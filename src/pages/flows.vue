@@ -3,7 +3,37 @@ const apiError = ref(false)
 
 const flows = ref([])
 const loadingFlows = ref(false)
+
+const flowToDelete = ref(null)
+const deleteFlowDialog = ref(false)
+
 const createFlowDialog = ref(false)
+const createFlowStep = ref(0)
+const createFlowSubmitLoading = ref(false)
+
+const createFlowCategories = ref([
+  {
+    icon: 'ri-survey-line',
+    title: 'DETAILS',
+    subtitle: 'Enter Flow Details',
+  },
+  {
+    icon: 'ri-survey-line',
+    title: 'ACTIONS',
+    subtitle: 'Flow Actions',
+  },
+  {
+    icon: 'ri-survey-line',
+    title: 'SUBMIT',
+    subtitle: 'Submit',
+  },
+])
+
+const createFlowForm = ref({
+  name: '',
+  description: '',
+  active: true,
+})
 
 const getFlows = async () => {
   loadingFlows.value = true
@@ -24,6 +54,60 @@ const getFlows = async () => {
   }
 }
 
+const createFlow = async flow => {
+  try {
+    const { data, error } = await useFetch('http://localhost:8080/flow', {
+      method: 'POST',
+      body: JSON.stringify(flow),
+    })
+
+    if (error.value) {
+      apiError.value = true
+      createFlowDialog.value = false
+      console.error(error.value)
+    }
+    else if (data.value) {
+      apiError.value = false
+      createFlowDialog.value = false
+      getFlows()
+    }
+  }
+  catch (err) {
+    console.error(err)
+    createFlowDialog.value = false
+    apiError.value = true
+  }
+}
+
+const deleteFlow = async flow => {
+  try {
+    const { data, error } = await useFetch(`http://localhost:8080/flow/${flow.id}`, {
+      method: 'DELETE',
+    })
+
+    if (error.value) {
+      apiError.value = true
+      deleteFlowDialog.value = false
+      console.error(error.value)
+    }
+    else if (data.value) {
+      apiError.value = false
+      deleteFlowDialog.value = false
+      getFlows()
+    }
+  }
+  catch (err) {
+    console.error(err)
+    deleteFlowDialog.value = false
+    apiError.value = true
+  }
+}
+
+const deleteFlowDialogFn = flow => {
+  deleteFlowDialog.value = true
+  flowToDelete.value = flow
+}
+
 onMounted(() => getFlows())
 </script>
 
@@ -32,23 +116,24 @@ onMounted(() => getFlows())
     <VRow class="match-height">
       <VCol
         cols="12"
-        md="8"
-        sm="8"
+        md="6"
+        sm="6"
         align="left"
       >
-        <p class="text-2xl">
+        <p class="text-2xl mb-0">
           Flows
         </p>
       </VCol>
       <VCol
         cols="12"
-        md="4"
-        sm="4"
+        md="6"
+        sm="6"
         align="right"
       >
         <VBtn
           :disabled="apiError"
           color="success"
+          class="mb-0"
           @click="createFlowDialog = true"
         >
           Create Flow
@@ -102,10 +187,30 @@ onMounted(() => getFlows())
                   </VAvatar>
                   <div>
                     <h6 class="text-h6">
-                      {{ flow.actions.length }}
+                      {{ flow.actions ? flow.actions.length : 0 }}
                     </h6>
                     <div class="text-sm">
                       Actions
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex gap-x-3 align-center">
+                  <VAvatar
+                    color="primary"
+                    variant="tonal"
+                    rounded
+                  >
+                    <VIcon
+                      icon="ri-terminal-line"
+                      size="28"
+                    />
+                  </VAvatar>
+                  <div>
+                    <h6 class="text-h6">
+                      {{ flow.actions ? flow.actions.length : 0 }}
+                    </h6>
+                    <div class="text-sm">
+                      Executions
                     </div>
                   </div>
                 </div>
@@ -184,7 +289,7 @@ onMounted(() => getFlows())
                     variant="tonal"
                     rounded
                     block
-                    @click="deleteFlow(flow.id)"
+                    @click="deleteFlowDialogFn(flow)"
                   />
                 </VCol>
               </VRow>
@@ -197,10 +302,9 @@ onMounted(() => getFlows())
 
   <!-- DIALOG -->
   <VDialog
-    :model-value="createFlowDialog"
+    v-model="createFlowDialog"
     max-width="900"
     min-height="590"
-    @update:model-value="dialogVisibleUpdate"
   >
     <!-- 👉 dialog close btn -->
     <DialogCloseBtn
@@ -225,7 +329,7 @@ onMounted(() => getFlows())
             lg="3"
           >
             <AppStepper
-              v-model:current-step="currentStep"
+              v-model:current-step="createFlowStep"
               direction="vertical"
               :items="createFlowCategories"
               icon-size="22"
@@ -244,19 +348,19 @@ onMounted(() => getFlows())
               @submit.prevent="() => {}"
             >
               <VWindow
-                v-model="currentStep"
+                v-model="createFlowStep"
                 class="disable-tab-transition stepper-content"
               >
                 <!-- 👉 DETAILS -->
                 <VWindowItem>
-                  <AppTextField
+                  <VTextField
                     v-model="createFlowForm.name"
                     label="Flow Name"
                     placeholder="Flow Name"
                     :rules="[requiredValidator]"
                   />
 
-                  <AppTextField
+                  <VTextField
                     v-model="createFlowForm.description"
                     class="mt-3"
                     label="Flow Description"
@@ -284,12 +388,6 @@ onMounted(() => getFlows())
                   <p class="text-sm mb-4">
                     Create the new Flow.
                   </p>
-
-                  <VImg
-                    :src="laptopGirl"
-                    width="176"
-                    class="mx-auto"
-                  />
                 </VWindowItem>
               </VWindow>
 
@@ -297,11 +395,11 @@ onMounted(() => getFlows())
                 <VBtn
                   variant="tonal"
                   color="secondary"
-                  :disabled="currentStep === 0"
-                  @click="currentStep--"
+                  :disabled="createFlowStep === 0"
+                  @click="createFlowStep--"
                 >
                   <VIcon
-                    icon="tabler-arrow-left"
+                    icon="ri-arrow-left-line"
                     start
                     class="flip-in-rtl"
                   />
@@ -309,22 +407,28 @@ onMounted(() => getFlows())
                 </VBtn>
 
                 <VBtn
-                  v-if="createFlowCategories.length - 1 === currentStep"
+                  v-if="createFlowCategories.length - 1 === createFlowStep"
                   color="success"
                   :loading="createFlowSubmitLoading"
-                  @click="createFlow"
+                  @click="createFlow(createFlowForm)"
                 >
                   Create
+
+                  <VIcon
+                    icon="ri-rocket-2-line"
+                    end
+                    class="flip-in-rtl"
+                  />
                 </VBtn>
 
                 <VBtn
                   v-else
-                  @click="currentStep++"
+                  @click="createFlowStep++"
                 >
                   Next
 
                   <VIcon
-                    icon="tabler-arrow-right"
+                    icon="ri-arrow-right-line"
                     end
                     class="flip-in-rtl"
                   />
@@ -333,6 +437,41 @@ onMounted(() => getFlows())
             </VForm>
           </VCol>
         </VRow>
+      </VCardText>
+    </VCard>
+  </VDialog>
+
+  <!-- Delete Flow Dialog -->
+  <VDialog
+    v-model="deleteFlowDialog"
+    persistent
+    class="v-dialog-sm"
+  >
+    <!-- Dialog Content -->
+    <VCard title="Delete Flow">
+      <DialogCloseBtn
+        variant="text"
+        size="default"
+        @click="deleteFlowDialog = false"
+      />
+
+      <VCardText>
+        Are you sure you want to delete this Flow?
+      </VCardText>
+
+      <VCardText class="d-flex justify-end flex-wrap gap-4">
+        <VBtn
+          color="secondary"
+          @click="deleteFlowDialog = false"
+        >
+          Cancel
+        </VBtn>
+        <VBtn
+          color="error"
+          @click="deleteFlow(flowToDelete)"
+        >
+          Delete
+        </VBtn>
       </VCardText>
     </VCard>
   </VDialog>
