@@ -10,7 +10,6 @@ jobs:
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !BuildImageWithKanikoStep
     name: Build Docker Image
-    buildContext: --dockerfile=@project_path@/prod.Dockerfile
     output: !RegistryOutput
       destinations: git.justlab.xyz/alertflow/frontend/alertflow_frontend:latest,git.justlab.xyz/alertflow/frontend/alertflow_frontend:@build_number@
     builtInRegistryAccessTokenSecret: push_key
