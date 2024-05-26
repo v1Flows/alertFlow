@@ -1,20 +1,21 @@
 version: 33
 jobs:
-  - name: Build Docker Image
-    steps:
-      - !CheckoutStep
-        name: Checkout
-        cloneCredential: !DefaultCredential {}
-        withLfs: false
-        withSubmodules: false
-        condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
-      - !BuildImageWithKanikoStep
-        name: Build Docker Image
-        output: !RegistryOutput
-          destinations: git.justlab.xyz/alertflow/frontend/alertflow_frontend:latest
-        builtInRegistryAccessTokenSecret: push_key
-        condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
-    retryCondition: never
-    maxRetries: 3
-    retryDelay: 30
-    timeout: 3600
+- name: Build Docker Image
+  steps:
+  - !CheckoutStep
+    name: Checkout
+    cloneCredential: !DefaultCredential {}
+    withLfs: false
+    withSubmodules: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !BuildImageWithKanikoStep
+    name: Build Docker Image
+    buildContext: --dockerfile=prod.Dockerfile
+    output: !RegistryOutput
+      destinations: git.justlab.xyz/alertflow/frontend/alertflow_frontend:latest,git.justlab.xyz/alertflow/frontend/alertflow_frontend:@build_number@
+    builtInRegistryAccessTokenSecret: push_key
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
