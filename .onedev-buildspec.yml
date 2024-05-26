@@ -11,7 +11,7 @@ jobs:
   - !BuildImageWithKanikoStep
     name: Build Docker Image
     output: !RegistryOutput
-      destinations: git.justlab.xyz/alertflow/frontend/alertflow_frontend:latest, git.justlab.xyz/alertflow/frontend/alertflow_frontend:@build_number@
+      destinations: git.justlab.xyz/alertflow/frontend/alertflow_frontend:latest git.justlab.xyz/alertflow/frontend/alertflow_frontend:@build_number@
     builtInRegistryAccessTokenSecret: push_key
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   retryCondition: never
