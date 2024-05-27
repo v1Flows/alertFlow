@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useGenerateImageVariant } from '@/@core/composable/useGenerateImageVariant'
-import { router } from '@/plugins/1.router'
 import authV2LoginIllustrationBorderedDark from '@images/pages/auth-v2-login-illustration-bordered-dark.png'
 import authV2LoginIllustrationBorderedLight from '@images/pages/auth-v2-login-illustration-bordered-light.png'
 import authV2LoginIllustrationDark from '@images/pages/auth-v2-login-illustration-dark.png'
@@ -11,8 +10,8 @@ import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { themeConfig } from '@themeConfig'
 
 const route = useRoute()
-
-// const ability = useAbility()
+const router = useRouter()
+const ability = useAbility()
 
 const form = ref({
   email: '',
@@ -61,7 +60,7 @@ const login = async () => {
   }
 
   try {
-    const { data, error } = await useFetch<Response>('http://localhost:8080/auth/login', {
+    const { data, error } = await useFetch<Response>('https://alertflow-api.justlab.xyz/auth/login', {
       method: 'POST',
       body: JSON.stringify(form.value),
     })
@@ -73,9 +72,12 @@ const login = async () => {
     }
     else if (data.value) {
       loadingLogin.value = false
-      useCookie('userAbilityRules').value = JSON.parse(data.value).User.user.role
+      useCookie('userAbilityRules').value = JSON.parse(data.value).User.user.role === 'authenticated' ? 'all' : 'Comment'
 
-      // ability.update('admin')
+      ability.update([{
+        action: 'manage',
+        subject: JSON.parse(data.value).User.user.role === 'authenticated' ? 'all' : 'Comment',
+      }])
 
       useCookie('userData').value = JSON.parse(data.value).User.user
       useCookie('accessToken').value = JSON.parse(data.value).User.access_token
@@ -86,7 +88,7 @@ const login = async () => {
     }
   }
   catch (error) {
-    console.error(err)
+    console.error(error)
     loadingLogin.value = false
     apiError.value = true
   }

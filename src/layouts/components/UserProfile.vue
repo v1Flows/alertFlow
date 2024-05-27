@@ -2,6 +2,62 @@
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 import avatar1 from '@images/avatars/avatar-1.png'
 
+const router = useRouter()
+const ability = useAbility()
+
+const userData = useCookie<any>('userData')
+const logoutLoading = ref(false)
+const apiError = ref(false)
+
+const logout = async () => {
+  logoutLoading.value = true
+
+  const requestBody = ref({
+    token: useCookie('accessToken').value,
+  })
+
+  try {
+    const { data, error } = await useFetch('https://alertflow-api.justlab.xyz/auth/logout', {
+      method: 'POST',
+      body: JSON.stringify(requestBody.value),
+    })
+
+    if (error.value) {
+      logoutLoading.value = false
+      apiError.value = true
+      console.log(useCookie('accessToken').value)
+      console.error(error.value)
+    }
+    else if (data.value) {
+      logoutLoading.value = false
+      apiError.value = false
+
+      // Remove "accessToken" from cookie
+      useCookie('accessToken').value = null
+
+      // Remove "userData" from cookie
+      useCookie('userData').value = null
+
+      // ℹ️ We had to remove abilities in then block because if we don't nav menu items mutation is visible while redirecting user to login page
+      // Remove "userAbilities" from cookie
+      useCookie('userAbilityRules').value = null
+
+      // Reset ability to initial ability
+      ability.update([])
+
+      // Redirect to login page
+      await router.push('/login')
+
+      console.log(data.value)
+    }
+  }
+  catch (error) {
+    console.error(error)
+    logoutLoading.value = false
+    apiError.value = true
+  }
+}
+
 const userProfileList = [
   { type: 'divider' },
   {
@@ -14,26 +70,6 @@ const userProfileList = [
     type: 'navItem',
     icon: 'ri-settings-4-line',
     title: 'Settings',
-    href: '#',
-  },
-  {
-    type: 'navItem',
-    icon: 'ri-file-text-line',
-    title: 'Billing Plan',
-    href: '#',
-    chipsProps: { color: 'error', text: '4', size: 'small' },
-  },
-  { type: 'divider' },
-  {
-    type: 'navItem',
-    icon: 'ri-money-dollar-circle-line',
-    title: 'Pricing',
-    href: '#',
-  },
-  {
-    type: 'navItem',
-    icon: 'ri-question-line',
-    title: 'FAQ',
     href: '#',
   },
 ]
@@ -65,13 +101,9 @@ const userProfileList = [
         <VList>
           <VListItem class="px-4">
             <div class="d-flex gap-x-2 align-center">
-              <VAvatar>
-                <VImg :src="avatar1" />
-              </VAvatar>
-
               <div>
                 <div class="text-body-2 font-weight-medium text-high-emphasis">
-                  John Doe
+                  {{ userData.email }}
                 </div>
                 <div class="text-capitalize text-caption text-disabled">
                   Admin
@@ -122,7 +154,7 @@ const userProfileList = [
                 color="error"
                 size="small"
                 append-icon="ri-logout-box-r-line"
-                :to="{ name: 'login' }"
+                @click="logout"
               >
                 Logout
               </VBtn>

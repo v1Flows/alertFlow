@@ -1,4 +1,11 @@
 <script setup lang="ts">
+definePage({
+  meta: {
+    action: 'create',
+    subject: 'all',
+  },
+})
+
 const apiUrl = ref('')
 const setSettingsButtonLoading = ref(false)
 const showSettingsChangedBarSuccess = ref(false)

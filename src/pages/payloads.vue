@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import { VCodeBlock } from '@wdns/vue-code-block'
 
+definePage({
+  meta: {
+    action: 'create',
+    subject: 'all',
+  },
+})
+
 interface Payload {
   id: string
   created_at: string

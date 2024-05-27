@@ -1,4 +1,11 @@
 <script setup lang="ts">
+definePage({
+  meta: {
+    action: 'create',
+    subject: 'all',
+  },
+})
+
 const { data, error } = await useFetch('https://alertflow-api.justlab.xyz/settings')
 
 let settings = ref({
