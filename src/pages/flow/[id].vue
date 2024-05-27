@@ -39,7 +39,7 @@ const currentTab = ref('tab-1')
 const getFlow = async () => {
   loadingFlow.value = true
   try {
-    const { data, error } = await useFetch(`http://localhost:8080/flow/${flowID}`)
+    const { data, error } = await useFetch(`https://alertflow-api.justlab.xyz/flow/${flowID}`)
     if (error.value) {
       apiError.value = true
       console.error(error.value)
@@ -58,7 +58,7 @@ const getFlow = async () => {
 const getFlowExecutions = async () => {
   loadingExecutions.value = true
   try {
-    const { data, error } = await useFetch(`http://localhost:8080/flow/${flowID}/executions`)
+    const { data, error } = await useFetch(`https://alertflow-api.justlab.xyz/flow/${flowID}/executions`)
     if (error.value) {
       apiError.value = true
       console.error(error.value)
@@ -82,7 +82,7 @@ const getFlowExecutions = async () => {
 const getFlowPayloads = async () => {
   loadingPayloads.value = true
   try {
-    const { data, error } = await useFetch(`http://localhost:8080/flow/${flowID}/payloads`)
+    const { data, error } = await useFetch(`https://alertflow-api.justlab.xyz/flow/${flowID}/payloads`)
     if (error.value) {
       apiError.value = true
       console.error(error.value)

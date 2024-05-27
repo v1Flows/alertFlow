@@ -4,7 +4,7 @@ const setSettingsButtonLoading = ref(false)
 const showSettingsChangedBarSuccess = ref(false)
 const showSettingsChangedBarFail = ref(false)
 
-const { data: getSettingsData, error } = await useFetch('http://localhost:8080/settings')
+const { data: getSettingsData, error } = await useFetch('https://alertflow-api.justlab.xyz/settings')
 if (error.value)
   console.error(error.value)
 else if (getSettingsData.value)
@@ -13,7 +13,7 @@ else if (getSettingsData.value)
 async function setSettings() {
   setSettingsButtonLoading.value = true
 
-  const { data: setSettingsData, error: setSettingsError } = await useFetch('http://localhost:8080/settings', {
+  const { data: setSettingsData, error: setSettingsError } = await useFetch('https://alertflow-api.justlab.xyz/settings', {
     method: 'POST',
     body: JSON.stringify({ api_endpoint: apiUrl.value }),
   })
@@ -38,7 +38,7 @@ async function setSettings() {
         <VTextField
           v-model="apiUrl"
           label="API URL"
-          placeholder="http://localhost:8080"
+          placeholder="https://alertflow-api.justlab.xyz"
         />
 
         <VBtn

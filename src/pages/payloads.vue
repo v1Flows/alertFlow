@@ -14,7 +14,7 @@ const showPayloadDialog = ref(false)
 const showPayloadData = ref('')
 
 const getPayloads = async () => {
-  const { data, error } = await useFetch('http://localhost:8080/payloads')
+  const { data, error } = await useFetch('https://alertflow-api.justlab.xyz/payloads')
   if (error.value) {
     apiError.value = true
     console.error(error.value)

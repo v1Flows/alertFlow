@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { data, error } = await useFetch('http://localhost:8080/settings')
+const { data, error } = await useFetch('https://alertflow-api.justlab.xyz/settings')
 
 let settings = ref({
   api_endpoint: '',

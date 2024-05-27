@@ -38,7 +38,7 @@ const createFlowForm = ref({
 const getFlows = async () => {
   loadingFlows.value = true
   try {
-    const { data, error } = await useFetch('http://localhost:8080/flows')
+    const { data, error } = await useFetch('https://alertflow-api.justlab.xyz/flows')
     if (error.value) {
       apiError.value = true
       console.error(error.value)
@@ -56,7 +56,7 @@ const getFlows = async () => {
 
 const createFlow = async flow => {
   try {
-    const { data, error } = await useFetch('http://localhost:8080/flow', {
+    const { data, error } = await useFetch('https://alertflow-api.justlab.xyz/flow', {
       method: 'POST',
       body: JSON.stringify(flow),
     })
@@ -81,7 +81,7 @@ const createFlow = async flow => {
 
 const deleteFlow = async flow => {
   try {
-    const { data, error } = await useFetch(`http://localhost:8080/flow/${flow.id}`, {
+    const { data, error } = await useFetch(`https://alertflow-api.justlab.xyz/flow/${flow.id}`, {
       method: 'DELETE',
     })
 

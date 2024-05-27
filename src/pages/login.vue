@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useGenerateImageVariant } from '@/@core/composable/useGenerateImageVariant'
-import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
+import { router } from '@/plugins/1.router'
 import authV2LoginIllustrationBorderedDark from '@images/pages/auth-v2-login-illustration-bordered-dark.png'
 import authV2LoginIllustrationBorderedLight from '@images/pages/auth-v2-login-illustration-bordered-light.png'
 import authV2LoginIllustrationDark from '@images/pages/auth-v2-login-illustration-dark.png'
@@ -10,11 +10,17 @@ import authV2LoginMaskLight from '@images/pages/auth-v2-login-mask-light.png'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { themeConfig } from '@themeConfig'
 
+const route = useRoute()
+
+// const ability = useAbility()
+
 const form = ref({
   email: '',
   password: '',
-  remember: false,
 })
+
+const loadingLogin = ref(false)
+const apiError = ref(false)
 
 definePage({
   meta: {
@@ -25,6 +31,66 @@ definePage({
 const isPasswordVisible = ref(false)
 const authV2LoginMask = useGenerateImageVariant(authV2LoginMaskLight, authV2LoginMaskDark)
 const authV2LoginIllustration = useGenerateImageVariant (authV2LoginIllustrationLight, authV2LoginIllustrationDark, authV2LoginIllustrationBorderedLight, authV2LoginIllustrationBorderedDark, true)
+
+const login = async () => {
+  loadingLogin.value = true
+
+  interface Response {
+    User: {
+      access_token: string
+      token_type: string
+      expires_in: number
+      refresh_token: string
+      user: {
+        id: string
+        aud: string
+        role: string
+        email: string
+        invited_at: string
+        confirmed_at: string
+        confirmation_sent_at: string
+        app_metadata: JSON
+        user_metadata: JSON
+        created_at: string
+        updated_at: string
+      }
+      provider_token: string
+      provider_refresh_token: string
+    }
+    result: string
+  }
+
+  try {
+    const { data, error } = await useFetch<Response>('http://localhost:8080/auth/login', {
+      method: 'POST',
+      body: JSON.stringify(form.value),
+    })
+
+    if (error.value) {
+      loadingLogin.value = false
+      apiError.value = true
+      console.error(error.value)
+    }
+    else if (data.value) {
+      loadingLogin.value = false
+      useCookie('userAbilityRules').value = JSON.parse(data.value).User.user.role
+
+      // ability.update('admin')
+
+      useCookie('userData').value = JSON.parse(data.value).User.user
+      useCookie('accessToken').value = JSON.parse(data.value).User.access_token
+
+      await nextTick(() => {
+        router.replace(route.query.to ? String(route.query.to) : '/')
+      })
+    }
+  }
+  catch (error) {
+    console.error(err)
+    loadingLogin.value = false
+    apiError.value = true
+  }
+}
 </script>
 
 <template>
@@ -106,11 +172,6 @@ const authV2LoginIllustration = useGenerateImageVariant (authV2LoginIllustration
 
                 <!-- remember me checkbox -->
                 <div class="d-flex align-center justify-space-between flex-wrap my-6 gap-x-2">
-                  <VCheckbox
-                    v-model="form.remember"
-                    label="Remember me"
-                  />
-
                   <a
                     class="text-primary"
                     href="#"
@@ -123,42 +184,11 @@ const authV2LoginIllustration = useGenerateImageVariant (authV2LoginIllustration
                 <VBtn
                   block
                   type="submit"
+                  :loading="loadingLogin"
+                  @click="login"
                 >
                   Login
                 </VBtn>
-              </VCol>
-
-              <!-- create account -->
-              <VCol
-                cols="12"
-                class="text-body-1 text-center"
-              >
-                <span class="d-inline-block">
-                  New on our platform?
-                </span>
-                <a
-                  class="text-primary ms-1 d-inline-block text-body-1"
-                  href="#"
-                >
-                  Create an account
-                </a>
-              </VCol>
-
-              <VCol
-                cols="12"
-                class="d-flex align-center"
-              >
-                <VDivider />
-                <span class="mx-4 text-high-emphasis">or</span>
-                <VDivider />
-              </VCol>
-
-              <!-- auth providers -->
-              <VCol
-                cols="12"
-                class="text-center"
-              >
-                <AuthProvider />
               </VCol>
             </VRow>
           </VForm>
