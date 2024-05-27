@@ -24,6 +24,7 @@ const apiError = ref(false)
 definePage({
   meta: {
     layout: 'blank',
+    unauthenticatedOnly: true,
   },
 })
 
@@ -72,15 +73,18 @@ const login = async () => {
     }
     else if (data.value) {
       loadingLogin.value = false
-      useCookie('userAbilityRules').value = JSON.parse(data.value).User.user.role === 'authenticated' ? 'all' : 'Comment'
 
-      ability.update([{
+      const userAbilities = [{
         action: 'manage',
         subject: JSON.parse(data.value).User.user.role === 'authenticated' ? 'all' : 'Comment',
-      }])
+      }]
+
+      // Update the ability using `update` method
+      ability.update(userAbilities)
 
       useCookie('userData').value = JSON.parse(data.value).User.user
       useCookie('accessToken').value = JSON.parse(data.value).User.access_token
+      useCookie('userAbilityRules').value = userAbilities
 
       await nextTick(() => {
         router.replace(route.query.to ? String(route.query.to) : '/')
