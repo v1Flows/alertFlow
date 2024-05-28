@@ -26,11 +26,6 @@ const createFlowCategories = ref([
   },
   {
     icon: 'ri-survey-line',
-    title: 'ACTIONS',
-    subtitle: 'Flow Actions',
-  },
-  {
-    icon: 'ri-survey-line',
     title: 'SUBMIT',
     subtitle: 'Submit',
   },
@@ -141,13 +136,11 @@ onMounted(() => getFlows())
           :disabled="apiError"
           color="success"
           class="mb-0"
+          prepend-icon="ri-add-line"
+          variant="tonal"
           @click="createFlowDialog = true"
         >
           Create Flow
-          <VIcon
-            end
-            icon="ri-add-line"
-          />
         </VBtn>
       </VCol>
     </VRow>
@@ -203,27 +196,7 @@ onMounted(() => getFlows())
                 </div>
                 <div class="d-flex gap-x-3 align-center">
                   <VAvatar
-                    color="primary"
-                    variant="tonal"
-                    rounded
-                  >
-                    <VIcon
-                      icon="ri-terminal-line"
-                      size="28"
-                    />
-                  </VAvatar>
-                  <div>
-                    <h6 class="text-h6">
-                      {{ flow.actions ? flow.actions.length : 0 }}
-                    </h6>
-                    <div class="text-sm">
-                      Executions
-                    </div>
-                  </div>
-                </div>
-                <div class="d-flex gap-x-3 align-center">
-                  <VAvatar
-                    color="primary"
+                    :color="flow.active ? 'success' : 'error'"
                     variant="tonal"
                     rounded
                   >
@@ -234,19 +207,33 @@ onMounted(() => getFlows())
                   </VAvatar>
                   <div>
                     <h6
-                      v-if="flow.active"
-                      class="text-h6 text-success"
+                      class="text-h6"
+                      :class="flow.active ? 'text-success' : 'text-error'"
                     >
-                      Active
-                    </h6>
-                    <h6
-                      v-else
-                      class="text-h6 text-error"
-                    >
-                      Inactive
+                      {{ flow.active ? 'Active' : 'Inactive' }}
                     </h6>
                     <div class="text-sm">
                       Status
+                    </div>
+                  </div>
+                </div>
+                <div class="d-flex gap-x-3 align-center">
+                  <VAvatar
+                    color="primary"
+                    variant="tonal"
+                    rounded
+                  >
+                    <VIcon
+                      icon="ri-loop-left-line"
+                      size="28"
+                    />
+                  </VAvatar>
+                  <div>
+                    <h6 class="text-h6">
+                      {{ flow.updated_at ? new Date(flow.updated_at).toLocaleString() : 'N/A' }}
+                    </h6>
+                    <div class="text-sm">
+                      Last Update
                     </div>
                   </div>
                 </div>
@@ -254,7 +241,7 @@ onMounted(() => getFlows())
               <VRow class="match-height">
                 <VCol
                   cols="12"
-                  md="5"
+                  md="10"
                 >
                   <RouterLink :to="`/flow/${flow.id}`">
                     <VBtn
@@ -272,28 +259,12 @@ onMounted(() => getFlows())
                 </VCol>
                 <VCol
                   cols="12"
-                  md="5"
-                >
-                  <VBtn
-                    color="warning"
-                    variant="tonal"
-                    block
-                  >
-                    Edit
-                    <VIcon
-                      end
-                      icon="ri-pencil-line"
-                    />
-                  </VBtn>
-                </VCol>
-                <VCol
-                  cols="12"
                   md="2"
                 >
                   <VBtn
                     icon="ri-delete-bin-line"
                     color="error"
-                    variant="tonal"
+                    variant="outlined"
                     rounded
                     block
                     @click="deleteFlowDialogFn(flow)"
@@ -381,11 +352,6 @@ onMounted(() => getFlows())
                     color="success"
                     :label="createFlowForm.active === true ? 'Active' : 'Inactive'"
                   />
-                </VWindowItem>
-
-                <!-- 👉 ACTIONS -->
-                <VWindowItem>
-                  <p>No Use till now</p>
                 </VWindowItem>
 
                 <VWindowItem class="text-center">

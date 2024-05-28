@@ -327,17 +327,17 @@ const filteredFlowExecutionsIndexEnd = computed(() => executionPage.value * exec
 const filteredFlowExecutions = computed(() => {
   if (hideExecutionsCompleted.value) {
     if (executionSelected.value !== 'all')
-      return flowExecutions.value.filter(execution => executionSelected.value === execution.type && execution.running === true || execution.error === true).slice(filteredFlowExecutionsIndexStart.value, filteredFlowExecutionsIndexEnd.value).sort((a, b) => new Date(b.executed_at).getTime() - new Date(a.executed_at).getTime())
-    else
-      return flowExecutions.value.filter(execution => execution.running === true || execution.error === true).slice(filteredFlowExecutionsIndexStart.value, filteredFlowExecutionsIndexEnd.value).sort((a, b) => new Date(b.executed_at).getTime() - new Date(a.executed_at).getTime())
+      return flowExecutions.value.filter(execution => executionSelected.value === execution.type && execution.running === true || execution.error === true).sort((a, b) => new Date(b.executed_at).getTime() - new Date(a.executed_at).getTime()).slice(filteredFlowExecutionsIndexStart.value, filteredFlowExecutionsIndexEnd.value)
+    else   
+      return flowExecutions.value.filter(execution => execution.running === true || execution.error === true).sort((a, b) => new Date(b.executed_at).getTime() - new Date(a.executed_at).getTime()).slice(filteredFlowExecutionsIndexStart.value, filteredFlowExecutionsIndexEnd.value)
   }
   else
     if (executionSelected.value === 'all') {
-      return flowExecutions.value.slice(filteredFlowExecutionsIndexStart.value, filteredFlowExecutionsIndexEnd.value).sort((a, b) => new Date(b.executed_at).getTime() - new Date(a.executed_at).getTime())
+      return flowExecutions.value.sort((a, b) => new Date(b.executed_at).getTime() - new Date(a.executed_at).getTime()).slice(filteredFlowExecutionsIndexStart.value, filteredFlowExecutionsIndexEnd.value)
     }
 
     else {
-      return flowExecutions.value.filter(execution => executionSelected.value === execution.type).slice(filteredFlowExecutionsIndexStart.value, filteredFlowExecutionsIndexEnd.value).sort((a, b) => new Date(b.executed_at).getTime() - new Date(a.executed_at).getTime())
+      return flowExecutions.value.filter(execution => executionSelected.value === execution.type).sort((a, b) => new Date(b.executed_at).getTime() - new Date(a.executed_at).getTime()).slice(filteredFlowExecutionsIndexStart.value, filteredFlowExecutionsIndexEnd.value)
     }
 })
 
@@ -672,159 +672,152 @@ const paginated = computed(() => flowPayloads.value.slice(payloadIndexStart.valu
 
       <!-- 👉 Executions -->
       <VWindowItem value="tab-2">
-        <VAlert
-          v-if="flowExecutions.length === 0"
-          color="info"
-          variant="tonal"
-        >
-          No Executions found for this Flow
-        </VAlert>
-
-        <div v-else>
-          <VCard class="mb-6">
-            <VCardText>
-              <!-- 👉 Header -->
-              <div class="d-flex justify-space-between align-center flex-wrap gap-4 mb-6">
-                <div>
-                  <h5 class="text-h5">
-                    Executions
-                  </h5>
-                  <div class="text-body-1">
-                    {{ flowExecutions.length }} Flow Executions found
-                  </div>
-                </div>
-
-                <div class="d-flex flex-wrap align-center gap-y-4 gap-x-6">
-                  <VSelect
-                    v-model="executionSelected"
-                    density="compact"
-                    :items="executionItems"
-                    style="min-inline-size: 250px;"
-                  />
-                  <VSwitch
-                    v-model="hideExecutionsCompleted"
-                    label="Hide Completed"
-                  />
+        <VCard class="mb-6">
+          <VCardText>
+            <!-- 👉 Header -->
+            <div class="d-flex justify-space-between align-center flex-wrap gap-4 mb-6">
+              <div>
+                <h5 class="text-h5">
+                  Executions
+                </h5>
+                <div class="text-body-1">
+                  {{ flowExecutions.length }} Flow Executions found
                 </div>
               </div>
 
-              <!-- 👉 Course List -->
-              <div class="mb-6">
-                <VRow class="match-height">
-                  <template
-                    v-for="execution in filteredFlowExecutions"
-                    :key="execution.id"
+              <div class="d-flex flex-wrap align-center gap-y-4 gap-x-6">
+                <VSelect
+                  v-model="executionSelected"
+                  density="compact"
+                  :items="executionItems"
+                  style="min-inline-size: 250px;"
+                />
+                <VSwitch
+                  v-model="hideExecutionsCompleted"
+                  label="Hide Completed"
+                />
+              </div>
+            </div>
+
+            <!-- 👉 Course List -->
+            <div class="mb-6">
+              <VRow class="match-height">
+                <template
+                  v-for="execution in filteredFlowExecutions"
+                  :key="execution.id"
+                >
+                  <VCol
+                    cols="12"
+                    md="4"
+                    sm="6"
                   >
-                    <VCol
-                      cols="12"
-                      md="4"
-                      sm="6"
+                    <VCard
+                      flat
+                      border
                     >
-                      <VCard
-                        flat
-                        border
-                      >
-                        <VCardText class="pt-3">
-                          <div class="d-flex justify-space-between align-center mb-4">
-                            <VChip
-                              variant="tonal"
-                              :color="getExecutionColor(execution)"
-                              size="small"
-                            >
-                              {{ getExecutionStatus(execution) }}
-                            </VChip>
-                            <div class="d-flex align-center">
-                              <VIcon
-                                :icon="getExecutionIcon(execution)"
-                                color="secondary"
-                                size="24"
-                                class="me-2"
-                              />
-                            </div>
-                          </div>
-
-                          <h5 class="text-h5 mb-1">
-                            {{ execution.type.charAt(0).toUpperCase() + execution.type.slice(1) }}
-                          </h5>
-                          <p>
-                            {{ execution.id }}
-                          </p>
-
-                          <div class="d-flex align-center mb-1">
-                            <VIcon
-                              icon="ri-time-line"
-                              size="20"
-                              class="me-1"
-                            />
-                            <div class="text-body-1 my-auto">
-                              {{ execution.finished_at ? Math.floor(new Date(execution.finished_at) - new Date(execution.executed_at)) / 1000 : 0 }}s
-                            </div>
-                          </div>
-                          <div class="mb-2">
-                            <VIcon
-                              :icon="getExecutionStatusIcon(execution)"
-                              :color="getExecutionColor(execution)"
-                              class="me-1"
-                            />
-                            <span
-                              class="text-body-1"
-                              :class="getExecutionTextColor(execution)"
-                            >{{ getExecutionStatus(execution) === 'No Action Matched' ? execution.no_match_reason : getExecutionStatus(execution) }}</span>
-                          </div>
-
-                          <VProgressLinear
-                            :model-value="getExecutionStatus(execution) === 'Finished Successfully' ? 100 : getExecutionStatus(execution) === 'Error' ? 100 : 0"
-                            :indeterminate="getExecutionStatus(execution) === 'Running'"
-                            rounded
-                            rounded-bar
+                      <VCardText class="pt-3">
+                        <div class="d-flex justify-space-between align-center mb-4">
+                          <VChip
+                            variant="tonal"
                             :color="getExecutionColor(execution)"
-                            height="8"
-                            class="mb-4"
-                          />
-
-                          <div class="d-flex flex-wrap gap-4">
-                            <VBtn
-                              variant="outlined"
+                            size="small"
+                          >
+                            {{ getExecutionStatus(execution) }}
+                          </VChip>
+                          <div class="d-flex align-center">
+                            <VIcon
+                              :icon="getExecutionIcon(execution)"
                               color="secondary"
-                              class="flex-grow-1"
-                            >
-                              <template #prepend>
-                                <VIcon
-                                  icon="ri-refresh-line"
-                                  class="flip-in-rtl"
-                                />
-                              </template>
-                              Get Details
-                            </VBtn>
-                            <VBtn
-                              variant="outlined"
-                              class="flex-grow-1"
-                            >
-                              <template #append>
-                                <VIcon
-                                  icon="ri-arrow-right-line"
-                                  class="flip-in-rtl"
-                                />
-                              </template>
-                              Show Payload
-                            </VBtn>
+                              size="24"
+                              class="me-2"
+                            />
                           </div>
-                        </VCardText>
-                      </VCard>
-                    </VCol>
-                  </template>
-                </VRow>
-              </div>
+                        </div>
 
-              <VPagination
-                v-model="executionPage"
-                rounded
-                color="primary"
-                :length="Math.ceil(flowExecutions.length / executionItemsPerPage)"
-              />
-            </VCardText>
-          </VCard>
-        </div>
+                        <h5 class="text-h5 mb-1">
+                          {{ execution.type.charAt(0).toUpperCase() + execution.type.slice(1) }}
+                        </h5>
+                        <p>
+                          {{ execution.id }}
+                        </p>
+                        <p>
+                          {{ new Date(execution.executed_at).toLocaleString() }}
+                        </p>
+
+                        <div class="d-flex align-center mb-1">
+                          <VIcon
+                            icon="ri-time-line"
+                            size="20"
+                            class="me-1"
+                          />
+                          <div class="text-body-1 my-auto">
+                            {{ execution.finished_at ? Math.floor(new Date(execution.finished_at) - new Date(execution.executed_at)) / 1000 : 0 }}s
+                          </div>
+                        </div>
+                        <div class="mb-2">
+                          <VIcon
+                            :icon="getExecutionStatusIcon(execution)"
+                            :color="getExecutionColor(execution)"
+                            class="me-1"
+                          />
+                          <span
+                            class="text-body-1"
+                            :class="getExecutionTextColor(execution)"
+                          >{{ getExecutionStatus(execution) === 'No Action Matched' ? execution.no_match_reason : getExecutionStatus(execution) }}</span>
+                        </div>
+
+                        <VProgressLinear
+                          :model-value="getExecutionStatus(execution) === 'Finished Successfully' ? 100 : getExecutionStatus(execution) === 'Error' ? 100 : 0"
+                          :indeterminate="getExecutionStatus(execution) === 'Running'"
+                          rounded
+                          rounded-bar
+                          :color="getExecutionColor(execution)"
+                          height="8"
+                          class="mb-4"
+                        />
+
+                        <div class="d-flex flex-wrap gap-4">
+                          <VBtn
+                            variant="outlined"
+                            color="secondary"
+                            class="flex-grow-1"
+                          >
+                            <template #prepend>
+                              <VIcon
+                                icon="ri-refresh-line"
+                                class="flip-in-rtl"
+                              />
+                            </template>
+                            Get Details
+                          </VBtn>
+                          <VBtn
+                            variant="outlined"
+                            class="flex-grow-1"
+                          >
+                            <template #append>
+                              <VIcon
+                                icon="ri-arrow-right-line"
+                                class="flip-in-rtl"
+                              />
+                            </template>
+                            Show Payload
+                          </VBtn>
+                        </div>
+                      </VCardText>
+                    </VCard>
+                  </VCol>
+                </template>
+              </VRow>
+            </div>
+
+            <VPagination
+              v-model="executionPage"
+              rounded
+              color="primary"
+              :length="Math.ceil(flowExecutions.length / executionItemsPerPage)"
+            />
+          </VCardText>
+        </VCard>
       </VWindowItem>
       <VWindowItem value="tab-3">
         <VAlert

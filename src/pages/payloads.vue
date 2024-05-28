@@ -17,8 +17,31 @@ interface Payload {
 const apiError = ref(false)
 
 const payloads = ref<Payload[]>([])
+const payloadsToday = ref<Payload[]>([])
+const payloadsLast7Days = ref<Payload[]>([])
+const payloadsLast30Days = ref<Payload[]>([])
 const showPayloadDialog = ref(false)
 const showPayloadData = ref('')
+
+const getTodaysPayloads = () => {
+  const now = new Date()
+
+  payloadsToday.value = payloads.value.filter(payload => new Date(payload.created_at) >= now)
+}
+
+const getLast7DaysPayloads = () => {
+  const now = new Date()
+  const last7Days = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
+
+  payloadsLast7Days.value = payloads.value.filter(payload => new Date(payload.created_at) >= last7Days)
+}
+
+const getLast30DaysPayloads = () => {
+  const now = new Date()
+  const last30Days = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
+
+  payloadsLast30Days.value = payloads.value.filter(payload => new Date(payload.created_at) >= last30Days)
+}
 
 const getPayloads = async () => {
   const { data, error } = await useFetch('https://alertflow-api.justlab.xyz/payloads')
@@ -29,6 +52,10 @@ const getPayloads = async () => {
   else if (data.value) {
     apiError.value = false
     payloads.value = JSON.parse(data.value).payloads.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+
+    getTodaysPayloads()
+    getLast7DaysPayloads()
+    getLast30DaysPayloads()
   }
 }
 
@@ -55,7 +82,7 @@ onMounted(() => getPayloads())
     <div class="mb-6">
       <VRow>
         <VCol
-          sm="4"
+          sm="3"
           cols="12"
         >
           <VCard>
@@ -87,7 +114,39 @@ onMounted(() => getPayloads())
           </VCard>
         </VCol>
         <VCol
-          sm="4"
+          sm="3"
+          cols="12"
+        >
+          <VCard>
+            <VCardText class="d-flex align-center">
+              <VAvatar
+                size="40"
+                rounded="lg"
+                color="success"
+                variant="tonal"
+                class="me-4"
+              >
+                <VIcon
+                  icon="ri-number-1"
+                  size="24"
+                />
+              </VAvatar>
+
+              <div class="d-flex flex-column">
+                <div class="d-flex align-center flex-wrap gap-x-2">
+                  <h5 class="text-h5">
+                    {{ payloadsToday.length }}
+                  </h5>
+                </div>
+                <div class="text-body-1">
+                  Payloads today
+                </div>
+              </div>
+            </VCardText>
+          </VCard>
+        </VCol>
+        <VCol
+          sm="3"
           cols="12"
         >
           <VCard>
@@ -108,7 +167,7 @@ onMounted(() => getPayloads())
               <div class="d-flex flex-column">
                 <div class="d-flex align-center flex-wrap gap-x-2">
                   <h5 class="text-h5">
-                    -
+                    {{ payloadsLast7Days.length }}
                   </h5>
                 </div>
                 <div class="text-body-1">
@@ -119,7 +178,7 @@ onMounted(() => getPayloads())
           </VCard>
         </VCol>
         <VCol
-          sm="4"
+          sm="3"
           cols="12"
         >
           <VCard>
@@ -140,7 +199,7 @@ onMounted(() => getPayloads())
               <div class="d-flex flex-column">
                 <div class="d-flex align-center flex-wrap gap-x-2">
                   <h5 class="text-h5">
-                    -
+                    {{ payloadsLast30Days.length }}
                   </h5>
                 </div>
                 <div class="text-body-1">
