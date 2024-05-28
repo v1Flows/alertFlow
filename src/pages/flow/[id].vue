@@ -65,12 +65,18 @@ const isEditActionDialogVisible = ref(false)
 const addActionLoading = ref(false)
 const addActionDialog = ref(false)
 
+// Action // Delete
+const deleteActionDialog = ref(false)
+const deleteActionID = ref(0)
+const deleteActionLoading = ref(false)
+
 const addActionData = ref({
   id: uuid.v4(),
   name: '',
   description: '',
   type: 'log',
-  active: false,
+  react_on: null,
+  active: true,
   patternGroup: null,
   patternLabelKey: '',
   patternLabelValue: '',
@@ -277,6 +283,39 @@ const addFlowAction = async () => {
   else {
     apiError.value = false
     addActionLoading.value = false
+  }
+}
+
+const deleteActionDialogFn = async (index: number) => {
+  deleteActionDialog.value = true
+  deleteActionID.value = index
+}
+
+const deleteAction = async () => {
+  deleteActionLoading.value = true
+  
+  flow.value.actions = flow.value.actions.filter((_, i) => i !== deleteActionID.value)
+
+  const { error } = await useFetch(`https://alertflow-api.justlab.xyz/flow/${flowID}/action`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      actions: flow.value.actions,
+    }),
+  })
+
+  if (error.value) {
+    apiError.value = true
+    deleteActionLoading.value = false
+    deleteActionDialog.value = false
+    console.log(error.value)
+  }
+  else {
+    apiError.value = false
+    deleteActionDialog.value = false
+    deleteActionLoading.value = false
   }
 }
 
@@ -530,12 +569,7 @@ const paginated = computed(() => flowPayloads.value.slice(payloadIndexStart.valu
                       <VIcon
                         icon="ri-delete-bin-5-line"
                         class="flip-in-rtl"
-                      />
-                    </IconBtn>
-                    <IconBtn>
-                      <VIcon
-                        icon="ri-more-2-line"
-                        class="flip-in-rtl"
+                        @click="deleteActionDialogFn(index)"
                       />
                     </IconBtn>
                   </div>
@@ -544,8 +578,8 @@ const paginated = computed(() => flowPayloads.value.slice(payloadIndexStart.valu
                   <div v-show="show[index]">
                     <VRow class="px-12 pb-3">
                       <VCol
-                        cols="12"
-                        md="12"
+                        cols="6"
+                        md="3"
                       >
                         <VTable>
                           <tr>
@@ -553,10 +587,10 @@ const paginated = computed(() => flowPayloads.value.slice(payloadIndexStart.valu
                               class="text-sm pb-1"
                               style="inline-size: 100px;"
                             >
-                              Action Type
+                              ID
                             </td>
                             <td class="text-sm text-high-emphasis font-weight-medium">
-                              {{ action.type }}
+                              {{ action.id }}
                             </td>
                           </tr>
                           <tr>
@@ -564,7 +598,45 @@ const paginated = computed(() => flowPayloads.value.slice(payloadIndexStart.valu
                               class="text-sm pb-1"
                               style="inline-size: 100px;"
                             >
-                              Group
+                              Typ
+                            </td>
+                            <td class="text-sm text-high-emphasis font-weight-medium">
+                              {{ action.type }}
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="text-sm pb-1">
+                              Active
+                            </td>
+                            <td class="text-sm text-high-emphasis font-weight-medium">
+                              {{ action.active }}
+                            </td>
+                          </tr>
+                        </VTable>
+                      </VCol>
+                      <VDivider vertical />
+                      <VCol
+                        cols="6"
+                        md="3"
+                      >
+                        <VTable>
+                          <tr>
+                            <td
+                              class="text-sm pb-1"
+                              style="inline-size: 100px;"
+                            >
+                              React On
+                            </td>
+                            <td class="text-sm text-high-emphasis font-weight-medium">
+                              {{ action.react_on }}
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              class="text-sm pb-1"
+                              style="inline-size: 100px;"
+                            >
+                              Object Group
                             </td>
                             <td class="text-sm text-high-emphasis font-weight-medium">
                               {{ action.patternGroup }}
@@ -869,6 +941,7 @@ const paginated = computed(() => flowPayloads.value.slice(payloadIndexStart.valu
     <VDialog
       :width="$vuetify.display.smAndDown ? 'auto' : 900 "
       :model-value="addActionDialog"
+      persistent
     >
       <VCard class="pa-sm-11 pa-3">
         <VCardText class="pt-5">
@@ -918,7 +991,7 @@ const paginated = computed(() => flowPayloads.value.slice(payloadIndexStart.valu
           <VForm>
             <VRow>
               <!-- 👉 Action Name -->
-              <VCol cols="12">
+              <VCol cols="12" md="6">
                 <VTextField
                   v-model="addActionData.name"
                   label="Name"
@@ -927,7 +1000,7 @@ const paginated = computed(() => flowPayloads.value.slice(payloadIndexStart.valu
               </VCol>
 
               <!-- 👉 Action Description -->
-              <VCol cols="12">
+              <VCol cols="12" md="6">
                 <VTextField
                   v-model="addActionData.description"
                   label="Description"
@@ -935,8 +1008,39 @@ const paginated = computed(() => flowPayloads.value.slice(payloadIndexStart.valu
                 />
               </VCol>
 
-              <!-- 👉 Select Object Group -->
+              <!-- 👉 Select Action Status -->
               <VCol cols="12">
+                <VSwitch
+                  v-model="addActionData.active"
+                  label="Activate Action"
+                  :value-true="true"
+                  :value-false="false"
+                  color="success"
+                />
+              </VCol>
+
+              <VCol cols="12">
+                <VDivider />
+              </VCol>
+
+              <VCol cols="12">
+                <h2 class="text-lg font-weight-medium">
+                  Action Conditions
+                </h2>
+              </VCol>
+
+              <!-- 👉 Select React on Firing or Resolved -->
+              <VCol cols="12" md="6">
+                <VSelect
+                  v-model="addActionData.react_on"
+                  label="Select Alert-Group Status"
+                  placeholder="Select an Alert-Group Status to react on"
+                  :items="['firing', 'resolved', 'both']"
+                />
+              </VCol>
+
+              <!-- 👉 Select Object Group -->
+              <VCol cols="12" md="6">
                 <VSelect
                   v-model="addActionData.patternGroup"
                   label="Select Object Group"
@@ -972,9 +1076,17 @@ const paginated = computed(() => flowPayloads.value.slice(payloadIndexStart.valu
               <VCol
                 v-if="addActionData.type !== 'log'"
                 cols="12"
-                md="12"
               >
                 <VDivider />
+              </VCol>
+
+              <VCol
+                v-if="addActionData.type !== 'log'"
+                cols="12"
+              >
+                <h2 class="text-lg font-weight-medium">
+                  {{ addActionData.type.charAt(0).toUpperCase() + addActionData.type.slice(1) }} Details
+                </h2>
               </VCol>
 
               <VCol
@@ -1001,10 +1113,6 @@ const paginated = computed(() => flowPayloads.value.slice(payloadIndexStart.valu
                 />
               </VCol>
 
-              <VCol cols="12">
-                <VSwitch v-model="addActionData.active" :true-value="true" :false-value="false" color="success" label="Activate Action" />
-              </VCol>
-
               <!-- 👉 Submit and Cancel button -->
               <VCol
                 cols="12"
@@ -1029,6 +1137,42 @@ const paginated = computed(() => flowPayloads.value.slice(payloadIndexStart.valu
               </VCol>
             </VRow>
           </VForm>
+        </VCardText>
+      </VCard>
+    </VDialog>
+
+    <!-- Delete Action Dialog -->
+    <VDialog
+      v-model="deleteActionDialog"
+      persistent
+      class="v-dialog-sm"
+    >
+      <!-- Dialog Content -->
+      <VCard title="Delete Action">
+        <DialogCloseBtn
+          variant="text"
+          size="default"
+          @click="deleteActionDialog = false"
+        />
+
+        <VCardText>
+          Are you sure you want to delete this Action?
+        </VCardText>
+
+        <VCardText class="d-flex justify-end flex-wrap gap-4">
+          <VBtn
+            color="secondary"
+            @click="deleteActionDialog = false"
+          >
+            Cancel
+          </VBtn>
+          <VBtn
+            color="error"
+            :loading="deleteActionLoading"
+            @click="deleteAction"
+          >
+            Delete
+          </VBtn>
         </VCardText>
       </VCard>
     </VDialog>
