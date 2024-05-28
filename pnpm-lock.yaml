@@ -123,6 +123,9 @@ importers:
       vue-router:
         specifier: 4.3.2
         version: 4.3.2(vue@3.4.25(typescript@5.4.5))
+      vue-uuid:
+        specifier: ^3.0.0
+        version: 3.0.0(vue@3.4.25(typescript@5.4.5))
       vue3-apexcharts:
         specifier: 1.5.2
         version: 1.5.2(apexcharts@3.49.0)(vue@3.4.25(typescript@5.4.5))
@@ -1410,6 +1413,9 @@ packages:
 
   '@types/unist@2.0.10':
     resolution: {integrity: sha512-IfYcSBWE3hLpBg8+X2SEa8LVkJdJEkT2Ese2aaLs3ptGdVtABxndrMaxuFlQ1qdFf9Q5rDvDpxI3WwgvKFAsQA==}
+
+  '@types/uuid@8.3.4':
+    resolution: {integrity: sha512-c/I8ZRb51j+pYGAu5CrFMRxqZ2ke4y2grEBO5AUjgSkSk+qT2Ea+OdWElz/OiMf5MNpn2b17kuVBwZLQJXzihw==}
 
   '@types/video.js@7.3.58':
     resolution: {integrity: sha512-1CQjuSrgbv1/dhmcfQ83eVyYbvGyqhTvb2Opxr0QCV+iJ4J6/J+XWQ3Om59WiwCd1MN3rDUHasx5XRrpUtewYQ==}
@@ -4448,6 +4454,10 @@ packages:
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
+  uuid@8.3.2:
+    resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
+    hasBin: true
+
   validate-npm-package-license@3.0.4:
     resolution: {integrity: sha512-DpKm2Ui/xN7/HQKCtpZxoRWBhZ9Z0kqtygG8XCgNQ8ZlDnxuQmWhj566j8fN4Cu3/JmbhsDo7fcAJq4s9h27Ew==}
 
@@ -4599,6 +4609,11 @@ packages:
     hasBin: true
     peerDependencies:
       typescript: '*'
+
+  vue-uuid@3.0.0:
+    resolution: {integrity: sha512-+5DP857xVmTHYd00dMC1c1gVg/nxG6+K4Lepojv9ckHt8w0fDpGc5gQCCttS9D+AkSkTJgb0cekidKjTWu5OQQ==}
+    peerDependencies:
+      vue: '>= 3.0.0'
 
   vue3-apexcharts@1.5.2:
     resolution: {integrity: sha512-rGbgUJDjtsyjfRF0uzwDjzt8+M7ICSRAbm1N9KCDiczW8BSpbEZuaEsJDJYnJuLFIIVXIGilYzIcjNBf6NbeYA==}
@@ -5808,6 +5823,8 @@ snapshots:
       minipass: 4.2.8
 
   '@types/unist@2.0.10': {}
+
+  '@types/uuid@8.3.4': {}
 
   '@types/video.js@7.3.58': {}
 
@@ -9452,6 +9469,8 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
+  uuid@8.3.2: {}
+
   validate-npm-package-license@3.0.4:
     dependencies:
       spdx-correct: 3.2.0
@@ -9635,6 +9654,12 @@ snapshots:
       '@vue/language-core': 2.0.14(typescript@5.4.5)
       semver: 7.6.2
       typescript: 5.4.5
+
+  vue-uuid@3.0.0(vue@3.4.25(typescript@5.4.5)):
+    dependencies:
+      '@types/uuid': 8.3.4
+      uuid: 8.3.2
+      vue: 3.4.25(typescript@5.4.5)
 
   vue3-apexcharts@1.5.2(apexcharts@3.49.0)(vue@3.4.25(typescript@5.4.5)):
     dependencies:

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { VCodeBlock } from '@wdns/vue-code-block'
+import { VCodeBlock } from '@wdns/vue-code-block';
+import { uuid } from 'vue-uuid';
 
 definePage({
   meta: {
@@ -13,22 +14,42 @@ interface Flow {
   name: string
   description: string
   active: boolean
-  actions: json
+  actions: JSON
   created_at: string
   updated_at: string
 }
 
 const apiError = ref(false)
 
+// Flow
 const flowID = useRoute().params.id
-const flow = ref<Flow>({})
+
+const flow = ref<Flow>({
+  id: '',
+  name: '',
+  description: '',
+  active: false,
+  actions: <any>[],
+  created_at: '',
+  updated_at: '',
+})
+
 const loadingFlow = ref(false)
+
+// Flow // Edit
+const editFlowLoading = ref(false)
+const editFlowDialog = ref(false)
 
 // Executions
 const flowExecutions = ref([])
 const loadingExecutions = ref(false)
-const executionSelected = ref([])
+const executionSelected = ref('all')
+const executionPage = ref(1)
 const executionItems = ref([])
+const executionItemsPerPage = ref(9)
+
+// const executionItemsPerPage = ref(10)
+const hideExecutionsCompleted = ref(false)
 
 // Payloads
 const flowPayloads = ref([])
@@ -37,8 +58,40 @@ const payloadsSize = ref(10)
 const payloadsListCurrent = ref(1)
 
 // Action
-const actionSelectedInt = ref(null)
-const actionSelectedData = ref({})
+const show = ref([true, false, false])
+const isEditActionDialogVisible = ref(false)
+
+// Action // Add
+const addActionLoading = ref(false)
+const addActionDialog = ref(false)
+
+const addActionData = ref({
+  id: uuid.v4(),
+  name: '',
+  description: '',
+  type: 'log',
+  active: false,
+  patternGroup: null,
+  patternLabelKey: '',
+  patternLabelValue: '',
+  webhookUrl: '',
+  webhookAuthToken: '',
+})
+
+const addActionSelectableTyped = ref([
+  {
+    title: 'Log',
+    desc: 'Print Log Message on API-Backend Server',
+    value: 'log',
+    icon: 'ri-article-line',
+  },
+  {
+    title: 'Webhook',
+    desc: 'Trigger Webhook',
+    value: 'webhook',
+    icon: 'ri-webhook-line',
+  },
+])
 
 // Tabs
 const currentTab = ref('tab-1')
@@ -72,10 +125,17 @@ const getFlowExecutions = async () => {
     }
     flowExecutions.value = await JSON.parse(data.value).executions
 
-    for (let i = 0; i < flowExecutions.value.length; i++) {
-      if (executionItems.value.includes(flowExecutions.value[i].type) === false)
-        executionItems.value.push(flowExecutions.value[i].type)
-    }
+    const executionItemsUnique = new Set()
+
+    for (let i = 0; i < flowExecutions.value.length; i++)
+      executionItemsUnique.add(flowExecutions.value[i].type)
+
+    executionItems.value = Array.from(executionItemsUnique).map(type => ({
+      title: type === '' ? 'N/A' : type.charAt(0).toUpperCase() + type.slice(1),
+      value: type,
+    }))
+
+    executionItems.value.unshift({ title: 'All', value: 'all' })
 
     loadingExecutions.value = false
   }
@@ -104,11 +164,7 @@ const getFlowPayloads = async () => {
   }
 }
 
-const actionSelected = action => {
-  actionSelectedData.value = action
-}
-
-const getExecutionIcon = execution => {
+const getExecutionIcon = (execution: any) => {
   if (execution.type === 'log')
     return 'ri-article-line'
 
@@ -116,42 +172,134 @@ const getExecutionIcon = execution => {
     return 'ri-question-line'
 }
 
-const getExecutionColor = execution => {
-  if (execution.error)
-    return 'error'
-
+const getExecutionColor = (execution: any) => {
+  if (execution.no_match)
+    return 'secondary'
   else
-    if (execution.running)
+    if (execution.running && !execution.error)
       return 'warning'
-
     else
-      if (execution.type === '')
-        return 'info'
-
+      if (execution.error)
+        return 'error'
       else
         return 'success'
 }
 
-const getExecutionStatus = execution => {
-  if (execution.error)
-    return 'Error'
-
+const getExecutionTextColor = (execution: any) => {
+  if (execution.no_match)
+    return 'text-secondary'
   else
-    if (execution.running)
-      return 'Running'
-
+    if (execution.running && !execution.error)
+      return 'text-warning'
     else
-      return 'Success'
+      if (execution.error)
+        return 'text-error'
+      else
+        return 'text-success'
+}
+
+const getExecutionStatus = (execution: any) => {
+  if (execution.no_match)
+    return 'No Action Matched'
+  else
+    if (execution.running && !execution.error)
+      return 'Running'
+    else
+      if (execution.error)
+        return 'Error'
+      else
+        return 'Finished Successfully'
+}
+
+const getExecutionStatusIcon = (execution: any) => {
+  if (execution.no_match)
+    return 'ri-indeterminate-circle-line'
+  else
+    if (execution.running && !execution.error)
+      return 'ri-time-line'
+    else
+      if (execution.error)
+        return 'ri-error-warning-line'
+      else
+        return 'ri-checkbox-circle-line'
+}
+
+const updateFlow = async () => {
+  editFlowLoading.value = true
+
+  const { error } = await useFetch(`https://alertflow-api.justlab.xyz/flow/${flowID}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      name: flow.value.name,
+      description: flow.value.description,
+      active: flow.value.active,
+    }),
+  })
+
+  if (error.value) {
+    apiError.value = true
+    editFlowLoading.value = false
+    console.error(error.value)
+  }
+  else {
+    editFlowLoading.value = false
+    getFlow()
+  }
+}
+
+const addFlowAction = async () => {
+  addActionLoading.value = true
+
+  if (!Array.isArray(flow.value.actions)) {
+    flow.value.actions = []
+  }
+
+  flow.value.actions.push(addActionData.value)
+
+  const { error } = await useFetch(`https://alertflow-api.justlab.xyz/flow/${flowID}/action`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      actions: flow.value.actions,
+    }),
+  })
+
+  if (error.value) {
+    apiError.value = true
+    addActionLoading.value = false
+    console.log(error.value)
+  }
+  else {
+    apiError.value = false
+    addActionLoading.value = false
+  }
 }
 
 onMounted(() => getFlow() && getFlowExecutions() && getFlowPayloads())
 
-const filteredFlowExecutions = computed(() => {
-  if (executionSelected.value.length === 0)
-    return flowExecutions.value.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+const filteredFlowExecutionsIndexStart = computed(() => (executionPage.value - 1) * executionItemsPerPage.value)
+const filteredFlowExecutionsIndexEnd = computed(() => executionPage.value * executionItemsPerPage.value)
 
+const filteredFlowExecutions = computed(() => {
+  if (hideExecutionsCompleted.value) {
+    if (executionSelected.value !== 'all')
+      return flowExecutions.value.filter(execution => executionSelected.value === execution.type && execution.running === true || execution.error === true).slice(filteredFlowExecutionsIndexStart.value, filteredFlowExecutionsIndexEnd.value).sort((a, b) => new Date(b.executed_at).getTime() - new Date(a.executed_at).getTime())
+    else
+      return flowExecutions.value.filter(execution => execution.running === true || execution.error === true).slice(filteredFlowExecutionsIndexStart.value, filteredFlowExecutionsIndexEnd.value).sort((a, b) => new Date(b.executed_at).getTime() - new Date(a.executed_at).getTime())
+  }
   else
-    return flowExecutions.value.filter(execution => executionSelected.value.includes(execution.type)).sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+    if (executionSelected.value === 'all') {
+      return flowExecutions.value.slice(filteredFlowExecutionsIndexStart.value, filteredFlowExecutionsIndexEnd.value).sort((a, b) => new Date(b.executed_at).getTime() - new Date(a.executed_at).getTime())
+    }
+
+    else {
+      return flowExecutions.value.filter(execution => executionSelected.value === execution.type).slice(filteredFlowExecutionsIndexStart.value, filteredFlowExecutionsIndexEnd.value).sort((a, b) => new Date(b.executed_at).getTime() - new Date(a.executed_at).getTime())
+    }
 })
 
 const payloadIndexStart = computed(() => (payloadsListCurrent.value - 1) * payloadsSize.value)
@@ -160,23 +308,39 @@ const paginated = computed(() => flowPayloads.value.slice(payloadIndexStart.valu
 </script>
 
 <template>
-  <div class="mb-6">
-    <div class="d-flex align-center gap-x-2 mb-2">
-      <p class="text-2xl font-weight-medium mb-0">
+  <div class="d-flex justify-space-between align-center flex-wrap gap-y-4 mb-6">
+    <div>
+      <h4 class="text-h4 mb-1">
         {{ flow.name }}
+        <VChip
+          color="secondary"
+          label
+          class="mb-0 mx-2"
+        >
+          {{ flow.id }}
+        </VChip>
+      </h4>
+      <p class="text-body-1 mb-0">
+        {{ flow.description }}
       </p>
-      <VDivider vertical />
-      <VChip
-        color="secondary"
-        label
-        class="mb-0"
-      >
-        {{ flow.id }}
-      </VChip>
     </div>
-    <p class="text-sm text-disabled mb-0">
-      {{ flow.description }}
-    </p>
+    <div class="d-flex gap-4 align-center flex-wrap">
+      <VBtn
+        variant="outlined"
+        color="warning"
+        @click="editFlowDialog = true"
+      >
+        Edit Flow
+      </VBtn>
+      <VBtn
+        prepend-icon="ri-arrow-left-s-line"
+        variant="tonal"
+        color="success"
+        :to="{ name: 'flows' }"
+      >
+        Back to Flows
+      </VBtn>
+    </div>
   </div>
 
   <VAlert
@@ -193,39 +357,24 @@ const paginated = computed(() => flowPayloads.value.slice(payloadIndexStart.valu
       <VCol
         cols="12"
         md="3"
-        sm="6"
+        sm="3"
       >
         <div>
-          <VCard
-            class="logistics-card-statistics"
-            :loading="apiError"
-          >
+          <VCard :loading="apiError">
             <VCardText>
-              <div class="d-flex align-center gap-x-4 mb-1">
+              <div class="d-flex align-center justify-space-between">
+                <div class="d-flex flex-column">
+                  <span
+                    class="text-h5 mb-1"
+                    :class="flow.active ? 'text-success' : 'text-error'"
+                  >{{ flow.active ? 'Active' : 'Inactive' }}</span>
+                  <span class="text-sm">Flow Status</span>
+                </div>
                 <VAvatar
+                  icon="ri-check-double-line"
                   variant="tonal"
                   :color="flow.active ? 'success' : 'error'"
-                  rounded
-                >
-                  <VIcon
-                    icon="ri-check-double-line"
-                    size="28"
-                  />
-                </VAvatar>
-                <h4 class="text-h4">
-                  {{ flow.active ? 'Active' : 'Inactive' }}
-                </h4>
-              </div>
-              <div class="text-body-1 mb-1">
-                Flow Status
-              </div>
-              <div class="d-flex gap-x-2 align-center">
-                <h6 class="text-h6">
-                  12%
-                </h6>
-                <div class="text-sm text-disabled">
-                  than last week
-                </div>
+                />
               </div>
             </VCardText>
           </VCard>
@@ -234,39 +383,21 @@ const paginated = computed(() => flowPayloads.value.slice(payloadIndexStart.valu
       <VCol
         cols="12"
         md="3"
-        sm="6"
+        sm="3"
       >
         <div>
-          <VCard
-            class="logistics-card-statistics"
-            :loading="apiError"
-          >
+          <VCard :loading="apiError">
             <VCardText>
-              <div class="d-flex align-center gap-x-4 mb-1">
+              <div class="d-flex align-center justify-space-between">
+                <div class="d-flex flex-column">
+                  <span class="text-h5 mb-1">{{ flowExecutions.length }}</span>
+                  <span class="text-sm">Executions</span>
+                </div>
                 <VAvatar
+                  icon="ri-terminal-line"
                   variant="tonal"
                   color="warning"
-                  rounded
-                >
-                  <VIcon
-                    icon="ri-terminal-line"
-                    size="28"
-                  />
-                </VAvatar>
-                <h4 class="text-h4">
-                  {{ flowExecutions.length }}
-                </h4>
-              </div>
-              <div class="text-body-1 mb-1">
-                Executions
-              </div>
-              <div class="d-flex gap-x-2 align-center">
-                <h6 class="text-h6">
-                  12%
-                </h6>
-                <div class="text-sm text-disabled">
-                  than last week
-                </div>
+                />
               </div>
             </VCardText>
           </VCard>
@@ -275,39 +406,21 @@ const paginated = computed(() => flowPayloads.value.slice(payloadIndexStart.valu
       <VCol
         cols="12"
         md="3"
-        sm="6"
+        sm="3"
       >
         <div>
-          <VCard
-            class="logistics-card-statistics"
-            :loading="apiError"
-          >
+          <VCard :loading="apiError">
             <VCardText>
-              <div class="d-flex align-center gap-x-4 mb-1">
-                <VAvatar
-                  variant="tonal"
-                  color="success"
-                  rounded
-                >
-                  <VIcon
-                    icon="ri-git-repository-commits-line"
-                    size="28"
-                  />
-                </VAvatar>
-                <h4 class="text-h4">
-                  {{ flowPayloads.length }}
-                </h4>
-              </div>
-              <div class="text-body-1 mb-1">
-                Injected Payloads
-              </div>
-              <div class="d-flex gap-x-2 align-center">
-                <h6 class="text-h6">
-                  12%
-                </h6>
-                <div class="text-sm text-disabled">
-                  than last week
+              <div class="d-flex align-center justify-space-between">
+                <div class="d-flex flex-column">
+                  <span class="text-h5 mb-1">{{ flowPayloads.length }}</span>
+                  <span class="text-sm">Injected Payloads</span>
                 </div>
+                <VAvatar
+                  icon="ri-git-repository-commits-line"
+                  variant="tonal"
+                  color="info"
+                />
               </div>
             </VCardText>
           </VCard>
@@ -316,635 +429,606 @@ const paginated = computed(() => flowPayloads.value.slice(payloadIndexStart.valu
       <VCol
         cols="12"
         md="3"
-        sm="6"
+        sm="3"
       >
-        <VCard>
-          <VCardText>
-            <div class="d-flex flex-wrap gap-4">
-              <VBtn
-                variant="outlined"
-                color="info"
-                class="flex-grow-1"
-              >
-                Create Action
-              </VBtn>
-
-              <VBtn
-                color="warning"
-                variant="outlined"
-                class="mb-4 flex-grow-1"
-              >
-                Edit Flow
-              </VBtn>
-            </div>
-
-            <!-- 👉  Add Payment trigger button  -->
-            <VBtn
-              block
-              prepend-icon="ri-arrow-left-s-line"
-              color="success"
-              variant="tonal"
-              :to="{ name: 'flows' }"
-            >
-              Back to Flows
-            </VBtn>
-          </VCardText>
-        </VCard>
+        <div>
+          <VCard :loading="apiError">
+            <VCardText>
+              <div class="d-flex align-center justify-space-between">
+                <div class="d-flex flex-column">
+                  <span class="text-h5 mb-1">{{ new Date(flow.updated_at).toLocaleString() }}</span>
+                  <span class="text-sm">Last Flow Update</span>
+                </div>
+                <VAvatar
+                  icon="ri-loop-left-line"
+                  variant="tonal"
+                  color="secondary"
+                />
+              </div>
+            </VCardText>
+          </VCard>
+        </div>
       </VCol>
     </VRow>
   </div>
   <div class="my-5">
-    <VCard :loading="apiError">
-      <VTabs
-        v-model="currentTab"
-        grow
-        stacked
-      >
-        <VTab>
-          <VIcon
-            icon="ri-hammer-line"
-            class="mb-2"
-          />
-          <span>Flow Actions</span>
-        </VTab>
-
-        <VTab>
-          <VIcon
-            icon="ri-terminal-line"
-            class="mb-2"
-          />
-          <span>Executions</span>
-        </VTab>
-
-        <VTab>
-          <VIcon
-            icon="ri-git-repository-commits-line"
-            class="mb-2"
-          />
-          <span>Payloads</span>
-        </VTab>
-      </VTabs>
-
-      <VCardText>
-        <VWindow v-model="currentTab">
-          <!-- 👉 Actions -->
-          <VWindowItem value="tab-1">
-            <VCard>
-              <VCardText>
-                <VSlideGroup
-                  v-model="actionSelectedInt"
-                  show-arrows
-                  mandatory
-                  class="mb-10"
-                >
-                  <VSlideGroupItem
-                    v-for="action in flow.actions"
-                    :key="action.id"
-                    v-slot="{ isSelected, toggle }"
-                    :value="action.id"
-                  >
-                    <div
-                      style="block-size: 100px; inline-size: 110px;"
-                      :style="isSelected ? 'border-color:rgb(var(--v-theme-primary)) !important' : ''"
-                      :class="isSelected ? 'border' : 'border border-dashed'"
-                      class="d-flex flex-column justify-center align-center cursor-pointer rounded py-4 px-5 me-4"
-                      @click="() => { toggle(); actionSelected(action); }"
-                    >
-                      <VAvatar
-                        rounded
-                        size="38"
-                        color="primary"
-                        variant="tonal"
-                        class="mb-2"
-                      >
-                        <VIcon
-                          size="22"
-                          icon="ri-article-line"
-                        />
-                      </VAvatar>
-                      <h6 class="text-base font-weight-medium mb-0">
-                        {{ action.type.toUpperCase() }}
-                      </h6>
-                    </div>
-                  </VSlideGroupItem>
-
-                  <!-- 👉 slider more -->
-                  <VSlideGroupItem>
-                    <div
-                      style="block-size: 100px; inline-size: 110px;"
-                      class="d-flex flex-column justify-center align-center rounded border border-dashed py-4 px-5"
-                    >
-                      <VAvatar
-                        rounded
-                        size="38"
-                        variant="tonal"
-                      >
-                        <VIcon
-                          size="22"
-                          icon="ri-add-line"
-                        />
-                      </VAvatar>
-                    </div>
-                  </VSlideGroupItem>
-                </VSlideGroup>
-
-                <VTimeline
-                  v-if="actionSelectedInt !== null"
-                  side="end"
-                  align="start"
-                  line-inset="8"
-                  truncate-line="start"
-                  density="compact"
-                  class="v-timeline--variant-outlined"
-                >
-                  <!-- SECTION Timeline Item: Flight -->
-                  <VTimelineItem
-                    dot-color="rgb(var(--v-theme-surface))"
-                    size="x-small"
-                  >
-                    <template #icon>
-                      <VIcon
-                        icon="ri-group-line"
-                        color="primary"
-                      />
-                    </template>
-                    <!-- 👉 Header -->
-                    <div class="d-flex justify-space-between align-center gap-2 flex-wrap mb-2">
-                      <span class="app-timeline-title">
-                        {{ actionSelectedData.patternGroup }}
-                      </span>
-                    </div>
-
-                    <!-- 👉 Content -->
-                    <div class="app-timeline-text mt-1">
-                      Which Object to use for Key, Value search
-                    </div>
-                  </VTimelineItem>
-                  <!-- !SECTION -->
-
-                  <!-- SECTION Timeline Item: Interview Schedule -->
-                  <VTimelineItem
-                    size="x-small"
-                    dot-color="rgb(var(--v-theme-surface))"
-                  >
-                    <template #icon>
-                      <VIcon
-                        icon="ri-key-2-line"
-                        color="success"
-                      />
-                    </template>
-                    <!-- 👉 Header -->
-                    <div class="d-flex justify-space-between align-center flex-wrap mb-2">
-                      <div class="app-timeline-title">
-                        {{ actionSelectedData.patternLabelKey }}
-                      </div>
-                    </div>
-
-                    <div class="app-timeline-text mt-1">
-                      Key to search for
-                    </div>
-                  </VTimelineItem>
-                  <!-- !SECTION -->
-
-                  <!-- SECTION Design Review -->
-                  <VTimelineItem
-                    size="x-small"
-                    dot-color="rgb(var(--v-theme-surface))"
-                  >
-                    <template #icon>
-                      <VIcon
-                        icon="ri-quote-text"
-                        color="info"
-                      />
-                    </template>
-                    <!-- 👉 Header -->
-                    <div class="d-flex justify-space-between align-center flex-wrap mb-2">
-                      <span class="app-timeline-title">
-                        {{ actionSelectedData.patternLabelValue }}
-                      </span>
-                    </div>
-
-                    <!-- 👉 Content -->
-                    <p class="app-timeline-text mt-1 mb-2">
-                      Value to search for
-                    </p>
-                  </VTimelineItem>
-                </VTimeline>
-              </VCardText>
-            </VCard>
-          </VWindowItem>
-
-          <!-- 👉 Executions -->
-          <VWindowItem value="tab-2">
-            <VAlert
-              v-if="flowExecutions.length === 0"
-              color="info"
-              variant="tonal"
-            >
-              No Executions found for this Flow
-            </VAlert>
-
-            <div v-else>
-              <VCombobox
-                v-model="executionSelected"
-                chips
-                clearable
-                multiple
-                closable-chips
-                clear-icon="ri-close-circle-line"
-                :items="executionItems"
-                label="Filter by Action Type"
-                prepend-icon="ri-filter-3-line"
-                class="mb-4 mt-2"
-              />
-
-              <VList
-                lines="two"
-                border
-              >
-                <template
-                  v-for="(execution, index) in filteredFlowExecutions"
-                  :key="execution.id"
-                >
-                  <VListItem class="py-2">
-                    <template #prepend>
-                      <VAvatar
-                        size="36"
-                        rounded
-                        variant="tonal"
-                        :icon="getExecutionIcon(execution)"
-                        :color="getExecutionColor(execution)"
-                      />
-                    </template>
-                    <VListItemTitle>
-                      <span>{{ execution.type.toUpperCase() }}</span>
-                      <VBadge
-                        dot
-                        location="start center"
-                        offset-x="2"
-                        :color="getExecutionColor(execution)"
-                        class="me-3 ms-1"
-                      >
-                        <span class="ms-4">{{ getExecutionStatus(execution) }}</span>
-                      </VBadge>
-                    </VListItemTitle>
-
-                    <VListItemSubtitle class="mt-1">
-                      <span>Execution ID</span>
-                      <span class="text-xs text-disabled ms-2">{{ execution.id }}</span>
-                    </VListItemSubtitle>
-
-                    <VListItemSubtitle class="mt-1">
-                      <span>Payload ID</span>
-                      <span class="text-xs text-disabled ms-2">{{ execution.payload_id }}</span>
-                    </VListItemSubtitle>
-
-                    <VListItemSubtitle class="mt-1">
-                      <span>Executed At</span>
-                      <span class="text-xs text-disabled ms-2">{{ new Date(execution.executed_at).toLocaleString() }}</span>
-                    </VListItemSubtitle>
-
-                    <VListItemSubtitle class="mt-1">
-                      <span>Finished At</span>
-                      <span class="text-xs text-disabled ms-2">{{ new Date(execution.finished_at).toLocaleString() }}</span>
-                    </VListItemSubtitle>
-
-                    <template #append>
-                      <VBtn
-                        variant="tonal"
-                        @click="showPayload(execution)"
-                      >
-                        Show Payload
-                        <VIcon
-                          end
-                          icon="ri-home-7-line"
-                        />
-                      </VBtn>
-                      <VBtn
-                        variant="tonal"
-                        color="error"
-                        class="ms-2"
-                      >
-                        <VIcon icon="ri-home-7-line" />
-                      </VBtn>
-                    </template>
-                  </VListItem>
-                  <VDivider v-if="index !== flowExecutions.length - 1" />
-                </template>
-              </VList>
-            </div>
-          </VWindowItem>
-          <VWindowItem value="tab-3">
-            <VAlert
-              v-if="flowPayloads.length === 0"
-              color="info"
-              variant="tonal"
-            >
-              No Payloads found for this Flow
-            </VAlert>
-            <div v-else>
-              <VExpansionPanels
-                variant="accordion"
-                class="expansion-panels-width-border"
-              >
-                <VExpansionPanel
-                  v-for="(payload) in paginated.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))"
-                  :key="payload.id"
-                >
-                  <VExpansionPanelTitle>
-                    <span class="text-info me-2"> {{ new Date(payload.created_at).toLocaleString() }} </span> -> {{ payload.id }}
-                  </VExpansionPanelTitle>
-                  <VExpansionPanelText>
-                    <VCodeBlock
-                      :code="payload.payload"
-                      label="Payload"
-                      :indent="2"
-                      lang="json"
-                      highlightjs
-                      theme="tokyo-night-dark"
-                      :copy-button="false"
-                      code-block-radius="0rem"
-                    />
-                  </VExpansionPanelText>
-                </VExpansionPanel>
-              </VExpansionPanels>
-
-              <VPagination
-                v-model="payloadsListCurrent"
-                :length="flowPayloads.length / payloadsSize + 1"
-                :total-visible="$vuetify.display.mdAndUp ? 7 : 3"
-                class="mt-4"
-              />
-            </div>
-          </VWindowItem>
-        </VWindow>
-      </VCardText>
-    </VCard>
-  </div>
-  <div>
-    <VDialog
-      :model-value="createFlowDialog"
-      max-width="900"
-      min-height="590"
-      @update:model-value="dialogVisibleUpdate"
+    <VTabs
+      v-model="currentTab"
+      class="v-tabs-pill mb-1"
     >
-      <!-- 👉 dialog close btn -->
-      <DialogCloseBtn
-        size="small"
-        @click="createFlowDialog = false"
-      />
-      <VCard
-        class="create-app-dialog"
-        min-height="590"
-      >
-        <VCardText class="pa-5 pa-sm-16">
-          <!-- 👉 Title -->
-          <h4 class="text-h4 text-center mb-6">
-            Create a new Flow Action
-          </h4>
+      <VTab prepend-icon="ri-hammer-line">
+        <span>Flow Actions</span>
+      </VTab>
 
-          <VRow>
-            <VCol
-              cols="12"
-              sm="5"
-              md="4"
-              lg="3"
-            >
-              <AppStepper
-                v-model:current-step="currentStep"
-                direction="vertical"
-                :items="createActionsCategories"
-                icon-size="22"
-                class="stepper-icon-step-bg"
-              />
-            </VCol>
+      <VTab prepend-icon="ri-terminal-line">
+        <span>Executions</span>
+      </VTab>
 
-            <VCol
-              cols="12"
-              sm="7"
-              md="8"
-              lg="9"
-            >
-              <VForm
-                ref="createFlowFormRef"
-                @submit.prevent="() => {}"
+      <VTab prepend-icon="ri-git-repository-commits-line">
+        <span>Payloads</span>
+      </VTab>
+    </VTabs>
+
+    <VWindow v-model="currentTab">
+      <!-- 👉 Actions -->
+      <VWindowItem value="tab-1">
+        <VCard class="mb-6">
+          <VCardText>
+            <div class="d-flex justify-space-between pb-5 flex-wrap align-center gap-y-4 gap-x-6">
+              <h5 class="text-h5">
+                Actions
+              </h5>
+              <VBtn
+                variant="outlined"
+                size="small"
+                @click="addActionDialog = !addActionDialog"
               >
-                <VWindow
-                  v-model="currentStep"
-                  class="disable-tab-transition stepper-content"
-                >
-                  <!-- 👉 ACTIONS -->
-                  <VWindowItem>
-                    <CustomRadiosWithIcon
-                      v-model:selected-radio="createAction.type"
-                      :radio-content="createActionSelects"
-                      :grid-column="{ sm: '4', cols: '12' }"
-                    />
-
-                    <VRow
-                      v-if="createAction.type !== ''"
-                      class="mt-6"
-                      no-gutters
+                Add new Action
+              </VBtn>
+            </div>
+            <template
+              v-for="(action, index) in flow.actions"
+              :key="action.id"
+            >
+              <div>
+                <div class="d-flex justify-space-between my-3 gap-y-2 flex-wrap align-center">
+                  <div class="d-flex align-center gap-x-2">
+                    <IconBtn
+                      density="comfortable"
+                      @click="show[index] = !show[index]"
                     >
-                      <!-- 👉 First Name -->
-                      <VCol
-                        cols="12"
-                        md="3"
-                        class="d-flex align-items-center"
-                      >
-                        <label class="v-label text-body-2 text-high-emphasis">Status</label>
-                      </VCol>
-
-                      <VCol
-                        cols="12"
-                        md="9"
-                      >
-                        <VCheckbox
-                          v-model="createAction.active"
-                          color="success"
-                          :label="createAction.active === true ? 'Active' : 'Inactive'"
-                        />
-                      </VCol>
-                    </VRow>
-                  </VWindowItem>
-
-                  <!-- 👉 PATTERN -->
-                  <VWindowItem>
-                    <h5 class="text-h5 mb-1">
-                      Select the object where your label is located
-                    </h5>
-                    <VRadioGroup
-                      v-model="createAction.patternGroup"
-                      inline
-                    >
-                      <VRadio
-                        label="groupLabels"
-                        value="groupLabels"
-                      />
-                      <VRadio
-                        label="commonLabels"
-                        value="commonLabels"
-                      />
-                      <VRadio
-                        label="alertLabels"
-                        value="alertLabels"
-                      />
-                    </VRadioGroup>
-
-                    <VDivider class="my-4" />
-
-                    <VRow>
-                      <VCol cols="12">
-                        <VRow no-gutters>
-                          <!-- 👉 First Name -->
-                          <VCol
-                            cols="12"
-                            md="3"
-                            class="d-flex align-items-center"
-                          >
-                            <label
-                              class="v-label text-body-2 text-high-emphasis"
-                              for="patternLabelKey"
-                            >Label Key</label>
-                          </VCol>
-
-                          <VCol
-                            cols="12"
-                            md="9"
-                          >
-                            <AppTextField
-                              id="patternLabelKey"
-                              v-model="createAction.patternLabelKey"
-                              placeholder="Label Key"
-                              persistent-placeholder
-                            />
-                          </VCol>
-                        </VRow>
-                      </VCol>
-
-                      <VCol cols="12">
-                        <VRow no-gutters>
-                          <!-- 👉 First Name -->
-                          <VCol
-                            cols="12"
-                            md="3"
-                            class="d-flex align-items-center"
-                          >
-                            <label
-                              class="v-label text-body-2 text-high-emphasis"
-                              for="patternLabelValue"
-                            >Label Value</label>
-                          </VCol>
-
-                          <VCol
-                            cols="12"
-                            md="9"
-                          >
-                            <AppTextField
-                              id="patternLabelValue"
-                              v-model="createAction.patternLabelValue"
-                              placeholder="Label Value"
-                              persistent-placeholder
-                            />
-                          </VCol>
-                        </VRow>
-                      </VCol>
-                    </VRow>
-                  </VWindowItem>
-
-                  <VWindowItem class="text-center">
-                    <h5 class="text-h5 mb-1">
-                      Create it 🚀
-                    </h5>
-                    <p class="text-sm mb-4">
-                      Create the new Action.
-                    </p>
-
-                    <VImg
-                      :src="laptopGirl"
-                      width="176"
-                      class="mx-auto"
-                    />
-                  </VWindowItem>
-                </VWindow>
-
-                <div class="d-flex justify-space-between mt-6">
-                  <VBtn
-                    variant="tonal"
-                    color="secondary"
-                    :disabled="currentStep === 0"
-                    @click="currentStep--"
-                  >
-                    <VIcon
-                      icon="ri-home-7-line"
-                      start
-                      class="flip-in-rtl"
-                    />
-                    Previous
-                  </VBtn>
-
-                  <VBtn
-                    v-if="createActionsCategories.length - 1 === currentStep"
-                    color="success"
-                    :loading="createActionSubmitLoading"
-                    @click="createActions"
-                  >
-                    Create
-                  </VBtn>
-
-                  <div v-else>
-                    <VBtn
-                      color="info"
-                      variant="tonal"
-                      class="me-4"
-                      @click="createActionsCategories.push({ icon: 'ri-home-7-line', title: `ACTION ${createActions.actionCategories.length + 1}`, subtitle: 'Action to perform' })"
-                    >
-                      Create Another Action
-
                       <VIcon
-                        icon="ri-home-7-line"
-                        end
+                        :icon="show[index] ? 'ri-arrow-down-s-line' : 'ri-arrow-right-s-line'"
+                        class="flip-in-rtl text-high-emphasis"
+                      />
+                    </IconBtn>
+                    <div>
+                      <div class="d-flex gap-2 mb-1">
+                        <h6 class="text-h6">
+                          {{ action.name }}
+                        </h6>
+                        <VChip
+                          :color="action.active ? 'success' : 'error'"
+                          density="comfortable"
+                        >
+                          {{ action.active ? 'Active' : 'Inactive' }}
+                        </VChip>
+                      </div>
+                      <p class="text-body-1 mb-0">
+                        {{ action.description }}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="ms-5">
+                    <IconBtn @click="isEditActionDialogVisible = !isEditActionDialogVisible">
+                      <VIcon
+                        icon="ri-pencil-line"
                         class="flip-in-rtl"
                       />
-                    </VBtn>
-
-                    <VBtn @click="currentStep++">
-                      Next
-
+                    </IconBtn>
+                    <IconBtn>
                       <VIcon
-                        icon="ri-home-7-line"
+                        icon="ri-delete-bin-5-line"
                         class="flip-in-rtl"
                       />
-                    </VBtn>
+                    </IconBtn>
+                    <IconBtn>
+                      <VIcon
+                        icon="ri-more-2-line"
+                        class="flip-in-rtl"
+                      />
+                    </IconBtn>
                   </div>
                 </div>
-              </VForm>
+                <VExpandTransition>
+                  <div v-show="show[index]">
+                    <VRow class="px-12 pb-3">
+                      <VCol
+                        cols="12"
+                        md="12"
+                      >
+                        <VTable>
+                          <tr>
+                            <td
+                              class="text-sm pb-1"
+                              style="inline-size: 100px;"
+                            >
+                              Action Type
+                            </td>
+                            <td class="text-sm text-high-emphasis font-weight-medium">
+                              {{ action.type }}
+                            </td>
+                          </tr>
+                          <tr>
+                            <td
+                              class="text-sm pb-1"
+                              style="inline-size: 100px;"
+                            >
+                              Group
+                            </td>
+                            <td class="text-sm text-high-emphasis font-weight-medium">
+                              {{ action.patternGroup }}
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="text-sm pb-1">
+                              Key
+                            </td>
+                            <td class="text-sm text-high-emphasis font-weight-medium">
+                              {{ action.patternLabelKey }}
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="text-sm pb-1">
+                              Value
+                            </td>
+                            <td class="text-sm text-high-emphasis font-weight-medium">
+                              {{ action.patternLabelValue }}
+                            </td>
+                          </tr>
+                        </VTable>
+                      </VCol>
+                    </VRow>
+                  </div>
+                </VExpandTransition>
+                <VDivider v-if="index !== flow.actions.length - 1" />
+              </div>
+            </template>
+          </VCardText>
+        </VCard>
+      </VWindowItem>
+
+      <!-- 👉 Executions -->
+      <VWindowItem value="tab-2">
+        <VAlert
+          v-if="flowExecutions.length === 0"
+          color="info"
+          variant="tonal"
+        >
+          No Executions found for this Flow
+        </VAlert>
+
+        <div v-else>
+          <VCard class="mb-6">
+            <VCardText>
+              <!-- 👉 Header -->
+              <div class="d-flex justify-space-between align-center flex-wrap gap-4 mb-6">
+                <div>
+                  <h5 class="text-h5">
+                    Executions
+                  </h5>
+                  <div class="text-body-1">
+                    {{ flowExecutions.length }} Flow Executions found
+                  </div>
+                </div>
+
+                <div class="d-flex flex-wrap align-center gap-y-4 gap-x-6">
+                  <VSelect
+                    v-model="executionSelected"
+                    density="compact"
+                    :items="executionItems"
+                    style="min-inline-size: 250px;"
+                  />
+                  <VSwitch
+                    v-model="hideExecutionsCompleted"
+                    label="Hide Completed"
+                  />
+                </div>
+              </div>
+
+              <!-- 👉 Course List -->
+              <div class="mb-6">
+                <VRow class="match-height">
+                  <template
+                    v-for="execution in filteredFlowExecutions"
+                    :key="execution.id"
+                  >
+                    <VCol
+                      cols="12"
+                      md="4"
+                      sm="6"
+                    >
+                      <VCard
+                        flat
+                        border
+                      >
+                        <VCardText class="pt-3">
+                          <div class="d-flex justify-space-between align-center mb-4">
+                            <VChip
+                              variant="tonal"
+                              :color="getExecutionColor(execution)"
+                              size="small"
+                            >
+                              {{ getExecutionStatus(execution) }}
+                            </VChip>
+                            <div class="d-flex align-center">
+                              <VIcon
+                                :icon="getExecutionIcon(execution)"
+                                color="secondary"
+                                size="24"
+                                class="me-2"
+                              />
+                            </div>
+                          </div>
+
+                          <h5 class="text-h5 mb-1">
+                            {{ execution.type.charAt(0).toUpperCase() + execution.type.slice(1) }}
+                          </h5>
+                          <p>
+                            {{ execution.id }}
+                          </p>
+
+                          <div class="d-flex align-center mb-1">
+                            <VIcon
+                              icon="ri-time-line"
+                              size="20"
+                              class="me-1"
+                            />
+                            <div class="text-body-1 my-auto">
+                              {{ execution.finished_at ? Math.floor(new Date(execution.finished_at) - new Date(execution.executed_at)) / 1000 : 0 }}s
+                            </div>
+                          </div>
+                          <div class="mb-2">
+                            <VIcon
+                              :icon="getExecutionStatusIcon(execution)"
+                              :color="getExecutionColor(execution)"
+                              class="me-1"
+                            />
+                            <span
+                              class="text-body-1"
+                              :class="getExecutionTextColor(execution)"
+                            >{{ getExecutionStatus(execution) === 'No Action Matched' ? execution.no_match_reason : getExecutionStatus(execution) }}</span>
+                          </div>
+
+                          <VProgressLinear
+                            :model-value="getExecutionStatus(execution) === 'Finished Successfully' ? 100 : getExecutionStatus(execution) === 'Error' ? 100 : 0"
+                            :indeterminate="getExecutionStatus(execution) === 'Running'"
+                            rounded
+                            rounded-bar
+                            :color="getExecutionColor(execution)"
+                            height="8"
+                            class="mb-4"
+                          />
+
+                          <div class="d-flex flex-wrap gap-4">
+                            <VBtn
+                              variant="outlined"
+                              color="secondary"
+                              class="flex-grow-1"
+                            >
+                              <template #prepend>
+                                <VIcon
+                                  icon="ri-refresh-line"
+                                  class="flip-in-rtl"
+                                />
+                              </template>
+                              Get Details
+                            </VBtn>
+                            <VBtn
+                              variant="outlined"
+                              class="flex-grow-1"
+                            >
+                              <template #append>
+                                <VIcon
+                                  icon="ri-arrow-right-line"
+                                  class="flip-in-rtl"
+                                />
+                              </template>
+                              Show Payload
+                            </VBtn>
+                          </div>
+                        </VCardText>
+                      </VCard>
+                    </VCol>
+                  </template>
+                </VRow>
+              </div>
+
+              <VPagination
+                v-model="executionPage"
+                rounded
+                color="primary"
+                :length="Math.ceil(flowExecutions.length / executionItemsPerPage)"
+              />
+            </VCardText>
+          </VCard>
+        </div>
+      </VWindowItem>
+      <VWindowItem value="tab-3">
+        <VAlert
+          v-if="flowPayloads.length === 0"
+          color="info"
+          variant="tonal"
+        >
+          No Payloads found for this Flow
+        </VAlert>
+        <div v-else>
+          <VExpansionPanels
+            variant="accordion"
+            class="expansion-panels-width-border"
+          >
+            <VExpansionPanel
+              v-for="(payload) in paginated.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))"
+              :key="payload.id"
+            >
+              <VExpansionPanelTitle>
+                <span class="text-info me-2"> {{ new Date(payload.created_at).toLocaleString() }} </span> -> {{ payload.id }}
+              </VExpansionPanelTitle>
+              <VExpansionPanelText>
+                <VCodeBlock
+                  :code="payload.payload"
+                  label="Payload"
+                  :indent="2"
+                  lang="json"
+                  highlightjs
+                  theme="tokyo-night-dark"
+                  :copy-button="false"
+                  code-block-radius="0rem"
+                />
+              </VExpansionPanelText>
+            </VExpansionPanel>
+          </VExpansionPanels>
+
+          <VPagination
+            v-model="payloadsListCurrent"
+            :length="flowPayloads.length / payloadsSize + 1"
+            :total-visible="$vuetify.display.mdAndUp ? 7 : 3"
+            class="mt-4"
+          />
+        </div>
+      </VWindowItem>
+    </VWindow>
+  </div>
+  <div>
+    <!-- 👉 Edit Flow Dialog -->
+    <VDialog
+      v-model="editFlowDialog"
+      max-width="600"
+    >
+      <!-- Dialog Content -->
+      <VCard title="Flow">
+        <DialogCloseBtn
+          variant="text"
+          size="default"
+          @click="async () => { await getFlow(); editFlowDialog = false; }"
+        />
+
+        <VCardText>
+          <VRow>
+            <VCol cols="12">
+              <VTextField
+                v-model="flow.name"
+                label="Name"
+                placeholder="Name"
+              />
+            </VCol>
+            <VCol cols="12">
+              <VTextField
+                v-model="flow.description"
+                label="Description"
+                placeholder="Description"
+              />
+            </VCol>
+            <VCol cols="12">
+              <p class="mb-0">
+                Status
+              </p>
+              <VSwitch
+                v-model="flow.active"
+                label="Active"
+                :value="flow.active"
+                :true-value="true"
+                :false-value="false"
+                color="success"
+              />
             </VCol>
           </VRow>
+        </VCardText>
+
+        <VCardText class="d-flex justify-end flex-wrap gap-4">
+          <VBtn
+            color="error"
+            variant="outlined"
+            @click="async () => { await getFlow(); editFlowDialog = false; }"
+          >
+            Close
+          </VBtn>
+          <VBtn
+            color="success"
+            variant="tonal"
+            :loading="editFlowLoading"
+            @click="async () => { await updateFlow(); editFlowDialog = false; }"
+          >
+            Save
+          </VBtn>
         </VCardText>
       </VCard>
     </VDialog>
 
-    <!-- 👉 Execution PAYLOAD Dialog -->
+    <!-- 👉 Add Action Dialog -->
     <VDialog
-      v-model="executionPayloadDialogVisible"
-      class="v-dialog-sm"
+      :width="$vuetify.display.smAndDown ? 'auto' : 900 "
+      :model-value="addActionDialog"
     >
-      <!-- Dialog close btn -->
-      <DialogCloseBtn @click="executionPayloadDialogVisible = !executionPayloadDialogVisible" />
-
-      <!-- Dialog Content -->
-      <VCard title="Payload">
-        <VCardText>
-          <VCodeBlock
-            :code="executionPayload.payload"
-            :indent="2"
-            lang="json"
-            highlightjs
-            theme="tokyo-night-dark"
-            :copy-button="false"
-            code-block-radius="0rem"
+      <VCard class="pa-sm-11 pa-3">
+        <VCardText class="pt-5">
+          <!-- 👉 dialog close btn -->
+          <DialogCloseBtn
+            variant="text"
+            size="default"
+            @click="addActionDialog = false"
           />
+
+          <!-- 👉 Title -->
+          <div class="text-center mb-6">
+            <h4 class="text-h4 mb-2">
+              Add Flow Action
+            </h4>
+
+            <p class="text-body-1">
+              Add an Action which is executed for this Flow if the conditions are met
+            </p>
+          </div>
+
+          <CustomRadios
+            v-model:selected-radio="addActionData.type"
+            :radio-content="addActionSelectableTyped"
+            :grid-column="{ sm: '6', cols: '12' }"
+            class="mb-5"
+          >
+            <template #default="items">
+              <div class="d-flex flex-column">
+                <div class="d-flex mb-2 align-center gap-x-1">
+                  <VIcon
+                    :icon="items.item.icon"
+                    size="20"
+                    class="text-high-emphasis"
+                  />
+                  <div class="text-body-1 font-weight-medium text-high-emphasis">
+                    {{ items.item.title }}
+                  </div>
+                </div>
+                <p class="text-body-2 mb-0">
+                  {{ items.item.desc }}
+                </p>
+              </div>
+            </template>
+          </CustomRadios>
+          <!-- 👉 Form -->
+          <VForm>
+            <VRow>
+              <!-- 👉 Action Name -->
+              <VCol cols="12">
+                <VTextField
+                  v-model="addActionData.name"
+                  label="Name"
+                  placeholder="My Action"
+                />
+              </VCol>
+
+              <!-- 👉 Action Description -->
+              <VCol cols="12">
+                <VTextField
+                  v-model="addActionData.description"
+                  label="Description"
+                  placeholder="My Action Description"
+                />
+              </VCol>
+
+              <!-- 👉 Select Object Group -->
+              <VCol cols="12">
+                <VSelect
+                  v-model="addActionData.patternGroup"
+                  label="Select Object Group"
+                  placeholder="Select Object Group"
+                  :items="['alerts', 'groupLabels', 'commonLabels', 'commonAnnotations']"
+                />
+              </VCol>
+
+              <!-- 👉 Object Key -->
+              <VCol
+                cols="12"
+                md="6"
+              >
+                <VTextField
+                  v-model="addActionData.patternLabelKey"
+                  label="Object Key"
+                  placeholder="alertname"
+                />
+              </VCol>
+
+              <!-- 👉 Object Value -->
+              <VCol
+                cols="12"
+                md="6"
+              >
+                <VTextField
+                  v-model="addActionData.patternLabelValue"
+                  label="Object Value"
+                  placeholder="myAlarm"
+                />
+              </VCol>
+
+              <VCol
+                v-if="addActionData.type !== 'log'"
+                cols="12"
+                md="12"
+              >
+                <VDivider />
+              </VCol>
+
+              <VCol
+                v-if="addActionData.type === 'webhook'"
+                cols="12"
+                md="6"
+              >
+                <VTextField
+                  v-model="addActionData.webhookUrl"
+                  label="Webhook URL"
+                  placeholder="https://my-server.com/webhook"
+                />
+              </VCol>
+
+              <VCol
+                v-if="addActionData.type === 'webhook'"
+                cols="12"
+                md="6"
+              >
+                <VTextField
+                  v-model="addActionData.webhookAuthToken"
+                  label="Webhook Auth Token"
+                  placeholder="Bearer 1234567890"
+                />
+              </VCol>
+
+              <VCol cols="12">
+                <VSwitch v-model="addActionData.active" :true-value="true" :false-value="false" color="success" label="Activate Action" />
+              </VCol>
+
+              <!-- 👉 Submit and Cancel button -->
+              <VCol
+                cols="12"
+                class="text-center"
+              >
+                <VBtn
+                  type="submit"
+                  class="me-3"
+                  :loading="addActionLoading"
+                  @click="async () => { await addFlowAction(); addActionDialog = false; }"
+                >
+                  submit
+                </VBtn>
+
+                <VBtn
+                  variant="outlined"
+                  color="secondary"
+                  @click="addActionDialog = false"
+                >
+                  Cancel
+                </VBtn>
+              </VCol>
+            </VRow>
+          </VForm>
         </VCardText>
       </VCard>
     </VDialog>
