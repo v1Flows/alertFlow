@@ -1,6 +1,6 @@
 import type { ThemeDefinition } from 'vuetify'
 
-export const staticPrimaryColor = '#666CFF'
+export const staticPrimaryColor = '#0a9396'
 export const staticPrimaryDarkenColor = '#5C61E6'
 
 export const themes: Record<string, ThemeDefinition> = {
@@ -84,21 +84,21 @@ export const themes: Record<string, ThemeDefinition> = {
       'secondary': '#6D788D',
       'secondary-darken-1': '#626C7F',
       'on-secondary': '#fff',
-      'success': '#72E128',
+      'success': '#2ac670',
       'success-darken-1': '#67CB24',
       'on-success': '#fff',
-      'info': '#26C6F9',
+      'info': '#3fa1f2',
       'info-darken-1': '#22B3E1',
       'on-info': '#fff',
-      'warning': '#FDB528',
+      'warning': '#ffd74d',
       'warning-darken-1': '#E4A324',
       'on-warning': '#fff',
-      'error': '#FF4D49',
+      'error': '#e65f3f',
       'error-darken-1': '#E64542',
       'on-error': '#fff',
-      'background': '#282A42',
+      'background': '#0c0c0e',
       'on-background': '#EAEAFF',
-      'surface': '#30334E',
+      'surface': '#1f1f21',
       'on-surface': '#EAEAFF',
       'grey-50': '#2A2E42',
       'grey-100': '#2F3349',
