@@ -155,7 +155,7 @@ onMounted(() => getFlows())
   <div>
     <VRow class="match-height">
       <VCol
-        v-for="flow in flows"
+        v-for="flow in flows.sort((a, b) => b.active - a.active)"
         :key="flow"
         cols="12"
         md="4"

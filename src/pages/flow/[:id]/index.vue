@@ -777,31 +777,21 @@ const paginated = computed(() => flowPayloads.value.slice(payloadIndexStart.valu
                         />
 
                         <div class="d-flex flex-wrap gap-4">
-                          <VBtn
-                            variant="outlined"
-                            color="secondary"
-                            class="flex-grow-1"
-                          >
-                            <template #prepend>
-                              <VIcon
-                                icon="ri-refresh-line"
-                                class="flip-in-rtl"
-                              />
-                            </template>
-                            Get Details
-                          </VBtn>
-                          <VBtn
-                            variant="outlined"
-                            class="flex-grow-1"
-                          >
-                            <template #append>
-                              <VIcon
-                                icon="ri-arrow-right-line"
-                                class="flip-in-rtl"
-                              />
-                            </template>
-                            Show Payload
-                          </VBtn>
+                          <RouterLink :to="`/flow/${flow.id}/execution/${execution.id}`">
+                            <VBtn
+                              variant="tonal"
+                              color="primary"
+                              class="flex-grow-1"
+                            >
+                              <template #prepend>
+                                <VIcon
+                                  icon="ri-corner-down-right-line"
+                                  class="flip-in-rtl"
+                                />
+                              </template>
+                              Get Details
+                            </VBtn>
+                          </RouterLink>
                         </div>
                       </VCardText>
                     </VCard>
