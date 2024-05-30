@@ -56,7 +56,7 @@ const getFlows = async () => {
   }
 }
 
-const createFlow = async flow => {
+const createFlow = async (flow: any) => {
   try {
     const { data, error } = await useFetch('https://alertflow-api.justlab.xyz/flow', {
       method: 'POST',

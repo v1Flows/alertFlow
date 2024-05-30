@@ -48,16 +48,16 @@ const translateMouse = computed(() => (speed: number) => {
         <div class="text-center pt-6 pb-16">
           <div class="mb-4 landing-page-title">
             <div>
-              All in one sass application
+              All in one Alarm Management System
             </div>
             for your business
           </div>
           <div class="text-body-1 font-weight-medium text-high-emphasis pb-8">
             <p class="mb-0">
-              No coding required to make customization
+              No coding required to make alarm actions
             </p>
             <p class="mb-0">
-              The live customer has everything your marketing needs
+              Your infrastructure alarms fully automated with flows
             </p>
           </div>
           <VBtn

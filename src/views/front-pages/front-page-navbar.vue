@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { useWindowScroll } from '@vueuse/core'
-import type { RouteLocationRaw } from 'vue-router/auto'
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 import { useDisplay } from 'vuetify'
 import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
-import navImg from '@images/front-pages/misc/nav-img.png'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { themeConfig } from '@themeConfig'
 
@@ -19,20 +17,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 const display = useDisplay()
 
-interface navItem {
-  name: string
-  to: RouteLocationRaw
-}
-
-interface MenuItem {
-  listTitle: string
-  listIcon: string
-  navItems: navItem[]
-}
-
-const route = useRoute()
-const router = useRouter()
-
 const { y } = useWindowScroll()
 
 const sidebar = ref(false)
@@ -40,58 +24,6 @@ const sidebar = ref(false)
 watch(() => display, () => {
   return display.mdAndUp ? sidebar.value = false : sidebar.value
 }, { deep: true })
-
-const isMenuOpen = ref(false)
-
-const menuItems: MenuItem[] = [
-  // {
-  //   listTitle: 'Page',
-  //   listIcon: 'ri-layout-grid-line',
-  //   navItems: [
-  //     { name: 'Pricing', to: { name: 'front-pages-pricing' } },
-  //     { name: 'Payment', to: { name: 'front-pages-payment' } },
-  //     { name: 'Checkout', to: { name: 'front-pages-checkout' } },
-  //     { name: 'Help Center', to: { name: 'front-pages-help-center' } },
-  //   ],
-  // },
-  // {
-  //   listTitle: 'Auth Demo',
-  //   listIcon: 'ri-lock-unlock-line',
-  //   navItems: [
-  //     { name: 'Login (Basic)', to: { name: 'pages-authentication-login-v1' } },
-  //     { name: 'Login (Cover)', to: { name: 'pages-authentication-login-v2' } },
-  //     { name: 'Register (Basic)', to: { name: 'pages-authentication-register-v1' } },
-  //     { name: 'Register (Cover)', to: { name: 'pages-authentication-register-v2' } },
-  //     { name: 'Register (Multi-steps)', to: { name: 'pages-authentication-register-multi-steps' } },
-  //     { name: 'Forgot Password (Basic)', to: { name: 'pages-authentication-forgot-password-v1' } },
-  //     { name: 'Forgot Password (Cover)', to: { name: 'pages-authentication-forgot-password-v2' } },
-  //     { name: 'Reset Password (Basic)', to: { name: 'pages-authentication-reset-password-v1' } },
-  //     { name: 'Reset Password (cover  )', to: { name: 'pages-authentication-reset-password-v2' } },
-  //   ],
-  // },
-  // {
-  //   listTitle: 'Other',
-  //   listIcon: 'ri-image-line',
-  //   navItems: [
-  //     { name: 'Under Maintenance', to: { name: 'pages-misc-under-maintenance' } },
-  //     { name: 'Coming Soon', to: { name: 'pages-misc-coming-soon' } },
-  //     { name: 'Not Authorized', to: { path: '/not-authorized' } },
-  //     { name: 'Verify Email (Basic)', to: { name: 'pages-authentication-verify-email-v1' } },
-  //     { name: 'Verify Email (Cover)', to: { name: 'pages-authentication-verify-email-v2' } },
-  //     { name: 'Two Steps (Basic)', to: { name: 'pages-authentication-two-steps-v1' } },
-  //     { name: 'Two Steps (Cover)', to: { name: 'pages-authentication-two-steps-v2' } },
-  //   ],
-  // },
-]
-
-const isCurrentRoute = (to: RouteLocationRaw) => {
-  return route.matched.some(_route => _route.path.startsWith(router.resolve(to).path))
-
-  // ℹ️ Below is much accurate approach if you don't have any nested routes
-  // return route.matched.some(_route => _route.path === router.resolve(to).path)
-}
-
-const isPageActive = computed(() => menuItems.some(item => item.navItems.some(listItem => isCurrentRoute(listItem.to))))
 </script>
 
 <template>
@@ -116,62 +48,11 @@ const isPageActive = computed(() => menuItems.some(item => item.navItems.some(li
           >
             {{ item }}
           </RouterLink>
-          <div
-            class="text-high-emphasis font-weight-medium cursor-pointer"
-            :class="isPageActive ? 'active-link' : 'text-high-emphasis'"
-          >
-            <div
-              :class="isMenuOpen ? 'mb-6' : ''"
-              @click="isMenuOpen = !isMenuOpen"
-            >
-              Pages <VIcon :icon="isMenuOpen ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'" />
-            </div>
-            <div
-              v-for="(item, index) in menuItems"
-              :key="index"
-              :class="isMenuOpen ? 'd-block' : 'd-none'"
-            >
-              <div class="d-flex align-center gap-x-3 mb-4">
-                <VAvatar
-                  variant="tonal"
-                  color="primary"
-                  rounded
-                  :icon="item.listIcon"
-                />
-                <div class="text-body-1 text-high-emphasis font-weight-medium">
-                  {{ item.listTitle }}
-                </div>
-              </div>
-              <ul class="mb-6">
-                <li
-                  v-for="listItem in item.navItems"
-                  :key="listItem.name"
-                  style="list-style: none;"
-                  class="text-body-1 mb-4"
-                >
-                  <RouterLink
-                    :to="listItem.to"
-                    :target="item.listTitle === 'Page' ? '_self' : '_blank'"
-                    class="mega-menu-item"
-                    :class="isCurrentRoute(listItem.to) ? 'active-link' : ''"
-                  >
-                    <VIcon
-                      icon="ri-circle-line"
-                      :size="10"
-                      class="me-2"
-                    />
-                    <span>  {{ listItem.name }}</span>
-                  </RouterLink>
-                </li>
-              </ul>
-            </div>
-          </div>
           <RouterLink
-            to="/"
-            target="_blank"
+            to="/dashboard"
             class="text-body-1 font-weight-medium nav-link px-0"
           >
-            Admin
+            Dashboard
           </RouterLink>
         </div>
       </div>
@@ -239,91 +120,11 @@ const isPageActive = computed(() => menuItems.some(item => item.navItems.some(li
             {{ item }}
           </RouterLink>
 
-          <!-- Pages Menu -->
-          <span
-            class="font-weight-medium cursor-pointer nav-link"
-            :class="isPageActive ? 'active-link' : 'text-high-emphasis'"
-          >
-            Pages
-            <VIcon
-              icon="ri-arrow-down-s-line"
-              size="20"
-              class="ms-2"
-            />
-
-            <VMenu
-              open-on-hover
-              activator="parent"
-              transition="slide-y-transition"
-              location="bottom center"
-              offset="16"
-              content-class="mega-menu"
-              location-strategy="static"
-              close-on-content-click
-            >
-              <VCard max-width="1000">
-                <VCardText class="pa-8">
-                  <div class="nav-menu">
-                    <div
-                      v-for="(item, index) in menuItems"
-                      :key="index"
-                    >
-                      <div class="d-flex align-center gap-x-3 mb-6">
-                        <VAvatar
-                          variant="tonal"
-                          color="primary"
-                          rounded
-                          :icon="item.listIcon"
-                        />
-                        <div class="text-body-1 text-high-emphasis font-weight-medium">
-                          {{ item.listTitle }}
-                        </div>
-                      </div>
-                      <ul>
-                        <li
-                          v-for="listItem in item.navItems"
-                          :key="listItem.name"
-                          style="list-style: none;"
-                          class="text-body-1 mb-4 text-no-wrap"
-                        >
-                          <RouterLink
-                            class="mega-menu-item"
-                            :to="listItem.to"
-                            :target="item.listTitle === 'Page' ? '_self' : '_blank'"
-                            :class="isCurrentRoute(listItem.to) ? 'active-link' : ''"
-                          >
-                            <div class="d-flex align-center">
-                              <VIcon
-                                icon="ri-circle-line"
-                                :size="10"
-                                class="me-2"
-                              />
-                              <span>{{ listItem.name }}</span>
-                            </div>
-                          </RouterLink>
-                        </li>
-                      </ul>
-                    </div>
-                    <img
-                      :src="navImg"
-                      alt="Navigation Image"
-                      class="d-inline-block rounded-lg"
-                      style="border: 10px solid rgb(var(--v-theme-background));"
-                      :width="$vuetify.display.lgAndUp ? '330' : '250'"
-                      :height="$vuetify.display.lgAndUp ? '330' : '250'"
-                    >
-                  </div>
-                </VCardText>
-              </VCard>
-            </VMenu>
-          </span>
-
           <RouterLink
-            to="/"
-            target="_blank"
+            to="/dashboard"
             class="nav-link font-weight-medium"
           >
-            Admin
+            Dashboard
           </RouterLink>
         </div>
       </div>
