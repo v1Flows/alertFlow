@@ -1,8 +1,8 @@
 export default [
   {
     title: 'Home',
-    to: { name: 'root' },
-    icon: { icon: 'ri-home-smile-2-line' },
+    to: { name: 'dashboard' },
+    icon: { icon: 'ri-dashboard-line' },
     action: 'create',
     subject: 'all',
   },

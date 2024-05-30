@@ -1,4 +1,11 @@
 <script setup lang="ts">
+definePage({
+  meta: {
+    action: 'create',
+    subject: 'all',
+  },
+})
+
 const apiError = ref(false)
 const createFlowDialog = ref(false)
 </script>
