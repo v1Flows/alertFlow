@@ -243,7 +243,7 @@ onMounted(() => getFlows())
                   cols="12"
                   md="10"
                 >
-                  <RouterLink :to="`/flow/${flow.id}`">
+                  <RouterLink :to="`/dashboard/flow/${flow.id}`">
                     <VBtn
                       color="primary"
                       variant="tonal"

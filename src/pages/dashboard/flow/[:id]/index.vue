@@ -375,7 +375,7 @@ const paginated = computed(() => flowPayloads.value.slice(payloadIndexStart.valu
         prepend-icon="ri-arrow-left-s-line"
         variant="tonal"
         color="success"
-        :to="{ name: 'flows' }"
+        :to="{ name: 'dashboard-flows' }"
       >
         Back to Flows
       </VBtn>
@@ -777,7 +777,7 @@ const paginated = computed(() => flowPayloads.value.slice(payloadIndexStart.valu
                         />
 
                         <div class="d-flex flex-wrap gap-4">
-                          <RouterLink :to="`/flow/${flow.id}/execution/${execution.id}`">
+                          <RouterLink :to="`/dashboard/flow/${flow.id}/execution/${execution.id}`">
                             <VBtn
                               variant="tonal"
                               color="primary"

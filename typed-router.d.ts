@@ -20,11 +20,12 @@ declare module 'vue-router/auto-routes' {
   export interface RouteNamedMap {
     'root': RouteRecordInfo<'root', '/', Record<never, never>, Record<never, never>>,
     '$error': RouteRecordInfo<'$error', '/:error(.*)', { error: ParamValue<true> }, { error: ParamValue<false> }>,
-    'flow:id': RouteRecordInfo<'flow:id', '/flow/::id', { :id: ParamValue<true> }, { :id: ParamValue<false> }>,
-    'flow:id-execution:id': RouteRecordInfo<'flow:id-execution:id', '/flow/::id/execution/::id', { :id: ParamValue<true>, :id: ParamValue<true> }, { :id: ParamValue<false>, :id: ParamValue<false> }>,
-    'flows': RouteRecordInfo<'flows', '/flows', Record<never, never>, Record<never, never>>,
+    'dashboard-flow:id': RouteRecordInfo<'dashboard-flow:id', '/dashboard/flow/::id', { :id: ParamValue<true> }, { :id: ParamValue<false> }>,
+    'dashboard-flow:id-execution:id': RouteRecordInfo<'dashboard-flow:id-execution:id', '/dashboard/flow/::id/execution/::id', { :id: ParamValue<true>, :id: ParamValue<true> }, { :id: ParamValue<false>, :id: ParamValue<false> }>,
+    'dashboard-flows': RouteRecordInfo<'dashboard-flows', '/dashboard/flows', Record<never, never>, Record<never, never>>,
+    'dashboard-payloads': RouteRecordInfo<'dashboard-payloads', '/dashboard/payloads', Record<never, never>, Record<never, never>>,
+    'dashboard-projects': RouteRecordInfo<'dashboard-projects', '/dashboard/projects', Record<never, never>, Record<never, never>>,
     'login': RouteRecordInfo<'login', '/login', Record<never, never>, Record<never, never>>,
-    'payloads': RouteRecordInfo<'payloads', '/payloads', Record<never, never>, Record<never, never>>,
     'settings': RouteRecordInfo<'settings', '/settings', Record<never, never>, Record<never, never>>,
   }
 }
