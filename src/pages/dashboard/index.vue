@@ -20,17 +20,6 @@ else if (data.value)
 
 <template>
   <div>
-    <VAlert
-      v-if="settings.api_endpoint === ''"
-      color="error"
-      variant="tonal"
-      class="mb-4"
-    >
-      API is not configured. Go to <RouterLink to="/settings">
-        Settings
-      </RouterLink> and configure it.
-    </VAlert>
-
     <VRow>
       <VCol
         cols="12"

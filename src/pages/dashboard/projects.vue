@@ -42,7 +42,7 @@ const projectToDelete = ref('')
 const getProjects = async () => {
   loadingProjects.value = true
   try {
-    const { data, error } = await useFetch('https://alertflow-api.justlab.xyz/projects', {
+    const { data, error } = await useFetch('https://alertflow-api.justlab.xyz/api/projects', {
       method: 'POST',
       body: JSON.stringify({
         email: useCookie('userData').value.email,
@@ -90,7 +90,7 @@ const createProject = async (project: any) => {
   console.log(project)
 
   try {
-    const { data, error } = await useFetch('http://alertflow-api.justlab.xyz/project', {
+    const { data, error } = await useFetch('http://alertflow-api.justlab.xyz/api/projects', {
       method: 'POST',
       body: JSON.stringify(project),
     })
@@ -119,7 +119,7 @@ const createProject = async (project: any) => {
 const editProjectFn = async () => {
   editProjectLoading.value = true
 
-  const { error } = await useFetch(`https://alertflow-api.justlab.xyz/project/${editProjectData.value.id}`, {
+  const { error } = await useFetch(`https://alertflow-api.justlab.xyz/api/projects/${editProjectData.value.id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -161,7 +161,7 @@ const deleteProjectFn = (projectID: string) => {
 const deleteProject = async (projectID: string) => {
   deleteProjectLoading.value = true
   try {
-    const { data, error } = await useFetch(`https://alertflow-api.justlab.xyz/project/${projectID}`, {
+    const { data, error } = await useFetch(`https://alertflow-api.justlab.xyz/api/projects/${projectID}`, {
       method: 'DELETE',
     })
 
@@ -190,6 +190,14 @@ onMounted(() => getProjects())
 </script>
 
 <template>
+  <VAlert
+    v-model="apiError"
+    title="Error communicating with API"
+    text="Please try again later"
+    type="error"
+    variant="tonal"
+  />
+
   <div>
     <VRow class="match-height">
       <VCol
