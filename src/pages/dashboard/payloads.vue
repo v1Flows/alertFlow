@@ -21,7 +21,7 @@ const payloadsToday = ref<Payload[]>([])
 const payloadsLast7Days = ref<Payload[]>([])
 const payloadsLast30Days = ref<Payload[]>([])
 const showPayloadDialog = ref(false)
-const showPayloadData = ref('')
+const showPayloadData = ref({})
 
 const getTodaysPayloads = () => {
   const now = new Date()
@@ -44,7 +44,13 @@ const getLast30DaysPayloads = () => {
 }
 
 const getPayloads = async () => {
-  const { data, error } = await useFetch('https://alertflow-api.justlab.xyz/payloads')
+  const { data, error } = await useFetch('http://localhost:8080/api/payloads/', {
+    headers: {
+      'Authorization': useCookie('accessToken').value,
+      'Content-Type': 'application/json',
+    },
+  })
+
   if (error.value) {
     apiError.value = true
     console.error(error.value)
@@ -60,7 +66,7 @@ const getPayloads = async () => {
 }
 
 const showPayload = (payload: string) => {
-  showPayloadData.value = payload
+  showPayloadData.value = JSON.stringify(payload)
   showPayloadDialog.value = true
 }
 

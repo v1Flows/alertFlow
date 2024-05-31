@@ -11,6 +11,7 @@ definePage({
 
 interface Flow {
   id: string
+  project_id: string
   name: string
   description: string
   active: boolean
@@ -26,6 +27,7 @@ const flowID = useRoute().params.id
 
 const flow = ref<Flow>({
   id: '',
+  project_id: '',
   name: '',
   description: '',
   active: false,
@@ -39,6 +41,10 @@ const loadingFlow = ref(false)
 // Flow // Edit
 const editFlowLoading = ref(false)
 const editFlowDialog = ref(false)
+
+// Project
+const loadingProject = ref(false)
+const project = ref({})
 
 // Executions
 const flowExecutions = ref([])
@@ -59,7 +65,6 @@ const payloadsListCurrent = ref(1)
 
 // Action
 const show = ref([true, false, false])
-const isEditActionDialogVisible = ref(false)
 
 // Action // Add
 const addActionLoading = ref(false)
@@ -69,6 +74,10 @@ const addActionDialog = ref(false)
 const deleteActionDialog = ref(false)
 const deleteActionID = ref(0)
 const deleteActionLoading = ref(false)
+
+// Action // Edit
+const editActionDialogVisible = ref(false)
+const editActionIndex = ref(0)
 
 const addActionData = ref({
   id: uuid.v4(),
@@ -105,13 +114,19 @@ const currentTab = ref('tab-1')
 const getFlow = async () => {
   loadingFlow.value = true
   try {
-    const { data, error } = await useFetch(`https://alertflow-api.justlab.xyz/flow/${flowID}`)
+    const { data, error } = await useFetch(`http://localhost:8080/api/flows/${flowID}`, {
+      headers: {
+        'Authorization': useCookie('accessToken').value,
+        'Content-Type': 'application/json',
+      },
+    })
     if (error.value) {
       apiError.value = true
       console.error(error.value)
     }
 
     flow.value = await JSON.parse(data.value).flow
+    getProject()
     loadingFlow.value = false
   }
   catch (err) {
@@ -121,10 +136,41 @@ const getFlow = async () => {
   }
 }
 
+const getProject = async () => {
+  loadingProject.value = true
+  try {
+    const { data, error } = await useFetch(`http://localhost:8080/api/projects/${flow.value.project_id}`, {
+      headers: {
+        'Authorization': useCookie('accessToken').value,
+        'Content-Type': 'application/json',
+      },
+      method: 'GET',
+    })
+
+    if (error.value) {
+      apiError.value = true
+      console.error(error.value)
+    }
+
+    project.value = await JSON.parse(data.value).project
+    loadingProject.value = false
+  }
+  catch (err) {
+    console.error(err)
+    loadingProject.value = false
+    apiError.value = true
+  }
+}
+
 const getFlowExecutions = async () => {
   loadingExecutions.value = true
   try {
-    const { data, error } = await useFetch(`https://alertflow-api.justlab.xyz/flow/${flowID}/executions`)
+    const { data, error } = await useFetch(`http://localhost:8080/api/flows/${flowID}/executions`, {
+      headers: {
+        'Authorization': useCookie('accessToken').value,
+        'Content-Type': 'application/json',
+      },
+    })
     if (error.value) {
       apiError.value = true
       console.error(error.value)
@@ -155,7 +201,12 @@ const getFlowExecutions = async () => {
 const getFlowPayloads = async () => {
   loadingPayloads.value = true
   try {
-    const { data, error } = await useFetch(`https://alertflow-api.justlab.xyz/flow/${flowID}/payloads`)
+    const { data, error } = await useFetch(`http://localhost:8080/api/flows/${flowID}/payloads`, {
+      headers: {
+        'Authorization': useCookie('accessToken').value,
+        'Content-Type': 'application/json',
+      },
+    })
     if (error.value) {
       apiError.value = true
       console.error(error.value)
@@ -233,9 +284,10 @@ const getExecutionStatusIcon = (execution: any) => {
 const updateFlow = async () => {
   editFlowLoading.value = true
 
-  const { error } = await useFetch(`https://alertflow-api.justlab.xyz/flow/${flowID}`, {
+  const { error } = await useFetch(`http://localhost:8080/api/flows/${flowID}`, {
     method: 'PUT',
     headers: {
+      'Authorization': useCookie('accessToken').value,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
@@ -263,11 +315,10 @@ const addFlowAction = async () => {
     flow.value.actions = []
   }
 
-  flow.value.actions.push(addActionData.value)
-
-  const { error } = await useFetch(`https://alertflow-api.justlab.xyz/flow/${flowID}/action`, {
+  const { error } = await useFetch(`http://localhost:8080/api/flows/${flowID}/actions`, {
     method: 'POST',
     headers: {
+      'Authorization': useCookie('accessToken').value,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
@@ -296,9 +347,10 @@ const deleteAction = async () => {
   
   flow.value.actions = flow.value.actions.filter((_, i) => i !== deleteActionID.value)
 
-  const { error } = await useFetch(`https://alertflow-api.justlab.xyz/flow/${flowID}/action`, {
+  const { error } = await useFetch(`http://localhost:8080/api/flows/${flowID}/actions`, {
     method: 'POST',
     headers: {
+      'Authorization': useCookie('accessToken').value,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
@@ -319,7 +371,16 @@ const deleteAction = async () => {
   }
 }
 
-onMounted(() => getFlow() && getFlowExecutions() && getFlowPayloads())
+const editAction = (index: number) => {
+  editActionDialogVisible.value = true
+  editActionIndex.value = index
+}
+
+onMounted(async () => {
+  await getFlow()
+  await getFlowExecutions()
+  await getFlowPayloads()
+})
 
 const filteredFlowExecutionsIndexStart = computed(() => (executionPage.value - 1) * executionItemsPerPage.value)
 const filteredFlowExecutionsIndexEnd = computed(() => executionPage.value * executionItemsPerPage.value)
@@ -356,7 +417,14 @@ const paginated = computed(() => flowPayloads.value.slice(payloadIndexStart.valu
           label
           class="mb-0 mx-2"
         >
-          {{ flow.id }}
+          Flow ID: {{ flow.id }}
+        </VChip>
+        <VChip
+          color="info"
+          label
+          class="mb-0 mx-2"
+        >
+          Project: {{ project.name }}
         </VChip>
       </h4>
       <p class="text-body-1 mb-0">
@@ -559,7 +627,7 @@ const paginated = computed(() => flowPayloads.value.slice(payloadIndexStart.valu
                     </div>
                   </div>
                   <div class="ms-5">
-                    <IconBtn @click="isEditActionDialogVisible = !isEditActionDialogVisible">
+                    <IconBtn @click="editAction(index)">
                       <VIcon
                         icon="ri-pencil-line"
                         class="flip-in-rtl"
@@ -1105,7 +1173,7 @@ const paginated = computed(() => flowPayloads.value.slice(payloadIndexStart.valu
                   type="submit"
                   class="me-3"
                   :loading="addActionLoading"
-                  @click="async () => { await addFlowAction(); addActionDialog = false; }"
+                  @click="async () => { flow.actions.push(addActionData); await addFlowAction(); addActionDialog = false; }"
                 >
                   submit
                 </VBtn>
@@ -1114,6 +1182,210 @@ const paginated = computed(() => flowPayloads.value.slice(payloadIndexStart.valu
                   variant="outlined"
                   color="secondary"
                   @click="addActionDialog = false"
+                >
+                  Cancel
+                </VBtn>
+              </VCol>
+            </VRow>
+          </VForm>
+        </VCardText>
+      </VCard>
+    </VDialog>
+
+    <!-- 👉 Edit Action Dialog -->
+    <VDialog
+      :width="$vuetify.display.smAndDown ? 'auto' : 900 "
+      :model-value="editActionDialogVisible"
+      persistent
+    >
+      <VCard class="pa-sm-11 pa-3">
+        <VCardText class="pt-5">
+          <!-- 👉 dialog close btn -->
+          <DialogCloseBtn
+            variant="text"
+            size="default"
+            @click="editActionDialogVisible = false"
+          />
+
+          <!-- 👉 Title -->
+          <div class="text-center mb-6">
+            <h4 class="text-h4 mb-2">
+              Add Flow Action
+            </h4>
+
+            <p class="text-body-1">
+              Add an Action which is executed for this Flow if the conditions are met
+            </p>
+          </div>
+
+          <CustomRadios
+            v-model:selected-radio="flow.actions[editActionIndex].type"
+            :radio-content="addActionSelectableTyped"
+            :grid-column="{ sm: '6', cols: '12' }"
+            class="mb-5"
+          >
+            <template #default="items">
+              <div class="d-flex flex-column">
+                <div class="d-flex mb-2 align-center gap-x-1">
+                  <VIcon
+                    :icon="items.item.icon"
+                    size="20"
+                    class="text-high-emphasis"
+                  />
+                  <div class="text-body-1 font-weight-medium text-high-emphasis">
+                    {{ items.item.title }}
+                  </div>
+                </div>
+                <p class="text-body-2 mb-0">
+                  {{ items.item.desc }}
+                </p>
+              </div>
+            </template>
+          </CustomRadios>
+          <!-- 👉 Form -->
+          <VForm>
+            <VRow>
+              <!-- 👉 Action Name -->
+              <VCol cols="12" md="6">
+                <VTextField
+                  v-model="flow.actions[editActionIndex].name"
+                  label="Name"
+                  placeholder="My Action"
+                />
+              </VCol>
+
+              <!-- 👉 Action Description -->
+              <VCol cols="12" md="6">
+                <VTextField
+                  v-model="flow.actions[editActionIndex].description"
+                  label="Description"
+                  placeholder="My Action Description"
+                />
+              </VCol>
+
+              <!-- 👉 Select Action Status -->
+              <VCol cols="12">
+                <VSwitch
+                  v-model="flow.actions[editActionIndex].active"
+                  label="Activate Action"
+                  :value-true="true"
+                  :value-false="false"
+                  color="success"
+                />
+              </VCol>
+
+              <VCol cols="12">
+                <VDivider />
+              </VCol>
+
+              <VCol cols="12">
+                <h2 class="text-lg font-weight-medium">
+                  Action Conditions
+                </h2>
+              </VCol>
+
+              <!-- 👉 Select React on Firing or Resolved -->
+              <VCol cols="12" md="6">
+                <VSelect
+                  v-model="flow.actions[editActionIndex].react_on"
+                  label="Select Alert-Group Status"
+                  placeholder="Select an Alert-Group Status to react on"
+                  :items="['firing', 'resolved', 'both']"
+                />
+              </VCol>
+
+              <!-- 👉 Select Object Group -->
+              <VCol cols="12" md="6">
+                <VSelect
+                  v-model="flow.actions[editActionIndex].patternGroup"
+                  label="Select Object Group"
+                  placeholder="Select Object Group"
+                  :items="['alerts', 'groupLabels', 'commonLabels', 'commonAnnotations']"
+                />
+              </VCol>
+
+              <!-- 👉 Object Key -->
+              <VCol
+                cols="12"
+                md="6"
+              >
+                <VTextField
+                  v-model="flow.actions[editActionIndex].patternLabelKey"
+                  label="Object Key"
+                  placeholder="alertname"
+                />
+              </VCol>
+
+              <!-- 👉 Object Value -->
+              <VCol
+                cols="12"
+                md="6"
+              >
+                <VTextField
+                  v-model="flow.actions[editActionIndex].patternLabelValue"
+                  label="Object Value"
+                  placeholder="myAlarm"
+                />
+              </VCol>
+
+              <VCol
+                v-if="flow.actions[editActionIndex].type !== 'log'"
+                cols="12"
+              >
+                <VDivider />
+              </VCol>
+
+              <VCol
+                v-if="flow.actions[editActionIndex].type !== 'log'"
+                cols="12"
+              >
+                <h2 class="text-lg font-weight-medium">
+                  {{ flow.actions[editActionIndex].type.charAt(0).toUpperCase() + flow.actions[editActionIndex].type.slice(1) }} Details
+                </h2>
+              </VCol>
+
+              <VCol
+                v-if="flow.actions[editActionIndex].type === 'webhook'"
+                cols="12"
+                md="6"
+              >
+                <VTextField
+                  v-model="flow.actions[editActionIndex].webhookUrl"
+                  label="Webhook URL"
+                  placeholder="https://my-server.com/webhook"
+                />
+              </VCol>
+
+              <VCol
+                v-if="flow.actions[editActionIndex].type === 'webhook'"
+                cols="12"
+                md="6"
+              >
+                <VTextField
+                  v-model="flow.actions[editActionIndex].webhookAuthToken"
+                  label="Webhook Auth Token"
+                  placeholder="Bearer 1234567890"
+                />
+              </VCol>
+
+              <!-- 👉 Submit and Cancel button -->
+              <VCol
+                cols="12"
+                class="text-center"
+              >
+                <VBtn
+                  type="submit"
+                  class="me-3"
+                  :loading="addActionLoading"
+                  @click="async () => { await addFlowAction(); editActionDialogVisible = false; }"
+                >
+                  submit
+                </VBtn>
+
+                <VBtn
+                  variant="outlined"
+                  color="secondary"
+                  @click="editActionDialogVisible = false"
                 >
                   Cancel
                 </VBtn>

@@ -36,32 +36,11 @@ const login = async () => {
   loadingLogin.value = true
 
   interface Response {
-    User: {
-      access_token: string
-      token_type: string
-      expires_in: number
-      refresh_token: string
-      user: {
-        id: string
-        aud: string
-        role: string
-        email: string
-        invited_at: string
-        confirmed_at: string
-        confirmation_sent_at: string
-        app_metadata: JSON
-        user_metadata: JSON
-        created_at: string
-        updated_at: string
-      }
-      provider_token: string
-      provider_refresh_token: string
-    }
-    result: string
+    token: string
   }
 
   try {
-    const { data, error } = await useFetch<Response>('https://alertflow-api.justlab.xyz/auth/login', {
+    const { data, error } = await useFetch<Response>('https://alertflow-api.justlab.xyz/api/token', {
       method: 'POST',
       body: JSON.stringify(form.value),
     })
@@ -76,18 +55,18 @@ const login = async () => {
 
       const userAbilities = [{
         action: 'manage',
-        subject: JSON.parse(data.value).User.user.role === 'authenticated' ? 'all' : 'Comment',
+        subject: 'all',
       }]
 
       // Update the ability using `update` method
       ability.update(userAbilities)
 
-      useCookie('userData').value = JSON.parse(data.value).User.user
-      useCookie('accessToken').value = JSON.parse(data.value).User.access_token
+      useCookie('userData').value = JSON.parse(data.value).user
+      useCookie('accessToken').value = JSON.parse(data.value).token
       useCookie('userAbilityRules').value = userAbilities
 
       await nextTick(() => {
-        router.replace(route.query.to ? String(route.query.to) : '/')
+        router.replace(route.query.to ? String(route.query.to) : '/dashboard')
       })
     }
   }

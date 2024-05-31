@@ -42,14 +42,12 @@ const projectToDelete = ref('')
 const getProjects = async () => {
   loadingProjects.value = true
   try {
-    const { data, error } = await useFetch('https://alertflow-api.justlab.xyz/api/projects', {
-      method: 'POST',
-      body: JSON.stringify({
-        email: useCookie('userData').value.email,
-      }),
+    const { data, error } = await useFetch('http://localhost:8080/api/projects/', {
       headers: {
+        'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
       },
+      method: 'GET',
     })
 
     if (error.value) {
@@ -90,9 +88,13 @@ const createProject = async (project: any) => {
   console.log(project)
 
   try {
-    const { data, error } = await useFetch('http://alertflow-api.justlab.xyz/api/projects', {
+    const { data, error } = await useFetch('http://localhost:8080/api/projects/', {
       method: 'POST',
       body: JSON.stringify(project),
+      headers: {
+        'Authorization': useCookie('accessToken').value,
+        'Content-Type': 'application/json',
+      },
     })
 
     if (error.value) {
@@ -119,9 +121,10 @@ const createProject = async (project: any) => {
 const editProjectFn = async () => {
   editProjectLoading.value = true
 
-  const { error } = await useFetch(`https://alertflow-api.justlab.xyz/api/projects/${editProjectData.value.id}`, {
+  const { error } = await useFetch(`http://localhost:8080/api/projects/${editProjectData.value.id}`, {
     method: 'PUT',
     headers: {
+      'Authorization': useCookie('accessToken').value,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
@@ -150,7 +153,6 @@ const editProject = (project: any) => {
     members: project.members,
   }
   editProjectDialog.value = true
-  editProjectFn()
 }
 
 const deleteProjectFn = (projectID: string) => {
@@ -161,8 +163,12 @@ const deleteProjectFn = (projectID: string) => {
 const deleteProject = async (projectID: string) => {
   deleteProjectLoading.value = true
   try {
-    const { data, error } = await useFetch(`https://alertflow-api.justlab.xyz/api/projects/${projectID}`, {
+    const { data, error } = await useFetch(`http://localhost:8080/api/projects/${projectID}`, {
       method: 'DELETE',
+      headers: {
+        'Authorization': useCookie('accessToken').value,
+        'Content-Type': 'application/json',
+      },
     })
 
     if (error.value) {
@@ -186,7 +192,9 @@ const deleteProject = async (projectID: string) => {
   }
 }
 
-onMounted(() => getProjects())
+onMounted(async () => {
+  await getProjects()
+})
 </script>
 
 <template>
@@ -252,23 +260,62 @@ onMounted(() => getProjects())
                 <p class="text-body-1">
                   {{ project.description }}
                 </p>
+              </div>
+            </div>
+          </VCardText>
 
-                <a
-                  href="javascript:void(0)"
+          <VCardText>
+            <VRow class="match-height">
+              <VCol
+                cols="12"
+                md="7"
+              >
+                <RouterLink :to="`/dashboard/project/${project.id}`">
+                  <VBtn
+                    color="primary"
+                    variant="tonal"
+                    block
+                  >
+                    View
+                    <VIcon
+                      end
+                      icon="ri-eye-2-line"
+                    />
+                  </VBtn>
+                </RouterLink>
+              </VCol>
+              <VCol
+                cols="12"
+                md="3"
+              >
+                <VBtn
+                  color="warning"
+                  variant="outlined"
+                  rounded
+                  block
                   @click="editProject(project)"
                 >
-                  Edit Project
-                </a>
-              </div>
-
-              <IconBtn
-                color="error"
-                class="mt-n2"
-                @click="deleteProjectFn(project.id)"
+                  Edit
+                  <VIcon
+                    end
+                    icon="ri-pencil-line"
+                  />
+                </VBtn>
+              </VCol>
+              <VCol
+                cols="12"
+                md="2"
               >
-                <VIcon icon="ri-delete-bin-6-line" />
-              </IconBtn>
-            </div>
+                <VBtn
+                  icon="ri-delete-bin-line"
+                  color="error"
+                  variant="outlined"
+                  rounded
+                  block
+                  @click="deleteProjectFn(project.id)"
+                />
+              </VCol>
+            </VRow>
           </VCardText>
         </VCard>
       </VCol>
@@ -576,7 +623,7 @@ onMounted(() => getProjects())
                 type="submit"
                 class="me-3"
                 :loading="editProjectLoading"
-                @click="async () => { await editProject(editProjectData); editProjectDialog = false; }"
+                @click="async () => { await editProjectFn(); editProjectDialog = false; }"
               >
                 submit
               </VBtn>

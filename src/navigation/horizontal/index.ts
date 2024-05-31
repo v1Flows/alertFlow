@@ -15,7 +15,7 @@ export default [
   },
   {
     title: 'Flows',
-    to: { name: 'dashboard-flows' },
+    to: 'dashboard-flows',
     icon: { icon: 'ri-swap-2-line' },
     action: 'create',
     subject: 'all',
@@ -24,13 +24,6 @@ export default [
     title: 'Payloads',
     to: { name: 'dashboard-payloads' },
     icon: { icon: 'ri-database-line' },
-    action: 'create',
-    subject: 'all',
-  },
-  {
-    title: 'Settings',
-    to: { name: 'settings' },
-    icon: { icon: 'ri-settings-5-line' },
     action: 'create',
     subject: 'all',
   },

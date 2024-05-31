@@ -8,6 +8,9 @@ definePage({
 
 const apiError = ref(false)
 
+const projects = ref([])
+const loadingProjects = ref(false)
+
 const flows = ref([])
 const loadingFlows = ref(false)
 
@@ -15,32 +18,25 @@ const flowToDelete = ref(null)
 const deleteFlowDialog = ref(false)
 
 const createFlowDialog = ref(false)
-const createFlowStep = ref(0)
 const createFlowSubmitLoading = ref(false)
-
-const createFlowCategories = ref([
-  {
-    icon: 'ri-survey-line',
-    title: 'DETAILS',
-    subtitle: 'Enter Flow Details',
-  },
-  {
-    icon: 'ri-survey-line',
-    title: 'SUBMIT',
-    subtitle: 'Submit',
-  },
-])
 
 const createFlowForm = ref({
   name: '',
   description: '',
+  project_id: null,
   active: true,
 })
 
 const getFlows = async () => {
   loadingFlows.value = true
   try {
-    const { data, error } = await useFetch('https://alertflow-api.justlab.xyz/flows')
+    const { data, error } = await useFetch('http://localhost:8080/api/flows/', {
+      headers: {
+        'Authorization': useCookie('accessToken').value,
+        'Content-Type': 'application/json',
+      },
+    })
+
     if (error.value) {
       apiError.value = true
       console.error(error.value)
@@ -56,11 +52,43 @@ const getFlows = async () => {
   }
 }
 
+const getProjects = async () => {
+  loadingProjects.value = true
+  try {
+    const { data, error } = await useFetch('http://localhost:8080/api/projects/', {
+      headers: {
+        'Authorization': useCookie('accessToken').value,
+        'Content-Type': 'application/json',
+      },
+      method: 'GET',
+    })
+
+    if (error.value) {
+      apiError.value = true
+      console.error(error.value)
+    }
+
+    for (const project of JSON.parse(data.value).projects)
+      projects.value.push({ id: project.id, name: project.name })
+
+    loadingProjects.value = false
+  }
+  catch (err) {
+    console.error(err)
+    loadingProjects.value = false
+    apiError.value = true
+  }
+}
+
 const createFlow = async (flow: any) => {
   try {
-    const { data, error } = await useFetch('https://alertflow-api.justlab.xyz/flow', {
+    const { data, error } = await useFetch('http://localhost:8080/api/flows/', {
       method: 'POST',
       body: JSON.stringify(flow),
+      headers: {
+        'Authorization': useCookie('accessToken').value,
+        'Content-Type': 'application/json',
+      },
     })
 
     if (error.value) {
@@ -83,8 +111,12 @@ const createFlow = async (flow: any) => {
 
 const deleteFlow = async flow => {
   try {
-    const { data, error } = await useFetch(`https://alertflow-api.justlab.xyz/flow/${flow.id}`, {
+    const { data, error } = await useFetch(`http://localhost:8080/api/flows/${flow.id}`, {
       method: 'DELETE',
+      headers: {
+        'Authorization': useCookie('accessToken').value,
+        'Content-Type': 'application/json',
+      },
     })
 
     if (error.value) {
@@ -110,7 +142,10 @@ const deleteFlowDialogFn = flow => {
   flowToDelete.value = flow
 }
 
-onMounted(() => getFlows())
+onMounted(async () => {
+  await getFlows()
+  await getProjects()
+})
 </script>
 
 <template>
@@ -181,16 +216,16 @@ onMounted(() => getFlows())
                     rounded
                   >
                     <VIcon
-                      icon="ri-hammer-line"
+                      icon="ri-stack-line"
                       size="28"
                     />
                   </VAvatar>
                   <div>
                     <h6 class="text-h6">
-                      {{ flow.actions ? flow.actions.length : 0 }}
+                      {{ projects.find(project => project.id === flow.project_id)?.name }}
                     </h6>
                     <div class="text-sm">
-                      Actions
+                      Project
                     </div>
                   </div>
                 </div>
@@ -300,87 +335,60 @@ onMounted(() => getFlows())
         </h4>
 
         <VRow>
-          <VCol
-            cols="12"
-            sm="5"
-            md="4"
-            lg="3"
-          >
-            <AppStepper
-              v-model:current-step="createFlowStep"
-              direction="vertical"
-              :items="createFlowCategories"
-              icon-size="22"
-              class="stepper-icon-step-bg"
-            />
-          </VCol>
-
-          <VCol
-            cols="12"
-            sm="7"
-            md="8"
-            lg="9"
-          >
+          <VCol cols="12">
             <VForm
               ref="createFlowFormRef"
               @submit.prevent="() => {}"
             >
-              <VWindow
-                v-model="createFlowStep"
-                class="disable-tab-transition stepper-content"
-              >
-                <!-- 👉 DETAILS -->
-                <VWindowItem>
-                  <VTextField
-                    v-model="createFlowForm.name"
-                    label="Flow Name"
-                    placeholder="Flow Name"
-                    :rules="[requiredValidator]"
-                  />
+              <VTextField
+                v-model="createFlowForm.name"
+                label="Flow Name"
+                placeholder="Flow Name"
+                :rules="[requiredValidator]"
+              />
 
-                  <VTextField
-                    v-model="createFlowForm.description"
-                    class="mt-3"
-                    label="Flow Description"
-                    placeholder="Flow Description"
-                    :rules="[requiredValidator]"
-                  />
+              <VTextField
+                v-model="createFlowForm.description"
+                class="mt-6"
+                label="Flow Description"
+                placeholder="Flow Description"
+                :rules="[requiredValidator]"
+              />
 
-                  <VCheckbox
-                    v-model="createFlowForm.active"
-                    class="mt-3"
-                    color="success"
-                    :label="createFlowForm.active === true ? 'Active' : 'Inactive'"
-                  />
-                </VWindowItem>
+              <VSelect
+                v-model="createFlowForm.project_id"
+                :items="projects"
+                item-title="name"
+                item-value="id"
+                label="Assign Flow to Project"
+                class="mt-6"
+                placeholder="Select Project"
+                eager
+                :rules="[requiredValidator]"
+              />
 
-                <VWindowItem class="text-center">
-                  <h5 class="text-h5 mb-1">
-                    Create it 🚀
-                  </h5>
-                  <p class="text-sm mb-4">
-                    Create the new Flow.
-                  </p>
-                </VWindowItem>
-              </VWindow>
+              <VCheckbox
+                v-model="createFlowForm.active"
+                class="mt-6"
+                color="success"
+                :label="createFlowForm.active === true ? 'Active' : 'Inactive'"
+              />
 
               <div class="d-flex justify-space-between mt-6">
                 <VBtn
                   variant="tonal"
                   color="secondary"
-                  :disabled="createFlowStep === 0"
-                  @click="createFlowStep--"
+                  @click="createFlowDialog = false"
                 >
                   <VIcon
-                    icon="ri-arrow-left-line"
+                    icon="ri-arrow-go-back-line"
                     start
                     class="flip-in-rtl"
                   />
-                  Previous
+                  Cancel
                 </VBtn>
 
                 <VBtn
-                  v-if="createFlowCategories.length - 1 === createFlowStep"
                   color="success"
                   :loading="createFlowSubmitLoading"
                   @click="createFlow(createFlowForm)"
@@ -389,19 +397,6 @@ onMounted(() => getFlows())
 
                   <VIcon
                     icon="ri-rocket-2-line"
-                    end
-                    class="flip-in-rtl"
-                  />
-                </VBtn>
-
-                <VBtn
-                  v-else
-                  @click="createFlowStep++"
-                >
-                  Next
-
-                  <VIcon
-                    icon="ri-arrow-right-line"
                     end
                     class="flip-in-rtl"
                   />

@@ -25,8 +25,8 @@ declare module 'vue-router/auto-routes' {
     'dashboard-flow:id-execution:id': RouteRecordInfo<'dashboard-flow:id-execution:id', '/dashboard/flow/::id/execution/::id', { :id: ParamValue<true>, :id: ParamValue<true> }, { :id: ParamValue<false>, :id: ParamValue<false> }>,
     'dashboard-flows': RouteRecordInfo<'dashboard-flows', '/dashboard/flows', Record<never, never>, Record<never, never>>,
     'dashboard-payloads': RouteRecordInfo<'dashboard-payloads', '/dashboard/payloads', Record<never, never>, Record<never, never>>,
+    'dashboard-project:id': RouteRecordInfo<'dashboard-project:id', '/dashboard/project/::id', { :id: ParamValue<true> }, { :id: ParamValue<false> }>,
     'dashboard-projects': RouteRecordInfo<'dashboard-projects', '/dashboard/projects', Record<never, never>, Record<never, never>>,
     'login': RouteRecordInfo<'login', '/login', Record<never, never>, Record<never, never>>,
-    'settings': RouteRecordInfo<'settings', '/settings', Record<never, never>, Record<never, never>>,
   }
 }

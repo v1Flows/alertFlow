@@ -6,56 +6,23 @@ const router = useRouter()
 const ability = useAbility()
 
 const userData = useCookie<any>('userData')
-const logoutLoading = ref(false)
-const apiError = ref(false)
 
-const logout = async () => {
-  logoutLoading.value = true
+const logout = () => {
+  // Remove "accessToken" from cookie
+  useCookie('accessToken').value = null
 
-  const requestBody = ref({
-    token: useCookie('accessToken').value,
-  })
+  // Remove "userData" from cookie
+  useCookie('userData').value = null
 
-  try {
-    const { data, error } = await useFetch('https://alertflow-api.justlab.xyz/auth/logout', {
-      method: 'POST',
-      body: JSON.stringify(requestBody.value),
-    })
+  // ℹ️ We had to remove abilities in then block because if we don't nav menu items mutation is visible while redirecting user to login page
+  // Remove "userAbilities" from cookie
+  useCookie('userAbilityRules').value = null
 
-    if (error.value) {
-      logoutLoading.value = false
-      apiError.value = true
-      console.log(useCookie('accessToken').value)
-      console.error(error.value)
-    }
-    else if (data.value) {
-      logoutLoading.value = false
-      apiError.value = false
+  // Reset ability to initial ability
+  ability.update([])
 
-      // Remove "accessToken" from cookie
-      useCookie('accessToken').value = null
-
-      // Remove "userData" from cookie
-      useCookie('userData').value = null
-
-      // ℹ️ We had to remove abilities in then block because if we don't nav menu items mutation is visible while redirecting user to login page
-      // Remove "userAbilities" from cookie
-      useCookie('userAbilityRules').value = null
-
-      // Reset ability to initial ability
-      ability.update([])
-
-      // Redirect to login page
-      await router.push('/login')
-
-      console.log(data.value)
-    }
-  }
-  catch (error) {
-    console.error(error)
-    logoutLoading.value = false
-    apiError.value = true
-  }
+  // Redirect to login page
+  router.push('/login')
 }
 
 const userProfileList = [
