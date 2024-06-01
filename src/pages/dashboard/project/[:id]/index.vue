@@ -9,6 +9,7 @@ definePage({
 })
 
 const apiError = ref(false)
+const refreshDataProgress = ref(0)
 
 // Project
 const projectID = useRoute().params.id
@@ -270,10 +271,72 @@ const resolveUserRoleVariant = (role: string) => {
   return { color: 'success', icon: 'ri-user-line' }
 }
 
+const resolveRunnerHeatbeat = (lastHeartbeat: string) => {
+  let dateTime = 'N/A'
+  if (lastHeartbeat.Valid)
+    dateTime = new Date(lastHeartbeat.Time).toLocaleString()
+
+  return dateTime
+}
+
+const resolveRunnerHeartbeatColor = (lastHeartbeat: string) => {
+  if (lastHeartbeat.Valid) {
+    if (new Date(lastHeartbeat.Time).getTime() < new Date().getTime() - 15000)
+      return 'text-warning'
+
+    return 'text-success'
+  }
+  else { return 'text-error' }
+}
+
+const resolveRunnerHearbeatAge = (lastHeartbeat: string) => {
+  let age = 0
+  if (lastHeartbeat.Valid) {
+    age = new Date().getTime() - new Date(lastHeartbeat.Time).getTime()
+    if (age > 1000 * 60 * 60 * 24)
+      return `${Math.floor(age / (1000 * 60 * 60 * 24))} days`
+
+    if (age > 1000 * 60 * 60)
+      return `${Math.floor(age / (1000 * 60 * 60))} hours`
+
+    if (age > 1000 * 60)
+      return `${Math.floor(age / (1000 * 60))} minutes`
+
+    return `${Math.floor(age / 1000)} seconds`
+  }
+  else { return 0 }
+}
+
+const refreshData = async () => {
+  const refreshInterval = 10 * 1000 // 10 seconds
+  const eachSecondInterval = 1000 // 1 second
+
+  console.log('test')
+
+  const intervalId = setInterval(async () => {
+    await getProject()
+    await getApiKeys()
+    await getRunners()
+
+    refreshDataProgress.value = 0
+  }, refreshInterval)
+
+  const eachSecondIntervalId = setInterval(() => {
+    refreshDataProgress.value += 10
+  }, eachSecondInterval)
+
+  onUnmounted(() => {
+    clearInterval(intervalId)
+    clearInterval(eachSecondIntervalId)
+  })
+}
+
 onMounted(async () => {
   await getProject()
   await getApiKeys()
   await getRunners()
+
+  refreshData()
 })
 </script>
 
@@ -309,6 +372,10 @@ onMounted(async () => {
       >
         Back to Project
       </VBtn>
+      <VProgressCircular
+        :model-value="refreshDataProgress"
+        color="primary"
+      />
     </div>
   </div>
 
@@ -694,7 +761,7 @@ onMounted(async () => {
             sm="6"
             lg="4"
           >
-            <VCard :loading="runner.active">
+            <VCard :loading="!runner.registered">
               <VCardText class="d-flex align-center pb-4">
                 <VRow>
                   <VCol
@@ -794,9 +861,23 @@ onMounted(async () => {
                         </td>
                         <td
                           class="text-body-1 text-high-emphasis font-weight-medium pb-1"
-                          :class="{ 'text-success': runner.last_heartbeat.valid, 'text-error': !runner.last_heartbeat.valid }"
+                          :class="resolveRunnerHeartbeatColor(runner.last_heartbeat)"
                         >
-                          {{ runner.last_heartbeat.valid ? new Date(runner.last_heartbeat).toLocaleString() : 'N/A' }}
+                          {{ resolveRunnerHeatbeat(runner.last_heartbeat) }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          class="text-body-1 pb-1"
+                          style="inline-size: 150px;"
+                        >
+                          Heartbeat Age:
+                        </td>
+                        <td
+                          class="text-body-1 text-high-emphasis font-weight-medium pb-1"
+                          :class="resolveRunnerHeartbeatColor(runner.last_heartbeat)"
+                        >
+                          {{ resolveRunnerHearbeatAge(runner.last_heartbeat) }}
                         </td>
                       </tr>
                       <tr>
@@ -807,7 +888,7 @@ onMounted(async () => {
                           Runner Version:
                         </td>
                         <td class="text-body-1 text-high-emphasis font-weight-medium pb-1">
-                          {{ runner.version ? runner.version : 'N/A' }}
+                          {{ runner.runner_version ? runner.runner_version : 'N/A' }}
                         </td>
                       </tr>
                     </VTable>
