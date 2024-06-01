@@ -175,6 +175,22 @@ const login = async () => {
                   Login
                 </VBtn>
               </VCol>
+
+              <!-- create account -->
+              <VCol
+                cols="12"
+                class="text-body-1 text-center"
+              >
+                <span class="d-inline-block">
+                  New on our platform?
+                </span>
+                <RouterLink
+                  class="text-primary ms-1 d-inline-block text-body-1"
+                  :to="{ name: 'register' }"
+                >
+                  Create an account
+                </RouterLink>
+              </VCol>
             </VRow>
           </VForm>
         </VCardText>
