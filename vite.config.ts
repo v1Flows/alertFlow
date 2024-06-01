@@ -6,6 +6,7 @@ import Components from 'unplugin-vue-components/vite'
 import { VueRouterAutoImports, getPascalCaseRouteName } from 'unplugin-vue-router'
 import VueRouter from 'unplugin-vue-router/vite'
 import { defineConfig } from 'vite'
+import { VitePWA } from 'vite-plugin-pwa'
 import VueDevTools from 'vite-plugin-vue-devtools'
 import Layouts from 'vite-plugin-vue-layouts'
 import vuetify from 'vite-plugin-vuetify'
@@ -77,6 +78,33 @@ export default defineConfig({
     }),
 
     svgLoader(),
+
+    VitePWA({
+      registerType: 'autoUpdate',
+      injectRegister: 'auto',
+      workbox: {
+        cleanupOutdatedCaches: false,
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,json,vue,txt,woff2}'],
+      },
+      manifest: {
+        name: 'AlertFlow',
+        short_name: 'AlertFlow',
+        description: 'AlertFlow is an platform for automating monitoring alerts in your infrastructure.',
+        theme_color: '#19182a',
+        icons: [
+          {
+            src: 'pwa-192x192.png',
+            sizes: '192x192',
+            type: 'image/png',
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+          },
+        ],
+      },
+    }),
   ],
   define: { 'process.env': {} },
   resolve: {

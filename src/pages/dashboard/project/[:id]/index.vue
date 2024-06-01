@@ -735,7 +735,7 @@ onMounted(async () => {
               :disabled="apiError"
               color="success"
               class="mb-0"
-              prepend-icon="ri-remix-run-line"
+              prepend-icon="ri-add-line"
               variant="tonal"
               @click="addRunnerDialog = true"
             >
