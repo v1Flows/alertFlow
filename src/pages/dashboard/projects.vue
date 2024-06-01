@@ -42,7 +42,7 @@ const projectToDelete = ref('')
 const getProjects = async () => {
   loadingProjects.value = true
   try {
-    const { data, error } = await useFetch('http://localhost:8080/api/projects/', {
+    const { data, error } = await useFetch('https://alertflow-api.justlab.xyz/api/projects/', {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
@@ -88,7 +88,7 @@ const createProject = async (project: any) => {
   console.log(project)
 
   try {
-    const { data, error } = await useFetch('http://localhost:8080/api/projects/', {
+    const { data, error } = await useFetch('https://alertflow-api.justlab.xyz/api/projects/', {
       method: 'POST',
       body: JSON.stringify(project),
       headers: {
@@ -121,7 +121,7 @@ const createProject = async (project: any) => {
 const editProjectFn = async () => {
   editProjectLoading.value = true
 
-  const { error } = await useFetch(`http://localhost:8080/api/projects/${editProjectData.value.id}`, {
+  const { error } = await useFetch(`https://alertflow-api.justlab.xyz/api/projects/${editProjectData.value.id}`, {
     method: 'PUT',
     headers: {
       'Authorization': useCookie('accessToken').value,
@@ -163,7 +163,7 @@ const deleteProjectFn = (projectID: string) => {
 const deleteProject = async (projectID: string) => {
   deleteProjectLoading.value = true
   try {
-    const { data, error } = await useFetch(`http://localhost:8080/api/projects/${projectID}`, {
+    const { data, error } = await useFetch(`https://alertflow-api.justlab.xyz/api/projects/${projectID}`, {
       method: 'DELETE',
       headers: {
         'Authorization': useCookie('accessToken').value,

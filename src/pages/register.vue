@@ -31,7 +31,7 @@ const registerLoading = ref(false)
 const registerUser = async () => {
   registerLoading.value = true
   try {
-    const { data, error } = await useFetch('http://localhost:8080/api/user/register', {
+    const { data, error } = await useFetch('https://alertflow-api.justlab.xyz/api/user/register', {
       headers: {
         'Content-Type': 'application/json',
       },
