@@ -766,18 +766,15 @@ onMounted(async () => {
                 <VRow>
                   <VCol
                     cols="12"
-                    sm="6"
+                    sm="11"
                   >
-                    <VChip
-                      color="secondary"
-                      label
-                    >
-                      ID: {{ runner.id }}
-                    </VChip>
+                    <h4 class="text-h4">
+                      {{ runner.name }}
+                    </h4>
                   </VCol>
                   <VCol
                     cols="12"
-                    sm="6"
+                    sm="1"
                     align="end"
                   >
                     <VBtn
@@ -791,9 +788,12 @@ onMounted(async () => {
               </VCardText>
 
               <VCardText>
-                <h4 class="text-h4">
-                  {{ runner.name }}
-                </h4>
+                <VChip
+                  color="secondary"
+                  label
+                >
+                  ID: {{ runner.id }}
+                </VChip>
               </VCardText>
 
               <VDivider />
