@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { VCodeBlock } from '@wdns/vue-code-block'
+
 definePage({
   meta: {
     action: 'create',
@@ -17,6 +19,12 @@ const project = ref({})
 const searchQuery = ref('')
 const selectedRole = ref()
 const isAddNewUserDrawerVisible = ref(false)
+
+// API Keys
+const apiKeys = ref([])
+const loadingApiKeys = ref(false)
+const addApiKeyDialog = ref(false)
+const addApiKeyDescription = ref('')
 
 // Data table options
 const itemsPerPage = ref(10)
@@ -73,6 +81,88 @@ const getProject = async () => {
   }
 }
 
+const getApiKeys = async () => {
+  loadingApiKeys.value = true
+  try {
+    const { data, error } = await useFetch(`http://localhost:8080/api/projects/${projectID}/apikeys`, {
+      headers: {
+        'Authorization': useCookie('accessToken').value,
+        'Content-Type': 'application/json',
+      },
+      method: 'GET',
+    })
+
+    if (error.value) {
+      apiError.value = true
+      console.error(error.value)
+    }
+
+    apiKeys.value = await JSON.parse(data.value).api_keys
+    loadingApiKeys.value = false
+  }
+  catch (err) {
+    console.error(err)
+    loadingApiKeys.value = false
+    apiError.value = true
+  }
+}
+
+const deleteApiKey = async (apiKeyID: string) => {
+  try {
+    const { error } = await useFetch(`http://localhost:8080/api/token/service/${apiKeyID}`, {
+      headers: {
+        'Authorization': useCookie('accessToken').value,
+        'Content-Type': 'application/json',
+      },
+      method: 'DELETE',
+    })
+
+    if (error.value) {
+      apiError.value = true
+      console.error(error.value)
+    }
+    else {
+      apiError.value = false
+      getApiKeys()
+    }
+  }
+  catch (err) {
+    console.error(err)
+    apiError.value = true
+  }
+}
+
+const createApiKey = async () => {
+  try {
+    const { data, error } = await useFetch(`http://localhost:8080/api/token/service/${projectID}`, {
+      headers: {
+        'Authorization': useCookie('accessToken').value,
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        description: addApiKeyDescription.value,
+      }),
+    })
+
+    if (error.value) {
+      apiError.value = true
+      addApiKeyDialog.value = false
+      console.error(error.value)
+    }
+    else if (data.value) {
+      apiError.value = false
+      addApiKeyDialog.value = false
+      getApiKeys()
+    }
+  }
+  catch (err) {
+    console.error(err)
+    apiError.value = true
+    addApiKeyDialog.value = false
+  }
+}
+
 const resolveUserRoleVariant = (role: string) => {
   const roleLowerCase = role.toLowerCase()
 
@@ -88,6 +178,7 @@ const resolveUserRoleVariant = (role: string) => {
 
 onMounted(async () => {
   await getProject()
+  await getApiKeys()
 })
 </script>
 
@@ -196,7 +287,7 @@ onMounted(async () => {
             <VCardText>
               <div class="d-flex align-center justify-space-between">
                 <div class="d-flex flex-column">
-                  <span class="text-h5 mb-1">{{ project.api_keys ? project.api_keys.length : 0 }}</span>
+                  <span class="text-h5 mb-1">{{ apiKeys.length }}</span>
                   <span class="text-sm">Number of API Keys</span>
                 </div>
                 <VAvatar
@@ -389,10 +480,136 @@ onMounted(async () => {
           <!-- SECTION -->
         </VCard>
       </VWindowItem>
-      <VWindowItem value="tab-2" />
+      <VWindowItem value="tab-2">
+        <VRow class="mb-6">
+          <VCol
+            cols="12"
+            align="right"
+          >
+            <VBtn
+              :disabled="apiError"
+              color="success"
+              class="mb-0"
+              prepend-icon="ri-add-line"
+              variant="tonal"
+              @click="addApiKeyDialog = true"
+            >
+              Create API Key
+            </VBtn>
+          </VCol>
+        </VRow>
+        <VAlert
+          v-if="apiKeys.length === 0"
+          color="info"
+          variant="tonal"
+        >
+          No API Keys found for this Project.
+        </VAlert>
+
+        <VRow v-if="apiKeys.length > 0">
+          <VCol
+            v-for="key in apiKeys"
+            :key="key.id"
+            cols="12"
+            sm="6"
+            lg="4"
+          >
+            <VCard>
+              <VCardText class="d-flex align-center pb-4">
+                <VRow>
+                  <VCol
+                    cols="12"
+                    sm="6"
+                  >
+                    <span>
+                      Created At: {{ new Date(key.created_at).toLocaleString() }}
+                    </span>
+                  </VCol>
+                  <VCol
+                    cols="12"
+                    sm="6"
+                    align="end"
+                  >
+                    <VBtn
+                      icon="ri-delete-bin-7-line"
+                      variant="text"
+                      color="error"
+                      @click="deleteApiKey(key.id)"
+                    />
+                  </VCol>
+                </VRow>
+              </VCardText>
+
+              <VCardText>
+                <div class="d-flex justify-space-between align-end">
+                  <div>
+                    <h5 class="text-h5 mb-1">
+                      {{ key.description }}
+                    </h5>
+                  </div>
+                </div>
+              </VCardText>
+
+              <VCardText>
+                <VCodeBlock
+                  :browser-window="true"
+                  :code="key.key"
+                  :indent="2"
+                  highlightjs
+                  theme="tokyo-night-dark"
+                  :persistent-copy-button="true"
+                  code-block-radius="0rem"
+                />
+              </VCardText>
+            </VCard>
+          </VCol>
+        </VRow>
+      </VWindowItem>
       <VWindowItem value="tab-3" />
     </VWindow>
   </div>
+  <VDialog
+    v-model="addApiKeyDialog"
+    max-width="600"
+  >
+    <!-- Dialog Content -->
+    <VCard title="Creat Service API Key">
+      <DialogCloseBtn
+        variant="text"
+        size="default"
+        @click="addApiKeyDialog = false"
+      />
+
+      <VCardText>
+        <VRow>
+          <VCol cols="12">
+            <VTextField
+              v-model="addApiKeyDescription"
+              label="Description"
+              placeholder="My API Key"
+            />
+          </VCol>
+        </VRow>
+      </VCardText>
+
+      <VCardText class="d-flex justify-end flex-wrap gap-4">
+        <VBtn
+          variant="outlined"
+          color="secondary"
+          @click="addApiKeyDialog = false"
+        >
+          Close
+        </VBtn>
+        <VBtn
+          variant="tonal"
+          color="success"
+          @click="createApiKey"
+        >
+          Create
+        </VBtn>
+      </VCardText>
+    </VCard>
+  </VDialog>
 </template>
 
 <style lang="scss" scoped>
