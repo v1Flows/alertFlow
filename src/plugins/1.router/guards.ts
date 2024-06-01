@@ -18,17 +18,32 @@ export const setupGuards = (router: _RouterTyped<RouteNamedMap & { [key: string]
      */
     const isLoggedIn = !!(useCookie('userData').value && useCookie('accessToken').value)
 
-    // if (!isLoggedIn) {
-    //   if (to.fullPath !== '/login') {
-    //     return {
-    //       name: 'login',
-    //       query: {
-    //         ...to.query,
-    //         to: to.fullPath !== '/' ? to.path : undefined,
-    //       },
-    //     }
-    //   }
-    // }
+    if (isLoggedIn) {
+      const { onFetchResponse } = useFetch('http://localhost:8080/api/token/validate', {
+        headers: {
+          'Authorization': useCookie('accessToken').value,
+          'Content-Type': 'application/json',
+        },
+      })
+
+      onFetchResponse(response => {
+        if (response.status === 401) {
+          // Remove "accessToken" from cookie
+          useCookie('accessToken').value = null
+
+          // Remove "userData" from cookie
+          useCookie('userData').value = null
+
+          return {
+            name: 'login',
+            query: {
+              ...to.query,
+              to: to.fullPath !== '/' ? to.path : undefined,
+            },
+          }
+        }
+      })
+    }
 
     /*
       If user is logged in and is trying to access login like page, redirect to home
