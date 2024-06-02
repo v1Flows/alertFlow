@@ -21,6 +21,11 @@ declare module 'vue-router/auto-routes' {
     'root': RouteRecordInfo<'root', '/', Record<never, never>, Record<never, never>>,
     '$error': RouteRecordInfo<'$error', '/:error(.*)', { error: ParamValue<true> }, { error: ParamValue<false> }>,
     'dashboard': RouteRecordInfo<'dashboard', '/dashboard', Record<never, never>, Record<never, never>>,
+    'dashboard-admin-flows': RouteRecordInfo<'dashboard-admin-flows', '/dashboard/admin/flows', Record<never, never>, Record<never, never>>,
+    'dashboard-admin-projects': RouteRecordInfo<'dashboard-admin-projects', '/dashboard/admin/projects', Record<never, never>, Record<never, never>>,
+    'dashboard-admin-runners': RouteRecordInfo<'dashboard-admin-runners', '/dashboard/admin/runners', Record<never, never>, Record<never, never>>,
+    'dashboard-admin-settings': RouteRecordInfo<'dashboard-admin-settings', '/dashboard/admin/settings', Record<never, never>, Record<never, never>>,
+    'dashboard-admin-users': RouteRecordInfo<'dashboard-admin-users', '/dashboard/admin/users', Record<never, never>, Record<never, never>>,
     'dashboard-flow:id': RouteRecordInfo<'dashboard-flow:id', '/dashboard/flow/::id', { :id: ParamValue<true> }, { :id: ParamValue<false> }>,
     'dashboard-flow:id-execution:id': RouteRecordInfo<'dashboard-flow:id-execution:id', '/dashboard/flow/::id/execution/::id', { :id: ParamValue<true>, :id: ParamValue<true> }, { :id: ParamValue<false>, :id: ParamValue<false> }>,
     'dashboard-flows': RouteRecordInfo<'dashboard-flows', '/dashboard/flows', Record<never, never>, Record<never, never>>,
@@ -28,6 +33,7 @@ declare module 'vue-router/auto-routes' {
     'dashboard-project:id': RouteRecordInfo<'dashboard-project:id', '/dashboard/project/::id', { :id: ParamValue<true> }, { :id: ParamValue<false> }>,
     'dashboard-projects': RouteRecordInfo<'dashboard-projects', '/dashboard/projects', Record<never, never>, Record<never, never>>,
     'login': RouteRecordInfo<'login', '/login', Record<never, never>, Record<never, never>>,
+    'not-authorized': RouteRecordInfo<'not-authorized', '/not-authorized', Record<never, never>, Record<never, never>>,
     'register': RouteRecordInfo<'register', '/register', Record<never, never>, Record<never, never>>,
   }
 }

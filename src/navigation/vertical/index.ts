@@ -27,4 +27,47 @@ export default [
     action: 'create',
     subject: 'all',
   },
+  {
+    title: 'Admin',
+    icon: { icon: 'ri-shield-star-line' },
+    action: 'create',
+    subject: 'Admin',
+    children: [
+      {
+        title: 'Users',
+        to: { name: 'dashboard-admin-users' },
+        icon: { icon: 'ri-user-line' },
+        action: 'create',
+        subject: 'Admin',
+      },
+      {
+        title: 'Projects',
+        to: { name: 'dashboard-admin-projects' },
+        icon: { icon: 'ri-stack-line' },
+        action: 'create',
+        subject: 'Admin',
+      },
+      {
+        title: 'Flows',
+        to: { name: 'dashboard-admin-flows' },
+        icon: { icon: 'ri-swap-2-line' },
+        action: 'create',
+        subject: 'Admin',
+      },
+      {
+        title: 'Runners',
+        to: { name: 'dashboard-admin-runners' },
+        icon: { icon: 'ri-remix-run-line' },
+        action: 'create',
+        subject: 'Admin',
+      },
+      {
+        title: 'Settings',
+        to: { name: 'dashboard-admin-settings' },
+        icon: { icon: 'ri-settings-5-line' },
+        action: 'create',
+        subject: 'Admin',
+      },
+    ],
+  },
 ]

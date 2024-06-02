@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import illustrationJohnDark from '@images/cards/illustration-john-dark.png'
+import illustrationJohnLight from '@images/cards/illustration-john-light.png'
+
+import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
+
 definePage({
   meta: {
     action: 'create',
@@ -6,54 +11,65 @@ definePage({
   },
 })
 
-const { data, error } = await useFetch('https://alertflow.justlab.xyz/settings')
-
-let settings = ref({
-  api_endpoint: '',
-})
-
-if (error.value)
-  console.error(error.value)
-else if (data.value)
-  settings = JSON.parse(data.value)
+const johnImage = useGenerateImageVariant(illustrationJohnLight, illustrationJohnDark)
 </script>
 
 <template>
   <div>
-    <VRow>
-      <VCol
-        cols="12"
-        sm="6"
-        md="4"
+    <div class="pe-3">
+      <div class="mb-2">
+        <span class="text-h5">
+          Welcome back,
+        </span>
+        <span class="text-h4">
+          {{ useCookie('userData').value.username }} 👋🏻
+        </span>
+      </div>
+
+      <div
+        class="text-wrap text-body-1 mb-4"
+        style="max-inline-size: 400px;"
       >
-        <VCard>
-          <VCardText class="d-flex align-center">
+        Let's take a look at some of your numbers.
+      </div>
+
+      <div class="d-flex justify-space-between flex-wrap gap-6 flex-column flex-md-row">
+        <div
+          v-for="{ title, value, icon, color } in [
+            { title: 'Received Payloads', value: '34', icon: 'ri-file-list-3-line', color: 'primary' },
+            { title: 'Executed Actions', value: '82', icon: 'ri-hammer-line', color: 'info' },
+            { title: 'Completed Executions', value: '14', icon: 'ri-terminal-line', color: 'success' },
+            { title: 'Failed Executions', value: '2', icon: 'ri-emotion-unhappy-line', color: 'error' },
+          ]"
+          :key="title"
+        >
+          <div class="d-flex">
             <VAvatar
-              size="40"
-              rounded="lg"
-              :color="settings.api_endpoint !== '' ? 'success' : 'error'"
               variant="tonal"
-              class="me-4"
+              :color="color"
+              rounded
+              size="54"
+              class="text-primary me-4"
             >
               <VIcon
-                icon="ri-server-line"
-                size="24"
+                :icon="icon"
+                size="38"
               />
             </VAvatar>
-
-            <div class="d-flex flex-column">
-              <div class="d-flex align-center flex-wrap gap-x-2">
-                <h5 class="text-h5">
-                  {{ settings.api_endpoint !== '' ? 'Configured' : 'Not Configured' }}
-                </h5>
-              </div>
-              <div class="text-body-1">
-                API
-              </div>
+            <div>
+              <h6 class="text-h6 text-medium-emphasis">
+                {{ title }}
+              </h6>
+              <h4
+                class="text-h4"
+                :class="`text-${color}`"
+              >
+                {{ value }}
+              </h4>
             </div>
-          </VCardText>
-        </VCard>
-      </VCol>
-    </VRow>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>

@@ -48,7 +48,6 @@ const login = async () => {
     if (error.value) {
       loadingLogin.value = false
       apiError.value = true
-      console.error(error.value)
     }
     else if (data.value) {
       loadingLogin.value = false
@@ -128,6 +127,15 @@ const login = async () => {
           <p class="mb-0">
             Please sign-in to your account and start the adventure
           </p>
+        </VCardText>
+
+        <VCardText v-if="apiError">
+          <VAlert
+            title="Login Error"
+            text="Please check your credentials or try again later"
+            type="error"
+            variant="tonal"
+          />
         </VCardText>
 
         <VCardText>
