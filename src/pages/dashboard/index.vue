@@ -6,7 +6,7 @@ definePage({
   },
 })
 
-const { data, error } = await useFetch('https://alertflow-api.justlab.xyz/settings')
+const { data, error } = await useFetch('https://alertflow.justlab.xyz/settings')
 
 let settings = ref({
   api_endpoint: '',

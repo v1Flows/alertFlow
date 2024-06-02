@@ -114,7 +114,7 @@ const currentTab = ref('tab-1')
 const getFlow = async () => {
   loadingFlow.value = true
   try {
-    const { data, error } = await useFetch(`https://alertflow-api.justlab.xyz/api/flows/${flowID}`, {
+    const { data, error } = await useFetch(`https://alertflow.justlab.xyz/api/flows/${flowID}`, {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
@@ -139,7 +139,7 @@ const getFlow = async () => {
 const getProject = async () => {
   loadingProject.value = true
   try {
-    const { data, error } = await useFetch(`https://alertflow-api.justlab.xyz/api/projects/${flow.value.project_id}`, {
+    const { data, error } = await useFetch(`https://alertflow.justlab.xyz/api/projects/${flow.value.project_id}`, {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
@@ -165,7 +165,7 @@ const getProject = async () => {
 const getFlowExecutions = async () => {
   loadingExecutions.value = true
   try {
-    const { data, error } = await useFetch(`https://alertflow-api.justlab.xyz/api/flows/${flowID}/executions`, {
+    const { data, error } = await useFetch(`https://alertflow.justlab.xyz/api/flows/${flowID}/executions`, {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
@@ -201,7 +201,7 @@ const getFlowExecutions = async () => {
 const getFlowPayloads = async () => {
   loadingPayloads.value = true
   try {
-    const { data, error } = await useFetch(`https://alertflow-api.justlab.xyz/api/flows/${flowID}/payloads`, {
+    const { data, error } = await useFetch(`https://alertflow.justlab.xyz/api/flows/${flowID}/payloads`, {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
@@ -284,7 +284,7 @@ const getExecutionStatusIcon = (execution: any) => {
 const updateFlow = async () => {
   editFlowLoading.value = true
 
-  const { error } = await useFetch(`https://alertflow-api.justlab.xyz/api/flows/${flowID}`, {
+  const { error } = await useFetch(`https://alertflow.justlab.xyz/api/flows/${flowID}`, {
     method: 'PUT',
     headers: {
       'Authorization': useCookie('accessToken').value,
@@ -315,7 +315,7 @@ const addFlowAction = async () => {
     flow.value.actions = []
   }
 
-  const { error } = await useFetch(`https://alertflow-api.justlab.xyz/api/flows/${flowID}/actions`, {
+  const { error } = await useFetch(`https://alertflow.justlab.xyz/api/flows/${flowID}/actions`, {
     method: 'POST',
     headers: {
       'Authorization': useCookie('accessToken').value,
@@ -347,7 +347,7 @@ const deleteAction = async () => {
   
   flow.value.actions = flow.value.actions.filter((_, i) => i !== deleteActionID.value)
 
-  const { error } = await useFetch(`https://alertflow-api.justlab.xyz/api/flows/${flowID}/actions`, {
+  const { error } = await useFetch(`https://alertflow.justlab.xyz/api/flows/${flowID}/actions`, {
     method: 'POST',
     headers: {
       'Authorization': useCookie('accessToken').value,

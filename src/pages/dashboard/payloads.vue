@@ -44,7 +44,7 @@ const getLast30DaysPayloads = () => {
 }
 
 const getPayloads = async () => {
-  const { data, error } = await useFetch('https://alertflow-api.justlab.xyz/api/payloads/', {
+  const { data, error } = await useFetch('https://alertflow.justlab.xyz/api/payloads/', {
     headers: {
       'Authorization': useCookie('accessToken').value,
       'Content-Type': 'application/json',

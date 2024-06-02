@@ -67,7 +67,7 @@ const currentTab = ref('tab-1')
 const getProject = async () => {
   loadingProject.value = true
   try {
-    const { data, error } = await useFetch(`https://alertflow-api.justlab.xyz/api/projects/${projectID}`, {
+    const { data, error } = await useFetch(`https://alertflow.justlab.xyz/api/projects/${projectID}`, {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
@@ -93,7 +93,7 @@ const getProject = async () => {
 const getApiKeys = async () => {
   loadingApiKeys.value = true
   try {
-    const { data, error } = await useFetch(`https://alertflow-api.justlab.xyz/api/projects/${projectID}/apikeys`, {
+    const { data, error } = await useFetch(`https://alertflow.justlab.xyz/api/projects/${projectID}/apikeys`, {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
@@ -118,7 +118,7 @@ const getApiKeys = async () => {
 
 const deleteApiKey = async (apiKeyID: string) => {
   try {
-    const { error } = await useFetch(`https://alertflow-api.justlab.xyz/api/token/service/${apiKeyID}`, {
+    const { error } = await useFetch(`https://alertflow.justlab.xyz/api/token/service/${apiKeyID}`, {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
@@ -143,7 +143,7 @@ const deleteApiKey = async (apiKeyID: string) => {
 
 const createApiKey = async () => {
   try {
-    const { data, error } = await useFetch(`https://alertflow-api.justlab.xyz/api/token/service/${projectID}`, {
+    const { data, error } = await useFetch(`https://alertflow.justlab.xyz/api/token/service/${projectID}`, {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
@@ -175,7 +175,7 @@ const createApiKey = async () => {
 const getRunners = async () => {
   loadingRunners.value = true
   try {
-    const { data, error } = await useFetch('https://alertflow-api.justlab.xyz/api/runners/', {
+    const { data, error } = await useFetch('https://alertflow.justlab.xyz/api/runners/', {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
@@ -200,7 +200,7 @@ const getRunners = async () => {
 
 const addRunner = async () => {
   try {
-    const { data, error } = await useFetch('https://alertflow-api.justlab.xyz/api/runners/', {
+    const { data, error } = await useFetch('https://alertflow.justlab.xyz/api/runners/', {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
@@ -232,7 +232,7 @@ const addRunner = async () => {
 
 const deleteRunner = async (runnerID: string) => {
   try {
-    const { error } = await useFetch(`https://alertflow-api.justlab.xyz/api/runners/${runnerID}`, {
+    const { error } = await useFetch(`https://alertflow.justlab.xyz/api/runners/${runnerID}`, {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
