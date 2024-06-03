@@ -149,36 +149,19 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div>
-    <VRow class="match-height">
-      <VCol
-        cols="12"
-        md="6"
-        sm="6"
-        align="left"
-      >
-        <p class="text-2xl mb-0">
-          Flows
-        </p>
-      </VCol>
-      <VCol
-        cols="12"
-        md="6"
-        sm="6"
-        align="right"
-      >
-        <VBtn
-          :disabled="apiError"
-          color="success"
-          class="mb-0"
-          prepend-icon="ri-add-line"
-          variant="tonal"
-          @click="createFlowDialog = true"
-        >
-          Create Flow
-        </VBtn>
-      </VCol>
-    </VRow>
+  <div class="d-flex justify-space-between">
+    <p class="text-2xl">
+      Flows
+    </p>
+    <VBtn
+      :disabled="apiError"
+      color="success"
+      prepend-icon="ri-add-line"
+      variant="tonal"
+      @click="createFlowDialog = true"
+    >
+      Create Flow
+    </VBtn>
   </div>
   <VAlert
     v-model="apiError"
