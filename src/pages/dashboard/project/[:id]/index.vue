@@ -128,6 +128,7 @@ const deleteApiKey = async (apiKeyID: string) => {
 
     if (error.value) {
       apiError.value = true
+      console.log(apiKeyID)
       console.error(error.value)
     }
     else {
@@ -449,8 +450,8 @@ onMounted(async () => {
             <VCardText>
               <div class="d-flex align-center justify-space-between">
                 <div class="d-flex flex-column">
-                  <span class="text-h5 mb-1">{{ runners.length }}</span>
-                  <span class="text-sm">Runners</span>
+                  <span class="text-h5 mb-1">{{ project.alertflow_runners ? runners.length : runners.filter(runner => !runner.alertflow_runner).length }}</span>
+                  <span class="text-sm">Available Runners</span>
                 </div>
                 <VAvatar
                   icon="ri-remix-run-line"
@@ -647,24 +648,27 @@ onMounted(async () => {
         </VCard>
       </VWindowItem>
       <VWindowItem value="tab-2">
-        <VRow>
-          <VCol cols="12">
-            <VBtn
-              :disabled="apiError"
-              color="success"
-              class="mb-0"
-              prepend-icon="ri-add-line"
-              variant="tonal"
-              @click="addApiKeyDialog = true"
-            >
-              Create API Key
-            </VBtn>
-          </VCol>
-        </VRow>
+        <div class="mb-4 d-flex gap-4">
+          <h4 class="text-h4">
+            Service API Keys
+          </h4>
+          <VBtn
+            :disabled="apiError"
+            color="success"
+            class="mb-0"
+            prepend-icon="ri-add-line"
+            variant="outlined"
+            @click="addApiKeyDialog = true"
+          >
+            Create API Key
+          </VBtn>
+        </div>
+
         <VAlert
           v-if="apiKeys.length === 0"
           color="info"
           variant="tonal"
+          class="mt-4"
         >
           No API Keys found for this Project.
         </VAlert>
@@ -678,29 +682,16 @@ onMounted(async () => {
             lg="4"
           >
             <VCard>
-              <VCardText class="d-flex align-center pb-4">
-                <VRow>
-                  <VCol
-                    cols="12"
-                    sm="6"
-                  >
-                    <span>
-                      Created At: {{ new Date(key.created_at).toLocaleString() }}
-                    </span>
-                  </VCol>
-                  <VCol
-                    cols="12"
-                    sm="6"
-                    align="end"
-                  >
-                    <VBtn
-                      icon="ri-delete-bin-7-line"
-                      variant="text"
-                      color="error"
-                      @click="deleteApiKey(key.id)"
-                    />
-                  </VCol>
-                </VRow>
+              <VCardText class="d-flex align-center justify-space-between pb-4">
+                <span>
+                  Created At: {{ new Date(key.created_at).toLocaleString() }}
+                </span>
+                <VBtn
+                  icon="ri-delete-bin-7-line"
+                  variant="text"
+                  color="error"
+                  @click="deleteApiKey(key.id)"
+                />
               </VCardText>
 
               <VCardText>
@@ -729,20 +720,21 @@ onMounted(async () => {
         </VRow>
       </VWindowItem>
       <VWindowItem value="tab-3">
-        <VRow>
-          <VCol cols="12">
-            <VBtn
-              :disabled="apiError"
-              color="success"
-              class="mb-0"
-              prepend-icon="ri-add-line"
-              variant="tonal"
-              @click="addRunnerDialog = true"
-            >
-              Add Runner
-            </VBtn>
-          </VCol>
-        </VRow>
+        <div class="d-flex mb-4 gap-4">
+          <h4 class="text-h4">
+            Self-Hosted
+          </h4>
+          <VBtn
+            :disabled="apiError"
+            color="success"
+            class="mb-0"
+            prepend-icon="ri-add-line"
+            variant="outlined"
+            @click="addRunnerDialog = true"
+          >
+            Add Runner
+          </VBtn>
+        </div>
 
         <VAlert
           v-if="runners.length === 0"
@@ -753,38 +745,28 @@ onMounted(async () => {
           No Runners found for this Project.
         </VAlert>
 
-        <VRow v-if="runners.length > 0">
+        <VRow
+          v-if="runners.length > 0"
+          class="mb-4"
+        >
           <VCol
-            v-for="runner in runners"
+            v-for="runner in runners.filter(runner => runner.alertflow_runner === false)"
             :key="runner.id"
             cols="12"
             sm="6"
             lg="4"
           >
             <VCard :loading="!runner.registered">
-              <VCardText class="d-flex align-center pb-4">
-                <VRow>
-                  <VCol
-                    cols="12"
-                    sm="11"
-                  >
-                    <h4 class="text-h4">
-                      {{ runner.name }}
-                    </h4>
-                  </VCol>
-                  <VCol
-                    cols="12"
-                    sm="1"
-                    align="end"
-                  >
-                    <VBtn
-                      icon="ri-delete-bin-7-line"
-                      variant="text"
-                      color="error"
-                      @click="removeRunnerID = runner.id ; removeRunnerDialog = true"
-                    />
-                  </VCol>
-                </VRow>
+              <VCardText class="d-flex justify-space-between">
+                <h4 class="text-h4">
+                  {{ runner.name }}
+                </h4>
+                <VBtn
+                  icon="ri-delete-bin-7-line"
+                  variant="text"
+                  color="error"
+                  @click="removeRunnerID = runner.id ; removeRunnerDialog = true"
+                />
               </VCardText>
 
               <VCardText>
@@ -794,6 +776,132 @@ onMounted(async () => {
                 >
                   ID: {{ runner.id }}
                 </VChip>
+              </VCardText>
+
+              <VDivider />
+
+              <VCardText>
+                <VRow>
+                  <VCol
+                    cols="12"
+                    sm="6"
+                  >
+                    <VTable>
+                      <tr>
+                        <td
+                          class="text-body-1 pb-1"
+                          style="inline-size: 150px;"
+                        >
+                          Registered:
+                        </td>
+                        <td
+                          class="text-body-1 text-high-emphasis font-weight-medium pb-1"
+                          :class="{ 'text-success': runner.registered, 'text-error': !runner.registered }"
+                        >
+                          {{ runner.registered ? 'Yes' : 'No' }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          class="text-body-1 pb-1"
+                          style="inline-size: 150px;"
+                        >
+                          Active:
+                        </td>
+                        <td
+                          class="text-body-1 text-high-emphasis font-weight-medium pb-1"
+                          :class="{ 'text-success': runner.active, 'text-error': !runner.active }"
+                        >
+                          {{ runner.active ? 'Yes' : 'No' }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          class="text-body-1 pb-1"
+                          style="inline-size: 150px;"
+                        >
+                          Available Actions:
+                        </td>
+                        <td class="text-body-1 text-high-emphasis font-weight-medium">
+                          {{ runner.actions ? runner.actions.length : 0 }}
+                        </td>
+                      </tr>
+                    </VTable>
+                  </VCol>
+                  <VDivider vertical />
+                  <VCol
+                    cols="12"
+                    sm="6"
+                  >
+                    <VTable>
+                      <tr>
+                        <td
+                          class="text-body-1 pb-1"
+                          style="inline-size: 150px;"
+                        >
+                          Last Heartbeat:
+                        </td>
+                        <td
+                          class="text-body-1 text-high-emphasis font-weight-medium pb-1"
+                          :class="resolveRunnerHeartbeatColor(runner.last_heartbeat)"
+                        >
+                          {{ resolveRunnerHeatbeat(runner.last_heartbeat) }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          class="text-body-1 pb-1"
+                          style="inline-size: 150px;"
+                        >
+                          Heartbeat Age:
+                        </td>
+                        <td
+                          class="text-body-1 text-high-emphasis font-weight-medium pb-1"
+                          :class="resolveRunnerHeartbeatColor(runner.last_heartbeat)"
+                        >
+                          {{ resolveRunnerHearbeatAge(runner.last_heartbeat) }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          class="text-body-1 pb-1"
+                          style="inline-size: 150px;"
+                        >
+                          Runner Version:
+                        </td>
+                        <td class="text-body-1 text-high-emphasis font-weight-medium pb-1">
+                          {{ runner.runner_version ? runner.runner_version : 'N/A' }}
+                        </td>
+                      </tr>
+                    </VTable>
+                  </VCol>
+                </VRow>
+              </VCardText>
+            </VCard>
+          </VCol>
+        </VRow>
+        <h4 class="text-h4 mb-4">
+          AlertFlow Hosted
+        </h4>
+        <VRow
+          v-if="runners.length > 0"
+          class="mb-4"
+        >
+          <VCol
+            v-for="runner in runners.filter(runner => runner.alertflow_runner)"
+            :key="runner.id"
+            cols="12"
+            sm="6"
+            lg="4"
+          >
+            <VCard
+              :loading="!runner.registered"
+              :disabled="!project.alertflow_runners"
+            >
+              <VCardText class="d-flex align-center pb-4">
+                <h4 class="text-h4">
+                  {{ runner.name }}
+                </h4>
               </VCardText>
 
               <VDivider />

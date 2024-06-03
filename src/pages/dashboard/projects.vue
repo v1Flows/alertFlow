@@ -33,6 +33,7 @@ const editProjectData = ref({
   name: null,
   description: null,
   members: null,
+  alertflow_runners: null,
 })
 
 const deleteProjectDialog = ref(false)
@@ -131,6 +132,7 @@ const editProjectFn = async () => {
       name: editProjectData.value.name,
       description: editProjectData.value.description,
       members: editProjectData.value.members,
+      alertflow_runners: editProjectData.value.alertflow_runners,
     }),
   })
 
@@ -151,6 +153,7 @@ const editProject = (project: any) => {
     name: project.name,
     description: project.description,
     members: project.members,
+    alertflow_runners: project.alertflow_runners,
   }
   editProjectDialog.value = true
 }
@@ -485,7 +488,7 @@ onMounted(async () => {
     </VCard>
   </VDialog>
 
-  <!-- 👉 Edit Project Members Dialog -->
+  <!-- 👉 Edit Project Dialog -->
   <VDialog
     :width="$vuetify.display.smAndDown ? 'auto' : 900 "
     :model-value="editProjectDialog"
@@ -503,7 +506,7 @@ onMounted(async () => {
         <!-- 👉 Title -->
         <div class="text-center mb-6">
           <h4 class="text-h4 mb-2">
-            Edit Project Members
+            Edit Project
           </h4>
 
           <p class="text-body-1">
@@ -536,6 +539,31 @@ onMounted(async () => {
                 label="Description"
                 placeholder="My Project Description"
               />
+            </VCol>
+
+            <VCol cols="12">
+              <h5 class="text-h5">
+                Project Settings
+              </h5>
+            </VCol>
+
+            <VCol cols="12">
+              <p class="text-body-1 mb-0">
+                Enable AlertFlow Hosted Runners:
+              </p>
+              <VSwitch
+                v-model="editProjectData.alertflow_runners"
+                :label="editProjectData.alertflow_runners ? 'Enabled' : 'Disabled'"
+                :true-value="true"
+                :false-value="false"
+                color="success"
+              />
+            </VCol>
+
+            <VCol cols="12">
+              <h5 class="text-h5">
+                Project Members
+              </h5>
             </VCol>
 
             <VCol cols="10">

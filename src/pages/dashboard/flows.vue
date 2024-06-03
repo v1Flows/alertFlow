@@ -340,68 +340,94 @@ onMounted(async () => {
               ref="createFlowFormRef"
               @submit.prevent="() => {}"
             >
-              <VTextField
-                v-model="createFlowForm.name"
-                label="Flow Name"
-                placeholder="Flow Name"
-                :rules="[requiredValidator]"
-              />
-
-              <VTextField
-                v-model="createFlowForm.description"
-                class="mt-6"
-                label="Flow Description"
-                placeholder="Flow Description"
-                :rules="[requiredValidator]"
-              />
-
-              <VSelect
-                v-model="createFlowForm.project_id"
-                :items="projects"
-                item-title="name"
-                item-value="id"
-                label="Assign Flow to Project"
-                class="mt-6"
-                placeholder="Select Project"
-                eager
-                :rules="[requiredValidator]"
-              />
-
-              <VCheckbox
-                v-model="createFlowForm.active"
-                class="mt-6"
-                color="success"
-                :label="createFlowForm.active === true ? 'Active' : 'Inactive'"
-              />
-
-              <div class="d-flex justify-space-between mt-6">
-                <VBtn
-                  variant="tonal"
-                  color="secondary"
-                  @click="createFlowDialog = false"
+              <VRow>
+                <VCol
+                  cols="12"
+                  md="6"
                 >
-                  <VIcon
-                    icon="ri-arrow-go-back-line"
-                    start
-                    class="flip-in-rtl"
+                  <VTextField
+                    v-model="createFlowForm.name"
+                    label="Flow Name"
+                    placeholder="Flow Name"
+                    :rules="[requiredValidator]"
                   />
-                  Cancel
-                </VBtn>
+                </VCol>
 
-                <VBtn
-                  color="success"
-                  :loading="createFlowSubmitLoading"
-                  @click="createFlow(createFlowForm)"
+                <VCol
+                  cols="12"
+                  md="6"
                 >
-                  Create
-
-                  <VIcon
-                    icon="ri-rocket-2-line"
-                    end
-                    class="flip-in-rtl"
+                  <VTextField
+                    v-model="createFlowForm.description"
+                    label="Flow Description"
+                    placeholder="Flow Description"
+                    :rules="[requiredValidator]"
                   />
-                </VBtn>
-              </div>
+                </VCol>
+
+                <VCol
+                  cols="12"
+                  md="6"
+                >
+                  <VSelect
+                    v-model="createFlowForm.project_id"
+                    :items="projects"
+                    item-title="name"
+                    item-value="id"
+                    label="Assign Flow to Project"
+                    placeholder="Select Project"
+                    eager
+                    :rules="[requiredValidator]"
+                  />
+                </VCol>
+
+                <VCol
+                  cols="12"
+                  md="6"
+                >
+                  <div class="d-flex align-center gap-4">
+                    <h5 class="text-h5">
+                      Flow Status:
+                    </h5>
+                    <VCheckbox
+                      v-model="createFlowForm.active"
+                      color="success"
+                      :label="createFlowForm.active === true ? 'Active' : 'Inactive'"
+                    />
+                  </div>
+                </VCol>
+
+                <VCol cols="12">
+                  <div class="d-flex justify-space-between mt-6">
+                    <VBtn
+                      variant="tonal"
+                      color="secondary"
+                      @click="createFlowDialog = false"
+                    >
+                      <VIcon
+                        icon="ri-arrow-go-back-line"
+                        start
+                        class="flip-in-rtl"
+                      />
+                      Cancel
+                    </VBtn>
+
+                    <VBtn
+                      color="success"
+                      :loading="createFlowSubmitLoading"
+                      @click="createFlow(createFlowForm)"
+                    >
+                      Create
+
+                      <VIcon
+                        icon="ri-rocket-2-line"
+                        end
+                        class="flip-in-rtl"
+                      />
+                    </VBtn>
+                  </div>
+                </VCol>
+              </VRow>
             </VForm>
           </VCol>
         </VRow>
