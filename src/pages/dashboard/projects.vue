@@ -20,6 +20,7 @@ const createProjectData = ref({
   id: uuid.v4(),
   name: '',
   description: '',
+  alertflow_runners: true,
   members: [{ email: useCookie('userData').value.email, role: 'Owner' }],
 })
 
@@ -374,6 +375,25 @@ onMounted(async () => {
                 v-model="createProjectData.description"
                 label="Description"
                 placeholder="My Project Description"
+              />
+            </VCol>
+
+            <VCol cols="12">
+              <h5 class="text-h5">
+                Project Settings
+              </h5>
+            </VCol>
+
+            <VCol cols="12">
+              <p class="text-body-1 mb-0">
+                Enable AlertFlow Hosted Runners:
+              </p>
+              <VSwitch
+                v-model="createProjectData.alertflow_runners"
+                :label="createProjectData.alertflow_runners ? 'Enabled' : 'Disabled'"
+                :true-value="true"
+                :false-value="false"
+                color="success"
               />
             </VCol>
 

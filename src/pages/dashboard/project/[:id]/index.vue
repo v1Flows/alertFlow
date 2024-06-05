@@ -176,10 +176,11 @@ const createApiKey = async () => {
 const getRunners = async () => {
   loadingRunners.value = true
   try {
-    const { data, error } = await useFetch('https://alertflow.justlab.xyz/api/runners/', {
+    const { data, error } = await useFetch('http://localhost:8080/api/runners/', {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
+        'Project-ID': projectID,
       },
       method: 'GET',
     })
