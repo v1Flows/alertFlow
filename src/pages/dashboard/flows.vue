@@ -176,7 +176,7 @@ onMounted(async () => {
         v-for="flow in flows.sort((a, b) => b.active - a.active)"
         :key="flow"
         cols="12"
-        md="4"
+        md="6"
         sm="6"
       >
         <VCard :loading="loadingFlows">

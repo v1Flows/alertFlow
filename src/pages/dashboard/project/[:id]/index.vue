@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { VCodeBlock } from '@wdns/vue-code-block'
+import { VCodeBlock } from '@wdns/vue-code-block';
 
 definePage({
   meta: {
@@ -176,11 +176,10 @@ const createApiKey = async () => {
 const getRunners = async () => {
   loadingRunners.value = true
   try {
-    const { data, error } = await useFetch('http://localhost:8080/api/runners/', {
+    const { data, error } = await useFetch(`https://alertflow-api.justlab.xyz/api/projects/${projectID}/runners`, {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
-        'Project-ID': projectID,
       },
       method: 'GET',
     })
@@ -755,7 +754,7 @@ onMounted(async () => {
             :key="runner.id"
             cols="12"
             sm="6"
-            lg="4"
+            lg="6"
           >
             <VCard :loading="!runner.registered">
               <VCardText class="d-flex justify-space-between">
@@ -824,7 +823,7 @@ onMounted(async () => {
                           Available Actions:
                         </td>
                         <td class="text-body-1 text-high-emphasis font-weight-medium">
-                          {{ runner.actions ? runner.actions.length : 0 }}
+                          {{ runner.available_actions ? runner.available_actions.length : 0 }}
                         </td>
                       </tr>
                     </VTable>
@@ -893,7 +892,7 @@ onMounted(async () => {
             :key="runner.id"
             cols="12"
             sm="6"
-            lg="4"
+            lg="6"
           >
             <VCard
               :loading="!runner.registered"
