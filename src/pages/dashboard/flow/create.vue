@@ -5,11 +5,15 @@ const apiError = ref(false)
 
 const numberedSteps = [
   {
-    title: 'Flow Details',
+    title: 'Details',
     subtitle: 'Setup Details',
   },
   {
-    title: 'Flow Actions',
+    title: 'Runner',
+    subtitle: 'Select Runner',
+  },
+  {
+    title: 'Actions',
     subtitle: 'Add Actions',
   },
   {
@@ -34,13 +38,29 @@ const accountForm = ref({
 })
 
 const projectList = ref([])
+const runnerList = ref([])
+const actionList = ref([])
 
 const flow = ref({
   name: '',
   description: '',
   project_id: '',
+  runner_id: '',
   active: true,
-  actions: <any>[],
+  actions: [
+    {
+      name: '',
+      description: '',
+      active: true,
+      type: 'log',
+      react_on: null,
+      patternGroup: null,
+      patternLabelKey: '',
+      patternLabelValue: '',
+      webhookUrl: '',
+      webhookAuthToken: '',
+    },
+  ],
   created_at: '',
   updated_at: '',
 })
@@ -75,18 +95,62 @@ const getProjects = async () => {
       console.error(error.value)
     }
 
-    for (const project of JSON.parse(data.value).projects)
-    projectList.value.push({
-      title: project.name,
-      desc: project.description,
-      value: project.id,
-      icon: 'ri-stack-line',
-    })
+    for (const project of JSON.parse(data.value).projects) {
+      projectList.value.push({
+        title: project.name,
+        desc: project.description,
+        value: project.id,
+        icon: 'ri-stack-line',
+      })
+    }
   }
   catch (err) {
     console.error(err)
     apiError.value = true
   }
+}
+
+const fetchRunners = async () => {
+  const { data, error } = await useFetch<any>(`https://alertflow.justlab.xyz/api/projects/${flow.value.project_id}/runners`, {
+    headers: {
+      'Authorization': useCookie('accessToken').value,
+      'Content-Type': 'application/json',
+    },
+    method: 'GET',
+  })
+
+  if (error.value) { console.error(error.value) }
+  else {
+    runnerList.value = []
+    for (const runner of JSON.parse(data.value).runners) {
+      runnerList.value.push({
+        title: runner.name,
+        value: runner.id,
+        icon: 'ri-remix-run-line',
+      })
+    }
+  }
+}
+
+const formatActions = () => {
+  const actions = runnerList.value.filter(runner => runner.value === flow.value.runner_id)
+
+  console.log(actions)
+
+  for (const action of actions) {
+    actionList.value.push({
+      title: action.title,
+      value: action.value,
+    })
+  }
+}
+
+const removeAction = () => {
+  flow.value.actions.pop()
+}
+
+const addAction = () => {
+  flow.value.actions.push({})
 }
 
 const validateAccountForm = () => {
@@ -189,9 +253,9 @@ onMounted(() => {
               </VCol>
 
               <VCol cols="12">
-                <h7 class="text-h7">
+                <H7 class="text-h7">
                   To which project do you want to assign the flow to?
-                </h7>
+                </H7>
               </VCol>
 
               <VCol cols="12">
@@ -200,6 +264,7 @@ onMounted(() => {
                   v-model:selected-radio="flow.project_id"
                   :radio-content="projectList"
                   :grid-column="{ cols: '12', sm: '4' }"
+                  @update:selected-radio="fetchRunners"
                 />
               </VCol>
 
@@ -240,60 +305,19 @@ onMounted(() => {
             <VRow>
               <VCol cols="12">
                 <h6 class="text-h6">
-                  Actions
+                  Runner
                 </h6>
                 <p class="text-sm mb-0">
-                  Setup Actions
+                  Select an Runner where Actions should be executed on
                 </p>
               </VCol>
 
-              <VCol
-                cols="12"
-                md="6"
-              >
-                <VTextField
-                  v-model="personalForm.firstName"
-                  label="First Name"
-                  :rules="[requiredValidator]"
-                  placeholder="Leonard"
-                />
-              </VCol>
-
-              <VCol
-                cols="12"
-                md="6"
-              >
-                <VTextField
-                  v-model="personalForm.lastName"
-                  label="Last Name"
-                  :rules="[requiredValidator]"
-                  placeholder="Carter"
-                />
-              </VCol>
-
-              <VCol
-                cols="12"
-                md="6"
-              >
-                <VSelect
-                  v-model="personalForm.country"
-                  label="Country"
-                  :rules="[requiredValidator]"
-                  placeholder="Select Country"
-                  :items="['UK', 'USA', 'Canada', 'Australia', 'Germany']"
-                />
-              </VCol>
-
-              <VCol
-                cols="12"
-                md="6"
-              >
-                <VSelect
-                  v-model="personalForm.language"
-                  label="Language"
-                  :rules="[requiredValidator]"
-                  placeholder="Select Language"
-                  :items="['English', 'Spanish', 'French', 'Russian', 'German']"
+              <VCol cols="12">
+                <CustomRadiosWithIcon
+                  v-model:selected-radio="flow.runner_id"
+                  :radio-content="runnerList"
+                  :grid-column="{ cols: '12', sm: '4' }"
+                  @update:selected-radio="formatActions"
                 />
               </VCol>
 
@@ -310,6 +334,88 @@ onMounted(() => {
                       class="flip-in-rtl"
                     />
                     Previous
+                  </VBtn>
+
+                  <VBtn type="submit">
+                    Next
+                    <VIcon
+                      icon="ri-arrow-right-line"
+                      end
+                      class="flip-in-rtl"
+                    />
+                  </VBtn>
+                </div>
+              </VCol>
+            </VRow>
+          </VForm>
+        </VWindowItem>
+
+        <VWindowItem>
+          <VForm
+            ref="refPersonalForm"
+            @submit.prevent="validatePersonalForm"
+          >
+            <VRow>
+              <VCol cols="12">
+                <h6 class="text-h6">
+                  Actions
+                </h6>
+                <p class="text-sm mb-0">
+                  Setup Actions
+                </p>
+              </VCol>
+
+              <VCol cols="12">
+                <VExpansionPanels multiple>
+                  <VExpansionPanel
+                    v-for="(action, index) in flow.actions"
+                    :key="index"
+                  >
+                    <VExpansionPanelTitle>
+                      #{{ index + 1 }} Action
+                    </VExpansionPanelTitle>
+                    <VExpansionPanelText>
+                      <CustomRadiosWithIcon
+                        v-model:selected-radio="flow.actions[index].type"
+                        :radio-content="actionList"
+                        :grid-column="{ cols: '12', sm: '4' }"
+                      />
+                    </VExpansionPanelText>
+                  </VExpansionPanel>
+                </VExpansionPanels>
+              </VCol>
+
+              <VCol cols="12">
+                <div class="d-flex flex-wrap gap-4 justify-sm-space-between justify-center mt-8">
+                  <VBtn
+                    color="secondary"
+                    variant="tonal"
+                    @click="currentStep--"
+                  >
+                    <VIcon
+                      icon="ri-arrow-left-line"
+                      start
+                      class="flip-in-rtl"
+                    />
+                    Previous
+                  </VBtn>
+
+                  <VBtn
+                    color="error"
+                    variant="outlined"
+                    @click="removeAction"
+                  >
+                    <VIcon icon="ri-subtract-line" />
+                    Remove Action
+                  </VBtn>
+
+                  <VBtn
+                    color="info"
+                    variant="outlined"
+                    @click="addAction"
+                  >
+                    <VIcon icon="ri-add-line" />
+                    Add Action
                   </VBtn>
 
                   <VBtn type="submit">
