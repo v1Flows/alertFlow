@@ -158,7 +158,7 @@ onMounted(async () => {
       color="success"
       prepend-icon="ri-add-line"
       variant="tonal"
-      @click="createFlowDialog = true"
+      to="/dashboard/flow/create"
     >
       Create Flow
     </VBtn>

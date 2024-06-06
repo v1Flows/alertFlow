@@ -15,10 +15,25 @@ export default [
   },
   {
     title: 'Flows',
-    to: 'dashboard-flows',
     icon: { icon: 'ri-swap-2-line' },
     action: 'create',
     subject: 'User',
+    children: [
+      {
+        title: 'List',
+        to: 'dashboard-flows',
+        icon: { icon: 'ri-list-check-2' },
+        action: 'create',
+        subject: 'User',
+      },
+      {
+        title: 'Create',
+        to: 'dashboard-flow-create',
+        icon: { icon: 'ri-add-line' },
+        action: 'create',
+        subject: 'User',
+      },
+    ],
   },
   {
     title: 'Payloads',

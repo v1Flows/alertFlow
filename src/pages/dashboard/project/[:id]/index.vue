@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { VCodeBlock } from '@wdns/vue-code-block';
+import { VCodeBlock } from '@wdns/vue-code-block'
 
 definePage({
   meta: {
@@ -176,7 +176,7 @@ const createApiKey = async () => {
 const getRunners = async () => {
   loadingRunners.value = true
   try {
-    const { data, error } = await useFetch(`https://alertflow-api.justlab.xyz/api/projects/${projectID}/runners`, {
+    const { data, error } = await useFetch(`https://alertflow.justlab.xyz/api/projects/${projectID}/runners`, {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',

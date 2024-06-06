@@ -28,6 +28,7 @@ declare module 'vue-router/auto-routes' {
     'dashboard-admin-users': RouteRecordInfo<'dashboard-admin-users', '/dashboard/admin/users', Record<never, never>, Record<never, never>>,
     'dashboard-flow:id': RouteRecordInfo<'dashboard-flow:id', '/dashboard/flow/::id', { :id: ParamValue<true> }, { :id: ParamValue<false> }>,
     'dashboard-flow:id-execution:id': RouteRecordInfo<'dashboard-flow:id-execution:id', '/dashboard/flow/::id/execution/::id', { :id: ParamValue<true>, :id: ParamValue<true> }, { :id: ParamValue<false>, :id: ParamValue<false> }>,
+    'dashboard-flow-create': RouteRecordInfo<'dashboard-flow-create', '/dashboard/flow/create', Record<never, never>, Record<never, never>>,
     'dashboard-flows': RouteRecordInfo<'dashboard-flows', '/dashboard/flows', Record<never, never>, Record<never, never>>,
     'dashboard-payloads': RouteRecordInfo<'dashboard-payloads', '/dashboard/payloads', Record<never, never>, Record<never, never>>,
     'dashboard-project:id': RouteRecordInfo<'dashboard-project:id', '/dashboard/project/::id', { :id: ParamValue<true> }, { :id: ParamValue<false> }>,
