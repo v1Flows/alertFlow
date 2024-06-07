@@ -80,35 +80,6 @@ const getProjects = async () => {
   }
 }
 
-const createFlow = async (flow: any) => {
-  try {
-    const { data, error } = await useFetch('https://alertflow.justlab.xyz/api/flows/', {
-      method: 'POST',
-      body: JSON.stringify(flow),
-      headers: {
-        'Authorization': useCookie('accessToken').value,
-        'Content-Type': 'application/json',
-      },
-    })
-
-    if (error.value) {
-      apiError.value = true
-      createFlowDialog.value = false
-      console.error(error.value)
-    }
-    else if (data.value) {
-      apiError.value = false
-      createFlowDialog.value = false
-      getFlows()
-    }
-  }
-  catch (err) {
-    console.error(err)
-    createFlowDialog.value = false
-    apiError.value = true
-  }
-}
-
 const deleteFlow = async flow => {
   try {
     const { data, error } = await useFetch(`https://alertflow.justlab.xyz/api/flows/${flow.id}`, {

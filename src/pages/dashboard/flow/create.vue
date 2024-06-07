@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { VForm } from 'vuetify/components/VForm';
 
-const apiError = ref(false)
+const router = useRouter()
+
+const apiErrors = ref({
+  get_projects: false,
+  fetch_runners: false,
+  create_flow: false,
+})
 
 const numberedSteps = [
   {
@@ -13,7 +19,7 @@ const numberedSteps = [
     subtitle: 'Select Runner',
   },
   {
-    title: 'Actions',
+    title: 'Action Conditions',
     subtitle: 'Select Action Conditions',
   },
   {
@@ -27,19 +33,12 @@ const numberedSteps = [
 ]
 
 const currentStep = ref(0)
-const isPasswordVisible = ref(false)
-const isCPasswordVisible = ref(false)
 const isCurrentStepValid = ref(true)
-const refAccountForm = ref<VForm>()
-const refPersonalForm = ref<VForm>()
-const refSocialLinkForm = ref<VForm>()
-
-const accountForm = ref({
-  username: '',
-  email: '',
-  password: '',
-  cPassword: '',
-})
+const refFlowDetailsForm = ref<VForm>()
+const refRunnerForm = ref<VForm>()
+const refActionConditionForm = ref<VForm>()
+const refActionsForm = ref<VForm>()
+const refSummaryForm = ref<VForm>()
 
 const projectList = <any>ref([])
 const runnerList = <any>ref([])
@@ -66,8 +65,7 @@ const flow = ref({
   description: '',
   project_id: '',
   runner_id: '',
-  active: true,
-  actions_details: {
+  action_details: {
     pattern_type: '',
     pattern: {
       react_on: 'firing',
@@ -90,23 +88,6 @@ const flow = ref({
       },
     },
   ],
-  created_at: '',
-  updated_at: '',
-})
-
-const personalForm = ref({
-  firstName: '',
-  lastName: '',
-  country: undefined,
-  language: undefined,
-})
-
-const socialForm = ref({
-  twitter: '',
-  facebook: '',
-  googlePlus: '',
-  LinkedIn: '',
-
 })
 
 const getProjects = async () => {
@@ -120,7 +101,7 @@ const getProjects = async () => {
     })
 
     if (error.value) {
-      apiError.value = true
+      apiErrors.value.get_projects = true
       console.error(error.value)
     }
 
@@ -134,8 +115,8 @@ const getProjects = async () => {
     }
   }
   catch (err) {
+    apiErrors.value.get_projects = true
     console.error(err)
-    apiError.value = true
   }
 }
 
@@ -148,7 +129,10 @@ const fetchRunners = async () => {
     method: 'GET',
   })
 
-  if (error.value) { console.error(error.value) }
+  if (error.value) {
+    apiErrors.value.fetch_runners = true
+    console.error(error.value)
+  }
   else {
     runnerData.value = JSON.parse(data.value).runners
     runnerList.value = []
@@ -164,8 +148,6 @@ const fetchRunners = async () => {
 
 const formatActions = () => {
   const actions = runnerData.value.filter(runner => runner.id === flow.value.runner_id)
-
-  console.log(actions[0].available_actions)
 
   for (const action of actions[0].available_actions) {
     actionList.value.push({
@@ -197,8 +179,40 @@ const addAction = () => {
   )
 }
 
-const validateAccountForm = () => {
-  refAccountForm.value?.validate().then(valid => {
+const validateFlowDetailsForm = () => {
+  refFlowDetailsForm.value?.validate().then(valid => {
+    if (valid.valid) {
+      if (flow.value.project_id === '') {
+        isCurrentStepValid.value = false
+      } else {
+        currentStep.value++
+        isCurrentStepValid.value = true
+      }
+    }
+    else { isCurrentStepValid.value = false }
+  })
+}
+
+const validateRunnerForm = () => {
+  if (flow.value.runner_id === '') {
+    isCurrentStepValid.value = false
+  } else {
+    currentStep.value++
+    isCurrentStepValid.value = true
+  }
+}
+
+const validateActionConditionForm = () => {
+  if (flow.value.action_details.pattern_type === '') {
+    isCurrentStepValid.value = false
+  } else {
+    currentStep.value++
+    isCurrentStepValid.value = true
+  }
+}
+
+const validateActionsForm = () => {
+  refActionsForm.value?.validate().then(valid => {
     if (valid.valid) {
       currentStep.value++
       isCurrentStepValid.value = true
@@ -207,29 +221,29 @@ const validateAccountForm = () => {
   })
 }
 
-const validatePersonalForm = () => {
-  refPersonalForm.value?.validate().then(valid => {
-    if (valid.valid) {
-      currentStep.value++
-      isCurrentStepValid.value = true
-    }
-    else { isCurrentStepValid.value = false }
-  })
-}
+const createFlow = async () => {
+  try {
+    const { data, error } = await useFetch('https://alertflow.justlab.xyz/api/flows/', {
+      method: 'POST',
+      body: JSON.stringify(flow.value),
+      headers: {
+        'Authorization': useCookie('accessToken').value,
+        'Content-Type': 'application/json',
+      },
+    })
 
-const validateSocialLinkForm = () => {
-  refSocialLinkForm.value?.validate().then(valid => {
-    if (valid.valid) {
-      isCurrentStepValid.value = true
-
-      console.log({
-        ...accountForm.value,
-        ...personalForm.value,
-        ...socialForm.value,
-      })
+    if (error.value) {
+      apiErrors.value.create_flow = true
+      console.error(error.value)
     }
-    else { isCurrentStepValid.value = false }
-  })
+    else if (data.value) {
+      router.push({ name: 'dashboard-flows' })
+    }
+  }
+  catch (err) {
+    apiErrors.value.create_flow = true
+    console.error(err)
+  }
 }
 
 onMounted(() => {
@@ -238,6 +252,33 @@ onMounted(() => {
 </script>
 
 <template>
+  <VAlert
+    v-model="apiErrors.get_projects"
+    color="error"
+    icon="ri-error-warning-line"
+    class="mb-4"
+    closable
+  >
+    Error receiving project data from API
+  </VAlert>
+  <VAlert
+    v-model="apiErrors.fetch_runners"
+    color="error"
+    icon="ri-error-warning-line"
+    class="mb-4"
+    closable
+  >
+    Error receiving runner data from API
+  </VAlert>
+  <VAlert
+    v-model="apiErrors.create_flow"
+    color="error"
+    icon="ri-error-warning-line"
+    class="mb-4"
+    closable
+  >
+    Error creating flow in API
+  </VAlert>
   <VCard>
     <VCardText>
       <!-- 👉 Stepper -->
@@ -259,8 +300,8 @@ onMounted(() => {
       >
         <VWindowItem>
           <VForm
-            ref="refAccountForm"
-            @submit.prevent="validateAccountForm"
+            ref="refFlowDetailsForm"
+            @submit.prevent="validateFlowDetailsForm"
           >
             <VRow>
               <VCol cols="12">
@@ -343,8 +384,8 @@ onMounted(() => {
 
         <VWindowItem>
           <VForm
-            ref="refPersonalForm"
-            @submit.prevent="validatePersonalForm"
+            ref="refRunnerForm"
+            @submit.prevent="validateRunnerForm"
           >
             <VRow>
               <VCol cols="12">
@@ -396,8 +437,8 @@ onMounted(() => {
 
         <VWindowItem>
           <VForm
-            ref="refPersonalForm"
-            @submit.prevent="validatePersonalForm"
+            ref="refActionConditionForm"
+            @submit.prevent="validateActionConditionForm"
           >
             <VRow>
               <VCol cols="12">
@@ -411,15 +452,15 @@ onMounted(() => {
 
               <VCol cols="12">
                 <CustomRadiosWithIcon
-                  v-model:selected-radio="flow.actions_details.pattern_type"
+                  v-model:selected-radio="flow.action_details.pattern_type"
                   :radio-content="actionConditions"
                   :grid-column="{ cols: '12', sm: '6' }"
                 />
               </VCol>
 
-              <VCol cols="12" md="6" v-if="flow.actions_details.pattern_type === 'common'">
+              <VCol cols="12" md="6" v-if="flow.action_details.pattern_type === 'common'">
                 <VSelect
-                  v-model="flow.actions_details.pattern.react_on"
+                  v-model="flow.action_details.pattern.react_on"
                   :items="['firing', 'resolved', 'both']"
                   placeholder="firing"
                   :rules="[requiredValidator]"
@@ -427,9 +468,9 @@ onMounted(() => {
                 />
               </VCol>
 
-              <VCol cols="12" md="6" v-if="flow.actions_details.pattern_type === 'common'">
+              <VCol cols="12" md="6" v-if="flow.action_details.pattern_type === 'common'">
                 <VSelect
-                  v-model="flow.actions_details.pattern.group"
+                  v-model="flow.action_details.pattern.group"
                   :items="['alerts', 'groupLabels', 'commonLabels', 'commonAnnotations']"
                   placeholder="alerts"
                   :rules="[requiredValidator]"
@@ -437,18 +478,18 @@ onMounted(() => {
                 />
               </VCol>
 
-              <VCol cols="12" md="6" v-if="flow.actions_details.pattern_type === 'common'">
+              <VCol cols="12" md="6" v-if="flow.action_details.pattern_type === 'common'">
                 <VTextField
-                  v-model="flow.actions_details.pattern.key"
+                  v-model="flow.action_details.pattern.key"
                   placeholder="alertname"
                   :rules="[requiredValidator]"
                   label="Object Key"
                 />
               </VCol>
 
-              <VCol cols="12" md="6" v-if="flow.actions_details.pattern_type === 'common'">
+              <VCol cols="12" md="6" v-if="flow.action_details.pattern_type === 'common'">
                 <VTextField
-                  v-model="flow.actions_details.pattern.value"
+                  v-model="flow.action_details.pattern.value"
                   placeholder="MyAlarm"
                   :rules="[requiredValidator]"
                   label="Object Value"
@@ -486,8 +527,8 @@ onMounted(() => {
 
         <VWindowItem>
           <VForm
-            ref="refPersonalForm"
-            @submit.prevent="validatePersonalForm"
+            ref="refActionsForm"
+            @submit.prevent="validateActionsForm"
           >
             <VRow>
               <VCol cols="12">
@@ -548,7 +589,7 @@ onMounted(() => {
                         />
                       </VCol>
 
-                      <VCol cols="12" md="6" v-if="flow.actions_details.pattern_type === 'custom'">
+                      <VCol cols="12" md="6" v-if="flow.action_details.pattern_type === 'custom'">
                         <VSelect
                           v-model="flow.actions[index].pattern.react_on"
                           :items="['firing', 'resolved', 'both']"
@@ -558,7 +599,7 @@ onMounted(() => {
                         />
                       </VCol>
 
-                      <VCol cols="12" md="6" v-if="flow.actions_details.pattern_type === 'custom'">
+                      <VCol cols="12" md="6" v-if="flow.action_details.pattern_type === 'custom'">
                         <VSelect
                           v-model="flow.actions[index].pattern.group"
                           :items="['alerts', 'groupLabels', 'commonLabels', 'commonAnnotations']"
@@ -568,7 +609,7 @@ onMounted(() => {
                         />
                       </VCol>
 
-                      <VCol cols="12" md="6" v-if="flow.actions_details.pattern_type === 'custom'">
+                      <VCol cols="12" md="6" v-if="flow.action_details.pattern_type === 'custom'">
                         <VTextField
                           v-model="flow.actions[index].pattern.key"
                           placeholder="alertname"
@@ -577,7 +618,7 @@ onMounted(() => {
                         />
                       </VCol>
 
-                      <VCol cols="12" md="6" v-if="flow.actions_details.pattern_type === 'custom'">
+                      <VCol cols="12" md="6" v-if="flow.action_details.pattern_type === 'custom'">
                         <VTextField
                           v-model="flow.actions[index].pattern.value"
                           placeholder="MyAlarm"
@@ -639,8 +680,7 @@ onMounted(() => {
 
         <VWindowItem>
           <VForm
-            ref="refSocialLinkForm"
-            @submit.prevent="validateSocialLinkForm"
+            ref="refSummaryForm"
           >
             <VRow>
               <VCol cols="12">
@@ -691,135 +731,136 @@ onMounted(() => {
                       </td>
                       <td>
                         <p class="mb-0 text-wrap me-4">
-                          {{ flow.actions_details.pattern_type === 'common' ? 'Common Pattern for all Actions' : 'Custom Pattern per Action' }}
+                          {{ flow.action_details.pattern_type === 'common' ? 'Common Pattern for all Actions' : 'Custom Pattern per Action' }}
                         </p>
                       </td>
                     </tr>
-                    <tr v-if="flow.actions_details.pattern_type === 'common'">
+                    <tr v-if="flow.action_details.pattern_type === 'common'">
                       <td class="pe-6">
                         Pattern React On:
                       </td>
                       <td>
                         <p class="mb-0 text-wrap me-4">
-                          {{ flow.actions_details.pattern.react_on }}
+                          {{ flow.action_details.pattern.react_on }}
                         </p>
                       </td>
                     </tr>
-                    <tr v-if="flow.actions_details.pattern_type === 'common'">
+                    <tr v-if="flow.action_details.pattern_type === 'common'">
                       <td class="pe-6">
                         Pattern Group:
                       </td>
                       <td>
                         <p class="mb-0 text-wrap me-4">
-                          {{ flow.actions_details.pattern.group }}
+                          {{ flow.action_details.pattern.group }}
                         </p>
                       </td>
                     </tr>
-                    <tr v-if="flow.actions_details.pattern_type === 'common'">
+                    <tr v-if="flow.action_details.pattern_type === 'common'">
                       <td class="pe-6">
                         Pattern Key:
                       </td>
                       <td>
                         <p class="mb-0 text-wrap me-4">
-                          {{ flow.actions_details.pattern.key }}
+                          {{ flow.action_details.pattern.key }}
                         </p>
                       </td>
                     </tr>
-                    <tr v-if="flow.actions_details.pattern_type === 'common'">
+                    <tr v-if="flow.action_details.pattern_type === 'common'">
                       <td class="pe-6">
                         Pattern Value:
                       </td>
                       <td>
                         <p class="mb-0 text-wrap me-4">
-                          {{ flow.actions_details.pattern.value }}
+                          {{ flow.action_details.pattern.value }}
                         </p>
                       </td>
                     </tr>
                   </tbody>
                 </table>
 
-                <h6 class="text-h6 mt-6 mb-4">
-                  {{ flow.actions.length }} Actions
-                </h6>
+                <VCard :title="`${flow.actions.length} Actions`">
+                  <VCardText>
+                    <VTimeline
+                      side="end"
+                      align="start"
+                      line-inset="9"
+                      truncate-line="start"
+                      density="compact"
+                    >
+                      <VTimelineItem
+                        dot-color="primary"
+                        size="x-small"
+                        v-for="(action, index) in flow.actions"
+                        :key="index"
+                      >
+                        <div class="d-flex justify-space-between align-center gap-2 flex-wrap mb-2">
+                          <span class="app-timeline-title">
+                            {{ action.name }}
+                          </span>
+                        </div>
 
-                <table class="text-body-1">
-                  <tbody
-                    v-for="(action, index) in flow.actions"
-                    :key="index"
-                  >
-                    <tr>
-                      <td class="pe-6">
-                        Name:
-                      </td>
-                      <td>
-                        <p class="mb-0 text-wrap me-4">
-                          {{ action.name }}
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="pe-6">
-                        Description:
-                      </td>
-                      <td>
-                        <p class="mb-0 text-wrap me-4">
+                        <div class="app-timeline-text mt-1 mb-1">
                           {{ action.description }}
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="pe-6">
-                        Type:
-                      </td>
-                      <td>
-                        <p class="mb-0 text-wrap me-4">
-                          {{ action.type }}
-                        </p>
-                      </td>
-                    </tr>
-                    <tr v-if="flow.actions_details.pattern_type === 'custom'">
-                      <td class="pe-6">
-                        Pattern React on:
-                      </td>
-                      <td>
-                        <p class="mb-0 text-wrap me-4">
-                          {{ action.pattern.react_on }}
-                        </p>
-                      </td>
-                    </tr>
-                    <tr v-if="flow.actions_details.pattern_type === 'custom'">
-                      <td class="pe-6">
-                        Pattern Group:
-                      </td>
-                      <td>
-                        <p class="mb-0 text-wrap me-4">
-                          {{ action.pattern.group }}
-                        </p>
-                      </td>
-                    </tr>
-                    <tr v-if="flow.actions_details.pattern_type === 'custom'">
-                      <td class="pe-6">
-                        Pattern Key:
-                      </td>
-                      <td>
-                        <p class="mb-0 text-wrap me-4">
-                          {{ action.pattern.key }}
-                        </p>
-                      </td>
-                    </tr>
-                    <tr v-if="flow.actions_details.pattern_type === 'custom'">
-                      <td class="pe-6">
-                        Pattern Value:
-                      </td>
-                      <td>
-                        <p class="mb-0 text-wrap me-4">
-                          {{ action.pattern.value }}
-                        </p>
-                      </td>
-                    </tr>
-                    <VDivider class="mt-4 mb-2" />
-                  </tbody>
-                </table>
+                        </div>
+
+                        <table class="text-body-1">
+                          <tbody>
+                            <tr>
+                              <td class="pe-6">
+                                Type:
+                              </td>
+                              <td>
+                                <p class="mb-0 text-wrap me-4">
+                                  {{ action.type }}
+                                </p>
+                              </td>
+                            </tr>
+                            <tr v-if="flow.action_details.pattern_type === 'custom'">
+                              <td class="pe-6">
+                                Pattern React on:
+                              </td>
+                              <td>
+                                <p class="mb-0 text-wrap me-4">
+                                  {{ action.pattern.react_on }}
+                                </p>
+                              </td>
+                            </tr>
+                            <tr v-if="flow.action_details.pattern_type === 'custom'">
+                              <td class="pe-6">
+                                Pattern Group:
+                              </td>
+                              <td>
+                                <p class="mb-0 text-wrap me-4">
+                                  {{ action.pattern.group }}
+                                </p>
+                              </td>
+                            </tr>
+                            <tr v-if="flow.action_details.pattern_type === 'custom'">
+                              <td class="pe-6">
+                                Pattern Key:
+                              </td>
+                              <td>
+                                <p class="mb-0 text-wrap me-4">
+                                  {{ action.pattern.key }}
+                                </p>
+                              </td>
+                            </tr>
+                            <tr v-if="flow.action_details.pattern_type === 'custom'">
+                              <td class="pe-6">
+                                Pattern Value:
+                              </td>
+                              <td>
+                                <p class="mb-0 text-wrap me-4">
+                                  {{ action.pattern.value }}
+                                </p>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </VTimelineItem>
+                    </VTimeline>
+                  </VCardText>
+                </VCard>
               </VCol>
 
               <VCol cols="12">
@@ -840,6 +881,7 @@ onMounted(() => {
                   <VBtn
                     color="success"
                     type="submit"
+                    @click="createFlow"
                   >
                     submit
                   </VBtn>
