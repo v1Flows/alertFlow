@@ -1,4 +1,5 @@
 import type { RouteNamedMap, _RouterTyped } from 'unplugin-vue-router'
+import { ability } from '../casl/ability'
 import { canNavigate } from '@layouts/plugins/casl'
 
 export const setupGuards = (router: _RouterTyped<RouteNamedMap & { [key: string]: any }>) => {
@@ -19,7 +20,7 @@ export const setupGuards = (router: _RouterTyped<RouteNamedMap & { [key: string]
     const isLoggedIn = !!(useCookie('userData').value && useCookie('accessToken').value)
 
     if (isLoggedIn) {
-      const { onFetchResponse } = useFetch('https://alertflow.justlab.xyz/api/token/validate', {
+      const { onFetchResponse, onFetchError } = useFetch('https://alertflow.justlab.xyz/api/token/validate', {
         headers: {
           'Authorization': useCookie('accessToken').value,
           'Content-Type': 'application/json',
@@ -41,6 +42,22 @@ export const setupGuards = (router: _RouterTyped<RouteNamedMap & { [key: string]
               to: to.fullPath !== '/' ? to.path : undefined,
             },
           }
+        }
+      })
+
+      onFetchError(() => {
+        useCookie('accessToken').value = null
+        useCookie('userData').value = null
+        useCookie('userAbilityRules').value = null
+
+        ability.update([])
+
+        return {
+          name: 'login',
+          query: {
+            ...to.query,
+            to: to.fullPath !== '/' ? to.path : undefined,
+          },
         }
       })
     }
