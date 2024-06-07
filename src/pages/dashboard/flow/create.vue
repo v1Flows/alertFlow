@@ -67,11 +67,16 @@ const flow = ref({
   runner_id: '',
   action_details: {
     pattern_type: '',
-    pattern: {
-      react_on: 'firing',
-      group: 'alerts',
-      key: '',
-      value: '',
+    patterns: {
+      match: [
+        {
+          react_on: 'firing',
+          group: 'alerts',
+          key: '',
+          value: '',
+        },
+      ],
+      exclude: [],
     },
   },
   actions: [
@@ -175,6 +180,36 @@ const addAction = () => {
         key: '',
         value: '',
       },
+    },
+  )
+}
+
+const removeMatchPattern = () => {
+  flow.value.action_details.patterns.match.pop()
+}
+
+const addMatchPattern = () => {
+  flow.value.action_details.patterns.match.push(
+    {
+      react_on: 'firing',
+      group: 'alerts',
+      key: '',
+      value: '',
+    },
+  )
+}
+
+const removeExcludePattern = () => {
+  flow.value.action_details.patterns.exclude.pop()
+}
+
+const addExcludePattern = () => {
+  flow.value.action_details.patterns.exclude.push(
+    {
+      react_on: 'firing',
+      group: 'alerts',
+      key: '',
+      value: '',
     },
   )
 }
@@ -458,42 +493,142 @@ onMounted(() => {
                 />
               </VCol>
 
-              <VCol cols="12" md="6" v-if="flow.action_details.pattern_type === 'common'">
-                <VSelect
-                  v-model="flow.action_details.pattern.react_on"
-                  :items="['firing', 'resolved', 'both']"
-                  placeholder="firing"
-                  :rules="[requiredValidator]"
-                  label="React On"
-                />
+              <VCol cols="12" v-if="flow.action_details.pattern_type === 'common'">
+                <h6 class="text-h6 text-success">
+                  Patterns to Match
+                </h6>
+                <p class="text-sm mb-0">
+                  The Action/s will be triggered when the following pattern is matched
+                </p>
+                
+                <div class="d-flex flex-wrap gap-4">
+                  <VBtn class="mt-4" color="success" variant="outlined" size="small" @click="addMatchPattern">
+                    Add Pattern
+                  </VBtn>
+                  <VBtn class="mt-4" color="error" variant="outlined" size="small" @click="removeMatchPattern">
+                    Remove Pattern
+                  </VBtn>
+                </div>
               </VCol>
 
-              <VCol cols="12" md="6" v-if="flow.action_details.pattern_type === 'common'">
-                <VSelect
-                  v-model="flow.action_details.pattern.group"
-                  :items="['alerts', 'groupLabels', 'commonLabels', 'commonAnnotations']"
-                  placeholder="alerts"
-                  :rules="[requiredValidator]"
-                  label="Object Group"
-                />
+              <VCol cols=12 v-if="flow.action_details.pattern_type === 'common'">
+                <VExpansionPanels multiple>
+                  <VExpansionPanel
+                    v-for="(pattern, index) in flow.action_details.patterns.match"
+                    :key="index"
+                  >
+                    <VExpansionPanelTitle class="mb-2">
+                      Match Pattern {{ index +1 }}
+                    </VExpansionPanelTitle>
+                    <VExpansionPanelText>
+                      <VRow>
+                        <VCol cols="12" md="6">
+                          <VSelect
+                            v-model="flow.action_details.patterns.match[index].react_on"
+                            :items="['firing', 'resolved', 'both']"
+                            placeholder="firing"
+                            :rules="[requiredValidator]"
+                            label="React On"
+                          />
+                        </VCol>
+                        <VCol cols="12" md="6">
+                          <VSelect
+                            v-model="flow.action_details.patterns.match[index].group"
+                            :items="['alerts', 'groupLabels', 'commonLabels', 'commonAnnotations']"
+                            placeholder="alerts"
+                            :rules="[requiredValidator]"
+                            label="Object Group"
+                          />
+                        </VCol>
+                        <VCol cols="12" md="6">
+                          <VTextField
+                            v-model="flow.action_details.patterns.match[index].key"
+                            placeholder="alertname"
+                            :rules="[requiredValidator]"
+                            label="Object Key"
+                          />
+                        </VCol>
+                        <VCol cols="12" md="6">
+                          <VTextField
+                            v-model="flow.action_details.patterns.match[index].value"
+                            placeholder="MyAlarm"
+                            :rules="[requiredValidator]"
+                            label="Object Value"
+                          />
+                        </VCol>
+                      </VRow>
+                    </VExpansionPanelText>
+                  </VExpansionPanel>
+                </VExpansionPanels>
               </VCol>
 
-              <VCol cols="12" md="6" v-if="flow.action_details.pattern_type === 'common'">
-                <VTextField
-                  v-model="flow.action_details.pattern.key"
-                  placeholder="alertname"
-                  :rules="[requiredValidator]"
-                  label="Object Key"
-                />
+              <VCol cols="12" v-if="flow.action_details.pattern_type === 'common'">
+                <h6 class="text-h6 text-error">
+                  Patterns to Exclude
+                </h6>
+                <p class="text-sm mb-0">
+                  The Action/s will be skipped when the following pattern is matched
+                </p>
+
+                <div class="d-flex flex-wrap gap-4">
+                  <VBtn class="mt-4" color="success" variant="outlined" size="small" @click="addExcludePattern">
+                    Add Pattern
+                  </VBtn>
+                  <VBtn class="mt-4" color="error" variant="outlined" size="small" @click="removeExcludePattern">
+                    Remove Pattern
+                  </VBtn>
+                </div>
               </VCol>
 
-              <VCol cols="12" md="6" v-if="flow.action_details.pattern_type === 'common'">
-                <VTextField
-                  v-model="flow.action_details.pattern.value"
-                  placeholder="MyAlarm"
-                  :rules="[requiredValidator]"
-                  label="Object Value"
-                />
+              <VCol cols=12 v-if="flow.action_details.pattern_type === 'common'">
+                <VExpansionPanels multiple>
+                  <VExpansionPanel
+                    v-for="(pattern, index) in flow.action_details.patterns.exclude"
+                    :key="index"
+                  >
+                    <VExpansionPanelTitle class="mb-2">
+                      Exclude Pattern {{ index + 1 }}
+                    </VExpansionPanelTitle>
+                    <VExpansionPanelText>
+                      <VRow>
+                        <VCol cols="12" md="6">
+                          <VSelect
+                            v-model="flow.action_details.patterns.exclude[index].react_on"
+                            :items="['firing', 'resolved', 'both']"
+                            placeholder="firing"
+                            :rules="[requiredValidator]"
+                            label="React On"
+                          />
+                        </VCol>
+                        <VCol cols="12" md="6">
+                          <VSelect
+                            v-model="flow.action_details.patterns.exclude[index].group"
+                            :items="['alerts', 'groupLabels', 'commonLabels', 'commonAnnotations']"
+                            placeholder="alerts"
+                            :rules="[requiredValidator]"
+                            label="Object Group"
+                          />
+                        </VCol>
+                        <VCol cols="12" md="6">
+                          <VTextField
+                            v-model="flow.action_details.patterns.exclude[index].key"
+                            placeholder="alertname"
+                            :rules="[requiredValidator]"
+                            label="Object Key"
+                          />
+                        </VCol>
+                        <VCol cols="12" md="6">
+                          <VTextField
+                            v-model="flow.action_details.patterns.exclude[index].value"
+                            placeholder="MyAlarm"
+                            :rules="[requiredValidator]"
+                            label="Object Value"
+                          />
+                        </VCol>
+                      </VRow>
+                    </VExpansionPanelText>
+                  </VExpansionPanel>
+                </VExpansionPanels>
               </VCol>
 
               <VCol cols="12">
@@ -735,48 +870,135 @@ onMounted(() => {
                         </p>
                       </td>
                     </tr>
-                    <tr v-if="flow.action_details.pattern_type === 'common'">
-                      <td class="pe-6">
-                        Pattern React On:
-                      </td>
-                      <td>
-                        <p class="mb-0 text-wrap me-4">
-                          {{ flow.action_details.pattern.react_on }}
-                        </p>
-                      </td>
-                    </tr>
-                    <tr v-if="flow.action_details.pattern_type === 'common'">
-                      <td class="pe-6">
-                        Pattern Group:
-                      </td>
-                      <td>
-                        <p class="mb-0 text-wrap me-4">
-                          {{ flow.action_details.pattern.group }}
-                        </p>
-                      </td>
-                    </tr>
-                    <tr v-if="flow.action_details.pattern_type === 'common'">
-                      <td class="pe-6">
-                        Pattern Key:
-                      </td>
-                      <td>
-                        <p class="mb-0 text-wrap me-4">
-                          {{ flow.action_details.pattern.key }}
-                        </p>
-                      </td>
-                    </tr>
-                    <tr v-if="flow.action_details.pattern_type === 'common'">
-                      <td class="pe-6">
-                        Pattern Value:
-                      </td>
-                      <td>
-                        <p class="mb-0 text-wrap me-4">
-                          {{ flow.action_details.pattern.value }}
-                        </p>
-                      </td>
-                    </tr>
                   </tbody>
                 </table>
+
+                <VCard title="Patterns" v-if="flow.action_details.pattern_type === 'common'">
+                  <VCardText>
+                    <VTimeline
+                      side="end"
+                      align="start"
+                      line-inset="9"
+                      truncate-line="start"
+                      density="compact"
+                    >
+                      <VTimelineItem
+                        dot-color="error"
+                        size="x-small"
+                        v-for="(pattern, index) in flow.action_details.patterns.exclude"
+                        :key="index"
+                      >
+                        <div class="d-flex justify-space-between align-center gap-2 flex-wrap mb-2">
+                          <span class="app-timeline-title text-error">
+                            {{ index + 1 }}. Exclude Pattern
+                          </span>
+                        </div>
+
+                        <table class="text-body-1">
+                          <tbody>
+                            <tr>
+                              <td class="pe-6">
+                                React On:
+                              </td>
+                              <td>
+                                <p class="mb-0 text-wrap me-4">
+                                  {{ pattern.react_on }}
+                                </p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="pe-6">
+                                Group:
+                              </td>
+                              <td>
+                                <p class="mb-0 text-wrap me-4">
+                                  {{ pattern.group }}
+                                </p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="pe-6">
+                                Key:
+                              </td>
+                              <td>
+                                <p class="mb-0 text-wrap me-4">
+                                  {{ pattern.key }}
+                                </p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="pe-6">
+                                Value:
+                              </td>
+                              <td>
+                                <p class="mb-0 text-wrap me-4">
+                                  {{ pattern.value }}
+                                </p>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </VTimelineItem>
+                      <VTimelineItem
+                        dot-color="success"
+                        size="x-small"
+                        v-for="(pattern, index) in flow.action_details.patterns.match"
+                        :key="index"
+                      >
+                        <div class="d-flex justify-space-between align-center gap-2 flex-wrap mb-2">
+                          <span class="app-timeline-title text-success">
+                            {{ index + 1 }}. Match Pattern
+                          </span>
+                        </div>
+
+                        <table class="text-body-1">
+                          <tbody>
+                            <tr>
+                              <td class="pe-6">
+                                React On:
+                              </td>
+                              <td>
+                                <p class="mb-0 text-wrap me-4">
+                                  {{ pattern.react_on }}
+                                </p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="pe-6">
+                                Group:
+                              </td>
+                              <td>
+                                <p class="mb-0 text-wrap me-4">
+                                  {{ pattern.group }}
+                                </p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="pe-6">
+                                Key:
+                              </td>
+                              <td>
+                                <p class="mb-0 text-wrap me-4">
+                                  {{ pattern.key }}
+                                </p>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td class="pe-6">
+                                Value:
+                              </td>
+                              <td>
+                                <p class="mb-0 text-wrap me-4">
+                                  {{ pattern.value }}
+                                </p>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </VTimelineItem>
+                    </VTimeline>
+                  </VCardText>
+                </VCard>
 
                 <VCard :title="`${flow.actions.length} Actions`">
                   <VCardText>
