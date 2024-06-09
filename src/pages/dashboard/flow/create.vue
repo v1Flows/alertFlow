@@ -103,7 +103,7 @@ const flow = ref({
 
 const getProjects = async () => {
   try {
-    const { data, error } = await useFetch('https://alertflow.justlab.xyz/api/projects/', {
+    const { data, error } = await useFetch('http://localhost:8080/api/projects/', {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
@@ -132,7 +132,7 @@ const getProjects = async () => {
 }
 
 const fetchRunners = async () => {
-  const { data, error } = await useFetch<any>(`https://alertflow.justlab.xyz/api/projects/${flow.value.project_id}/runners`, {
+  const { data, error } = await useFetch<any>(`http://localhost:8080/api/projects/${flow.value.project_id}/runners`, {
     headers: {
       'Authorization': useCookie('accessToken').value,
       'Content-Type': 'application/json',
@@ -292,7 +292,7 @@ const validateActionsForm = () => {
 
 const createFlow = async () => {
   try {
-    const { data, error } = await useFetch('https://alertflow.justlab.xyz/api/flows/', {
+    const { data, error } = await useFetch('http://localhost:8080/api/flows/', {
       method: 'POST',
       body: JSON.stringify(flow.value),
       headers: {

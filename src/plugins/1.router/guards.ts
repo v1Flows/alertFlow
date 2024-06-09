@@ -20,7 +20,7 @@ export const setupGuards = (router: _RouterTyped<RouteNamedMap & { [key: string]
     const isLoggedIn = !!(useCookie('userData').value && useCookie('accessToken').value)
 
     if (isLoggedIn) {
-      const { onFetchResponse, onFetchError } = useFetch('https://alertflow.justlab.xyz/api/token/validate', {
+      const { onFetchResponse, onFetchError } = useFetch('http://localhost:8080/api/token/validate', {
         headers: {
           'Authorization': useCookie('accessToken').value,
           'Content-Type': 'application/json',

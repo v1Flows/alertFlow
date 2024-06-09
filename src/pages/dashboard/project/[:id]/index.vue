@@ -67,7 +67,7 @@ const currentTab = ref('tab-1')
 const getProject = async () => {
   loadingProject.value = true
   try {
-    const { data, error } = await useFetch(`https://alertflow.justlab.xyz/api/projects/${projectID}`, {
+    const { data, error } = await useFetch(`http://localhost:8080/api/projects/${projectID}`, {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
@@ -93,7 +93,7 @@ const getProject = async () => {
 const getApiKeys = async () => {
   loadingApiKeys.value = true
   try {
-    const { data, error } = await useFetch(`https://alertflow.justlab.xyz/api/projects/${projectID}/apikeys`, {
+    const { data, error } = await useFetch(`http://localhost:8080/api/projects/${projectID}/apikeys`, {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
@@ -118,7 +118,7 @@ const getApiKeys = async () => {
 
 const deleteApiKey = async (apiKeyID: string) => {
   try {
-    const { error } = await useFetch(`https://alertflow.justlab.xyz/api/token/service/${apiKeyID}`, {
+    const { error } = await useFetch(`http://localhost:8080/api/token/service/${apiKeyID}`, {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
@@ -144,7 +144,7 @@ const deleteApiKey = async (apiKeyID: string) => {
 
 const createApiKey = async () => {
   try {
-    const { data, error } = await useFetch(`https://alertflow.justlab.xyz/api/token/service/${projectID}`, {
+    const { data, error } = await useFetch(`http://localhost:8080/api/token/service/${projectID}`, {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
@@ -176,7 +176,7 @@ const createApiKey = async () => {
 const getRunners = async () => {
   loadingRunners.value = true
   try {
-    const { data, error } = await useFetch(`https://alertflow.justlab.xyz/api/projects/${projectID}/runners`, {
+    const { data, error } = await useFetch(`http://localhost:8080/api/projects/${projectID}/runners`, {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
@@ -201,7 +201,7 @@ const getRunners = async () => {
 
 const addRunner = async () => {
   try {
-    const { data, error } = await useFetch('https://alertflow.justlab.xyz/api/runners/', {
+    const { data, error } = await useFetch('http://localhost:8080/api/runners/', {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
@@ -233,7 +233,7 @@ const addRunner = async () => {
 
 const deleteRunner = async (runnerID: string) => {
   try {
-    const { error } = await useFetch(`https://alertflow.justlab.xyz/api/runners/${runnerID}`, {
+    const { error } = await useFetch(`http://localhost:8080/api/runners/${runnerID}`, {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
@@ -760,6 +760,13 @@ onMounted(async () => {
               <VCardText class="d-flex justify-space-between">
                 <h4 class="text-h4">
                   {{ runner.name }}
+                  <VChip
+                    :color="runner.registered ? 'success' : 'error'"
+                    label
+                    class="mb-0 mx-2"
+                  >
+                    Registered: {{ runner.registered ? 'Yes' : 'No' }}
+                  </VChip>
                 </h4>
                 <VBtn
                   icon="ri-delete-bin-7-line"
@@ -790,21 +797,7 @@ onMounted(async () => {
                       <tr>
                         <td
                           class="text-body-1 pb-1"
-                          style="inline-size: 150px;"
-                        >
-                          Registered:
-                        </td>
-                        <td
-                          class="text-body-1 text-high-emphasis font-weight-medium pb-1"
-                          :class="{ 'text-success': runner.registered, 'text-error': !runner.registered }"
-                        >
-                          {{ runner.registered ? 'Yes' : 'No' }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td
-                          class="text-body-1 pb-1"
-                          style="inline-size: 150px;"
+                          style="inline-size: 250px;"
                         >
                           Active:
                         </td>
@@ -818,12 +811,23 @@ onMounted(async () => {
                       <tr>
                         <td
                           class="text-body-1 pb-1"
-                          style="inline-size: 150px;"
+                          style="inline-size: 250px;"
                         >
                           Available Actions:
                         </td>
                         <td class="text-body-1 text-high-emphasis font-weight-medium">
                           {{ runner.available_actions ? runner.available_actions.length : 0 }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          class="text-body-1 pb-1"
+                          style="inline-size: 250px;"
+                        >
+                          Available Payload Injectors:
+                        </td>
+                        <td class="text-body-1 text-high-emphasis font-weight-medium pb-1">
+                          {{ runner.available_payload_injectors ? runner.available_payload_injectors.length : 0 }}
                         </td>
                       </tr>
                     </VTable>
@@ -902,6 +906,13 @@ onMounted(async () => {
                 <h4 class="text-h4">
                   {{ runner.name }}
                 </h4>
+                <VChip
+                  :color="runner.registered ? 'success' : 'error'"
+                  label
+                  class="mb-0 mx-2"
+                >
+                  Registered: {{ runner.registered ? 'Yes' : 'No' }}
+                </VChip>
               </VCardText>
 
               <VDivider />
@@ -916,21 +927,7 @@ onMounted(async () => {
                       <tr>
                         <td
                           class="text-body-1 pb-1"
-                          style="inline-size: 150px;"
-                        >
-                          Registered:
-                        </td>
-                        <td
-                          class="text-body-1 text-high-emphasis font-weight-medium pb-1"
-                          :class="{ 'text-success': runner.registered, 'text-error': !runner.registered }"
-                        >
-                          {{ runner.registered ? 'Yes' : 'No' }}
-                        </td>
-                      </tr>
-                      <tr>
-                        <td
-                          class="text-body-1 pb-1"
-                          style="inline-size: 150px;"
+                          style="inline-size: 250px;"
                         >
                           Active:
                         </td>
@@ -944,12 +941,23 @@ onMounted(async () => {
                       <tr>
                         <td
                           class="text-body-1 pb-1"
-                          style="inline-size: 150px;"
+                          style="inline-size: 250px;"
                         >
                           Available Actions:
                         </td>
                         <td class="text-body-1 text-high-emphasis font-weight-medium">
                           {{ runner.actions ? runner.actions.length : 0 }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          class="text-body-1 pb-1"
+                          style="inline-size: 250px;"
+                        >
+                          Available Payload Injectors:
+                        </td>
+                        <td class="text-body-1 text-high-emphasis font-weight-medium pb-1">
+                          {{ runner.available_payload_injectors ? runner.available_payload_injectors.length : 0 }}
                         </td>
                       </tr>
                     </VTable>

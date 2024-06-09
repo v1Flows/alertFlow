@@ -40,7 +40,7 @@ const login = async () => {
   }
 
   try {
-    const { data, error } = await useFetch<Response>('https://alertflow.justlab.xyz/api/token', {
+    const { data, error } = await useFetch<Response>('http://localhost:8080/api/token', {
       method: 'POST',
       body: JSON.stringify(form.value),
     })

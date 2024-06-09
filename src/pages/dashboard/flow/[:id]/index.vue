@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { VCodeBlock } from '@wdns/vue-code-block'
-import { uuid } from 'vue-uuid'
+import { VCodeBlock } from '@wdns/vue-code-block';
 
 definePage({
   meta: {
@@ -82,7 +81,7 @@ const currentTab = ref('tab-1')
 const getProject = async () => {
   loadingProject.value = true
   try {
-    const { data, error } = await useFetch(`https://alertflow.justlab.xyz/api/projects/${flow.value.project_id}`, {
+    const { data, error } = await useFetch(`http://localhost:8080/api/projects/${flow.value.project_id}`, {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
@@ -108,7 +107,7 @@ const getProject = async () => {
 const getFlow = async () => {
   loadingFlow.value = true
   try {
-    const { data, error } = await useFetch(`https://alertflow.justlab.xyz/api/flows/${flowID}`, {
+    const { data, error } = await useFetch(`http://localhost:8080/api/flows/${flowID}`, {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
@@ -121,7 +120,6 @@ const getFlow = async () => {
     }
 
     flow.value = await JSON.parse(data.value).flow
-    console.log(flow.value)
     getProject()
     loadingFlow.value = false
   }
@@ -135,7 +133,7 @@ const getFlow = async () => {
 const getFlowExecutions = async () => {
   loadingExecutions.value = true
   try {
-    const { data, error } = await useFetch(`https://alertflow.justlab.xyz/api/flows/${flowID}/executions`, {
+    const { data, error } = await useFetch(`http://localhost:8080/api/flows/${flowID}/executions`, {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
@@ -172,7 +170,7 @@ const getFlowExecutions = async () => {
 const getFlowPayloads = async () => {
   loadingPayloads.value = true
   try {
-    const { data, error } = await useFetch(`https://alertflow.justlab.xyz/api/flows/${flowID}/payloads`, {
+    const { data, error } = await useFetch(`http://localhost:8080/api/flows/${flowID}/payloads`, {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
@@ -256,7 +254,7 @@ const getExecutionStatusIcon = (execution: any) => {
 const updateFlow = async () => {
   editFlowLoading.value = true
 
-  const { error } = await useFetch(`https://alertflow.justlab.xyz/api/flows/${flowID}`, {
+  const { error } = await useFetch(`http://localhost:8080/api/flows/${flowID}`, {
     method: 'PUT',
     headers: {
       'Authorization': useCookie('accessToken').value,
@@ -978,7 +976,7 @@ const paginated = computed(() => flowPayloads.value.slice(payloadIndexStart.valu
               </VExpansionPanelTitle>
               <VExpansionPanelText>
                 <VCodeBlock
-                  :code="payload.payload"
+                  :code="JSON.stringify(payload.payload)"
                   label="Payload"
                   :indent="2"
                   lang="json"

@@ -30,7 +30,7 @@ const createFlowForm = ref({
 const getFlows = async () => {
   loadingFlows.value = true
   try {
-    const { data, error } = await useFetch('https://alertflow.justlab.xyz/api/flows/', {
+    const { data, error } = await useFetch('http://localhost:8080/api/flows/', {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ const getFlows = async () => {
 const getProjects = async () => {
   loadingProjects.value = true
   try {
-    const { data, error } = await useFetch('https://alertflow.justlab.xyz/api/projects/', {
+    const { data, error } = await useFetch('http://localhost:8080/api/projects/', {
       headers: {
         'Authorization': useCookie('accessToken').value,
         'Content-Type': 'application/json',
@@ -82,7 +82,7 @@ const getProjects = async () => {
 
 const deleteFlow = async flow => {
   try {
-    const { data, error } = await useFetch(`https://alertflow.justlab.xyz/api/flows/${flow.id}`, {
+    const { data, error } = await useFetch(`http://localhost:8080/api/flows/${flow.id}`, {
       method: 'DELETE',
       headers: {
         'Authorization': useCookie('accessToken').value,
