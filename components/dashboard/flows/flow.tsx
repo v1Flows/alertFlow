@@ -5,6 +5,9 @@ import { Separator } from '@/components/ui/separator';
 import { Plus, Rocket, Wand, Library } from 'lucide-react';
 import { cookies } from 'next/headers'
 import { FetchFailedAlert } from "@/components/alerts/fetchFail";
+import { FlowActions } from "@/components/dashboard/flows/actions";
+import { FlowCommonPattern } from "@/components/dashboard/flows/commonPattern";
+import { FlowActionPattern } from "@/components/dashboard/flows/actionPattern";
 import { Badge } from "@/components/ui/badge"
 import {
   Card,
@@ -74,7 +77,6 @@ export async function Flow({ flowId }: any) {
   'use client'
   const flow = await getFlow(flowId)
   const projects = await getProjects()
-  console.log(flow)
 
   return (
     <>
@@ -141,7 +143,7 @@ export async function Flow({ flowId }: any) {
         </Card>
       </div>
       <div>
-        <Tabs defaultValue="actions" className="w-[400px]">
+        <Tabs defaultValue="actions">
           <TabsList>
             <TabsTrigger value="actions">
               <Wand className="mr-2 h-4 w-4" />
@@ -156,8 +158,13 @@ export async function Flow({ flowId }: any) {
               Payloads
             </TabsTrigger>
           </TabsList>
-          <TabsContent value="actions">Make changes to your account here.</TabsContent>
-          <TabsContent value="executions">Change your password here.</TabsContent>
+          <TabsContent value="actions">
+            {flow.action_details.pattern_type === "common" && <FlowCommonPattern flow={flow} className="w-full" />}
+            {flow.action_details.pattern_type === "custom" && flow.actions.map((action: any, index: number) => <FlowActionPattern key={index} action={action} className="w-full" />)}
+          </TabsContent>
+          <TabsContent value="executions">
+            asasas
+          </TabsContent>
           <TabsContent value="payloads">Change your password here.</TabsContent>
         </Tabs>
       </div>
