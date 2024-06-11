@@ -126,7 +126,7 @@ export const navItems: NavItem[] = [
   },
   {
     title: 'Flows',
-    href: '/dashboard/employee',
+    href: '/dashboard/flows',
     icon: 'kanban',
     label: 'flows'
   },

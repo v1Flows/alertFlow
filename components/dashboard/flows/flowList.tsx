@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/card"
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -28,10 +27,32 @@ import {
 import { Heading } from '@/components/ui/heading';
 import { Plus, Eye, Trash2 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
-import { Label } from "@/components/ui/label"
+import { Badge } from "@/components/ui/badge"
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 import { cookies } from 'next/headers'
-import { AnimatedTooltip } from "@/components/ui/animated-tooltip";
+
+async function getFlows() {
+  const cookieStore = cookies()
+  const token = cookieStore.get('token')?.value
+
+  if (!token) {
+    return { error: "No token found" }
+  }
+
+  const res = await fetch("http://localhost:8080/api/flows/", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": token,
+    },
+  })
+
+  if (!res.ok) {
+    return { error: "Failed to fetch data" }
+  }
+
+  return res.json()
+}
 
 async function getProjects() {
   const cookieStore = cookies()
@@ -56,16 +77,17 @@ async function getProjects() {
   return res.json()
 }
 
-export async function ProjectList() {
+export async function FlowList() {
   'use client'
+  const flows = await getFlows()
   const projects = await getProjects()
 
   return (
     <>
       <div className="flex items-start justify-between">
         <Heading
-          title={`Projects (${projects.projects.length})`}
-          description="Manage projects"
+          title={`Flows (${flows.flows.length})`}
+          description="Manage flows"
         />
         <Button
           className="text-xs md:text-sm"
@@ -78,23 +100,38 @@ export async function ProjectList() {
         <ExclamationTriangleIcon className="h-4 w-4" />
         <AlertTitle>Error</AlertTitle>
         <AlertDescription>
-          Project data was not able to be fetched.
+          Flow data was not able to be fetched.
         </AlertDescription>
       </Alert>
       <div className="flex gap-4">
-        {projects.projects?.map((project: any) => (
-          <Card key={project.id} className="w-[350px]">
+        {flows.flows?.map((flow: any) => (
+          <Card key={flow.id} className="w-[550px]">
             <CardHeader>
-              <CardTitle>{project.name}</CardTitle>
-              <CardDescription>{project.description}</CardDescription>
+              <div className="flex items-start justify-between">
+                <div>
+                  <CardTitle>{flow.name}</CardTitle>
+                  <CardDescription>{flow.description}</CardDescription>
+                </div>
+                <Badge style={{ backgroundColor: flow.active ? "lightgreen" : "red" }}>{flow.active ? "Active" : "Inactive"}</Badge>
+              </div>
             </CardHeader>
             <CardContent>
-              <div className="grid w-full items-center gap-4">
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="name">Members</Label>
-                  <div className="flex flex-row items-center justify-left mb-10 w-full">
-                    <AnimatedTooltip items={project.members.map((member: any, index: number) => ({ ...member, id: index, name: member.email, designation: member.role, image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3540&q=80" }))} />
-                  </div>
+              <div className="grid w-full items-center gap-1">
+                <div className="flex justify-left gap-2">
+                  <p className="text-sm font-medium">
+                    Project:
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {projects.projects.find((project: any) => project.id === flow.project_id)?.name}
+                  </p>
+                </div>
+                <div className="flex justify-left gap-2">
+                  <p className="text-sm font-medium">
+                    Last Update:
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    {flow.updated_at ? new Date(flow.updated_at).toLocaleString() : "N/A"}
+                  </p>
                 </div>
               </div>
             </CardContent>
