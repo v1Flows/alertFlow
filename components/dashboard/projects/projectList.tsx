@@ -20,10 +20,16 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert"
 import { Heading } from '@/components/ui/heading';
 import { Plus } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Label } from "@/components/ui/label"
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 import { cookies } from 'next/headers'
 import { AnimatedTooltip } from "@/components/ui/animated-tooltip";
 
@@ -68,6 +74,13 @@ export async function ProjectList() {
         </Button>
       </div>
       <Separator />
+      <Alert variant="destructive">
+        <ExclamationTriangleIcon className="h-4 w-4" />
+        <AlertTitle>Error</AlertTitle>
+        <AlertDescription>
+          Project data was not able to be fetched.
+        </AlertDescription>
+      </Alert>
       <div className="flex gap-4">
         {projects.projects?.map((project: any) => (
           <Card key={project.id} className="w-[350px]">
