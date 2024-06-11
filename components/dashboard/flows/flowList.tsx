@@ -19,17 +19,16 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from "@/components/ui/alert"
 import { Heading } from '@/components/ui/heading';
 import { Plus, Eye, Trash2 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from "@/components/ui/badge"
-import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 import { cookies } from 'next/headers'
+import Link from "next/link"
+import { FetchFailedAlert } from "@/components/alerts/fetchFail";
+
+let flowFetchFailed = false
+let projectFetchFailed = false
 
 async function getFlows() {
   const cookieStore = cookies()
@@ -48,9 +47,11 @@ async function getFlows() {
   })
 
   if (!res.ok) {
+    flowFetchFailed = true
     return { error: "Failed to fetch data" }
   }
 
+  flowFetchFailed = false
   return res.json()
 }
 
@@ -71,9 +72,11 @@ async function getProjects() {
   })
 
   if (!res.ok) {
+    projectFetchFailed = true
     return { error: "Failed to fetch data" }
   }
 
+  projectFetchFailed = false
   return res.json()
 }
 
@@ -96,13 +99,7 @@ export async function FlowList() {
         </Button>
       </div>
       <Separator />
-      <Alert variant="destructive">
-        <ExclamationTriangleIcon className="h-4 w-4" />
-        <AlertTitle>Error</AlertTitle>
-        <AlertDescription>
-          Flow data was not able to be fetched.
-        </AlertDescription>
-      </Alert>
+      {(flowFetchFailed || projectFetchFailed) && <FetchFailedAlert />}
       <div className="flex gap-4">
         {flows.flows?.map((flow: any) => (
           <Card key={flow.id} className="w-[550px]">
@@ -112,7 +109,7 @@ export async function FlowList() {
                   <CardTitle>{flow.name}</CardTitle>
                   <CardDescription>{flow.description}</CardDescription>
                 </div>
-                <Badge style={{ backgroundColor: flow.active ? "lightgreen" : "red" }}>{flow.active ? "Active" : "Inactive"}</Badge>
+                <Badge style={{ backgroundColor: flow.active ? "green" : "red" }}>{flow.active ? "Active" : "Inactive"}</Badge>
               </div>
             </CardHeader>
             <CardContent>
@@ -136,9 +133,11 @@ export async function FlowList() {
               </div>
             </CardContent>
             <CardFooter className="flex justify-between">
-              <Button className="text-xs md:text-sm">
-                <Eye className="mr-2 h-4 w-4" />
-                View
+              <Button className="text-xs md:text-sm" variant="secondary" asChild>
+                <Link href={`/dashboard/flows/${flow.id}`}>
+                  <Eye className="mr-2 h-4 w-4" />
+                  View
+                </Link>
               </Button>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
