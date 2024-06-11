@@ -13,11 +13,23 @@ const authConfig = {
         }
       },
       async authorize(credentials, req) {
-        const user = {
-          id: '1',
-          name: 'John',
-          email: credentials?.email as string
-        };
+        const response = await fetch('http://localhost:8080/api/token', {
+          method: 'POST',
+          body: JSON.stringify(credentials),
+          headers: { 'Content-Type': 'application/json' }
+        })
+
+        if (!response.ok) return null
+
+        const data = await response.json();
+
+        let user = {
+          id: data.user.id,
+          name: data.user.username,
+          email: data.user.email,
+          token: data.token
+        }
+
         if (user) {
           // Any object returned will be saved in `user` property of the JWT
           return user;
