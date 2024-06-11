@@ -26,7 +26,7 @@ import {
   AlertTitle,
 } from "@/components/ui/alert"
 import { Heading } from '@/components/ui/heading';
-import { Plus } from 'lucide-react';
+import { Plus, Eye, Trash2 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Label } from "@/components/ui/label"
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
@@ -40,7 +40,7 @@ async function getProjects() {
   if (!token) {
     return { error: "No token found" }
   }
-  
+
   const res = await fetch("http://localhost:8080/api/projects/", {
     method: "GET",
     headers: {
@@ -102,9 +102,15 @@ export async function ProjectList() {
               </div>
             </CardContent>
             <CardFooter className="flex justify-between">
+              <Button className="text-xs md:text-sm">
+                <Eye className="mr-2 h-4 w-4" />
+                View
+              </Button>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button variant="outline">Delete</Button>
+                  <Button variant="destructive">
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
@@ -116,11 +122,10 @@ export async function ProjectList() {
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction>Continue</AlertDialogAction>
+                    <Button variant="destructive">Delete Project</Button>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
-              <Button>View</Button>
             </CardFooter>
           </Card>
         ))}
