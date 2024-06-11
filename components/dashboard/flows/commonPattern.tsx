@@ -4,6 +4,16 @@ import { cn } from "@/lib/utils";
 import { AnimatedBeam } from "@/components/magicui/animated-beam";
 import React, { forwardRef, useRef } from "react";
 import { Library, CircleSlash, BadgeCheck, Rocket, Forklift, Combine } from 'lucide-react';
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
 
 // eslint-disable-next-line react/display-name
 const Circle = forwardRef<
@@ -52,18 +62,42 @@ export function FlowCommonPattern({ flow }: any) {
           </Circle>
           <h4>Get Common Patterns</h4>
         </div>
-        <div className="flex flex-col justify-center items-center">
-          <Circle ref={div3Ref} className="bg-red-500 ">
-            <CircleSlash className="text-black" />
-          </Circle>
-          <h4>Pattern Exclude Check</h4>
-        </div>
-        <div className="flex flex-col justify-center items-center">
-          <Circle ref={div4Ref} className="bg-green-500">
-            <BadgeCheck className="text-black" />
-          </Circle>
-          <h4>Pattern Match Check</h4>
-        </div>
+        <Sheet>
+          <SheetTrigger asChild>
+            <div className="flex flex-col justify-center items-center">
+              <Circle ref={div3Ref} className="bg-red-500 ">
+                <CircleSlash className="text-black" />
+              </Circle>
+              <h4>Pattern Exclude Check</h4>
+            </div>
+          </SheetTrigger>
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle style={{ color: 'red' }}>Exclude Patterns</SheetTitle>
+              <SheetDescription>
+                List of exclude Patterns
+              </SheetDescription>
+            </SheetHeader>
+          </SheetContent>
+        </Sheet>
+        <Sheet>
+          <SheetTrigger asChild>
+            <div className="flex flex-col justify-center items-center">
+              <Circle ref={div4Ref} className="bg-green-500">
+                <BadgeCheck className="text-black" />
+              </Circle>
+              <h4>Pattern Match Check</h4>
+            </div>
+          </SheetTrigger>
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle style={{ color: 'green' }}>Match Patterns</SheetTitle>
+              <SheetDescription>
+                List of match Patterns
+              </SheetDescription>
+            </SheetHeader>
+          </SheetContent>
+        </Sheet>
         <div className="flex flex-col justify-center items-center">
           <Circle ref={div5Ref}>
             <Rocket className="text-black" />
@@ -72,12 +106,24 @@ export function FlowCommonPattern({ flow }: any) {
         </div>
         <div className="flex flex-col justify-center gap-2">
           {flow.actions.map((action: any, index: number) => (
-            <div key={index} className="flex flex-col justify-center items-center">
-              <Circle ref={stepRefs[index]}>
-                <Forklift className="text-black" />
-              </Circle>
-              <h4>{action.name}</h4>
-            </div>
+            <Sheet key={index}>
+              <SheetTrigger asChild>
+                <div className="flex flex-col justify-center items-center">
+                  <Circle ref={stepRefs[index]}>
+                    <Forklift className="text-black" />
+                  </Circle>
+                  <h4>{action.name}</h4>
+                </div>
+              </SheetTrigger>
+              <SheetContent>
+                <SheetHeader>
+                  <SheetTitle>{action.name}</SheetTitle>
+                  <SheetDescription>
+                    {action.description}
+                  </SheetDescription>
+                </SheetHeader>
+              </SheetContent>
+            </Sheet>
           ))}
         </div>
       </div>

@@ -2,10 +2,9 @@
 import { Heading } from '@/components/ui/heading';
 import { Button } from "@/components/ui/button"
 import { Separator } from '@/components/ui/separator';
-import { Plus, Rocket, Wand, Library } from 'lucide-react';
+import { Plus, Rocket, Wand, Library, HelpCircle } from 'lucide-react';
 import { cookies } from 'next/headers'
 import { FetchFailedAlert } from "@/components/alerts/fetchFail";
-import { FlowActions } from "@/components/dashboard/flows/actions";
 import { FlowCommonPattern } from "@/components/dashboard/flows/commonPattern";
 import { FlowActionPattern } from "@/components/dashboard/flows/actionPattern";
 import { Badge } from "@/components/ui/badge"
@@ -18,6 +17,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Label } from "@/components/ui/label"
 
 let flowFetchFailed = false
 let projectFetchFailed = false
@@ -159,6 +159,10 @@ export async function Flow({ flowId }: any) {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="actions">
+            <Badge variant={"secondary"} className="mb-4 mt-2">
+              <HelpCircle className="mr-1 h-4 w-4" />
+              Hint: you can click on some circles
+            </Badge>
             {flow.action_details.pattern_type === "common" && <FlowCommonPattern flow={flow} className="w-full" />}
             {flow.action_details.pattern_type === "custom" && flow.actions.map((action: any, index: number) => <FlowActionPattern key={index} action={action} className="w-full" />)}
           </TabsContent>
