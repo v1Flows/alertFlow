@@ -2,7 +2,7 @@ import BreadCrumb from '@/components/breadcrumb';
 import { UserClient } from '@/components/tables/user-tables/client';
 import { users } from '@/constants/data';
 
-const breadcrumbItems = [{ title: 'User', link: '/dashboard/user' }];
+const breadcrumbItems = [{ title: 'Projects', link: '/dashboard/projects' }];
 export default function page() {
   return (
     <>

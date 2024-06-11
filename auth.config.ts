@@ -1,5 +1,6 @@
 import { NextAuthConfig } from 'next-auth';
 import CredentialProvider from 'next-auth/providers/credentials';
+import { cookies } from 'next/headers'
 
 const authConfig = {
   providers: [
@@ -22,6 +23,11 @@ const authConfig = {
         if (!response.ok) return null
 
         const data = await response.json();
+
+        const cookieStore = cookies();
+        cookieStore.set('token', data.token, {
+          maxAge: 60 * 60 * 24 * 30
+        })
 
         let user = {
           id: data.user.id,
