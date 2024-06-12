@@ -92,7 +92,7 @@ export async function ProjectList() {
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="name">Members</Label>
                   <div className="flex flex-row items-center justify-left mb-10 w-full">
-                    <AvatarCircles people={project.members} />
+                    <AvatarCircles people={project.members} className="" />
                   </div>
                 </div>
               </div>
