@@ -100,7 +100,7 @@ export async function FlowList() {
       </div>
       <Separator />
       {(flowFetchFailed || projectFetchFailed) && <FetchFailedAlert />}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid lg:grid-cols-3 sm:grid-cols-1 gap-4">
         {flows.flows?.map((flow: any) => (
           <Card key={flow.id} className="w-full">
             <CardHeader>

@@ -33,7 +33,7 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator";
 import { CopyBlock, dracula } from "react-code-blocks";
 
-export function PayloadList({ payloads }: any) {
+export function ExecutionList({ executions }: any) {
   return (
     <div>
       <ScrollArea className="w-full h-[800px] mt-4">
@@ -48,7 +48,7 @@ export function PayloadList({ payloads }: any) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {payloads.map((payload: any) => (
+            {executions.map((payload: any) => (
               <TableRow key={payload.id}>
                 <TableCell className="font-medium">{payload.id}</TableCell>
                 <TableCell>{new Date(payload.created_at).toLocaleString()}</TableCell>

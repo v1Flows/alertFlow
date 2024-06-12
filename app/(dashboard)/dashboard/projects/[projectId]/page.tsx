@@ -1,26 +1,22 @@
 import BreadCrumb from '@/components/breadcrumb';
-import { ProductForm } from '@/components/forms/product-form';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { Project } from '@/components/dashboard/projects/project';
+import { LoadingCard } from '@/components/loading/loadingCard';
+import { Suspense } from 'react'
 import React from 'react';
 
-export default function Page() {
+export default function Page({ params }: { params: { projectId: string } }) {
   const breadcrumbItems = [
-    { title: 'User', link: '/dashboard/user' },
-    { title: 'Create', link: '/dashboard/user/create' }
+    { title: 'Projects', link: '/dashboard/projects' },
+    { title: `${params.projectId}`, link: '/dashboard/flow/{{ projectId }}' }
   ];
   return (
-    <ScrollArea className="h-full">
-      <div className="flex-1 space-y-4 p-5">
+    <>
+      <div className="flex-1 space-y-4  p-4 pt-6 md:p-8">
         <BreadCrumb items={breadcrumbItems} />
-        <ProductForm
-          categories={[
-            { _id: 'shirts', name: 'shirts' },
-            { _id: 'pants', name: 'pants' }
-          ]}
-          initialData={null}
-          key={null}
-        />
+        <Suspense fallback={<LoadingCard />}>
+          <Project projectId={params.projectId} />
+        </Suspense>
       </div>
-    </ScrollArea>
+    </>
   );
 }

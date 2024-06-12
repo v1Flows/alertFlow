@@ -3,7 +3,6 @@ import * as React from "react"
 import { Button } from "@/components/ui/button"
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
@@ -19,18 +18,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from "@/components/ui/alert"
+import Link from "next/link"
 import { Heading } from '@/components/ui/heading';
 import { Plus, Eye, Trash2 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
-import { Label } from "@/components/ui/label"
-import { ExclamationTriangleIcon } from "@radix-ui/react-icons"
 import { cookies } from 'next/headers'
-import { AnimatedTooltip } from "@/components/ui/animated-tooltip";
 import { FetchFailedAlert } from "@/components/alerts/fetchFail";
 import AvatarCircles from "@/components/magicui/avatar-circles";
 
@@ -67,40 +59,45 @@ export async function ProjectList() {
 
   return (
     <>
-      <div className="flex items-start justify-between">
-        <Heading
-          title={`Projects (${projects.projects.length})`}
-          description="Manage projects"
-        />
-        <Button
-          className="text-xs md:text-sm"
-        >
-          <Plus className="mr-2 h-4 w-4" /> Add New
-        </Button>
+      <div className="grid grid-cols-2 justify-between items-center">
+        <div className="col-span-1 justify-self-start">
+          <Heading
+            title={`Projects (${projects.projects.length})`}
+            description="Manage projects"
+          />
+        </div>
+        <div className="col-span-1 justify-self-end">
+          <Button
+            className="text-xs md:text-sm"
+          >
+            <Plus className="mr-2 h-4 w-4" /> Add New
+          </Button>
+        </div>
       </div>
       <Separator />
       {projectFetchFailed && <FetchFailedAlert />}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid lg:grid-cols-4 gap-4">
         {projects.projects?.map((project: any) => (
           <Card key={project.id} className="w-full">
             <CardHeader>
-              <CardTitle>{project.name}</CardTitle>
-              <CardDescription>{project.description}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid w-full items-center gap-4">
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="name">Members</Label>
-                  <div className="flex flex-row items-center justify-left mb-10 w-full">
-                    <AvatarCircles people={project.members} className="" />
+              <div className="grid grid-cols-2">
+                <div className="grid-span-1 justify-self-start">
+                  <CardTitle>{project.name}</CardTitle>
+                  <CardDescription>{project.description}</CardDescription>
+                </div>
+                <div className="grid-span-1 justify-self-end">
+                  <div className="flex flex-row items-center justify-left w-full">
+                    <AvatarCircles people={project.members} />
                   </div>
                 </div>
               </div>
-            </CardContent>
+            </CardHeader>
             <CardFooter className="flex justify-between">
-              <Button className="text-xs md:text-sm" variant="secondary">
-                <Eye className="mr-2 h-4 w-4" />
-                View
+              <Button className="text-xs md:text-sm" variant="secondary" asChild>
+                <Link href={`/dashboard/projects/${project.id}`}>
+                  <Eye className="mr-2 h-4 w-4" />
+                  View
+                </Link>
               </Button>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
