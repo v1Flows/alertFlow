@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Label } from "@/components/ui/label"
+import GaugeCircle from "@/components/magicui/gauge-circle";
 
 let flowFetchFailed = false
 let projectFetchFailed = false
@@ -78,19 +79,33 @@ export async function Flow({ flowId }: any) {
 
   return (
     <>
-      <div className="flex items-start justify-between">
-        <div className="flex items-start gap-6 justify-between">
-          <Heading
-            title={`${flow.name}`}
-            description={`${flow.description}`}
-          />
-          <Badge className="mt-2">Flow ID: {flowId}</Badge>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="col-span-1">
+          <div className="flex items-start gap-6">
+            <Heading
+              title={`${flow.name}`}
+              description={`${flow.description}`}
+            />
+            <Badge className="mt-2">Flow ID: {flowId}</Badge>
+          </div>
         </div>
-        <Button
-          className="text-xs md:text-sm"
-        >
-          <Plus className="mr-2 h-4 w-4" /> Add New
-        </Button>
+        <div className="col-span-1">
+          <div className="flex items-center gap-6 justify-end">
+            <Button
+              className="text-xs md:text-sm"
+            >
+              <Plus className="mr-2 h-4 w-4" /> Add New
+            </Button>
+            <GaugeCircle
+              className="h-12 w-12 text-sm"
+              max={100}
+              min={0}
+              value={50}
+              gaugePrimaryColor="rgb(79 70 229)"
+              gaugeSecondaryColor="rgba(74, 77, 84, 1)"
+            />
+          </div>
+        </div>
       </div>
       <Separator />
       {(flowFetchFailed || projectFetchFailed) && <FetchFailedAlert />}
