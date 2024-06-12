@@ -207,24 +207,28 @@ export function FlowCommonPattern({ flow }: any) {
         containerRef={containerRef}
         fromRef={div1Ref}
         toRef={div2Ref}
+        pathWidth={4}
       />
       <AnimatedBeam
         duration={5}
         containerRef={containerRef}
         fromRef={div2Ref}
         toRef={div3Ref}
+        pathWidth={4}
       />
       <AnimatedBeam
         duration={5}
         containerRef={containerRef}
         fromRef={div3Ref}
         toRef={div4Ref}
+        pathWidth={4}
       />
       <AnimatedBeam
         duration={5}
         containerRef={containerRef}
         fromRef={div4Ref}
         toRef={div5Ref}
+        pathWidth={4}
       />
       {stepRefs.map((_: any, i: any) => (
         <AnimatedBeam
@@ -233,6 +237,7 @@ export function FlowCommonPattern({ flow }: any) {
           containerRef={containerRef}
           fromRef={div5Ref}
           toRef={stepRefs[(i + 1) % stepRefs.length]}
+          pathWidth={4}
         />
       ))}
       {stepRefs.map((_: any, i: any) => (
@@ -243,6 +248,7 @@ export function FlowCommonPattern({ flow }: any) {
           containerRef={containerRef}
           fromRef={stepRefs[(i + 1) % stepRefs.length]}
           toRef={div5Ref}
+          pathWidth={4}
         />
       ))}
     </div >

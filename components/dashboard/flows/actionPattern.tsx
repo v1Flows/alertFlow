@@ -211,24 +211,28 @@ export function FlowActionPattern({ action }: any) {
         containerRef={containerRef}
         fromRef={div1Ref}
         toRef={div2Ref}
+        pathWidth={4}
       />
       <AnimatedBeam
         duration={5}
         containerRef={containerRef}
         fromRef={div2Ref}
         toRef={div3Ref}
+        pathWidth={4}
       />
       <AnimatedBeam
         duration={5}
         containerRef={containerRef}
         fromRef={div3Ref}
         toRef={div4Ref}
+        pathWidth={4}
       />
       <AnimatedBeam
         duration={5}
         containerRef={containerRef}
         fromRef={div4Ref}
         toRef={div5Ref}
+        pathWidth={4}
       />
       <AnimatedBeam
         duration={5}
@@ -236,6 +240,7 @@ export function FlowActionPattern({ action }: any) {
         fromRef={div5Ref}
         toRef={div6Ref}
         curvature={-25}
+        pathWidth={4}
       />
       <AnimatedBeam
         duration={5}
@@ -244,6 +249,7 @@ export function FlowActionPattern({ action }: any) {
         toRef={div5Ref}
         reverse
         curvature={25}
+        pathWidth={4}
       />
     </div>
   )
