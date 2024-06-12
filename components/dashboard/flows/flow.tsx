@@ -17,9 +17,11 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Label } from "@/components/ui/label"
 import GaugeCircle from "@/components/magicui/gauge-circle";
+import { PayloadList } from './payloadList';
 
 let flowFetchFailed = false
 let projectFetchFailed = false
+let payloadFetchFailed = false
 
 async function getFlow(flowId: any) {
   const cookieStore = cookies()
@@ -72,10 +74,37 @@ async function getProjects() {
   return res.json()
 }
 
+async function getPayloads(flowId: any) {
+  const cookieStore = cookies()
+  const token = cookieStore.get('token')?.value
+
+  if (!token) {
+    return { error: "No token found" }
+  }
+
+  const res = await fetch(`http://localhost:8080/api/flows/${flowId}/payloads`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": token,
+    },
+  })
+
+  if (!res.ok) {
+    payloadFetchFailed = true
+    return { error: "Failed to fetch data" }
+  }
+
+  payloadFetchFailed = false
+  const data = await res.json()
+  return data.payloads
+}
+
 export async function Flow({ flowId }: any) {
   'use client'
   const flow = await getFlow(flowId)
   const projects = await getProjects()
+  const payloads = await getPayloads(flowId)
 
   return (
     <>
@@ -187,9 +216,11 @@ export async function Flow({ flowId }: any) {
             </div>
           </TabsContent>
           <TabsContent value="executions">
-            asasas
+            asass
           </TabsContent>
-          <TabsContent value="payloads">Change your password here.</TabsContent>
+          <TabsContent value="payloads">
+            <PayloadList payloads={payloads} />
+          </TabsContent>
         </Tabs>
       </div>
     </>
