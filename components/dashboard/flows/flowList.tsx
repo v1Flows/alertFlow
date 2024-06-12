@@ -100,9 +100,9 @@ export async function FlowList() {
       </div>
       <Separator />
       {(flowFetchFailed || projectFetchFailed) && <FetchFailedAlert />}
-      <div className="flex gap-4">
+      <div className="grid grid-cols-3 gap-4">
         {flows.flows?.map((flow: any) => (
-          <Card key={flow.id} className="w-[550px]">
+          <Card key={flow.id} className="w-full">
             <CardHeader>
               <div className="flex items-start justify-between">
                 <div>

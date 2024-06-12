@@ -109,8 +109,8 @@ export async function Flow({ flowId }: any) {
       </div>
       <Separator />
       {(flowFetchFailed || projectFetchFailed) && <FetchFailedAlert />}
-      <div className="flex gap-4 justify-between">
-        <Card className="w-[550px]">
+      <div className="grid grid-cols-4 gap-4">
+        <Card className="w-full">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
@@ -121,7 +121,7 @@ export async function Flow({ flowId }: any) {
             </div>
           </CardHeader>
         </Card>
-        <Card className="w-[550px]">
+        <Card className="w-full">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
@@ -132,7 +132,7 @@ export async function Flow({ flowId }: any) {
             </div>
           </CardHeader>
         </Card>
-        <Card className="w-[550px]">
+        <Card className="w-full">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
@@ -143,7 +143,7 @@ export async function Flow({ flowId }: any) {
             </div>
           </CardHeader>
         </Card>
-        <Card className="w-[550px]">
+        <Card className="w-full">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>

@@ -80,9 +80,9 @@ export async function ProjectList() {
       </div>
       <Separator />
       {projectFetchFailed && <FetchFailedAlert />}
-      <div className="flex gap-4">
+      <div className="grid grid-cols-4 gap-4">
         {projects.projects?.map((project: any) => (
-          <Card key={project.id} className="w-[350px]">
+          <Card key={project.id} className="w-full">
             <CardHeader>
               <CardTitle>{project.name}</CardTitle>
               <CardDescription>{project.description}</CardDescription>
