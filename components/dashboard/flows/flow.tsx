@@ -10,9 +10,7 @@ import { FlowActionPattern } from "@/components/dashboard/flows/actionPattern";
 import { Badge } from "@/components/ui/badge"
 import {
   Card,
-  CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -164,7 +162,14 @@ export async function Flow({ flowId }: any) {
               Hint: you can click on some circles
             </Badge>
             {flow.action_details.pattern_type === "common" && <FlowCommonPattern flow={flow} className="w-full" />}
-            {flow.action_details.pattern_type === "custom" && flow.actions.map((action: any, index: number) => <FlowActionPattern key={index} action={action} className="w-full" />)}
+            <div className="flex flex-col gap-4">
+              {flow.action_details.pattern_type === "custom" && flow.actions.map((action: any, index: number) =>
+                <div key={index}>
+                  <Label className="mb-2">{action.name}</Label>
+                  <FlowActionPattern action={action} className="w-full" />
+                </div>
+              )}
+            </div>
           </TabsContent>
           <TabsContent value="executions">
             asasas

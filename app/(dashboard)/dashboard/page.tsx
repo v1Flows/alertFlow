@@ -1,3 +1,4 @@
+import { FeatureCard } from '@/components/dashboard/dashboard/feature_card';
 import { CalendarDateRangePicker } from '@/components/date-range-picker';
 import { Overview } from '@/components/overview';
 import { RecentSales } from '@/components/recent-sales';
