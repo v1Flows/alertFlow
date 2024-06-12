@@ -1,12 +1,8 @@
 import { Heading } from '@/components/ui/heading';
 import { Badge } from "@/components/ui/badge"
 import { Separator } from '@/components/ui/separator';
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 // Icons
 import { KeySquare, Play, User, PencilRuler } from 'lucide-react';
@@ -14,6 +10,7 @@ import { KeySquare, Play, User, PencilRuler } from 'lucide-react';
 import GetProject from '../utils/GetProjectData';
 import GetProjectApiKeys from '../utils/GetProjectApiKeys';
 import GetProjectRunners from '../utils/GetProjectRunners';
+import { RunnerList } from './runnerList';
 
 export async function Project({ projectId }: any) {
   const project = await GetProject(projectId)
@@ -30,7 +27,7 @@ export async function Project({ projectId }: any) {
         <Badge className="mt-2">Project ID: {projectId}</Badge>
       </div>
       <Separator />
-      <div className="grid lg:grid-cols-4 gap-4">
+      <div className="grid lg:grid-cols-4 md:grid-cols-2 sm:grid-cols-1 gap-4">
         <div className="col-span-1">
           <Card className="w-full">
             <CardHeader>
@@ -95,6 +92,36 @@ export async function Project({ projectId }: any) {
             </CardHeader>
           </Card>
         </div>
+      </div>
+      <div>
+        <Tabs defaultValue="members">
+          <TabsList>
+            <TabsTrigger value="members">
+              <User className="mr-2 h-4 w-4" />
+              Members
+            </TabsTrigger>
+            <TabsTrigger value="runners">
+              <Play className="mr-2 h-4 w-4" />
+              Runners
+            </TabsTrigger>
+            <TabsTrigger value="apikeys">
+              <KeySquare className="mr-2 h-4 w-4" />
+              API Keys
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="members">
+            <Badge variant={"secondary"} className="mb-4 mt-2">
+              <PencilRuler className="mr-1 h-4 w-4" />
+              Hint: you can click on some circles
+            </Badge>
+          </TabsContent>
+          <TabsContent value="runners">
+            <RunnerList runners={runners} />
+          </TabsContent>
+          <TabsContent value="apikeys">
+            asdasd
+          </TabsContent>
+        </Tabs>
       </div>
     </>
   )

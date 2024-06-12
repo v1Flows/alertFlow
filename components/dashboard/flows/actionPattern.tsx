@@ -69,7 +69,7 @@ export function FlowActionPattern({ action }: any) {
       className="relative flex w-full items-center justify-center overflow-hidden rounded-lg border bg-background p-10 md:shadow-xl"
       ref={containerRef}
     >
-      <div className="flex h-full w-full flex-row items-stretch justify-between gap-10">
+      <div className="flex h-full w-full flex-row flex-wrap items-stretch justify-between gap-10">
         <div className="flex flex-col justify-center items-center">
           <Circle ref={div1Ref}>
             <Library className="text-black" />

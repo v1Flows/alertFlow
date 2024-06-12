@@ -20,9 +20,10 @@ import { PayloadList } from './payloadList';
 import { ExecutionList } from './executionList';
 import GetFlowPayloads from '@/components/dashboard/utils/GetFlowPayloadData';
 import GetFlowExecutions from '@/components/dashboard/utils/GetFlowExecutionsData';
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 // Icons
-import { Plus, Rocket, Wand, Library, HelpCircle, PencilRuler, Wrench, HeartPulse, FolderGit2 } from 'lucide-react';
+import { Plus, Rocket, Wand, Library, HelpCircle, PencilRuler, Wrench, HeartPulse, FolderGit2, Container } from 'lucide-react';
 
 let flowFetchFailed = false
 let projectFetchFailed = false
@@ -87,8 +88,8 @@ export async function Flow({ flowId }: any) {
   const executions = await GetFlowExecutions(flowId)
 
   return (
-    <>
-      <div className="grid lg:grid-cols-2 gap-4">
+    <main>
+      <div className="grid lg:grid-cols-2 gap-4 mb-4">
         <div className="col-span-1">
           <div className="flex items-start gap-6">
             <Heading
@@ -116,9 +117,9 @@ export async function Flow({ flowId }: any) {
           </div>
         </div>
       </div>
-      <Separator />
+      <Separator className="mb-4" />
       {(flowFetchFailed || projectFetchFailed) && <FetchFailedAlert />}
-      <div className="grid lg:grid-cols-4 gap-4">
+      <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4 mb-6">
         <Card className="w-full">
           <CardHeader>
             <div className="flex items-center justify-between">
@@ -215,6 +216,6 @@ export async function Flow({ flowId }: any) {
           </TabsContent>
         </Tabs>
       </div>
-    </>
+    </main>
   )
 }
