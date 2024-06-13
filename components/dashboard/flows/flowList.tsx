@@ -109,7 +109,7 @@ export async function FlowList() {
                   <CardTitle>{flow.name}</CardTitle>
                   <CardDescription>{flow.description}</CardDescription>
                 </div>
-                <Badge style={{ backgroundColor: flow.active ? "green" : "red" }}>{flow.active ? "Active" : "Inactive"}</Badge>
+                <Badge style={{ color: flow.active ? "green" : "red" }} variant={"outline"}>{flow.active ? "Active" : "Inactive"}</Badge>
               </div>
             </CardHeader>
             <CardContent>

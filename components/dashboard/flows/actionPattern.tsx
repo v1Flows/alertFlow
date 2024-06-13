@@ -91,7 +91,7 @@ export function FlowActionPattern({ action }: any) {
               <h4>Pattern Exclude Check</h4>
             </div>
           </DrawerTrigger>
-          <DrawerContent className="mb-10">
+          <DrawerContent className="mb-10 items-center">
             <DrawerHeader>
               <DrawerTitle>
                 <div className="flex gap-2 items-center">
@@ -100,27 +100,29 @@ export function FlowActionPattern({ action }: any) {
                 </div>
               </DrawerTitle>
             </DrawerHeader>
-            <Table className="mt-2">
-              <TableCaption>A list of your Flows exclude patterns.</TableCaption>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Group</TableHead>
-                  <TableHead>Key</TableHead>
-                  <TableHead>Value</TableHead>
-                  <TableHead>React On</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {action.patterns.exclude.map((item: any, index: number) => (
-                  <TableRow key={index}>
-                    <TableCell>{item.group}</TableCell>
-                    <TableCell>{item.key}</TableCell>
-                    <TableCell>{item.value}</TableCell>
-                    <TableCell>{item.react_on}</TableCell>
+            <div>
+              <Table className="mt-2 w-[600px]">
+                <TableCaption>A list of your Flows exclude patterns.</TableCaption>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Group</TableHead>
+                    <TableHead>Key</TableHead>
+                    <TableHead>Value</TableHead>
+                    <TableHead>React On</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {action.patterns.exclude.map((item: any, index: number) => (
+                    <TableRow key={index}>
+                      <TableCell>{item.group}</TableCell>
+                      <TableCell>{item.key}</TableCell>
+                      <TableCell>{item.value}</TableCell>
+                      <TableCell>{item.react_on}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           </DrawerContent>
         </Drawer>
         <Drawer>
@@ -132,7 +134,7 @@ export function FlowActionPattern({ action }: any) {
               <h4>Pattern Match Check</h4>
             </div>
           </DrawerTrigger>
-          <DrawerContent className="mb-10">
+          <DrawerContent className="mb-10 items-center">
             <DrawerHeader>
               <DrawerTitle>
                 <div className="flex gap-2 items-center">
@@ -141,27 +143,29 @@ export function FlowActionPattern({ action }: any) {
                 </div>
               </DrawerTitle>
             </DrawerHeader>
-            <Table className="mt-2">
-              <TableCaption>A list of your Flows match patterns.</TableCaption>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Group</TableHead>
-                  <TableHead>Key</TableHead>
-                  <TableHead>Value</TableHead>
-                  <TableHead>React On</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {action.patterns.match.map((item: any, index: number) => (
-                  <TableRow key={index}>
-                    <TableCell>{item.group}</TableCell>
-                    <TableCell>{item.key}</TableCell>
-                    <TableCell>{item.value}</TableCell>
-                    <TableCell>{item.react_on}</TableCell>
+            <div>
+              <Table className="mt-2 w-[600px]">
+                <TableCaption>A list of your Flows match patterns.</TableCaption>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Group</TableHead>
+                    <TableHead>Key</TableHead>
+                    <TableHead>Value</TableHead>
+                    <TableHead>React On</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {action.patterns.match.map((item: any, index: number) => (
+                    <TableRow key={index}>
+                      <TableCell>{item.group}</TableCell>
+                      <TableCell>{item.key}</TableCell>
+                      <TableCell>{item.value}</TableCell>
+                      <TableCell>{item.react_on}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           </DrawerContent>
         </Drawer>
         <div className="flex flex-col justify-center items-center">

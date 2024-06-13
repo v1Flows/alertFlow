@@ -1,13 +1,14 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+'use client'
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Label } from '@/components/ui/label'
 import { BorderBeam } from "@/components/magicui/border-beam";
+import TimeAgo from 'react-timeago'
 
 // Icons
 import { HeartPulse, Forklift, Milestone, BookPlus } from 'lucide-react';
 
 export function RunnerList({ runners }: any) {
-  console.log(runners)
   return (
     <main className="mt-4">
       <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">Self-Hosted</h3>
@@ -38,7 +39,7 @@ export function RunnerList({ runners }: any) {
                       <HeartPulse className="h-5 w-5" />
                       <Label>Last Heartbeat</Label>
                     </div>
-                    <p>{new Date(runner.last_heartbeat.Time).toLocaleString()}</p>
+                    <TimeAgo date={runner.last_heartbeat.Time} />
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center justify-start gap-2">
@@ -57,7 +58,7 @@ export function RunnerList({ runners }: any) {
                 </div>
               </CardContent>
             </Card>
-            <BorderBeam size={250} borderWidth={2.0} duration={12} delay={9} colorFrom={runner.registered ? runner.active ? "#1355ab" : "#008000" : "#ff0000"} colorTo={runner.registered ? runner.active ? "#1355ab" : "#008000" : "#ff0000"} />
+            {runner.active && <BorderBeam size={250} borderWidth={1.5} duration={8} delay={9} colorFrom={"#1355ab"} colorTo={"#1355ab"} />}
           </div>
         ))}
       </div>
@@ -86,7 +87,7 @@ export function RunnerList({ runners }: any) {
                       <HeartPulse className="h-5 w-5" />
                       <Label>Last Heartbeat</Label>
                     </div>
-                    <p>{new Date(runner.last_heartbeat.Time).toLocaleString()}</p>
+                    <TimeAgo date={runner.last_heartbeat.Time} />
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center justify-start gap-2">
