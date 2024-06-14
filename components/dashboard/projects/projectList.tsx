@@ -20,11 +20,12 @@ import {
 } from "@/components/ui/alert-dialog"
 import Link from "next/link"
 import { Heading } from '@/components/ui/heading';
-import { Plus, Eye, Trash2 } from 'lucide-react';
+import { Eye, Trash2 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { cookies } from 'next/headers'
 import { FetchFailedAlert } from "@/components/alerts/fetchFail";
 import AvatarCircles from "@/components/magicui/avatar-circles";
+import { CreateProject } from "./projectCreateDialog";
 
 let projectFetchFailed = false
 
@@ -67,11 +68,7 @@ export async function ProjectList() {
           />
         </div>
         <div className="col-span-1 justify-self-end">
-          <Button
-            className="text-xs md:text-sm"
-          >
-            <Plus className="mr-2 h-4 w-4" /> Add New
-          </Button>
+          <CreateProject />
         </div>
       </div>
       <Separator />
@@ -115,7 +112,7 @@ export async function ProjectList() {
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <Button variant="destructive">Delete Project</Button>
+                    <Button variant="destructive" onClick={() => deleteProject(project.id)}>Delete Project</Button>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>

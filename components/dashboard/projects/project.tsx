@@ -55,7 +55,7 @@ export async function Project({ projectId }: any) {
                     <CardDescription>Available Runners</CardDescription>
                   </div>
                 </div>
-                <h4>{runners.length}</h4>
+                <h4>{project.alertflow_runners ? runners.length : runners.filter((runner: any) => !runner.alertflow_runner).length}</h4>
               </div>
             </CardHeader>
           </Card>
@@ -116,7 +116,7 @@ export async function Project({ projectId }: any) {
             </Badge>
           </TabsContent>
           <TabsContent value="runners">
-            <RunnerList runners={runners} />
+            <RunnerList runners={project.alertflow_runners ? runners : runners.filter((runner: any) => !runner.alertflow_runner)} alertflow_runners={project.alertflow_runners} />
           </TabsContent>
           <TabsContent value="apikeys">
             asdasd

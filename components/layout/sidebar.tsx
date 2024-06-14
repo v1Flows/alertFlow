@@ -27,7 +27,6 @@ export default function Sidebar({ className }: SidebarProps) {
         !isMinimized ? 'w-72' : 'w-[72px]',
         className
       )}
-      style={{ backgroundColor: "#22272e" }}
     >
       <ChevronLeft
         className={cn(

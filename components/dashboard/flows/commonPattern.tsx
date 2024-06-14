@@ -5,15 +5,15 @@ import { AnimatedBeam } from "@/components/magicui/animated-beam";
 import React, { forwardRef, useRef } from "react";
 import { Library, CircleSlash, BadgeCheck, Rocket, Forklift, Combine } from 'lucide-react';
 import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet"
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer"
 import {
   Table,
   TableBody,
@@ -75,88 +75,92 @@ export function FlowCommonPattern({ flow }: any) {
           </Circle>
           <h4>Get Common Patterns</h4>
         </div>
-        <Sheet>
-          <SheetTrigger asChild>
+        <Drawer>
+          <DrawerTrigger asChild>
             <div className="flex flex-col justify-center items-center">
               <Circle ref={div3Ref} className="bg-red-500 ">
                 <CircleSlash className="text-black" />
               </Circle>
               <h4>Pattern Exclude Check</h4>
             </div>
-          </SheetTrigger>
-          <SheetContent>
-            <SheetHeader>
-              <SheetTitle>
+          </DrawerTrigger>
+          <DrawerContent className="mb-10 items-center">
+            <DrawerHeader>
+              <DrawerTitle>
                 <div className="flex gap-2 items-center">
                   <CircleSlash style={{ color: 'red' }} />
                   Exclude Patterns ({flow.action_details.patterns.exclude.length})
                 </div>
-              </SheetTitle>
-            </SheetHeader>
-            <Table className="mt-2">
-              <TableCaption>A list of your Flows exclude patterns.</TableCaption>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Group</TableHead>
-                  <TableHead>Key</TableHead>
-                  <TableHead>Value</TableHead>
-                  <TableHead>React On</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {flow.action_details.patterns.exclude.map((item: any, index: number) => (
-                  <TableRow key={index}>
-                    <TableCell>{item.group}</TableCell>
-                    <TableCell>{item.key}</TableCell>
-                    <TableCell>{item.value}</TableCell>
-                    <TableCell>{item.react_on}</TableCell>
+              </DrawerTitle>
+            </DrawerHeader>
+            <div>
+              <Table className="mt-2 w-[600px]">
+                <TableCaption>A list of your Flows exclude patterns.</TableCaption>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Group</TableHead>
+                    <TableHead>Key</TableHead>
+                    <TableHead>Value</TableHead>
+                    <TableHead>React On</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </SheetContent>
-        </Sheet>
-        <Sheet>
-          <SheetTrigger asChild>
+                </TableHeader>
+                <TableBody>
+                  {flow.action_details.patterns.exclude.map((item: any, index: number) => (
+                    <TableRow key={index}>
+                      <TableCell>{item.group}</TableCell>
+                      <TableCell>{item.key}</TableCell>
+                      <TableCell>{item.value}</TableCell>
+                      <TableCell>{item.react_on}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </DrawerContent>
+        </Drawer>
+        <Drawer>
+          <DrawerTrigger asChild>
             <div className="flex flex-col justify-center items-center">
               <Circle ref={div4Ref} className="bg-green-500">
                 <BadgeCheck className="text-black" />
               </Circle>
               <h4>Pattern Match Check</h4>
             </div>
-          </SheetTrigger>
-          <SheetContent>
-            <SheetHeader>
-              <SheetTitle>
+          </DrawerTrigger>
+          <DrawerContent className="mb-10 items-center">
+            <DrawerHeader>
+              <DrawerTitle>
                 <div className="flex gap-2 items-center">
                   <BadgeCheck style={{ color: 'green' }} />
                   Match Patterns ({flow.action_details.patterns.match.length})
                 </div>
-              </SheetTitle>
-            </SheetHeader>
-            <Table className="mt-2">
-              <TableCaption>A list of your Flows match patterns.</TableCaption>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Group</TableHead>
-                  <TableHead>Key</TableHead>
-                  <TableHead>Value</TableHead>
-                  <TableHead>React On</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {flow.action_details.patterns.match.map((item: any, index: number) => (
-                  <TableRow key={index}>
-                    <TableCell>{item.group}</TableCell>
-                    <TableCell>{item.key}</TableCell>
-                    <TableCell>{item.value}</TableCell>
-                    <TableCell>{item.react_on}</TableCell>
+              </DrawerTitle>
+            </DrawerHeader>
+            <div>
+              <Table className="mt-2 w-[600px]">
+                <TableCaption>A list of your Flows match patterns.</TableCaption>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Group</TableHead>
+                    <TableHead>Key</TableHead>
+                    <TableHead>Value</TableHead>
+                    <TableHead>React On</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </SheetContent>
-        </Sheet>
+                </TableHeader>
+                <TableBody>
+                  {flow.action_details.patterns.match.map((item: any, index: number) => (
+                    <TableRow key={index}>
+                      <TableCell>{item.group}</TableCell>
+                      <TableCell>{item.key}</TableCell>
+                      <TableCell>{item.value}</TableCell>
+                      <TableCell>{item.react_on}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </DrawerContent>
+        </Drawer>
         <div className="flex flex-col justify-center items-center">
           <Circle ref={div5Ref}>
             <Rocket className="text-black" />
@@ -165,27 +169,27 @@ export function FlowCommonPattern({ flow }: any) {
         </div>
         <div className="flex flex-col justify-center gap-2">
           {flow.actions.map((action: any, index: number) => (
-            <Sheet key={index}>
-              <SheetTrigger asChild>
+            <Drawer key={index}>
+              <DrawerTrigger asChild>
                 <div className="flex flex-col justify-center items-center">
                   <Circle ref={stepRefs[index]}>
                     <Forklift className="text-black" />
                   </Circle>
                   <h4>{action.name}</h4>
                 </div>
-              </SheetTrigger>
-              <SheetContent>
-                <SheetHeader>
-                  <SheetTitle>
+              </DrawerTrigger>
+              <DrawerContent className="mb-10 items-center">
+                <DrawerHeader>
+                  <DrawerTitle>
                     <div className="flex gap-2 items-center">
                       {action.name}
                       <Badge style={{ backgroundColor: action.active ? 'green' : 'red' }}>{action.active ? 'Active' : 'Inactive'}</Badge>
                     </div>
-                  </SheetTitle>
-                  <SheetDescription>
+                  </DrawerTitle>
+                  <DrawerDescription>
                     {action.description}
-                  </SheetDescription>
-                </SheetHeader>
+                  </DrawerDescription>
+                </DrawerHeader>
                 <Separator />
                 <div className="grid gap-4 mt-4">
                   <div>
@@ -197,8 +201,8 @@ export function FlowCommonPattern({ flow }: any) {
                     <Label>action params</Label>
                   </div>
                 </div>
-              </SheetContent>
-            </Sheet>
+              </DrawerContent>
+            </Drawer>
           ))}
         </div>
       </div>

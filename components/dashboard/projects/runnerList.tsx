@@ -8,7 +8,8 @@ import TimeAgo from 'react-timeago'
 // Icons
 import { HeartPulse, Forklift, Milestone, BookPlus } from 'lucide-react';
 
-export function RunnerList({ runners }: any) {
+export function RunnerList({ runners, alertflow_runners }: any) {
+  console.log(alertflow_runners)
   return (
     <main className="mt-4">
       <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">Self-Hosted</h3>
@@ -63,52 +64,55 @@ export function RunnerList({ runners }: any) {
         ))}
       </div>
       <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">AlertFlow Provisioned</h3>
-      <div className="grid lg:grid-cols-4 justify-between items-center gap-4 mb-6">
-        {runners.filter((runner: any) => runner.alertflow_runner === true).map((runner: any) => (
-          <div key={runner.id} className="col-span-1 mt-2">
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle>{runner.name}</CardTitle>
-                  <Badge style={{ color: runner.registered ? "green" : "red" }} variant={"outline"}>{runner.registered ? "Registered" : "Not Registered"}</Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
+      {!alertflow_runners && <p className="text-gray-500">Alertflow provided runners is disabled for this project</p>}
+      {alertflow_runners &&
+        <div className="grid lg:grid-cols-4 justify-between items-center gap-4 mb-6">
+          {runners.filter((runner: any) => runner.alertflow_runner === true).map((runner: any) => (
+            <div key={runner.id} className="col-span-1 mt-2">
+              <Card>
+                <CardHeader>
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center justify-start gap-2">
-                      <Milestone className="h-5 w-5" />
-                      <Label>Version</Label>
-                    </div>
-                    <p>{runner.runner_version}</p>
+                    <CardTitle>{runner.name}</CardTitle>
+                    <Badge style={{ color: runner.registered ? "green" : "red" }} variant={"outline"}>{runner.registered ? "Registered" : "Not Registered"}</Badge>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center justify-start gap-2">
-                      <HeartPulse className="h-5 w-5" />
-                      <Label>Last Heartbeat</Label>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-start gap-2">
+                        <Milestone className="h-5 w-5" />
+                        <Label>Version</Label>
+                      </div>
+                      <p>{runner.runner_version}</p>
                     </div>
-                    <TimeAgo date={runner.last_heartbeat.Time} />
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center justify-start gap-2">
-                      <Forklift className="h-5 w-5" />
-                      <Label>Available Actions</Label>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-start gap-2">
+                        <HeartPulse className="h-5 w-5" />
+                        <Label>Last Heartbeat</Label>
+                      </div>
+                      <TimeAgo date={runner.last_heartbeat.Time} />
                     </div>
-                    <p>{runner.available_actions.length}</p>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center justify-start gap-2">
-                      <BookPlus className="h-5 w-5" />
-                      <Label>Available Payload Injectors</Label>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-start gap-2">
+                        <Forklift className="h-5 w-5" />
+                        <Label>Available Actions</Label>
+                      </div>
+                      <p>{runner.available_actions.length}</p>
                     </div>
-                    <p>{runner.available_payload_injectors.length}</p>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-start gap-2">
+                        <BookPlus className="h-5 w-5" />
+                        <Label>Available Payload Injectors</Label>
+                      </div>
+                      <p>{runner.available_payload_injectors.length}</p>
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        ))}
-      </div>
+                </CardContent>
+              </Card>
+            </div>
+          ))}
+        </div>
+      }
     </main >
   )
 }

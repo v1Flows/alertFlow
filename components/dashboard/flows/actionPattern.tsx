@@ -175,27 +175,27 @@ export function FlowActionPattern({ action }: any) {
           </Circle>
           <h4>Start Execution</h4>
         </div>
-        <Sheet>
-          <SheetTrigger asChild>
+        <Drawer>
+          <DrawerTrigger asChild>
             <div className="flex flex-col justify-center items-center">
               <Circle ref={div6Ref}>
                 <Forklift className="text-black" />
               </Circle>
               <h4>{action.name}</h4>
             </div>
-          </SheetTrigger>
-          <SheetContent>
-            <SheetHeader>
-              <SheetTitle>
+          </DrawerTrigger>
+          <DrawerContent className="mb-10 items-center">
+            <DrawerHeader>
+              <DrawerTitle>
                 <div className="flex gap-2 items-center">
                   {action.name}
                   <Badge style={{ backgroundColor: action.active ? 'green' : 'red' }}>{action.active ? 'Active' : 'Inactive'}</Badge>
                 </div>
-              </SheetTitle>
-              <SheetDescription>
+              </DrawerTitle>
+              <DrawerDescription>
                 {action.description}
-              </SheetDescription>
-            </SheetHeader>
+              </DrawerDescription>
+            </DrawerHeader>
             <Separator />
             <div className="grid gap-4 mt-4">
               <div>
@@ -207,8 +207,8 @@ export function FlowActionPattern({ action }: any) {
                 <Label>action params</Label>
               </div>
             </div>
-          </SheetContent>
-        </Sheet>
+          </DrawerContent>
+        </Drawer>
       </div>
 
       <AnimatedBeam
