@@ -37,13 +37,13 @@
     --card-foreground: 210 19% 78%;
     --border: 225 8% 14%;
     --input: 225 8% 17%;
-    --primary: 221.54,55.91%,63.53%;
+    --primary: 45, 96%, 51%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 219 6% 25%;
+    --secondary: 201, 100%, 91%;
     --secondary-foreground: 219 6% 85%;
     --accent: 225 18% 24%;
     --accent-foreground: 225 18% 84%;
-    --destructive: 8 90% 49%;
+    --destructive: 353, 80%, 53%;
     --destructive-foreground: 0 0% 100%;
     --ring: 219 16% 65%;
   }
