@@ -59,6 +59,7 @@ export function FlowCommonPattern({ flow }: any) {
   return (
     <div
       className="relative flex w-full items-center justify-center overflow-hidden rounded-lg border bg-background p-10 md:shadow-xl"
+      style={{ backgroundColor: "#2c3035" }}
       ref={containerRef}
     >
       <div className="flex h-full w-full flex-row flex-wrap items-stretch justify-between gap-10">
