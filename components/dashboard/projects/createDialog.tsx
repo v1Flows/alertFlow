@@ -13,7 +13,7 @@ import { Plus } from 'lucide-react';
 import { CreateProjectForm } from "./createForm"
 import { cookies } from 'next/headers'
 
-export function CreateProject() {
+export async function CreateProject() {
   const cookieStore = cookies()
   const token = cookieStore.get('token')?.value
 

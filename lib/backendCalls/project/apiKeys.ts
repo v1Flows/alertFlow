@@ -2,16 +2,16 @@
 
 import { cookies } from 'next/headers'
 
-export default async function GetProject(projectId: any) {
+export default async function GetProjectApiKeys(projectId: any) {
   'use client'
   const cookieStore = cookies()
-  const token = cookieStore.get('token')?.value
+  const token = cookieStore.get('session')?.value
 
   if (!token) {
     return { error: "No token found" }
   }
 
-  const res = await fetch(`http://localhost:8080/api/projects/${projectId}`, {
+  const res = await fetch(`http://localhost:8080/api/projects/${projectId}/apikeys`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -25,5 +25,5 @@ export default async function GetProject(projectId: any) {
 
 
   const data = await res.json()
-  return data.project
+  return data.api_keys
 }

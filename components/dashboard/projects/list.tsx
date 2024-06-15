@@ -23,7 +23,8 @@ import { Eye, Trash2 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import AvatarCircles from "@/components/magicui/avatar-circles";
 import { CreateProject } from "./createDialog";
-import GetProjects from "@/lib/backendCalls/getProjects"
+import GetProjects from "@/lib/backendCalls/project/all"
+import { DeleteProjectButton } from "./deleteProject"
 
 export async function ProjectList() {
   const projects = await GetProjects();
@@ -81,14 +82,14 @@ export async function ProjectList() {
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <Button variant="destructive" onClick={() => deleteProject(project.id)}>Delete Project</Button>
+                    <DeleteProjectButton id={project.id} />
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
             </CardFooter>
           </Card>
         ))}
-      </div>
+      </div >
     </>
   )
 }

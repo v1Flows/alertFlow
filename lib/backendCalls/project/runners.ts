@@ -5,7 +5,7 @@ import { cookies } from 'next/headers'
 export default async function GetProjectRunners(projectId: any) {
   'use client'
   const cookieStore = cookies()
-  const token = cookieStore.get('token')?.value
+  const token = cookieStore.get('session')?.value
 
   if (!token) {
     return { error: "No token found" }
