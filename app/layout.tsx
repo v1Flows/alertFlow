@@ -1,33 +1,34 @@
-import Providers from '@/components/layout/providers';
-import { Toaster } from '@/components/ui/toaster';
-import '@uploadthing/react/styles.css';
-import type { Metadata } from 'next';
-import NextTopLoader from 'nextjs-toploader';
-import { Inter } from 'next/font/google';
-import './globals.css';
-import { auth } from '@/auth';
-
-const inter = Inter({ subsets: ['latin'] });
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import { cn } from "@/lib/utils";
+import { Navbar } from "@/components/layout/navbar";
+import { ThemeProvider } from "@/components/layout/theme-provider";
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Next Shadcn',
-  description: 'Basic dashboard with Next.js and Shadcn'
+  title: "AlertFlow",
+  description: "Monitoring Automation Platform",
 };
 
-export default async function RootLayout({
-  children
-}: {
+export default function RootLayout({
+  children,
+}: Readonly<{
   children: React.ReactNode;
-}) {
-  const session = await auth();
+}>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} overflow-hidden`}>
-        <NextTopLoader />
-        <Providers session={session}>
-          <Toaster />
+    <html lang="pt-br" suppressHydrationWarning>
+      <body className={cn("min-h-screen bg-background", inter.className)}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Navbar />
+
           {children}
-        </Providers>
+        </ThemeProvider>
       </body>
     </html>
   );
