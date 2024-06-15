@@ -177,15 +177,15 @@ export const Navbar = () => {
       </NavigationMenu>
 
       <div className="hidden lg:flex">
-        <Button asChild size="sm" variant="ghost" aria-label="Login">
+        <Button asChild size="sm" variant="ghost" aria-label="Login" >
           <Link
             aria-label="Login"
             href="/auth/login"
           >
             <LogIn className="size-5 mr-2" />
             Login
-          </Link>
-        </Button>
+          </Link >
+        </Button >
         <ToggleTheme />
       </div>
     </header>
