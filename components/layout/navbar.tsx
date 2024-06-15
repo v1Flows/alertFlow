@@ -42,6 +42,10 @@ const routeList: RouteProps[] = [
     href: "/dashboard/projects",
     label: "Projects",
   },
+  {
+    href: "/dashboard/flows",
+    label: "Flows",
+  },
 ];
 
 const featureList: FeatureProps[] = [

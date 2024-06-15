@@ -7,10 +7,11 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { Suspense } from 'react'
-import { ProjectList } from "@/components/dashboard/projects/list";
+import { FlowList } from "@/components/dashboard/flows/list";
 import { LoadingCard } from "@/components/loading/loadingCard";
 
-export default function Projects() {
+const breadcrumbItems = [{ title: 'Flows', link: '/dashboard/flows' }];
+export default function page() {
   return (
     <>
       <div className="flex-1 space-y-4  p-4 pt-6 md:p-8">
@@ -21,12 +22,12 @@ export default function Projects() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>Projects</BreadcrumbPage>
+              <BreadcrumbPage>Flows</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
         <Suspense fallback={<LoadingCard />}>
-          <ProjectList />
+          <FlowList />
         </Suspense>
       </div>
     </>
