@@ -21,7 +21,7 @@ export async function login(formData: FormData) {
   const expires = new Date(data.expires_at * 1000)
 
   cookies().set('session', data.token, { expires, httpOnly: true })
-  cookies().set('user', data.user, { expires, httpOnly: true })
+  cookies().set('user', data.user, { httpOnly: true })
 }
 
 export async function updateSession(request: NextRequest) {

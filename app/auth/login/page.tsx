@@ -29,7 +29,7 @@ export default function LoginForm() {
               action={async (formData) => {
                 'use server'
                 await login(formData);
-                // redirect('/dashboard')
+                redirect('/dashboard')
               }}>
               <div className="grid gap-4">
                 <div className="grid gap-2">
