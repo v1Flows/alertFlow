@@ -25,6 +25,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          {/* TODO: only show Navbar if we are not on the /dashboard */}
           <Navbar />
 
           {children}
