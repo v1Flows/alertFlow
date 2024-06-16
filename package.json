@@ -16,6 +16,7 @@
 		"@nextui-org/link": "2.0.32",
 		"@nextui-org/listbox": "2.1.21",
 		"@nextui-org/navbar": "2.0.33",
+		"@nextui-org/react": "^2.4.2",
 		"@nextui-org/snippet": "2.0.38",
 		"@nextui-org/switch": "2.0.31",
 		"@nextui-org/system": "2.2.1",
