@@ -1,15 +1,18 @@
 'use client'
-import React from "react";
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Avatar, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Checkbox, Input, Link, cn } from "@nextui-org/react";
+import React, { useState } from "react";
+import { User, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Checkbox, Input, Link, cn } from "@nextui-org/react";
 import { MailIcon, LockIcon, LoginIcon, AddNoteIcon, CopyDocumentIcon, EditDocumentIcon, DeleteDocumentIcon } from '@/components/icons';
+import Logout from "./logout";
 
 export default function Login() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [isLoginLoading, setIsLoginLoading] = useState(false);
 
   const iconClasses = "text-xl text-default-500 pointer-events-none flex-shrink-0";
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   async function onLogin() {
+    setIsLoginLoading(true);
     const emailInput = document.getElementsByName("email")[0] as HTMLInputElement;
     const email = emailInput.value;
 
@@ -35,18 +38,27 @@ export default function Login() {
     localStorage.setItem("user", JSON.stringify(user));
 
     if (token) {
-      onOpenChange(false);
+      setIsLoginLoading(false);
+      onOpenChange()
     } else {
+      setIsLoginLoading(false);
       alert("Invalid credentials");
     }
   }
 
   return (
     <>
-      {user && (
+      {user.username && (
         <Dropdown>
           <DropdownTrigger>
-            <Avatar showFallback isBordered color="primary" name={user.username} />
+            <User   
+              name={user.username}
+              description={user.email}
+              avatarProps={{
+                name: user.username
+              }}
+              className="hover:cursor-pointer hover:opacity-80"
+            />
           </DropdownTrigger>
           <DropdownMenu variant="faded" aria-label="Dropdown menu with description">
             <DropdownItem
@@ -63,13 +75,14 @@ export default function Login() {
               color="danger"
               description="Log out of your account"
               startContent={<DeleteDocumentIcon className={cn(iconClasses, "text-danger")} />}
+              onPress={Logout}
             >
               Logout
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
       )}
-      {!user && (
+      {!user.username && (
         <>
           <Button
             startContent={<LoginIcon className="text-danger" />}
@@ -129,7 +142,7 @@ export default function Login() {
                     <Button color="danger" variant="flat" onPress={onClose}>
                       Close
                     </Button>
-                    <Button color="primary" onPress={onLogin}>
+                    <Button isLoading={isLoginLoading} color="primary" onPress={onLogin}>
                       Sign in
                     </Button>
                   </ModalFooter>
