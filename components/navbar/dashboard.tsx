@@ -1,6 +1,6 @@
 'use client'
 import React from "react";
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@nextui-org/react";
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Link } from "@nextui-org/react";
 import { ChevronDown, Lock, Activity, Flash, Server, TagUser, Scale } from "@/components/icons";
 
 export default function DashboardMenu() {
@@ -13,6 +13,7 @@ export default function DashboardMenu() {
     server: <Server className="text-success" fill="currentColor" size={30} />,
     user: <TagUser className="text-danger" fill="currentColor" size={30} />,
   };
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   return (
     <Dropdown>
@@ -23,6 +24,7 @@ export default function DashboardMenu() {
           radius="sm"
           variant="light"
           endContent={icons.chevron}
+          isDisabled={!user.email}
         >
           Dashboard
         </Button>
@@ -32,6 +34,7 @@ export default function DashboardMenu() {
           key="home"
           description="See your dashboard home page."
           startContent={icons.activity}
+          href="/dashboard"
         >
           Home
         </DropdownItem>
@@ -39,6 +42,7 @@ export default function DashboardMenu() {
           key="projects"
           description="Get a list of your projects and their status."
           startContent={icons.server}
+          href="/dashboard/projects"
         >
           Projects
         </DropdownItem>
@@ -46,6 +50,7 @@ export default function DashboardMenu() {
           key="flows"
           description="See all your flows and their details."
           startContent={icons.flash}
+          href="/dashboard/flows"
         >
           Flows
         </DropdownItem>
