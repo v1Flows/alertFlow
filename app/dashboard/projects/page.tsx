@@ -1,9 +1,7 @@
-import { title } from "@/components/primitives";
+import { ProjectsList } from "@/components/dashboard/projects/list";
 
 export default function DashboardProjectsPage() {
   return (
-    <div>
-      <h1 className={title()}>Dashboard Projects Page</h1>
-    </div>
+    <ProjectsList />
   );
 }
