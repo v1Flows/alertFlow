@@ -18,18 +18,17 @@ import {
   Link,
 } from "@nextui-org/react";
 
-import Logout from "./logout";
-
+import { Logout } from "@/lib/logout";
 import { MailIcon, LockIcon, LoginIcon } from "@/components/icons";
 import { setSession } from "@/lib/setSession";
 
-export default function Login() {
+export default function Login(user: any) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoginLoading, setIsLoginLoading] = useState(false);
 
   const iconClasses =
     "text-xl text-default-500 pointer-events-none flex-shrink-0";
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const userData = user.user;
 
   async function onLogin() {
     setIsLoginLoading(true);
@@ -60,9 +59,6 @@ export default function Login() {
 
     setSession(token, user, expires_at);
 
-    localStorage.setItem("token", token);
-    localStorage.setItem("user", JSON.stringify(user));
-
     if (token) {
       setIsLoginLoading(false);
       onOpenChange();
@@ -72,9 +68,13 @@ export default function Login() {
     }
   }
 
+  async function LogoutHandler() {
+    await Logout();
+  }
+
   return (
     <>
-      {user.username && (
+      {userData.username && (
         <Dropdown>
           <DropdownTrigger>
             <Avatar
@@ -82,7 +82,7 @@ export default function Login() {
               as="button"
               className="transition-transform"
               color="secondary"
-              name={user.username}
+              name={userData.username}
               size="sm"
             />
           </DropdownTrigger>
@@ -97,14 +97,14 @@ export default function Login() {
               key="logout"
               className="text-danger"
               color="danger"
-              onPress={Logout}
+              onPress={LogoutHandler}
             >
               Logout
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
       )}
-      {!user.username && (
+      {!userData.username && (
         <>
           <Button
             color="primary"
@@ -127,7 +127,6 @@ export default function Login() {
                   </ModalHeader>
                   <ModalBody>
                     <Input
-                      autoFocus
                       required
                       endContent={
                         <MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />

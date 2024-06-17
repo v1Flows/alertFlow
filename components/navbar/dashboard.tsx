@@ -18,7 +18,9 @@ import {
   Scale,
 } from "@/components/icons";
 
-export default function DashboardMenu() {
+export default function DashboardMenu(user: any) {
+  const userData = user.user;
+
   const icons = {
     chevron: <ChevronDown fill="currentColor" size={16} />,
     scale: <Scale className="text-warning" fill="currentColor" size={30} />,
@@ -30,7 +32,6 @@ export default function DashboardMenu() {
     server: <Server className="text-success" fill="currentColor" size={30} />,
     user: <TagUser className="text-danger" fill="currentColor" size={30} />,
   };
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   return (
     <Dropdown>
@@ -39,7 +40,7 @@ export default function DashboardMenu() {
           disableRipple
           className="p-0 bg-transparent data-[hover=true]:bg-transparent"
           endContent={icons.chevron}
-          isDisabled={!user.email}
+          isDisabled={!userData.email}
           radius="sm"
           variant="light"
         >

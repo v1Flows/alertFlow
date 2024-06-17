@@ -11,19 +11,17 @@ import {
 } from "@nextui-org/react";
 import { Kbd } from "@nextui-org/kbd";
 import { Input } from "@nextui-org/input";
+import { cookies } from "next/headers";
 
-import Login from "@/components/auth/login";
-
-import { siteConfig } from "@/config/site";
-import { ThemeSwitch } from "@/components/theme-switch";
-import {
-  GithubIcon,
-  SearchIcon,
-  Logo,
-} from "@/components/icons";
 import DashboardMenu from "./navbar/dashboard";
 
+import Login from "@/components/auth/login";
+import { ThemeSwitch } from "@/components/theme-switch";
+import { SearchIcon, Logo } from "@/components/icons";
+
 export const Navbar = () => {
+  const user = JSON.parse(cookies().get("user")?.value || "{}");
+
   const searchInput = (
     <Input
       aria-label="Search"
@@ -51,31 +49,25 @@ export const Navbar = () => {
         <Logo />
         <p className="font-bold text-inherit">AlertFlow</p>
       </NavbarBrand>
-      <NavbarContent className="hidden sm:flex basis-1/5 sm:basis-full" justify="start">
+      <NavbarContent
+        className="hidden sm:flex basis-1/5 sm:basis-full"
+        justify="start"
+      >
         <NavbarItem isActive>
-          <Link
-            href="/"
-            aria-current="page"
-          >
+          <Link aria-current="page" href="/">
             Home
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <DashboardMenu />
+          <DashboardMenu user={user} />
         </NavbarItem>
         <NavbarItem>
-          <Link
-            color="foreground"
-            href="/faq"
-          >
+          <Link color="foreground" href="/faq">
             FAQ
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link
-            color="foreground"
-            href="/support"
-          >
+          <Link color="foreground" href="/support">
             Support
           </Link>
         </NavbarItem>
@@ -89,7 +81,7 @@ export const Navbar = () => {
           <ThemeSwitch />
         </NavbarItem>
         <NavbarItem className="hidden sm:flex">
-          <Login />
+          <Login user={user} />
         </NavbarItem>
       </NavbarContent>
 
@@ -100,10 +92,7 @@ export const Navbar = () => {
 
       <NavbarMenu>
         <NavbarMenuItem>
-          <Link
-            color="foreground"
-            href="/"
-          >
+          <Link color="foreground" href="/">
             Home
           </Link>
         </NavbarMenuItem>
@@ -111,18 +100,12 @@ export const Navbar = () => {
           <DashboardMenu />
         </NavbarMenuItem>
         <NavbarMenuItem>
-          <Link
-            color="foreground"
-            href="/faq"
-          >
+          <Link color="foreground" href="/faq">
             FAQ
           </Link>
         </NavbarMenuItem>
         <NavbarMenuItem>
-          <Link
-            color="foreground"
-            href="/support"
-          >
+          <Link color="foreground" href="/support">
             Support
           </Link>
         </NavbarMenuItem>
