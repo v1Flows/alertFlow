@@ -1,25 +1,49 @@
-'use client'
+"use client";
 import React, { useState } from "react";
-import { User, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Checkbox, Input, Link, cn } from "@nextui-org/react";
-import { MailIcon, LockIcon, LoginIcon, AddNoteIcon, CopyDocumentIcon, EditDocumentIcon, DeleteDocumentIcon } from '@/components/icons';
+import {
+  Avatar,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  useDisclosure,
+  Checkbox,
+  Input,
+  Link,
+} from "@nextui-org/react";
+
 import Logout from "./logout";
+
+import { MailIcon, LockIcon, LoginIcon } from "@/components/icons";
+import { setSession } from "@/lib/setSession";
 
 export default function Login() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoginLoading, setIsLoginLoading] = useState(false);
 
-  const iconClasses = "text-xl text-default-500 pointer-events-none flex-shrink-0";
+  const iconClasses =
+    "text-xl text-default-500 pointer-events-none flex-shrink-0";
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   async function onLogin() {
     setIsLoginLoading(true);
-    const emailInput = document.getElementsByName("email")[0] as HTMLInputElement;
+    const emailInput = document.getElementsByName(
+      "email",
+    )[0] as HTMLInputElement;
     const email = emailInput.value;
 
-    const passwordInput = document.getElementsByName("password")[0] as HTMLInputElement;
+    const passwordInput = document.getElementsByName(
+      "password",
+    )[0] as HTMLInputElement;
     const password = passwordInput.value;
 
-    const response = await fetch("http://localhost:8080/api/token", {
+    const response = await fetch("http://localhost:8080/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -32,14 +56,16 @@ export default function Login() {
 
     if (!response) return;
 
-    const { token, user } = await response.json();
+    const { token, user, expires_at } = await response.json();
+
+    setSession(token, user, expires_at);
 
     localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(user));
 
     if (token) {
       setIsLoginLoading(false);
-      onOpenChange()
+      onOpenChange();
     } else {
       setIsLoginLoading(false);
       alert("Invalid credentials");
@@ -51,30 +77,26 @@ export default function Login() {
       {user.username && (
         <Dropdown>
           <DropdownTrigger>
-            <User   
+            <Avatar
+              isBordered
+              as="button"
+              className="transition-transform"
+              color="secondary"
               name={user.username}
-              description={user.email}
-              avatarProps={{
-                name: user.username
-              }}
-              className="hover:cursor-pointer hover:opacity-80"
+              size="sm"
             />
           </DropdownTrigger>
-          <DropdownMenu variant="faded" aria-label="Dropdown menu with description">
-            <DropdownItem
-              key="new"
-              description="Go to your profile"
-              showDivider
-              startContent={<AddNoteIcon className={iconClasses} />}
-            >
+          <DropdownMenu
+            aria-label="Dropdown menu with description"
+            variant="faded"
+          >
+            <DropdownItem key="profile" showDivider>
               Profile
             </DropdownItem>
             <DropdownItem
-              key="delete"
+              key="logout"
               className="text-danger"
               color="danger"
-              description="Log out of your account"
-              startContent={<DeleteDocumentIcon className={cn(iconClasses, "text-danger")} />}
               onPress={Logout}
             >
               Logout
@@ -85,45 +107,47 @@ export default function Login() {
       {!user.username && (
         <>
           <Button
-            startContent={<LoginIcon className="text-danger" />}
-            onPress={onOpen}
             color="primary"
+            startContent={<LoginIcon className="text-danger" />}
             variant="flat"
+            onPress={onOpen}
           >
             Login
           </Button>
           <Modal
             isOpen={isOpen}
-            onOpenChange={onOpenChange}
             placement="top-center"
+            onOpenChange={onOpenChange}
           >
             <ModalContent>
               {(onClose: any) => (
                 <>
-                  <ModalHeader className="flex flex-col gap-1">Log in</ModalHeader>
+                  <ModalHeader className="flex flex-col gap-1">
+                    Log in
+                  </ModalHeader>
                   <ModalBody>
                     <Input
                       autoFocus
+                      required
                       endContent={
                         <MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
                       }
                       label="Email"
-                      placeholder="Enter your email"
-                      variant="bordered"
-                      type="email"
-                      required
                       name="email"
+                      placeholder="Enter your email"
+                      type="email"
+                      variant="bordered"
                     />
                     <Input
+                      required
                       endContent={
                         <LockIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
                       }
                       label="Password"
+                      name="password"
                       placeholder="Enter your password"
                       type="password"
                       variant="bordered"
-                      required
-                      name="password"
                     />
                     <div className="flex py-2 px-1 justify-between">
                       <Checkbox
@@ -142,7 +166,11 @@ export default function Login() {
                     <Button color="danger" variant="flat" onPress={onClose}>
                       Close
                     </Button>
-                    <Button isLoading={isLoginLoading} color="primary" onPress={onLogin}>
+                    <Button
+                      color="primary"
+                      isLoading={isLoginLoading}
+                      onPress={onLogin}
+                    >
                       Sign in
                     </Button>
                   </ModalFooter>
