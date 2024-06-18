@@ -1,11 +1,8 @@
 import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
 
-import { ProjectsList } from "@/components/dashboard/projects/list";
-import GetProjects from "@/lib/fetch/project/all";
+import { Project } from "@/components/dashboard/projects/project";
 
-export default async function DashboardProjectsPage() {
-  const projects = await GetProjects();
-
+export default function DashboardProjectPage({ params }: { params: { id: string } }) {
   return (
     <>
       <Breadcrumbs>
@@ -15,7 +12,7 @@ export default async function DashboardProjectsPage() {
         <BreadcrumbItem>Album</BreadcrumbItem>
         <BreadcrumbItem>Song</BreadcrumbItem>
       </Breadcrumbs>
-      <ProjectsList projects={projects} />
+      <Project id={params.id} />
     </>
   );
 }
