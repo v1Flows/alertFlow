@@ -1,14 +1,8 @@
 import React from "react";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  Divider,
-  Avatar,
-  AvatarGroup,
-} from "@nextui-org/react";
+import { Card, CardHeader, CardBody, Divider } from "@nextui-org/react";
 
 import ProjectTabs from "./tabs";
+import ProjectBreadcrumbs from "./breadcrumbs";
 
 import {
   PlayCircleIcon,
@@ -21,7 +15,6 @@ import { subtitle } from "@/components/primitives";
 import GetProject from "@/lib/fetch/project/data";
 import GetProjectRunners from "@/lib/fetch/project/runners";
 import GetProjectApiKeys from "@/lib/fetch/project/apiKeys";
-import ProjectBreadcrumbs from "./breadcrumbs";
 
 export async function Project({ id }: any) {
   const data = await GetProject(id);
@@ -47,15 +40,9 @@ export async function Project({ id }: any) {
                 <p className="text-md font-bold">Members</p>
               </CardHeader>
               <CardBody>
-                <AvatarGroup isBordered>
-                  {data.members.map((member: any) => (
-                    <Avatar
-                      key={member.email}
-                      color={member.role === "Owner" ? "danger" : "secondary"}
-                      name={member.email}
-                    />
-                  ))}
-                </AvatarGroup>
+                <p className="text-default-500 font-bold">
+                  {data.members.length}
+                </p>
               </CardBody>
             </Card>
           </div>
@@ -68,7 +55,7 @@ export async function Project({ id }: any) {
                 <p className="text-md font-bold">Runners</p>
               </CardHeader>
               <CardBody>
-                <span>{runners.length}</span>
+                <p className="text-default-500 font-bold">{runners.length}</p>
               </CardBody>
             </Card>
           </div>
@@ -81,7 +68,7 @@ export async function Project({ id }: any) {
                 <p className="text-md font-bold">API Keys</p>
               </CardHeader>
               <CardBody>
-                <span>{apiKeys.length}</span>
+                <p className="text-default-500 font-bold">{apiKeys.length}</p>
               </CardBody>
             </Card>
           </div>
@@ -94,18 +81,16 @@ export async function Project({ id }: any) {
                 <p className="text-md font-bold">Created At</p>
               </CardHeader>
               <CardBody>
-                <span>{new Date(data.created_at).toLocaleString()}</span>
+                <p className="text-default-500 font-bold">
+                  {new Date(data.created_at).toLocaleString()}
+                </p>
               </CardBody>
             </Card>
           </div>
         </div>
       </div>
       <div className="w-full mt-6">
-        <Card>
-          <CardHeader>
-            <ProjectTabs apiKeys={apiKeys} project={data} runners={runners} />
-          </CardHeader>
-        </Card>
+        <ProjectTabs apiKeys={apiKeys} project={data} runners={runners} />
       </div>
     </main>
   );
