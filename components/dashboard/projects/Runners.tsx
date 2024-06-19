@@ -49,8 +49,25 @@ export default function Runners({ runners }: any) {
           (runner: any) =>
             runner.alertflow_runner === true && (
               <Card key={runner.id}>
-                <CardHeader>{runner.name}</CardHeader>
-                <CardBody>{runner.name}</CardBody>
+                <CardHeader>
+                  <div>
+                    <p className="text-md">{runner.name}</p>
+                    <p className="text-sm text-default-500">{runner.id}</p>
+                  </div>
+                </CardHeader>
+                <Divider />
+                <CardBody>
+                  <div className="grid grid-cols-2 grid-rows-3 items-center justify-center">
+                    <p className="text-sm font-bold">Version:</p>
+                    <p>{runner.runner_version}</p>
+                    <p className="text-sm font-bold">Active:</p>
+                    <p>{runner.active ? "Yes" : "No"}</p>
+                    <p className="text-sm font-bold">Last Heartbeat:</p>
+                    <p>
+                      {new Date(runner.last_heartbeat.Time).toLocaleString()}
+                    </p>
+                  </div>
+                </CardBody>
               </Card>
             ),
         )}
