@@ -7,14 +7,21 @@ import {
   Avatar,
   AvatarGroup,
 } from "@nextui-org/react";
-import { Users, Play, KeySquare, PencilRuler } from "lucide-react";
 
 import ProjectTabs from "./tabs";
 
+import {
+  PlayCircleIcon,
+  UsersIcon,
+  TagIcon,
+  CalendarIcon,
+} from "@/components/icons";
+import { IconWrapper } from "@/lib/IconWrapper";
 import { subtitle } from "@/components/primitives";
 import GetProject from "@/lib/fetch/project/data";
 import GetProjectRunners from "@/lib/fetch/project/runners";
 import GetProjectApiKeys from "@/lib/fetch/project/apiKeys";
+import ProjectBreadcrumbs from "./breadcrumbs";
 
 export async function Project({ id }: any) {
   const data = await GetProject(id);
@@ -23,16 +30,20 @@ export async function Project({ id }: any) {
 
   return (
     <main>
+      <ProjectBreadcrumbs id={id} />
       <h1 className={subtitle()} style={{ color: "violet" }}>
         {id}
       </h1>
+      <p className="text-sm text-default-500">{data.description}</p>
       <Divider className="mb-4" />
       <div>
         <div className="grid grid-cols-4 gap-2">
           <div className="col-span-1">
             <Card fullWidth>
-              <CardHeader className="justify-start gap-3 items-center">
-                <Avatar icon={<Users color="black" />} radius="sm" size="sm" />
+              <CardHeader className="justify-start gap-2 items-center">
+                <IconWrapper className="bg-primary/10 text-primary">
+                  <UsersIcon className="text-lg" />
+                </IconWrapper>
                 <p className="text-md font-bold">Members</p>
               </CardHeader>
               <CardBody>
@@ -50,8 +61,10 @@ export async function Project({ id }: any) {
           </div>
           <div className="col-span-1">
             <Card fullWidth>
-              <CardHeader className="justify-start gap-3 items-center">
-                <Avatar icon={<Play color="black" />} radius="sm" size="sm" />
+              <CardHeader className="justify-start gap-2 items-center">
+                <IconWrapper className="bg-warning/10 text-warning">
+                  <PlayCircleIcon className="text-lg" />
+                </IconWrapper>
                 <p className="text-md font-bold">Runners</p>
               </CardHeader>
               <CardBody>
@@ -61,12 +74,10 @@ export async function Project({ id }: any) {
           </div>
           <div className="col-span-1">
             <Card fullWidth>
-              <CardHeader className="justify-start gap-3 items-center">
-                <Avatar
-                  icon={<KeySquare color="black" />}
-                  radius="sm"
-                  size="sm"
-                />
+              <CardHeader className="justify-start gap-2 items-center">
+                <IconWrapper className="bg-default/50 text-foreground">
+                  <TagIcon className="text-lg" />
+                </IconWrapper>
                 <p className="text-md font-bold">API Keys</p>
               </CardHeader>
               <CardBody>
@@ -76,12 +87,10 @@ export async function Project({ id }: any) {
           </div>
           <div className="col-span-1">
             <Card fullWidth>
-              <CardHeader className="justify-start gap-3 items-center">
-                <Avatar
-                  icon={<PencilRuler color="black" />}
-                  radius="sm"
-                  size="sm"
-                />
+              <CardHeader className="justify-start gap-2 items-center">
+                <IconWrapper className="bg-secondary/10 text-secondary">
+                  <CalendarIcon className="text-lg" />
+                </IconWrapper>
                 <p className="text-md font-bold">Created At</p>
               </CardHeader>
               <CardBody>
