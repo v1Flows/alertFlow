@@ -1,5 +1,23 @@
-import { Card, CardHeader, CardBody, Divider, Chip, Button } from "@nextui-org/react";
-import { PlusIcon } from "@/components/icons";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Divider,
+  Chip,
+  Button,
+  Dropdown,
+  DropdownSection,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+} from "@nextui-org/react";
+
+import {
+  PlusIcon,
+  VerticalDotsIcon,
+  EditDocumentIcon,
+  DeleteDocumentIcon,
+} from "@/components/icons";
 
 export default function Runners({ runners }: any) {
   return (
@@ -21,13 +39,40 @@ export default function Runners({ runners }: any) {
                     <p className="text-md">{runner.name}</p>
                     <p className="text-sm text-default-500">{runner.id}</p>
                   </div>
-                  <Chip
-                    color={runner.registered ? "success" : "danger"}
-                    size="sm"
-                    variant="dot"
-                  >
-                    {runner.registered ? "Registered" : "Unregistered"}
-                  </Chip>
+                  <div className="flex items-center gap-2">
+                    <Chip
+                      color={runner.registered ? "success" : "danger"}
+                      size="sm"
+                      variant="dot"
+                    >
+                      {runner.registered ? "Registered" : "Unregistered"}
+                    </Chip>
+                    <div className="relative flex justify-end items-center gap-2">
+                      <Dropdown backdrop="opaque">
+                        <DropdownTrigger>
+                          <Button isIconOnly size="sm" variant="light">
+                            <VerticalDotsIcon className="text-default-300" />
+                          </Button>
+                        </DropdownTrigger>
+                        <DropdownMenu>
+                          <DropdownSection title="Actions" showDivider>
+                            <DropdownItem startContent={<EditDocumentIcon />}>
+                              Edit
+                            </DropdownItem>
+                          </DropdownSection>
+                          <DropdownSection title="Danger zone">
+                            <DropdownItem
+                              className="text-danger"
+                              color="danger"
+                              startContent={<DeleteDocumentIcon />}
+                            >
+                              Delete
+                            </DropdownItem>
+                          </DropdownSection>
+                        </DropdownMenu>
+                      </Dropdown>
+                    </div>
+                  </div>
                 </CardHeader>
                 <Divider />
                 <CardBody>
