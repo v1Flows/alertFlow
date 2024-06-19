@@ -19,7 +19,7 @@ import {
   DeleteDocumentIcon,
 } from "@/components/icons";
 
-export default function Runners({ runners }: any) {
+export default function Runners({ runners, project }: any) {
   return (
     <main>
       <div className="flex items-center justify-between mb-4">
@@ -55,7 +55,7 @@ export default function Runners({ runners }: any) {
                           </Button>
                         </DropdownTrigger>
                         <DropdownMenu>
-                          <DropdownSection title="Actions" showDivider>
+                          <DropdownSection showDivider title="Actions">
                             <DropdownItem startContent={<EditDocumentIcon />}>
                               Edit
                             </DropdownItem>
@@ -91,36 +91,50 @@ export default function Runners({ runners }: any) {
             ),
         )}
       </div>
-      <p className="text-lg font-bold mt-4">AlertFlow Runners</p>
+
+      <p className="text-lg font-bold mt-4 mb-4">AlertFlow Runners</p>
       <Divider className="mb-4" />
-      <div className="grid grid-cols-2 gap-4">
-        {runners.map(
-          (runner: any) =>
-            runner.alertflow_runner === true && (
-              <Card key={runner.id}>
-                <CardHeader>
-                  <div>
-                    <p className="text-md">{runner.name}</p>
-                    <p className="text-sm text-default-500">{runner.id}</p>
-                  </div>
-                </CardHeader>
-                <Divider />
-                <CardBody>
-                  <div className="grid grid-cols-2 grid-rows-3 items-center justify-center">
-                    <p className="text-sm font-bold">Version:</p>
-                    <p>{runner.runner_version}</p>
-                    <p className="text-sm font-bold">Active:</p>
-                    <p>{runner.active ? "Yes" : "No"}</p>
-                    <p className="text-sm font-bold">Last Heartbeat:</p>
-                    <p>
-                      {new Date(runner.last_heartbeat.Time).toLocaleString()}
-                    </p>
-                  </div>
-                </CardBody>
-              </Card>
-            ),
-        )}
-      </div>
+      {project.alertflow_runners === true && (
+        <div>
+          <div className="grid grid-cols-2 gap-4">
+            {runners.map(
+              (runner: any) =>
+                runner.alertflow_runner === true && (
+                  <Card key={runner.id}>
+                    <CardHeader>
+                      <div>
+                        <p className="text-md">{runner.name}</p>
+                        <p className="text-sm text-default-500">{runner.id}</p>
+                      </div>
+                    </CardHeader>
+                    <Divider />
+                    <CardBody>
+                      <div className="grid grid-cols-2 grid-rows-3 items-center justify-center">
+                        <p className="text-sm font-bold">Version:</p>
+                        <p>{runner.runner_version}</p>
+                        <p className="text-sm font-bold">Active:</p>
+                        <p>{runner.active ? "Yes" : "No"}</p>
+                        <p className="text-sm font-bold">Last Heartbeat:</p>
+                        <p>
+                          {new Date(
+                            runner.last_heartbeat.Time,
+                          ).toLocaleString()}
+                        </p>
+                      </div>
+                    </CardBody>
+                  </Card>
+                ),
+            )}
+          </div>
+        </div>
+      )}
+      {project.alertflow_runners === false && (
+        <div>
+          <p className="text-sm text-default-500 font-bold mt-4 mb-4">
+            AlertFlow runners are disabled
+          </p>
+        </div>
+      )}
     </main>
   );
 }

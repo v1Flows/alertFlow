@@ -33,7 +33,7 @@ export default function ProjectTabs({ project, runners, apiKeys }: any) {
               </div>
             }
           >
-            <Runners runners={runners} />
+            <Runners runners={runners} project={project} />
           </Tab>
           <Tab
             key="videos"
@@ -44,7 +44,7 @@ export default function ProjectTabs({ project, runners, apiKeys }: any) {
               </div>
             }
           >
-            <ProjectAPIKeys apiKeys={apiKeys} />
+            <ProjectAPIKeys apiKeys={apiKeys} project={project} />
           </Tab>
         </Tabs>
       </div>

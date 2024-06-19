@@ -8,15 +8,12 @@ import {
   TableCell,
   Tooltip,
   Snippet,
-  Button,
 } from "@nextui-org/react";
+import { Toaster, toast } from "sonner";
 
-import {
-  EditIcon,
-  DeleteIcon,
-  CopyDocumentIcon,
-  PlusIcon,
-} from "@/components/icons";
+import AddAPIKeyModal from "./project/AddAPIKey";
+
+import { EditIcon, DeleteIcon, CopyDocumentIcon } from "@/components/icons";
 
 const statusColorMap = {
   Owner: "danger",
@@ -24,7 +21,12 @@ const statusColorMap = {
   Viewer: "default",
 };
 
-export default function ProjectAPIKeys({ apiKeys }: any) {
+export default function ProjectAPIKeys({ apiKeys, project }: any) {
+  const copyAPIKeytoClipboard = (key: string) => {
+    navigator.clipboard.writeText(key);
+    toast.success("Copied to clipboard!");
+  };
+
   const renderCell = React.useCallback((key, columnKey) => {
     const cellValue = key[columnKey];
 
@@ -36,7 +38,11 @@ export default function ProjectAPIKeys({ apiKeys }: any) {
           <div className="relative flex items-center justify-center gap-2">
             <Tooltip content="Copy API Key">
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <CopyDocumentIcon />
+                <CopyDocumentIcon
+                  onClick={() => {
+                    copyAPIKeytoClipboard(key.key);
+                  }}
+                />
               </span>
             </Tooltip>
             <Tooltip content="Edit API Key">
@@ -51,6 +57,8 @@ export default function ProjectAPIKeys({ apiKeys }: any) {
             </Tooltip>
           </div>
         );
+      case "created_at":
+        return new Date(key.created_at).toLocaleString();
       default:
         return cellValue;
     }
@@ -59,15 +67,14 @@ export default function ProjectAPIKeys({ apiKeys }: any) {
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col items-end justify-center gap-4">
-        <Button color="primary" endContent={<PlusIcon />}>
-          Add New
-        </Button>
+        <AddAPIKeyModal projectID={project.id} />
       </div>
     );
   });
 
   return (
     <div>
+      <Toaster richColors position="bottom-center" />
       <Table
         aria-label="Example table with custom cells"
         topContent={topContent}
@@ -86,7 +93,14 @@ export default function ProjectAPIKeys({ apiKeys }: any) {
             ACTIONS
           </TableColumn>
         </TableHeader>
-        <TableBody emptyContent={"No rows to display."} items={apiKeys}>
+        <TableBody
+          emptyContent={"No rows to display."}
+          items={apiKeys.sort(
+            (a, b) =>
+              new Date(b.created_at).getTime() -
+              new Date(a.created_at).getTime(),
+          )}
+        >
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (

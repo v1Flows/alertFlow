@@ -3,6 +3,7 @@ import { Card, CardHeader, CardBody, Divider } from "@nextui-org/react";
 
 import ProjectTabs from "./tabs";
 import ProjectBreadcrumbs from "./breadcrumbs";
+import EditProjectModal from "./project/Edit";
 
 import {
   PlayCircleIcon,
@@ -24,13 +25,18 @@ export async function Project({ id }: any) {
   return (
     <main>
       <ProjectBreadcrumbs id={id} />
-      <h1 className={subtitle()} style={{ color: "violet" }}>
-        {id}
-      </h1>
-      <p className="text-sm text-default-500">{data.description}</p>
+      <div className="flex items-center justify-between mb-4 mt-2">
+        <div>
+          <h1 className={subtitle()} style={{ color: "violet" }}>
+            {data.name}
+          </h1>
+          <p className="text-sm text-default-500">{data.description}</p>
+        </div>
+        <EditProjectModal project={data} />
+      </div>
       <Divider className="mb-4" />
       <div>
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-4 gap-4">
           <div className="col-span-1">
             <Card fullWidth>
               <CardHeader className="justify-start gap-2 items-center">
@@ -55,7 +61,16 @@ export async function Project({ id }: any) {
                 <p className="text-md font-bold">Runners</p>
               </CardHeader>
               <CardBody>
-                <p className="text-default-500 font-bold">{runners.length}</p>
+                {data.alertflow_runners ? (
+                  <p className="text-default-500 font-bold">{runners.length}</p>
+                ) : (
+                  <p className="text-default-500 font-bold">
+                    {
+                      runners.filter((r: any) => r.alertflow_runner === false)
+                        .length
+                    }
+                  </p>
+                )}
               </CardBody>
             </Card>
           </div>
