@@ -6,12 +6,11 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  User,
   Tooltip,
-  Chip,
+  Snippet,
 } from "@nextui-org/react";
 
-import { EditIcon, DeleteIcon, EyeIcon } from "@/components/icons";
+import { EditIcon, DeleteIcon, CopyDocumentIcon } from "@/components/icons";
 
 const statusColorMap = {
   Owner: "danger",
@@ -19,40 +18,27 @@ const statusColorMap = {
   Viewer: "default",
 };
 
-export default function ProjectMembers({ members }: any) {
-  const renderCell = React.useCallback((user, columnKey) => {
-    const cellValue = user[columnKey];
+export default function ProjectAPIKeys({ apiKeys }: any) {
+  const renderCell = React.useCallback((key, columnKey) => {
+    const cellValue = key[columnKey];
 
     switch (columnKey) {
-      case "name":
-        return (
-          <User
-            avatarProps={{ radius: "lg", name: user.email }}
-            name={user.email}
-          >
-            {user.email}
-          </User>
-        );
-      case "role":
-        return (
-          <Chip
-            className="capitalize"
-            color={statusColorMap[user.role]}
-            size="sm"
-            variant="flat"
-          >
-            {cellValue}
-          </Chip>
-        );
+      case "key":
+        return <Snippet>{key.key}</Snippet>;
       case "actions":
         return (
           <div className="relative flex items-center justify-center gap-2">
-            <Tooltip content="Edit user">
+            <Tooltip content="Copy API Key">
+              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                <CopyDocumentIcon />
+              </span>
+            </Tooltip>
+            <Tooltip content="Edit API Key">
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <EditIcon />
               </span>
             </Tooltip>
-            <Tooltip color="danger" content="Delete user">
+            <Tooltip color="danger" content="Delete API Key">
               <span className="text-lg text-danger cursor-pointer active:opacity-50">
                 <DeleteIcon />
               </span>
@@ -67,19 +53,22 @@ export default function ProjectMembers({ members }: any) {
   return (
     <Table aria-label="Example table with custom cells">
       <TableHeader>
-        <TableColumn key="name" align="start">
-          NAME
+        <TableColumn key="id" align="start">
+          ID
         </TableColumn>
-        <TableColumn key="role" align="start">
-          ROLE
+        <TableColumn key="description" align="start">
+          DESCRIPTION
+        </TableColumn>
+        <TableColumn key="created_at" align="start">
+          CREATED AT
         </TableColumn>
         <TableColumn key="actions" align="center">
           ACTIONS
         </TableColumn>
       </TableHeader>
-      <TableBody items={members}>
+      <TableBody items={apiKeys}>
         {(item) => (
-          <TableRow key={item.email}>
+          <TableRow key={item.id}>
             {(columnKey) => (
               <TableCell>{renderCell(item, columnKey)}</TableCell>
             )}

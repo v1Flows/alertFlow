@@ -5,8 +5,11 @@ import { Tabs, Tab } from "@nextui-org/react";
 import ProjectMembers from "./UserTable";
 
 import { PlayCircleIcon, UsersIcon, TagIcon } from "@/components/icons";
+import ProjectAPIKeys from "./APIKeysTable";
 
 export default function ProjectTabs({ project, runners, apiKeys }: any) {
+  console.log(apiKeys);
+
   return (
     <main>
       <div className="flex w-full flex-col">
@@ -39,7 +42,9 @@ export default function ProjectTabs({ project, runners, apiKeys }: any) {
                 <span>API Keys</span>
               </div>
             }
-          />
+          >
+            <ProjectAPIKeys apiKeys={apiKeys} />
+          </Tab>
         </Tabs>
       </div>
     </main>
