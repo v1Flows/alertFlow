@@ -9,7 +9,7 @@ import {
   User,
   Tooltip,
   Chip,
-  Button
+  Button,
 } from "@nextui-org/react";
 
 import { EditIcon, DeleteIcon, PlusIcon } from "@/components/icons";
@@ -21,7 +21,7 @@ const statusColorMap = {
 };
 
 export default function ProjectMembers({ members }: any) {
-  const renderCell = React.useCallback((user, columnKey) => {
+  const renderCell = React.useCallback((user: any, columnKey: any) => {
     const cellValue = user[columnKey];
 
     switch (columnKey) {
@@ -73,7 +73,7 @@ export default function ProjectMembers({ members }: any) {
         </Button>
       </div>
     );
-  });
+  }, []);
 
   return (
     <Table aria-label="Example table with custom cells" topContent={topContent}>
@@ -88,8 +88,8 @@ export default function ProjectMembers({ members }: any) {
           ACTIONS
         </TableColumn>
       </TableHeader>
-      <TableBody items={members} emptyContent={"No rows to display."}>
-        {(item) => (
+      <TableBody emptyContent={"No rows to display."} items={members}>
+        {(item: any) => (
           <TableRow key={item.email}>
             {(columnKey) => (
               <TableCell>{renderCell(item, columnKey)}</TableCell>

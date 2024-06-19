@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 "use client";
 import React, { useState } from "react";
 import {
@@ -26,8 +27,6 @@ export default function Login(user: any) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoginLoading, setIsLoginLoading] = useState(false);
 
-  const iconClasses =
-    "text-xl text-default-500 pointer-events-none flex-shrink-0";
   const userData = user.user;
 
   async function onLogin() {

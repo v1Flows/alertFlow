@@ -1,4 +1,3 @@
-
 import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
 
 import { ProjectsList } from "@/components/dashboard/projects/list";

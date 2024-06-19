@@ -1,10 +1,6 @@
 import React from "react";
 import { Card, CardHeader, CardBody, Divider } from "@nextui-org/react";
 
-import ProjectTabs from "./tabs";
-import ProjectBreadcrumbs from "./breadcrumbs";
-import EditProjectModal from "./project/Edit";
-
 import {
   PlayCircleIcon,
   UsersIcon,
@@ -16,6 +12,10 @@ import { subtitle } from "@/components/primitives";
 import GetProject from "@/lib/fetch/project/data";
 import GetProjectRunners from "@/lib/fetch/project/runners";
 import GetProjectApiKeys from "@/lib/fetch/project/apiKeys";
+
+import EditProjectModal from "./project/Edit";
+import ProjectBreadcrumbs from "./breadcrumbs";
+import ProjectTabs from "./tabs";
 
 export async function Project({ id }: any) {
   const data = await GetProject(id);

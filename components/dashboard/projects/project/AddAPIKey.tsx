@@ -31,10 +31,10 @@ export default function AddAPIKeyModal({ projectID }: any) {
     if (response.result === "success") {
       setDescription("");
       onOpenChange();
+      // eslint-disable-next-line no-undef
       window.location.reload();
     } else {
       console.log(response);
-      alert("Something went wrong");
     }
 
     setIsLoginLoading(false);

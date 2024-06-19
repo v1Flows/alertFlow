@@ -1,8 +1,8 @@
 "use server";
 import { cookies } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export async function updateSession(request: NextRequest) {
+export async function updateSession() {
   const session = cookies().get("session")?.value;
 
   if (!session) return;

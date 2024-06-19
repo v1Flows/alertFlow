@@ -14,9 +14,7 @@ export default function Home() {
         <h1 className={title()}>Make&nbsp;</h1>
         <h1 className={title({ color: "violet" })}>AlertFlow&nbsp;</h1>
         <br />
-        <h1 className={title()}>
-          your personal Monitoring Assistant.
-        </h1>
+        <h1 className={title()}>your personal Monitoring Assistant.</h1>
         <h2 className={subtitle({ class: "mt-4" })}>
           Beautiful, fast and modern React UI library.
         </h2>

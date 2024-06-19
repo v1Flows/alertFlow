@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React from "react";
 import {
   Table,
@@ -11,15 +12,9 @@ import {
 } from "@nextui-org/react";
 import { Toaster, toast } from "sonner";
 
-import AddAPIKeyModal from "./project/AddAPIKey";
-
 import { EditIcon, DeleteIcon, CopyDocumentIcon } from "@/components/icons";
 
-const statusColorMap = {
-  Owner: "danger",
-  Editor: "primary",
-  Viewer: "default",
-};
+import AddAPIKeyModal from "./project/AddAPIKey";
 
 export default function ProjectAPIKeys({ apiKeys, project }: any) {
   const copyAPIKeytoClipboard = (key: string) => {
@@ -27,7 +22,7 @@ export default function ProjectAPIKeys({ apiKeys, project }: any) {
     toast.success("Copied to clipboard!");
   };
 
-  const renderCell = React.useCallback((key, columnKey) => {
+  const renderCell = React.useCallback((key: any, columnKey: any) => {
     const cellValue = key[columnKey];
 
     switch (columnKey) {
@@ -70,7 +65,7 @@ export default function ProjectAPIKeys({ apiKeys, project }: any) {
         <AddAPIKeyModal projectID={project.id} />
       </div>
     );
-  });
+  }, []);
 
   return (
     <div>
@@ -96,12 +91,12 @@ export default function ProjectAPIKeys({ apiKeys, project }: any) {
         <TableBody
           emptyContent={"No rows to display."}
           items={apiKeys.sort(
-            (a, b) =>
+            (a: any, b: any) =>
               new Date(b.created_at).getTime() -
               new Date(a.created_at).getTime(),
           )}
         >
-          {(item) => (
+          {(item: any) => (
             <TableRow key={item.id}>
               {(columnKey) => (
                 <TableCell>{renderCell(item, columnKey)}</TableCell>

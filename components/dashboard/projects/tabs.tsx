@@ -2,9 +2,9 @@
 import React from "react";
 import { Tabs, Tab } from "@nextui-org/react";
 
-import ProjectMembers from "./UserTable";
-
 import { PlayCircleIcon, UsersIcon, TagIcon } from "@/components/icons";
+
+import ProjectMembers from "./UserTable";
 import ProjectAPIKeys from "./APIKeysTable";
 import Runners from "./Runners";
 
@@ -33,7 +33,7 @@ export default function ProjectTabs({ project, runners, apiKeys }: any) {
               </div>
             }
           >
-            <Runners runners={runners} project={project} />
+            <Runners project={project} runners={runners} />
           </Tab>
           <Tab
             key="videos"
