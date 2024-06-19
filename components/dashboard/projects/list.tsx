@@ -39,7 +39,6 @@ export function ProjectsList({ projects }: any) {
               <CardBody>
                 <p>{project.description}</p>
               </CardBody>
-              <Divider />
               <CardFooter>
                 <p className="text-small text-default-500">
                   Created At: {new Date(project.created_at).toDateString()}

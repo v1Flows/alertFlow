@@ -6,10 +6,9 @@ import ProjectMembers from "./UserTable";
 
 import { PlayCircleIcon, UsersIcon, TagIcon } from "@/components/icons";
 import ProjectAPIKeys from "./APIKeysTable";
+import Runners from "./Runners";
 
 export default function ProjectTabs({ project, runners, apiKeys }: any) {
-  console.log(apiKeys);
-
   return (
     <main>
       <div className="flex w-full flex-col">
@@ -33,7 +32,9 @@ export default function ProjectTabs({ project, runners, apiKeys }: any) {
                 <span>Runners</span>
               </div>
             }
-          />
+          >
+            <Runners runners={runners} />
+          </Tab>
           <Tab
             key="videos"
             title={
