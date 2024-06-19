@@ -9,9 +9,10 @@ import {
   User,
   Tooltip,
   Chip,
+  Button
 } from "@nextui-org/react";
 
-import { EditIcon, DeleteIcon, EyeIcon } from "@/components/icons";
+import { EditIcon, DeleteIcon, PlusIcon } from "@/components/icons";
 
 const statusColorMap = {
   Owner: "danger",
@@ -64,8 +65,18 @@ export default function ProjectMembers({ members }: any) {
     }
   }, []);
 
+  const topContent = React.useMemo(() => {
+    return (
+      <div className="flex flex-col items-end justify-center gap-4">
+        <Button color="primary" endContent={<PlusIcon />}>
+          Add New
+        </Button>
+      </div>
+    );
+  });
+
   return (
-    <Table aria-label="Example table with custom cells">
+    <Table aria-label="Example table with custom cells" topContent={topContent}>
       <TableHeader>
         <TableColumn key="name" align="start">
           NAME
@@ -77,7 +88,7 @@ export default function ProjectMembers({ members }: any) {
           ACTIONS
         </TableColumn>
       </TableHeader>
-      <TableBody items={members}>
+      <TableBody items={members} emptyContent={"No rows to display."}>
         {(item) => (
           <TableRow key={item.email}>
             {(columnKey) => (

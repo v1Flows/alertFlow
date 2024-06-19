@@ -1,11 +1,15 @@
-import { Card, CardHeader, CardBody, Divider, Chip } from "@nextui-org/react";
+import { Card, CardHeader, CardBody, Divider, Chip, Button } from "@nextui-org/react";
+import { PlusIcon } from "@/components/icons";
 
 export default function Runners({ runners }: any) {
-  console.log(runners);
-
   return (
     <main>
-      <p className="text-lg font-bold">Selfhosted Runners</p>
+      <div className="flex items-center justify-between mb-4">
+        <p className="text-lg font-bold">Selfhosted Runners</p>
+        <Button color="primary" endContent={<PlusIcon />}>
+          Add New
+        </Button>
+      </div>
       <Divider className="mb-4" />
       <div className="grid grid-cols-2 gap-4">
         {runners.map(
@@ -28,12 +32,12 @@ export default function Runners({ runners }: any) {
                 <Divider />
                 <CardBody>
                   <div className="grid grid-cols-2 grid-rows-3 items-center justify-center">
-                    <p className="text-sm font-bold">Version:</p>
-                    <p>{runner.runner_version}</p>
-                    <p className="text-sm font-bold">Active:</p>
-                    <p>{runner.active ? "Yes" : "No"}</p>
-                    <p className="text-sm font-bold">Last Heartbeat:</p>
-                    <p>
+                    <p className="text-sm">Version:</p>
+                    <p className="text-sm">{runner.runner_version}</p>
+                    <p className="text-sm">Active:</p>
+                    <p className="text-sm">{runner.active ? "Yes" : "No"}</p>
+                    <p className="text-sm">Last Heartbeat:</p>
+                    <p className="text-sm">
                       {new Date(runner.last_heartbeat.Time).toLocaleString()}
                     </p>
                   </div>

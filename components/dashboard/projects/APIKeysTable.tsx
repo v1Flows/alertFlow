@@ -8,9 +8,15 @@ import {
   TableCell,
   Tooltip,
   Snippet,
+  Button,
 } from "@nextui-org/react";
 
-import { EditIcon, DeleteIcon, CopyDocumentIcon } from "@/components/icons";
+import {
+  EditIcon,
+  DeleteIcon,
+  CopyDocumentIcon,
+  PlusIcon,
+} from "@/components/icons";
 
 const statusColorMap = {
   Owner: "danger",
@@ -50,31 +56,46 @@ export default function ProjectAPIKeys({ apiKeys }: any) {
     }
   }, []);
 
+  const topContent = React.useMemo(() => {
+    return (
+      <div className="flex flex-col items-end justify-center gap-4">
+        <Button color="primary" endContent={<PlusIcon />}>
+          Add New
+        </Button>
+      </div>
+    );
+  });
+
   return (
-    <Table aria-label="Example table with custom cells">
-      <TableHeader>
-        <TableColumn key="id" align="start">
-          ID
-        </TableColumn>
-        <TableColumn key="description" align="start">
-          DESCRIPTION
-        </TableColumn>
-        <TableColumn key="created_at" align="start">
-          CREATED AT
-        </TableColumn>
-        <TableColumn key="actions" align="center">
-          ACTIONS
-        </TableColumn>
-      </TableHeader>
-      <TableBody items={apiKeys}>
-        {(item) => (
-          <TableRow key={item.id}>
-            {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
-            )}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+    <div>
+      <Table
+        aria-label="Example table with custom cells"
+        topContent={topContent}
+      >
+        <TableHeader>
+          <TableColumn key="id" align="start">
+            ID
+          </TableColumn>
+          <TableColumn key="description" align="start">
+            DESCRIPTION
+          </TableColumn>
+          <TableColumn key="created_at" align="start">
+            CREATED AT
+          </TableColumn>
+          <TableColumn key="actions" align="center">
+            ACTIONS
+          </TableColumn>
+        </TableHeader>
+        <TableBody emptyContent={"No rows to display."} items={apiKeys}>
+          {(item) => (
+            <TableRow key={item.id}>
+              {(columnKey) => (
+                <TableCell>{renderCell(item, columnKey)}</TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </div>
   );
 }
