@@ -23,7 +23,7 @@ export default function Reloader() {
   return (
     <Progress
       aria-label="Reloading..."
-      className="w-40"
+      className="lg:w-40"
       size="sm"
       value={value}
     />

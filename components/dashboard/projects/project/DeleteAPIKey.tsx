@@ -41,7 +41,7 @@ export default function DeleteAPIKey(keyID: any) {
     <>
       <Toaster richColors position="bottom-center" />
       <DeleteIcon onClick={onOpen} />
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>

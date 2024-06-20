@@ -31,9 +31,11 @@ export async function Project({ id }: any) {
 
   return (
     <main>
-      <div className="flex items-center justify-between">
+      <div className="grid lg:grid-cols-2 items-center justify-between">
         <ProjectBreadcrumbs id={id} />
-        <Reloader />
+        <div className="lg:justify-self-end lg:mt-0 mt-2">
+          <Reloader />
+        </div>
       </div>
       <div className="flex items-end justify-between mb-4 mt-2">
         <div>
