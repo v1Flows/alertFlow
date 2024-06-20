@@ -12,6 +12,6 @@ export async function middleware(request: NextRequest) {
     !request.url.includes("_next") &&
     request.cookies.get("session")
   ) {
-    return await updateSession(request);
+    return await updateSession();
   }
 }

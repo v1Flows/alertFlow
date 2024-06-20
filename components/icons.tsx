@@ -186,7 +186,7 @@ export const SearchIcon = (props: IconSvgProps) => (
   </svg>
 );
 
-export const NextUILogo: React.FC<IconSvgProps> = (props) => {
+export const NextUILogo: React.FC<IconSvgProps> = (props: any) => {
   const { width, height = 40 } = props;
 
   return (
@@ -214,7 +214,7 @@ export const NextUILogo: React.FC<IconSvgProps> = (props) => {
   );
 };
 
-export const LoginIcon: React.FC<IconSvgProps> = (props) => {
+export const LoginIcon: React.FC<IconSvgProps> = (props: any) => {
   const { width, height = 40 } = props;
 
   return (
@@ -276,7 +276,7 @@ export const LockIcon = (props: any) => (
   </svg>
 );
 
-export const AddNoteIcon = (props) => (
+export const AddNoteIcon = (props: any) => (
   <svg
     aria-hidden="true"
     fill="none"
@@ -299,7 +299,7 @@ export const AddNoteIcon = (props) => (
   </svg>
 );
 
-export const CopyDocumentIcon = (props) => (
+export const CopyDocumentIcon = (props: any) => (
   <svg
     aria-hidden="true"
     fill="none"
@@ -326,7 +326,7 @@ export const CopyDocumentIcon = (props) => (
   </svg>
 );
 
-export const EditDocumentIcon = (props) => (
+export const EditDocumentIcon = (props: any) => (
   <svg
     aria-hidden="true"
     fill="none"
@@ -349,7 +349,7 @@ export const EditDocumentIcon = (props) => (
   </svg>
 );
 
-export const DeleteDocumentIcon = (props) => (
+export const DeleteDocumentIcon = (props: any) => (
   <svg
     aria-hidden="true"
     fill="none"
@@ -378,7 +378,7 @@ export const DeleteDocumentIcon = (props) => (
   </svg>
 );
 
-export const ChevronDown = ({ fill, size, height, width, ...props }) => {
+export const ChevronDown = ({ fill, size, height, width, ...props }: any) => {
   return (
     <svg
       fill="none"
@@ -400,7 +400,7 @@ export const ChevronDown = ({ fill, size, height, width, ...props }) => {
   );
 };
 
-export const Lock = ({ fill, size, height, width, ...props }) => {
+export const Lock = ({ fill, size, height, width, ...props }: any) => {
   const color = fill;
 
   return (
@@ -447,7 +447,7 @@ export const Lock = ({ fill, size, height, width, ...props }) => {
   );
 };
 
-export const Activity = ({ fill, size, height, width, ...props }) => {
+export const Activity = ({ fill, size, height, width, ...props }: any) => {
   return (
     <svg
       height={size || height || 24}
@@ -478,7 +478,7 @@ export const Flash = ({
   height,
   width,
   ...props
-}) => {
+}: any) => {
   return (
     <svg
       fill="none"
@@ -506,7 +506,7 @@ export const Server = ({
   height,
   width,
   ...props
-}) => {
+}: any) => {
   return (
     <svg
       fill="none"
@@ -533,7 +533,7 @@ export const TagUser = ({
   height,
   width,
   ...props
-}) => {
+}: any) => {
   return (
     <svg
       fill="none"
@@ -568,7 +568,7 @@ export const Scale = ({
   height,
   width,
   ...props
-}) => {
+}: any) => {
   return (
     <svg
       fill="none"
@@ -596,7 +596,7 @@ export const Scale = ({
   );
 };
 
-export const GalleryIcon = (props) => (
+export const GalleryIcon = (props: any) => (
   <svg
     aria-hidden="true"
     fill="none"
@@ -622,7 +622,7 @@ export const GalleryIcon = (props) => (
   </svg>
 );
 
-export const MusicIcon = (props) => (
+export const MusicIcon = (props: any) => (
   <svg
     aria-hidden="true"
     fill="none"
@@ -644,7 +644,7 @@ export const MusicIcon = (props) => (
   </svg>
 );
 
-export const VideoIcon = (props) => (
+export const VideoIcon = (props: any) => (
   <svg
     aria-hidden="true"
     fill="none"
@@ -671,7 +671,7 @@ export const VideoIcon = (props) => (
   </svg>
 );
 
-export const PlayCircleIcon = (props) => (
+export const PlayCircleIcon = (props: any) => (
   <svg
     height="1em"
     viewBox="0 0 24 24"
@@ -687,7 +687,7 @@ export const PlayCircleIcon = (props) => (
   </svg>
 );
 
-export const UsersIcon = (props) => (
+export const UsersIcon = (props: any) => (
   <svg
     height="1em"
     viewBox="0 0 24 24"
@@ -706,7 +706,7 @@ export const UsersIcon = (props) => (
   </svg>
 );
 
-export const ShieldSecurityIcon = (props) => (
+export const ShieldSecurityIcon = (props: any) => (
   <svg
     aria-hidden="true"
     fill="none"
@@ -743,7 +743,7 @@ export const ShieldSecurityIcon = (props) => (
   </svg>
 );
 
-export const CalendarIcon = (props) => (
+export const CalendarIcon = (props: any) => (
   <svg
     aria-hidden="true"
     fill="none"
@@ -767,7 +767,7 @@ export const CalendarIcon = (props) => (
   </svg>
 );
 
-export const HomeIcon = (props) => (
+export const HomeIcon = (props: any) => (
   <svg
     aria-hidden="true"
     fill="none"
@@ -785,7 +785,7 @@ export const HomeIcon = (props) => (
   </svg>
 );
 
-export const LayoutIcon = (props) => (
+export const LayoutIcon = (props: any) => (
   <svg
     height="1em"
     viewBox="0 0 24 24"
@@ -800,7 +800,7 @@ export const LayoutIcon = (props) => (
   </svg>
 );
 
-export const TagIcon = (props) => (
+export const TagIcon = (props: any) => (
   <svg
     height="1em"
     viewBox="0 0 24 24"
@@ -816,7 +816,7 @@ export const TagIcon = (props) => (
   </svg>
 );
 
-export const PlusIcon = ({ size = 24, width, height, ...props }) => (
+export const PlusIcon = ({ size = 24, width, height, ...props }: any) => (
   <svg
     aria-hidden="true"
     fill="none"
@@ -862,7 +862,12 @@ export const ChevronDownIcon = ({ strokeWidth = 1.5, ...otherProps }) => (
   </svg>
 );
 
-export const VerticalDotsIcon = ({ size = 24, width, height, ...props }) => (
+export const VerticalDotsIcon = ({
+  size = 24,
+  width,
+  height,
+  ...props
+}: any) => (
   <svg
     aria-hidden="true"
     fill="none"
@@ -880,7 +885,7 @@ export const VerticalDotsIcon = ({ size = 24, width, height, ...props }) => (
   </svg>
 );
 
-export const EditIcon = (props) => (
+export const EditIcon = (props: any) => (
   <svg
     aria-hidden="true"
     fill="none"
@@ -918,7 +923,7 @@ export const EditIcon = (props) => (
   </svg>
 );
 
-export const DeleteIcon = (props) => (
+export const DeleteIcon = (props: any) => (
   <svg
     aria-hidden="true"
     fill="none"
@@ -967,7 +972,7 @@ export const DeleteIcon = (props) => (
   </svg>
 );
 
-export const EyeIcon = (props) => (
+export const EyeIcon = (props: any) => (
   <svg
     aria-hidden="true"
     fill="none"
