@@ -38,7 +38,7 @@ export const Navbar = () => {
         <NavbarItem>
           <DashboardMenu user={user} />
         </NavbarItem>
-        <NavbarItem>
+        {/* <NavbarItem>
           <Link color="foreground" href="/faq">
             FAQ
           </Link>
@@ -47,7 +47,7 @@ export const Navbar = () => {
           <Link color="foreground" href="/support">
             Support
           </Link>
-        </NavbarItem>
+        </NavbarItem> */}
       </NavbarContent>
 
       <NavbarContent
@@ -76,7 +76,7 @@ export const Navbar = () => {
         <NavbarMenuItem>
           <DashboardMenu user={user} />
         </NavbarMenuItem>
-        <NavbarMenuItem>
+        {/* <NavbarMenuItem>
           <Link color="foreground" href="/faq">
             FAQ
           </Link>
@@ -85,7 +85,7 @@ export const Navbar = () => {
           <Link color="foreground" href="/support">
             Support
           </Link>
-        </NavbarMenuItem>
+        </NavbarMenuItem> */}
         <NavbarMenuItem>
           <Divider className="my-4" />
           <Login user={user} />
