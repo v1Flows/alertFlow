@@ -11,7 +11,7 @@ export default async function GetProject(projectId: any) {
     return { error: "No token found" };
   }
 
-  const res = await fetch(`http://localhost:8080/api/projects/${projectId}`, {
+  const res = await fetch(`${process.env.API_ENDPOINT}/projects/${projectId}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

@@ -12,7 +12,7 @@ export default async function DeleteProjectApiKey(apiKeyID: any) {
   }
 
   const res = await fetch(
-    `http://localhost:8080/api/token/service/${apiKeyID}`,
+    `${process.env.API_ENDPOINT}/token/service/${apiKeyID}`,
     {
       method: "DELETE",
       headers: {

@@ -15,7 +15,7 @@ export default async function CreateProjectApiKey({
   }
 
   const res = await fetch(
-    `http://localhost:8080/api/token/service/${projectId}`,
+    `${process.env.API_ENDPOINT}/token/service/${projectId}`,
     {
       method: "POST",
       headers: {

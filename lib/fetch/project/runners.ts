@@ -12,7 +12,7 @@ export default async function GetProjectRunners(projectId: any) {
   }
 
   const res = await fetch(
-    `http://localhost:8080/api/projects/${projectId}/runners`,
+    `${process.env.API_ENDPOINT}/projects/${projectId}/runners`,
     {
       method: "GET",
       headers: {

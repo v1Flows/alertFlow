@@ -11,7 +11,7 @@ export default async function AddProjectRunner({ projectId, name }: any) {
     return { error: "No token found" };
   }
 
-  const res = await fetch(`http://localhost:8080/api/runners/`, {
+  const res = await fetch(`${process.env.API_ENDPOINT}/runners/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

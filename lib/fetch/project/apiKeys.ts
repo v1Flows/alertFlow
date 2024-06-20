@@ -12,7 +12,7 @@ export default async function GetProjectApiKeys(projectId: any) {
   }
 
   const res = await fetch(
-    `http://localhost:8080/api/projects/${projectId}/apikeys`,
+    `${process.env.API_ENDPOINT}/projects/${projectId}/apikeys`,
     {
       method: "GET",
       headers: {

@@ -41,7 +41,7 @@ export default function Login(user: any) {
     )[0] as HTMLInputElement;
     const password = passwordInput.value;
 
-    const response = await fetch("http://localhost:8080/api/auth/login", {
+    const response = await fetch(process.env.API_ENDPOINT + "/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

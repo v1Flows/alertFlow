@@ -8,7 +8,7 @@ export async function updateSession() {
   if (!session) return;
 
   // Refresh the token
-  const response = await fetch("http://localhost:8080/api/token/refresh", {
+  const response = await fetch(process.env.API_ENDPOINT + "/token/refresh", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
