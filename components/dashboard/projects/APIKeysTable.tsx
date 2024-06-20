@@ -12,7 +12,7 @@ import {
 } from "@nextui-org/react";
 import { Toaster, toast } from "sonner";
 
-import { EditIcon, CopyDocumentIcon } from "@/components/icons";
+import { CopyDocumentIcon } from "@/components/icons";
 
 import AddAPIKeyModal from "./project/AddAPIKey";
 import DeleteAPIKey from "./project/DeleteAPIKey";
@@ -39,11 +39,6 @@ export default function ProjectAPIKeys({ apiKeys, project }: any) {
                     copyAPIKeytoClipboard(key.key);
                   }}
                 />
-              </span>
-            </Tooltip>
-            <Tooltip content="Edit API Key">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <EditIcon />
               </span>
             </Tooltip>
             <Tooltip color="danger" content="Delete API Key">
