@@ -12,6 +12,7 @@ import {
   DropdownItem,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import { Toaster, toast } from "sonner";
 
 import {
   VerticalDotsIcon,
@@ -29,15 +30,16 @@ export default function Runners({ runners, project }: any) {
     const response = await DeleteProjectRunner(runnerID);
 
     if (response.result === "success") {
-      // eslint-disable-next-line no-undef
+      toast.success("Runner deleted successfully");
       router.refresh();
     } else {
-      console.log(response);
+      toast.error("Failed to delete runner");
     }
   }
 
   return (
     <main>
+      <Toaster richColors position="bottom-center" />
       <div className="flex items-center justify-between mb-4">
         <p className="text-lg font-bold">Selfhosted Runners</p>
         <AddRunnerModal projectID={project.id} />
@@ -69,11 +71,6 @@ export default function Runners({ runners, project }: any) {
                           </Button>
                         </DropdownTrigger>
                         <DropdownMenu>
-                          <DropdownSection showDivider title="Actions">
-                            <DropdownItem startContent={<EditDocumentIcon />}>
-                              Edit
-                            </DropdownItem>
-                          </DropdownSection>
                           <DropdownSection title="Danger zone">
                             <DropdownItem
                               className="text-danger"
