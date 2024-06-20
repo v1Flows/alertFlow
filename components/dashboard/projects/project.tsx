@@ -1,5 +1,11 @@
 import React from "react";
-import { Card, CardHeader, CardBody, Divider } from "@nextui-org/react";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Divider,
+  Progress,
+} from "@nextui-org/react";
 
 import {
   PlayCircleIcon,
@@ -12,6 +18,7 @@ import { subtitle } from "@/components/primitives";
 import GetProject from "@/lib/fetch/project/data";
 import GetProjectRunners from "@/lib/fetch/project/runners";
 import GetProjectApiKeys from "@/lib/fetch/project/apiKeys";
+import Reloader from "@/components/reloader/Reloader";
 
 import EditProjectModal from "./project/Edit";
 import ProjectBreadcrumbs from "./breadcrumbs";
@@ -24,7 +31,10 @@ export async function Project({ id }: any) {
 
   return (
     <main>
-      <ProjectBreadcrumbs id={id} />
+      <div className="flex items-center justify-between">
+        <ProjectBreadcrumbs id={id} />
+        <Reloader />
+      </div>
       <div className="flex items-end justify-between mb-4 mt-2">
         <div>
           <h1 className={subtitle()} style={{ color: "violet" }}>
