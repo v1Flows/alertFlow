@@ -25,7 +25,7 @@ export async function Project({ id }: any) {
   return (
     <main>
       <ProjectBreadcrumbs id={id} />
-      <div className="flex items-center justify-between mb-4 mt-2">
+      <div className="flex items-end justify-between mb-4 mt-2">
         <div>
           <h1 className={subtitle()} style={{ color: "violet" }}>
             {data.name}

@@ -13,6 +13,7 @@ import {
 } from "@nextui-org/react";
 
 import { EditIcon, DeleteIcon, PlusIcon } from "@/components/icons";
+import AddMemberModal from "./project/AddMember";
 
 const statusColorMap = {
   Owner: "danger",
@@ -20,7 +21,7 @@ const statusColorMap = {
   Viewer: "default",
 };
 
-export default function ProjectMembers({ members }: any) {
+export default function ProjectMembers({ members, projectID }: any) {
   const renderCell = React.useCallback((user: any, columnKey: any) => {
     const cellValue = user[columnKey];
 
@@ -68,9 +69,7 @@ export default function ProjectMembers({ members }: any) {
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col items-end justify-center gap-4">
-        <Button color="primary" endContent={<PlusIcon />}>
-          Add New
-        </Button>
+        <AddMemberModal projectID={projectID} />
       </div>
     );
   }, []);

@@ -10,18 +10,21 @@ import {
   Button,
   useDisclosure,
   Input,
+  Select,
+  SelectItem,
 } from "@nextui-org/react";
 
 import { PlusIcon } from "@/components/icons";
 import CreateProjectApiKey from "@/lib/fetch/project/POST/CreateAPIKey";
 
-export default function AddAPIKeyModal({ projectID }: any) {
+export default function AddMemberModal({ projectID }: any) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [isCreateLoading, setIsCreateLoading] = useState(false);
-  const [description, setDescription] = React.useState("");
+  const [isLoginLoading, setIsLoginLoading] = useState(false);
+  const [mail, setMail] = React.useState("");
+  const [role, setRole] = React.useState(new Set([]));
 
   async function handleCreateAPIKey() {
-    setIsCreateLoading(true);
+    setIsLoginLoading(true);
 
     const response = await CreateProjectApiKey({
       projectId: projectID,
@@ -37,7 +40,7 @@ export default function AddAPIKeyModal({ projectID }: any) {
       console.log(response);
     }
 
-    setIsCreateLoading(false);
+    setIsLoginLoading(false);
   }
 
   return (
@@ -50,27 +53,51 @@ export default function AddAPIKeyModal({ projectID }: any) {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Create API Key
+                Add Member to Project
               </ModalHeader>
               <ModalBody>
                 <Input
-                  label="Description"
-                  placeholder="Enter the project description"
-                  value={description}
+                  label="User Email"
+                  placeholder="Enter the email of the user"
+                  value={mail}
                   variant="bordered"
-                  onValueChange={setDescription}
+                  onValueChange={setMail}
                 />
+                <Select
+                  className="w-full"
+                  label="Member Role"
+                  placeholder="Select the role of the member"
+                  selectedKeys={role}
+                  variant="bordered"
+                  onSelectionChange={(key: any) => setRole(key)}
+                >
+                  <SelectItem
+                    key="Owner"
+                    className="text-danger"
+                    color="danger"
+                  >
+                    Owner
+                  </SelectItem>
+                  <SelectItem
+                    key="Editor"
+                    className="text-primary"
+                    color="primary"
+                  >
+                    Editor
+                  </SelectItem>
+                  <SelectItem key="Viewer">Viewer</SelectItem>
+                </Select>
               </ModalBody>
               <ModalFooter>
                 <Button color="default" variant="bordered" onPress={onClose}>
-                  Discard
+                  Cancel
                 </Button>
                 <Button
                   color="primary"
-                  isLoading={isCreateLoading}
+                  isLoading={isLoginLoading}
                   onPress={handleCreateAPIKey}
                 >
-                  Create API Key
+                  Add Member
                 </Button>
               </ModalFooter>
             </>

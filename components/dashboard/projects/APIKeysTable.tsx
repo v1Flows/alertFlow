@@ -15,6 +15,7 @@ import { Toaster, toast } from "sonner";
 import { EditIcon, DeleteIcon, CopyDocumentIcon } from "@/components/icons";
 
 import AddAPIKeyModal from "./project/AddAPIKey";
+import DeleteAPIKey from "./project/DeleteAPIKey";
 
 export default function ProjectAPIKeys({ apiKeys, project }: any) {
   const copyAPIKeytoClipboard = (key: string) => {
@@ -47,7 +48,7 @@ export default function ProjectAPIKeys({ apiKeys, project }: any) {
             </Tooltip>
             <Tooltip color="danger" content="Delete API Key">
               <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                <DeleteIcon />
+                <DeleteAPIKey keyID={key.id} />
               </span>
             </Tooltip>
           </div>

@@ -9,12 +9,20 @@ import ProjectAPIKeys from "./APIKeysTable";
 import Runners from "./Runners";
 
 export default function ProjectTabs({ project, runners, apiKeys }: any) {
+  const [selected, setSelected] = React.useState("photos");
+
   return (
     <main>
       <div className="flex w-full flex-col">
-        <Tabs aria-label="Options" color="primary" variant="underlined">
+        <Tabs
+          aria-label="Options"
+          color="primary"
+          selectedKey={selected}
+          variant="underlined"
+          onSelectionChange={(key: any) => setSelected(key as string)}
+        >
           <Tab
-            key="photos"
+            key="members"
             title={
               <div className="flex items-center space-x-2">
                 <UsersIcon className="h-5 w-5" />
@@ -22,10 +30,10 @@ export default function ProjectTabs({ project, runners, apiKeys }: any) {
               </div>
             }
           >
-            <ProjectMembers members={project.members} />
+            <ProjectMembers members={project.members} projectID={project.id} />
           </Tab>
           <Tab
-            key="music"
+            key="runners"
             title={
               <div className="flex items-center space-x-2">
                 <PlayCircleIcon className="h-5 w-5" />
@@ -36,7 +44,7 @@ export default function ProjectTabs({ project, runners, apiKeys }: any) {
             <Runners project={project} runners={runners} />
           </Tab>
           <Tab
-            key="videos"
+            key="apikeys"
             title={
               <div className="flex items-center space-x-2">
                 <TagIcon className="h-5 w-5" />

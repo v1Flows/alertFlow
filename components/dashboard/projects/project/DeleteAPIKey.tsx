@@ -1,0 +1,73 @@
+"use client";
+
+import React, { useState } from "react";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  useDisclosure,
+} from "@nextui-org/react";
+
+import { DeleteIcon } from "@/components/icons";
+import DeleteProjectApiKey from "@/lib/fetch/project/DELETE/DeleteAPIKey";
+
+export default function DeleteAPIKey(keyID: any) {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
+
+  async function handleDeleteAPIKey() {
+    setIsDeleteLoading(true);
+
+    const response = await DeleteProjectApiKey(keyID.keyID);
+
+    if (response.result === "success") {
+      onOpenChange();
+      // eslint-disable-next-line no-undef
+      window.location.reload();
+    } else {
+      console.log(response);
+    }
+
+    setIsDeleteLoading(false);
+  }
+
+  return (
+    <>
+      <DeleteIcon onClick={onOpen} />
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                <p>Delete API Key</p>
+                <p className="text-sm text-default-500">{keyID.keyID}</p>
+              </ModalHeader>
+              <ModalBody>
+                <p>
+                  Are you sure you want to delete this API key? This action
+                  cannot be undone and will cause any active runner which is
+                  using this key to not work anylonger.
+                </p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="default" variant="light" onPress={onClose}>
+                  Cancel
+                </Button>
+                <Button
+                  color="danger"
+                  isLoading={isDeleteLoading}
+                  onPress={handleDeleteAPIKey}
+                >
+                  Delete
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    </>
+  );
+}
