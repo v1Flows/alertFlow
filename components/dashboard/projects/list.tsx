@@ -33,7 +33,7 @@ export function ProjectsList({ projects }: any) {
             >
               <CardHeader className="justify-between">
                 <p className="text-md">{project.name}</p>
-                <Code color="secondary">{project.id}</Code>
+                <Code color="primary">{project.id}</Code>
               </CardHeader>
               <Divider />
               <CardBody>

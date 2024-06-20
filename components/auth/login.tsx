@@ -80,7 +80,7 @@ export default function Login(user: any) {
               isBordered
               as="button"
               className="transition-transform"
-              color="secondary"
+              color="primary"
               name={userData?.username}
               size="sm"
             />
