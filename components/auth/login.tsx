@@ -73,7 +73,7 @@ export default function Login(user: any) {
 
   return (
     <>
-      {userData.username && (
+      {userData?.username && (
         <Dropdown>
           <DropdownTrigger>
             <Avatar
@@ -81,7 +81,7 @@ export default function Login(user: any) {
               as="button"
               className="transition-transform"
               color="secondary"
-              name={userData.username}
+              name={userData?.username}
               size="sm"
             />
           </DropdownTrigger>
@@ -103,7 +103,7 @@ export default function Login(user: any) {
           </DropdownMenu>
         </Dropdown>
       )}
-      {!userData.username && (
+      {!userData?.username && (
         <>
           <Button
             color="primary"

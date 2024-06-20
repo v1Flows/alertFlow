@@ -40,7 +40,7 @@ export default function DashboardMenu(user: any) {
           disableRipple
           className="p-0 bg-transparent data-[hover=true]:bg-transparent"
           endContent={icons.chevron}
-          isDisabled={!userData.email}
+          isDisabled={!userData?.email}
           radius="sm"
           variant="light"
         >
