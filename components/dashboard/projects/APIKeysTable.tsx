@@ -12,7 +12,7 @@ import {
 } from "@nextui-org/react";
 import { Toaster, toast } from "sonner";
 
-import { EditIcon, DeleteIcon, CopyDocumentIcon } from "@/components/icons";
+import { EditIcon, CopyDocumentIcon } from "@/components/icons";
 
 import AddAPIKeyModal from "./project/AddAPIKey";
 import DeleteAPIKey from "./project/DeleteAPIKey";

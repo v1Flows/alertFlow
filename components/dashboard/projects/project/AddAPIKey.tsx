@@ -11,11 +11,15 @@ import {
   useDisclosure,
   Input,
 } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
+import { Toaster, toast } from "sonner";
 
 import { PlusIcon } from "@/components/icons";
 import CreateProjectApiKey from "@/lib/fetch/project/POST/CreateAPIKey";
 
 export default function AddAPIKeyModal({ projectID }: any) {
+  const router = useRouter();
+
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isCreateLoading, setIsCreateLoading] = useState(false);
   const [description, setDescription] = React.useState("");
@@ -31,10 +35,10 @@ export default function AddAPIKeyModal({ projectID }: any) {
     if (response.result === "success") {
       setDescription("");
       onOpenChange();
-      // eslint-disable-next-line no-undef
-      window.location.reload();
+      toast.success("API key created successfully");
+      router.refresh();
     } else {
-      console.log(response);
+      toast.error(response.message);
     }
 
     setIsCreateLoading(false);
@@ -42,6 +46,7 @@ export default function AddAPIKeyModal({ projectID }: any) {
 
   return (
     <>
+      <Toaster richColors position="bottom-center" />
       <Button color="primary" endContent={<PlusIcon />} onPress={onOpen}>
         Add New
       </Button>

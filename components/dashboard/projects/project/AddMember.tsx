@@ -13,11 +13,14 @@ import {
   Select,
   SelectItem,
 } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
+import { Toaster, toast } from "sonner";
 
 import { PlusIcon } from "@/components/icons";
 import CreateProjectApiKey from "@/lib/fetch/project/POST/CreateAPIKey";
 
 export default function AddMemberModal({ projectID }: any) {
+  const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoginLoading, setIsLoginLoading] = useState(false);
   const [mail, setMail] = React.useState("");
@@ -28,16 +31,16 @@ export default function AddMemberModal({ projectID }: any) {
 
     const response = await CreateProjectApiKey({
       projectId: projectID,
-      description,
+      mail,
     });
 
     if (response.result === "success") {
-      setDescription("");
+      setMail("");
       onOpenChange();
-      // eslint-disable-next-line no-undef
-      window.location.reload();
+      toast.success("Member added successfully");
+      router.refresh();
     } else {
-      console.log(response);
+      toast.error("Failed to add member");
     }
 
     setIsLoginLoading(false);
@@ -45,6 +48,7 @@ export default function AddMemberModal({ projectID }: any) {
 
   return (
     <>
+      <Toaster richColors position="bottom-center" />
       <Button color="primary" endContent={<PlusIcon />} onPress={onOpen}>
         Add New
       </Button>

@@ -10,11 +10,13 @@ import {
   Button,
   useDisclosure,
 } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 
 import { DeleteIcon } from "@/components/icons";
 import DeleteProjectApiKey from "@/lib/fetch/project/DELETE/DeleteAPIKey";
 
 export default function DeleteRunnerModal(runnerID: any) {
+  const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
 
@@ -25,8 +27,7 @@ export default function DeleteRunnerModal(runnerID: any) {
 
     if (response.result === "success") {
       onOpenChange();
-      // eslint-disable-next-line no-undef
-      window.location.reload();
+      router.refresh();
     } else {
       console.log(response);
     }

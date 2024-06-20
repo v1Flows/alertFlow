@@ -11,11 +11,14 @@ import {
   useDisclosure,
   Input,
 } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
+import { Toaster, toast } from "sonner";
 
 import { PlusIcon } from "@/components/icons";
 import AddProjectRunner from "@/lib/fetch/project/POST/AddRunner";
 
 export default function AddRunnerModal({ projectID }: any) {
+  const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isCreateLoading, setIsCreateLoading] = useState(false);
   const [name, setName] = React.useState("");
@@ -31,10 +34,10 @@ export default function AddRunnerModal({ projectID }: any) {
     if (response.result === "success") {
       setName("");
       onOpenChange();
-      // eslint-disable-next-line no-undef
-      window.location.reload();
+      toast.success("Runner created successfully");
+      router.refresh();
     } else {
-      console.log(response);
+      toast.error("Failed to create runner");
     }
 
     setIsCreateLoading(false);
@@ -42,6 +45,7 @@ export default function AddRunnerModal({ projectID }: any) {
 
   return (
     <>
+      <Toaster richColors position="bottom-center" />
       <Button color="primary" endContent={<PlusIcon />} onPress={onOpen}>
         Add New
       </Button>

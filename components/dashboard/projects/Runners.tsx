@@ -11,6 +11,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 
 import {
   VerticalDotsIcon,
@@ -22,12 +23,14 @@ import DeleteProjectRunner from "@/lib/fetch/project/DELETE/DeleteRunner";
 import AddRunnerModal from "./project/AddRunner";
 
 export default function Runners({ runners, project }: any) {
+  const router = useRouter();
+
   async function handleDeleteRunner(runnerID: any) {
     const response = await DeleteProjectRunner(runnerID);
 
     if (response.result === "success") {
       // eslint-disable-next-line no-undef
-      window.location.reload();
+      router.refresh();
     } else {
       console.log(response);
     }

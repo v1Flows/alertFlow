@@ -10,11 +10,14 @@ import {
   Button,
   useDisclosure,
 } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
+import { Toaster, toast } from "sonner";
 
 import { DeleteIcon } from "@/components/icons";
 import DeleteProjectApiKey from "@/lib/fetch/project/DELETE/DeleteAPIKey";
 
 export default function DeleteAPIKey(keyID: any) {
+  const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
 
@@ -25,10 +28,10 @@ export default function DeleteAPIKey(keyID: any) {
 
     if (response.result === "success") {
       onOpenChange();
-      // eslint-disable-next-line no-undef
-      window.location.reload();
+      toast.success("API key deleted successfully");
+      router.refresh();
     } else {
-      console.log(response);
+      toast.error("Failed to delete API key");
     }
 
     setIsDeleteLoading(false);
@@ -36,6 +39,7 @@ export default function DeleteAPIKey(keyID: any) {
 
   return (
     <>
+      <Toaster richColors position="bottom-center" />
       <DeleteIcon onClick={onOpen} />
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
