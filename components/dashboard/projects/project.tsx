@@ -36,7 +36,7 @@ export async function Project({ id }: any) {
       </div>
       <Divider className="mb-4" />
       <div>
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid lg:grid-cols-4 grid-cols-2 gap-4">
           <div className="col-span-1">
             <Card fullWidth>
               <CardHeader className="justify-start gap-2 items-center">

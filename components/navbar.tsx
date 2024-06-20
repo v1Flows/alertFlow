@@ -74,7 +74,7 @@ export const Navbar = () => {
           </Link>
         </NavbarMenuItem>
         <NavbarMenuItem>
-          <DashboardMenu />
+          <DashboardMenu user={user} />
         </NavbarMenuItem>
         <NavbarMenuItem>
           <Link color="foreground" href="/faq">
@@ -88,7 +88,7 @@ export const Navbar = () => {
         </NavbarMenuItem>
         <NavbarMenuItem>
           <Divider className="my-4" />
-          <Login />
+          <Login user={user} />
         </NavbarMenuItem>
       </NavbarMenu>
     </NextUINavbar>

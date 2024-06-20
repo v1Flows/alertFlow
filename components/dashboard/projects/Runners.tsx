@@ -41,7 +41,7 @@ export default function Runners({ runners, project }: any) {
         <AddRunnerModal projectID={project.id} />
       </div>
       <Divider className="mb-4" />
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid lg:grid-cols-2 gap-4">
         {runners.map(
           (runner: any) =>
             runner.alertflow_runner === false && (
@@ -108,7 +108,7 @@ export default function Runners({ runners, project }: any) {
       <Divider className="mb-4" />
       {project.alertflow_runners === true && (
         <div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid lg:grid-cols-2 gap-4">
             {runners.map(
               (runner: any) =>
                 runner.alertflow_runner === true && (

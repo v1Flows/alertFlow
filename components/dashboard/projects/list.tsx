@@ -21,7 +21,7 @@ export function ProjectsList({ projects }: any) {
         Projects
       </h1>
       <Divider className="mb-4" />
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid lg:grid-cols-2 gap-4">
         {projects.map((project: any) => (
           <div key={project.id} className="col-span-1">
             <Card
