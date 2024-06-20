@@ -13,20 +13,31 @@ import {
 } from "@nextui-org/react";
 
 import {
-  PlusIcon,
   VerticalDotsIcon,
   EditDocumentIcon,
   DeleteDocumentIcon,
 } from "@/components/icons";
+import DeleteProjectRunner from "@/lib/fetch/project/DELETE/DeleteRunner";
+
+import AddRunnerModal from "./project/AddRunner";
 
 export default function Runners({ runners, project }: any) {
+  async function handleDeleteRunner(runnerID: any) {
+    const response = await DeleteProjectRunner(runnerID);
+
+    if (response.result === "success") {
+      // eslint-disable-next-line no-undef
+      window.location.reload();
+    } else {
+      console.log(response);
+    }
+  }
+
   return (
     <main>
       <div className="flex items-center justify-between mb-4">
         <p className="text-lg font-bold">Selfhosted Runners</p>
-        <Button color="primary" endContent={<PlusIcon />}>
-          Add New
-        </Button>
+        <AddRunnerModal projectID={project.id} />
       </div>
       <Divider className="mb-4" />
       <div className="grid grid-cols-2 gap-4">
@@ -65,6 +76,7 @@ export default function Runners({ runners, project }: any) {
                               className="text-danger"
                               color="danger"
                               startContent={<DeleteDocumentIcon />}
+                              onClick={() => handleDeleteRunner(runner.id)}
                             >
                               Delete
                             </DropdownItem>
