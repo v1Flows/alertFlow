@@ -14,11 +14,7 @@ import {
 import { useRouter } from "next/navigation";
 import { Toaster, toast } from "sonner";
 
-import {
-  VerticalDotsIcon,
-  EditDocumentIcon,
-  DeleteDocumentIcon,
-} from "@/components/icons";
+import { VerticalDotsIcon, DeleteDocumentIcon } from "@/components/icons";
 import DeleteProjectRunner from "@/lib/fetch/project/DELETE/DeleteRunner";
 
 import AddRunnerModal from "./project/AddRunner";
@@ -67,7 +63,11 @@ export default function Runners({ runners, project }: any) {
                       <Dropdown backdrop="opaque">
                         <DropdownTrigger>
                           <Button isIconOnly size="sm" variant="light">
-                            <VerticalDotsIcon className="text-default-300" />
+                            <VerticalDotsIcon
+                              className="text-default-300"
+                              height={undefined}
+                              width={undefined}
+                            />
                           </Button>
                         </DropdownTrigger>
                         <DropdownMenu>
@@ -122,11 +122,11 @@ export default function Runners({ runners, project }: any) {
                     <Divider />
                     <CardBody>
                       <div className="grid grid-cols-2 grid-rows-3 items-center justify-center">
-                        <p className="text-sm font-bold">Version:</p>
+                        <p className="text-sm">Version:</p>
                         <p>{runner.runner_version}</p>
-                        <p className="text-sm font-bold">Active:</p>
+                        <p className="text-sm">Active:</p>
                         <p>{runner.active ? "Yes" : "No"}</p>
-                        <p className="text-sm font-bold">Last Heartbeat:</p>
+                        <p className="text-sm">Last Heartbeat:</p>
                         <p>
                           {new Date(
                             runner.last_heartbeat.Time,

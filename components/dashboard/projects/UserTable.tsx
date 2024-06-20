@@ -9,10 +9,10 @@ import {
   User,
   Tooltip,
   Chip,
-  Button,
 } from "@nextui-org/react";
 
-import { EditIcon, DeleteIcon, PlusIcon } from "@/components/icons";
+import { EditIcon, DeleteIcon } from "@/components/icons";
+
 import AddMemberModal from "./project/AddMember";
 
 const statusColorMap = {

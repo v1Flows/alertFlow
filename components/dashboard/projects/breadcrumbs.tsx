@@ -3,7 +3,7 @@
 import React from "react";
 import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
 
-import { HomeIcon, LayoutIcon, Server } from "@/components/icons";
+import { HomeIcon, LayoutIcon } from "@/components/icons";
 
 export default function ProjectBreadcrumbs({ id }: any) {
   return (

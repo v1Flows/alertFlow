@@ -49,7 +49,11 @@ export default function AddMemberModal({ projectID }: any) {
   return (
     <>
       <Toaster richColors position="bottom-center" />
-      <Button color="primary" endContent={<PlusIcon />} onPress={onOpen}>
+      <Button
+        color="primary"
+        endContent={<PlusIcon height={undefined} width={undefined} />}
+        onPress={onOpen}
+      >
         Add New
       </Button>
       <Modal isOpen={isOpen} placement="top-center" onOpenChange={onOpenChange}>
