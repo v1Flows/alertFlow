@@ -8,12 +8,15 @@ export default async function GetProjects() {
   const token = cookieStore.get("session")?.value;
 
   try {
+    const headers = new Headers();
+
+    headers.append("Content-Type", "application/json");
+    if (token) {
+      headers.append("Authorization", token);
+    }
     const res = await fetch(`${process.env.API_ENDPOINT}/projects/`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token,
-      },
+      headers: headers,
     });
     const data = await res.json();
 
