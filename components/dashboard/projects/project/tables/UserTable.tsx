@@ -13,7 +13,7 @@ import {
 
 import { EditIcon, DeleteIcon } from "@/components/icons";
 
-import AddMemberModal from "./project/AddMember";
+import AddMemberModal from "@/components/dashboard/projects/project/modals/AddMember";
 
 const statusColorMap: any = {
   Owner: "danger",

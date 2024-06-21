@@ -3,10 +3,9 @@ import React from "react";
 import { Tabs, Tab } from "@nextui-org/react";
 
 import { PlayCircleIcon, UsersIcon, TagIcon } from "@/components/icons";
-
-import ProjectMembers from "./UserTable";
-import ProjectAPIKeys from "./APIKeysTable";
-import Runners from "./Runners";
+import ProjectMembers from "@/components/dashboard/projects/project/tables/UserTable";
+import ProjectAPIKeys from "@/components/dashboard/projects/project/tables/APIKeysTable";
+import Runners from "@/components/dashboard/projects/project/Runners";
 
 export default function ProjectTabs({ project, runners, apiKeys }: any) {
   const [selected, setSelected] = React.useState("photos");

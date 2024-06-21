@@ -16,7 +16,7 @@ import { Toaster, toast } from "sonner";
 import { DeleteIcon } from "@/components/icons";
 import DeleteProjectApiKey from "@/lib/fetch/project/DELETE/DeleteAPIKey";
 
-export default function DeleteAPIKey(keyID: any) {
+export default function DeleteAPIKeyModal(keyID: any) {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);

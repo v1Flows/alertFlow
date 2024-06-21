@@ -7,23 +7,18 @@ export default async function GetProjects() {
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;
 
-  if (!token) {
-    return { error: "No token found" };
-  }
+  try {
+    const res = await fetch(`${process.env.API_ENDPOINT}/projects/`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+    });
+    const data = await res.json();
 
-  const res = await fetch(`${process.env.API_ENDPOINT}/projects/`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: token,
-    },
-  });
-
-  if (!res.ok) {
+    return data.projects;
+  } catch (error) {
     return { error: "Failed to fetch data" };
   }
-
-  const data = await res.json();
-
-  return data.projects;
 }

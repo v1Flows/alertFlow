@@ -15,8 +15,8 @@ import GetProjectApiKeys from "@/lib/fetch/project/apiKeys";
 import Reloader from "@/components/reloader/Reloader";
 
 import EditProjectModal from "./project/Edit";
-import ProjectBreadcrumbs from "./breadcrumbs";
-import ProjectTabs from "./tabs";
+import ProjectBreadcrumbs from "./project/breadcrumbs";
+import ProjectTabs from "./project/tabs";
 
 export async function Project({ id }: any) {
   const data = await GetProject(id);

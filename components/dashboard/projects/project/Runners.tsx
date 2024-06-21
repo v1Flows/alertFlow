@@ -16,8 +16,7 @@ import { Toaster, toast } from "sonner";
 
 import { VerticalDotsIcon, DeleteDocumentIcon } from "@/components/icons";
 import DeleteProjectRunner from "@/lib/fetch/project/DELETE/DeleteRunner";
-
-import AddRunnerModal from "./project/AddRunner";
+import AddRunnerModal from "@/components/dashboard/projects/project/modals/AddRunner";
 
 export default function Runners({ runners, project }: any) {
   const router = useRouter();
