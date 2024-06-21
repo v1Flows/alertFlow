@@ -2,6 +2,7 @@ import { Snippet } from "@nextui-org/snippet";
 import { Code } from "@nextui-org/code";
 
 import { title, subtitle } from "@/components/primitives";
+import HomeFeatures from "@/components/home/Features";
 
 export default function Home() {
   return (
@@ -22,6 +23,10 @@ export default function Home() {
             Coming <Code color="primary">Soon.</Code>
           </span>
         </Snippet>
+      </div>
+
+      <div className="mt-8">
+        <HomeFeatures />
       </div>
     </section>
   );

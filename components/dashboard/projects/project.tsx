@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  Divider,
-  Progress,
-} from "@nextui-org/react";
+import { Card, CardHeader, CardBody, Divider } from "@nextui-org/react";
 
 import {
   PlayCircleIcon,
@@ -39,7 +33,10 @@ export async function Project({ id }: any) {
       </div>
       <div className="flex items-end justify-between mb-4 mt-2">
         <div>
-          <h1 className={subtitle()} style={{ color: "violet" }}>
+          <h1
+            className={subtitle({ className: "mb-0" })}
+            style={{ color: "violet" }}
+          >
             {data.name}
           </h1>
           <p className="text-sm text-default-500">{data.description}</p>
@@ -109,7 +106,7 @@ export async function Project({ id }: any) {
               </CardHeader>
               <CardBody>
                 <p className="text-default-500 font-bold">
-                  {new Date(data.created_at).toLocaleString()}
+                  {new Date(data.created_at).toLocaleString("de-DE")}
                 </p>
               </CardBody>
             </Card>
