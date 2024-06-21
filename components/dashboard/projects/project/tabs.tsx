@@ -8,7 +8,7 @@ import ProjectAPIKeys from "@/components/dashboard/projects/project/tables/APIKe
 import Runners from "@/components/dashboard/projects/project/Runners";
 
 export default function ProjectTabs({ project, runners, apiKeys }: any) {
-  const [selected, setSelected] = React.useState("photos");
+  const [selected, setSelected] = React.useState("members");
 
   return (
     <main>

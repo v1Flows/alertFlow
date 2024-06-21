@@ -47,7 +47,7 @@ export function ProjectsList({ projects }: any) {
       </h1>
       <Divider className="mb-4" />
       {projects.error && (
-        <Card className="bg-danger/10">
+        <Card className="shadow shadow-danger">
           <CardHeader className="justify-start gap-2 items-center">
             <IconWrapper className="bg-danger/10 text-danger">
               <InfoIcon className="text-lg" />

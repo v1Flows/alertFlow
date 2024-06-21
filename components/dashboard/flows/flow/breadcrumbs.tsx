@@ -3,23 +3,23 @@
 import React from "react";
 import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
 
-import { HomeIcon, Server } from "@/components/icons";
+import { Flash, HomeIcon } from "@/components/icons";
 
-export default function ProjectBreadcrumbs({ id }: any) {
+export default function FlowBreadcrumbs({ id }: any) {
   return (
     <Breadcrumbs>
       <BreadcrumbItem href="/dashboard" startContent={<HomeIcon />}>
         Dashboard
       </BreadcrumbItem>
       <BreadcrumbItem
-        href="/dashboard/projects"
+        href="/dashboard/flows"
         startContent={
-          <Server className="text-success" fill="currentColor" size={15} />
+          <Flash className="text-primary" fill="currentColor" size={15} />
         }
       >
-        Projects
+        Flows
       </BreadcrumbItem>
-      <BreadcrumbItem href={`/dashboard/projects/${id}`}>{id}</BreadcrumbItem>
+      <BreadcrumbItem href={`/dashboard/flows/${id}`}>{id}</BreadcrumbItem>
     </Breadcrumbs>
   );
 }

@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-export default async function GetFlows() {
+export default async function GetFlow(flowID: any) {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;
@@ -14,13 +14,13 @@ export default async function GetFlows() {
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.API_ENDPOINT}/flows/`, {
+    const res = await fetch(`${process.env.API_ENDPOINT}/flows/${flowID}`, {
       method: "GET",
       headers: headers,
     });
     const data = await res.json();
 
-    return data.flows;
+    return data.flow;
   } catch (error) {
     return { error: "Failed to fetch data" };
   }
