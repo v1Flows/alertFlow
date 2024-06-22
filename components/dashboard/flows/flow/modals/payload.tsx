@@ -9,6 +9,7 @@ import {
   useDisclosure,
   Snippet,
 } from "@nextui-org/react";
+
 import { EyeIcon } from "@/components/icons";
 
 export default function PayloadModal({ payload }: any) {

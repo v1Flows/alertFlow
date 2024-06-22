@@ -79,9 +79,10 @@ export default function Login(user: any) {
             <Avatar
               isBordered
               as="button"
-              className="transition-transform"
+              className="bg-gradient-to-r from-indigo-500 to-purple-500"
               color="primary"
               name={userData?.username}
+              radius="sm"
               size="sm"
             />
           </DropdownTrigger>

@@ -13,16 +13,19 @@ import {
   Server,
   EditDocumentIcon,
   CheckIcon,
+  PlayCircleIcon,
 } from "@/components/icons";
 import GetProjects from "@/lib/fetch/project/all";
 
 import FlowTabs from "./flow/tabs";
+import GetProjectRunners from "@/lib/fetch/project/runners";
 
 export async function Flow({ id }: any) {
   const projects = await GetProjects();
   const flow = await GetFlow(id);
   const executions = await GetFlowExecutions(id);
   const payloads = await GetFlowPayloads(id);
+  const runners = await GetProjectRunners(flow.project_id);
 
   return (
     <main>
@@ -112,18 +115,14 @@ export async function Flow({ id }: any) {
               <div className="col-span-1">
                 <Card fullWidth>
                   <CardHeader className="justify-start gap-2 items-center">
-                    <IconWrapper className="bg-primary/10">
-                      <Flash
-                        className="text-primary"
-                        fill="currentColor"
-                        size={20}
-                      />
+                    <IconWrapper className="bg-primary/10 text-primary">
+                      <PlayCircleIcon className="text-lg" />
                     </IconWrapper>
-                    <p className="text-md font-bold">Actions</p>
+                    <p className="text-md font-bold">Runner</p>
                   </CardHeader>
                   <CardBody>
                     <p className="text-default-500 font-bold">
-                      {flow?.actions.length}
+                      {flow.runner_id === "any" ? "Any" : runners.find((runner: any) => runner.id === flow.runner_id)?.name}
                     </p>
                   </CardBody>
                 </Card>
@@ -138,7 +137,7 @@ export async function Flow({ id }: any) {
                   </CardHeader>
                   <CardBody>
                     <p className="text-default-500 font-bold">
-                      {flow?.updated_at
+                      {flow.updated_at
                         ? new Date(flow?.updated_at).toLocaleString("de-DE")
                         : "N/A"}
                     </p>

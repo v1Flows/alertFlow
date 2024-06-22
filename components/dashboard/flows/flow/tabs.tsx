@@ -3,8 +3,8 @@ import React from "react";
 import { Tabs, Tab } from "@nextui-org/react";
 
 import { Flash, MailIcon, Activity } from "@/components/icons";
-import FlowActionPattern from "@/components/dashboard/flows/flow/actionPattern";
-import FlowCommonPattern from "@/components/dashboard/flows/flow/commonPattern";
+import FlowPattern from "@/components/dashboard/flows/flow/pattern";
+
 import PayloadsTable from "./tables/payloads";
 
 export default function FlowTabs({ flow, payloads }: any) {
@@ -29,12 +29,16 @@ export default function FlowTabs({ flow, payloads }: any) {
               </div>
             }
           >
-            {flow.action_details.pattern_type === "custom" &&
-              flow.actions.map((action: any, index: number) => (
-                <FlowActionPattern key={index} action={action} />
-              ))}
-            {flow.action_details.pattern_type === "common" && (
-              <FlowCommonPattern flow={flow} />
+            {!flow.actions[0].name ? (
+              <div className="flex flex-col items-center justify-center">
+                <p className="text-center text-default-400">No actions found</p>
+              </div>
+            ) : (
+              <>
+                {flow.actions.map((action: any, index: number) => (
+                  <FlowPattern key={index} action={action} />
+                ))}
+              </>
             )}
           </Tab>
           <Tab

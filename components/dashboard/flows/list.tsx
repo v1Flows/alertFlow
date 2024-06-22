@@ -26,6 +26,9 @@ import {
 } from "@/components/icons";
 import { subtitle } from "@/components/primitives";
 import { IconWrapper } from "@/lib/IconWrapper";
+import DeleteFlow from "@/lib/fetch/flow/DELETE/DeleteFlow";
+
+import NewFlowModal from "./create";
 
 export default function FlowList({ flows, projects }: any) {
   const router = useRouter();
@@ -41,13 +44,21 @@ export default function FlowList({ flows, projects }: any) {
     }
   };
 
+  function deleteFlow(id: string) {
+    DeleteFlow(id);
+    router.refresh();
+  }
+
   return (
     <main>
       <Toaster richColors position="bottom-center" />
-      <h1 className={subtitle()} style={{ color: "violet" }}>
-        Flows
-      </h1>
-      <Divider className="mb-4" />
+      <div className="flex items-center justify-between">
+        <h1 className={subtitle()} style={{ color: "violet" }}>
+          Flows
+        </h1>
+        <NewFlowModal projects={projects} />
+      </div>
+      <Divider className="mb-4 mt-4" />
       {flows.error && (
         <Card className="shadow shadow-danger">
           <CardHeader className="justify-start gap-2 items-center">
@@ -72,7 +83,9 @@ export default function FlowList({ flows, projects }: any) {
                 <CardHeader className="justify-between">
                   <div className="flex flex-col items-start">
                     <p className="text-md">{flow.name}</p>
-                    <p className="text-sm text-default-500">{flow.description}</p>
+                    <p className="text-sm text-default-500">
+                      {flow.description}
+                    </p>
                   </div>
                   <Dropdown backdrop="opaque">
                     <DropdownTrigger>
@@ -98,6 +111,7 @@ export default function FlowList({ flows, projects }: any) {
                           className="text-danger"
                           color="danger"
                           startContent={<DeleteDocumentIcon />}
+                          onClick={() => deleteFlow(flow.id)}
                         >
                           Delete
                         </DropdownItem>
@@ -109,11 +123,13 @@ export default function FlowList({ flows, projects }: any) {
                 <CardBody>
                   <div className="flex items-center gap-2 justify-start">
                     <Chip color="primary" radius="sm" size="sm" variant="flat">
-                      Project:{" "}
-                      {projects.map(
-                        (project: any) =>
-                          project.id === flow.project_id && project.name,
-                      )}
+                      <p className="font-bold">
+                        Project:{" "}
+                        {projects.map(
+                          (project: any) =>
+                            project.id === flow.project_id && project.name,
+                        )}
+                      </p>
                     </Chip>
                     <Chip
                       color={flow.active ? "success" : "danger"}
@@ -121,7 +137,9 @@ export default function FlowList({ flows, projects }: any) {
                       size="sm"
                       variant="flat"
                     >
-                      Status: {flow.active ? "Active" : "Inactive"}
+                      <p className="font-bold">
+                        Status: {flow.active ? "Active" : "Inactive"}
+                      </p>
                     </Chip>
                   </div>
                   <div className="flex items-end justify-between">
