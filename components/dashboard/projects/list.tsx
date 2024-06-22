@@ -12,6 +12,13 @@ import {
   DropdownItem,
   Button,
   CardFooter,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Snippet,
+  useDisclosure,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { Toaster, toast } from "sonner";
@@ -24,10 +31,14 @@ import {
   DeleteDocumentIcon,
   VerticalDotsIcon,
 } from "@/components/icons";
+import DeleteProject from "@/lib/fetch/project/DELETE/DeleteProject";
+
 import NewProjectModal from "./create";
 
 export function ProjectsList({ projects }: any) {
   const router = useRouter();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [projectToDelete, setProjectToDelete] = React.useState("");
 
   const copyProjectIDtoClipboard = (key: string) => {
     // eslint-disable-next-line no-undef
@@ -39,6 +50,17 @@ export function ProjectsList({ projects }: any) {
       toast.error("Failed to copy project ID to clipboard");
     }
   };
+
+  function deleteProjectModal(id: string) {
+    setProjectToDelete(id);
+    onOpenChange();
+  }
+
+  function deleteProject() {
+    onOpenChange();
+    DeleteProject(projectToDelete);
+    router.refresh();
+  }
 
   return (
     <main>
@@ -102,6 +124,7 @@ export function ProjectsList({ projects }: any) {
                           className="text-danger"
                           color="danger"
                           startContent={<DeleteDocumentIcon />}
+                          onClick={() => deleteProjectModal(project.id)}
                         >
                           Delete
                         </DropdownItem>
@@ -135,6 +158,48 @@ export function ProjectsList({ projects }: any) {
           ))}
         </div>
       )}
+      <Modal
+        backdrop="blur"
+        isOpen={isOpen}
+        placement="center"
+        onOpenChange={onOpenChange}
+      >
+        <ModalContent className="w-full">
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1 text-danger">
+                Are you sure?
+              </ModalHeader>
+              <ModalBody>
+                <p>
+                  You are about to delete the following project which{" "}
+                  <span className="font-bold">cannot be undone</span>:
+                </p>
+                <Divider />
+                <Snippet hideCopyButton hideSymbol>
+                  <span>
+                    Name:{" "}
+                    {
+                      projects.find(
+                        (project: any) => project.id === projectToDelete,
+                      ).name
+                    }
+                  </span>
+                  <span>ID: {projectToDelete}</span>
+                </Snippet>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="default" variant="bordered" onPress={onClose}>
+                  Cancel
+                </Button>
+                <Button color="danger" variant="solid" onPress={deleteProject}>
+                  DELETE
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </main>
   );
 }
