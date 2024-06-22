@@ -6,11 +6,11 @@ import {
   Combine,
   CircleSlash,
   BadgeCheck,
+  Forklift,
 } from "lucide-react";
 import {
   Card,
   CardBody,
-  CardHeader,
   cn,
   Popover,
   PopoverTrigger,
@@ -43,27 +43,26 @@ const Circle = forwardRef<
   );
 });
 
-export default function FlowActionPattern({ action }: any) {
+export default function FlowCommonPattern({ flow }: any) {
   const containerRef = useRef<HTMLDivElement>(null);
   const div1Ref = useRef<HTMLDivElement>(null);
   const div2Ref = useRef<HTMLDivElement>(null);
   const div3Ref = useRef<HTMLDivElement>(null);
   const div4Ref = useRef<HTMLDivElement>(null);
   const div5Ref = useRef<HTMLDivElement>(null);
-  const div6Ref = useRef<HTMLDivElement>(null);
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const stepRefs = flow.actions.map(() => useRef<HTMLDivElement>(null));
 
   return (
     <>
       <Card className="mb-6 w-full">
-        <CardHeader>
-          <h3>{action.name}</h3>
-        </CardHeader>
         <CardBody className="mb-4">
           <div
             ref={containerRef}
             className="relative flex h-full w-full justify-between"
           >
-            <div className="grid lg:grid-cols-5 gap-10 w-full">
+            <div className="grid lg:grid-cols-6 w-full h-full gap-8">
               <div className="flex flex-col justify-center items-center">
                 <Circle ref={div1Ref}>
                   <Library className="text-black" />
@@ -94,7 +93,7 @@ export default function FlowActionPattern({ action }: any) {
                       <TableColumn>REACT ON</TableColumn>
                     </TableHeader>
                     <TableBody>
-                      {action.patterns.exclude.map(
+                      {flow.action_details.patterns.exclude.map(
                         (pattern: any, index: number) => (
                           <TableRow key={index}>
                             <TableCell>{pattern.group}</TableCell>
@@ -126,7 +125,7 @@ export default function FlowActionPattern({ action }: any) {
                       <TableColumn>REACT ON</TableColumn>
                     </TableHeader>
                     <TableBody>
-                      {action.patterns.match.map(
+                      {flow.action_details.patterns.match.map(
                         (pattern: any, index: number) => (
                           <TableRow key={index}>
                             <TableCell>{pattern.group}</TableCell>
@@ -145,6 +144,34 @@ export default function FlowActionPattern({ action }: any) {
                   <Rocket className="text-black" />
                 </Circle>
                 <h4>Start Execution</h4>
+              </div>
+              <div className="lg:flex lg:flex-col grid grid-cols-2 gap-10">
+                {flow.actions.map((action: any, index: number) => (
+                  <Popover
+                    key={index}
+                    showArrow
+                    backdrop="opaque"
+                    offset={10}
+                    placement="top"
+                  >
+                    <PopoverTrigger>
+                      <div className="flex flex-col justify-center items-center">
+                        <Circle ref={stepRefs[index]}>
+                          <Forklift className="text-black" />
+                        </Circle>
+                        <h4>{action.name}</h4>
+                      </div>
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <div className="flex flex-col justify-start items-start">
+                        <h3 className="text-lg">{action.name}</h3>
+                        <p className="text-sm text-default-500">
+                          {action.description}
+                        </p>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                ))}
               </div>
             </div>
 
@@ -176,23 +203,27 @@ export default function FlowActionPattern({ action }: any) {
               pathWidth={4}
               toRef={div5Ref}
             />
-            <AnimatedBeam
-              containerRef={containerRef}
-              curvature={-25}
-              duration={5}
-              fromRef={div5Ref}
-              pathWidth={4}
-              toRef={div6Ref}
-            />
-            <AnimatedBeam
-              reverse
-              containerRef={containerRef}
-              curvature={25}
-              duration={5}
-              fromRef={div6Ref}
-              pathWidth={4}
-              toRef={div5Ref}
-            />
+            {stepRefs.map((_: any, i: any) => (
+              <AnimatedBeam
+                key={i}
+                containerRef={containerRef}
+                duration={5}
+                fromRef={div5Ref}
+                pathWidth={4}
+                toRef={stepRefs[(i + 1) % stepRefs.length]}
+              />
+            ))}
+            {stepRefs.map((_: any, i: any) => (
+              <AnimatedBeam
+                key={i}
+                reverse
+                containerRef={containerRef}
+                duration={5}
+                fromRef={stepRefs[(i + 1) % stepRefs.length]}
+                pathWidth={4}
+                toRef={div5Ref}
+              />
+            ))}
           </div>
         </CardBody>
       </Card>

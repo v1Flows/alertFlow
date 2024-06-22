@@ -12,7 +12,6 @@ import {
 } from "@nextui-org/react";
 
 import { EditIcon, DeleteIcon } from "@/components/icons";
-
 import AddMemberModal from "@/components/dashboard/projects/project/modals/AddMember";
 
 const statusColorMap: any = {

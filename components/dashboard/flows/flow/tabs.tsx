@@ -4,8 +4,10 @@ import { Tabs, Tab } from "@nextui-org/react";
 
 import { Flash, MailIcon, Activity } from "@/components/icons";
 import FlowActionPattern from "@/components/dashboard/flows/flow/actionPattern";
+import FlowCommonPattern from "@/components/dashboard/flows/flow/commonPattern";
+import PayloadsTable from "./tables/payloads";
 
-export default function FlowTabs({ flow }: any) {
+export default function FlowTabs({ flow, payloads }: any) {
   const [selected, setSelected] = React.useState("photos");
 
   return (
@@ -31,6 +33,9 @@ export default function FlowTabs({ flow }: any) {
               flow.actions.map((action: any, index: number) => (
                 <FlowActionPattern key={index} action={action} />
               ))}
+            {flow.action_details.pattern_type === "common" && (
+              <FlowCommonPattern flow={flow} />
+            )}
           </Tab>
           <Tab
             key="executions"
@@ -53,6 +58,7 @@ export default function FlowTabs({ flow }: any) {
             }
           >
             {/* <ProjectAPIKeys apiKeys={apiKeys} project={project} /> */}
+            <PayloadsTable payloads={payloads} />
           </Tab>
         </Tabs>
       </div>

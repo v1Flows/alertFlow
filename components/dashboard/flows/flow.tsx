@@ -119,7 +119,7 @@ export async function Flow({ id }: any) {
                         size={20}
                       />
                     </IconWrapper>
-                    <p className="text-md font-bold">Amount of Actions</p>
+                    <p className="text-md font-bold">Actions</p>
                   </CardHeader>
                   <CardBody>
                     <p className="text-default-500 font-bold">
@@ -148,7 +148,7 @@ export async function Flow({ id }: any) {
             </div>
           </div>
           <div className="w-full mt-6">
-            <FlowTabs flow={flow} />
+            <FlowTabs flow={flow} payloads={payloads} />
           </div>
         </>
       )}
