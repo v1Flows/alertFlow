@@ -76,6 +76,7 @@ export default function PayloadsTable({ payloads }: any) {
               showControls
               showShadow
               color="primary"
+              isDisabled={payloads.length === 0}
               page={page}
               total={pages}
               onChange={(page) => setPage(page)}
@@ -101,7 +102,7 @@ export default function PayloadsTable({ payloads }: any) {
             ACTIONS
           </TableColumn>
         </TableHeader>
-        <TableBody items={items}>
+        <TableBody emptyContent="No payloads found" items={items}>
           {(item: any) => (
             <TableRow key={item.name}>
               {(columnKey) => (
