@@ -24,6 +24,7 @@ import {
   DeleteDocumentIcon,
   VerticalDotsIcon,
 } from "@/components/icons";
+import NewProjectModal from "./create";
 
 export function ProjectsList({ projects }: any) {
   const router = useRouter();
@@ -42,10 +43,13 @@ export function ProjectsList({ projects }: any) {
   return (
     <main>
       <Toaster richColors position="bottom-center" />
-      <h1 className={subtitle()} style={{ color: "violet" }}>
-        Projects
-      </h1>
-      <Divider className="mb-4" />
+      <div className="flex items-center justify-between">
+        <h1 className={subtitle()} style={{ color: "violet" }}>
+          Projects
+        </h1>
+        <NewProjectModal />
+      </div>
+      <Divider className="mb-4 mt-4" />
       {projects.error && (
         <Card className="shadow shadow-danger">
           <CardHeader className="justify-start gap-2 items-center">

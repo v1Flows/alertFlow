@@ -14,6 +14,13 @@ import {
   Button,
   Chip,
   CardFooter,
+  useDisclosure,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Snippet,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 
@@ -32,6 +39,8 @@ import NewFlowModal from "./create";
 
 export default function FlowList({ flows, projects }: any) {
   const router = useRouter();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [flowToDelete, setFlowToDelete] = React.useState("");
 
   const copyFlowIDtoClipboard = (key: string) => {
     // eslint-disable-next-line no-undef
@@ -44,8 +53,14 @@ export default function FlowList({ flows, projects }: any) {
     }
   };
 
-  function deleteFlow(id: string) {
-    DeleteFlow(id);
+  function deleteFlowModal(id: string) {
+    setFlowToDelete(id);
+    onOpenChange();
+  }
+
+  function deleteFlow() {
+    onOpenChange();
+    DeleteFlow(flowToDelete);
     router.refresh();
   }
 
@@ -56,7 +71,7 @@ export default function FlowList({ flows, projects }: any) {
         <h1 className={subtitle()} style={{ color: "violet" }}>
           Flows
         </h1>
-        <NewFlowModal projects={projects} />
+        <NewFlowModal flows={flows} projects={projects} />
       </div>
       <Divider className="mb-4 mt-4" />
       {flows.error && (
@@ -111,7 +126,7 @@ export default function FlowList({ flows, projects }: any) {
                           className="text-danger"
                           color="danger"
                           startContent={<DeleteDocumentIcon />}
-                          onClick={() => deleteFlow(flow.id)}
+                          onClick={() => deleteFlowModal(flow.id)}
                         >
                           Delete
                         </DropdownItem>
@@ -140,6 +155,14 @@ export default function FlowList({ flows, projects }: any) {
                       <p className="font-bold">
                         Status: {flow.active ? "Active" : "Inactive"}
                       </p>
+                    </Chip>
+                    <Chip
+                      color="secondary"
+                      radius="sm"
+                      size="sm"
+                      variant="flat"
+                    >
+                      <p className="font-bold">ID: {flow.id}</p>
                     </Chip>
                   </div>
                   <div className="flex items-end justify-between">
@@ -170,6 +193,44 @@ export default function FlowList({ flows, projects }: any) {
           ))}
         </div>
       )}
+      <Modal
+        backdrop="blur"
+        isOpen={isOpen}
+        placement="center"
+        onOpenChange={onOpenChange}
+      >
+        <ModalContent className="w-full">
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1 text-danger">
+                Are you sure?
+              </ModalHeader>
+              <ModalBody>
+                <p>
+                  You are about to delete the following flow which{" "}
+                  <span className="font-bold">cannot be undone</span>:
+                </p>
+                <Divider />
+                <Snippet hideCopyButton hideSymbol>
+                  <span>
+                    Name:{" "}
+                    {flows.find((flow: any) => flow.id === flowToDelete).name}
+                  </span>
+                  <span>ID: {flowToDelete}</span>
+                </Snippet>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="default" variant="bordered" onPress={onClose}>
+                  Cancel
+                </Button>
+                <Button color="danger" variant="solid" onPress={deleteFlow}>
+                  DELETE
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </main>
   );
 }
