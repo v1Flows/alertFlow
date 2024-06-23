@@ -13,14 +13,46 @@ import {
   Switch,
   cn,
 } from "@nextui-org/react";
+import { Toaster, toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 import { EditDocumentIcon } from "@/components/icons";
+import UpdateProject from "@/lib/fetch/project/PUT/UpdateProject";
 
 export default function EditProjectModal({ project }: any) {
+  const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const [name, setName] = React.useState(project.name);
+  const [description, setDescription] = React.useState(project.description);
+  const [alertflowRunners, setAlertflowRunners] = React.useState(
+    project.alertflow_runners,
+  );
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  async function updateProject() {
+    setIsLoading(true);
+    const response = await UpdateProject(
+      project.id,
+      name,
+      description,
+      alertflowRunners,
+    );
+
+    if (!response.error) {
+      router.refresh();
+      onOpenChange();
+      setIsLoading(false);
+      toast.success("Project updated successfully");
+    } else {
+      setIsLoading(false);
+      toast.error("Failed to update project");
+    }
+  }
 
   return (
     <>
+      <Toaster richColors position="bottom-center" />
       <Button
         color="warning"
         endContent={<EditDocumentIcon />}
@@ -33,23 +65,26 @@ export default function EditProjectModal({ project }: any) {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">
+              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 text-warning">
+                <EditDocumentIcon />
                 Edit Project
               </ModalHeader>
               <ModalBody>
                 <Input
-                  defaultValue={project.name}
                   label="Name"
                   name="name"
                   placeholder="Enter the project name"
+                  value={name}
                   variant="bordered"
+                  onValueChange={setName}
                 />
                 <Input
-                  defaultValue={project.description}
                   label="Description"
                   name="description"
                   placeholder="Enter the project description"
+                  value={description}
                   variant="bordered"
+                  onValueChange={setDescription}
                 />
                 <Switch
                   classNames={{
@@ -69,7 +104,8 @@ export default function EditProjectModal({ project }: any) {
                       "group-data-[selected]:group-data-[pressed]:ml-4",
                     ),
                   }}
-                  defaultSelected={project.alertflow_runners}
+                  isSelected={alertflowRunners}
+                  onValueChange={setAlertflowRunners}
                 >
                   <div className="flex flex-col gap-1">
                     <p className="text-medium">Enable AlertFlow Runners</p>
@@ -83,7 +119,11 @@ export default function EditProjectModal({ project }: any) {
                 <Button color="default" variant="bordered" onPress={onClose}>
                   Discard
                 </Button>
-                <Button color="primary" onPress={onClose}>
+                <Button
+                  color="primary"
+                  isLoading={isLoading}
+                  onPress={updateProject}
+                >
                   Save Changes
                 </Button>
               </ModalFooter>

@@ -10,11 +10,15 @@ import {
   Button,
   useDisclosure,
   Input,
+  Divider,
+  Snippet,
+  Chip,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { Toaster, toast } from "sonner";
+import { LibraryIcon } from "lucide-react";
 
-import { PlusIcon } from "@/components/icons";
+import { CheckIcon, InfoIcon, PlusIcon } from "@/components/icons";
 import AddProjectRunner from "@/lib/fetch/project/POST/AddRunner";
 
 export default function AddRunnerModal({ projectID }: any) {
@@ -22,6 +26,13 @@ export default function AddRunnerModal({ projectID }: any) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isCreateLoading, setIsCreateLoading] = useState(false);
   const [name, setName] = React.useState("");
+
+  // instructions modal
+  const {
+    isOpen: isOpenInstructions,
+    onOpen: onOpenInstructions,
+    onOpenChange: onOpenChangeInstructions,
+  } = useDisclosure();
 
   async function handleCreateAPIKey() {
     setIsCreateLoading(true);
@@ -34,7 +45,7 @@ export default function AddRunnerModal({ projectID }: any) {
     if (response.result === "success") {
       setName("");
       onOpenChange();
-      toast.success("Runner created successfully");
+      onOpenChangeInstructions();
       router.refresh();
     } else {
       toast.error("Failed to create runner");
@@ -79,6 +90,67 @@ export default function AddRunnerModal({ projectID }: any) {
                   onPress={handleCreateAPIKey}
                 >
                   Add Runner
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+      <Modal
+        isOpen={isOpenInstructions}
+        placement="center"
+        onOpenChange={onOpenChangeInstructions}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1 text-success">
+                Your new Runner can now be configured
+              </ModalHeader>
+              <ModalBody>
+                <p>
+                  You can now use the below API URL to configure your Runner.
+                </p>
+                <Divider />
+                <div>
+                  <p className="text-sm font-bold text-default-400">API URL</p>
+                  <Snippet hideSymbol className="w-full">
+                    {`${process.env.API_ENDPOINT}/runners`}
+                  </Snippet>
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-default-400">
+                    Runner ID
+                  </p>
+                  <Chip
+                    color="primary"
+                    radius="sm"
+                    startContent={<InfoIcon />}
+                    variant="flat"
+                  >
+                    The Runner-ID can be found on the Runners-Tab
+                  </Chip>
+                </div>
+                <p className="text-sm text-default-500 mt-2">
+                  If you need help with the configuration, please click the
+                  documentation button below.
+                </p>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  color="default"
+                  startContent={<LibraryIcon />}
+                  variant="bordered"
+                  onPress={onClose}
+                >
+                  Show Documentation
+                </Button>
+                <Button
+                  color="success"
+                  startContent={<CheckIcon />}
+                  onPress={onClose}
+                >
+                  Understood
                 </Button>
               </ModalFooter>
             </>

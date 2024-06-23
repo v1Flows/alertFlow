@@ -31,7 +31,6 @@ import {
   EyeIcon,
   InfoIcon,
 } from "@/components/icons";
-import { subtitle } from "@/components/primitives";
 import { IconWrapper } from "@/lib/IconWrapper";
 import DeleteFlow from "@/lib/fetch/flow/DELETE/DeleteFlow";
 
@@ -68,9 +67,12 @@ export default function FlowList({ flows, projects }: any) {
     <main>
       <Toaster richColors position="bottom-center" />
       <div className="flex items-center justify-between">
-        <h1 className={subtitle()} style={{ color: "violet" }}>
-          Flows
-        </h1>
+        <div className="flex items-center space-x-1">
+          <p className="text-2xl font-bold mb-0 text-default-500">
+            {flows.length}
+          </p>
+          <p className="text-2xl font-bold mb-0 text-primary">Flows</p>
+        </div>
         <NewFlowModal flows={flows} projects={projects} />
       </div>
       <Divider className="mb-4 mt-4" />
@@ -136,7 +138,7 @@ export default function FlowList({ flows, projects }: any) {
                 </CardHeader>
                 <Divider />
                 <CardBody>
-                  <div className="flex items-center gap-2 justify-start">
+                  <div className="flex items-center justify-start gap-2 flex-wrap">
                     <Chip color="primary" radius="sm" size="sm" variant="flat">
                       <p className="font-bold">
                         Project:{" "}
@@ -178,7 +180,7 @@ export default function FlowList({ flows, projects }: any) {
                 </CardBody>
                 <CardFooter>
                   <Button
-                    className="w-full"
+                    className="w-full font-bold"
                     color="primary"
                     radius="sm"
                     variant="flat"

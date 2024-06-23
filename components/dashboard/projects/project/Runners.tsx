@@ -10,24 +10,58 @@ import {
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Snippet,
+  useDisclosure,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { Toaster, toast } from "sonner";
+import React from "react";
 
-import { VerticalDotsIcon, DeleteDocumentIcon } from "@/components/icons";
+import { VerticalDotsIcon, DeleteDocumentIcon, CopyDocumentIcon } from "@/components/icons";
 import DeleteProjectRunner from "@/lib/fetch/project/DELETE/DeleteRunner";
 import AddRunnerModal from "@/components/dashboard/projects/project/modals/AddRunner";
 
 export default function Runners({ runners, project }: any) {
   const router = useRouter();
 
-  async function handleDeleteRunner(runnerID: any) {
-    const response = await DeleteProjectRunner(runnerID);
+  // delete runner things
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [runnerToDelete, setRunnerToDelete] = React.useState("");
+  const [isDeleteLoading, setIsDeleteLoading] = React.useState(false);
+
+  const copyRunnerIDtoClipboard = (id: string) => {
+    // eslint-disable-next-line no-undef
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      // eslint-disable-next-line no-undef
+      navigator.clipboard.writeText(id);
+      toast.success("Runner ID copied to clipboard!");
+    } else {
+      toast.error("Failed to copy runner ID to clipboard");
+    }
+  };
+
+  function handleDeleteRunner(runnerID: any) {
+    setRunnerToDelete(runnerID);
+    onOpenChange();
+  }
+
+  async function deleteRunner() {
+    setIsDeleteLoading(true);
+    const response = await DeleteProjectRunner(runnerToDelete);
 
     if (response.result === "success") {
+      setRunnerToDelete("");
+      setIsDeleteLoading(false);
+      onOpenChange();
       toast.success("Runner deleted successfully");
       router.refresh();
     } else {
+      setIsDeleteLoading(false);
       toast.error("Failed to delete runner");
     }
   }
@@ -70,6 +104,14 @@ export default function Runners({ runners, project }: any) {
                           </Button>
                         </DropdownTrigger>
                         <DropdownMenu>
+                          <DropdownSection title="Actions">
+                            <DropdownItem
+                              startContent={<CopyDocumentIcon />}
+                              onClick={() => copyRunnerIDtoClipboard(runner.id)}
+                            >
+                              Copy ID
+                            </DropdownItem>
+                          </DropdownSection>
                           <DropdownSection title="Danger zone">
                             <DropdownItem
                               className="text-danger"
@@ -146,6 +188,55 @@ export default function Runners({ runners, project }: any) {
           </p>
         </div>
       )}
+      <Modal
+        backdrop="blur"
+        isOpen={isOpen}
+        placement="center"
+        onOpenChange={onOpenChange}
+      >
+        <ModalContent className="w-full">
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1 text-danger">
+                Are you sure?
+              </ModalHeader>
+              <ModalBody>
+                <p>
+                  You are about to delete the following runner which{" "}
+                  <span className="font-bold">cannot be undone</span>:
+                </p>
+                <Divider />
+                <Snippet hideCopyButton hideSymbol>
+                  <span>
+                    Name:{" "}
+                    {
+                      runners.find(
+                        (runner: any) => runner.id === runnerToDelete,
+                      ).name
+                    }
+                  </span>
+                  <span>ID: {runnerToDelete}</span>
+                </Snippet>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="default" variant="bordered" onPress={onClose}>
+                  Cancel
+                </Button>
+                <Button
+                  className="font-bold"
+                  color="danger"
+                  isLoading={isDeleteLoading}
+                  startContent={<DeleteDocumentIcon />}
+                  variant="solid"
+                  onPress={deleteRunner}
+                >
+                  DELETE
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </main>
   );
 }

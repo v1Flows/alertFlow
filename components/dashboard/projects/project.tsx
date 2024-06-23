@@ -34,8 +34,8 @@ export async function Project({ id }: any) {
       <div className="flex items-end justify-between mb-4 mt-2">
         <div>
           <h1
-            className={subtitle({ className: "mb-0" })}
-            style={{ color: "violet" }}
+            className={subtitle({ className: "mb-0 font-bold" })}
+            style={{ color: "#0072f5" }}
           >
             {data.name}
           </h1>

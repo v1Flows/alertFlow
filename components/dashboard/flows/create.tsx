@@ -96,8 +96,13 @@ export default function NewFlowModal({ projects, flows }: any) {
   return (
     <>
       <Toaster richColors position="bottom-center" />
-      <Button color="primary" radius="sm" variant="solid" onPress={onOpen}>
-        <PlusIcon />
+      <Button
+        color="primary"
+        radius="sm"
+        startContent={<PlusIcon />}
+        variant="solid"
+        onPress={onOpen}
+      >
         New Flow
       </Button>
       <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
@@ -216,7 +221,8 @@ export default function NewFlowModal({ projects, flows }: any) {
               <ModalBody>
                 <p>
                   Your new flow has been created successfully and is ready to be
-                  used. You only have to use the Flow-ID and the API-URL which can be found below.
+                  used. You only have to use the Flow-ID and the API-URL which
+                  can be found below.
                 </p>
                 <p>
                   If you need help with that please click on the documentation

@@ -11,7 +11,6 @@ import {
   Divider,
   Switch,
   cn,
-  Snippet,
 } from "@nextui-org/react";
 import { Toaster, toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -74,8 +73,13 @@ export default function NewProjectModal() {
   return (
     <>
       <Toaster richColors position="bottom-center" />
-      <Button color="primary" radius="sm" variant="solid" onPress={onOpen}>
-        <PlusIcon />
+      <Button
+        color="primary"
+        radius="sm"
+        startContent={<PlusIcon />}
+        variant="solid"
+        onPress={onOpen}
+      >
         New Project
       </Button>
       <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
@@ -169,8 +173,8 @@ export default function NewProjectModal() {
               </ModalHeader>
               <ModalBody>
                 <p>
-                  Your new project has been created successfully and is ready to be
-                  used.
+                  Your new project has been created successfully and is ready to
+                  be used.
                 </p>
                 <p className="text-sm font-bold text-default-400">
                   The Project-ID can be found on the Projects page

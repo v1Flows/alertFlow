@@ -19,13 +19,13 @@ import {
   ModalFooter,
   Snippet,
   useDisclosure,
+  Chip,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { Toaster, toast } from "sonner";
 
 import { IconWrapper } from "@/lib/IconWrapper";
 import { EyeIcon, InfoIcon } from "@/components/icons";
-import { subtitle } from "@/components/primitives";
 import {
   CopyDocumentIcon,
   DeleteDocumentIcon,
@@ -66,9 +66,12 @@ export function ProjectsList({ projects }: any) {
     <main>
       <Toaster richColors position="bottom-center" />
       <div className="flex items-center justify-between">
-        <h1 className={subtitle()} style={{ color: "violet" }}>
-          Projects
-        </h1>
+        <div className="flex items-center space-x-1">
+          <p className="text-2xl font-bold mb-0 text-default-500">
+            {projects.length}
+          </p>
+          <p className="text-2xl font-bold mb-0 text-primary">Projects</p>
+        </div>
         <NewProjectModal />
       </div>
       <Divider className="mb-4 mt-4" />
@@ -134,6 +137,16 @@ export function ProjectsList({ projects }: any) {
                 </CardHeader>
                 <Divider />
                 <CardBody>
+                  <div className="flex items-center justify-start gap-2 flex-wrap">
+                    <Chip
+                      color="secondary"
+                      radius="sm"
+                      size="sm"
+                      variant="flat"
+                    >
+                      <p className="font-bold">ID: {project.id}</p>
+                    </Chip>
+                  </div>
                   <p className="text-small text-default-500 mt-2">
                     Created At:{" "}
                     {new Date(project.created_at).toLocaleString("de-DE")}
@@ -141,7 +154,7 @@ export function ProjectsList({ projects }: any) {
                 </CardBody>
                 <CardFooter>
                   <Button
-                    className="w-full"
+                    className="w-full font-bold"
                     color="primary"
                     radius="sm"
                     variant="flat"
