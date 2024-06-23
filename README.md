@@ -1,35 +1,53 @@
-# vue
+# Next.js & NextUI Template
 
-This template should help get you started developing with Vue 3 in Vite.
+This is a template for creating applications using Next.js 14 (app directory) and NextUI (v2).
 
-## Recommended IDE Setup
+[Try it on CodeSandbox](https://githubbox.com/nextui-org/next-app-template)
 
-[VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar) (and disable Vetur).
+## Technologies Used
 
-## Type Support for `.vue` Imports in TS
+- [Next.js 14](https://nextjs.org/docs/getting-started)
+- [NextUI v2](https://nextui.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Tailwind Variants](https://tailwind-variants.org)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Framer Motion](https://www.framer.com/motion/)
+- [next-themes](https://github.com/pacocoursey/next-themes)
 
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates.
+## How to Use
 
-However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can run `Volar: Switch TS Plugin on/off` from VS Code command palette.
+### Use the template with create-next-app
 
-## Customize configuration
+To create a new project based on this template using `create-next-app`, run the following command:
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+```bash
+npx create-next-app -e https://github.com/nextui-org/next-app-template
+```
 
-## Project Setup
+### Install dependencies
 
-```sh
+You can use one of them `npm`, `yarn`, `pnpm`, `bun`, Example using `npm`:
+
+```bash
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### Run the development server
 
-```sh
+```bash
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+### Setup pnpm (optional)
 
-```sh
-npm run build
+If you are using `pnpm`, you need to add the following code to your `.npmrc` file:
+
+```bash
+public-hoist-pattern[]=*@nextui-org/*
 ```
+
+After modifying the `.npmrc` file, you need to run `pnpm install` again to ensure that the dependencies are installed correctly.
+
+## License
+
+Licensed under the [MIT license](https://github.com/nextui-org/next-app-template/blob/main/LICENSE).
