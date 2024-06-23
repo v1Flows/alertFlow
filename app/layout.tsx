@@ -1,32 +1,57 @@
-import Providers from '@/components/layout/providers';
-import { Toaster } from '@/components/ui/toaster';
-import '@uploadthing/react/styles.css';
-import type { Metadata } from 'next';
-import NextTopLoader from 'nextjs-toploader';
-import { Inter } from 'next/font/google';
-import './globals.css';
-import { auth } from '@/auth';
+import React from "react";
+import "@/styles/globals.css";
+import { Metadata, Viewport } from "next";
+import clsx from "clsx";
 
-const inter = Inter({ subsets: ['latin'] });
+import { siteConfig } from "@/config/site";
+import { fontSans } from "@/config/fonts";
+import { Navbar } from "@/components/navbar";
+
+import { Providers } from "./providers";
 
 export const metadata: Metadata = {
-  title: 'Next Shadcn',
-  description: 'Basic dashboard with Next.js and Shadcn'
+  title: {
+    default: siteConfig.name,
+    template: `%s - ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
-export default async function RootLayout({
-  children
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "white" },
+    { media: "(prefers-color-scheme: dark)", color: "black" },
+  ],
+};
+
+export default function RootLayout({
+  children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} overflow-hidden`}>
-        <NextTopLoader />
-        <Providers session={session}>
-          <Toaster />
-          {children}
+    <html suppressHydrationWarning lang="en">
+      <head />
+      <body
+        className={clsx(
+          "min-h-screen bg-background font-sans antialiased",
+          fontSans.variable,
+        )}
+      >
+        <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
+          <div className="relative flex flex-col h-screen">
+            <Navbar />
+            <main className="container mx-auto max-w-7xl pt-2 px-6 flex-grow">
+              {children}
+            </main>
+            <footer className="w-full flex items-center justify-center py-3">
+              <span className="text-default-600">Powered by&nbsp;</span>
+              <p className="text-primary">JustLab</p>
+            </footer>
+          </div>
         </Providers>
       </body>
     </html>
