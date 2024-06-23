@@ -2,7 +2,6 @@
 "use client";
 import React, { useState } from "react";
 import {
-  Avatar,
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
@@ -17,6 +16,7 @@ import {
   Checkbox,
   Input,
   Link,
+  User,
 } from "@nextui-org/react";
 
 import { Logout } from "@/lib/logout";
@@ -76,14 +76,17 @@ export default function Login(user: any) {
       {userData?.username && (
         <Dropdown>
           <DropdownTrigger>
-            <Avatar
-              isBordered
-              as="button"
-              className="bg-gradient-to-r from-indigo-500 to-purple-500"
-              color="primary"
+            <User
+              avatarProps={{
+                name: userData?.username,
+                radius: "sm",
+                isBordered: true,
+                size: "sm",
+                color: "primary",
+              }}
+              className="gap-3"
+              description={userData?.email}
               name={userData?.username}
-              radius="sm"
-              size="sm"
             />
           </DropdownTrigger>
           <DropdownMenu
