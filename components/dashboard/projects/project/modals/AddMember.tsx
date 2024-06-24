@@ -28,10 +28,14 @@ export default function AddMemberModal({ projectID }: any) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoginLoading, setIsLoginLoading] = useState(false);
   const [mail, setMail] = React.useState("");
-  const [role, setRole] = React.useState(new Set([]));
+  const [role, setRole] = React.useState("");
 
   const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState("");
+
+  const handleSelectRole = (e: any) => {
+    setRole(e.currentKey);
+  };
 
   async function handleAddUser() {
     setIsLoginLoading(true);
@@ -41,14 +45,14 @@ export default function AddMemberModal({ projectID }: any) {
       members: [
         {
           email: mail,
-          role: role.currentKey,
+          role: role,
         },
       ],
     });
 
     if (response.result === "success") {
       setMail("");
-      setRole(new Set([]));
+      setRole("");
       setError(false);
       setErrorText("");
       onOpenChange();
@@ -102,9 +106,9 @@ export default function AddMemberModal({ projectID }: any) {
                   className="w-full"
                   label="Member Role"
                   placeholder="Select the role of the member"
-                  selectedKeys={role}
+                  selectedKeys={[role]}
                   variant="bordered"
-                  onSelectionChange={(key: any) => setRole(key)}
+                  onSelectionChange={handleSelectRole}
                 >
                   <SelectItem
                     key="Owner"
