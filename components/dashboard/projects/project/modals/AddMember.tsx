@@ -12,12 +12,16 @@ import {
   Input,
   Select,
   SelectItem,
+  Card,
+  CardHeader,
+  CardBody,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { Toaster, toast } from "sonner";
 
-import { PlusIcon } from "@/components/icons";
-import CreateProjectApiKey from "@/lib/fetch/project/POST/CreateAPIKey";
+import { InfoIcon, PlusIcon } from "@/components/icons";
+import UpdateProjectMembers from "@/lib/fetch/project/PUT/UpdateProjectMembers";
+import { IconWrapper } from "@/lib/IconWrapper";
 
 export default function AddMemberModal({ projectID }: any) {
   const router = useRouter();
@@ -26,21 +30,34 @@ export default function AddMemberModal({ projectID }: any) {
   const [mail, setMail] = React.useState("");
   const [role, setRole] = React.useState(new Set([]));
 
-  async function handleCreateAPIKey() {
+  const [error, setError] = useState(false);
+  const [errorText, setErrorText] = useState("");
+
+  async function handleAddUser() {
     setIsLoginLoading(true);
 
-    const response = await CreateProjectApiKey({
-      projectId: projectID,
-      mail,
+    const response = await UpdateProjectMembers({
+      id: projectID,
+      members: [
+        {
+          email: mail,
+          role: role.currentKey,
+        },
+      ],
     });
 
     if (response.result === "success") {
       setMail("");
+      setRole(new Set([]));
+      setError(false);
+      setErrorText("");
       onOpenChange();
       toast.success("Member added successfully");
       router.refresh();
-    } else {
-      toast.error("Failed to add member");
+    } else if (response.error) {
+      setError(true);
+      setErrorText(response.error);
+      toast.error("Failure: " + response.error);
     }
 
     setIsLoginLoading(false);
@@ -64,6 +81,16 @@ export default function AddMemberModal({ projectID }: any) {
                 Add Member to Project
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <Card className="border border-danger-300 border-2">
+                    <CardHeader className="justify-start gap-2 items-center">
+                      <IconWrapper className="bg-danger/10 text-danger">
+                        <InfoIcon className="text-lg" />
+                      </IconWrapper>
+                      <p className="text-md font-bold text-danger">{errorText}</p>
+                    </CardHeader>
+                  </Card>
+                )}
                 <Input
                   label="User Email"
                   placeholder="Enter the email of the user"
@@ -103,7 +130,7 @@ export default function AddMemberModal({ projectID }: any) {
                 <Button
                   color="primary"
                   isLoading={isLoginLoading}
-                  onPress={handleCreateAPIKey}
+                  onPress={handleAddUser}
                 >
                   Add Member
                 </Button>
