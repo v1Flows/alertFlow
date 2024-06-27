@@ -11,8 +11,10 @@ import {
   Chip,
 } from "@nextui-org/react";
 
-import { EditIcon, DeleteIcon } from "@/components/icons";
 import AddMemberModal from "@/components/dashboard/projects/project/modals/AddMember";
+
+import EditProjectMemberModal from "../modals/EditMember";
+import DeleteMemberModal from "../modals/DeleteMember";
 
 const statusColorMap: any = {
   Owner: "danger",
@@ -50,12 +52,20 @@ export default function ProjectMembers({ members, projectID }: any) {
           <div className="relative flex items-center justify-center gap-2">
             <Tooltip content="Edit user">
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <EditIcon />
+                <EditProjectMemberModal
+                  mailInc={user.email}
+                  projectID={projectID}
+                  roleInc={user.role}
+                />
               </span>
             </Tooltip>
             <Tooltip color="danger" content="Delete user">
               <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                <DeleteIcon />
+                <DeleteMemberModal
+                  mailInc={user.email}
+                  projectID={projectID}
+                  roleInc={user.role}
+                />
               </span>
             </Tooltip>
           </div>

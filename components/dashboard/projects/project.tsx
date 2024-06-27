@@ -14,7 +14,7 @@ import GetProjectRunners from "@/lib/fetch/project/runners";
 import GetProjectApiKeys from "@/lib/fetch/project/apiKeys";
 import Reloader from "@/components/reloader/Reloader";
 
-import EditProjectModal from "./project/Edit";
+import EditProjectModal from "./project/modals/Edit";
 import ProjectBreadcrumbs from "./project/breadcrumbs";
 import ProjectTabs from "./project/tabs";
 

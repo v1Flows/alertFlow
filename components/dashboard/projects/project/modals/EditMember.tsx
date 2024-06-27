@@ -15,19 +15,23 @@ import {
   Card,
   CardHeader,
 } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
 import { Toaster, toast } from "sonner";
+import { useRouter } from "next/navigation";
 
-import { InfoIcon, PlusIcon } from "@/components/icons";
+import { EditIcon, InfoIcon } from "@/components/icons";
 import UpdateProjectMembers from "@/lib/fetch/project/PUT/UpdateProjectMembers";
 import { IconWrapper } from "@/lib/IconWrapper";
 
-export default function AddMemberModal({ projectID }: any) {
+export default function EditProjectMemberModal({
+  projectID,
+  mailInc,
+  roleInc,
+}: any) {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoginLoading, setIsLoginLoading] = useState(false);
-  const [mail, setMail] = React.useState("");
-  const [role, setRole] = React.useState("");
+  const [mail, setMail] = React.useState(mailInc);
+  const [role, setRole] = React.useState(roleInc);
 
   const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState("");
@@ -36,7 +40,7 @@ export default function AddMemberModal({ projectID }: any) {
     setRole(e.currentKey);
   };
 
-  async function handleAddUser() {
+  async function handleUpdateUser() {
     setIsLoginLoading(true);
 
     const response = await UpdateProjectMembers({
@@ -69,19 +73,14 @@ export default function AddMemberModal({ projectID }: any) {
   return (
     <>
       <Toaster richColors position="bottom-center" />
-      <Button
-        color="primary"
-        endContent={<PlusIcon height={undefined} width={undefined} />}
-        onPress={onOpen}
-      >
-        Add New
-      </Button>
+      <EditIcon onClick={onOpen} />
       <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">
-                Add Member to Project
+              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 text-warning">
+                <EditIcon />
+                Edit Member
               </ModalHeader>
               <ModalBody>
                 {error && (
@@ -90,7 +89,9 @@ export default function AddMemberModal({ projectID }: any) {
                       <IconWrapper className="bg-danger/10 text-danger">
                         <InfoIcon className="text-lg" />
                       </IconWrapper>
-                      <p className="text-md font-bold text-danger">{errorText}</p>
+                      <p className="text-md font-bold text-danger">
+                        {errorText}
+                      </p>
                     </CardHeader>
                   </Card>
                 )}
@@ -133,9 +134,9 @@ export default function AddMemberModal({ projectID }: any) {
                 <Button
                   color="primary"
                   isLoading={isLoginLoading}
-                  onPress={handleAddUser}
+                  onPress={handleUpdateUser}
                 >
-                  Add Member
+                  Update Member
                 </Button>
               </ModalFooter>
             </>
