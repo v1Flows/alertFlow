@@ -16,6 +16,7 @@ import {
   Checkbox,
   Input,
   Link,
+  Avatar,
   User,
 } from "@nextui-org/react";
 
@@ -76,23 +77,39 @@ export default function Login(user: any) {
       {userData?.username && (
         <Dropdown>
           <DropdownTrigger>
-            <User
-              avatarProps={{
-                name: userData?.username,
-                radius: "sm",
-                isBordered: true,
-                size: "sm",
-                color: "primary",
-              }}
-              className="gap-3"
-              description={userData?.email}
+            <Avatar
+              isBordered
+              as="button"
+              className="transition-transform"
+              color="primary"
               name={userData?.username}
+              radius="sm"
+              size="sm"
             />
           </DropdownTrigger>
           <DropdownMenu
             aria-label="Dropdown menu with description"
             variant="faded"
           >
+            <DropdownItem key="user" showDivider>
+              <User
+                avatarProps={{
+                  size: "sm",
+                  radius: "sm",
+                  name: userData?.username,
+                }}
+                classNames={{
+                  name:
+                    userData?.role === "Admin" ? "text-danger font-bold" : "",
+                }}
+                description={userData?.email}
+                name={
+                  userData?.role === "Admin"
+                    ? userData?.username + " | " + userData?.role
+                    : userData?.username
+                }
+              />
+            </DropdownItem>
             <DropdownItem key="profile" showDivider>
               Profile
             </DropdownItem>

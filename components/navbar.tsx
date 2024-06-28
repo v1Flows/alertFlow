@@ -16,6 +16,7 @@ import { ThemeSwitch } from "@/components/theme-switch";
 import { Logo } from "@/components/icons";
 
 import DashboardMenu from "./navbar/dashboard";
+import AdminMenu from "./navbar/admin";
 
 export const Navbar = () => {
   const user = JSON.parse(cookies().get("user")?.value || "{}");
@@ -38,6 +39,11 @@ export const Navbar = () => {
         <NavbarItem>
           <DashboardMenu user={user} />
         </NavbarItem>
+        {user.role === "Admin" && (
+          <NavbarItem>
+            <AdminMenu user={user} />
+          </NavbarItem>
+        )}
         {/* <NavbarItem>
           <Link color="foreground" href="/faq">
             FAQ
@@ -76,6 +82,9 @@ export const Navbar = () => {
         <NavbarMenuItem>
           <DashboardMenu user={user} />
         </NavbarMenuItem>
+        <NavbarItem>
+          <AdminMenu user={user} />
+        </NavbarItem>
         {/* <NavbarMenuItem>
           <Link color="foreground" href="/faq">
             FAQ
