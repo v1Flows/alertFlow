@@ -82,9 +82,11 @@ export const Navbar = () => {
         <NavbarMenuItem>
           <DashboardMenu user={user} />
         </NavbarMenuItem>
-        <NavbarItem>
-          <AdminMenu user={user} />
-        </NavbarItem>
+        {user.role === "Admin" && (
+          <NavbarItem>
+            <AdminMenu user={user} />
+          </NavbarItem>
+        )}
         {/* <NavbarMenuItem>
           <Link color="foreground" href="/faq">
             FAQ

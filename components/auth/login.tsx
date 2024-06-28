@@ -134,7 +134,7 @@ export default function Login(user: any) {
           >
             Login
           </Button>
-          <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
+          <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange} isDismissable={false}>
             <ModalContent>
               {(onClose: any) => (
                 <>
