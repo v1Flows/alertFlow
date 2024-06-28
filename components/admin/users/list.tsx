@@ -180,7 +180,7 @@ export function UsersList({ users }: any) {
             </TableColumn>
           </TableHeader>
           <TableBody items={users}>
-            {(item) => (
+            {(item: any) => (
               <TableRow key={item.id}>
                 {(columnKey) => (
                   <TableCell>{renderCell(item, columnKey)}</TableCell>

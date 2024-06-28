@@ -185,7 +185,7 @@ export function ProjectList({ projects }: any) {
             </TableColumn>
           </TableHeader>
           <TableBody items={projects}>
-            {(item) => (
+            {(item: any) => (
               <TableRow key={item.id}>
                 {(columnKey) => (
                   <TableCell>{renderCell(item, columnKey)}</TableCell>
