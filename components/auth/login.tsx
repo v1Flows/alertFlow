@@ -18,20 +18,29 @@ import {
   Link,
   Avatar,
   User,
+  Card,
+  CardHeader,
 } from "@nextui-org/react";
 
 import { Logout } from "@/lib/logout";
-import { MailIcon, LockIcon, LoginIcon } from "@/components/icons";
+import { MailIcon, LockIcon, LoginIcon, InfoIcon } from "@/components/icons";
 import { setSession } from "@/lib/setSession";
+import { IconWrapper } from "@/lib/IconWrapper";
 
 export default function Login(user: any) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoginLoading, setIsLoginLoading] = useState(false);
 
+  const [error, setError] = useState(false);
+  const [errorText, setErrorText] = useState("");
+
   const userData = user.user;
 
   async function onLogin() {
     setIsLoginLoading(true);
+    setError(false);
+    setErrorText("");
+
     const emailInput = document.getElementsByName(
       "email",
     )[0] as HTMLInputElement;
@@ -60,11 +69,14 @@ export default function Login(user: any) {
     setSession(token, user, expires_at);
 
     if (token) {
+      setError(false);
+      setErrorText("");
       setIsLoginLoading(false);
       onOpenChange();
     } else {
       setIsLoginLoading(false);
-      alert("Invalid credentials");
+      setError(true);
+      setErrorText("Invalid credentials");
     }
   }
 
@@ -134,7 +146,12 @@ export default function Login(user: any) {
           >
             Login
           </Button>
-          <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange} isDismissable={false}>
+          <Modal
+            isDismissable={false}
+            isOpen={isOpen}
+            placement="center"
+            onOpenChange={onOpenChange}
+          >
             <ModalContent>
               {(onClose: any) => (
                 <>
@@ -142,6 +159,18 @@ export default function Login(user: any) {
                     Log in
                   </ModalHeader>
                   <ModalBody>
+                    {error && (
+                      <Card className="border border-danger-300 border-2">
+                        <CardHeader className="justify-start gap-2 items-center">
+                          <IconWrapper className="bg-danger/10 text-danger">
+                            <InfoIcon className="text-lg" />
+                          </IconWrapper>
+                          <p className="text-md font-bold text-danger">
+                            {errorText}
+                          </p>
+                        </CardHeader>
+                      </Card>
+                    )}
                     <Input
                       required
                       endContent={

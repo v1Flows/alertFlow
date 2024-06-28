@@ -1,9 +1,12 @@
 import { UsersList } from "@/components/admin/users/list";
+import AdminGetUsers from "@/lib/fetch/admin/users";
 
-export default function AdminUsersPage() {
+export default async function AdminUsersPage() {
+  const user = await AdminGetUsers();
+
   return (
     <>
-      <UsersList />
+      <UsersList users={user} />
     </>
   );
 }

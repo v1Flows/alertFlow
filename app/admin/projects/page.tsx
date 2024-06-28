@@ -1,9 +1,12 @@
 import { ProjectList } from "@/components/admin/projects/list";
+import AdminGetProjects from "@/lib/fetch/admin/projects";
 
-export default function AdminProjectsPage() {
+export default async function AdminProjectsPage() {
+  const projects = await AdminGetProjects();
+
   return (
     <>
-      <ProjectList />
+      <ProjectList projects={projects} />
     </>
   );
 }
