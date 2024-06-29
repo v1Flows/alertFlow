@@ -161,7 +161,7 @@ export function ProjectList({ projects }: any) {
           <p className="text-2xl mb-0">Projects</p>
         </div>
       </div>
-      <Divider className="mb-4 mt-2" />
+      <Divider className="my-4" />
       <div>
         <Table aria-label="Example table with custom cells">
           <TableHeader>

@@ -20,6 +20,7 @@ import AdminMenu from "./navbar/admin";
 
 export const Navbar = () => {
   const user = JSON.parse(cookies().get("user")?.value || "{}");
+  const session = cookies().get("session")?.value;
 
   return (
     <NextUINavbar maxWidth="xl" position="sticky">
@@ -64,7 +65,7 @@ export const Navbar = () => {
           <ThemeSwitch />
         </NavbarItem>
         <NavbarItem className="hidden sm:flex">
-          <Login user={user} />
+          <Login user={user} session={session} />
         </NavbarItem>
       </NavbarContent>
 
@@ -99,7 +100,7 @@ export const Navbar = () => {
         </NavbarMenuItem> */}
         <NavbarMenuItem>
           <Divider className="my-4" />
-          <Login user={user} />
+          <Login user={user} session={session} />
         </NavbarMenuItem>
       </NavbarMenu>
     </NextUINavbar>

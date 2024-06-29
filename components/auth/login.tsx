@@ -23,18 +23,24 @@ import {
 } from "@nextui-org/react";
 
 import { Logout } from "@/lib/logout";
-import { MailIcon, LockIcon, LoginIcon, InfoIcon } from "@/components/icons";
+import {
+  MailIcon,
+  LockIcon,
+  LoginIcon,
+  InfoIcon,
+  CopyDocumentIcon,
+} from "@/components/icons";
 import { setSession } from "@/lib/setSession";
 import { IconWrapper } from "@/lib/IconWrapper";
 
-export default function Login(user: any) {
+export default function Login({ user, session }: any) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoginLoading, setIsLoginLoading] = useState(false);
 
   const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState("");
 
-  const userData = user.user;
+  const userData = user;
 
   async function onLogin() {
     setIsLoginLoading(true);
@@ -122,8 +128,16 @@ export default function Login(user: any) {
                 }
               />
             </DropdownItem>
-            <DropdownItem key="profile" showDivider>
-              Profile
+            <DropdownItem key="profile">Profile</DropdownItem>
+            <DropdownItem
+              key="api_key"
+              showDivider
+              startContent={<CopyDocumentIcon />}
+              onPress={() => {
+                navigator.clipboard.writeText(session);
+              }}
+            >
+              Copy API Key
             </DropdownItem>
             <DropdownItem
               key="logout"

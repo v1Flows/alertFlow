@@ -153,7 +153,7 @@ export function UsersList({ users }: any) {
           <p className="text-2xl mb-0">Users</p>
         </div>
       </div>
-      <Divider className="mb-4 mt-2" />
+      <Divider className="my-4" />
       <div>
         <Table aria-label="Example table with custom cells">
           <TableHeader>
