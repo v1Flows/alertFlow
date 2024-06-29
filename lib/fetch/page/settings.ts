@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-export default async function AdminGetSettings() {
+export default async function PageGetSettings() {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;
@@ -14,7 +14,7 @@ export default async function AdminGetSettings() {
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.API_ENDPOINT}/admin/settings`, {
+    const res = await fetch(`${process.env.API_ENDPOINT}/page/settings`, {
       method: "GET",
       headers: headers,
     });

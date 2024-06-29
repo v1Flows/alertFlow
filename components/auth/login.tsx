@@ -21,12 +21,13 @@ import {
   Card,
   CardHeader,
 } from "@nextui-org/react";
+import { LogInIcon, UserPlusIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import { Logout } from "@/lib/logout";
 import {
   MailIcon,
   LockIcon,
-  LoginIcon,
   InfoIcon,
   CopyDocumentIcon,
 } from "@/components/icons";
@@ -34,6 +35,8 @@ import { setSession } from "@/lib/setSession";
 import { IconWrapper } from "@/lib/IconWrapper";
 
 export default function Login({ user, session }: any) {
+  const router = useRouter();
+
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoginLoading, setIsLoginLoading] = useState(false);
 
@@ -152,14 +155,24 @@ export default function Login({ user, session }: any) {
       )}
       {!userData?.username && (
         <>
-          <Button
-            color="primary"
-            startContent={<LoginIcon className="text-danger" />}
-            variant="flat"
-            onPress={onOpen}
-          >
-            Login
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              color="primary"
+              startContent={<LogInIcon />}
+              variant="flat"
+              onPress={onOpen}
+            >
+              Login
+            </Button>
+            <Button
+              color="primary"
+              startContent={<UserPlusIcon />}
+              variant="flat"
+              onPress={() => router.push("/auth/signup")}
+            >
+              Sign Up
+            </Button>
+          </div>
           <Modal
             isDismissable={false}
             isOpen={isOpen}

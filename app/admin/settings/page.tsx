@@ -1,8 +1,8 @@
 import { Settings } from "@/components/admin/settings/list";
-import AdminGetSettings from "@/lib/fetch/admin/settings";
+import PageGetSettings from "@/lib/fetch/page/settings";
 
 export default async function AdminSettingsPage() {
-  var settings = await AdminGetSettings();
+  var settings = await PageGetSettings();
 
   return (
     <>

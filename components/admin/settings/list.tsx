@@ -1,10 +1,22 @@
 "use client";
-import { Card, CardBody, CardHeader, Divider, Switch } from "@nextui-org/react";
-import { ActivityIcon, ConstructionIcon, FileTerminalIcon, MilestoneIcon } from "lucide-react";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Divider,
+  Switch,
+} from "@nextui-org/react";
+import {
+  ConstructionIcon,
+  FileTerminalIcon,
+  MilestoneIcon,
+} from "lucide-react";
 import React from "react";
+import { useRouter } from "next/navigation";
+import { Toaster, toast } from "sonner";
 
 import {
-  Activity,
   Flash,
   MailIcon,
   PlayCircleIcon,
@@ -12,8 +24,11 @@ import {
   TagIcon,
   UsersIcon,
 } from "@/components/icons";
+import UpdateSettings from "@/lib/fetch/admin/POST/UpdateSettings";
 
 export function Settings({ settings }: any) {
+  const router = useRouter();
+
   const [maintenance, setMaintenance] = React.useState(settings.maintenance);
   const [signup, setSignup] = React.useState(settings.signup);
   const [createProjects, setCreateProjects] = React.useState(
@@ -39,8 +54,37 @@ export function Settings({ settings }: any) {
     settings.inject_payloads,
   );
 
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  async function updateSettings() {
+    setIsLoading(true);
+    const response = await UpdateSettings(
+      maintenance,
+      signup,
+      createProjects,
+      createFlows,
+      createRunners,
+      createApiKeys,
+      addProjectMembers,
+      addFlowActions,
+      startExecutions,
+      injectPayloads,
+    );
+
+    if (!response.error) {
+      setIsLoading(false);
+      toast.success("Settings updated successfully");
+      router.refresh();
+    } else {
+      setIsLoading(false);
+      router.refresh();
+      toast.error("Failed to update settings");
+    }
+  }
+
   return (
     <main>
+      <Toaster richColors position="bottom-center" />
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-1">
           <p className="text-2xl font-bold mb-0 text-danger">Admin</p>
@@ -276,6 +320,17 @@ export function Settings({ settings }: any) {
             </p>
           </CardBody>
         </Card>
+      </div>
+      <div className="my-4 w-full">
+        <Button
+          className="w-full"
+          color="primary"
+          isLoading={isLoading}
+          variant="flat"
+          onPress={updateSettings}
+        >
+          Save Settings
+        </Button>
       </div>
     </main>
   );
