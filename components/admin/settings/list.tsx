@@ -1,6 +1,17 @@
 "use client";
-import { Divider, Switch, cn } from "@nextui-org/react";
+import { Card, CardBody, CardHeader, Divider, Switch } from "@nextui-org/react";
+import { ActivityIcon, ConstructionIcon, FileTerminalIcon, MilestoneIcon } from "lucide-react";
 import React from "react";
+
+import {
+  Activity,
+  Flash,
+  MailIcon,
+  PlayCircleIcon,
+  Server,
+  TagIcon,
+  UsersIcon,
+} from "@/components/icons";
 
 export function Settings({ settings }: any) {
   const [maintenance, setMaintenance] = React.useState(settings.maintenance);
@@ -38,315 +49,233 @@ export function Settings({ settings }: any) {
         </div>
       </div>
       <Divider className="my-4" />
-      <div className="grid grid-cols-2 gap-4 items-center justify-between">
-        <Switch
-          classNames={{
-            base: cn(
-              "inline-flex flex-row-reverse w-full max-w-full bg-content1 hover:bg-content2 items-center",
-              "justify-between cursor-pointer rounded-lg gap-2 p-4 border-2 border-transparent",
-              "data-[selected=true]:border-danger",
-            ),
-            wrapper: "p-0 h-4 overflow-visible",
-            thumb: cn(
-              "w-6 h-6 border-2 shadow-lg",
-              "group-data-[hover=true]:border-danger",
-              //selected
-              "group-data-[selected=true]:ml-6",
-              // pressed
-              "group-data-[pressed=true]:w-7",
-              "group-data-[selected]:group-data-[pressed]:ml-4",
-            ),
-          }}
-          color="danger"
-          isSelected={maintenance}
-          onValueChange={setMaintenance}
+      <div className="grid md:grid-cols-2 gap-4 items-center justify-between">
+        <Card
+          className={`${maintenance ? "border-danger-200" : "border-default-200"} border-2`}
         >
-          <div className="flex flex-col gap-1">
-            <p className="text-medium">Maintenance</p>
-            <p className="text-tiny text-default-400">
-              Get access to new features before they are released.
+          <CardHeader className="flex justify-between items-center">
+            <div className="flex items-center space-x-1">
+              <ConstructionIcon className="h-4 w-4" />
+              <p className="text-md font-bold">Maintenance</p>
+            </div>
+            <Switch
+              color="danger"
+              isSelected={maintenance}
+              size="sm"
+              onValueChange={setMaintenance}
+            />
+          </CardHeader>
+          <CardBody>
+            <p className="text-sm text-default-500">
+              Enabling maintenance mode will have to following effects to users:
             </p>
-          </div>
-        </Switch>
+          </CardBody>
+        </Card>
 
-        <Switch
-          classNames={{
-            base: cn(
-              "inline-flex flex-row-reverse w-full max-w-full bg-content1 hover:bg-content2 items-center",
-              "justify-between cursor-pointer rounded-lg gap-2 p-4 border-2 border-transparent",
-              "data-[selected=true]:border-success",
-              "border-danger",
-            ),
-            wrapper: "p-0 h-4 overflow-visible",
-            thumb: cn(
-              "w-6 h-6 border-2 shadow-lg",
-              "group-data-[hover=true]:border-success",
-              //selected
-              "group-data-[selected=true]:ml-6",
-              // pressed
-              "group-data-[pressed=true]:w-7",
-              "group-data-[selected]:group-data-[pressed]:ml-4",
-            ),
-          }}
-          color="success"
-          isSelected={signup}
-          onValueChange={setSignup}
+        <Card
+          className={`${signup ? "border-success-200" : "border-danger-200"} border-2`}
         >
-          <div className="flex flex-col gap-1">
-            <p className="text-medium">SignUp</p>
-            <p className="text-tiny text-default-400">
-              Get access to new features before they are released.
+          <CardHeader className="flex justify-between items-center">
+            <div className="flex items-center space-x-1">
+              <MilestoneIcon className="h-4 w-4" />
+              <p className="text-md font-bold">SignUp</p>
+            </div>
+            <Switch
+              color="success"
+              isSelected={signup}
+              size="sm"
+              onValueChange={setSignup}
+            />
+          </CardHeader>
+          <CardBody>
+            <p className="text-sm text-default-500">
+              Disabling this option will prevent users from signing up.
             </p>
-          </div>
-        </Switch>
+          </CardBody>
+        </Card>
 
-        <Switch
-          classNames={{
-            base: cn(
-              "inline-flex flex-row-reverse w-full max-w-full bg-content1 hover:bg-content2 items-center",
-              "justify-between cursor-pointer rounded-lg gap-2 p-4 border-2 border-transparent",
-              "data-[selected=true]:border-success",
-              "border-danger",
-            ),
-            wrapper: "p-0 h-4 overflow-visible",
-            thumb: cn(
-              "w-6 h-6 border-2 shadow-lg",
-              "group-data-[hover=true]:border-success",
-              //selected
-              "group-data-[selected=true]:ml-6",
-              // pressed
-              "group-data-[pressed=true]:w-7",
-              "group-data-[selected]:group-data-[pressed]:ml-4",
-            ),
-          }}
-          color="success"
-          isSelected={createProjects}
-          onValueChange={setCreateProjects}
+        <Card
+          className={`${createProjects ? "border-success-200" : "border-danger-200"} border-2`}
         >
-          <div className="flex flex-col gap-1">
-            <p className="text-medium">Create Projects</p>
-            <p className="text-tiny text-default-400">
-              Get access to new features before they are released.
+          <CardHeader className="flex justify-between items-center">
+            <div className="flex items-center space-x-1">
+              <Server className="h-4 w-4" />
+              <p className="text-md font-bold">Create Projects</p>
+            </div>
+            <Switch
+              color="success"
+              isSelected={createProjects}
+              size="sm"
+              onValueChange={setCreateProjects}
+            />
+          </CardHeader>
+          <CardBody>
+            <p className="text-sm text-default-500">
+              Disabling this option will prevent users from creating new
+              projects.
             </p>
-          </div>
-        </Switch>
+          </CardBody>
+        </Card>
 
-        <Switch
-          classNames={{
-            base: cn(
-              "inline-flex flex-row-reverse w-full max-w-full bg-content1 hover:bg-content2 items-center",
-              "justify-between cursor-pointer rounded-lg gap-2 p-4 border-2 border-transparent",
-              "data-[selected=true]:border-success",
-              "border-danger",
-            ),
-            wrapper: "p-0 h-4 overflow-visible",
-            thumb: cn(
-              "w-6 h-6 border-2 shadow-lg",
-              "group-data-[hover=true]:border-success",
-              //selected
-              "group-data-[selected=true]:ml-6",
-              // pressed
-              "group-data-[pressed=true]:w-7",
-              "group-data-[selected]:group-data-[pressed]:ml-4",
-            ),
-          }}
-          color="success"
-          isSelected={createFlows}
-          onValueChange={setCreateFlows}
+        <Card
+          className={`${createFlows ? "border-success-200" : "border-danger-200"} border-2`}
         >
-          <div className="flex flex-col gap-1">
-            <p className="text-medium">Create Flows</p>
-            <p className="text-tiny text-default-400">
-              Get access to new features before they are released.
+          <CardHeader className="flex justify-between items-center">
+            <div className="flex items-center space-x-1">
+              <Flash className="h-4 w-4" />
+              <p className="text-md font-bold">Create Flows</p>
+            </div>
+            <Switch
+              color="success"
+              isSelected={createFlows}
+              size="sm"
+              onValueChange={setCreateFlows}
+            />
+          </CardHeader>
+          <CardBody>
+            <p className="text-sm text-default-500">
+              Disabling this option will prevent users from creating new flows.
             </p>
-          </div>
-        </Switch>
+          </CardBody>
+        </Card>
 
-        <Switch
-          classNames={{
-            base: cn(
-              "inline-flex flex-row-reverse w-full max-w-full bg-content1 hover:bg-content2 items-center",
-              "justify-between cursor-pointer rounded-lg gap-2 p-4 border-2 border-transparent",
-              "data-[selected=true]:border-success",
-              "border-danger",
-            ),
-            wrapper: "p-0 h-4 overflow-visible",
-            thumb: cn(
-              "w-6 h-6 border-2 shadow-lg",
-              "group-data-[hover=true]:border-success",
-              //selected
-              "group-data-[selected=true]:ml-6",
-              // pressed
-              "group-data-[pressed=true]:w-7",
-              "group-data-[selected]:group-data-[pressed]:ml-4",
-            ),
-          }}
-          color="success"
-          isSelected={createRunners}
-          onValueChange={setCreateRunners}
+        <Card
+          className={`${createRunners ? "border-success-200" : "border-danger-200"} border-2`}
         >
-          <div className="flex flex-col gap-1">
-            <p className="text-medium">Create Runners</p>
-            <p className="text-tiny text-default-400">
-              Get access to new features before they are released.
+          <CardHeader className="flex justify-between items-center">
+            <div className="flex items-center space-x-1">
+              <PlayCircleIcon className="h-4 w-4" />
+              <p className="text-md font-bold">Create Runners</p>
+            </div>
+            <Switch
+              color="success"
+              isSelected={createRunners}
+              size="sm"
+              onValueChange={setCreateRunners}
+            />
+          </CardHeader>
+          <CardBody>
+            <p className="text-sm text-default-500">
+              Disabling this option will prevent users from creating new runners
+              within projects.
             </p>
-          </div>
-        </Switch>
+          </CardBody>
+        </Card>
 
-        <Switch
-          classNames={{
-            base: cn(
-              "inline-flex flex-row-reverse w-full max-w-full bg-content1 hover:bg-content2 items-center",
-              "justify-between cursor-pointer rounded-lg gap-2 p-4 border-2 border-transparent",
-              "data-[selected=true]:border-success",
-              "border-danger",
-            ),
-            wrapper: "p-0 h-4 overflow-visible",
-            thumb: cn(
-              "w-6 h-6 border-2 shadow-lg",
-              "group-data-[hover=true]:border-success",
-              //selected
-              "group-data-[selected=true]:ml-6",
-              // pressed
-              "group-data-[pressed=true]:w-7",
-              "group-data-[selected]:group-data-[pressed]:ml-4",
-            ),
-          }}
-          color="success"
-          isSelected={createApiKeys}
-          onValueChange={setCreateApiKeys}
+        <Card
+          className={`${createApiKeys ? "border-success-200" : "border-danger-200"} border-2`}
         >
-          <div className="flex flex-col gap-1">
-            <p className="text-medium">Create API Keys</p>
-            <p className="text-tiny text-default-400">
-              Get access to new features before they are released.
+          <CardHeader className="flex justify-between items-center">
+            <div className="flex items-center space-x-1">
+              <TagIcon className="h-4 w-4" />
+              <p className="text-md font-bold">Create API Keys</p>
+            </div>
+            <Switch
+              color="success"
+              isSelected={createApiKeys}
+              size="sm"
+              onValueChange={setCreateApiKeys}
+            />
+          </CardHeader>
+          <CardBody>
+            <p className="text-sm text-default-500">
+              Disabling this option will prevent users from creating new api
+              keys within projects.
             </p>
-          </div>
-        </Switch>
+          </CardBody>
+        </Card>
 
-        <Switch
-          classNames={{
-            base: cn(
-              "inline-flex flex-row-reverse w-full max-w-full bg-content1 hover:bg-content2 items-center",
-              "justify-between cursor-pointer rounded-lg gap-2 p-4 border-2 border-transparent",
-              "data-[selected=true]:border-success",
-              "border-danger",
-            ),
-            wrapper: "p-0 h-4 overflow-visible",
-            thumb: cn(
-              "w-6 h-6 border-2 shadow-lg",
-              "group-data-[hover=true]:border-success",
-              //selected
-              "group-data-[selected=true]:ml-6",
-              // pressed
-              "group-data-[pressed=true]:w-7",
-              "group-data-[selected]:group-data-[pressed]:ml-4",
-            ),
-          }}
-          color="success"
-          isSelected={addProjectMembers}
-          onValueChange={setAddProjectMembers}
+        <Card
+          className={`${addProjectMembers ? "border-success-200" : "border-danger-200"} border-2`}
         >
-          <div className="flex flex-col gap-1">
-            <p className="text-medium">Add Project Members</p>
-            <p className="text-tiny text-default-400">
-              Get access to new features before they are released.
+          <CardHeader className="flex justify-between items-center">
+            <div className="flex items-center space-x-1">
+              <UsersIcon className="h-4 w-4" />
+              <p className="text-md font-bold">Add Project Members</p>
+            </div>
+            <Switch
+              color="success"
+              isSelected={addProjectMembers}
+              size="sm"
+              onValueChange={setAddProjectMembers}
+            />
+          </CardHeader>
+          <CardBody>
+            <p className="text-sm text-default-500">
+              Disabling this option will prevent project owners from adding new
+              members to projects.
             </p>
-          </div>
-        </Switch>
+          </CardBody>
+        </Card>
 
-        <Switch
-          classNames={{
-            base: cn(
-              "inline-flex flex-row-reverse w-full max-w-full bg-content1 hover:bg-content2 items-center",
-              "justify-between cursor-pointer rounded-lg gap-2 p-4 border-2 border-transparent",
-              "data-[selected=true]:border-success",
-              "border-danger",
-            ),
-            wrapper: "p-0 h-4 overflow-visible",
-            thumb: cn(
-              "w-6 h-6 border-2 shadow-lg",
-              "group-data-[hover=true]:border-success",
-              //selected
-              "group-data-[selected=true]:ml-6",
-              // pressed
-              "group-data-[pressed=true]:w-7",
-              "group-data-[selected]:group-data-[pressed]:ml-4",
-            ),
-          }}
-          color="success"
-          isSelected={addFlowActions}
-          onValueChange={setAddFlowActions}
+        <Card
+          className={`${addFlowActions ? "border-success-200" : "border-danger-200"} border-2`}
         >
-          <div className="flex flex-col gap-1">
-            <p className="text-medium">Add Flow Actions</p>
-            <p className="text-tiny text-default-400">
-              Get access to new features before they are released.
+          <CardHeader className="flex justify-between items-center">
+            <div className="flex items-center space-x-1">
+              <Flash className="h-4 w-4" />
+              <p className="text-md font-bold">Add Flow Actions</p>
+            </div>
+            <Switch
+              color="success"
+              isSelected={addFlowActions}
+              size="sm"
+              onValueChange={setAddFlowActions}
+            />
+          </CardHeader>
+          <CardBody>
+            <p className="text-sm text-default-500">
+              Disabling this option will prevent project owners & editors from
+              adding new actions to any flow.
             </p>
-          </div>
-        </Switch>
+          </CardBody>
+        </Card>
 
-        <Switch
-          classNames={{
-            base: cn(
-              "inline-flex flex-row-reverse w-full max-w-full bg-content1 hover:bg-content2 items-center",
-              "justify-between cursor-pointer rounded-lg gap-2 p-4 border-2 border-transparent",
-              "data-[selected=true]:border-success",
-              "border-danger",
-            ),
-            wrapper: "p-0 h-4 overflow-visible",
-            thumb: cn(
-              "w-6 h-6 border-2 shadow-lg",
-              "group-data-[hover=true]:border-success",
-              //selected
-              "group-data-[selected=true]:ml-6",
-              // pressed
-              "group-data-[pressed=true]:w-7",
-              "group-data-[selected]:group-data-[pressed]:ml-4",
-            ),
-          }}
-          color="success"
-          isSelected={startExecutions}
-          onValueChange={setStartExecutions}
+        <Card
+          className={`${startExecutions ? "border-success-200" : "border-danger-200"} border-2`}
         >
-          <div className="flex flex-col gap-1">
-            <p className="text-medium">Start Executions</p>
-            <p className="text-tiny text-default-400">
-              Get access to new features before they are released.
+          <CardHeader className="flex justify-between items-center">
+            <div className="flex items-center space-x-1">
+              <FileTerminalIcon className="h-4 w-4" />
+              <p className="text-md font-bold">Start Executions</p>
+            </div>
+            <Switch
+              color="success"
+              isSelected={startExecutions}
+              size="sm"
+              onValueChange={setStartExecutions}
+            />
+          </CardHeader>
+          <CardBody>
+            <p className="text-sm text-default-500">
+              Disabling this option will prevent runners from starting a new
+              execution.
             </p>
-          </div>
-        </Switch>
+          </CardBody>
+        </Card>
 
-        <Switch
-          classNames={{
-            base: cn(
-              "inline-flex flex-row-reverse w-full max-w-full bg-content1 hover:bg-content2 items-center",
-              "justify-between cursor-pointer rounded-lg gap-2 p-4 border-2 border-transparent",
-              "data-[selected=true]:border-success",
-              "border-danger",
-            ),
-            wrapper: "p-0 h-4 overflow-visible",
-            thumb: cn(
-              "w-6 h-6 border-2 shadow-lg",
-              "group-data-[hover=true]:border-success",
-              //selected
-              "group-data-[selected=true]:ml-6",
-              // pressed
-              "group-data-[pressed=true]:w-7",
-              "group-data-[selected]:group-data-[pressed]:ml-4",
-            ),
-          }}
-          color="success"
-          isSelected={injectPayloads}
-          onValueChange={setInjectPayloads}
+        <Card
+          className={`${injectPayloads ? "border-success-200" : "border-danger-200"} border-2`}
         >
-          <div className="flex flex-col gap-1">
-            <p className="text-medium">Inject Payloads</p>
-            <p className="text-tiny text-default-400">
-              Get access to new features before they are released.
+          <CardHeader className="flex justify-between items-center">
+            <div className="flex items-center space-x-1">
+              <MailIcon className="h-4 w-4" />
+              <p className="text-md font-bold">Inject Payloads</p>
+            </div>
+            <Switch
+              color="success"
+              isSelected={injectPayloads}
+              size="sm"
+              onValueChange={setInjectPayloads}
+            />
+          </CardHeader>
+          <CardBody>
+            <p className="text-sm text-default-500">
+              Disabling this option will prevent incoming payloads from being
+              registered at AlertFlow.
             </p>
-          </div>
-        </Switch>
+          </CardBody>
+        </Card>
       </div>
     </main>
   );
