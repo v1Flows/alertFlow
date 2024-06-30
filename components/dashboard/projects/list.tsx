@@ -35,7 +35,7 @@ import DeleteProject from "@/lib/fetch/project/DELETE/DeleteProject";
 
 import NewProjectModal from "./create";
 
-export function ProjectsList({ projects }: any) {
+export function ProjectsList({ projects, settings }: any) {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [projectToDelete, setProjectToDelete] = React.useState("");
@@ -72,7 +72,7 @@ export function ProjectsList({ projects }: any) {
           </p>
           <p className="text-2xl font-bold mb-0 text-primary">Projects</p>
         </div>
-        <NewProjectModal />
+        <NewProjectModal settings={settings} />
       </div>
       <Divider className="mb-4 mt-4" />
       {projects.error && (

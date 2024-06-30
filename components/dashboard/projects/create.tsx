@@ -19,7 +19,7 @@ import { LibraryIcon } from "lucide-react";
 import { CheckIcon, PlusIcon } from "@/components/icons";
 import CreateProject from "@/lib/fetch/project/POST/CreateProject";
 
-export default function NewProjectModal() {
+export default function NewProjectModal({ settings }: any) {
   const router = useRouter();
 
   // create modal
@@ -75,6 +75,7 @@ export default function NewProjectModal() {
       <Toaster richColors position="bottom-center" />
       <Button
         color="primary"
+        isDisabled={!settings.create_projects}
         radius="sm"
         startContent={<PlusIcon />}
         variant="solid"

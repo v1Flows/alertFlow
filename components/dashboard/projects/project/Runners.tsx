@@ -31,7 +31,7 @@ import {
 import DeleteProjectRunner from "@/lib/fetch/project/DELETE/DeleteRunner";
 import AddRunnerModal from "@/components/dashboard/projects/project/modals/AddRunner";
 
-export default function Runners({ runners, project }: any) {
+export default function Runners({ runners, project, settings }: any) {
   const router = useRouter();
 
   // delete runner things
@@ -100,7 +100,7 @@ export default function Runners({ runners, project }: any) {
       <Toaster richColors position="bottom-center" />
       <div className="flex items-center justify-between mb-4">
         <p className="text-lg font-bold">Selfhosted Runners</p>
-        <AddRunnerModal projectID={project.id} />
+        <AddRunnerModal projectID={project.id} settings={settings} />
       </div>
       <Divider className="mb-4" />
       <div className="grid lg:grid-cols-2 gap-4">

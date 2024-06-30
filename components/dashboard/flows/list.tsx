@@ -36,7 +36,7 @@ import DeleteFlow from "@/lib/fetch/flow/DELETE/DeleteFlow";
 
 import NewFlowModal from "./create";
 
-export default function FlowList({ flows, projects }: any) {
+export default function FlowList({ flows, projects, settings }: any) {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [flowToDelete, setFlowToDelete] = React.useState("");
@@ -73,7 +73,7 @@ export default function FlowList({ flows, projects }: any) {
           </p>
           <p className="text-2xl font-bold mb-0 text-primary">Flows</p>
         </div>
-        <NewFlowModal flows={flows} projects={projects} />
+        <NewFlowModal flows={flows} projects={projects} settings={settings} />
       </div>
       <Divider className="mb-4 mt-4" />
       {flows.error && (

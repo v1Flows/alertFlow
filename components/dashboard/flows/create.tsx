@@ -23,7 +23,7 @@ import { CheckIcon, PlusIcon } from "@/components/icons";
 import GetProjectRunners from "@/lib/fetch/project/runners";
 import CreateFlow from "@/lib/fetch/flow/POST/CreateFlow";
 
-export default function NewFlowModal({ projects, flows }: any) {
+export default function NewFlowModal({ projects, flows, settings }: any) {
   const router = useRouter();
 
   // create modal
@@ -102,6 +102,7 @@ export default function NewFlowModal({ projects, flows }: any) {
         startContent={<PlusIcon />}
         variant="solid"
         onPress={onOpen}
+        isDisabled={!settings.create_flows}
       >
         New Flow
       </Button>

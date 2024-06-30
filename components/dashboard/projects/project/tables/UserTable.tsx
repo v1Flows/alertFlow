@@ -22,7 +22,7 @@ const statusColorMap: any = {
   Viewer: "default",
 };
 
-export default function ProjectMembers({ members, projectID }: any) {
+export default function ProjectMembers({ members, projectID, settings }: any) {
   const renderCell = React.useCallback((user: any, columnKey: any) => {
     const cellValue = user[columnKey];
 
@@ -78,7 +78,7 @@ export default function ProjectMembers({ members, projectID }: any) {
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col items-end justify-center gap-4">
-        <AddMemberModal projectID={projectID} />
+        <AddMemberModal projectID={projectID} settings={settings} />
       </div>
     );
   }, []);

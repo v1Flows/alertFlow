@@ -79,7 +79,12 @@ export const Navbar = async () => {
           <ThemeSwitch />
         </NavbarItem>
         <NavbarItem className="hidden sm:flex">
-          <Login session={session} showSignUp={true} user={user} />
+          <Login
+            session={session}
+            settings={settings}
+            showSignUp={true}
+            user={user}
+          />
         </NavbarItem>
       </NavbarContent>
 
@@ -114,7 +119,12 @@ export const Navbar = async () => {
         </NavbarMenuItem> */}
         <NavbarMenuItem>
           <Divider className="my-4" />
-          <Login session={session} showSignUp={true} user={user} />
+          <Login
+            session={session}
+            settings={settings}
+            showSignUp={true}
+            user={user}
+          />
         </NavbarMenuItem>
       </NavbarMenu>
     </NextUINavbar>

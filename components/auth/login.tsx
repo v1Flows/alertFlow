@@ -20,6 +20,7 @@ import {
   User,
   Card,
   CardHeader,
+  Tooltip,
 } from "@nextui-org/react";
 import { LogInIcon, UserPlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -34,7 +35,7 @@ import {
 import { setSession } from "@/lib/setSession";
 import { IconWrapper } from "@/lib/IconWrapper";
 
-export default function Login({ user, session, showSignUp }: any) {
+export default function Login({ user, session, showSignUp, settings }: any) {
   const router = useRouter();
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -164,15 +165,43 @@ export default function Login({ user, session, showSignUp }: any) {
             >
               Login
             </Button>
-            {showSignUp && (
+            {showSignUp && settings.signup && (
               <Button
-                color="primary"
+                color="secondary"
                 startContent={<UserPlusIcon />}
                 variant="flat"
                 onPress={() => router.push("/auth/signup")}
               >
                 Sign Up
               </Button>
+            )}
+            {showSignUp && !settings.signup && (
+              <Tooltip
+                color="default"
+                content={
+                  <div className="px-1 py-2">
+                    <div className="text-small font-bold text-danger">
+                      Disabled
+                    </div>
+                    <div className="text-tiny">
+                      Sign Up is currently disabled
+                    </div>
+                  </div>
+                }
+                offset={15}
+                placement="bottom"
+              >
+                <span>
+                  <Button
+                    isDisabled
+                    color="secondary"
+                    startContent={<UserPlusIcon />}
+                    variant="flat"
+                  >
+                    Sign Up
+                  </Button>
+                </span>
+              </Tooltip>
             )}
           </div>
           <Modal
