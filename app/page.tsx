@@ -4,6 +4,9 @@ import { Code } from "@nextui-org/code";
 import { title, subtitle } from "@/components/primitives";
 import HomeFeatures from "@/components/home/Features";
 import { Navbar } from "@/components/navbar";
+import HomeTerraform from "@/components/home/Terraform";
+import HomeSecurity from "@/components/home/Security";
+import HomeSelfhosting from "@/components/home/Selfhosting";
 
 export default function Home() {
   return (
@@ -31,6 +34,15 @@ export default function Home() {
 
           <div className="mt-8">
             <HomeFeatures />
+          </div>
+        </section>
+        <section className="flex flex-col gap-4 py-8 md:py-10">
+          <HomeTerraform />
+          <div className="mt-32">
+            <HomeSecurity />
+          </div>
+          <div className="mt-32">
+            <HomeSelfhosting />
           </div>
         </section>
       </main>
