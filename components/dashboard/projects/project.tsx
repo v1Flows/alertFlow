@@ -14,11 +14,11 @@ import GetProjectRunners from "@/lib/fetch/project/runners";
 import GetProjectApiKeys from "@/lib/fetch/project/apiKeys";
 import Reloader from "@/components/reloader/Reloader";
 
-import EditProjectModal from "./project/Edit";
+import EditProjectModal from "./project/modals/Edit";
 import ProjectBreadcrumbs from "./project/breadcrumbs";
 import ProjectTabs from "./project/tabs";
 
-export async function Project({ id }: any) {
+export async function Project({ id, settings }: any) {
   const data = await GetProject(id);
   const runners = await GetProjectRunners(id);
   const apiKeys = await GetProjectApiKeys(id);
@@ -114,7 +114,12 @@ export async function Project({ id }: any) {
         </div>
       </div>
       <div className="w-full mt-6">
-        <ProjectTabs apiKeys={apiKeys} project={data} runners={runners} />
+        <ProjectTabs
+          apiKeys={apiKeys}
+          project={data}
+          runners={runners}
+          settings={settings}
+        />
       </div>
     </main>
   );

@@ -21,12 +21,17 @@ import {
 import { useRouter } from "next/navigation";
 import { Toaster, toast } from "sonner";
 import React from "react";
+import TimeAgo from "react-timeago";
 
-import { VerticalDotsIcon, DeleteDocumentIcon, CopyDocumentIcon } from "@/components/icons";
+import {
+  VerticalDotsIcon,
+  DeleteDocumentIcon,
+  CopyDocumentIcon,
+} from "@/components/icons";
 import DeleteProjectRunner from "@/lib/fetch/project/DELETE/DeleteRunner";
 import AddRunnerModal from "@/components/dashboard/projects/project/modals/AddRunner";
 
-export default function Runners({ runners, project }: any) {
+export default function Runners({ runners, project, settings }: any) {
   const router = useRouter();
 
   // delete runner things
@@ -66,12 +71,36 @@ export default function Runners({ runners, project }: any) {
     }
   }
 
+  function heartbeatColor(runner: any) {
+    var timeAgo =
+      (new Date(runner.last_heartbeat.Time).getTime() - Date.now()) / 1000;
+
+    if (timeAgo < 0 && timeAgo > -30) {
+      return "success";
+    } else if (timeAgo <= -30 && timeAgo > -60) {
+      return "warning";
+    } else if (timeAgo <= -60) {
+      return "danger";
+    }
+  }
+
+  function heartbeatStatus(runner: any) {
+    var timeAgo =
+      (new Date(runner.last_heartbeat.Time).getTime() - Date.now()) / 1000;
+
+    if (timeAgo < 0 && timeAgo > -30) {
+      return true;
+    } else if (timeAgo <= -30) {
+      return false;
+    }
+  }
+
   return (
     <main>
       <Toaster richColors position="bottom-center" />
       <div className="flex items-center justify-between mb-4">
         <p className="text-lg font-bold">Selfhosted Runners</p>
-        <AddRunnerModal projectID={project.id} />
+        <AddRunnerModal projectID={project.id} settings={settings} />
       </div>
       <Divider className="mb-4" />
       <div className="grid lg:grid-cols-2 gap-4">
@@ -84,13 +113,20 @@ export default function Runners({ runners, project }: any) {
                     <p className="text-md">{runner.name}</p>
                     <p className="text-sm text-default-500">{runner.id}</p>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <Chip
                       color={runner.registered ? "success" : "danger"}
                       size="sm"
                       variant="dot"
                     >
                       {runner.registered ? "Registered" : "Unregistered"}
+                    </Chip>
+                    <Chip
+                      color={heartbeatColor(runner)}
+                      size="sm"
+                      variant="flat"
+                    >
+                      {heartbeatStatus(runner) ? "Healthy" : "Unhealthy"}
                     </Chip>
                     <div className="relative flex justify-end items-center gap-2">
                       <Dropdown backdrop="opaque">
@@ -135,8 +171,10 @@ export default function Runners({ runners, project }: any) {
                     <p className="text-sm">Active:</p>
                     <p className="text-sm">{runner.active ? "Yes" : "No"}</p>
                     <p className="text-sm">Last Heartbeat:</p>
-                    <p className="text-sm">
-                      {new Date(runner.last_heartbeat.Time).toLocaleString()}
+                    <p
+                      className={"text-" + heartbeatColor(runner) + " text-sm"}
+                    >
+                      <TimeAgo date={runner.last_heartbeat.Time} />
                     </p>
                   </div>
                 </CardBody>
@@ -154,24 +192,37 @@ export default function Runners({ runners, project }: any) {
               (runner: any) =>
                 runner.alertflow_runner === true && (
                   <Card key={runner.id}>
-                    <CardHeader>
+                    <CardHeader className="justify-between items-center">
                       <div>
                         <p className="text-md">{runner.name}</p>
                         <p className="text-sm text-default-500">{runner.id}</p>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Chip
+                          color={heartbeatColor(runner)}
+                          size="sm"
+                          variant="flat"
+                        >
+                          {heartbeatStatus(runner) ? "Healthy" : "Unhealthy"}
+                        </Chip>
                       </div>
                     </CardHeader>
                     <Divider />
                     <CardBody>
                       <div className="grid grid-cols-2 grid-rows-3 items-center justify-center">
                         <p className="text-sm">Version:</p>
-                        <p>{runner.runner_version}</p>
+                        <p className="text-sm">{runner.runner_version}</p>
                         <p className="text-sm">Active:</p>
-                        <p>{runner.active ? "Yes" : "No"}</p>
+                        <p className="text-sm">
+                          {runner.active ? "Yes" : "No"}
+                        </p>
                         <p className="text-sm">Last Heartbeat:</p>
-                        <p>
-                          {new Date(
-                            runner.last_heartbeat.Time,
-                          ).toLocaleString()}
+                        <p
+                          className={
+                            "text-" + heartbeatColor(runner) + " text-sm"
+                          }
+                        >
+                          <TimeAgo date={runner.last_heartbeat.Time} />
                         </p>
                       </div>
                     </CardBody>

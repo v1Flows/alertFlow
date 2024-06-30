@@ -21,7 +21,7 @@ import { LibraryIcon } from "lucide-react";
 import { CheckIcon, InfoIcon, PlusIcon } from "@/components/icons";
 import AddProjectRunner from "@/lib/fetch/project/POST/AddRunner";
 
-export default function AddRunnerModal({ projectID }: any) {
+export default function AddRunnerModal({ projectID, settings }: any) {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isCreateLoading, setIsCreateLoading] = useState(false);
@@ -61,6 +61,7 @@ export default function AddRunnerModal({ projectID }: any) {
         color="primary"
         endContent={<PlusIcon height={undefined} width={undefined} />}
         onPress={onOpen}
+        isDisabled={!settings.create_runners}
       >
         Add New
       </Button>

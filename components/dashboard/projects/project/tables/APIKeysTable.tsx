@@ -16,7 +16,7 @@ import { CopyDocumentIcon } from "@/components/icons";
 import AddAPIKeyModal from "@/components/dashboard/projects/project/modals/AddAPIKey";
 import DeleteAPIKeyModal from "@/components/dashboard/projects/project/modals/DeleteAPIKey";
 
-export default function ProjectAPIKeys({ apiKeys, project }: any) {
+export default function ProjectAPIKeys({ apiKeys, project, settings }: any) {
   const copyAPIKeytoClipboard = (key: string) => {
     navigator.clipboard.writeText(key);
     toast.success("Copied to clipboard!");
@@ -57,7 +57,7 @@ export default function ProjectAPIKeys({ apiKeys, project }: any) {
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col items-end justify-center gap-4">
-        <AddAPIKeyModal projectID={project.id} />
+        <AddAPIKeyModal projectID={project.id} settings={settings} />
       </div>
     );
   }, []);

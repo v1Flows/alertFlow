@@ -31,5 +31,12 @@ export async function updateSession() {
     httpOnly: true,
   });
 
+  res.cookies.set({
+    name: "user",
+    value: JSON.stringify(data.user),
+    expires: new Date(data.expires_at * 1000),
+    httpOnly: true,
+  });
+
   return res;
 }

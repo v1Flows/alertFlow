@@ -17,7 +17,7 @@ import { Toaster, toast } from "sonner";
 import { PlusIcon } from "@/components/icons";
 import CreateProjectApiKey from "@/lib/fetch/project/POST/CreateAPIKey";
 
-export default function AddAPIKeyModal({ projectID }: any) {
+export default function AddAPIKeyModal({ projectID, settings }: any) {
   const router = useRouter();
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -51,6 +51,7 @@ export default function AddAPIKeyModal({ projectID }: any) {
         color="primary"
         endContent={<PlusIcon height={undefined} width={undefined} />}
         onPress={onOpen}
+        isDisabled={!settings.create_api_keys}
       >
         Add New
       </Button>

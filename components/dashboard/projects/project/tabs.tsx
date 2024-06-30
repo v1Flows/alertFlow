@@ -7,7 +7,12 @@ import ProjectMembers from "@/components/dashboard/projects/project/tables/UserT
 import ProjectAPIKeys from "@/components/dashboard/projects/project/tables/APIKeysTable";
 import Runners from "@/components/dashboard/projects/project/Runners";
 
-export default function ProjectTabs({ project, runners, apiKeys }: any) {
+export default function ProjectTabs({
+  project,
+  runners,
+  apiKeys,
+  settings,
+}: any) {
   const [selected, setSelected] = React.useState("members");
 
   return (
@@ -29,7 +34,11 @@ export default function ProjectTabs({ project, runners, apiKeys }: any) {
               </div>
             }
           >
-            <ProjectMembers members={project.members} projectID={project.id} />
+            <ProjectMembers
+              members={project.members}
+              projectID={project.id}
+              settings={settings}
+            />
           </Tab>
           <Tab
             key="runners"
@@ -40,7 +49,7 @@ export default function ProjectTabs({ project, runners, apiKeys }: any) {
               </div>
             }
           >
-            <Runners project={project} runners={runners} />
+            <Runners project={project} runners={runners} settings={settings} />
           </Tab>
           <Tab
             key="apikeys"
@@ -51,7 +60,11 @@ export default function ProjectTabs({ project, runners, apiKeys }: any) {
               </div>
             }
           >
-            <ProjectAPIKeys apiKeys={apiKeys} project={project} />
+            <ProjectAPIKeys
+              apiKeys={apiKeys}
+              project={project}
+              settings={settings}
+            />
           </Tab>
         </Tabs>
       </div>

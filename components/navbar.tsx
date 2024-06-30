@@ -8,17 +8,23 @@ import {
   NavbarMenuItem,
   Link,
   Divider,
+  Chip,
 } from "@nextui-org/react";
 import { cookies } from "next/headers";
 
 import Login from "@/components/auth/login";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { Logo } from "@/components/icons";
+import AdminGetSettings from "@/lib/fetch/page/settings";
 
 import DashboardMenu from "./navbar/dashboard";
+import AdminMenu from "./navbar/admin";
 
-export const Navbar = () => {
+export const Navbar = async () => {
   const user = JSON.parse(cookies().get("user")?.value || "{}");
+  const session = cookies().get("session")?.value;
+
+  const settings = await AdminGetSettings();
 
   return (
     <NextUINavbar maxWidth="xl" position="sticky">
@@ -38,6 +44,11 @@ export const Navbar = () => {
         <NavbarItem>
           <DashboardMenu user={user} />
         </NavbarItem>
+        {user.role === "Admin" && (
+          <NavbarItem>
+            <AdminMenu user={user} />
+          </NavbarItem>
+        )}
         {/* <NavbarItem>
           <Link color="foreground" href="/faq">
             FAQ
@@ -50,6 +61,16 @@ export const Navbar = () => {
         </NavbarItem> */}
       </NavbarContent>
 
+      {user.role === "Admin" && settings.maintenance && (
+        <NavbarContent justify="center">
+          <NavbarItem>
+            <Chip color="danger" radius="sm" variant="flat">
+              Maintenance is Active!
+            </Chip>
+          </NavbarItem>
+        </NavbarContent>
+      )}
+
       <NavbarContent
         className="hidden sm:flex basis-1/5 sm:basis-full"
         justify="end"
@@ -58,7 +79,12 @@ export const Navbar = () => {
           <ThemeSwitch />
         </NavbarItem>
         <NavbarItem className="hidden sm:flex">
-          <Login user={user} />
+          <Login
+            session={session}
+            settings={settings}
+            showSignUp={true}
+            user={user}
+          />
         </NavbarItem>
       </NavbarContent>
 
@@ -76,6 +102,11 @@ export const Navbar = () => {
         <NavbarMenuItem>
           <DashboardMenu user={user} />
         </NavbarMenuItem>
+        {user.role === "Admin" && (
+          <NavbarItem>
+            <AdminMenu user={user} />
+          </NavbarItem>
+        )}
         {/* <NavbarMenuItem>
           <Link color="foreground" href="/faq">
             FAQ
@@ -88,7 +119,12 @@ export const Navbar = () => {
         </NavbarMenuItem> */}
         <NavbarMenuItem>
           <Divider className="my-4" />
-          <Login user={user} />
+          <Login
+            session={session}
+            settings={settings}
+            showSignUp={true}
+            user={user}
+          />
         </NavbarMenuItem>
       </NavbarMenu>
     </NextUINavbar>
