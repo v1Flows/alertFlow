@@ -34,7 +34,7 @@ import {
 import { setSession } from "@/lib/setSession";
 import { IconWrapper } from "@/lib/IconWrapper";
 
-export default function Login({ user, session }: any) {
+export default function Login({ user, session, showSignUp }: any) {
   const router = useRouter();
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -164,14 +164,16 @@ export default function Login({ user, session }: any) {
             >
               Login
             </Button>
-            <Button
-              color="primary"
-              startContent={<UserPlusIcon />}
-              variant="flat"
-              onPress={() => router.push("/auth/signup")}
-            >
-              Sign Up
-            </Button>
+            {showSignUp && (
+              <Button
+                color="primary"
+                startContent={<UserPlusIcon />}
+                variant="flat"
+                onPress={() => router.push("/auth/signup")}
+              >
+                Sign Up
+              </Button>
+            )}
           </div>
           <Modal
             isDismissable={false}

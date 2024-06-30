@@ -1,5 +1,3 @@
-import { Button } from "@nextui-org/react";
-import { RefreshCwIcon } from "lucide-react";
 import { cookies } from "next/headers";
 
 import { title, subtitle } from "@/components/primitives";
@@ -19,7 +17,7 @@ export default function MaintenancePage() {
           Apologies for the inconvenience.
         </h2>
         <div className="mt-8 flex justify-center gap-4">
-          <Login session={session} user={user} />
+          <Login session={session} showSignUp={false} user={user} />
         </div>
       </div>
     </section>
