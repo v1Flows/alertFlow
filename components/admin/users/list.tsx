@@ -9,7 +9,6 @@ import {
   TableCell,
   User,
   Chip,
-  Tooltip,
   Divider,
   Dropdown,
   DropdownTrigger,
@@ -19,10 +18,33 @@ import {
   DropdownItem,
   cn,
 } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
+import { Toaster, toast } from "sonner";
 
-import { EditIcon, DeleteIcon, EyeIcon, VerticalDotsIcon, EditDocumentIcon, LockIcon, DeleteDocumentIcon } from "@/components/icons";
+import {
+  EyeIcon,
+  VerticalDotsIcon,
+  EditDocumentIcon,
+  LockIcon,
+  DeleteDocumentIcon,
+} from "@/components/icons";
+import UpdateUserStatus from "@/lib/fetch/admin/PUT/UpdateUserStatus";
 
 export function UsersList({ users }: any) {
+  const router = useRouter();
+
+  async function changeUserStatus(userID: string, active: boolean) {
+    const res = await UpdateUserStatus(userID, active);
+
+    router.refresh();
+
+    if (!res.error) {
+      toast.success("User status updated successfully");
+    } else {
+      toast.error("Failed to update user status");
+    }
+  }
+
   const iconClasses =
     "text-xl text-default-500 pointer-events-none flex-shrink-0";
 
@@ -110,17 +132,36 @@ export function UsersList({ users }: any) {
                   >
                     Edit User
                   </DropdownItem>
-                  <DropdownItem
-                    key="disable"
-                    className="text-secondary"
-                    color="secondary"
-                    description="Disable access to AlertFlow for this user"
-                    startContent={
-                      <LockIcon className={cn(iconClasses, "text-secondary")} />
-                    }
-                  >
-                    Disable User
-                  </DropdownItem>
+                  {user.active && (
+                    <DropdownItem
+                      key="disable"
+                      className="text-secondary"
+                      color="secondary"
+                      description="Disable access to AlertFlow for this user"
+                      startContent={
+                        <LockIcon
+                          className={cn(iconClasses, "text-secondary")}
+                        />
+                      }
+                      onClick={() => changeUserStatus(user.id, false)}
+                    >
+                      Disable User
+                    </DropdownItem>
+                  )}
+                  {!user.active && (
+                    <DropdownItem
+                      key="disable"
+                      className="text-success"
+                      color="success"
+                      description="Enable access to AlertFlow for this user"
+                      startContent={
+                        <LockIcon className={cn(iconClasses, "text-success")} />
+                      }
+                      onClick={() => changeUserStatus(user.id, true)}
+                    >
+                      Enable User
+                    </DropdownItem>
+                  )}
                   <DropdownItem
                     key="delete"
                     className="text-danger"
@@ -146,6 +187,7 @@ export function UsersList({ users }: any) {
 
   return (
     <main>
+      <Toaster richColors position="bottom-center" />
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-1">
           <p className="text-2xl font-bold mb-0 text-danger">Admin</p>

@@ -24,7 +24,7 @@ import {
   TagIcon,
   UsersIcon,
 } from "@/components/icons";
-import UpdateSettings from "@/lib/fetch/admin/POST/UpdateSettings";
+import UpdateSettings from "@/lib/fetch/admin/PUT/UpdateSettings";
 
 export function Settings({ settings }: any) {
   const router = useRouter();
