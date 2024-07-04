@@ -1,0 +1,17 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+jobs:
+  build:
+    runs-on: alertflow
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag alertflow/frontend:$GITHUB_HEAD_REF --tag harbor.justlab.xyz/alertflow/frontend:$GITHUB_HEAD_REF
+      - name: Push the Docker image
+        run: docker push harbor.justlab.xyz/alertflow/frontend:$GITHUB_HEAD_REF
