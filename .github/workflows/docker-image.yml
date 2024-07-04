@@ -12,8 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag alertflow/frontend:latest --tag harbor.justlab.xyz/alertflow/frontend:latest
+        run: docker build . --file Dockerfile --tag alertflow/frontend:latest --tag harbor.justlab.xyz/alertflow/frontend:latest --tag harbor.justlab.xyz/alertflow/frontend:${{ github.ref_name }}
 
+  push:
+    runs-on: [self-hosted, alertflow]
+    steps:
       - name: Docker Login
         uses: docker/login-action@v3.2.0
         with:
@@ -23,4 +26,4 @@ jobs:
           logout: false
       
       - name: Push the Docker image
-        run: docker push harbor.justlab.xyz/alertflow/frontend:latest
+        run: docker push harbor.justlab.xyz/alertflow/frontend
