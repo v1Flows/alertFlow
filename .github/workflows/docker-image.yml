@@ -12,6 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag alertflow/frontend:$GITHUB_HEAD_REF --tag harbor.justlab.xyz/alertflow/frontend:$GITHUB_HEAD_REF
+        run: docker build . --file Dockerfile --tag alertflow/frontend:latest --tag harbor.justlab.xyz/alertflow/frontend:latest
       - name: Push the Docker image
-        run: docker push harbor.justlab.xyz/alertflow/frontend:$GITHUB_HEAD_REF
+        run: docker push harbor.justlab.xyz/alertflow/frontend:latest
