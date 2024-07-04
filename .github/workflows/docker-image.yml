@@ -25,5 +25,8 @@ jobs:
           password: ${{ secrets.HARBOR_LOGIN_PASSWORD }}
           logout: false
       
-      - name: Push the Docker image
-        run: docker push harbor.justlab.xyz/alertflow/frontend
+      - name: Push latest image
+        run: docker push harbor.justlab.xyz/alertflow/frontend:latest
+
+      - name: Push branch image
+        run: docker push harbor.justlab.xyz/alertflow/frontend:${{ github.ref_name }}
