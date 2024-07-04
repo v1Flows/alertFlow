@@ -72,13 +72,12 @@ export default function Login({ user, session, showSignUp, settings }: any) {
       }),
     });
 
-    if (!response) return;
+    const data = await response.json();
+    console.log(data)
 
-    const { token, user, expires_at } = await response.json();
+    setSession(data.token, data.user, data.expires_at);
 
-    setSession(token, user, expires_at);
-
-    if (token) {
+    if (data.token) {
       setError(false);
       setErrorText("");
       setIsLoginLoading(false);
@@ -86,7 +85,7 @@ export default function Login({ user, session, showSignUp, settings }: any) {
     } else {
       setIsLoginLoading(false);
       setError(true);
-      setErrorText("Invalid credentials");
+      setErrorText(data.error);
     }
   }
 
@@ -141,7 +140,7 @@ export default function Login({ user, session, showSignUp, settings }: any) {
                 navigator.clipboard.writeText(session);
               }}
             >
-              Copy API Key
+              Copy Token
             </DropdownItem>
             <DropdownItem
               key="logout"
@@ -223,7 +222,7 @@ export default function Login({ user, session, showSignUp, settings }: any) {
                           <IconWrapper className="bg-danger/10 text-danger">
                             <InfoIcon className="text-lg" />
                           </IconWrapper>
-                          <p className="text-md font-bold text-danger">
+                          <p className="text-md font-bold text-danger capitalize">
                             {errorText}
                           </p>
                         </CardHeader>
