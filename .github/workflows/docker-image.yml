@@ -14,9 +14,6 @@ jobs:
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag alertflow/frontend:latest --tag harbor.justlab.xyz/alertflow/frontend:latest --tag harbor.justlab.xyz/alertflow/frontend:${{ github.ref_name }}
 
-  push:
-    runs-on: [self-hosted, alertflow]
-    steps:
       - name: Docker Login
         uses: docker/login-action@v3.2.0
         with:
@@ -29,4 +26,4 @@ jobs:
         run: docker push harbor.justlab.xyz/alertflow/frontend:latest
 
       - name: Push branch image
-        run: docker push harbor.justlab.xyz/alertflow/frontend:${{ github.ref_name }}
+        run: docker push harbor.justlab.xyz/alertflow/frontend:${{ github.ref_name }}    
