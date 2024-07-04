@@ -20,6 +20,7 @@ jobs:
           registry: harbor.justlab.xyz
           username: ${{ secrets.HARBOR_LOGIN_USERNAME }}
           password: ${{ secrets.HARBOR_LOGIN_PASSWORD }}
+          logout: false
       
       - name: Push the Docker image
         run: docker push harbor.justlab.xyz/alertflow/frontend:latest
