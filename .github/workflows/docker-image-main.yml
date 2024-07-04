@@ -1,13 +1,12 @@
-name: Build & Push Docker Image
+name: Build & Push Docker Image Main
 
 on:
   push:
-    branches: [ "main", "develop" ]
-  pull_request:
-    branches: [ "main", "develop" ]
+    branches: [ "main" ]
 
 jobs:
   build:
+    name: Build & Push
     runs-on: [self-hosted, alertflow]
     steps:
       - uses: actions/checkout@v4
