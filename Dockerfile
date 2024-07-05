@@ -16,8 +16,6 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-
-
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
@@ -37,8 +35,6 @@ RUN yarn build
 # Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
-
-ENV NODE_ENV production
 
 # Uncomment the following line in case you want to disable telemetry during runtime.
 ENV NEXT_TELEMETRY_DISABLED 1
