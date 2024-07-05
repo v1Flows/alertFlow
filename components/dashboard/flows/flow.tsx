@@ -8,7 +8,6 @@ import FlowBreadcrumbs from "@/components/dashboard/flows/flow/breadcrumbs";
 import { subtitle } from "@/components/primitives";
 import { IconWrapper } from "@/lib/IconWrapper";
 import {
-  Flash,
   InfoIcon,
   Server,
   EditDocumentIcon,
@@ -16,9 +15,9 @@ import {
   PlayCircleIcon,
 } from "@/components/icons";
 import GetProjects from "@/lib/fetch/project/all";
+import GetProjectRunners from "@/lib/fetch/project/runners";
 
 import FlowTabs from "./flow/tabs";
-import GetProjectRunners from "@/lib/fetch/project/runners";
 
 export async function Flow({ id }: any) {
   const projects = await GetProjects();
@@ -122,7 +121,11 @@ export async function Flow({ id }: any) {
                   </CardHeader>
                   <CardBody>
                     <p className="text-default-500 font-bold">
-                      {flow.runner_id === "any" ? "Any" : runners.find((runner: any) => runner.id === flow.runner_id)?.name}
+                      {flow.runner_id === "any"
+                        ? "Any"
+                        : runners.find(
+                          (runner: any) => runner.id === flow.runner_id,
+                        )?.name}
                     </p>
                   </CardBody>
                 </Card>

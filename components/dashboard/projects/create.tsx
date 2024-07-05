@@ -11,13 +11,16 @@ import {
   Divider,
   Switch,
   cn,
+  Card,
+  CardHeader,
 } from "@nextui-org/react";
 import { Toaster, toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { LibraryIcon } from "lucide-react";
 
-import { CheckIcon, PlusIcon } from "@/components/icons";
+import { CheckIcon, InfoIcon, PlusIcon } from "@/components/icons";
 import CreateProject from "@/lib/fetch/project/POST/CreateProject";
+import { IconWrapper } from "@/lib/IconWrapper";
 
 export default function NewProjectModal({ settings }: any) {
   const router = useRouter();
@@ -34,6 +37,8 @@ export default function NewProjectModal({ settings }: any) {
   const [name, setName] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [alertflowRunners, setAlertflowRunners] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
 
   // loading
   const [isLoading, setIsLoading] = React.useState(false);
@@ -56,8 +61,12 @@ export default function NewProjectModal({ settings }: any) {
       setDescription("");
       setAlertflowRunners(false);
       setIsLoading(false);
+      setError(false);
+      setErrorText("");
     } else {
       setIsLoading(false);
+      setError(true);
+      setErrorText(response.error);
       toast.error("Failed to create project");
     }
   }
@@ -91,6 +100,16 @@ export default function NewProjectModal({ settings }: any) {
                 Create new Project
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <Card className="border border-danger-300 border-2">
+                    <CardHeader className="justify-start gap-2 items-center">
+                      <IconWrapper className="bg-danger/10 text-danger">
+                        <InfoIcon className="text-lg" />
+                      </IconWrapper>
+                      <p className="text-md font-bold text-danger">{errorText}</p>
+                    </CardHeader>
+                  </Card>
+                )}
                 <Input
                   isRequired
                   label="Name"

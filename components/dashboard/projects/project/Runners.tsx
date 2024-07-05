@@ -73,7 +73,7 @@ export default function Runners({ runners, project, settings }: any) {
 
   function heartbeatColor(runner: any) {
     var timeAgo =
-      (new Date(runner.last_heartbeat.Time).getTime() - Date.now()) / 1000;
+      (new Date(runner.last_heartbeat).getTime() - Date.now()) / 1000;
 
     if (timeAgo < 0 && timeAgo > -30) {
       return "success";
@@ -86,7 +86,7 @@ export default function Runners({ runners, project, settings }: any) {
 
   function heartbeatStatus(runner: any) {
     var timeAgo =
-      (new Date(runner.last_heartbeat.Time).getTime() - Date.now()) / 1000;
+      (new Date(runner.last_heartbeat).getTime() - Date.now()) / 1000;
 
     if (timeAgo < 0 && timeAgo > -30) {
       return true;
@@ -174,7 +174,7 @@ export default function Runners({ runners, project, settings }: any) {
                     <p
                       className={"text-" + heartbeatColor(runner) + " text-sm"}
                     >
-                      <TimeAgo date={runner.last_heartbeat.Time} />
+                      <TimeAgo date={runner.last_heartbeat} />
                     </p>
                   </div>
                 </CardBody>
@@ -222,7 +222,7 @@ export default function Runners({ runners, project, settings }: any) {
                             "text-" + heartbeatColor(runner) + " text-sm"
                           }
                         >
-                          <TimeAgo date={runner.last_heartbeat.Time} />
+                          <TimeAgo date={runner.last_heartbeat} />
                         </p>
                       </div>
                     </CardBody>

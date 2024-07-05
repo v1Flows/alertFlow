@@ -29,7 +29,7 @@ export default function FlowTabs({ flow, payloads }: any) {
               </div>
             }
           >
-            {!flow.actions[0].name ? (
+            {flow.actions.length === 0 ? (
               <div className="flex flex-col items-center justify-center">
                 <p className="text-center text-default-400">No actions found</p>
               </div>
@@ -61,7 +61,6 @@ export default function FlowTabs({ flow, payloads }: any) {
               </div>
             }
           >
-            {/* <ProjectAPIKeys apiKeys={apiKeys} project={project} /> */}
             <PayloadsTable payloads={payloads} />
           </Tab>
         </Tabs>
