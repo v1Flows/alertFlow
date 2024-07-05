@@ -51,6 +51,8 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
+ENV API_ENDPOINT="https://alertflow.org/api"
+
 USER nextjs
 
 CMD ["node", "server.js"]
