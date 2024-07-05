@@ -73,7 +73,6 @@ export default function Login({ user, session, showSignUp, settings }: any) {
     });
 
     const data = await response.json();
-    console.log(data)
 
     setSession(data.token, data.user, data.expires_at);
 
