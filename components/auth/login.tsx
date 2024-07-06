@@ -40,6 +40,7 @@ export default function Login({ user, session, showSignUp, settings }: any) {
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoginLoading, setIsLoginLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState("");
@@ -77,8 +78,6 @@ export default function Login({ user, session, showSignUp, settings }: any) {
     setSession(data.token, data.user, data.expires_at);
 
     if (data.token) {
-      setError(false);
-      setErrorText("");
       setIsLoginLoading(false);
       onOpenChange();
     } else {
@@ -254,6 +253,8 @@ export default function Login({ user, session, showSignUp, settings }: any) {
                         classNames={{
                           label: "text-small",
                         }}
+                        isSelected={rememberMe}
+                        onValueChange={setRememberMe}
                       >
                         Remember me
                       </Checkbox>

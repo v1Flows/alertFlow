@@ -1,9 +1,12 @@
-import { title } from "@/components/primitives";
+import SignUp from "@/components/auth/signup";
+import PageGetSettings from "@/lib/fetch/page/settings";
 
-export default function SignUpPage() {
+export default async function SignUpPage() {
+  var settings = await PageGetSettings();
+
   return (
-    <div>
-      <h1 className={title()}>SignUp</h1>
-    </div>
+    <>
+      <SignUp settings={settings} />
+    </>
   );
 }
