@@ -9,6 +9,7 @@ import {
   TableCell,
   Tooltip,
   Snippet,
+  Chip,
 } from "@nextui-org/react";
 import { Toaster, toast } from "sonner";
 
@@ -49,6 +50,19 @@ export default function ProjectAPIKeys({ apiKeys, project, settings }: any) {
         );
       case "created_at":
         return new Date(key.created_at).toLocaleString();
+      case "active":
+        return (
+          <Chip
+            className="capitalize"
+            color={key.active ? "success" : "danger"}
+            size="sm"
+            variant="flat"
+          >
+            {cellValue ? "Active" : "Inactive"}
+          </Chip>
+        );
+      case "type":
+        return <p className="capitalize">{key.type}</p>;
       default:
         return cellValue;
     }
@@ -75,6 +89,12 @@ export default function ProjectAPIKeys({ apiKeys, project, settings }: any) {
           </TableColumn>
           <TableColumn key="description" align="start">
             DESCRIPTION
+          </TableColumn>
+          <TableColumn key="active" align="start">
+            ACTIVE
+          </TableColumn>
+          <TableColumn key="type" align="start">
+            TYPE
           </TableColumn>
           <TableColumn key="created_at" align="start">
             CREATED AT

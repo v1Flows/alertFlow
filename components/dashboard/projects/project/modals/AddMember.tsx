@@ -18,7 +18,7 @@ import {
 import { useRouter } from "next/navigation";
 import { Toaster, toast } from "sonner";
 
-import { InfoIcon, PlusIcon } from "@/components/icons";
+import { InfoIcon, PlusIcon, UsersIcon } from "@/components/icons";
 import UpdateProjectMembers from "@/lib/fetch/project/PUT/UpdateProjectMembers";
 import { IconWrapper } from "@/lib/IconWrapper";
 
@@ -72,8 +72,8 @@ export default function AddMemberModal({ projectID, settings }: any) {
       <Button
         color="primary"
         endContent={<PlusIcon height={undefined} width={undefined} />}
-        onPress={onOpen}
         isDisabled={!settings.add_project_members}
+        onPress={onOpen}
       >
         Add New
       </Button>
@@ -81,7 +81,8 @@ export default function AddMemberModal({ projectID, settings }: any) {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">
+              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold">
+                <UsersIcon />
                 Add Member to Project
               </ModalHeader>
               <ModalBody>
@@ -91,7 +92,9 @@ export default function AddMemberModal({ projectID, settings }: any) {
                       <IconWrapper className="bg-danger/10 text-danger">
                         <InfoIcon className="text-lg" />
                       </IconWrapper>
-                      <p className="text-md font-bold text-danger">{errorText}</p>
+                      <p className="text-md font-bold text-danger">
+                        {errorText}
+                      </p>
                     </CardHeader>
                   </Card>
                 )}
@@ -134,9 +137,10 @@ export default function AddMemberModal({ projectID, settings }: any) {
                 <Button
                   color="primary"
                   isLoading={isLoginLoading}
+                  startContent={<PlusIcon />}
                   onPress={handleAddUser}
                 >
-                  Add Member
+                  Add
                 </Button>
               </ModalFooter>
             </>

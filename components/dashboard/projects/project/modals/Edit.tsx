@@ -65,7 +65,7 @@ export default function EditProjectModal({ project }: any) {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 text-warning">
+              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-warning">
                 <EditDocumentIcon />
                 Edit Project
               </ModalHeader>
@@ -90,7 +90,7 @@ export default function EditProjectModal({ project }: any) {
                   classNames={{
                     base: cn(
                       "inline-flex flex-row-reverse w-full max-w-md bg-content1 hover:bg-content2 items-center",
-                      "justify-between cursor-pointer rounded-lg gap-2 p-4 border-2 border-transparent",
+                      "justify-between cursor-pointer rounded-2xl gap-2 p-4 border-2 border-transparent",
                       "data-[selected=true]:border-primary",
                     ),
                     wrapper: "p-0 h-4 overflow-visible",

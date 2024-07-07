@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { Toaster, toast } from "sonner";
 
 import { DeleteIcon } from "@/components/icons";
-import DeleteProjectApiKey from "@/lib/fetch/project/DELETE/DeleteAPIKey";
+import DeleteRunnerApiKey from "@/lib/fetch/project/DELETE/DeleteRunnerAPIKey";
 
 export default function DeleteAPIKeyModal(keyID: any) {
   const router = useRouter();
@@ -24,7 +24,7 @@ export default function DeleteAPIKeyModal(keyID: any) {
   async function handleDeleteAPIKey() {
     setIsDeleteLoading(true);
 
-    const response = await DeleteProjectApiKey(keyID.keyID);
+    const response = await DeleteRunnerApiKey(keyID.keyID);
 
     if (response.result === "success") {
       onOpenChange();

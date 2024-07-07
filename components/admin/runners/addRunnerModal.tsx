@@ -18,10 +18,10 @@ import { Toaster, toast } from "sonner";
 import { LibraryIcon } from "lucide-react";
 
 import { CheckIcon, PlayCircleIcon, PlusIcon } from "@/components/icons";
-import AddProjectRunner from "@/lib/fetch/project/POST/AddRunner";
 import CreateRunnerApiKey from "@/lib/fetch/project/POST/CreateRunnerAPIKey";
+import AddAlertflowRunner from "@/lib/fetch/admin/POST/AddAlertflowRunner";
 
-export default function AddRunnerModal({ projectID, settings }: any) {
+export default function AddAlertflowRunnerModal() {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isCreateLoading, setIsCreateLoading] = useState(false);
@@ -39,13 +39,12 @@ export default function AddRunnerModal({ projectID, settings }: any) {
   async function handleCreateAPIKey() {
     setIsCreateLoading(true);
 
-    const response = await AddProjectRunner({
-      projectId: projectID,
+    const response = await AddAlertflowRunner({
       name,
     });
 
     const tokenResponse = await CreateRunnerApiKey({
-      projectId: projectID,
+      projectId: "none",
       description: name + " Runner API key",
     });
 
@@ -70,11 +69,12 @@ export default function AddRunnerModal({ projectID, settings }: any) {
       <Toaster richColors position="bottom-center" />
       <Button
         color="primary"
-        endContent={<PlusIcon height={undefined} width={undefined} />}
-        isDisabled={!settings.create_runners}
+        size="sm"
+        startContent={<PlusIcon />}
+        variant="flat"
         onPress={onOpen}
       >
-        Add New
+        <span className="font-bold">Add Runner</span>
       </Button>
       <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
         <ModalContent>
@@ -82,7 +82,7 @@ export default function AddRunnerModal({ projectID, settings }: any) {
             <>
               <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold">
                 <PlayCircleIcon />
-                Add Runner
+                Add AlertFlow Runner
               </ModalHeader>
               <ModalBody>
                 <Input

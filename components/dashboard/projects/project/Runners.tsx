@@ -27,6 +27,7 @@ import {
   VerticalDotsIcon,
   DeleteDocumentIcon,
   CopyDocumentIcon,
+  InfoIcon,
 } from "@/components/icons";
 import DeleteProjectRunner from "@/lib/fetch/project/DELETE/DeleteRunner";
 import AddRunnerModal from "@/components/dashboard/projects/project/modals/AddRunner";
@@ -248,13 +249,26 @@ export default function Runners({ runners, project, settings }: any) {
         <ModalContent className="w-full">
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1 text-danger">
+              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-danger">
+                <InfoIcon />
                 Are you sure?
               </ModalHeader>
               <ModalBody>
                 <p>
                   You are about to delete the following runner which{" "}
-                  <span className="font-bold">cannot be undone</span>:
+                  <span className="font-bold">cannot be undone.</span>
+                </p>
+                <p className="items-center">
+                  Any Flow which has this runner assigned will receive the
+                  flag{" "}
+                  <Chip
+                    color="warning"
+                    size="sm"
+                    startContent={<InfoIcon height={15} width={15} />}
+                    variant="flat"
+                  >
+                    Maintenace Required
+                  </Chip>
                 </p>
                 <Divider />
                 <Snippet hideCopyButton hideSymbol>

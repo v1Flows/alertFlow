@@ -23,10 +23,12 @@ import {
   EditDocumentIcon,
   EyeIcon,
   LockIcon,
+  PlusIcon,
   VerticalDotsIcon,
 } from "@/components/icons";
+import AddAlertflowRunnerModal from "./addRunnerModal";
 
-export function SelfHostedRunnerList({ runners }: any) {
+export function AlertflowRunnerList({ runners }: any) {
   const iconClasses =
     "text-xl text-default-500 pointer-events-none flex-shrink-0";
 
@@ -158,9 +160,12 @@ export function SelfHostedRunnerList({ runners }: any) {
 
   return (
     <main>
-      <p className="text-2xl font-bold mb-0 text-secondary mb-2">
-        Self-Hosted Runners
-      </p>
+      <div className="flex items-center justify-between mb-2">
+        <p className="text-2xl font-bold mb-0 text-primary">
+          AlertFlow Runners
+        </p>
+        <AddAlertflowRunnerModal />
+      </div>
       <div>
         <Table aria-label="Example table with custom cells">
           <TableHeader>
@@ -192,7 +197,7 @@ export function SelfHostedRunnerList({ runners }: any) {
               ACTIONS
             </TableColumn>
           </TableHeader>
-          <TableBody items={runners}>
+          <TableBody emptyContent={"No rows to display."} items={runners}>
             {(item: any) => (
               <TableRow key={item.id}>
                 {(columnKey) => (
