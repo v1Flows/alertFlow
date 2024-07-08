@@ -19,9 +19,9 @@ jobs:
         uses: thomaseizinger/create-pull-request@master
         with:
           github_token: ${{ secrets.ACTIONS_TOKEN }}
-          head: ${{ github.ref }}
+          head: develop
           base: main
-          title: 'An automatically created PR from ${{ github.ref }} to main!'
+          title: "An automatically created PR from develop to main!"
   
       - name: Build Docker Image
         run: docker build . --file Dockerfile --tag harbor.justlab.xyz/alertflow/frontend:${{ github.ref_name }}
