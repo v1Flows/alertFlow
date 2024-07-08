@@ -15,19 +15,13 @@ jobs:
         with:
           token: ${{ secrets.ACTIONS_TOKEN }}
   
-      - name: Open Pull Request to Master
-        # You may pin to the exact commit or the version.
-        # uses: misha-brt/create-pull-request@ee877de2fe1c0a9a1a2aa12f4030088710533ef8
-        uses: misha-brt/create-pull-request@v0.0.1
+      - name: Create pull request to main
+        uses: thomaseizinger/create-pull-request@master
         with:
-          # A GitHub API token
           github_token: ${{ secrets.ACTIONS_TOKEN }}
-          # The head ref that should be pulled into base.
-          head: ${{ github.ref_name }}
-          # The title of the pull request.
-          title: Merge Release to Main Branch
-          # The base branch for the pull request. Defaults to master.
+          head: ${{ github.ref }}
           base: main
+          title: 'An automatically created PR from ${{ github.ref }} to main!'
   
       - name: Build Docker Image
         run: docker build . --file Dockerfile --tag harbor.justlab.xyz/alertflow/frontend:${{ github.ref_name }}
