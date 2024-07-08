@@ -14,8 +14,8 @@ import {
 import { useRouter } from "next/navigation";
 import { Toaster, toast } from "sonner";
 
-import { PlusIcon } from "@/components/icons";
-import CreateProjectApiKey from "@/lib/fetch/project/POST/CreateAPIKey";
+import { PlusIcon, TagIcon } from "@/components/icons";
+import CreateRunnerApiKey from "@/lib/fetch/project/POST/CreateRunnerAPIKey";
 
 export default function AddAPIKeyModal({ projectID, settings }: any) {
   const router = useRouter();
@@ -27,7 +27,7 @@ export default function AddAPIKeyModal({ projectID, settings }: any) {
   async function handleCreateAPIKey() {
     setIsCreateLoading(true);
 
-    const response = await CreateProjectApiKey({
+    const response = await CreateRunnerApiKey({
       projectId: projectID,
       description,
     });
@@ -50,8 +50,8 @@ export default function AddAPIKeyModal({ projectID, settings }: any) {
       <Button
         color="primary"
         endContent={<PlusIcon height={undefined} width={undefined} />}
-        onPress={onOpen}
         isDisabled={!settings.create_api_keys}
+        onPress={onOpen}
       >
         Add New
       </Button>
@@ -59,7 +59,8 @@ export default function AddAPIKeyModal({ projectID, settings }: any) {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">
+              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold">
+                <TagIcon />
                 Create API Key
               </ModalHeader>
               <ModalBody>
@@ -78,9 +79,10 @@ export default function AddAPIKeyModal({ projectID, settings }: any) {
                 <Button
                   color="primary"
                   isLoading={isCreateLoading}
+                  startContent={<PlusIcon />}
                   onPress={handleCreateAPIKey}
                 >
-                  Create API Key
+                  Create
                 </Button>
               </ModalFooter>
             </>
