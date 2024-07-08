@@ -10,6 +10,20 @@ jobs:
     runs-on: [self-hosted, alertflow]
     steps:
       - uses: actions/checkout@v4
-      - uses: ncipollo/release-action@v1
+      - name: Create Release
+        uses: ncipollo/release-action@v1
         with:
           token: ${{ secrets.ACTIONS_TOKEN }}
+      - name: Open Pull Request to Master
+        # You may pin to the exact commit or the version.
+        # uses: misha-brt/create-pull-request@ee877de2fe1c0a9a1a2aa12f4030088710533ef8
+        uses: misha-brt/create-pull-request@v0.0.1
+        with:
+          # A GitHub API token
+          github_token: ${{ secrets.ACTIONS_TOKEN }}
+          # The head ref that should be pulled into base.
+          head: ${{ github.ref_name }}
+          # The title of the pull request.
+          title: Merge Release to Main Branch
+          # The base branch for the pull request. Defaults to master.
+          base: main
