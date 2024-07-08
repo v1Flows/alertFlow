@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 export default async function UpdateUserStatus(
   userId: string,
   targetStatus: boolean,
+  reason: string,
 ) {
   "use client";
   const cookieStore = cookies();
@@ -18,12 +19,13 @@ export default async function UpdateUserStatus(
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.API_ENDPOINT}/admin/users/${userId}`,
+      `${process.env.API_ENDPOINT}/admin/users/${userId}/state`,
       {
         method: "PUT",
         headers: headers,
         body: JSON.stringify({
-          active: targetStatus,
+          disabled: targetStatus,
+          disabled_reason: reason,
         }),
       },
     );

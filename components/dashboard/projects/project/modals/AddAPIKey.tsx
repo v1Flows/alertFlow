@@ -17,7 +17,7 @@ import { Toaster, toast } from "sonner";
 import { PlusIcon, TagIcon } from "@/components/icons";
 import CreateRunnerApiKey from "@/lib/fetch/project/POST/CreateRunnerAPIKey";
 
-export default function AddAPIKeyModal({ projectID, settings }: any) {
+export default function AddAPIKeyModal({ project, settings }: any) {
   const router = useRouter();
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -28,7 +28,7 @@ export default function AddAPIKeyModal({ projectID, settings }: any) {
     setIsCreateLoading(true);
 
     const response = await CreateRunnerApiKey({
-      projectId: projectID,
+      projectId: project.id,
       description,
     });
 
@@ -50,7 +50,7 @@ export default function AddAPIKeyModal({ projectID, settings }: any) {
       <Button
         color="primary"
         endContent={<PlusIcon height={undefined} width={undefined} />}
-        isDisabled={!settings.create_api_keys}
+        isDisabled={!settings.create_api_keys || project.disabled}
         onPress={onOpen}
       >
         Add New

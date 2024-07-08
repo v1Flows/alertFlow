@@ -146,6 +146,23 @@ export function ProjectsList({ projects, settings }: any) {
                     >
                       <p className="font-bold">ID: {project.id}</p>
                     </Chip>
+                    <Chip
+                      color={project.disabled ? "danger" : "success"}
+                      radius="sm"
+                      size="sm"
+                      variant="flat"
+                    >
+                      <p className="font-bold">
+                        Status: {project.disabled ? "Disabled" : "Active"}
+                      </p>
+                    </Chip>
+                    {project.disabled && (
+                      <Chip color="danger" radius="sm" size="sm" variant="flat">
+                        <p className="font-bold">
+                          Disable Reason: {project.disabled_reason}
+                        </p>
+                      </Chip>
+                    )}
                   </div>
                   <p className="text-small text-default-500 mt-2">
                     Created At:{" "}

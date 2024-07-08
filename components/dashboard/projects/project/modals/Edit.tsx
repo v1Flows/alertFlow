@@ -56,6 +56,7 @@ export default function EditProjectModal({ project }: any) {
       <Button
         color="warning"
         endContent={<EditDocumentIcon />}
+        isDisabled={project.disabled}
         variant="flat"
         onPress={onOpen}
       >

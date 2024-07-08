@@ -19,7 +19,16 @@ import {
   DropdownItem,
   DropdownSection,
   cn,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  Input,
+  ModalFooter,
+  useDisclosure,
 } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import {
   DeleteDocumentIcon,
@@ -28,8 +37,68 @@ import {
   LockIcon,
   VerticalDotsIcon,
 } from "@/components/icons";
+import ChangeProjectStatus from "@/lib/fetch/project/PUT/ChangeProjectStatus";
 
 export function ProjectList({ projects }: any) {
+  const router = useRouter();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [disableReason, setDisableReason] = React.useState("");
+  const [isDisableLoading, setIsDisableLoading] = React.useState(false);
+
+  const [projectID, setProjectID] = React.useState("");
+  const [disableProject, setDisableProject] = React.useState(false);
+
+  React.useEffect(() => {
+    if (projectID !== "" && !disableProject) {
+      changeProjectStatus();
+    }
+  }, [projectID, disableProject]);
+
+  function changeProjectStatusModal(projectID: string, disabled: boolean) {
+    setProjectID(projectID);
+    setDisableProject(disabled);
+
+    if (disabled) {
+      onOpenChange();
+    }
+  }
+
+  async function changeProjectStatus() {
+    if (!disableProject) {
+      const res = await ChangeProjectStatus(projectID, disableProject, "");
+
+      if (!res.error) {
+        setProjectID("");
+        router.refresh();
+        toast.success("Project status updated successfully");
+      } else {
+        router.refresh();
+        toast.error("Failed to update project status");
+      }
+    } else {
+      setIsDisableLoading(true);
+      const res = await ChangeProjectStatus(
+        projectID,
+        disableProject,
+        disableReason,
+      );
+
+      if (!res.error) {
+        setDisableReason("");
+        setProjectID("");
+        setDisableProject(false);
+        setIsDisableLoading(false);
+        onOpenChange();
+        router.refresh();
+        toast.success("Project status updated successfully");
+      } else {
+        setIsDisableLoading(false);
+        router.refresh();
+        toast.error("Failed to update project status");
+      }
+    }
+  }
+
   const iconClasses =
     "text-xl text-default-500 pointer-events-none flex-shrink-0";
 
@@ -79,6 +148,25 @@ export function ProjectList({ projects }: any) {
             {project.alertflow_runners ? "Enabled" : "Disabled"}
           </Chip>
         );
+      case "status":
+        return (
+          <div>
+            <Chip
+              className="capitalize"
+              color={project.disabled ? "danger" : "success"}
+              radius="sm"
+              size="sm"
+              variant="flat"
+            >
+              {project.disabled ? "Disabled" : "Active"}
+            </Chip>
+            {project.disabled && (
+              <p className="text-sm text-default-400">
+                {project.disabled_reason}
+              </p>
+            )}
+          </div>
+        );
       case "created_at":
         return new Date(project.created_at).toLocaleString("de-DE");
       case "actions":
@@ -104,7 +192,7 @@ export function ProjectList({ projects }: any) {
                     View Project
                   </DropdownItem>
                 </DropdownSection>
-                <DropdownSection title="Danger Zone">
+                <DropdownSection title="Edit Zone">
                   <DropdownItem
                     key="edit"
                     className="text-warning"
@@ -118,17 +206,42 @@ export function ProjectList({ projects }: any) {
                   >
                     Edit Project
                   </DropdownItem>
-                  <DropdownItem
-                    key="disable"
-                    className="text-secondary"
-                    color="secondary"
-                    description="Disable access to this project for members"
-                    startContent={
-                      <LockIcon className={cn(iconClasses, "text-secondary")} />
-                    }
-                  >
-                    Disable Project
-                  </DropdownItem>
+                  {project.disabled && (
+                    <DropdownItem
+                      key="disable"
+                      className="text-success"
+                      color="success"
+                      description="Disable access to this project for members"
+                      startContent={
+                        <LockIcon
+                          className={cn(iconClasses, "text-success")}
+                        />
+                      }
+                      onClick={() =>
+                        changeProjectStatusModal(project.id, false)
+                      }
+                    >
+                      Enable Project
+                    </DropdownItem>
+                  )}
+                  {!project.disabled && (
+                    <DropdownItem
+                      key="disable"
+                      className="text-danger"
+                      color="danger"
+                      description="Disable access to this project for members"
+                      startContent={
+                        <LockIcon
+                          className={cn(iconClasses, "text-danger")}
+                        />
+                      }
+                      onClick={() => changeProjectStatusModal(project.id, true)}
+                    >
+                      Disable Project
+                    </DropdownItem>
+                  )}
+                </DropdownSection>
+                <DropdownSection title="Danger Zone">
                   <DropdownItem
                     key="delete"
                     className="text-danger"
@@ -174,6 +287,9 @@ export function ProjectList({ projects }: any) {
             <TableColumn key="members" align="start">
               MEMBERS
             </TableColumn>
+            <TableColumn key="status" align="start">
+              STATUS
+            </TableColumn>
             <TableColumn key="alertflow_runners" align="start">
               ALERTFLOW RUNNERS
             </TableColumn>
@@ -184,7 +300,7 @@ export function ProjectList({ projects }: any) {
               ACTIONS
             </TableColumn>
           </TableHeader>
-          <TableBody items={projects}>
+          <TableBody emptyContent={"No rows to display."} items={projects}>
             {(item: any) => (
               <TableRow key={item.id}>
                 {(columnKey) => (
@@ -194,6 +310,47 @@ export function ProjectList({ projects }: any) {
             )}
           </TableBody>
         </Table>
+      </div>
+      <div>
+        <Modal
+          isOpen={isOpen}
+          placement="top-center"
+          onOpenChange={onOpenChange}
+        >
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-danger">
+                  <LockIcon /> Disable Project
+                </ModalHeader>
+                <ModalBody>
+                  <Snippet hideSymbol hideCopyButton>
+                    <span>ID: {projectID}</span>
+                  </Snippet>
+                  <Input
+                    label="Disable Reason"
+                    placeholder="Enter the reason for disabling this project"
+                    value={disableReason}
+                    variant="bordered"
+                    onValueChange={setDisableReason}
+                  />
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="default" variant="flat" onPress={onClose}>
+                    Cancel
+                  </Button>
+                  <Button
+                    color="danger"
+                    isLoading={isDisableLoading}
+                    onPress={changeProjectStatus}
+                  >
+                    Disable
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
       </div>
     </main>
   );
