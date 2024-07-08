@@ -33,8 +33,8 @@ import UpdateUserStatus from "@/lib/fetch/admin/PUT/UpdateUserStatus";
 export function UsersList({ users }: any) {
   const router = useRouter();
 
-  async function changeUserStatus(userID: string, active: boolean) {
-    const res = await UpdateUserStatus(userID, active);
+  async function changeUserStatus(userID: string, disabled: boolean) {
+    const res = await UpdateUserStatus(userID, disabled);
 
     router.refresh();
 
@@ -74,15 +74,15 @@ export function UsersList({ users }: any) {
             {cellValue}
           </p>
         );
-      case "active":
+      case "disabled":
         return (
           <Chip
             className="capitalize"
-            color={user.active ? "success" : "danger"}
+            color={user.disabled ? "danger" : "success"}
             size="sm"
             variant="flat"
           >
-            {user.active ? "Active" : "Inactive"}
+            {user.disabled ? "Disabled" : "Active"}
           </Chip>
         );
       case "created_at":
@@ -132,7 +132,7 @@ export function UsersList({ users }: any) {
                   >
                     Edit User
                   </DropdownItem>
-                  {user.active && (
+                  {!user.disabled && (
                     <DropdownItem
                       key="disable"
                       className="text-secondary"
@@ -143,12 +143,12 @@ export function UsersList({ users }: any) {
                           className={cn(iconClasses, "text-secondary")}
                         />
                       }
-                      onClick={() => changeUserStatus(user.id, false)}
+                      onClick={() => changeUserStatus(user.id, true)}
                     >
                       Disable User
                     </DropdownItem>
                   )}
-                  {!user.active && (
+                  {user.disabled && (
                     <DropdownItem
                       key="disable"
                       className="text-success"
@@ -157,7 +157,7 @@ export function UsersList({ users }: any) {
                       startContent={
                         <LockIcon className={cn(iconClasses, "text-success")} />
                       }
-                      onClick={() => changeUserStatus(user.id, true)}
+                      onClick={() => changeUserStatus(user.id, false)}
                     >
                       Enable User
                     </DropdownItem>
@@ -208,7 +208,7 @@ export function UsersList({ users }: any) {
             <TableColumn key="role" align="start">
               ROLE
             </TableColumn>
-            <TableColumn key="active" align="start">
+            <TableColumn key="disabled" align="start">
               STATUS
             </TableColumn>
             <TableColumn key="created_at" align="start">

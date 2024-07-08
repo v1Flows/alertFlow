@@ -23,7 +23,7 @@ export default async function UpdateUserStatus(
         method: "PUT",
         headers: headers,
         body: JSON.stringify({
-          active: targetStatus,
+          disabled: targetStatus,
         }),
       },
     );
