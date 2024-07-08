@@ -14,6 +14,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           token: ${{ secrets.ACTIONS_TOKEN }}
+  
       - name: Open Pull Request to Master
         # You may pin to the exact commit or the version.
         # uses: misha-brt/create-pull-request@ee877de2fe1c0a9a1a2aa12f4030088710533ef8
@@ -27,3 +28,17 @@ jobs:
           title: Merge Release to Main Branch
           # The base branch for the pull request. Defaults to master.
           base: main
+  
+      - name: Build Docker Image
+        run: docker build . --file Dockerfile --tag harbor.justlab.xyz/alertflow/frontend:${{ github.ref_name }}
+
+      - name: Docker Login
+        uses: docker/login-action@v3.2.0
+        with:
+          registry: harbor.justlab.xyz
+          username: ${{ secrets.HARBOR_LOGIN_USERNAME }}
+          password: ${{ secrets.HARBOR_LOGIN_PASSWORD }}
+          logout: false
+
+      - name: Push Branch Image
+        run: docker push harbor.justlab.xyz/alertflow/frontend:${{ github.ref_name }}   
