@@ -101,7 +101,7 @@ export default function Runners({ runners, project, settings }: any) {
       <Toaster richColors position="bottom-center" />
       <div className="flex items-center justify-between mb-4">
         <p className="text-lg font-bold">Selfhosted Runners</p>
-        <AddRunnerModal projectID={project.id} settings={settings} />
+        <AddRunnerModal project={project} settings={settings} />
       </div>
       <Divider className="mb-4" />
       <div className="grid lg:grid-cols-2 gap-4">

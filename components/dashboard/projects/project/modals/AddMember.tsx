@@ -22,7 +22,7 @@ import { InfoIcon, PlusIcon, UsersIcon } from "@/components/icons";
 import UpdateProjectMembers from "@/lib/fetch/project/PUT/UpdateProjectMembers";
 import { IconWrapper } from "@/lib/IconWrapper";
 
-export default function AddMemberModal({ projectID, settings }: any) {
+export default function AddMemberModal({ project, settings }: any) {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoginLoading, setIsLoginLoading] = useState(false);
@@ -40,7 +40,7 @@ export default function AddMemberModal({ projectID, settings }: any) {
     setIsLoginLoading(true);
 
     const response = await UpdateProjectMembers({
-      id: projectID,
+      id: project.id,
       members: [
         {
           email: mail,
@@ -72,10 +72,10 @@ export default function AddMemberModal({ projectID, settings }: any) {
       <Button
         color="primary"
         endContent={<PlusIcon height={undefined} width={undefined} />}
-        isDisabled={!settings.add_project_members}
+        isDisabled={!settings.add_project_members || project.disabled}
         onPress={onOpen}
       >
-        Add New
+        Add Member
       </Button>
       <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
         <ModalContent>

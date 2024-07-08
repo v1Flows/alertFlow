@@ -6,6 +6,7 @@ import {
   UsersIcon,
   TagIcon,
   CalendarIcon,
+  InfoIcon,
 } from "@/components/icons";
 import { IconWrapper } from "@/lib/IconWrapper";
 import { subtitle } from "@/components/primitives";
@@ -44,6 +45,25 @@ export async function Project({ id, settings }: any) {
         <EditProjectModal project={data} />
       </div>
       <Divider className="mb-4" />
+      {data.disabled && (
+        <div className="mb-4">
+          <Card className="bg-danger/10">
+            <CardHeader className="justify-start gap-2 items-center">
+              <IconWrapper className="bg-danger/10 text-danger">
+                <InfoIcon className="text-lg" />
+              </IconWrapper>
+              <p className="text-md font-bold text-danger">
+                Project is currently disabled
+              </p>
+            </CardHeader>
+            <CardBody>
+              <p className="text-default-500 font-bold">
+                Reason: {data.disabled_reason}
+              </p>
+            </CardBody>
+          </Card>
+        </div>
+      )}
       <div>
         <div className="grid lg:grid-cols-4 grid-cols-2 gap-4">
           <div className="col-span-1">

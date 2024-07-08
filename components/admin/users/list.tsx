@@ -17,6 +17,13 @@ import {
   DropdownSection,
   DropdownItem,
   cn,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  Input,
+  ModalFooter,
+  useDisclosure,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { Toaster, toast } from "sonner";
@@ -28,20 +35,61 @@ import {
   LockIcon,
   DeleteDocumentIcon,
 } from "@/components/icons";
-import UpdateUserStatus from "@/lib/fetch/admin/PUT/UpdateUserStatus";
+import UpdateUserStatus from "@/lib/fetch/admin/PUT/UpdateUserState";
 
 export function UsersList({ users }: any) {
   const router = useRouter();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [disableReason, setDisableReason] = React.useState("");
+  const [isDisableLoading, setIsDisableLoading] = React.useState(false);
 
-  async function changeUserStatus(userID: string, active: boolean) {
-    const res = await UpdateUserStatus(userID, active);
+  const [userID, setUserID] = React.useState("");
+  const [disableUser, setDisableUser] = React.useState(false);
 
-    router.refresh();
+  React.useEffect(() => {
+    if (userID !== "" && !disableUser) {
+      changeUserStatus();
+    }
+  }, [userID, disableUser]);
 
-    if (!res.error) {
-      toast.success("User status updated successfully");
+  function changeUserStatusModal(userID: string, disabled: boolean) {
+    setUserID(userID);
+    setDisableUser(disabled);
+
+    if (disabled) {
+      onOpenChange();
+    }
+  }
+
+  async function changeUserStatus() {
+    if (!disableUser) {
+      const res = await UpdateUserStatus(userID, disableUser, "");
+
+      if (!res.error) {
+        setUserID("");
+        router.refresh();
+        toast.success("User status updated successfully");
+      } else {
+        router.refresh();
+        toast.error("Failed to update user status");
+      }
     } else {
-      toast.error("Failed to update user status");
+      setIsDisableLoading(true);
+      const res = await UpdateUserStatus(userID, disableUser, disableReason);
+
+      if (!res.error) {
+        setIsDisableLoading(false);
+        setDisableReason("");
+        setUserID("");
+        setDisableUser(false);
+        onOpenChange();
+        router.refresh();
+        toast.success("User status updated successfully");
+      } else {
+        setIsDisableLoading(false);
+        router.refresh();
+        toast.error("Failed to update user status");
+      }
     }
   }
 
@@ -74,24 +122,30 @@ export function UsersList({ users }: any) {
             {cellValue}
           </p>
         );
-      case "active":
+      case "disabled":
         return (
-          <Chip
-            className="capitalize"
-            color={user.active ? "success" : "danger"}
-            size="sm"
-            variant="flat"
-          >
-            {user.active ? "Active" : "Inactive"}
-          </Chip>
+          <div>
+            <Chip
+              className="capitalize"
+              color={user.disabled ? "danger" : "success"}
+              radius="sm"
+              size="sm"
+              variant="flat"
+            >
+              {user.disabled ? "Disabled" : "Active"}
+            </Chip>
+            {user.disabled && (
+              <p className="text-sm text-default-400">{user.disabled_reason}</p>
+            )}
+          </div>
         );
       case "created_at":
         return new Date(user.created_at).toLocaleString("de-DE");
       case "updated_at":
         return (
           <p>
-            {user.updated_at.Valid
-              ? new Date(user.updated_at.Time).toLocaleString("de-DE")
+            {user.updated_at
+              ? new Date(user.updated_at).toLocaleString("de-DE")
               : "N/A"}
           </p>
         );
@@ -118,7 +172,7 @@ export function UsersList({ users }: any) {
                     View User
                   </DropdownItem>
                 </DropdownSection>
-                <DropdownSection title="Danger Zone">
+                <DropdownSection title="Edit Zone">
                   <DropdownItem
                     key="edit"
                     className="text-warning"
@@ -132,23 +186,23 @@ export function UsersList({ users }: any) {
                   >
                     Edit User
                   </DropdownItem>
-                  {user.active && (
+                  {!user.disabled && (
                     <DropdownItem
                       key="disable"
-                      className="text-secondary"
-                      color="secondary"
+                      className="text-danger"
+                      color="danger"
                       description="Disable access to AlertFlow for this user"
                       startContent={
                         <LockIcon
-                          className={cn(iconClasses, "text-secondary")}
+                          className={cn(iconClasses, "text-danger")}
                         />
                       }
-                      onClick={() => changeUserStatus(user.id, false)}
+                      onClick={() => changeUserStatusModal(user.id, true)}
                     >
                       Disable User
                     </DropdownItem>
                   )}
-                  {!user.active && (
+                  {user.disabled && (
                     <DropdownItem
                       key="disable"
                       className="text-success"
@@ -157,11 +211,13 @@ export function UsersList({ users }: any) {
                       startContent={
                         <LockIcon className={cn(iconClasses, "text-success")} />
                       }
-                      onClick={() => changeUserStatus(user.id, true)}
+                      onClick={() => changeUserStatusModal(user.id, false)}
                     >
                       Enable User
                     </DropdownItem>
                   )}
+                </DropdownSection>
+                <DropdownSection title="Danger Zone">
                   <DropdownItem
                     key="delete"
                     className="text-danger"
@@ -208,7 +264,7 @@ export function UsersList({ users }: any) {
             <TableColumn key="role" align="start">
               ROLE
             </TableColumn>
-            <TableColumn key="active" align="start">
+            <TableColumn key="disabled" align="start">
               STATUS
             </TableColumn>
             <TableColumn key="created_at" align="start">
@@ -231,6 +287,44 @@ export function UsersList({ users }: any) {
             )}
           </TableBody>
         </Table>
+      </div>
+      <div>
+        <Modal
+          isOpen={isOpen}
+          placement="top-center"
+          onOpenChange={onOpenChange}
+        >
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-danger">
+                  <LockIcon /> Disable User
+                </ModalHeader>
+                <ModalBody>
+                  <Input
+                    label="Disable Reason"
+                    placeholder="Enter the reason for disabling this user"
+                    value={disableReason}
+                    variant="bordered"
+                    onValueChange={setDisableReason}
+                  />
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="default" variant="flat" onPress={onClose}>
+                    Cancel
+                  </Button>
+                  <Button
+                    color="danger"
+                    isLoading={isDisableLoading}
+                    onPress={changeUserStatus}
+                  >
+                    Disable
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
       </div>
     </main>
   );
