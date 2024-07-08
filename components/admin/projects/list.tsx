@@ -48,28 +48,32 @@ export function ProjectList({ projects }: any) {
   const [projectID, setProjectID] = React.useState("");
   const [disableProject, setDisableProject] = React.useState(false);
 
+  React.useEffect(() => {
+    if (projectID !== "" && !disableProject) {
+      changeProjectStatus();
+    }
+  }, [projectID, disableProject]);
+
   function changeProjectStatusModal(projectID: string, disabled: boolean) {
     setProjectID(projectID);
     setDisableProject(disabled);
 
     if (disabled) {
       onOpenChange();
-    } else {
-      changeProjectStatus();
     }
   }
 
   async function changeProjectStatus() {
     if (!disableProject) {
-      const res = await ChangeProjectStatus(projectID, disableProject, "none");
+      const res = await ChangeProjectStatus(projectID, disableProject, "");
 
       if (!res.error) {
-        setDisableReason("");
         setProjectID("");
-        setDisableProject(false);
-        toast.success("User status updated successfully");
+        router.refresh();
+        toast.success("Project status updated successfully");
       } else {
-        toast.error("Failed to update user status");
+        router.refresh();
+        toast.error("Failed to update project status");
       }
     } else {
       setIsDisableLoading(true);
@@ -80,15 +84,17 @@ export function ProjectList({ projects }: any) {
       );
 
       if (!res.error) {
-        setIsDisableLoading(false);
         setDisableReason("");
         setProjectID("");
         setDisableProject(false);
+        setIsDisableLoading(false);
         onOpenChange();
-        toast.success("User status updated successfully");
+        router.refresh();
+        toast.success("Project status updated successfully");
       } else {
         setIsDisableLoading(false);
-        toast.error("Failed to update user status");
+        router.refresh();
+        toast.error("Failed to update project status");
       }
     }
   }
@@ -186,7 +192,7 @@ export function ProjectList({ projects }: any) {
                     View Project
                   </DropdownItem>
                 </DropdownSection>
-                <DropdownSection title="Danger Zone">
+                <DropdownSection title="Edit Zone">
                   <DropdownItem
                     key="edit"
                     className="text-warning"
@@ -203,12 +209,12 @@ export function ProjectList({ projects }: any) {
                   {project.disabled && (
                     <DropdownItem
                       key="disable"
-                      className="text-secondary"
-                      color="secondary"
+                      className="text-success"
+                      color="success"
                       description="Disable access to this project for members"
                       startContent={
                         <LockIcon
-                          className={cn(iconClasses, "text-secondary")}
+                          className={cn(iconClasses, "text-success")}
                         />
                       }
                       onClick={() =>
@@ -221,12 +227,12 @@ export function ProjectList({ projects }: any) {
                   {!project.disabled && (
                     <DropdownItem
                       key="disable"
-                      className="text-secondary"
-                      color="secondary"
+                      className="text-danger"
+                      color="danger"
                       description="Disable access to this project for members"
                       startContent={
                         <LockIcon
-                          className={cn(iconClasses, "text-secondary")}
+                          className={cn(iconClasses, "text-danger")}
                         />
                       }
                       onClick={() => changeProjectStatusModal(project.id, true)}
@@ -234,6 +240,8 @@ export function ProjectList({ projects }: any) {
                       Disable Project
                     </DropdownItem>
                   )}
+                </DropdownSection>
+                <DropdownSection title="Danger Zone">
                   <DropdownItem
                     key="delete"
                     className="text-danger"
@@ -316,6 +324,9 @@ export function ProjectList({ projects }: any) {
                   <LockIcon /> Disable Project
                 </ModalHeader>
                 <ModalBody>
+                  <Snippet hideSymbol hideCopyButton>
+                    <span>ID: {projectID}</span>
+                  </Snippet>
                   <Input
                     label="Disable Reason"
                     placeholder="Enter the reason for disabling this project"

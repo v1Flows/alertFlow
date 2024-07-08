@@ -21,7 +21,7 @@ import { CheckIcon, PlayCircleIcon, PlusIcon } from "@/components/icons";
 import AddProjectRunner from "@/lib/fetch/project/POST/AddRunner";
 import CreateRunnerApiKey from "@/lib/fetch/project/POST/CreateRunnerAPIKey";
 
-export default function AddRunnerModal({ projectID, settings }: any) {
+export default function AddRunnerModal({ project, settings }: any) {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isCreateLoading, setIsCreateLoading] = useState(false);
@@ -40,12 +40,12 @@ export default function AddRunnerModal({ projectID, settings }: any) {
     setIsCreateLoading(true);
 
     const response = await AddProjectRunner({
-      projectId: projectID,
+      projectId: project.id,
       name,
     });
 
     const tokenResponse = await CreateRunnerApiKey({
-      projectId: projectID,
+      projectId: project.id,
       description: name + " Runner API key",
     });
 
@@ -71,10 +71,10 @@ export default function AddRunnerModal({ projectID, settings }: any) {
       <Button
         color="primary"
         endContent={<PlusIcon height={undefined} width={undefined} />}
-        isDisabled={!settings.create_runners}
+        isDisabled={!settings.create_runners || project.disabled}
         onPress={onOpen}
       >
-        Add New
+        Add Runner
       </Button>
       <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
         <ModalContent>

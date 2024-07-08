@@ -19,7 +19,7 @@ export default async function UpdateUserStatus(
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.API_ENDPOINT}/admin/users/${userId}`,
+      `${process.env.API_ENDPOINT}/admin/users/${userId}/state`,
       {
         method: "PUT",
         headers: headers,
@@ -33,7 +33,6 @@ export default async function UpdateUserStatus(
 
     return data;
   } catch (error) {
-    console.log(error)
     return { error: "Failed to update user status" };
   }
 }

@@ -35,7 +35,7 @@ import {
   LockIcon,
   DeleteDocumentIcon,
 } from "@/components/icons";
-import UpdateUserStatus from "@/lib/fetch/admin/PUT/UpdateUserStatus";
+import UpdateUserStatus from "@/lib/fetch/admin/PUT/UpdateUserState";
 
 export function UsersList({ users }: any) {
   const router = useRouter();
@@ -46,25 +46,27 @@ export function UsersList({ users }: any) {
   const [userID, setUserID] = React.useState("");
   const [disableUser, setDisableUser] = React.useState(false);
 
+  React.useEffect(() => {
+    if (userID !== "" && !disableUser) {
+      changeUserStatus();
+    }
+  }, [userID, disableUser]);
+
   function changeUserStatusModal(userID: string, disabled: boolean) {
     setUserID(userID);
     setDisableUser(disabled);
 
     if (disabled) {
       onOpenChange();
-    } else {
-      changeUserStatus();
     }
   }
 
   async function changeUserStatus() {
     if (!disableUser) {
-      const res = await UpdateUserStatus(userID, disableUser, "none");
+      const res = await UpdateUserStatus(userID, disableUser, "");
 
       if (!res.error) {
-        setDisableReason("");
         setUserID("");
-        setDisableUser(false);
         router.refresh();
         toast.success("User status updated successfully");
       } else {
@@ -170,7 +172,7 @@ export function UsersList({ users }: any) {
                     View User
                   </DropdownItem>
                 </DropdownSection>
-                <DropdownSection title="Danger Zone">
+                <DropdownSection title="Edit Zone">
                   <DropdownItem
                     key="edit"
                     className="text-warning"
@@ -187,12 +189,12 @@ export function UsersList({ users }: any) {
                   {!user.disabled && (
                     <DropdownItem
                       key="disable"
-                      className="text-secondary"
-                      color="secondary"
+                      className="text-danger"
+                      color="danger"
                       description="Disable access to AlertFlow for this user"
                       startContent={
                         <LockIcon
-                          className={cn(iconClasses, "text-secondary")}
+                          className={cn(iconClasses, "text-danger")}
                         />
                       }
                       onClick={() => changeUserStatusModal(user.id, true)}
@@ -214,6 +216,8 @@ export function UsersList({ users }: any) {
                       Enable User
                     </DropdownItem>
                   )}
+                </DropdownSection>
+                <DropdownSection title="Danger Zone">
                   <DropdownItem
                     key="delete"
                     className="text-danger"

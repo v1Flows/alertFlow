@@ -71,7 +71,7 @@ export default function ProjectAPIKeys({ apiKeys, project, settings }: any) {
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col items-end justify-center gap-4">
-        <AddAPIKeyModal projectID={project.id} settings={settings} />
+        <AddAPIKeyModal project={project} settings={settings} />
       </div>
     );
   }, []);

@@ -22,7 +22,7 @@ const statusColorMap: any = {
   Viewer: "default",
 };
 
-export default function ProjectMembers({ members, projectID, settings }: any) {
+export default function ProjectMembers({ project, settings }: any) {
   const renderCell = React.useCallback((user: any, columnKey: any) => {
     const cellValue = user[columnKey];
 
@@ -54,7 +54,7 @@ export default function ProjectMembers({ members, projectID, settings }: any) {
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <EditProjectMemberModal
                   mailInc={user.email}
-                  projectID={projectID}
+                  projectID={project.id}
                   roleInc={user.role}
                 />
               </span>
@@ -63,7 +63,7 @@ export default function ProjectMembers({ members, projectID, settings }: any) {
               <span className="text-lg text-danger cursor-pointer active:opacity-50">
                 <DeleteMemberModal
                   mailInc={user.email}
-                  projectID={projectID}
+                  projectID={project.id}
                   roleInc={user.role}
                 />
               </span>
@@ -78,7 +78,7 @@ export default function ProjectMembers({ members, projectID, settings }: any) {
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col items-end justify-center gap-4">
-        <AddMemberModal projectID={projectID} settings={settings} />
+        <AddMemberModal project={project} settings={settings} />
       </div>
     );
   }, []);
@@ -96,7 +96,7 @@ export default function ProjectMembers({ members, projectID, settings }: any) {
           ACTIONS
         </TableColumn>
       </TableHeader>
-      <TableBody emptyContent={"No rows to display."} items={members}>
+      <TableBody emptyContent={"No rows to display."} items={project.members}>
         {(item: any) => (
           <TableRow key={item.email}>
             {(columnKey) => (

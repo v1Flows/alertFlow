@@ -34,11 +34,7 @@ export default function ProjectTabs({
               </div>
             }
           >
-            <ProjectMembers
-              members={project.members}
-              projectID={project.id}
-              settings={settings}
-            />
+            <ProjectMembers project={project} settings={settings} />
           </Tab>
           <Tab
             key="runners"

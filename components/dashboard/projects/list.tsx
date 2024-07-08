@@ -95,7 +95,6 @@ export function ProjectsList({ projects, settings }: any) {
               <Card
                 fullWidth
                 className="hover:shadow-md hover:shadow-primary shadow shadow-primary-200"
-                isDisabled={project.disabled}
               >
                 <CardHeader className="justify-between">
                   <div className="flex flex-col items-start">
@@ -106,12 +105,7 @@ export function ProjectsList({ projects, settings }: any) {
                   </div>
                   <Dropdown backdrop="opaque">
                     <DropdownTrigger>
-                      <Button
-                        isIconOnly
-                        isDisabled={project.disabled}
-                        size="sm"
-                        variant="light"
-                      >
+                      <Button isIconOnly size="sm" variant="light">
                         <VerticalDotsIcon
                           className="text-default-300"
                           height={undefined}
@@ -162,6 +156,13 @@ export function ProjectsList({ projects, settings }: any) {
                         Status: {project.disabled ? "Disabled" : "Active"}
                       </p>
                     </Chip>
+                    {project.disabled && (
+                      <Chip color="danger" radius="sm" size="sm" variant="flat">
+                        <p className="font-bold">
+                          Disable Reason: {project.disabled_reason}
+                        </p>
+                      </Chip>
+                    )}
                   </div>
                   <p className="text-small text-default-500 mt-2">
                     Created At:{" "}
@@ -172,7 +173,6 @@ export function ProjectsList({ projects, settings }: any) {
                   <Button
                     className="w-full font-bold"
                     color="primary"
-                    isDisabled={project.disabled}
                     radius="sm"
                     variant="flat"
                     onPress={() =>
