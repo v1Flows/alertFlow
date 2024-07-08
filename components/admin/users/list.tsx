@@ -17,6 +17,13 @@ import {
   DropdownSection,
   DropdownItem,
   cn,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  Input,
+  ModalFooter,
+  useDisclosure,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { Toaster, toast } from "sonner";
@@ -32,16 +39,55 @@ import UpdateUserStatus from "@/lib/fetch/admin/PUT/UpdateUserStatus";
 
 export function UsersList({ users }: any) {
   const router = useRouter();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [disableReason, setDisableReason] = React.useState("");
+  const [isDisableLoading, setIsDisableLoading] = React.useState(false);
 
-  async function changeUserStatus(userID: string, disabled: boolean) {
-    const res = await UpdateUserStatus(userID, disabled);
+  const [userID, setUserID] = React.useState("");
+  const [disableUser, setDisableUser] = React.useState(false);
 
-    router.refresh();
+  function changeUserStatusModal(userID: string, disabled: boolean) {
+    setUserID(userID);
+    setDisableUser(disabled);
 
-    if (!res.error) {
-      toast.success("User status updated successfully");
+    if (disabled) {
+      onOpenChange();
     } else {
-      toast.error("Failed to update user status");
+      changeUserStatus();
+    }
+  }
+
+  async function changeUserStatus() {
+    if (!disableUser) {
+      const res = await UpdateUserStatus(userID, disableUser, "none");
+
+      if (!res.error) {
+        setDisableReason("");
+        setUserID("");
+        setDisableUser(false);
+        router.refresh();
+        toast.success("User status updated successfully");
+      } else {
+        router.refresh();
+        toast.error("Failed to update user status");
+      }
+    } else {
+      setIsDisableLoading(true);
+      const res = await UpdateUserStatus(userID, disableUser, disableReason);
+
+      if (!res.error) {
+        setIsDisableLoading(false);
+        setDisableReason("");
+        setUserID("");
+        setDisableUser(false);
+        onOpenChange();
+        router.refresh();
+        toast.success("User status updated successfully");
+      } else {
+        setIsDisableLoading(false);
+        router.refresh();
+        toast.error("Failed to update user status");
+      }
     }
   }
 
@@ -76,22 +122,28 @@ export function UsersList({ users }: any) {
         );
       case "disabled":
         return (
-          <Chip
-            className="capitalize"
-            color={user.disabled ? "danger" : "success"}
-            size="sm"
-            variant="flat"
-          >
-            {user.disabled ? "Disabled" : "Active"}
-          </Chip>
+          <div>
+            <Chip
+              className="capitalize"
+              color={user.disabled ? "danger" : "success"}
+              radius="sm"
+              size="sm"
+              variant="flat"
+            >
+              {user.disabled ? "Disabled" : "Active"}
+            </Chip>
+            {user.disabled && (
+              <p className="text-sm text-default-400">{user.disabled_reason}</p>
+            )}
+          </div>
         );
       case "created_at":
         return new Date(user.created_at).toLocaleString("de-DE");
       case "updated_at":
         return (
           <p>
-            {user.updated_at.Valid
-              ? new Date(user.updated_at.Time).toLocaleString("de-DE")
+            {user.updated_at
+              ? new Date(user.updated_at).toLocaleString("de-DE")
               : "N/A"}
           </p>
         );
@@ -143,7 +195,7 @@ export function UsersList({ users }: any) {
                           className={cn(iconClasses, "text-secondary")}
                         />
                       }
-                      onClick={() => changeUserStatus(user.id, true)}
+                      onClick={() => changeUserStatusModal(user.id, true)}
                     >
                       Disable User
                     </DropdownItem>
@@ -157,7 +209,7 @@ export function UsersList({ users }: any) {
                       startContent={
                         <LockIcon className={cn(iconClasses, "text-success")} />
                       }
-                      onClick={() => changeUserStatus(user.id, false)}
+                      onClick={() => changeUserStatusModal(user.id, false)}
                     >
                       Enable User
                     </DropdownItem>
@@ -231,6 +283,44 @@ export function UsersList({ users }: any) {
             )}
           </TableBody>
         </Table>
+      </div>
+      <div>
+        <Modal
+          isOpen={isOpen}
+          placement="top-center"
+          onOpenChange={onOpenChange}
+        >
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-danger">
+                  <LockIcon /> Disable User
+                </ModalHeader>
+                <ModalBody>
+                  <Input
+                    label="Disable Reason"
+                    placeholder="Enter the reason for disabling this user"
+                    value={disableReason}
+                    variant="bordered"
+                    onValueChange={setDisableReason}
+                  />
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="default" variant="flat" onPress={onClose}>
+                    Cancel
+                  </Button>
+                  <Button
+                    color="danger"
+                    isLoading={isDisableLoading}
+                    onPress={changeUserStatus}
+                  >
+                    Disable
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
       </div>
     </main>
   );

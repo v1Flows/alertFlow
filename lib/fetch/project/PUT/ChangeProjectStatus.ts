@@ -2,9 +2,9 @@
 
 import { cookies } from "next/headers";
 
-export default async function UpdateUserStatus(
-  userId: string,
-  targetStatus: boolean,
+export default async function ChangeProjectStatus(
+  id: string,
+  status: boolean,
   reason: string,
 ) {
   "use client";
@@ -19,12 +19,12 @@ export default async function UpdateUserStatus(
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.API_ENDPOINT}/admin/users/${userId}`,
+      `${process.env.API_ENDPOINT}/projects/${id}/status`,
       {
         method: "PUT",
         headers: headers,
         body: JSON.stringify({
-          disabled: targetStatus,
+          disabled: status,
           disabled_reason: reason,
         }),
       },
@@ -33,7 +33,6 @@ export default async function UpdateUserStatus(
 
     return data;
   } catch (error) {
-    console.log(error)
-    return { error: "Failed to update user status" };
+    return { error: "Failed to update project" };
   }
 }

@@ -192,7 +192,7 @@ export function SelfHostedRunnerList({ runners }: any) {
               ACTIONS
             </TableColumn>
           </TableHeader>
-          <TableBody items={runners}>
+          <TableBody emptyContent={"No rows to display."} items={runners}>
             {(item: any) => (
               <TableRow key={item.id}>
                 {(columnKey) => (
