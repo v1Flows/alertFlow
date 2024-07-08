@@ -1,0 +1,13 @@
+name: Release Version
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: [self-hosted, alertflow]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ncipollo/release-action@v1
