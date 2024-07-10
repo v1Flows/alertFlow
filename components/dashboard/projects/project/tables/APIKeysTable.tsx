@@ -50,15 +50,15 @@ export default function ProjectAPIKeys({ apiKeys, project, settings }: any) {
         );
       case "created_at":
         return new Date(key.created_at).toLocaleString();
-      case "active":
+      case "status":
         return (
           <Chip
             className="capitalize"
-            color={key.active ? "success" : "danger"}
+            color={key.disabled ? "danger" : "success"}
             size="sm"
             variant="flat"
           >
-            {cellValue ? "Active" : "Inactive"}
+            {cellValue ? "Disabled" : "Active"}
           </Chip>
         );
       case "type":
@@ -90,8 +90,8 @@ export default function ProjectAPIKeys({ apiKeys, project, settings }: any) {
           <TableColumn key="description" align="start">
             DESCRIPTION
           </TableColumn>
-          <TableColumn key="active" align="start">
-            ACTIVE
+          <TableColumn key="status" align="start">
+            STATUS
           </TableColumn>
           <TableColumn key="type" align="start">
             TYPE

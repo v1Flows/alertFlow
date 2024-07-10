@@ -15,18 +15,58 @@ import {
   DropdownItem,
   DropdownSection,
   cn,
+  Modal,
+  ModalContent,
+  ModalFooter,
+  ModalBody,
+  Snippet,
+  Divider,
+  ModalHeader,
+  useDisclosure,
 } from "@nextui-org/react";
 import TimeAgo from "react-timeago";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import {
   DeleteDocumentIcon,
   EditDocumentIcon,
   EyeIcon,
+  InfoIcon,
   LockIcon,
   VerticalDotsIcon,
 } from "@/components/icons";
+import DeleteProjectRunner from "@/lib/fetch/project/DELETE/DeleteRunner";
 
-export function SelfHostedRunnerList({ runners }: any) {
+export function SelfHostedRunnerList({ runners, projects }: any) {
+  const router = useRouter();
+
+  // delete runner
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [runnerToDelete, setRunnerToDelete] = React.useState("");
+  const [isDeleteLoading, setIsDeleteLoading] = React.useState(false);
+
+  function handleDeleteRunner(id: any) {
+    setRunnerToDelete(id);
+    onOpenChange();
+  }
+
+  async function deleteRunner() {
+    setIsDeleteLoading(true);
+    const response = await DeleteProjectRunner(runnerToDelete);
+
+    if (response.result === "success") {
+      setRunnerToDelete("");
+      setIsDeleteLoading(false);
+      onOpenChange();
+      toast.success("Runner deleted successfully");
+      router.refresh();
+    } else {
+      setIsDeleteLoading(false);
+      toast.error("Failed to delete runner");
+    }
+  }
+
   const iconClasses =
     "text-xl text-default-500 pointer-events-none flex-shrink-0";
 
@@ -57,7 +97,7 @@ export function SelfHostedRunnerList({ runners }: any) {
       case "project":
         return (
           <div>
-            <p>{runner.name}</p>
+            <p>{projects.find((p: any) => p.id === runner.project_id).name}</p>
             <p className="text-xs text-default-400">{runner.project_id}</p>
           </div>
         );
@@ -67,10 +107,32 @@ export function SelfHostedRunnerList({ runners }: any) {
             {runner.registered ? "Registered" : "Unregistered"}
           </Chip>
         );
-      case "active":
+      case "status":
         return (
-          <Chip color={runner.active ? "primary" : "default"} variant="dot">
-            {runner.active ? "Active" : "Inactive"}
+          <div>
+            <Chip
+              className="capitalize"
+              color={runner.disabled ? "danger" : "success"}
+              radius="sm"
+              size="sm"
+              variant="flat"
+            >
+              {runner.disabled ? "Disabled" : "Active"}
+            </Chip>
+            {runner.disabled && (
+              <p className="text-sm text-default-400">
+                {runner.disabled_reason}
+              </p>
+            )}
+          </div>
+        );
+      case "executing_job":
+        return (
+          <Chip
+            color={runner.executing_job ? "primary" : "default"}
+            variant="dot"
+          >
+            {runner.executing_job ? "Active" : "Idle"}
           </Chip>
         );
       case "last_heartbeat":
@@ -79,10 +141,13 @@ export function SelfHostedRunnerList({ runners }: any) {
             <TimeAgo date={runner.last_heartbeat} />
           </p>
         );
-      case "available_actions":
-        return <p>{runner.available_actions.length}</p>;
-      case "available_payload_injectors":
-        return <p>{runner.available_payload_injectors.length}</p>;
+      case "functions":
+        return (
+          <div>
+            <p className="text-sm text-default-500">Actions: {runner.available_actions.length}</p>
+            <p className="text-sm text-default-500">Payload Injectors: {runner.available_payload_injectors.length}</p>
+          </div>
+        );
       case "runner_version":
         return <p>{runner.runner_version ? runner.runner_version : "N/A"}</p>;
       case "actions":
@@ -143,6 +208,7 @@ export function SelfHostedRunnerList({ runners }: any) {
                         className={cn(iconClasses, "text-danger")}
                       />
                     }
+                    onClick={() => handleDeleteRunner(runner.id)}
                   >
                     Delete Runner
                   </DropdownItem>
@@ -173,20 +239,20 @@ export function SelfHostedRunnerList({ runners }: any) {
             <TableColumn key="project" align="start">
               PROJECT
             </TableColumn>
+            <TableColumn key="status" align="start">
+              STATUS
+            </TableColumn>
             <TableColumn key="registered" align="start">
               REGISTERED
             </TableColumn>
-            <TableColumn key="active" align="start">
-              ACTIVE
+            <TableColumn key="executing_job" align="start">
+              EXECUTING JOB
             </TableColumn>
             <TableColumn key="last_heartbeat" align="start">
               LAST HEARTBEAT
             </TableColumn>
-            <TableColumn key="available_actions" align="start">
-              AVAILABLE ACTIONS
-            </TableColumn>
-            <TableColumn key="available_payload_injectors" align="start">
-              AVAILABLE P-I
+            <TableColumn key="functions" align="start">
+              FUNCTIONS
             </TableColumn>
             <TableColumn key="actions" align="center">
               ACTIONS
@@ -202,6 +268,70 @@ export function SelfHostedRunnerList({ runners }: any) {
             )}
           </TableBody>
         </Table>
+      </div>
+      <div>
+        <Modal
+          backdrop="blur"
+          isOpen={isOpen}
+          placement="center"
+          onOpenChange={onOpenChange}
+        >
+          <ModalContent className="w-full">
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-danger">
+                  <InfoIcon />
+                  Are you sure?
+                </ModalHeader>
+                <ModalBody>
+                  <p>
+                    You are about to delete the following runner which{" "}
+                    <span className="font-bold">cannot be undone.</span>
+                  </p>
+                  <p className="items-center">
+                    Any Flow which has this runner assigned will receive the
+                    flag{" "}
+                    <Chip
+                      color="warning"
+                      size="sm"
+                      startContent={<InfoIcon height={15} width={15} />}
+                      variant="flat"
+                    >
+                      Maintenace Required
+                    </Chip>
+                  </p>
+                  <Divider />
+                  <Snippet hideCopyButton hideSymbol>
+                    <span>
+                      Name:{" "}
+                      {
+                        runners.find(
+                          (runner: any) => runner.id === runnerToDelete,
+                        ).name
+                      }
+                    </span>
+                    <span>ID: {runnerToDelete}</span>
+                  </Snippet>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="default" variant="bordered" onPress={onClose}>
+                    Cancel
+                  </Button>
+                  <Button
+                    className="font-bold"
+                    color="danger"
+                    isLoading={isDeleteLoading}
+                    startContent={<DeleteDocumentIcon />}
+                    variant="solid"
+                    onPress={deleteRunner}
+                  >
+                    DELETE
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
       </div>
     </main>
   );

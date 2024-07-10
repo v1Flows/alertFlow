@@ -135,7 +135,7 @@ export default function AddRunnerModal({ project, settings }: any) {
                 </div>
                 <div>
                   <p className="text-sm font-bold text-default-400">API Key</p>
-                  <Snippet hideSymbol className="w-full">
+                  <Snippet hideSymbol className="w-full" codeString={inApikey}>
                     <span>{inApikey.slice(0, 30) + "..."}</span>
                   </Snippet>
                   <p className="text-sm text-default-400">
