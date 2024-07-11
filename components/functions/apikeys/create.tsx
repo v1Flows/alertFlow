@@ -1,59 +1,66 @@
 "use client";
 
-import React, { useState } from "react";
+import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
+
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
-  useDisclosure,
+  Card,
+  CardHeader,
+  cn,
+  Divider,
   Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Switch,
+  useDisclosure,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import React from "react";
 import { toast } from "sonner";
+import { LibraryIcon } from "lucide-react";
 
-import { PlusIcon, TagIcon } from "@/components/icons";
+import CreateProject from "@/lib/fetch/project/POST/CreateProject";
+import { CheckIcon, InfoIcon, PlusIcon, TagIcon } from "@/components/icons";
+import { IconWrapper } from "@/lib/IconWrapper";
 import CreateRunnerApiKey from "@/lib/fetch/project/POST/CreateRunnerAPIKey";
 
-export default function AddAPIKeyModal({ project, settings }: any) {
+export default function CreateApiKeyModal({
+  disclosure,
+  projectID,
+}: {
+  disclosure: UseDisclosureReturn;
+  projectID: any;
+}) {
   const router = useRouter();
+  const { isOpen, onOpen, onOpenChange } = disclosure;
 
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [isCreateLoading, setIsCreateLoading] = useState(false);
   const [description, setDescription] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(false);
 
   async function handleCreateAPIKey() {
-    setIsCreateLoading(true);
+    setIsLoading(true);
 
     const response = await CreateRunnerApiKey({
-      projectId: project.id,
+      projectId: projectID,
       description,
     });
 
     if (response.result === "success") {
-      setDescription("");
-      onOpenChange();
-      toast.success("API key created successfully");
       router.refresh();
+      onOpenChange();
+      setDescription("");
+      setIsLoading(false);
     } else {
-      toast.error(response.message);
+      setIsLoading(false);
+      toast.error("Failed to create project");
     }
-
-    setIsCreateLoading(false);
   }
 
   return (
     <>
-      <Button
-        color="primary"
-        endContent={<PlusIcon height={undefined} width={undefined} />}
-        isDisabled={!settings.create_api_keys || project.disabled}
-        onPress={onOpen}
-      >
-        Add New
-      </Button>
       <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
@@ -77,7 +84,7 @@ export default function AddAPIKeyModal({ project, settings }: any) {
                 </Button>
                 <Button
                   color="primary"
-                  isLoading={isCreateLoading}
+                  isLoading={isLoading}
                   startContent={<PlusIcon />}
                   onPress={handleCreateAPIKey}
                 >

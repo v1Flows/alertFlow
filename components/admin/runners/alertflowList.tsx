@@ -15,59 +15,27 @@ import {
   DropdownItem,
   DropdownSection,
   cn,
-  ModalBody,
-  ModalFooter,
-  ModalContent,
-  Modal,
-  Snippet,
-  Divider,
-  ModalHeader,
   useDisclosure,
 } from "@nextui-org/react";
 import TimeAgo from "react-timeago";
+import { useRouter } from "next/navigation";
 
 import {
   DeleteDocumentIcon,
   EditDocumentIcon,
-  EyeIcon,
-  InfoIcon,
   LockIcon,
+  PlusIcon,
   VerticalDotsIcon,
 } from "@/components/icons";
-
-import AddAlertflowRunnerModal from "./addRunnerModal";
-import DeleteProjectRunner from "@/lib/fetch/project/DELETE/DeleteRunner";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import CreateRunnerModal from "@/components/functions/runner/create";
+import DeleteRunnerModal from "@/components/functions/runner/delete";
 
 export function AlertflowRunnerList({ runners }: any) {
   const router = useRouter();
 
-  // delete runner
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [runnerToDelete, setRunnerToDelete] = React.useState("");
-  const [isDeleteLoading, setIsDeleteLoading] = React.useState(false);
-
-  function handleDeleteRunner(id: any) {
-    setRunnerToDelete(id);
-    onOpenChange();
-  }
-
-  async function deleteRunner() {
-    setIsDeleteLoading(true);
-    const response = await DeleteProjectRunner(runnerToDelete);
-
-    if (response.result === "success") {
-      setRunnerToDelete("");
-      setIsDeleteLoading(false);
-      onOpenChange();
-      toast.success("Runner deleted successfully");
-      router.refresh();
-    } else {
-      setIsDeleteLoading(false);
-      toast.error("Failed to delete runner");
-    }
-  }
+  const [targetRunner, setTargetRunner] = React.useState({} as any);
+  const addRunnerModal = useDisclosure();
+  const deleteRunnerModal = useDisclosure();
 
   const iconClasses =
     "text-xl text-default-500 pointer-events-none flex-shrink-0";
@@ -144,8 +112,12 @@ export function AlertflowRunnerList({ runners }: any) {
       case "functions":
         return (
           <div>
-            <p className="text-sm text-default-500">Actions: {runner.available_actions.length}</p>
-            <p className="text-sm text-default-500">Payload Injectors: {runner.available_payload_injectors.length}</p>
+            <p className="text-sm text-default-500">
+              Actions: {runner.available_actions.length}
+            </p>
+            <p className="text-sm text-default-500">
+              Payload Injectors: {runner.available_payload_injectors.length}
+            </p>
           </div>
         );
       case "runner_version":
@@ -160,20 +132,7 @@ export function AlertflowRunnerList({ runners }: any) {
                 </Button>
               </DropdownTrigger>
               <DropdownMenu variant="faded">
-                <DropdownSection showDivider title="Actions">
-                  <DropdownItem
-                    key="view"
-                    className="text-primary"
-                    color="primary"
-                    description="Take a look on this project"
-                    startContent={
-                      <EyeIcon className={cn(iconClasses, "text-primary")} />
-                    }
-                  >
-                    View Project
-                  </DropdownItem>
-                </DropdownSection>
-                <DropdownSection title="Danger Zone">
+                <DropdownSection title="Edit Zone">
                   <DropdownItem
                     key="edit"
                     className="text-warning"
@@ -185,19 +144,21 @@ export function AlertflowRunnerList({ runners }: any) {
                       />
                     }
                   >
-                    Edit Runner
+                    Edit
                   </DropdownItem>
                   <DropdownItem
                     key="disable"
-                    className="text-secondary"
-                    color="secondary"
+                    className="text-danger"
+                    color="danger"
                     description="Disable access to this project for members"
                     startContent={
-                      <LockIcon className={cn(iconClasses, "text-secondary")} />
+                      <LockIcon className={cn(iconClasses, "text-danger")} />
                     }
                   >
-                    Disable Runner
+                    Disable
                   </DropdownItem>
+                </DropdownSection>
+                <DropdownSection title="Danger Zone">
                   <DropdownItem
                     key="delete"
                     className="text-danger"
@@ -208,9 +169,12 @@ export function AlertflowRunnerList({ runners }: any) {
                         className={cn(iconClasses, "text-danger")}
                       />
                     }
-                    onClick={() => handleDeleteRunner(runner.id)}
+                    onClick={() => {
+                      setTargetRunner(runner);
+                      deleteRunnerModal.onOpen();
+                    }}
                   >
-                    Delete Runner
+                    Delete
                   </DropdownItem>
                 </DropdownSection>
               </DropdownMenu>
@@ -228,7 +192,15 @@ export function AlertflowRunnerList({ runners }: any) {
         <p className="text-2xl font-bold mb-0 text-primary">
           AlertFlow Runners
         </p>
-        <AddAlertflowRunnerModal />
+        <Button
+          color="primary"
+          endContent={<PlusIcon height={undefined} width={undefined} />}
+          size="sm"
+          variant="flat"
+          onPress={() => addRunnerModal.onOpen()}
+        >
+          Add Runner
+        </Button>
       </div>
       <div>
         <Table aria-label="Example table with custom cells">
@@ -272,70 +244,12 @@ export function AlertflowRunnerList({ runners }: any) {
           </TableBody>
         </Table>
       </div>
-      <div>
-        <Modal
-          backdrop="blur"
-          isOpen={isOpen}
-          placement="center"
-          onOpenChange={onOpenChange}
-        >
-          <ModalContent className="w-full">
-            {(onClose) => (
-              <>
-                <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-danger">
-                  <InfoIcon />
-                  Are you sure?
-                </ModalHeader>
-                <ModalBody>
-                  <p>
-                    You are about to delete the following runner which{" "}
-                    <span className="font-bold">cannot be undone.</span>
-                  </p>
-                  <p className="items-center">
-                    Any Flow which has this runner assigned will receive the
-                    flag{" "}
-                    <Chip
-                      color="warning"
-                      size="sm"
-                      startContent={<InfoIcon height={15} width={15} />}
-                      variant="flat"
-                    >
-                      Maintenace Required
-                    </Chip>
-                  </p>
-                  <Divider />
-                  <Snippet hideCopyButton hideSymbol>
-                    <span>
-                      Name:{" "}
-                      {
-                        runners.find(
-                          (runner: any) => runner.id === runnerToDelete,
-                        ).name
-                      }
-                    </span>
-                    <span>ID: {runnerToDelete}</span>
-                  </Snippet>
-                </ModalBody>
-                <ModalFooter>
-                  <Button color="default" variant="bordered" onPress={onClose}>
-                    Cancel
-                  </Button>
-                  <Button
-                    className="font-bold"
-                    color="danger"
-                    isLoading={isDeleteLoading}
-                    startContent={<DeleteDocumentIcon />}
-                    variant="solid"
-                    onPress={deleteRunner}
-                  >
-                    DELETE
-                  </Button>
-                </ModalFooter>
-              </>
-            )}
-          </ModalContent>
-        </Modal>
-      </div>
+      <CreateRunnerModal
+        alertflow_runner={true}
+        disclosure={addRunnerModal}
+        project={"none"}
+      />
+      <DeleteRunnerModal disclosure={deleteRunnerModal} runner={targetRunner} />
     </main>
   );
 }

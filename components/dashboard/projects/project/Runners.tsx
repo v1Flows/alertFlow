@@ -28,17 +28,16 @@ import {
   DeleteDocumentIcon,
   CopyDocumentIcon,
   InfoIcon,
+  PlusIcon,
 } from "@/components/icons";
 import DeleteProjectRunner from "@/lib/fetch/project/DELETE/DeleteRunner";
-import AddRunnerModal from "@/components/dashboard/projects/project/modals/AddRunner";
+import CreateRunnerModal from "@/components/functions/runner/create";
+import DeleteRunnerModal from "@/components/functions/runner/delete";
 
 export default function Runners({ runners, project, settings }: any) {
-  const router = useRouter();
-
-  // delete runner things
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [runnerToDelete, setRunnerToDelete] = React.useState("");
-  const [isDeleteLoading, setIsDeleteLoading] = React.useState(false);
+  const [targetRunner, setTargetRunner] = React.useState({} as any);
+  const addRunnerModal = useDisclosure();
+  const deleteRunnerModal = useDisclosure();
 
   const copyRunnerIDtoClipboard = (id: string) => {
     // eslint-disable-next-line no-undef
@@ -50,27 +49,6 @@ export default function Runners({ runners, project, settings }: any) {
       toast.error("Failed to copy runner ID to clipboard");
     }
   };
-
-  function handleDeleteRunner(runnerID: any) {
-    setRunnerToDelete(runnerID);
-    onOpenChange();
-  }
-
-  async function deleteRunner() {
-    setIsDeleteLoading(true);
-    const response = await DeleteProjectRunner(runnerToDelete);
-
-    if (response.result === "success") {
-      setRunnerToDelete("");
-      setIsDeleteLoading(false);
-      onOpenChange();
-      toast.success("Runner deleted successfully");
-      router.refresh();
-    } else {
-      setIsDeleteLoading(false);
-      toast.error("Failed to delete runner");
-    }
-  }
 
   function heartbeatColor(runner: any) {
     var timeAgo =
@@ -100,7 +78,14 @@ export default function Runners({ runners, project, settings }: any) {
     <main>
       <div className="flex items-center justify-between mb-4">
         <p className="text-lg font-bold">Selfhosted Runners</p>
-        <AddRunnerModal project={project} settings={settings} />
+        <Button
+          color="primary"
+          endContent={<PlusIcon height={undefined} width={undefined} />}
+          isDisabled={!settings.create_runners || project.disabled}
+          onPress={() => addRunnerModal.onOpen()}
+        >
+          Add Runner
+        </Button>
       </div>
       <Divider className="mb-4" />
       <div className="grid lg:grid-cols-2 gap-4">
@@ -153,7 +138,10 @@ export default function Runners({ runners, project, settings }: any) {
                               className="text-danger"
                               color="danger"
                               startContent={<DeleteDocumentIcon />}
-                              onClick={() => handleDeleteRunner(runner.id)}
+                              onClick={() => {
+                                setTargetRunner(runner);
+                                deleteRunnerModal.onOpen();
+                              }}
                             >
                               Delete
                             </DropdownItem>
@@ -247,67 +235,12 @@ export default function Runners({ runners, project, settings }: any) {
           </p>
         </div>
       )}
-      <Modal
-        backdrop="blur"
-        isOpen={isOpen}
-        placement="center"
-        onOpenChange={onOpenChange}
-      >
-        <ModalContent className="w-full">
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-danger">
-                <InfoIcon />
-                Are you sure?
-              </ModalHeader>
-              <ModalBody>
-                <p>
-                  You are about to delete the following runner which{" "}
-                  <span className="font-bold">cannot be undone.</span>
-                </p>
-                <p className="items-center">
-                  Any Flow which has this runner assigned will receive the flag{" "}
-                  <Chip
-                    color="warning"
-                    size="sm"
-                    startContent={<InfoIcon height={15} width={15} />}
-                    variant="flat"
-                  >
-                    Maintenace Required
-                  </Chip>
-                </p>
-                <Divider />
-                <Snippet hideCopyButton hideSymbol>
-                  <span>
-                    Name:{" "}
-                    {
-                      runners.find(
-                        (runner: any) => runner.id === runnerToDelete,
-                      ).name
-                    }
-                  </span>
-                  <span>ID: {runnerToDelete}</span>
-                </Snippet>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="default" variant="bordered" onPress={onClose}>
-                  Cancel
-                </Button>
-                <Button
-                  className="font-bold"
-                  color="danger"
-                  isLoading={isDeleteLoading}
-                  startContent={<DeleteDocumentIcon />}
-                  variant="solid"
-                  onPress={deleteRunner}
-                >
-                  DELETE
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
+      <CreateRunnerModal
+        alertflow_runner={false}
+        disclosure={addRunnerModal}
+        project={project}
+      />
+      <DeleteRunnerModal disclosure={deleteRunnerModal} runner={targetRunner} />
     </main>
   );
 }
