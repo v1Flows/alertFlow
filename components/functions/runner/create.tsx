@@ -1,31 +1,39 @@
 "use client";
 
-import React, { useState } from "react";
+import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
+
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
-  useDisclosure,
-  Input,
   Divider,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
   Snippet,
+  useDisclosure,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import React from "react";
 import { toast } from "sonner";
 import { LibraryIcon } from "lucide-react";
 
 import { CheckIcon, PlayCircleIcon, PlusIcon } from "@/components/icons";
+import AddRunner from "@/lib/fetch/runner/AddRunner";
 import CreateRunnerApiKey from "@/lib/fetch/project/POST/CreateRunnerAPIKey";
-import AddAlertflowRunner from "@/lib/fetch/admin/POST/AddAlertflowRunner";
 
-export default function AddAlertflowRunnerModal() {
+export default function CreateRunnerModal({
+  disclosure,
+  project,
+  alertflow_runner,
+}: {
+  disclosure: UseDisclosureReturn;
+  project: any;
+  alertflow_runner: any;
+}) {
   const router = useRouter();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [isCreateLoading, setIsCreateLoading] = useState(false);
-  const [name, setName] = React.useState("");
+  const { isOpen, onOpen, onOpenChange } = disclosure;
 
   // instructions modal
   const {
@@ -36,15 +44,21 @@ export default function AddAlertflowRunnerModal() {
   const [inApikey, setInApikey] = React.useState("");
   const [inRunnerId, setInRunnerId] = React.useState("");
 
-  async function handleCreateAPIKey() {
-    setIsCreateLoading(true);
+  const [name, setName] = React.useState("");
 
-    const response = await AddAlertflowRunner({
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  async function createRunner() {
+    setIsLoading(true);
+
+    const response = await AddRunner({
+      projectId: project.id ? project.id : "none",
       name,
+      alertflow_runner,
     });
 
     const tokenResponse = await CreateRunnerApiKey({
-      projectId: "none",
+      projectId: project.id ? project.id : "none",
       description: name + " Runner API key",
     });
 
@@ -61,27 +75,18 @@ export default function AddAlertflowRunnerModal() {
       toast.error("Failed to create runner");
     }
 
-    setIsCreateLoading(false);
+    setIsLoading(false);
   }
 
   return (
     <>
-      <Button
-        color="primary"
-        size="sm"
-        startContent={<PlusIcon />}
-        variant="flat"
-        onPress={onOpen}
-      >
-        <span className="font-bold">Add Runner</span>
-      </Button>
       <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold">
                 <PlayCircleIcon />
-                Add AlertFlow Runner
+                Add Runner
               </ModalHeader>
               <ModalBody>
                 <Input
@@ -98,9 +103,9 @@ export default function AddAlertflowRunnerModal() {
                 </Button>
                 <Button
                   color="primary"
-                  isLoading={isCreateLoading}
+                  isLoading={isLoading}
                   startContent={<PlusIcon />}
-                  onPress={handleCreateAPIKey}
+                  onPress={createRunner}
                 >
                   Add
                 </Button>

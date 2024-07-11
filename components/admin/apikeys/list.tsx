@@ -31,72 +31,21 @@ import { toast } from "sonner";
 import {
   DeleteDocumentIcon,
   EditDocumentIcon,
-  EyeIcon,
   LockIcon,
+  PlusIcon,
   VerticalDotsIcon,
 } from "@/components/icons";
 import ChangeProjectStatus from "@/lib/fetch/project/PUT/ChangeProjectStatus";
-import DeleteAPIKeyModal from "@/components/dashboard/projects/project/modals/DeleteAPIKey";
+import CreateApiKeyModal from "@/components/functions/apikeys/create";
+import DeleteApiKeyModal from "@/components/functions/apikeys/delete";
 
 export function ApiKeysList({ apikeys, projects }: any) {
   const router = useRouter();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [disableReason, setDisableReason] = React.useState("");
-  const [isDisableLoading, setIsDisableLoading] = React.useState(false);
 
-  const [projectID, setProjectID] = React.useState("");
-  const [disableProject, setDisableProject] = React.useState(false);
+  const [targetKey, setTargetKey] = React.useState({} as any);
 
-  React.useEffect(() => {
-    if (projectID !== "" && !disableProject) {
-      changeProjectStatus();
-    }
-  }, [projectID, disableProject]);
-
-  function changeProjectStatusModal(projectID: string, disabled: boolean) {
-    setProjectID(projectID);
-    setDisableProject(disabled);
-
-    if (disabled) {
-      onOpenChange();
-    }
-  }
-
-  async function changeProjectStatus() {
-    if (!disableProject) {
-      const res = await ChangeProjectStatus(projectID, disableProject, "");
-
-      if (!res.error) {
-        setProjectID("");
-        router.refresh();
-        toast.success("Project status updated successfully");
-      } else {
-        router.refresh();
-        toast.error("Failed to update project status");
-      }
-    } else {
-      setIsDisableLoading(true);
-      const res = await ChangeProjectStatus(
-        projectID,
-        disableProject,
-        disableReason,
-      );
-
-      if (!res.error) {
-        setDisableReason("");
-        setProjectID("");
-        setDisableProject(false);
-        setIsDisableLoading(false);
-        onOpenChange();
-        router.refresh();
-        toast.success("Project status updated successfully");
-      } else {
-        setIsDisableLoading(false);
-        router.refresh();
-        toast.error("Failed to update project status");
-      }
-    }
-  }
+  const addApiKeyModal = useDisclosure();
+  const deleteApiKeyModal = useDisclosure();
 
   const iconClasses =
     "text-xl text-default-500 pointer-events-none flex-shrink-0";
@@ -188,7 +137,6 @@ export function ApiKeysList({ apikeys, projects }: any) {
                       startContent={
                         <LockIcon className={cn(iconClasses, "text-success")} />
                       }
-                      onClick={() => changeProjectStatusModal(apikey.id, false)}
                     >
                       Enable
                     </DropdownItem>
@@ -202,7 +150,6 @@ export function ApiKeysList({ apikeys, projects }: any) {
                       startContent={
                         <LockIcon className={cn(iconClasses, "text-danger")} />
                       }
-                      onClick={() => changeProjectStatusModal(apikey.id, true)}
                     >
                       Disable
                     </DropdownItem>
@@ -219,6 +166,10 @@ export function ApiKeysList({ apikeys, projects }: any) {
                         className={cn(iconClasses, "text-danger")}
                       />
                     }
+                    onClick={() => {
+                      setTargetKey(apikey);
+                      deleteApiKeyModal.onOpen();
+                    }}
                   >
                     Delete
                   </DropdownItem>
@@ -240,6 +191,13 @@ export function ApiKeysList({ apikeys, projects }: any) {
           <p className="text-2xl mb-0">|</p>
           <p className="text-2xl mb-0">API Keys</p>
         </div>
+        <Button
+          color="primary"
+          endContent={<PlusIcon height={undefined} width={undefined} />}
+          onPress={() => addApiKeyModal.onOpen()}
+        >
+          Add New
+        </Button>
       </div>
       <Divider className="my-4" />
       <div>
@@ -278,47 +236,8 @@ export function ApiKeysList({ apikeys, projects }: any) {
           </TableBody>
         </Table>
       </div>
-      <div>
-        <Modal
-          isOpen={isOpen}
-          placement="top-center"
-          onOpenChange={onOpenChange}
-        >
-          <ModalContent>
-            {(onClose) => (
-              <>
-                <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-danger">
-                  <LockIcon /> Disable Project
-                </ModalHeader>
-                <ModalBody>
-                  <Snippet hideCopyButton hideSymbol>
-                    <span>ID: {projectID}</span>
-                  </Snippet>
-                  <Input
-                    label="Disable Reason"
-                    placeholder="Enter the reason for disabling this project"
-                    value={disableReason}
-                    variant="bordered"
-                    onValueChange={setDisableReason}
-                  />
-                </ModalBody>
-                <ModalFooter>
-                  <Button color="default" variant="flat" onPress={onClose}>
-                    Cancel
-                  </Button>
-                  <Button
-                    color="danger"
-                    isLoading={isDisableLoading}
-                    onPress={changeProjectStatus}
-                  >
-                    Disable
-                  </Button>
-                </ModalFooter>
-              </>
-            )}
-          </ModalContent>
-        </Modal>
-      </div>
+      <CreateApiKeyModal disclosure={addApiKeyModal} projectID={"none"} />
+      <DeleteApiKeyModal apikey={targetKey} disclosure={deleteApiKeyModal} />
     </main>
   );
 }

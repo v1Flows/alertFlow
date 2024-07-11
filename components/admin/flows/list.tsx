@@ -36,66 +36,13 @@ import {
   VerticalDotsIcon,
 } from "@/components/icons";
 import ChangeProjectStatus from "@/lib/fetch/project/PUT/ChangeProjectStatus";
+import FunctionDeleteFlow from "@/components/functions/flows/deleteFlow";
 
 export function FlowsList({ flows, projects }: any) {
   const router = useRouter();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [disableReason, setDisableReason] = React.useState("");
-  const [isDisableLoading, setIsDisableLoading] = React.useState(false);
 
-  const [projectID, setProjectID] = React.useState("");
-  const [disableProject, setDisableProject] = React.useState(false);
-
-  React.useEffect(() => {
-    if (projectID !== "" && !disableProject) {
-      changeProjectStatus();
-    }
-  }, [projectID, disableProject]);
-
-  function changeProjectStatusModal(projectID: string, disabled: boolean) {
-    setProjectID(projectID);
-    setDisableProject(disabled);
-
-    if (disabled) {
-      onOpenChange();
-    }
-  }
-
-  async function changeProjectStatus() {
-    if (!disableProject) {
-      const res = await ChangeProjectStatus(projectID, disableProject, "");
-
-      if (!res.error) {
-        setProjectID("");
-        router.refresh();
-        toast.success("Project status updated successfully");
-      } else {
-        router.refresh();
-        toast.error("Failed to update project status");
-      }
-    } else {
-      setIsDisableLoading(true);
-      const res = await ChangeProjectStatus(
-        projectID,
-        disableProject,
-        disableReason,
-      );
-
-      if (!res.error) {
-        setDisableReason("");
-        setProjectID("");
-        setDisableProject(false);
-        setIsDisableLoading(false);
-        onOpenChange();
-        router.refresh();
-        toast.success("Project status updated successfully");
-      } else {
-        setIsDisableLoading(false);
-        router.refresh();
-        toast.error("Failed to update project status");
-      }
-    }
-  }
+  const [targetFlow, setTargetFlow] = React.useState({} as any);
+  const deleteModal = useDisclosure();
 
   const iconClasses =
     "text-xl text-default-500 pointer-events-none flex-shrink-0";
@@ -105,7 +52,7 @@ export function FlowsList({ flows, projects }: any) {
 
     switch (columnKey) {
       case "id":
-        return <p>{flow.id}</p>;
+        return <p className="text-sm text-default-500">{flow.id}</p>;
       case "name":
         return (
           <div>
@@ -189,7 +136,6 @@ export function FlowsList({ flows, projects }: any) {
                       startContent={
                         <LockIcon className={cn(iconClasses, "text-success")} />
                       }
-                      onClick={() => changeProjectStatusModal(flow.id, false)}
                     >
                       Enable
                     </DropdownItem>
@@ -203,7 +149,6 @@ export function FlowsList({ flows, projects }: any) {
                       startContent={
                         <LockIcon className={cn(iconClasses, "text-danger")} />
                       }
-                      onClick={() => changeProjectStatusModal(flow.id, true)}
                     >
                       Disable
                     </DropdownItem>
@@ -220,6 +165,10 @@ export function FlowsList({ flows, projects }: any) {
                         className={cn(iconClasses, "text-danger")}
                       />
                     }
+                    onClick={() => {
+                      setTargetFlow(flow);
+                      deleteModal.onOpen();
+                    }}
                   >
                     Delete
                   </DropdownItem>
@@ -246,11 +195,11 @@ export function FlowsList({ flows, projects }: any) {
       <div>
         <Table aria-label="Example table with custom cells">
           <TableHeader>
-            <TableColumn key="id" align="start">
-              ID
-            </TableColumn>
             <TableColumn key="name" align="start">
               NAME
+            </TableColumn>
+            <TableColumn key="id" align="start">
+              ID
             </TableColumn>
             <TableColumn key="project_id" align="start">
               PROJECT
@@ -285,47 +234,7 @@ export function FlowsList({ flows, projects }: any) {
           </TableBody>
         </Table>
       </div>
-      <div>
-        <Modal
-          isOpen={isOpen}
-          placement="top-center"
-          onOpenChange={onOpenChange}
-        >
-          <ModalContent>
-            {(onClose) => (
-              <>
-                <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-danger">
-                  <LockIcon /> Disable Project
-                </ModalHeader>
-                <ModalBody>
-                  <Snippet hideCopyButton hideSymbol>
-                    <span>ID: {projectID}</span>
-                  </Snippet>
-                  <Input
-                    label="Disable Reason"
-                    placeholder="Enter the reason for disabling this project"
-                    value={disableReason}
-                    variant="bordered"
-                    onValueChange={setDisableReason}
-                  />
-                </ModalBody>
-                <ModalFooter>
-                  <Button color="default" variant="flat" onPress={onClose}>
-                    Cancel
-                  </Button>
-                  <Button
-                    color="danger"
-                    isLoading={isDisableLoading}
-                    onPress={changeProjectStatus}
-                  >
-                    Disable
-                  </Button>
-                </ModalFooter>
-              </>
-            )}
-          </ModalContent>
-        </Modal>
-      </div>
+      <FunctionDeleteFlow disclosure={deleteModal} flow={targetFlow} />
     </main>
   );
 }

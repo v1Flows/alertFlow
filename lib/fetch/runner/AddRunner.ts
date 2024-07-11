@@ -2,7 +2,11 @@
 
 import { cookies } from "next/headers";
 
-export default async function AddProjectRunner({ projectId, name }: any) {
+export default async function AddRunner({
+  projectId,
+  name,
+  alertflow_runner,
+}: any) {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;
@@ -17,7 +21,7 @@ export default async function AddProjectRunner({ projectId, name }: any) {
       "Content-Type": "application/json",
       Authorization: token,
     },
-    body: JSON.stringify({ name: name, project_id: projectId }),
+    body: JSON.stringify({ name, project_id: projectId, alertflow_runner }),
   });
 
   if (!res.ok) {
