@@ -163,20 +163,7 @@ export function SelfHostedRunnerList({ runners, projects }: any) {
                 </Button>
               </DropdownTrigger>
               <DropdownMenu variant="faded">
-                <DropdownSection showDivider title="Actions">
-                  <DropdownItem
-                    key="view"
-                    className="text-primary"
-                    color="primary"
-                    description="Take a look on this project"
-                    startContent={
-                      <EyeIcon className={cn(iconClasses, "text-primary")} />
-                    }
-                  >
-                    View Project
-                  </DropdownItem>
-                </DropdownSection>
-                <DropdownSection title="Danger Zone">
+                <DropdownSection showDivider title="Edit Zone">
                   <DropdownItem
                     key="edit"
                     className="text-warning"
@@ -188,19 +175,21 @@ export function SelfHostedRunnerList({ runners, projects }: any) {
                       />
                     }
                   >
-                    Edit Runner
+                    Edit
                   </DropdownItem>
                   <DropdownItem
                     key="disable"
-                    className="text-secondary"
-                    color="secondary"
+                    className="text-danger"
+                    color="danger"
                     description="Disable access to this project for members"
                     startContent={
-                      <LockIcon className={cn(iconClasses, "text-secondary")} />
+                      <LockIcon className={cn(iconClasses, "text-danger")} />
                     }
                   >
-                    Disable Runner
+                    Disable
                   </DropdownItem>
+                </DropdownSection>
+                <DropdownSection title="Danger Zone">
                   <DropdownItem
                     key="delete"
                     className="text-danger"
@@ -213,7 +202,7 @@ export function SelfHostedRunnerList({ runners, projects }: any) {
                     }
                     onClick={() => handleDeleteRunner(runner.id)}
                   >
-                    Delete Runner
+                    Delete
                   </DropdownItem>
                 </DropdownSection>
               </DropdownMenu>

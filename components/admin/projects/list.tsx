@@ -189,7 +189,7 @@ export function ProjectList({ projects }: any) {
                       <EyeIcon className={cn(iconClasses, "text-primary")} />
                     }
                   >
-                    View Project
+                    View
                   </DropdownItem>
                 </DropdownSection>
                 <DropdownSection title="Edit Zone">
@@ -204,7 +204,7 @@ export function ProjectList({ projects }: any) {
                       />
                     }
                   >
-                    Edit Project
+                    Edit
                   </DropdownItem>
                   {project.disabled && (
                     <DropdownItem
@@ -221,7 +221,7 @@ export function ProjectList({ projects }: any) {
                         changeProjectStatusModal(project.id, false)
                       }
                     >
-                      Enable Project
+                      Enable
                     </DropdownItem>
                   )}
                   {!project.disabled && (
@@ -237,7 +237,7 @@ export function ProjectList({ projects }: any) {
                       }
                       onClick={() => changeProjectStatusModal(project.id, true)}
                     >
-                      Disable Project
+                      Disable
                     </DropdownItem>
                   )}
                 </DropdownSection>
@@ -253,7 +253,7 @@ export function ProjectList({ projects }: any) {
                       />
                     }
                   >
-                    Delete Project
+                    Delete
                   </DropdownItem>
                 </DropdownSection>
               </DropdownMenu>

@@ -169,7 +169,7 @@ export function UsersList({ users }: any) {
                       <EyeIcon className={cn(iconClasses, "text-primary")} />
                     }
                   >
-                    View User
+                    View
                   </DropdownItem>
                 </DropdownSection>
                 <DropdownSection title="Edit Zone">
@@ -184,7 +184,7 @@ export function UsersList({ users }: any) {
                       />
                     }
                   >
-                    Edit User
+                    Edit
                   </DropdownItem>
                   {!user.disabled && (
                     <DropdownItem
@@ -197,7 +197,7 @@ export function UsersList({ users }: any) {
                       }
                       onClick={() => changeUserStatusModal(user.id, true)}
                     >
-                      Disable User
+                      Disable
                     </DropdownItem>
                   )}
                   {user.disabled && (
@@ -211,7 +211,7 @@ export function UsersList({ users }: any) {
                       }
                       onClick={() => changeUserStatusModal(user.id, false)}
                     >
-                      Enable User
+                      Enable
                     </DropdownItem>
                   )}
                 </DropdownSection>
@@ -227,7 +227,7 @@ export function UsersList({ users }: any) {
                       />
                     }
                   >
-                    Delete User
+                    Delete
                   </DropdownItem>
                 </DropdownSection>
               </DropdownMenu>
