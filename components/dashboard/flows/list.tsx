@@ -148,15 +148,22 @@ export default function FlowList({ flows, projects, settings }: any) {
                       </p>
                     </Chip>
                     <Chip
-                      color={flow.active ? "success" : "danger"}
+                      color={flow.disabled ? "danger" : "success"}
                       radius="sm"
                       size="sm"
                       variant="flat"
                     >
                       <p className="font-bold">
-                        Status: {flow.active ? "Active" : "Inactive"}
+                        Status: {flow.disabled ? "Disabled" : "Active"}
                       </p>
                     </Chip>
+                    {flow.disabled && (
+                      <Chip color="danger" radius="sm" size="sm" variant="flat">
+                        <p className="font-bold">
+                          Disable Reason: {flow.disabled_reason}
+                        </p>
+                      </Chip>
+                    )}
                     <Chip
                       color="secondary"
                       radius="sm"

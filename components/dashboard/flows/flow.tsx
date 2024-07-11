@@ -71,19 +71,19 @@ export async function Flow({ id }: any) {
                 <Card fullWidth>
                   <CardHeader className="justify-start gap-2 items-center">
                     <IconWrapper
-                      className={`bg-${flow.active ? "success" : "danger"}/10 text-${flow.active ? "success" : "danger"}`}
+                      className={`bg-${flow.disabled ? "danger" : "success"}/10 text-${flow.disabled ? "danger" : "success"}`}
                     >
-                      {flow.active ? (
-                        <CheckIcon className="text-lg" />
-                      ) : (
+                      {flow.disabled ? (
                         <InfoIcon className="text-lg" />
+                      ) : (
+                        <CheckIcon className="text-lg" />
                       )}
                     </IconWrapper>
                     <p className="text-md font-bold">Status</p>
                   </CardHeader>
                   <CardBody>
                     <p className="text-default-500 font-bold">
-                      {flow.active ? "Active" : "Inactive"}
+                      {flow.disabled ? "Disabled" : "Active"}
                     </p>
                   </CardBody>
                 </Card>
