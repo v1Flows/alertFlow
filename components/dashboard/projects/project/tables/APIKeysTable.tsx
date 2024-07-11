@@ -11,7 +11,7 @@ import {
   Snippet,
   Chip,
 } from "@nextui-org/react";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 
 import { CopyDocumentIcon } from "@/components/icons";
 import AddAPIKeyModal from "@/components/dashboard/projects/project/modals/AddAPIKey";
@@ -78,7 +78,6 @@ export default function ProjectAPIKeys({ apiKeys, project, settings }: any) {
 
   return (
     <div>
-      <Toaster richColors position="bottom-center" />
       <Table
         aria-label="Example table with custom cells"
         topContent={topContent}

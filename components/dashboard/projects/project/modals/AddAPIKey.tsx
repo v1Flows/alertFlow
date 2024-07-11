@@ -12,7 +12,7 @@ import {
   Input,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 
 import { PlusIcon, TagIcon } from "@/components/icons";
 import CreateRunnerApiKey from "@/lib/fetch/project/POST/CreateRunnerAPIKey";
@@ -46,7 +46,6 @@ export default function AddAPIKeyModal({ project, settings }: any) {
 
   return (
     <>
-      <Toaster richColors position="bottom-center" />
       <Button
         color="primary"
         endContent={<PlusIcon height={undefined} width={undefined} />}

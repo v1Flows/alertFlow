@@ -13,7 +13,7 @@ import {
   Switch,
   cn,
 } from "@nextui-org/react";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 import { EditDocumentIcon } from "@/components/icons";
@@ -52,7 +52,6 @@ export default function EditProjectModal({ project }: any) {
 
   return (
     <>
-      <Toaster richColors position="bottom-center" />
       <Button
         color="warning"
         endContent={<EditDocumentIcon />}

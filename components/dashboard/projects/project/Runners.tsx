@@ -19,7 +19,7 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import React from "react";
 import TimeAgo from "react-timeago";
 
@@ -98,7 +98,6 @@ export default function Runners({ runners, project, settings }: any) {
 
   return (
     <main>
-      <Toaster richColors position="bottom-center" />
       <div className="flex items-center justify-between mb-4">
         <p className="text-lg font-bold">Selfhosted Runners</p>
         <AddRunnerModal project={project} settings={settings} />
@@ -175,7 +174,11 @@ export default function Runners({ runners, project, settings }: any) {
                     <p
                       className={"text-" + heartbeatColor(runner) + " text-sm"}
                     >
-                      <TimeAgo date={runner.last_heartbeat} />
+                      {runner.last_heartbeat !== "0001-01-01T00:00:00Z" && (
+                        <TimeAgo date={runner.last_heartbeat} />
+                      )}
+                      {runner.last_heartbeat === "0001-01-01T00:00:00Z" &&
+                        "N/A"}
                     </p>
                   </div>
                 </CardBody>
@@ -223,7 +226,11 @@ export default function Runners({ runners, project, settings }: any) {
                             "text-" + heartbeatColor(runner) + " text-sm"
                           }
                         >
-                          <TimeAgo date={runner.last_heartbeat} />
+                          {runner.last_heartbeat !== "0001-01-01T00:00:00Z" && (
+                            <TimeAgo date={runner.last_heartbeat} />
+                          )}
+                          {runner.last_heartbeat === "0001-01-01T00:00:00Z" &&
+                            "N/A"}
                         </p>
                       </div>
                     </CardBody>
@@ -259,8 +266,7 @@ export default function Runners({ runners, project, settings }: any) {
                   <span className="font-bold">cannot be undone.</span>
                 </p>
                 <p className="items-center">
-                  Any Flow which has this runner assigned will receive the
-                  flag{" "}
+                  Any Flow which has this runner assigned will receive the flag{" "}
                   <Chip
                     color="warning"
                     size="sm"

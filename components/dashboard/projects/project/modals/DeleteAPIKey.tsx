@@ -11,7 +11,7 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 
 import { DeleteIcon } from "@/components/icons";
 import DeleteRunnerApiKey from "@/lib/fetch/project/DELETE/DeleteRunnerAPIKey";
@@ -39,7 +39,6 @@ export default function DeleteAPIKeyModal(keyID: any) {
 
   return (
     <>
-      <Toaster richColors position="bottom-center" />
       <DeleteIcon onClick={onOpen} />
       <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
         <ModalContent>

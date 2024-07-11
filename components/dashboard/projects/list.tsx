@@ -22,7 +22,7 @@ import {
   Chip,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 
 import { IconWrapper } from "@/lib/IconWrapper";
 import { EyeIcon, InfoIcon } from "@/components/icons";
@@ -64,7 +64,6 @@ export function ProjectsList({ projects, settings }: any) {
 
   return (
     <main>
-      <Toaster richColors position="bottom-center" />
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-1">
           <p className="text-2xl font-bold mb-0 text-default-500">

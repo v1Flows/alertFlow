@@ -135,7 +135,10 @@ export function AlertflowRunnerList({ runners }: any) {
       case "last_heartbeat":
         return (
           <p className={"text-" + heartbeatColor(runner)}>
-            <TimeAgo date={runner.last_heartbeat} />
+            {runner.last_heartbeat !== "0001-01-01T00:00:00Z" && (
+              <TimeAgo date={runner.last_heartbeat} />
+            )}
+            {runner.last_heartbeat === "0001-01-01T00:00:00Z" && "N/A"}
           </p>
         );
       case "functions":

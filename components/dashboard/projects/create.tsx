@@ -14,7 +14,7 @@ import {
   Card,
   CardHeader,
 } from "@nextui-org/react";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { LibraryIcon } from "lucide-react";
 
@@ -81,7 +81,6 @@ export default function NewProjectModal({ settings }: any) {
 
   return (
     <>
-      <Toaster richColors position="bottom-center" />
       <Button
         color="primary"
         isDisabled={!settings.create_projects}
@@ -106,7 +105,9 @@ export default function NewProjectModal({ settings }: any) {
                       <IconWrapper className="bg-danger/10 text-danger">
                         <InfoIcon className="text-lg" />
                       </IconWrapper>
-                      <p className="text-md font-bold text-danger">{errorText}</p>
+                      <p className="text-md font-bold text-danger">
+                        {errorText}
+                      </p>
                     </CardHeader>
                   </Card>
                 )}

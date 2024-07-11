@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import {
   Card,
   CardHeader,
@@ -65,7 +65,6 @@ export default function FlowList({ flows, projects, settings }: any) {
 
   return (
     <main>
-      <Toaster richColors position="bottom-center" />
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-1">
           <p className="text-2xl font-bold mb-0 text-default-500">

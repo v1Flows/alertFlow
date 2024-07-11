@@ -14,7 +14,7 @@ import {
   Snippet,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import { LibraryIcon } from "lucide-react";
 
 import { CheckIcon, PlayCircleIcon, PlusIcon } from "@/components/icons";
@@ -67,7 +67,6 @@ export default function AddRunnerModal({ project, settings }: any) {
 
   return (
     <>
-      <Toaster richColors position="bottom-center" />
       <Button
         color="primary"
         endContent={<PlusIcon height={undefined} width={undefined} />}

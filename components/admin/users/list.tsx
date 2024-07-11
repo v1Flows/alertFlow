@@ -26,7 +26,7 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 
 import {
   EyeIcon,
@@ -193,9 +193,7 @@ export function UsersList({ users }: any) {
                       color="danger"
                       description="Disable access to AlertFlow for this user"
                       startContent={
-                        <LockIcon
-                          className={cn(iconClasses, "text-danger")}
-                        />
+                        <LockIcon className={cn(iconClasses, "text-danger")} />
                       }
                       onClick={() => changeUserStatusModal(user.id, true)}
                     >
@@ -243,7 +241,6 @@ export function UsersList({ users }: any) {
 
   return (
     <main>
-      <Toaster richColors position="bottom-center" />
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-1">
           <p className="text-2xl font-bold mb-0 text-danger">Admin</p>

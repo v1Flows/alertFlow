@@ -12,7 +12,6 @@ import {
   Code,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { Toaster } from "sonner";
 
 import { DeleteDocumentIcon, DeleteIcon } from "@/components/icons";
 
@@ -33,7 +32,6 @@ export default function DeleteMemberModal({
 
   return (
     <>
-      <Toaster richColors position="bottom-center" />
       <DeleteIcon onClick={onOpen} />
       <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
         <ModalContent>
