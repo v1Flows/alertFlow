@@ -16,6 +16,7 @@ import {
   DropdownSection,
   cn,
   useDisclosure,
+  Pagination,
 } from "@nextui-org/react";
 import TimeAgo from "react-timeago";
 import { useRouter } from "next/navigation";
@@ -39,6 +40,17 @@ export function AlertflowRunnerList({ runners }: any) {
   const addRunnerModal = useDisclosure();
   const changeStatusModal = useDisclosure();
   const deleteRunnerModal = useDisclosure();
+
+  // pagination
+  const [page, setPage] = React.useState(1);
+  const rowsPerPage = 7;
+  const pages = Math.ceil(runners.length / rowsPerPage);
+  const items = React.useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    return runners.slice(start, end);
+  }, [page, runners]);
 
   const iconClasses =
     "text-xl text-default-500 pointer-events-none flex-shrink-0";
@@ -229,7 +241,25 @@ export function AlertflowRunnerList({ runners }: any) {
         </Button>
       </div>
       <div>
-        <Table aria-label="Example table with custom cells">
+        <Table
+          aria-label="Example table with custom cells"
+          bottomContent={
+            <div className="flex w-full justify-center">
+              <Pagination
+                isCompact
+                showControls
+                showShadow
+                color="secondary"
+                page={page}
+                total={pages}
+                onChange={(page) => setPage(page)}
+              />
+            </div>
+          }
+          classNames={{
+            wrapper: "min-h-[222px]",
+          }}
+        >
           <TableHeader>
             <TableColumn key="name" align="start">
               NAME
@@ -259,7 +289,7 @@ export function AlertflowRunnerList({ runners }: any) {
               ACTIONS
             </TableColumn>
           </TableHeader>
-          <TableBody emptyContent={"No rows to display."} items={runners}>
+          <TableBody emptyContent={"No rows to display."} items={items}>
             {(item: any) => (
               <TableRow key={item.id}>
                 {(columnKey) => (

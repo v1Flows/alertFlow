@@ -17,6 +17,7 @@ import {
   DropdownSection,
   cn,
   useDisclosure,
+  Pagination,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 
@@ -42,6 +43,17 @@ export function FlowsList({ flows, projects, runners }: any) {
   const editModal = useDisclosure();
   const changeStatusModal = useDisclosure();
   const deleteModal = useDisclosure();
+
+  // pagination
+  const [page, setPage] = React.useState(1);
+  const rowsPerPage = 7;
+  const pages = Math.ceil(flows.length / rowsPerPage);
+  const items = React.useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    return flows.slice(start, end);
+  }, [page, flows]);
 
   const iconClasses =
     "text-xl text-default-500 pointer-events-none flex-shrink-0";
@@ -229,7 +241,25 @@ export function FlowsList({ flows, projects, runners }: any) {
       </div>
       <Divider className="my-4" />
       <div>
-        <Table aria-label="Example table with custom cells">
+        <Table
+          aria-label="Example table with custom cells"
+          bottomContent={
+            <div className="flex w-full justify-center">
+              <Pagination
+                isCompact
+                showControls
+                showShadow
+                color="secondary"
+                page={page}
+                total={pages}
+                onChange={(page) => setPage(page)}
+              />
+            </div>
+          }
+          classNames={{
+            wrapper: "min-h-[222px]",
+          }}
+        >
           <TableHeader>
             <TableColumn key="name" align="start">
               NAME
@@ -259,7 +289,7 @@ export function FlowsList({ flows, projects, runners }: any) {
               ACTIONS
             </TableColumn>
           </TableHeader>
-          <TableBody emptyContent={"No rows to display."} items={flows}>
+          <TableBody emptyContent={"No rows to display."} items={items}>
             {(item: any) => (
               <TableRow key={item.id}>
                 {(columnKey) => (
@@ -276,7 +306,11 @@ export function FlowsList({ flows, projects, runners }: any) {
         flow={targetFlow}
         projects={projects}
       />
-      <ChangeFlowStatusModal disclosure={changeStatusModal} flow={targetFlow} status={status} />
+      <ChangeFlowStatusModal
+        disclosure={changeStatusModal}
+        flow={targetFlow}
+        status={status}
+      />
       <FunctionDeleteFlow disclosure={deleteModal} flow={targetFlow} />
     </main>
   );
