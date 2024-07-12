@@ -16,7 +16,7 @@ import {
   CardHeader,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 
 import { InfoIcon, PlusIcon, UsersIcon } from "@/components/icons";
 import UpdateProjectMembers from "@/lib/fetch/project/PUT/UpdateProjectMembers";
@@ -68,7 +68,6 @@ export default function AddMemberModal({ project, settings }: any) {
 
   return (
     <>
-      <Toaster richColors position="bottom-center" />
       <Button
         color="primary"
         endContent={<PlusIcon height={undefined} width={undefined} />}

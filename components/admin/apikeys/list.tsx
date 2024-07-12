@@ -9,6 +9,7 @@ import {
   TableCell,
   Chip,
   Divider,
+  Snippet,
   Dropdown,
   DropdownTrigger,
   Button,
@@ -16,71 +17,93 @@ import {
   DropdownItem,
   DropdownSection,
   cn,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  Input,
+  ModalFooter,
   useDisclosure,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import {
   DeleteDocumentIcon,
   EditDocumentIcon,
-  EyeIcon,
   LockIcon,
+  PlusIcon,
   VerticalDotsIcon,
 } from "@/components/icons";
-import FunctionDeleteFlow from "@/components/functions/flows/deleteFlow";
+import ChangeProjectStatus from "@/lib/fetch/project/PUT/ChangeProjectStatus";
+import CreateApiKeyModal from "@/components/functions/apikeys/create";
+import DeleteApiKeyModal from "@/components/functions/apikeys/delete";
 
-export function FlowsList({ flows, projects }: any) {
+export function ApiKeysList({ apikeys, projects }: any) {
   const router = useRouter();
 
-  const [targetFlow, setTargetFlow] = React.useState({} as any);
-  const deleteModal = useDisclosure();
+  const [targetKey, setTargetKey] = React.useState({} as any);
+
+  const addApiKeyModal = useDisclosure();
+  const deleteApiKeyModal = useDisclosure();
 
   const iconClasses =
     "text-xl text-default-500 pointer-events-none flex-shrink-0";
 
-  const renderCell = React.useCallback((flow: any, columnKey: any) => {
-    const cellValue = flow[columnKey];
+  const renderCell = React.useCallback((apikey: any, columnKey: any) => {
+    const cellValue = apikey[columnKey];
 
     switch (columnKey) {
-      case "id":
-        return <p className="text-sm text-default-500">{flow.id}</p>;
-      case "name":
-        return (
-          <div>
-            <p>{flow.name}</p>
-            <p className="text-sm text-default-500">{flow.description}</p>
-          </div>
-        );
       case "project_id":
         return (
           <div>
-            <p>{projects.find((p: any) => p.id === flow.project_id).name}</p>
-            <p className="text-xs text-default-400">{flow.project_id}</p>
+            {apikey.project_id !== "none" && (
+              <span>
+                <p>
+                  {projects.find((p: any) => p.id === apikey.project_id)?.name}
+                </p>
+                <p className="text-sm text-default-400">{apikey.project_id}</p>
+              </span>
+            )}
+            {apikey.project_id === "none" && (
+              <span>
+                <p>None</p>
+                <p className="text-sm text-default-400">
+                  Probaply an API Key for anything Alertflow related
+                </p>
+              </span>
+            )}
           </div>
         );
-      case "disabled":
+      case "description":
+        return <p className="text-sm text-default-500">{apikey.description}</p>;
+      case "status":
         return (
           <div>
             <Chip
               className="capitalize"
-              color={flow.disabled ? "danger" : "success"}
+              color={apikey.disabled ? "danger" : "success"}
               radius="sm"
               size="sm"
               variant="flat"
             >
-              {flow.disabled ? "Disabled" : "Active"}
+              {apikey.disabled ? "Disabled" : "Active"}
             </Chip>
-            {flow.disabled && (
-              <p className="text-sm text-default-400">{flow.disabled_reason}</p>
+            {apikey.disabled && (
+              <p className="text-sm text-default-400">
+                {apikey.disabled_reason}
+              </p>
             )}
           </div>
         );
-      case "a_actions":
-        return <p>{flow.actions.length}</p>;
       case "created_at":
-        return new Date(flow.created_at).toLocaleString("de-DE");
-      case "updated_at":
-        return new Date(flow.updated_at).toLocaleString("de-DE");
+        return new Date(apikey.created_at).toLocaleString("de-DE");
+      case "key":
+        return (
+          <Snippet hideSymbol className="w-full" codeString={apikey.key}>
+            <span>{apikey.key.slice(0, 15) + "..."}</span>
+          </Snippet>
+        );
       case "actions":
         return (
           <div className="relative flex justify-center items-center gap-2">
@@ -91,25 +114,12 @@ export function FlowsList({ flows, projects }: any) {
                 </Button>
               </DropdownTrigger>
               <DropdownMenu variant="faded">
-                <DropdownSection showDivider title="Actions">
-                  <DropdownItem
-                    key="view"
-                    className="text-primary"
-                    color="primary"
-                    description="Take a look on this flow"
-                    startContent={
-                      <EyeIcon className={cn(iconClasses, "text-primary")} />
-                    }
-                  >
-                    View
-                  </DropdownItem>
-                </DropdownSection>
                 <DropdownSection title="Edit Zone">
                   <DropdownItem
                     key="edit"
                     className="text-warning"
                     color="warning"
-                    description="Apply changes to this flow"
+                    description="Apply changes to this api key"
                     startContent={
                       <EditDocumentIcon
                         className={cn(iconClasses, "text-warning")}
@@ -118,12 +128,12 @@ export function FlowsList({ flows, projects }: any) {
                   >
                     Edit
                   </DropdownItem>
-                  {flow.disabled && (
+                  {apikey.disabled && (
                     <DropdownItem
                       key="disable"
                       className="text-success"
                       color="success"
-                      description="Disable access to this flow for members"
+                      description="Enable this api key"
                       startContent={
                         <LockIcon className={cn(iconClasses, "text-success")} />
                       }
@@ -131,12 +141,12 @@ export function FlowsList({ flows, projects }: any) {
                       Enable
                     </DropdownItem>
                   )}
-                  {!flow.disabled && (
+                  {!apikey.disabled && (
                     <DropdownItem
                       key="disable"
                       className="text-danger"
                       color="danger"
-                      description="Disable access to this flow for members"
+                      description="Disable this api key"
                       startContent={
                         <LockIcon className={cn(iconClasses, "text-danger")} />
                       }
@@ -150,15 +160,15 @@ export function FlowsList({ flows, projects }: any) {
                     key="delete"
                     className="text-danger"
                     color="danger"
-                    description="Permanently delete this flow"
+                    description="Permanently delete this api key"
                     startContent={
                       <DeleteDocumentIcon
                         className={cn(iconClasses, "text-danger")}
                       />
                     }
                     onClick={() => {
-                      setTargetFlow(flow);
-                      deleteModal.onOpen();
+                      setTargetKey(apikey);
+                      deleteApiKeyModal.onOpen();
                     }}
                   >
                     Delete
@@ -179,42 +189,43 @@ export function FlowsList({ flows, projects }: any) {
         <div className="flex items-center space-x-1">
           <p className="text-2xl font-bold mb-0 text-danger">Admin</p>
           <p className="text-2xl mb-0">|</p>
-          <p className="text-2xl mb-0">Flows</p>
+          <p className="text-2xl mb-0">API Keys</p>
         </div>
+        <Button
+          color="primary"
+          endContent={<PlusIcon height={undefined} width={undefined} />}
+          onPress={() => addApiKeyModal.onOpen()}
+        >
+          Add New
+        </Button>
       </div>
       <Divider className="my-4" />
       <div>
         <Table aria-label="Example table with custom cells">
           <TableHeader>
-            <TableColumn key="name" align="start">
-              NAME
-            </TableColumn>
             <TableColumn key="id" align="start">
               ID
             </TableColumn>
             <TableColumn key="project_id" align="start">
               PROJECT
             </TableColumn>
-            <TableColumn key="runner_id" align="start">
-              RUNNER
+            <TableColumn key="description" align="start">
+              DESCRIPTION
             </TableColumn>
-            <TableColumn key="disabled" align="start">
+            <TableColumn key="key" align="start">
+              KEY
+            </TableColumn>
+            <TableColumn key="status" align="start">
               STATUS
-            </TableColumn>
-            <TableColumn key="a_actions" align="start">
-              AVL. ACTIONS
             </TableColumn>
             <TableColumn key="created_at" align="start">
               CREATED AT
-            </TableColumn>
-            <TableColumn key="updated_at" align="start">
-              UPDATED AT
             </TableColumn>
             <TableColumn key="actions" align="center">
               ACTIONS
             </TableColumn>
           </TableHeader>
-          <TableBody emptyContent={"No rows to display."} items={flows}>
+          <TableBody emptyContent={"No rows to display."} items={apikeys}>
             {(item: any) => (
               <TableRow key={item.id}>
                 {(columnKey) => (
@@ -225,7 +236,8 @@ export function FlowsList({ flows, projects }: any) {
           </TableBody>
         </Table>
       </div>
-      <FunctionDeleteFlow disclosure={deleteModal} flow={targetFlow} />
+      <CreateApiKeyModal disclosure={addApiKeyModal} projectID={"none"} />
+      <DeleteApiKeyModal apikey={targetKey} disclosure={deleteApiKeyModal} />
     </main>
   );
 }

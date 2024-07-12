@@ -26,7 +26,7 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 
 import {
   EyeIcon,
@@ -169,7 +169,7 @@ export function UsersList({ users }: any) {
                       <EyeIcon className={cn(iconClasses, "text-primary")} />
                     }
                   >
-                    View User
+                    View
                   </DropdownItem>
                 </DropdownSection>
                 <DropdownSection title="Edit Zone">
@@ -184,7 +184,7 @@ export function UsersList({ users }: any) {
                       />
                     }
                   >
-                    Edit User
+                    Edit
                   </DropdownItem>
                   {!user.disabled && (
                     <DropdownItem
@@ -193,13 +193,11 @@ export function UsersList({ users }: any) {
                       color="danger"
                       description="Disable access to AlertFlow for this user"
                       startContent={
-                        <LockIcon
-                          className={cn(iconClasses, "text-danger")}
-                        />
+                        <LockIcon className={cn(iconClasses, "text-danger")} />
                       }
                       onClick={() => changeUserStatusModal(user.id, true)}
                     >
-                      Disable User
+                      Disable
                     </DropdownItem>
                   )}
                   {user.disabled && (
@@ -213,7 +211,7 @@ export function UsersList({ users }: any) {
                       }
                       onClick={() => changeUserStatusModal(user.id, false)}
                     >
-                      Enable User
+                      Enable
                     </DropdownItem>
                   )}
                 </DropdownSection>
@@ -229,7 +227,7 @@ export function UsersList({ users }: any) {
                       />
                     }
                   >
-                    Delete User
+                    Delete
                   </DropdownItem>
                 </DropdownSection>
               </DropdownMenu>
@@ -243,7 +241,6 @@ export function UsersList({ users }: any) {
 
   return (
     <main>
-      <Toaster richColors position="bottom-center" />
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-1">
           <p className="text-2xl font-bold mb-0 text-danger">Admin</p>

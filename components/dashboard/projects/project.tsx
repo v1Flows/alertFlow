@@ -1,5 +1,14 @@
+"use client";
+
 import React from "react";
-import { Card, CardHeader, CardBody, Divider } from "@nextui-org/react";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Divider,
+  useDisclosure,
+  Button,
+} from "@nextui-org/react";
 
 import {
   PlayCircleIcon,
@@ -7,27 +16,23 @@ import {
   TagIcon,
   CalendarIcon,
   InfoIcon,
+  EditDocumentIcon,
 } from "@/components/icons";
 import { IconWrapper } from "@/lib/IconWrapper";
 import { subtitle } from "@/components/primitives";
-import GetProject from "@/lib/fetch/project/data";
-import GetProjectRunners from "@/lib/fetch/project/runners";
-import GetProjectApiKeys from "@/lib/fetch/project/apiKeys";
 import Reloader from "@/components/reloader/Reloader";
+import EditProjectModal from "@/components/functions/projects/edit";
 
-import EditProjectModal from "./project/modals/Edit";
 import ProjectBreadcrumbs from "./project/breadcrumbs";
 import ProjectTabs from "./project/tabs";
 
-export async function Project({ id, settings }: any) {
-  const data = await GetProject(id);
-  const runners = await GetProjectRunners(id);
-  const apiKeys = await GetProjectApiKeys(id);
+export default function Project({ settings, project, runners, apiKeys }: any) {
+  const editProjectModal = useDisclosure();
 
   return (
     <main>
       <div className="grid lg:grid-cols-2 items-center justify-between">
-        <ProjectBreadcrumbs id={id} />
+        <ProjectBreadcrumbs id={project.id} />
         <div className="lg:justify-self-end lg:mt-0 mt-2">
           <Reloader />
         </div>
@@ -38,14 +43,22 @@ export async function Project({ id, settings }: any) {
             className={subtitle({ className: "mb-0 font-bold" })}
             style={{ color: "#0072f5" }}
           >
-            {data.name}
+            {project.name}
           </h1>
-          <p className="text-sm text-default-500">{data.description}</p>
+          <p className="text-sm text-default-500">{project.description}</p>
         </div>
-        <EditProjectModal project={data} />
+        <Button
+          color="warning"
+          endContent={<EditDocumentIcon />}
+          isDisabled={project.disabled}
+          variant="flat"
+          onPress={() => editProjectModal.onOpen()}
+        >
+          Edit Project
+        </Button>
       </div>
       <Divider className="mb-4" />
-      {data.disabled && (
+      {project.disabled && (
         <div className="mb-4">
           <Card className="bg-danger/10">
             <CardHeader className="justify-start gap-2 items-center">
@@ -58,7 +71,7 @@ export async function Project({ id, settings }: any) {
             </CardHeader>
             <CardBody>
               <p className="text-default-500 font-bold">
-                Reason: {data.disabled_reason}
+                Reason: {project.disabled_reason}
               </p>
             </CardBody>
           </Card>
@@ -76,7 +89,7 @@ export async function Project({ id, settings }: any) {
               </CardHeader>
               <CardBody>
                 <p className="text-default-500 font-bold">
-                  {data.members.length}
+                  {project.members.length}
                 </p>
               </CardBody>
             </Card>
@@ -90,7 +103,7 @@ export async function Project({ id, settings }: any) {
                 <p className="text-md font-bold">Runners</p>
               </CardHeader>
               <CardBody>
-                {data.alertflow_runners ? (
+                {project.alertflow_runners ? (
                   <p className="text-default-500 font-bold">{runners.length}</p>
                 ) : (
                   <p className="text-default-500 font-bold">
@@ -126,7 +139,7 @@ export async function Project({ id, settings }: any) {
               </CardHeader>
               <CardBody>
                 <p className="text-default-500 font-bold">
-                  {new Date(data.created_at).toLocaleString("de-DE")}
+                  {new Date(project.created_at).toLocaleString("de-DE")}
                 </p>
               </CardBody>
             </Card>
@@ -136,11 +149,12 @@ export async function Project({ id, settings }: any) {
       <div className="w-full mt-6">
         <ProjectTabs
           apiKeys={apiKeys}
-          project={data}
+          project={project}
           runners={runners}
           settings={settings}
         />
       </div>
+      <EditProjectModal disclosure={editProjectModal} project={project} />
     </main>
   );
 }

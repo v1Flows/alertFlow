@@ -15,7 +15,7 @@ import {
   cn,
   Snippet,
 } from "@nextui-org/react";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { LibraryIcon } from "lucide-react";
 
@@ -95,14 +95,13 @@ export default function NewFlowModal({ projects, flows, settings }: any) {
 
   return (
     <>
-      <Toaster richColors position="bottom-center" />
       <Button
         color="primary"
+        isDisabled={!settings.create_flows}
         radius="sm"
         startContent={<PlusIcon />}
         variant="solid"
         onPress={onOpen}
-        isDisabled={!settings.create_flows}
       >
         New Flow
       </Button>

@@ -15,7 +15,7 @@ import {
   Card,
   CardHeader,
 } from "@nextui-org/react";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 import { EditIcon, InfoIcon } from "@/components/icons";
@@ -72,7 +72,6 @@ export default function EditProjectMemberModal({
 
   return (
     <>
-      <Toaster richColors position="bottom-center" />
       <EditIcon onClick={onOpen} />
       <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
         <ModalContent>

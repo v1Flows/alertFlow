@@ -1,53 +1,58 @@
 "use client";
 
-import React, { useState } from "react";
+import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
+
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
-  useDisclosure,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { Toaster, toast } from "sonner";
+import React from "react";
+import { toast } from "sonner";
 
-import { DeleteIcon } from "@/components/icons";
 import DeleteRunnerApiKey from "@/lib/fetch/project/DELETE/DeleteRunnerAPIKey";
 
-export default function DeleteAPIKeyModal(keyID: any) {
+export default function DeleteApiKeyModal({
+  disclosure,
+  apikey,
+}: {
+  disclosure: UseDisclosureReturn;
+  apikey: any;
+}) {
   const router = useRouter();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
+  const { isOpen, onOpen, onOpenChange } = disclosure;
+
+  const [isLoading, setIsLoading] = React.useState(false);
 
   async function handleDeleteAPIKey() {
-    setIsDeleteLoading(true);
+    setIsLoading(true);
 
-    const response = await DeleteRunnerApiKey(keyID.keyID);
+    const response = await DeleteRunnerApiKey(apikey.id);
 
     if (response.result === "success") {
+      router.refresh();
       onOpenChange();
       toast.success("API key deleted successfully");
-      router.refresh();
+      setIsLoading(false);
     } else {
-      toast.error("Failed to delete API key");
+      setIsLoading(false);
+      toast.error("Failed to create project");
     }
-
-    setIsDeleteLoading(false);
   }
 
   return (
     <>
-      <Toaster richColors position="bottom-center" />
-      <DeleteIcon onClick={onOpen} />
       <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
                 <p>Delete API Key</p>
-                <p className="text-sm text-default-500">{keyID.keyID}</p>
+                <p className="text-sm text-default-500">{apikey.id}</p>
               </ModalHeader>
               <ModalBody>
                 <p>
@@ -62,7 +67,7 @@ export default function DeleteAPIKeyModal(keyID: any) {
                 </Button>
                 <Button
                   color="danger"
-                  isLoading={isDeleteLoading}
+                  isLoading={isLoading}
                   onPress={handleDeleteAPIKey}
                 >
                   Delete

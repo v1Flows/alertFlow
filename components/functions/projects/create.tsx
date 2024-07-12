@@ -1,32 +1,39 @@
-import React from "react";
+"use client";
+
+import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
+
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
-  useDisclosure,
-  Input,
-  Divider,
-  Switch,
-  cn,
   Card,
   CardHeader,
+  cn,
+  Divider,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Switch,
+  useDisclosure,
 } from "@nextui-org/react";
-import { Toaster, toast } from "sonner";
 import { useRouter } from "next/navigation";
+import React from "react";
+import { toast } from "sonner";
 import { LibraryIcon } from "lucide-react";
 
-import { CheckIcon, InfoIcon, PlusIcon } from "@/components/icons";
 import CreateProject from "@/lib/fetch/project/POST/CreateProject";
+import { CheckIcon, InfoIcon } from "@/components/icons";
 import { IconWrapper } from "@/lib/IconWrapper";
 
-export default function NewProjectModal({ settings }: any) {
+export default function CreateProjectModal({
+  disclosure,
+}: {
+  disclosure: UseDisclosureReturn;
+}) {
   const router = useRouter();
+  const { isOpen, onOpen, onOpenChange } = disclosure;
 
-  // create modal
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   // success modal
   const {
     isOpen: isOpenSuccess,
@@ -40,7 +47,6 @@ export default function NewProjectModal({ settings }: any) {
   const [error, setError] = React.useState(false);
   const [errorText, setErrorText] = React.useState("");
 
-  // loading
   const [isLoading, setIsLoading] = React.useState(false);
 
   async function createProject() {
@@ -81,17 +87,6 @@ export default function NewProjectModal({ settings }: any) {
 
   return (
     <>
-      <Toaster richColors position="bottom-center" />
-      <Button
-        color="primary"
-        isDisabled={!settings.create_projects}
-        radius="sm"
-        startContent={<PlusIcon />}
-        variant="solid"
-        onPress={onOpen}
-      >
-        New Project
-      </Button>
       <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
         <ModalContent className="w-full">
           {() => (
@@ -106,7 +101,9 @@ export default function NewProjectModal({ settings }: any) {
                       <IconWrapper className="bg-danger/10 text-danger">
                         <InfoIcon className="text-lg" />
                       </IconWrapper>
-                      <p className="text-md font-bold text-danger">{errorText}</p>
+                      <p className="text-md font-bold text-danger">
+                        {errorText}
+                      </p>
                     </CardHeader>
                   </Card>
                 )}

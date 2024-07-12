@@ -8,16 +8,22 @@ import {
   TableRow,
   TableCell,
   Tooltip,
-  Snippet,
   Chip,
+  Button,
+  useDisclosure,
 } from "@nextui-org/react";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 
-import { CopyDocumentIcon } from "@/components/icons";
-import AddAPIKeyModal from "@/components/dashboard/projects/project/modals/AddAPIKey";
-import DeleteAPIKeyModal from "@/components/dashboard/projects/project/modals/DeleteAPIKey";
+import { CopyDocumentIcon, DeleteIcon, PlusIcon } from "@/components/icons";
+import CreateApiKeyModal from "@/components/functions/apikeys/create";
+import DeleteApiKeyModal from "@/components/functions/apikeys/delete";
 
 export default function ProjectAPIKeys({ apiKeys, project, settings }: any) {
+  const [targetKey, setTargetKey] = React.useState({} as any);
+
+  const addApiKeyModal = useDisclosure();
+  const deleteApiKeyModal = useDisclosure();
+
   const copyAPIKeytoClipboard = (key: string) => {
     navigator.clipboard.writeText(key);
     toast.success("Copied to clipboard!");
@@ -27,8 +33,6 @@ export default function ProjectAPIKeys({ apiKeys, project, settings }: any) {
     const cellValue = key[columnKey];
 
     switch (columnKey) {
-      case "key":
-        return <Snippet>{key.key}</Snippet>;
       case "actions":
         return (
           <div className="relative flex items-center justify-center gap-2">
@@ -43,22 +47,27 @@ export default function ProjectAPIKeys({ apiKeys, project, settings }: any) {
             </Tooltip>
             <Tooltip color="danger" content="Delete API Key">
               <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                <DeleteAPIKeyModal keyID={key.id} />
+                <DeleteIcon
+                  onClick={() => {
+                    setTargetKey(key);
+                    deleteApiKeyModal.onOpen();
+                  }}
+                />
               </span>
             </Tooltip>
           </div>
         );
       case "created_at":
         return new Date(key.created_at).toLocaleString();
-      case "active":
+      case "status":
         return (
           <Chip
             className="capitalize"
-            color={key.active ? "success" : "danger"}
+            color={key.disabled ? "danger" : "success"}
             size="sm"
             variant="flat"
           >
-            {cellValue ? "Active" : "Inactive"}
+            {cellValue ? "Disabled" : "Active"}
           </Chip>
         );
       case "type":
@@ -71,14 +80,20 @@ export default function ProjectAPIKeys({ apiKeys, project, settings }: any) {
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col items-end justify-center gap-4">
-        <AddAPIKeyModal project={project} settings={settings} />
+        <Button
+          color="primary"
+          endContent={<PlusIcon height={undefined} width={undefined} />}
+          isDisabled={!settings.create_api_keys || project.disabled}
+          onPress={() => addApiKeyModal.onOpen()}
+        >
+          Add New
+        </Button>
       </div>
     );
   }, []);
 
   return (
     <div>
-      <Toaster richColors position="bottom-center" />
       <Table
         aria-label="Example table with custom cells"
         topContent={topContent}
@@ -90,8 +105,8 @@ export default function ProjectAPIKeys({ apiKeys, project, settings }: any) {
           <TableColumn key="description" align="start">
             DESCRIPTION
           </TableColumn>
-          <TableColumn key="active" align="start">
-            ACTIVE
+          <TableColumn key="status" align="start">
+            STATUS
           </TableColumn>
           <TableColumn key="type" align="start">
             TYPE
@@ -120,6 +135,8 @@ export default function ProjectAPIKeys({ apiKeys, project, settings }: any) {
           )}
         </TableBody>
       </Table>
+      <CreateApiKeyModal disclosure={addApiKeyModal} projectID={project.id} />
+      <DeleteApiKeyModal apikey={targetKey} disclosure={deleteApiKeyModal} />
     </div>
   );
 }

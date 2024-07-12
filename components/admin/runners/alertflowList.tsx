@@ -15,20 +15,28 @@ import {
   DropdownItem,
   DropdownSection,
   cn,
+  useDisclosure,
 } from "@nextui-org/react";
 import TimeAgo from "react-timeago";
+import { useRouter } from "next/navigation";
 
 import {
   DeleteDocumentIcon,
   EditDocumentIcon,
-  EyeIcon,
   LockIcon,
   PlusIcon,
   VerticalDotsIcon,
 } from "@/components/icons";
-import AddAlertflowRunnerModal from "./addRunnerModal";
+import CreateRunnerModal from "@/components/functions/runner/create";
+import DeleteRunnerModal from "@/components/functions/runner/delete";
 
 export function AlertflowRunnerList({ runners }: any) {
+  const router = useRouter();
+
+  const [targetRunner, setTargetRunner] = React.useState({} as any);
+  const addRunnerModal = useDisclosure();
+  const deleteRunnerModal = useDisclosure();
+
   const iconClasses =
     "text-xl text-default-500 pointer-events-none flex-shrink-0";
 
@@ -57,34 +65,61 @@ export function AlertflowRunnerList({ runners }: any) {
           </div>
         );
       case "project":
-        return (
-          <div>
-            <p>{runner.name}</p>
-            <p className="text-xs text-default-400">{runner.project_id}</p>
-          </div>
-        );
+        return <p>None</p>;
       case "registered":
         return (
           <Chip color={runner.registered ? "success" : "danger"} variant="dot">
             {runner.registered ? "Registered" : "Unregistered"}
           </Chip>
         );
-      case "active":
+      case "status":
         return (
-          <Chip color={runner.active ? "primary" : "default"} variant="dot">
-            {runner.active ? "Active" : "Inactive"}
+          <div>
+            <Chip
+              className="capitalize"
+              color={runner.disabled ? "danger" : "success"}
+              radius="sm"
+              size="sm"
+              variant="flat"
+            >
+              {runner.disabled ? "Disabled" : "Active"}
+            </Chip>
+            {runner.disabled && (
+              <p className="text-sm text-default-400">
+                {runner.disabled_reason}
+              </p>
+            )}
+          </div>
+        );
+      case "executing_job":
+        return (
+          <Chip
+            color={runner.executing_job ? "primary" : "default"}
+            variant="dot"
+          >
+            {runner.executing_job ? "Active" : "Idle"}
           </Chip>
         );
       case "last_heartbeat":
         return (
           <p className={"text-" + heartbeatColor(runner)}>
-            <TimeAgo date={runner.last_heartbeat} />
+            {runner.last_heartbeat !== "0001-01-01T00:00:00Z" && (
+              <TimeAgo date={runner.last_heartbeat} />
+            )}
+            {runner.last_heartbeat === "0001-01-01T00:00:00Z" && "N/A"}
           </p>
         );
-      case "available_actions":
-        return <p>{runner.available_actions.length}</p>;
-      case "available_payload_injectors":
-        return <p>{runner.available_payload_injectors.length}</p>;
+      case "functions":
+        return (
+          <div>
+            <p className="text-sm text-default-500">
+              Actions: {runner.available_actions.length}
+            </p>
+            <p className="text-sm text-default-500">
+              Payload Injectors: {runner.available_payload_injectors.length}
+            </p>
+          </div>
+        );
       case "runner_version":
         return <p>{runner.runner_version ? runner.runner_version : "N/A"}</p>;
       case "actions":
@@ -97,20 +132,7 @@ export function AlertflowRunnerList({ runners }: any) {
                 </Button>
               </DropdownTrigger>
               <DropdownMenu variant="faded">
-                <DropdownSection showDivider title="Actions">
-                  <DropdownItem
-                    key="view"
-                    className="text-primary"
-                    color="primary"
-                    description="Take a look on this project"
-                    startContent={
-                      <EyeIcon className={cn(iconClasses, "text-primary")} />
-                    }
-                  >
-                    View Project
-                  </DropdownItem>
-                </DropdownSection>
-                <DropdownSection title="Danger Zone">
+                <DropdownSection title="Edit Zone">
                   <DropdownItem
                     key="edit"
                     className="text-warning"
@@ -122,19 +144,21 @@ export function AlertflowRunnerList({ runners }: any) {
                       />
                     }
                   >
-                    Edit Runner
+                    Edit
                   </DropdownItem>
                   <DropdownItem
                     key="disable"
-                    className="text-secondary"
-                    color="secondary"
+                    className="text-danger"
+                    color="danger"
                     description="Disable access to this project for members"
                     startContent={
-                      <LockIcon className={cn(iconClasses, "text-secondary")} />
+                      <LockIcon className={cn(iconClasses, "text-danger")} />
                     }
                   >
-                    Disable Runner
+                    Disable
                   </DropdownItem>
+                </DropdownSection>
+                <DropdownSection title="Danger Zone">
                   <DropdownItem
                     key="delete"
                     className="text-danger"
@@ -145,8 +169,12 @@ export function AlertflowRunnerList({ runners }: any) {
                         className={cn(iconClasses, "text-danger")}
                       />
                     }
+                    onClick={() => {
+                      setTargetRunner(runner);
+                      deleteRunnerModal.onOpen();
+                    }}
                   >
-                    Delete Runner
+                    Delete
                   </DropdownItem>
                 </DropdownSection>
               </DropdownMenu>
@@ -164,7 +192,15 @@ export function AlertflowRunnerList({ runners }: any) {
         <p className="text-2xl font-bold mb-0 text-primary">
           AlertFlow Runners
         </p>
-        <AddAlertflowRunnerModal />
+        <Button
+          color="primary"
+          endContent={<PlusIcon height={undefined} width={undefined} />}
+          size="sm"
+          variant="flat"
+          onPress={() => addRunnerModal.onOpen()}
+        >
+          Add Runner
+        </Button>
       </div>
       <div>
         <Table aria-label="Example table with custom cells">
@@ -178,20 +214,20 @@ export function AlertflowRunnerList({ runners }: any) {
             <TableColumn key="project" align="start">
               PROJECT
             </TableColumn>
+            <TableColumn key="status" align="start">
+              STATUS
+            </TableColumn>
             <TableColumn key="registered" align="start">
               REGISTERED
             </TableColumn>
-            <TableColumn key="active" align="start">
-              ACTIVE
+            <TableColumn key="executing_job" align="start">
+              EXECUTING JOB
             </TableColumn>
             <TableColumn key="last_heartbeat" align="start">
               LAST HEARTBEAT
             </TableColumn>
-            <TableColumn key="available_actions" align="start">
-              AVAILABLE ACTIONS
-            </TableColumn>
-            <TableColumn key="available_payload_injectors" align="start">
-              AVAILABLE P-I
+            <TableColumn key="functions" align="start">
+              FUNCTIONS
             </TableColumn>
             <TableColumn key="actions" align="center">
               ACTIONS
@@ -208,6 +244,12 @@ export function AlertflowRunnerList({ runners }: any) {
           </TableBody>
         </Table>
       </div>
+      <CreateRunnerModal
+        alertflow_runner={true}
+        disclosure={addRunnerModal}
+        project={"none"}
+      />
+      <DeleteRunnerModal disclosure={deleteRunnerModal} runner={targetRunner} />
     </main>
   );
 }

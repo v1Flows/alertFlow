@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 
 import {
   Flash,
@@ -84,7 +84,6 @@ export function Settings({ settings }: any) {
 
   return (
     <main>
-      <Toaster richColors position="bottom-center" />
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-1">
           <p className="text-2xl font-bold mb-0 text-danger">Admin</p>

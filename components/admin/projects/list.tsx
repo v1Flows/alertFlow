@@ -19,85 +19,32 @@ import {
   DropdownItem,
   DropdownSection,
   cn,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  Input,
-  ModalFooter,
   useDisclosure,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 
 import {
   DeleteDocumentIcon,
   EditDocumentIcon,
   EyeIcon,
   LockIcon,
+  PlusIcon,
   VerticalDotsIcon,
 } from "@/components/icons";
-import ChangeProjectStatus from "@/lib/fetch/project/PUT/ChangeProjectStatus";
+import ChangeProjectStatusModal from "@/components/functions/projects/changeStatus";
+import EditProjectModal from "@/components/functions/projects/edit";
+import DeleteProjectModal from "@/components/functions/projects/delete";
+import CreateProjectModal from "@/components/functions/projects/create";
 
 export function ProjectList({ projects }: any) {
   const router = useRouter();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [disableReason, setDisableReason] = React.useState("");
-  const [isDisableLoading, setIsDisableLoading] = React.useState(false);
 
-  const [projectID, setProjectID] = React.useState("");
-  const [disableProject, setDisableProject] = React.useState(false);
-
-  React.useEffect(() => {
-    if (projectID !== "" && !disableProject) {
-      changeProjectStatus();
-    }
-  }, [projectID, disableProject]);
-
-  function changeProjectStatusModal(projectID: string, disabled: boolean) {
-    setProjectID(projectID);
-    setDisableProject(disabled);
-
-    if (disabled) {
-      onOpenChange();
-    }
-  }
-
-  async function changeProjectStatus() {
-    if (!disableProject) {
-      const res = await ChangeProjectStatus(projectID, disableProject, "");
-
-      if (!res.error) {
-        setProjectID("");
-        router.refresh();
-        toast.success("Project status updated successfully");
-      } else {
-        router.refresh();
-        toast.error("Failed to update project status");
-      }
-    } else {
-      setIsDisableLoading(true);
-      const res = await ChangeProjectStatus(
-        projectID,
-        disableProject,
-        disableReason,
-      );
-
-      if (!res.error) {
-        setDisableReason("");
-        setProjectID("");
-        setDisableProject(false);
-        setIsDisableLoading(false);
-        onOpenChange();
-        router.refresh();
-        toast.success("Project status updated successfully");
-      } else {
-        setIsDisableLoading(false);
-        router.refresh();
-        toast.error("Failed to update project status");
-      }
-    }
-  }
+  const [status, setStatus] = React.useState(false);
+  const [targetProject, setTargetProject] = React.useState({});
+  const newProjectModal = useDisclosure();
+  const changeStatusModal = useDisclosure();
+  const editProjectModal = useDisclosure();
+  const deleteProjectModal = useDisclosure();
 
   const iconClasses =
     "text-xl text-default-500 pointer-events-none flex-shrink-0";
@@ -188,8 +135,11 @@ export function ProjectList({ projects }: any) {
                     startContent={
                       <EyeIcon className={cn(iconClasses, "text-primary")} />
                     }
+                    onClick={() =>
+                      router.push(`/dashboard/projects/${project.id}`)
+                    }
                   >
-                    View Project
+                    View
                   </DropdownItem>
                 </DropdownSection>
                 <DropdownSection title="Edit Zone">
@@ -203,8 +153,12 @@ export function ProjectList({ projects }: any) {
                         className={cn(iconClasses, "text-warning")}
                       />
                     }
+                    onClick={() => {
+                      setTargetProject(project);
+                      editProjectModal.onOpen();
+                    }}
                   >
-                    Edit Project
+                    Edit
                   </DropdownItem>
                   {project.disabled && (
                     <DropdownItem
@@ -213,15 +167,15 @@ export function ProjectList({ projects }: any) {
                       color="success"
                       description="Disable access to this project for members"
                       startContent={
-                        <LockIcon
-                          className={cn(iconClasses, "text-success")}
-                        />
+                        <LockIcon className={cn(iconClasses, "text-success")} />
                       }
-                      onClick={() =>
-                        changeProjectStatusModal(project.id, false)
-                      }
+                      onClick={() => {
+                        setTargetProject(project);
+                        setStatus(false);
+                        changeStatusModal.onOpen();
+                      }}
                     >
-                      Enable Project
+                      Enable
                     </DropdownItem>
                   )}
                   {!project.disabled && (
@@ -231,13 +185,15 @@ export function ProjectList({ projects }: any) {
                       color="danger"
                       description="Disable access to this project for members"
                       startContent={
-                        <LockIcon
-                          className={cn(iconClasses, "text-danger")}
-                        />
+                        <LockIcon className={cn(iconClasses, "text-danger")} />
                       }
-                      onClick={() => changeProjectStatusModal(project.id, true)}
+                      onClick={() => {
+                        setTargetProject(project);
+                        setStatus(true);
+                        changeStatusModal.onOpen();
+                      }}
                     >
-                      Disable Project
+                      Disable
                     </DropdownItem>
                   )}
                 </DropdownSection>
@@ -252,8 +208,12 @@ export function ProjectList({ projects }: any) {
                         className={cn(iconClasses, "text-danger")}
                       />
                     }
+                    onClick={() => {
+                      setTargetProject(project);
+                      deleteProjectModal.onOpen();
+                    }}
                   >
-                    Delete Project
+                    Delete
                   </DropdownItem>
                 </DropdownSection>
               </DropdownMenu>
@@ -273,6 +233,15 @@ export function ProjectList({ projects }: any) {
           <p className="text-2xl mb-0">|</p>
           <p className="text-2xl mb-0">Projects</p>
         </div>
+        <Button
+          color="primary"
+          radius="sm"
+          startContent={<PlusIcon />}
+          variant="solid"
+          onPress={() => newProjectModal.onOpen()}
+        >
+          New Project
+        </Button>
       </div>
       <Divider className="my-4" />
       <div>
@@ -311,47 +280,17 @@ export function ProjectList({ projects }: any) {
           </TableBody>
         </Table>
       </div>
-      <div>
-        <Modal
-          isOpen={isOpen}
-          placement="top-center"
-          onOpenChange={onOpenChange}
-        >
-          <ModalContent>
-            {(onClose) => (
-              <>
-                <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-danger">
-                  <LockIcon /> Disable Project
-                </ModalHeader>
-                <ModalBody>
-                  <Snippet hideSymbol hideCopyButton>
-                    <span>ID: {projectID}</span>
-                  </Snippet>
-                  <Input
-                    label="Disable Reason"
-                    placeholder="Enter the reason for disabling this project"
-                    value={disableReason}
-                    variant="bordered"
-                    onValueChange={setDisableReason}
-                  />
-                </ModalBody>
-                <ModalFooter>
-                  <Button color="default" variant="flat" onPress={onClose}>
-                    Cancel
-                  </Button>
-                  <Button
-                    color="danger"
-                    isLoading={isDisableLoading}
-                    onPress={changeProjectStatus}
-                  >
-                    Disable
-                  </Button>
-                </ModalFooter>
-              </>
-            )}
-          </ModalContent>
-        </Modal>
-      </div>
+      <CreateProjectModal disclosure={newProjectModal} />
+      <ChangeProjectStatusModal
+        disclosure={changeStatusModal}
+        project={targetProject}
+        status={status}
+      />
+      <EditProjectModal disclosure={editProjectModal} project={targetProject} />
+      <DeleteProjectModal
+        disclosure={deleteProjectModal}
+        project={targetProject}
+      />
     </main>
   );
 }

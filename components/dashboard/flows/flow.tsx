@@ -62,28 +62,46 @@ export async function Flow({ id }: any) {
               </h1>
               <p className="text-sm text-default-500">{flow.description}</p>
             </div>
-            {/* <EditProjectModal project={data} /> */}
           </div>
           <Divider className="mb-4" />
+          {flow.maintenance_required && (
+            <div className="mb-4">
+              <Card className="bg-warning/10">
+                <CardHeader className="justify-start gap-2 items-center">
+                  <IconWrapper className="bg-warning/10 text-warning">
+                    <InfoIcon className="text-lg" />
+                  </IconWrapper>
+                  <p className="text-md font-bold text-warning">
+                    Flow is currently in maintenance mode
+                  </p>
+                </CardHeader>
+                <CardBody>
+                  <p className="text-default-500 font-bold capitalize">
+                    Reason: {flow.maintenance_message}
+                  </p>
+                </CardBody>
+              </Card>
+            </div>
+          )}
           <div>
             <div className="grid lg:grid-cols-4 grid-cols-2 gap-4">
               <div className="col-span-1">
                 <Card fullWidth>
                   <CardHeader className="justify-start gap-2 items-center">
                     <IconWrapper
-                      className={`bg-${flow.active ? "success" : "danger"}/10 text-${flow.active ? "success" : "danger"}`}
+                      className={`bg-${flow.disabled ? "danger" : "success"}/10 text-${flow.disabled ? "danger" : "success"}`}
                     >
-                      {flow.active ? (
-                        <CheckIcon className="text-lg" />
-                      ) : (
+                      {flow.disabled ? (
                         <InfoIcon className="text-lg" />
+                      ) : (
+                        <CheckIcon className="text-lg" />
                       )}
                     </IconWrapper>
                     <p className="text-md font-bold">Status</p>
                   </CardHeader>
                   <CardBody>
                     <p className="text-default-500 font-bold">
-                      {flow.active ? "Active" : "Inactive"}
+                      {flow.disabled ? "Disabled" : "Active"}
                     </p>
                   </CardBody>
                 </Card>

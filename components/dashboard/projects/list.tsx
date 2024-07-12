@@ -12,33 +12,28 @@ import {
   DropdownItem,
   Button,
   CardFooter,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Snippet,
   useDisclosure,
   Chip,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 
 import { IconWrapper } from "@/lib/IconWrapper";
-import { EyeIcon, InfoIcon } from "@/components/icons";
+import { EyeIcon, InfoIcon, PlusIcon } from "@/components/icons";
 import {
   CopyDocumentIcon,
   DeleteDocumentIcon,
   VerticalDotsIcon,
 } from "@/components/icons";
-import DeleteProject from "@/lib/fetch/project/DELETE/DeleteProject";
-
-import NewProjectModal from "./create";
+import DeleteProjectModal from "@/components/functions/projects/delete";
+import CreateProjectModal from "@/components/functions/projects/create";
 
 export function ProjectsList({ projects, settings }: any) {
   const router = useRouter();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [projectToDelete, setProjectToDelete] = React.useState("");
+
+  const [targetProject, setTargetProject] = React.useState({});
+  const deleteProjectModal = useDisclosure();
+  const newProjectModal = useDisclosure();
 
   const copyProjectIDtoClipboard = (key: string) => {
     // eslint-disable-next-line no-undef
@@ -51,20 +46,8 @@ export function ProjectsList({ projects, settings }: any) {
     }
   };
 
-  function deleteProjectModal(id: string) {
-    setProjectToDelete(id);
-    onOpenChange();
-  }
-
-  function deleteProject() {
-    onOpenChange();
-    DeleteProject(projectToDelete);
-    router.refresh();
-  }
-
   return (
     <main>
-      <Toaster richColors position="bottom-center" />
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-1">
           <p className="text-2xl font-bold mb-0 text-default-500">
@@ -72,7 +55,16 @@ export function ProjectsList({ projects, settings }: any) {
           </p>
           <p className="text-2xl font-bold mb-0 text-primary">Projects</p>
         </div>
-        <NewProjectModal settings={settings} />
+        <Button
+          color="primary"
+          isDisabled={!settings.create_projects}
+          radius="sm"
+          startContent={<PlusIcon />}
+          variant="solid"
+          onPress={() => newProjectModal.onOpen()}
+        >
+          New Project
+        </Button>
       </div>
       <Divider className="mb-4 mt-4" />
       {projects.error && (
@@ -127,7 +119,10 @@ export function ProjectsList({ projects, settings }: any) {
                           className="text-danger"
                           color="danger"
                           startContent={<DeleteDocumentIcon />}
-                          onClick={() => deleteProjectModal(project.id)}
+                          onClick={() => {
+                            setTargetProject(project);
+                            deleteProjectModal.onOpen();
+                          }}
                         >
                           Delete
                         </DropdownItem>
@@ -188,48 +183,11 @@ export function ProjectsList({ projects, settings }: any) {
           ))}
         </div>
       )}
-      <Modal
-        backdrop="blur"
-        isOpen={isOpen}
-        placement="center"
-        onOpenChange={onOpenChange}
-      >
-        <ModalContent className="w-full">
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1 text-danger">
-                Are you sure?
-              </ModalHeader>
-              <ModalBody>
-                <p>
-                  You are about to delete the following project which{" "}
-                  <span className="font-bold">cannot be undone</span>:
-                </p>
-                <Divider />
-                <Snippet hideCopyButton hideSymbol>
-                  <span>
-                    Name:{" "}
-                    {
-                      projects.find(
-                        (project: any) => project.id === projectToDelete,
-                      ).name
-                    }
-                  </span>
-                  <span>ID: {projectToDelete}</span>
-                </Snippet>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="default" variant="bordered" onPress={onClose}>
-                  Cancel
-                </Button>
-                <Button color="danger" variant="solid" onPress={deleteProject}>
-                  DELETE
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
+      <CreateProjectModal disclosure={newProjectModal} />
+      <DeleteProjectModal
+        disclosure={deleteProjectModal}
+        project={targetProject}
+      />
     </main>
   );
 }

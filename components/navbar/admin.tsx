@@ -17,6 +17,7 @@ import {
   TagUser,
   Scale,
   PlayCircleIcon,
+  TagIcon,
 } from "@/components/icons";
 
 export default function AdminMenu(user: any) {
@@ -60,7 +61,7 @@ export default function AdminMenu(user: any) {
         </DropdownItem>
         <DropdownItem
           key="projects"
-          description="Get a list of your projects and their status."
+          description="Get a list of all projects and their status."
           href="/admin/projects"
           startContent={icons.server}
         >
@@ -68,7 +69,7 @@ export default function AdminMenu(user: any) {
         </DropdownItem>
         <DropdownItem
           key="flows"
-          description="See all your flows and their details."
+          description="See all flows and their details."
           href="/admin/flows"
           startContent={icons.flash}
         >
@@ -76,15 +77,23 @@ export default function AdminMenu(user: any) {
         </DropdownItem>
         <DropdownItem
           key="runners"
-          description="See all your flows and their details."
+          description="Check all runners, their status and more."
           href="/admin/runners"
           startContent={<PlayCircleIcon className="h-8 w-8 text-warning" />}
         >
           Runners
         </DropdownItem>
         <DropdownItem
+          key="apikeys"
+          description="See all api keys and disable them."
+          href="/admin/apikeys"
+          startContent={<TagIcon className="h-8 w-8 text-default-500" />}
+        >
+          API Keys
+        </DropdownItem>
+        <DropdownItem
           key="settings"
-          description="See all your flows and their details."
+          description="Maintenance, signup and more."
           href="/admin/settings"
           startContent={icons.scale}
         >

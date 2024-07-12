@@ -1,27 +1,34 @@
 "use client";
 
-import React from "react";
+import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
+
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
-  useDisclosure,
-  Input,
-  Switch,
   cn,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Switch,
 } from "@nextui-org/react";
-import { Toaster, toast } from "sonner";
 import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
+import { toast } from "sonner";
 
 import { EditDocumentIcon } from "@/components/icons";
 import UpdateProject from "@/lib/fetch/project/PUT/UpdateProject";
 
-export default function EditProjectModal({ project }: any) {
+export default function EditProjectModal({
+  disclosure,
+  project,
+}: {
+  disclosure: UseDisclosureReturn;
+  project: any;
+}) {
   const router = useRouter();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange } = disclosure;
 
   const [name, setName] = React.useState(project.name);
   const [description, setDescription] = React.useState(project.description);
@@ -29,6 +36,12 @@ export default function EditProjectModal({ project }: any) {
     project.alertflow_runners,
   );
   const [isLoading, setIsLoading] = React.useState(false);
+
+  useEffect(() => {
+    setName(project.name);
+    setDescription(project.description);
+    setAlertflowRunners(project.alertflow_runners);
+  }, [project]);
 
   async function updateProject() {
     setIsLoading(true);
@@ -52,16 +65,6 @@ export default function EditProjectModal({ project }: any) {
 
   return (
     <>
-      <Toaster richColors position="bottom-center" />
-      <Button
-        color="warning"
-        endContent={<EditDocumentIcon />}
-        isDisabled={project.disabled}
-        variant="flat"
-        onPress={onOpen}
-      >
-        Edit Project
-      </Button>
       <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
