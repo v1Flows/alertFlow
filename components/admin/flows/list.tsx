@@ -28,12 +28,14 @@ import {
   VerticalDotsIcon,
 } from "@/components/icons";
 import FunctionDeleteFlow from "@/components/functions/flows/deleteFlow";
+import EditFlowModal from "@/components/functions/flows/edit";
 
-export function FlowsList({ flows, projects }: any) {
+export function FlowsList({ flows, projects, runners }: any) {
   const router = useRouter();
 
   const [targetFlow, setTargetFlow] = React.useState({} as any);
   const deleteModal = useDisclosure();
+  const editModal = useDisclosure();
 
   const iconClasses =
     "text-xl text-default-500 pointer-events-none flex-shrink-0";
@@ -56,6 +58,19 @@ export function FlowsList({ flows, projects }: any) {
           <div>
             <p>{projects.find((p: any) => p.id === flow.project_id).name}</p>
             <p className="text-xs text-default-400">{flow.project_id}</p>
+          </div>
+        );
+      case "runner_id":
+        return (
+          <div>
+            {flow.runner_id !== "any" ? (
+              <>
+                <p>{runners.find((r: any) => r.id === flow.runner_id).name}</p>
+                <p className="text-xs text-default-400">{flow.runner_id}</p>
+              </>
+            ) : (
+              <p>Any</p>
+            )}
           </div>
         );
       case "disabled":
@@ -100,6 +115,7 @@ export function FlowsList({ flows, projects }: any) {
                     startContent={
                       <EyeIcon className={cn(iconClasses, "text-primary")} />
                     }
+                    onClick={() => router.push(`/dashboard/flows/${flow.id}`)}
                   >
                     View
                   </DropdownItem>
@@ -115,6 +131,10 @@ export function FlowsList({ flows, projects }: any) {
                         className={cn(iconClasses, "text-warning")}
                       />
                     }
+                    onClick={() => {
+                      setTargetFlow(flow);
+                      editModal.onOpen();
+                    }}
                   >
                     Edit
                   </DropdownItem>
@@ -225,6 +245,11 @@ export function FlowsList({ flows, projects }: any) {
           </TableBody>
         </Table>
       </div>
+      <EditFlowModal
+        disclosure={editModal}
+        flow={targetFlow}
+        projects={projects}
+      />
       <FunctionDeleteFlow disclosure={deleteModal} flow={targetFlow} />
     </main>
   );
