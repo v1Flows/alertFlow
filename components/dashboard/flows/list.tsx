@@ -135,6 +135,14 @@ export default function FlowList({ flows, projects, settings }: any) {
                       </p>
                     </Chip>
                     <Chip
+                      color="secondary"
+                      radius="sm"
+                      size="sm"
+                      variant="flat"
+                    >
+                      <p className="font-bold">ID: {flow.id}</p>
+                    </Chip>
+                    <Chip
                       color={flow.disabled ? "danger" : "success"}
                       radius="sm"
                       size="sm"
@@ -151,14 +159,21 @@ export default function FlowList({ flows, projects, settings }: any) {
                         </p>
                       </Chip>
                     )}
-                    <Chip
-                      color="secondary"
-                      radius="sm"
-                      size="sm"
-                      variant="flat"
-                    >
-                      <p className="font-bold">ID: {flow.id}</p>
-                    </Chip>
+                    {flow.maintenance_required && (
+                      <Chip
+                        color="warning"
+                        radius="sm"
+                        size="sm"
+                        variant="flat"
+                      >
+                        <p className="font-bold">
+                          Maintenance Required:{" "}
+                          <span className="capitalize">
+                            {flow.maintenance_message}
+                          </span>
+                        </p>
+                      </Chip>
+                    )}
                   </div>
                   <div className="flex items-end justify-between">
                     <p className="text-small text-default-500 mt-2">
