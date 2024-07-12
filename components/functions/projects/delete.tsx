@@ -74,7 +74,12 @@ export default function DeleteProjectModal({
                 <Button color="default" variant="bordered" onPress={onClose}>
                   Cancel
                 </Button>
-                <Button color="danger" variant="solid" onPress={deleteProject}>
+                <Button
+                  color="danger"
+                  isLoading={isLoading}
+                  variant="solid"
+                  onPress={deleteProject}
+                >
                   DELETE
                 </Button>
               </ModalFooter>

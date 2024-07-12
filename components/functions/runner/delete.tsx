@@ -12,15 +12,12 @@ import {
   ModalFooter,
   ModalHeader,
   Snippet,
-  useDisclosure,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
 import { DeleteDocumentIcon, InfoIcon } from "@/components/icons";
-import AddRunner from "@/lib/fetch/runner/AddRunner";
-import CreateRunnerApiKey from "@/lib/fetch/project/POST/CreateRunnerAPIKey";
 import DeleteProjectRunner from "@/lib/fetch/project/DELETE/DeleteRunner";
 
 export default function DeleteRunnerModal({
