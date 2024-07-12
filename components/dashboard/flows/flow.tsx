@@ -1,9 +1,16 @@
-import { Divider, Card, CardHeader, CardBody } from "@nextui-org/react";
+"use client";
+
+import {
+  Divider,
+  Card,
+  CardHeader,
+  CardBody,
+  Button,
+  useDisclosure,
+} from "@nextui-org/react";
+import React from "react";
 
 import Reloader from "@/components/reloader/Reloader";
-import GetFlowExecutions from "@/lib/fetch/flow/executions";
-import GetFlow from "@/lib/fetch/flow/flow";
-import GetFlowPayloads from "@/lib/fetch/flow/payloads";
 import FlowBreadcrumbs from "@/components/dashboard/flows/flow/breadcrumbs";
 import { subtitle } from "@/components/primitives";
 import { IconWrapper } from "@/lib/IconWrapper";
@@ -14,17 +21,21 @@ import {
   CheckIcon,
   PlayCircleIcon,
 } from "@/components/icons";
-import GetProjects from "@/lib/fetch/project/all";
-import GetProjectRunners from "@/lib/fetch/project/runners";
+import EditFlowModal from "@/components/functions/flows/edit";
 
 import FlowTabs from "./flow/tabs";
 
-export async function Flow({ id }: any) {
-  const projects = await GetProjects();
-  const flow = await GetFlow(id);
-  const executions = await GetFlowExecutions(id);
-  const payloads = await GetFlowPayloads(id);
-  const runners = await GetProjectRunners(flow.project_id);
+export function Flow({
+  id,
+  projects,
+  flow,
+  executions,
+  payloads,
+  runners,
+  settings,
+}: any) {
+  const [stopReloading, setStopReloading] = React.useState(false);
+  const editFlowModal = useDisclosure();
 
   return (
     <main>
@@ -62,8 +73,39 @@ export async function Flow({ id }: any) {
               </h1>
               <p className="text-sm text-default-500">{flow.description}</p>
             </div>
+            <Button
+              color="warning"
+              endContent={<EditDocumentIcon />}
+              isDisabled={flow.disabled}
+              variant="flat"
+              onPress={() => {
+                setStopReloading(true);
+                editFlowModal.onOpen();
+              }}
+            >
+              Edit Flow
+            </Button>
           </div>
           <Divider className="mb-4" />
+          {flow.disabled && (
+            <div className="mb-4">
+              <Card className="bg-danger/10">
+                <CardHeader className="justify-start gap-2 items-center">
+                  <IconWrapper className="bg-danger/10 text-danger">
+                    <InfoIcon className="text-lg" />
+                  </IconWrapper>
+                  <p className="text-md font-bold text-danger">
+                    Flow is currently disabled
+                  </p>
+                </CardHeader>
+                <CardBody>
+                  <p className="text-default-500 font-bold">
+                    Reason: {flow.disabled_reason}
+                  </p>
+                </CardBody>
+              </Card>
+            </div>
+          )}
           {flow.maintenance_required && (
             <div className="mb-4">
               <Card className="bg-warning/10">
@@ -76,7 +118,7 @@ export async function Flow({ id }: any) {
                   </p>
                 </CardHeader>
                 <CardBody>
-                  <p className="text-default-500 font-bold capitalize">
+                  <p className="text-default-500 font-bold">
                     Reason: {flow.maintenance_message}
                   </p>
                 </CardBody>
@@ -172,6 +214,11 @@ export async function Flow({ id }: any) {
           </div>
         </>
       )}
+      <EditFlowModal
+        disclosure={editFlowModal}
+        flow={flow}
+        projects={projects}
+      />
     </main>
   );
 }

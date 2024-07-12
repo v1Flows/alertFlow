@@ -24,17 +24,19 @@ import {
   CopyDocumentIcon,
   EyeIcon,
   InfoIcon,
+  PlusIcon,
 } from "@/components/icons";
 import { IconWrapper } from "@/lib/IconWrapper";
 import FunctionDeleteFlow from "@/components/functions/flows/deleteFlow";
-
-import NewFlowModal from "./create";
+import FunctionCreateFlow from "@/components/functions/flows/create";
 
 export default function FlowList({ flows, projects, settings }: any) {
   const router = useRouter();
 
   const [deleteFlow, setDeleteFlow] = React.useState({} as any);
   const deleteModal = useDisclosure();
+
+  const newModal = useDisclosure();
 
   const copyFlowIDtoClipboard = (key: string) => {
     // eslint-disable-next-line no-undef
@@ -56,7 +58,16 @@ export default function FlowList({ flows, projects, settings }: any) {
           </p>
           <p className="text-2xl font-bold mb-0 text-primary">Flows</p>
         </div>
-        <NewFlowModal flows={flows} projects={projects} settings={settings} />
+        <Button
+          color="primary"
+          isDisabled={!settings.create_flows}
+          radius="sm"
+          startContent={<PlusIcon />}
+          variant="solid"
+          onPress={() => newModal.onOpen()}
+        >
+          New Flow
+        </Button>
       </div>
       <Divider className="mb-4 mt-4" />
       {flows.error && (
@@ -78,7 +89,7 @@ export default function FlowList({ flows, projects, settings }: any) {
             <div key={flow.id} className="col-span-1">
               <Card
                 fullWidth
-                className="hover:shadow-md hover:shadow-primary shadow shadow-primary-200"
+                className={`shadow hover:shadow-md ${flow.disabled ? "hover:shadow-danger shadow-danger-200" : "hover:shadow-primary shadow-primary-200"}`}
               >
                 <CardHeader className="justify-between">
                   <div className="flex flex-col items-start">
@@ -189,7 +200,7 @@ export default function FlowList({ flows, projects, settings }: any) {
                 <CardFooter>
                   <Button
                     className="w-full font-bold"
-                    color="primary"
+                    color={flow.disabled ? "danger" : "primary"}
                     radius="sm"
                     variant="flat"
                     onPress={() => router.push(`/dashboard/flows/${flow.id}`)}
@@ -203,6 +214,7 @@ export default function FlowList({ flows, projects, settings }: any) {
           ))}
         </div>
       )}
+      <FunctionCreateFlow disclosure={newModal} projects={projects} />
       <FunctionDeleteFlow disclosure={deleteModal} flow={deleteFlow} />
     </main>
   );

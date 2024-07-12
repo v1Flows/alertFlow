@@ -17,16 +17,10 @@ import {
   DropdownItem,
   DropdownSection,
   cn,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  Input,
-  ModalFooter,
   useDisclosure,
+  Pagination,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 
 import {
   DeleteDocumentIcon,
@@ -35,17 +29,29 @@ import {
   PlusIcon,
   VerticalDotsIcon,
 } from "@/components/icons";
-import ChangeProjectStatus from "@/lib/fetch/project/PUT/ChangeProjectStatus";
 import CreateApiKeyModal from "@/components/functions/apikeys/create";
 import DeleteApiKeyModal from "@/components/functions/apikeys/delete";
+import ChangeTokenStatusModal from "@/components/functions/apikeys/changeStatus";
+import EditTokenModal from "@/components/functions/apikeys/edit";
 
 export function ApiKeysList({ apikeys, projects }: any) {
-  const router = useRouter();
-
+  const [status, setStatus] = React.useState(false);
   const [targetKey, setTargetKey] = React.useState({} as any);
-
   const addApiKeyModal = useDisclosure();
+  const changeStatusModal = useDisclosure();
+  const editModal = useDisclosure();
   const deleteApiKeyModal = useDisclosure();
+
+  // pagination
+  const [page, setPage] = React.useState(1);
+  const rowsPerPage = 7;
+  const pages = Math.ceil(apikeys.length / rowsPerPage);
+  const items = React.useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    return apikeys.slice(start, end);
+  }, [page, apikeys]);
 
   const iconClasses =
     "text-xl text-default-500 pointer-events-none flex-shrink-0";
@@ -125,10 +131,14 @@ export function ApiKeysList({ apikeys, projects }: any) {
                         className={cn(iconClasses, "text-warning")}
                       />
                     }
+                    onClick={() => {
+                      setTargetKey(apikey);
+                      editModal.onOpen();
+                    }}
                   >
                     Edit
                   </DropdownItem>
-                  {apikey.disabled && (
+                  {apikey.disabled ? (
                     <DropdownItem
                       key="disable"
                       className="text-success"
@@ -137,11 +147,15 @@ export function ApiKeysList({ apikeys, projects }: any) {
                       startContent={
                         <LockIcon className={cn(iconClasses, "text-success")} />
                       }
+                      onClick={() => {
+                        setTargetKey(apikey);
+                        setStatus(false);
+                        changeStatusModal.onOpen();
+                      }}
                     >
                       Enable
                     </DropdownItem>
-                  )}
-                  {!apikey.disabled && (
+                  ) : (
                     <DropdownItem
                       key="disable"
                       className="text-danger"
@@ -150,6 +164,11 @@ export function ApiKeysList({ apikeys, projects }: any) {
                       startContent={
                         <LockIcon className={cn(iconClasses, "text-danger")} />
                       }
+                      onClick={() => {
+                        setTargetKey(apikey);
+                        setStatus(true);
+                        changeStatusModal.onOpen();
+                      }}
                     >
                       Disable
                     </DropdownItem>
@@ -193,7 +212,8 @@ export function ApiKeysList({ apikeys, projects }: any) {
         </div>
         <Button
           color="primary"
-          endContent={<PlusIcon height={undefined} width={undefined} />}
+          startContent={<PlusIcon height={undefined} width={undefined} />}
+          variant="flat"
           onPress={() => addApiKeyModal.onOpen()}
         >
           Add New
@@ -201,13 +221,31 @@ export function ApiKeysList({ apikeys, projects }: any) {
       </div>
       <Divider className="my-4" />
       <div>
-        <Table aria-label="Example table with custom cells">
+        <Table
+          aria-label="Example table with custom cells"
+          bottomContent={
+            <div className="flex w-full justify-center">
+              <Pagination
+                isCompact
+                showControls
+                showShadow
+                color="secondary"
+                page={page}
+                total={pages}
+                onChange={(page) => setPage(page)}
+              />
+            </div>
+          }
+          classNames={{
+            wrapper: "min-h-[222px]",
+          }}
+        >
           <TableHeader>
-            <TableColumn key="id" align="start">
-              ID
-            </TableColumn>
             <TableColumn key="project_id" align="start">
               PROJECT
+            </TableColumn>
+            <TableColumn key="id" align="start">
+              ID
             </TableColumn>
             <TableColumn key="description" align="start">
               DESCRIPTION
@@ -225,7 +263,7 @@ export function ApiKeysList({ apikeys, projects }: any) {
               ACTIONS
             </TableColumn>
           </TableHeader>
-          <TableBody emptyContent={"No rows to display."} items={apikeys}>
+          <TableBody emptyContent={"No rows to display."} items={items}>
             {(item: any) => (
               <TableRow key={item.id}>
                 {(columnKey) => (
@@ -237,6 +275,12 @@ export function ApiKeysList({ apikeys, projects }: any) {
         </Table>
       </div>
       <CreateApiKeyModal disclosure={addApiKeyModal} projectID={"none"} />
+      <ChangeTokenStatusModal
+        disclosure={changeStatusModal}
+        status={status}
+        token={targetKey}
+      />
+      <EditTokenModal disclosure={editModal} token={targetKey} />
       <DeleteApiKeyModal apikey={targetKey} disclosure={deleteApiKeyModal} />
     </main>
   );

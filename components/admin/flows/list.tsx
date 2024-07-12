@@ -17,6 +17,7 @@ import {
   DropdownSection,
   cn,
   useDisclosure,
+  Pagination,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 
@@ -25,15 +26,34 @@ import {
   EditDocumentIcon,
   EyeIcon,
   LockIcon,
+  PlusIcon,
   VerticalDotsIcon,
 } from "@/components/icons";
 import FunctionDeleteFlow from "@/components/functions/flows/deleteFlow";
+import EditFlowModal from "@/components/functions/flows/edit";
+import ChangeFlowStatusModal from "@/components/functions/flows/changeStatus";
+import FunctionCreateFlow from "@/components/functions/flows/create";
 
-export function FlowsList({ flows, projects }: any) {
+export function FlowsList({ flows, projects, runners }: any) {
   const router = useRouter();
 
+  const [status, setStatus] = React.useState(false);
   const [targetFlow, setTargetFlow] = React.useState({} as any);
+  const createModal = useDisclosure();
+  const editModal = useDisclosure();
+  const changeStatusModal = useDisclosure();
   const deleteModal = useDisclosure();
+
+  // pagination
+  const [page, setPage] = React.useState(1);
+  const rowsPerPage = 7;
+  const pages = Math.ceil(flows.length / rowsPerPage);
+  const items = React.useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    return flows.slice(start, end);
+  }, [page, flows]);
 
   const iconClasses =
     "text-xl text-default-500 pointer-events-none flex-shrink-0";
@@ -56,6 +76,19 @@ export function FlowsList({ flows, projects }: any) {
           <div>
             <p>{projects.find((p: any) => p.id === flow.project_id).name}</p>
             <p className="text-xs text-default-400">{flow.project_id}</p>
+          </div>
+        );
+      case "runner_id":
+        return (
+          <div>
+            {flow.runner_id !== "any" ? (
+              <>
+                <p>{runners.find((r: any) => r.id === flow.runner_id).name}</p>
+                <p className="text-xs text-default-400">{flow.runner_id}</p>
+              </>
+            ) : (
+              <p>Any</p>
+            )}
           </div>
         );
       case "disabled":
@@ -100,6 +133,7 @@ export function FlowsList({ flows, projects }: any) {
                     startContent={
                       <EyeIcon className={cn(iconClasses, "text-primary")} />
                     }
+                    onClick={() => router.push(`/dashboard/flows/${flow.id}`)}
                   >
                     View
                   </DropdownItem>
@@ -115,6 +149,10 @@ export function FlowsList({ flows, projects }: any) {
                         className={cn(iconClasses, "text-warning")}
                       />
                     }
+                    onClick={() => {
+                      setTargetFlow(flow);
+                      editModal.onOpen();
+                    }}
                   >
                     Edit
                   </DropdownItem>
@@ -123,10 +161,15 @@ export function FlowsList({ flows, projects }: any) {
                       key="disable"
                       className="text-success"
                       color="success"
-                      description="Disable access to this flow for members"
+                      description="Enable access to this flow for members"
                       startContent={
                         <LockIcon className={cn(iconClasses, "text-success")} />
                       }
+                      onClick={() => {
+                        setTargetFlow(flow);
+                        setStatus(false);
+                        changeStatusModal.onOpen();
+                      }}
                     >
                       Enable
                     </DropdownItem>
@@ -140,6 +183,11 @@ export function FlowsList({ flows, projects }: any) {
                       startContent={
                         <LockIcon className={cn(iconClasses, "text-danger")} />
                       }
+                      onClick={() => {
+                        setTargetFlow(flow);
+                        setStatus(true);
+                        changeStatusModal.onOpen();
+                      }}
                     >
                       Disable
                     </DropdownItem>
@@ -181,10 +229,37 @@ export function FlowsList({ flows, projects }: any) {
           <p className="text-2xl mb-0">|</p>
           <p className="text-2xl mb-0">Flows</p>
         </div>
+        <Button
+          color="primary"
+          radius="sm"
+          startContent={<PlusIcon />}
+          variant="flat"
+          onPress={() => createModal.onOpen()}
+        >
+          New Flow
+        </Button>
       </div>
       <Divider className="my-4" />
       <div>
-        <Table aria-label="Example table with custom cells">
+        <Table
+          aria-label="Example table with custom cells"
+          bottomContent={
+            <div className="flex w-full justify-center">
+              <Pagination
+                isCompact
+                showControls
+                showShadow
+                color="secondary"
+                page={page}
+                total={pages}
+                onChange={(page) => setPage(page)}
+              />
+            </div>
+          }
+          classNames={{
+            wrapper: "min-h-[222px]",
+          }}
+        >
           <TableHeader>
             <TableColumn key="name" align="start">
               NAME
@@ -214,7 +289,7 @@ export function FlowsList({ flows, projects }: any) {
               ACTIONS
             </TableColumn>
           </TableHeader>
-          <TableBody emptyContent={"No rows to display."} items={flows}>
+          <TableBody emptyContent={"No rows to display."} items={items}>
             {(item: any) => (
               <TableRow key={item.id}>
                 {(columnKey) => (
@@ -225,6 +300,17 @@ export function FlowsList({ flows, projects }: any) {
           </TableBody>
         </Table>
       </div>
+      <FunctionCreateFlow disclosure={createModal} projects={projects} />
+      <EditFlowModal
+        disclosure={editModal}
+        flow={targetFlow}
+        projects={projects}
+      />
+      <ChangeFlowStatusModal
+        disclosure={changeStatusModal}
+        flow={targetFlow}
+        status={status}
+      />
       <FunctionDeleteFlow disclosure={deleteModal} flow={targetFlow} />
     </main>
   );

@@ -10,17 +10,41 @@ import {
   Divider,
   Input,
   Link,
+  useDisclosure,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
+import SignUpAPI from "@/lib/auth/signup";
 
 import { EyeFilledIcon, EyeSlashFilledIcon } from "../icons";
+import SuccessSignUpModal from "../functions/auth/successSignUp";
 
 export default function SignUp({ settings }: any) {
   const router = useRouter();
 
-  const [isVisible, setIsVisible] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [username, setUsername] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
 
+  const [isVisible, setIsVisible] = React.useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
+
+  const successSignUpModal = useDisclosure();
+
+  async function SignUpHandler() {
+    setIsLoading(true);
+    const res = await SignUpAPI(email, username, password);
+
+    if (res.error) {
+      setIsLoading(false);
+      toast.error(res.error);
+    } else {
+      setIsLoading(false);
+      successSignUpModal.onOpen();
+    }
+  }
 
   return (
     <>
@@ -44,14 +68,18 @@ export default function SignUp({ settings }: any) {
                 label="Username"
                 size="sm"
                 type="username"
+                value={username}
                 variant="flat"
+                onValueChange={setUsername}
               />
               <Input
                 isRequired
                 label="Email"
                 size="sm"
                 type="email"
+                value={email}
                 variant="flat"
+                onValueChange={setEmail}
               />
             </div>
             <Input
@@ -72,7 +100,9 @@ export default function SignUp({ settings }: any) {
               label="Password"
               size="sm"
               type={isVisible ? "text" : "password"}
+              value={password}
               variant="flat"
+              onValueChange={setPassword}
             />
           </CardBody>
           <CardFooter className="flex flex-col gap-2">
@@ -80,8 +110,10 @@ export default function SignUp({ settings }: any) {
               fullWidth
               color="primary"
               isDisabled={!settings.signup}
+              isLoading={isLoading}
               size="md"
               variant="flat"
+              onClick={SignUpHandler}
             >
               Create an account
             </Button>
@@ -94,6 +126,7 @@ export default function SignUp({ settings }: any) {
           </CardFooter>
         </Card>
       </div>
+      <SuccessSignUpModal disclosure={successSignUpModal} />
     </>
   );
 }
