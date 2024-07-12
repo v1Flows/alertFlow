@@ -24,6 +24,7 @@ import {
 } from "@nextui-org/react";
 import { LogInIcon, UserPlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import { Logout } from "@/lib/logout";
 import {
@@ -136,6 +137,7 @@ export default function Login({ user, session, showSignUp, settings }: any) {
               startContent={<CopyDocumentIcon />}
               onPress={() => {
                 navigator.clipboard.writeText(session);
+                toast.success("Copied to clipboard!");
               }}
             >
               Copy Token
