@@ -113,6 +113,13 @@ export default function Runners({ runners, project, settings }: any) {
                     >
                       {heartbeatStatus(runner) ? "Healthy" : "Unhealthy"}
                     </Chip>
+                    <Chip
+                      color={runner.disabled ? "danger" : "success"}
+                      size="sm"
+                      variant="flat"
+                    >
+                      {runner.disabled ? "Disabled" : "Enabled"}
+                    </Chip>
                     <div className="relative flex justify-end items-center gap-2">
                       <Dropdown backdrop="opaque">
                         <DropdownTrigger>
@@ -197,6 +204,22 @@ export default function Runners({ runners, project, settings }: any) {
                         >
                           {heartbeatStatus(runner) ? "Healthy" : "Unhealthy"}
                         </Chip>
+                        <Chip
+                          color={runner.disabled ? "danger" : "success"}
+                          size="sm"
+                          variant="flat"
+                        >
+                          {runner.disabled ? "Disabled" : "Enabled"}
+                        </Chip>
+                        {runner.disabled && (
+                          <Chip
+                            color={runner.disabled ? "danger" : "success"}
+                            size="sm"
+                            variant="flat"
+                          >
+                            Disabled Reason: {runner.disabled_reason}
+                          </Chip>
+                        )}
                       </div>
                     </CardHeader>
                     <Divider />

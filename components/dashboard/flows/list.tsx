@@ -89,7 +89,7 @@ export default function FlowList({ flows, projects, settings }: any) {
             <div key={flow.id} className="col-span-1">
               <Card
                 fullWidth
-                className="hover:shadow-md hover:shadow-primary shadow shadow-primary-200"
+                className={`shadow hover:shadow-md ${flow.disabled ? "hover:shadow-danger shadow-danger-200" : "hover:shadow-primary shadow-primary-200"}`}
               >
                 <CardHeader className="justify-between">
                   <div className="flex flex-col items-start">
@@ -200,7 +200,7 @@ export default function FlowList({ flows, projects, settings }: any) {
                 <CardFooter>
                   <Button
                     className="w-full font-bold"
-                    color="primary"
+                    color={flow.disabled ? "danger" : "primary"}
                     radius="sm"
                     variant="flat"
                     onPress={() => router.push(`/dashboard/flows/${flow.id}`)}

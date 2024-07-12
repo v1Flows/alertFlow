@@ -17,16 +17,9 @@ import {
   DropdownItem,
   DropdownSection,
   cn,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  Input,
-  ModalFooter,
   useDisclosure,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 
 import {
   DeleteDocumentIcon,
@@ -35,14 +28,18 @@ import {
   PlusIcon,
   VerticalDotsIcon,
 } from "@/components/icons";
-import ChangeProjectStatus from "@/lib/fetch/project/PUT/ChangeProjectStatus";
 import CreateApiKeyModal from "@/components/functions/apikeys/create";
 import DeleteApiKeyModal from "@/components/functions/apikeys/delete";
+import ChangeTokenStatusModal from "@/components/functions/apikeys/changeStatus";
+import EditTokenModal from "@/components/functions/apikeys/edit";
 
 export function ApiKeysList({ apikeys, projects }: any) {
   const router = useRouter();
 
+  const [status, setStatus] = React.useState(false);
   const [targetKey, setTargetKey] = React.useState({} as any);
+  const changeStatusModal = useDisclosure();
+  const editModal = useDisclosure();
 
   const addApiKeyModal = useDisclosure();
   const deleteApiKeyModal = useDisclosure();
@@ -125,10 +122,14 @@ export function ApiKeysList({ apikeys, projects }: any) {
                         className={cn(iconClasses, "text-warning")}
                       />
                     }
+                    onClick={() => {
+                      setTargetKey(apikey);
+                      editModal.onOpen();
+                    }}
                   >
                     Edit
                   </DropdownItem>
-                  {apikey.disabled && (
+                  {apikey.disabled ? (
                     <DropdownItem
                       key="disable"
                       className="text-success"
@@ -137,11 +138,15 @@ export function ApiKeysList({ apikeys, projects }: any) {
                       startContent={
                         <LockIcon className={cn(iconClasses, "text-success")} />
                       }
+                      onClick={() => {
+                        setTargetKey(apikey);
+                        setStatus(false);
+                        changeStatusModal.onOpen();
+                      }}
                     >
                       Enable
                     </DropdownItem>
-                  )}
-                  {!apikey.disabled && (
+                  ) : (
                     <DropdownItem
                       key="disable"
                       className="text-danger"
@@ -150,6 +155,11 @@ export function ApiKeysList({ apikeys, projects }: any) {
                       startContent={
                         <LockIcon className={cn(iconClasses, "text-danger")} />
                       }
+                      onClick={() => {
+                        setTargetKey(apikey);
+                        setStatus(true);
+                        changeStatusModal.onOpen();
+                      }}
                     >
                       Disable
                     </DropdownItem>
@@ -193,7 +203,8 @@ export function ApiKeysList({ apikeys, projects }: any) {
         </div>
         <Button
           color="primary"
-          endContent={<PlusIcon height={undefined} width={undefined} />}
+          variant="flat"
+          startContent={<PlusIcon height={undefined} width={undefined} />}
           onPress={() => addApiKeyModal.onOpen()}
         >
           Add New
@@ -237,6 +248,12 @@ export function ApiKeysList({ apikeys, projects }: any) {
         </Table>
       </div>
       <CreateApiKeyModal disclosure={addApiKeyModal} projectID={"none"} />
+      <ChangeTokenStatusModal
+        disclosure={changeStatusModal}
+        status={status}
+        token={targetKey}
+      />
+      <EditTokenModal disclosure={editModal} token={targetKey} />
       <DeleteApiKeyModal apikey={targetKey} disclosure={deleteApiKeyModal} />
     </main>
   );

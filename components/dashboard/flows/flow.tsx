@@ -8,6 +8,7 @@ import {
   Button,
   useDisclosure,
 } from "@nextui-org/react";
+import React from "react";
 
 import Reloader from "@/components/reloader/Reloader";
 import FlowBreadcrumbs from "@/components/dashboard/flows/flow/breadcrumbs";
@@ -23,7 +24,6 @@ import {
 import EditFlowModal from "@/components/functions/flows/edit";
 
 import FlowTabs from "./flow/tabs";
-import React from "react";
 
 export function Flow({
   id,
@@ -87,6 +87,25 @@ export function Flow({
             </Button>
           </div>
           <Divider className="mb-4" />
+          {flow.disabled && (
+            <div className="mb-4">
+              <Card className="bg-danger/10">
+                <CardHeader className="justify-start gap-2 items-center">
+                  <IconWrapper className="bg-danger/10 text-danger">
+                    <InfoIcon className="text-lg" />
+                  </IconWrapper>
+                  <p className="text-md font-bold text-danger">
+                    Flow is currently disabled
+                  </p>
+                </CardHeader>
+                <CardBody>
+                  <p className="text-default-500 font-bold">
+                    Reason: {flow.disabled_reason}
+                  </p>
+                </CardBody>
+              </Card>
+            </div>
+          )}
           {flow.maintenance_required && (
             <div className="mb-4">
               <Card className="bg-warning/10">

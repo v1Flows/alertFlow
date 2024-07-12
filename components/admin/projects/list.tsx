@@ -237,7 +237,7 @@ export function ProjectList({ projects }: any) {
           color="primary"
           radius="sm"
           startContent={<PlusIcon />}
-          variant="solid"
+          variant="flat"
           onPress={() => newProjectModal.onOpen()}
         >
           New Project

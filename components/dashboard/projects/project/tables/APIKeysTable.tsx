@@ -61,14 +61,22 @@ export default function ProjectAPIKeys({ apiKeys, project, settings }: any) {
         return new Date(key.created_at).toLocaleString();
       case "status":
         return (
-          <Chip
-            className="capitalize"
-            color={key.disabled ? "danger" : "success"}
-            size="sm"
-            variant="flat"
-          >
-            {cellValue ? "Disabled" : "Active"}
-          </Chip>
+          <div>
+            <Chip
+              className="capitalize"
+              color={key.disabled ? "danger" : "success"}
+              radius="sm"
+              size="sm"
+              variant="flat"
+            >
+              {key.disabled ? "Disabled" : "Active"}
+            </Chip>
+            {key.disabled && (
+              <p className="text-sm text-default-400">
+                {key.disabled_reason}
+              </p>
+            )}
+          </div>
         );
       case "type":
         return <p className="capitalize">{key.type}</p>;

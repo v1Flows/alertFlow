@@ -86,7 +86,7 @@ export function ProjectsList({ projects, settings }: any) {
             <div key={project.id} className="col-span-1">
               <Card
                 fullWidth
-                className="hover:shadow-md hover:shadow-primary shadow shadow-primary-200"
+                className={`shadow hover:shadow-md ${project.disabled ? "hover:shadow-danger shadow-danger-200" : "hover:shadow-primary shadow-primary-200"}`}
               >
                 <CardHeader className="justify-between">
                   <div className="flex flex-col items-start">
@@ -167,7 +167,7 @@ export function ProjectsList({ projects, settings }: any) {
                 <CardFooter>
                   <Button
                     className="w-full font-bold"
-                    color="primary"
+                    color={project.disabled ? "danger" : "primary"}
                     radius="sm"
                     variant="flat"
                     onPress={() =>

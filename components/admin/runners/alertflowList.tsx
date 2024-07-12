@@ -29,12 +29,15 @@ import {
 } from "@/components/icons";
 import CreateRunnerModal from "@/components/functions/runner/create";
 import DeleteRunnerModal from "@/components/functions/runner/delete";
+import ChangeRunnerStatusModal from "@/components/functions/runner/changeStatus";
 
 export function AlertflowRunnerList({ runners }: any) {
   const router = useRouter();
 
+  const [status, setStatus] = React.useState(false);
   const [targetRunner, setTargetRunner] = React.useState({} as any);
   const addRunnerModal = useDisclosure();
+  const changeStatusModal = useDisclosure();
   const deleteRunnerModal = useDisclosure();
 
   const iconClasses =
@@ -146,17 +149,41 @@ export function AlertflowRunnerList({ runners }: any) {
                   >
                     Edit
                   </DropdownItem>
-                  <DropdownItem
-                    key="disable"
-                    className="text-danger"
-                    color="danger"
-                    description="Disable access to this project for members"
-                    startContent={
-                      <LockIcon className={cn(iconClasses, "text-danger")} />
-                    }
-                  >
-                    Disable
-                  </DropdownItem>
+                  {runner.disabled ? (
+                    <DropdownItem
+                      key="disable"
+                      className="text-success"
+                      color="success"
+                      description="Enable runner"
+                      startContent={
+                        <LockIcon className={cn(iconClasses, "text-success")} />
+                      }
+                      onClick={() => {
+                        setTargetRunner(runner);
+                        setStatus(false);
+                        changeStatusModal.onOpen();
+                      }}
+                    >
+                      Enable
+                    </DropdownItem>
+                  ) : (
+                    <DropdownItem
+                      key="disable"
+                      className="text-danger"
+                      color="danger"
+                      description="Disable runner"
+                      startContent={
+                        <LockIcon className={cn(iconClasses, "text-danger")} />
+                      }
+                      onClick={() => {
+                        setTargetRunner(runner);
+                        setStatus(true);
+                        changeStatusModal.onOpen();
+                      }}
+                    >
+                      Disable
+                    </DropdownItem>
+                  )}
                 </DropdownSection>
                 <DropdownSection title="Danger Zone">
                   <DropdownItem
@@ -195,7 +222,6 @@ export function AlertflowRunnerList({ runners }: any) {
         <Button
           color="primary"
           endContent={<PlusIcon height={undefined} width={undefined} />}
-          size="sm"
           variant="flat"
           onPress={() => addRunnerModal.onOpen()}
         >
@@ -248,6 +274,11 @@ export function AlertflowRunnerList({ runners }: any) {
         alertflow_runner={true}
         disclosure={addRunnerModal}
         project={"none"}
+      />
+      <ChangeRunnerStatusModal
+        disclosure={changeStatusModal}
+        runner={targetRunner}
+        status={status}
       />
       <DeleteRunnerModal disclosure={deleteRunnerModal} runner={targetRunner} />
     </main>
