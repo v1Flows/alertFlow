@@ -9,7 +9,6 @@ import {
   TableCell,
   Chip,
   Divider,
-  Snippet,
   Dropdown,
   DropdownTrigger,
   Button,
@@ -17,16 +16,9 @@ import {
   DropdownItem,
   DropdownSection,
   cn,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  Input,
-  ModalFooter,
   useDisclosure,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 
 import {
   DeleteDocumentIcon,
@@ -35,7 +27,6 @@ import {
   LockIcon,
   VerticalDotsIcon,
 } from "@/components/icons";
-import ChangeProjectStatus from "@/lib/fetch/project/PUT/ChangeProjectStatus";
 import FunctionDeleteFlow from "@/components/functions/flows/deleteFlow";
 
 export function FlowsList({ flows, projects }: any) {

@@ -4,27 +4,18 @@ import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
 import {
   Button,
-  Card,
-  CardHeader,
-  cn,
-  Divider,
   Input,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
-  Switch,
-  useDisclosure,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
-import { LibraryIcon } from "lucide-react";
 
-import CreateProject from "@/lib/fetch/project/POST/CreateProject";
-import { CheckIcon, InfoIcon, PlusIcon, TagIcon } from "@/components/icons";
-import { IconWrapper } from "@/lib/IconWrapper";
+import { PlusIcon, TagIcon } from "@/components/icons";
 import CreateRunnerApiKey from "@/lib/fetch/project/POST/CreateRunnerAPIKey";
 
 export default function CreateApiKeyModal({
