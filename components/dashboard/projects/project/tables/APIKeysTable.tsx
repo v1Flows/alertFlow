@@ -11,6 +11,7 @@ import {
   Chip,
   Button,
   useDisclosure,
+  Pagination,
 } from "@nextui-org/react";
 import { toast } from "sonner";
 
@@ -23,6 +24,17 @@ export default function ProjectAPIKeys({ apiKeys, project, settings }: any) {
 
   const addApiKeyModal = useDisclosure();
   const deleteApiKeyModal = useDisclosure();
+
+  // pagination
+  const [page, setPage] = React.useState(1);
+  const rowsPerPage = 7;
+  const pages = Math.ceil(apiKeys.length / rowsPerPage);
+  const items = React.useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    return apiKeys.slice(start, end);
+  }, [page, apiKeys]);
 
   const copyAPIKeytoClipboard = (key: string) => {
     navigator.clipboard.writeText(key);
@@ -72,9 +84,7 @@ export default function ProjectAPIKeys({ apiKeys, project, settings }: any) {
               {key.disabled ? "Disabled" : "Active"}
             </Chip>
             {key.disabled && (
-              <p className="text-sm text-default-400">
-                {key.disabled_reason}
-              </p>
+              <p className="text-sm text-default-400">{key.disabled_reason}</p>
             )}
           </div>
         );
@@ -104,6 +114,22 @@ export default function ProjectAPIKeys({ apiKeys, project, settings }: any) {
     <div>
       <Table
         aria-label="Example table with custom cells"
+        bottomContent={
+          <div className="flex w-full justify-center">
+            <Pagination
+              isCompact
+              showControls
+              showShadow
+              color="primary"
+              page={page}
+              total={pages}
+              onChange={(page) => setPage(page)}
+            />
+          </div>
+        }
+        classNames={{
+          wrapper: "min-h-[222px]",
+        }}
         topContent={topContent}
       >
         <TableHeader>
@@ -126,14 +152,7 @@ export default function ProjectAPIKeys({ apiKeys, project, settings }: any) {
             ACTIONS
           </TableColumn>
         </TableHeader>
-        <TableBody
-          emptyContent={"No rows to display."}
-          items={apiKeys.sort(
-            (a: any, b: any) =>
-              new Date(b.created_at).getTime() -
-              new Date(a.created_at).getTime(),
-          )}
-        >
+        <TableBody emptyContent={"No rows to display."} items={items}>
           {(item: any) => (
             <TableRow key={item.id}>
               {(columnKey) => (
