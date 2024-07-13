@@ -33,8 +33,6 @@ import {
   Scale,
 } from "@/components/icons";
 
-import AdminMenu from "./navbar/admin";
-
 export default function Nabar({ user, session, settings }: any) {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
