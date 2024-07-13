@@ -130,7 +130,12 @@ export default function Login({ user, session, showSignUp, settings }: any) {
                 }
               />
             </DropdownItem>
-            <DropdownItem key="profile">Profile</DropdownItem>
+            <DropdownItem
+              key="profile"
+              onPress={() => router.push(`/user/${userData?.id}`)}
+            >
+              Profile
+            </DropdownItem>
             <DropdownItem
               key="api_key"
               showDivider
