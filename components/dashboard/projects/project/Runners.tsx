@@ -120,42 +120,42 @@ export default function Runners({ runners, project, settings }: any) {
                     >
                       {runner.disabled ? "Disabled" : "Enabled"}
                     </Chip>
-                    <div className="relative flex justify-end items-center gap-2">
-                      <Dropdown backdrop="opaque">
-                        <DropdownTrigger>
-                          <Button isIconOnly size="sm" variant="light">
-                            <VerticalDotsIcon
-                              className="text-default-300"
-                              height={undefined}
-                              width={undefined}
-                            />
-                          </Button>
-                        </DropdownTrigger>
-                        <DropdownMenu>
-                          <DropdownSection title="Actions">
-                            <DropdownItem
-                              startContent={<CopyDocumentIcon />}
-                              onClick={() => copyRunnerIDtoClipboard(runner.id)}
-                            >
-                              Copy ID
-                            </DropdownItem>
-                          </DropdownSection>
-                          <DropdownSection title="Danger zone">
-                            <DropdownItem
-                              className="text-danger"
-                              color="danger"
-                              startContent={<DeleteDocumentIcon />}
-                              onClick={() => {
-                                setTargetRunner(runner);
-                                deleteRunnerModal.onOpen();
-                              }}
-                            >
-                              Delete
-                            </DropdownItem>
-                          </DropdownSection>
-                        </DropdownMenu>
-                      </Dropdown>
-                    </div>
+                  </div>
+                  <div className="relative flex justify-end items-center gap-2">
+                    <Dropdown backdrop="opaque">
+                      <DropdownTrigger>
+                        <Button isIconOnly size="sm" variant="light">
+                          <VerticalDotsIcon
+                            className="text-default-300"
+                            height={undefined}
+                            width={undefined}
+                          />
+                        </Button>
+                      </DropdownTrigger>
+                      <DropdownMenu>
+                        <DropdownSection title="Actions">
+                          <DropdownItem
+                            startContent={<CopyDocumentIcon />}
+                            onClick={() => copyRunnerIDtoClipboard(runner.id)}
+                          >
+                            Copy ID
+                          </DropdownItem>
+                        </DropdownSection>
+                        <DropdownSection title="Danger zone">
+                          <DropdownItem
+                            className="text-danger"
+                            color="danger"
+                            startContent={<DeleteDocumentIcon />}
+                            onClick={() => {
+                              setTargetRunner(runner);
+                              deleteRunnerModal.onOpen();
+                            }}
+                          >
+                            Delete
+                          </DropdownItem>
+                        </DropdownSection>
+                      </DropdownMenu>
+                    </Dropdown>
                   </div>
                 </CardHeader>
                 <Divider />
