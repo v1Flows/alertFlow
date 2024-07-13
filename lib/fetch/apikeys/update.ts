@@ -1,9 +1,8 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
 
-export default async function GetProject(projectId: any) {
+export default async function UpdateToken(id: string, description: string) {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;
@@ -15,17 +14,17 @@ export default async function GetProject(projectId: any) {
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(
-      `${process.env.API_ENDPOINT}/projects/${projectId}`,
-      {
-        method: "GET",
-        headers: headers,
-      },
-    );
+    const res = await fetch(`${process.env.API_ENDPOINT}/token/${id}`, {
+      method: "PUT",
+      headers: headers,
+      body: JSON.stringify({
+        description: description,
+      }),
+    });
     const data = await res.json();
 
-    return data.project;
+    return data;
   } catch (error) {
-    return { error: "Failed to fetch data" };
+    return { error: "Failed to update token" };
   }
 }

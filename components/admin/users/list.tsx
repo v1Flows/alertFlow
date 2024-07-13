@@ -24,6 +24,7 @@ import {
   Input,
   ModalFooter,
   useDisclosure,
+  Pagination,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -92,6 +93,17 @@ export function UsersList({ users }: any) {
       }
     }
   }
+
+  // pagination
+  const [page, setPage] = React.useState(1);
+  const rowsPerPage = 7;
+  const pages = Math.ceil(users.length / rowsPerPage);
+  const items = React.useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    return users.slice(start, end);
+  }, [page, users]);
 
   const iconClasses =
     "text-xl text-default-500 pointer-events-none flex-shrink-0";
@@ -250,7 +262,25 @@ export function UsersList({ users }: any) {
       </div>
       <Divider className="my-4" />
       <div>
-        <Table aria-label="Example table with custom cells">
+        <Table
+          aria-label="Example table with custom cells"
+          bottomContent={
+            <div className="flex w-full justify-center">
+              <Pagination
+                isCompact
+                showControls
+                showShadow
+                color="secondary"
+                page={page}
+                total={pages}
+                onChange={(page) => setPage(page)}
+              />
+            </div>
+          }
+          classNames={{
+            wrapper: "min-h-[222px]",
+          }}
+        >
           <TableHeader>
             <TableColumn key="username" align="start">
               USERNAME
@@ -274,7 +304,7 @@ export function UsersList({ users }: any) {
               ACTIONS
             </TableColumn>
           </TableHeader>
-          <TableBody items={users}>
+          <TableBody items={items}>
             {(item: any) => (
               <TableRow key={item.id}>
                 {(columnKey) => (

@@ -9,6 +9,7 @@ import {
   User,
   Tooltip,
   Chip,
+  Pagination,
 } from "@nextui-org/react";
 
 import AddMemberModal from "@/components/dashboard/projects/project/modals/AddMember";
@@ -23,6 +24,17 @@ const statusColorMap: any = {
 };
 
 export default function ProjectMembers({ project, settings }: any) {
+  // pagination
+  const [page, setPage] = React.useState(1);
+  const rowsPerPage = 7;
+  const pages = Math.ceil(project.members.length / rowsPerPage);
+  const items = React.useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    return project.members.slice(start, end);
+  }, [page, project.members]);
+
   const renderCell = React.useCallback((user: any, columnKey: any) => {
     const cellValue = user[columnKey];
 
@@ -84,7 +96,26 @@ export default function ProjectMembers({ project, settings }: any) {
   }, []);
 
   return (
-    <Table aria-label="Example table with custom cells" topContent={topContent}>
+    <Table
+      aria-label="Example table with custom cells"
+      bottomContent={
+        <div className="flex w-full justify-center">
+          <Pagination
+            isCompact
+            showControls
+            showShadow
+            color="primary"
+            page={page}
+            total={pages}
+            onChange={(page) => setPage(page)}
+          />
+        </div>
+      }
+      classNames={{
+        wrapper: "min-h-[222px]",
+      }}
+      topContent={topContent}
+    >
       <TableHeader>
         <TableColumn key="name" align="start">
           NAME
@@ -96,7 +127,7 @@ export default function ProjectMembers({ project, settings }: any) {
           ACTIONS
         </TableColumn>
       </TableHeader>
-      <TableBody emptyContent={"No rows to display."} items={project.members}>
+      <TableBody emptyContent={"No rows to display."} items={items}>
         {(item: any) => (
           <TableRow key={item.email}>
             {(columnKey) => (

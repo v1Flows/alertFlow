@@ -16,6 +16,7 @@ import {
   DropdownSection,
   cn,
   useDisclosure,
+  Pagination,
 } from "@nextui-org/react";
 import TimeAgo from "react-timeago";
 
@@ -26,10 +27,24 @@ import {
   VerticalDotsIcon,
 } from "@/components/icons";
 import DeleteRunnerModal from "@/components/functions/runner/delete";
+import ChangeRunnerStatusModal from "@/components/functions/runner/changeStatus";
 
 export function SelfHostedRunnerList({ runners, projects }: any) {
+  const [status, setStatus] = React.useState(false);
   const [targetRunner, setTargetRunner] = React.useState({} as any);
+  const changeStatusModal = useDisclosure();
   const deleteRunnerModal = useDisclosure();
+
+  // pagination
+  const [page, setPage] = React.useState(1);
+  const rowsPerPage = 7;
+  const pages = Math.ceil(runners.length / rowsPerPage);
+  const items = React.useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    return runners.slice(start, end);
+  }, [page, runners]);
 
   const iconClasses =
     "text-xl text-default-500 pointer-events-none flex-shrink-0";
@@ -145,17 +160,41 @@ export function SelfHostedRunnerList({ runners, projects }: any) {
                   >
                     Edit
                   </DropdownItem>
-                  <DropdownItem
-                    key="disable"
-                    className="text-danger"
-                    color="danger"
-                    description="Disable access to this project for members"
-                    startContent={
-                      <LockIcon className={cn(iconClasses, "text-danger")} />
-                    }
-                  >
-                    Disable
-                  </DropdownItem>
+                  {runner.disabled ? (
+                    <DropdownItem
+                      key="disable"
+                      className="text-success"
+                      color="success"
+                      description="Enable runner"
+                      startContent={
+                        <LockIcon className={cn(iconClasses, "text-success")} />
+                      }
+                      onClick={() => {
+                        setTargetRunner(runner);
+                        setStatus(false);
+                        changeStatusModal.onOpen();
+                      }}
+                    >
+                      Enable
+                    </DropdownItem>
+                  ) : (
+                    <DropdownItem
+                      key="disable"
+                      className="text-danger"
+                      color="danger"
+                      description="Disable runner"
+                      startContent={
+                        <LockIcon className={cn(iconClasses, "text-danger")} />
+                      }
+                      onClick={() => {
+                        setTargetRunner(runner);
+                        setStatus(true);
+                        changeStatusModal.onOpen();
+                      }}
+                    >
+                      Disable
+                    </DropdownItem>
+                  )}
                 </DropdownSection>
                 <DropdownSection title="Danger Zone">
                   <DropdownItem
@@ -191,7 +230,25 @@ export function SelfHostedRunnerList({ runners, projects }: any) {
         Self-Hosted Runners
       </p>
       <div>
-        <Table aria-label="Example table with custom cells">
+        <Table
+          aria-label="Example table with custom cells"
+          bottomContent={
+            <div className="flex w-full justify-center">
+              <Pagination
+                isCompact
+                showControls
+                showShadow
+                color="secondary"
+                page={page}
+                total={pages}
+                onChange={(page) => setPage(page)}
+              />
+            </div>
+          }
+          classNames={{
+            wrapper: "min-h-[222px]",
+          }}
+        >
           <TableHeader>
             <TableColumn key="name" align="start">
               NAME
@@ -221,7 +278,7 @@ export function SelfHostedRunnerList({ runners, projects }: any) {
               ACTIONS
             </TableColumn>
           </TableHeader>
-          <TableBody emptyContent={"No rows to display."} items={runners}>
+          <TableBody emptyContent={"No rows to display."} items={items}>
             {(item: any) => (
               <TableRow key={item.id}>
                 {(columnKey) => (
@@ -232,6 +289,11 @@ export function SelfHostedRunnerList({ runners, projects }: any) {
           </TableBody>
         </Table>
       </div>
+      <ChangeRunnerStatusModal
+        disclosure={changeStatusModal}
+        runner={targetRunner}
+        status={status}
+      />
       <DeleteRunnerModal disclosure={deleteRunnerModal} runner={targetRunner} />
     </main>
   );

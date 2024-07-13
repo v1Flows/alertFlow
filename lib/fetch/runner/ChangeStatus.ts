@@ -1,9 +1,12 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
 
-export default async function GetProject(projectId: any) {
+export default async function ChangeRunnerStatus(
+  id: string,
+  status: boolean,
+  reason: string,
+) {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;
@@ -16,16 +19,20 @@ export default async function GetProject(projectId: any) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.API_ENDPOINT}/projects/${projectId}`,
+      `${process.env.API_ENDPOINT}/runners/${id}/status`,
       {
-        method: "GET",
+        method: "PUT",
         headers: headers,
+        body: JSON.stringify({
+          disabled: status,
+          disabled_reason: reason,
+        }),
       },
     );
     const data = await res.json();
 
-    return data.project;
+    return data;
   } catch (error) {
-    return { error: "Failed to fetch data" };
+    return { error: "Failed to update runner" };
   }
 }

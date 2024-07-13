@@ -1,3 +1,7 @@
+"use client";
+
+import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
+
 import React from "react";
 import {
   Modal,
@@ -19,15 +23,21 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { LibraryIcon } from "lucide-react";
 
-import { CheckIcon, PlusIcon } from "@/components/icons";
+import { CheckIcon, Flash } from "@/components/icons";
 import GetProjectRunners from "@/lib/fetch/project/runners";
 import CreateFlow from "@/lib/fetch/flow/POST/CreateFlow";
 
-export default function NewFlowModal({ projects, flows, settings }: any) {
+export default function FunctionCreateFlow({
+  projects,
+  disclosure,
+}: {
+  projects: any;
+  disclosure: UseDisclosureReturn;
+}) {
   const router = useRouter();
 
   // create modal
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange } = disclosure;
   // instructions modal
   const {
     isOpen: isOpenInstructions,
@@ -95,22 +105,12 @@ export default function NewFlowModal({ projects, flows, settings }: any) {
 
   return (
     <>
-      <Button
-        color="primary"
-        isDisabled={!settings.create_flows}
-        radius="sm"
-        startContent={<PlusIcon />}
-        variant="solid"
-        onPress={onOpen}
-      >
-        New Flow
-      </Button>
       <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
         <ModalContent className="w-full">
           {() => (
             <>
-              <ModalHeader className="flex flex-col gap-1">
-                Create new Flow
+              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-primary">
+                <Flash size={20} /> Create Flow
               </ModalHeader>
               <ModalBody>
                 <Input

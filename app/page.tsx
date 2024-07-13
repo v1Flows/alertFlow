@@ -1,17 +1,23 @@
 import { Snippet } from "@nextui-org/snippet";
 import { Code } from "@nextui-org/code";
+import { cookies } from "next/headers";
 
 import { title, subtitle } from "@/components/primitives";
 import HomeFeatures from "@/components/home/Features";
-import { Navbar } from "@/components/navbar";
+import Navbar from "@/components/navbar";
 import HomeTerraform from "@/components/home/Terraform";
 import HomeSecurity from "@/components/home/Security";
 import HomeSelfhosting from "@/components/home/Selfhosting";
+import AdminGetSettings from "@/lib/fetch/page/settings";
 
-export default function Home() {
+export default async function Home() {
+  const user = JSON.parse(cookies().get("user")?.value || "{}");
+  const session = cookies().get("session")?.value;
+  const settings = await AdminGetSettings();
+
   return (
     <>
-      <Navbar />
+      <Navbar session={session} settings={settings} user={user} />
       <main className="container mx-auto max-w-7xl pt-2 px-6 flex-grow">
         <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
           <div className="inline-block max-w-lg text-center justify-center">
