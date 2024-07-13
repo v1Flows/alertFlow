@@ -16,13 +16,16 @@ import {
   DropdownItem,
   DropdownTrigger,
   Button,
+  Image,
 } from "@nextui-org/react";
 import React from "react";
 import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
+import { useIsSSR } from "@react-aria/ssr";
 
 import Login from "@/components/auth/login";
 import { ThemeSwitch } from "@/components/theme-switch";
-import { Logo, PlayCircleIcon, TagIcon } from "@/components/icons";
+import { PlayCircleIcon, TagIcon } from "@/components/icons";
 import {
   ChevronDown,
   Lock,
@@ -35,6 +38,8 @@ import {
 
 export default function Nabar({ user, session, settings }: any) {
   const router = useRouter();
+  const { theme } = useTheme();
+  const isSSR = useIsSSR();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   const icons = {
@@ -63,7 +68,14 @@ export default function Nabar({ user, session, settings }: any) {
       onMenuOpenChange={setIsMenuOpen}
     >
       <NavbarBrand as="li" className="gap-1 max-w-fit">
-        <Logo />
+        <Image
+          alt="Logo"
+          height={32}
+          radius="none"
+          shadow="none"
+          src={`/images/af_logo_${theme === "light" || isSSR ? "black" : "white"}.png`}
+          width={32}
+        />
         <p className="font-bold text-inherit">AlertFlow</p>
       </NavbarBrand>
       <NavbarContent
