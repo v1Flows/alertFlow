@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+
 import Project from "@/components/dashboard/projects/project";
 import PageGetSettings from "@/lib/fetch/page/settings";
 import GetProjectApiKeys from "@/lib/fetch/project/apiKeys";
