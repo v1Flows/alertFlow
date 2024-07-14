@@ -37,7 +37,7 @@ import EditProjectModal from "@/components/functions/projects/edit";
 import DeleteProjectModal from "@/components/functions/projects/delete";
 import CreateProjectModal from "@/components/functions/projects/create";
 
-export function ProjectList({ projects }: any) {
+export function ProjectList({ projects, members }: any) {
   const router = useRouter();
 
   const [status, setStatus] = React.useState(false);
@@ -80,20 +80,22 @@ export function ProjectList({ projects }: any) {
         );
       case "members":
         return (
-          <AvatarGroup isBordered max={5} radius="md">
-            {project.members.map((member: any) => (
-              <Avatar
-                key={member.email}
-                color={
-                  member.role === "Owner"
-                    ? "danger"
-                    : member.role === "Editor"
-                      ? "primary"
-                      : "secondary"
-                }
-                name={member.email}
-              />
-            ))}
+          <AvatarGroup isBordered max={5} radius="sm">
+            {members
+              .filter((member: any) => member.project_id === project.id)
+              .map((member: any) => (
+                <Avatar
+                  key={member.email}
+                  color={
+                    member.role === "Owner"
+                      ? "danger"
+                      : member.role === "Editor"
+                        ? "primary"
+                        : "default"
+                  }
+                  name={member.email}
+                />
+              ))}
           </AvatarGroup>
         );
       case "alertflow_runners":

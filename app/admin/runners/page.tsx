@@ -12,7 +12,7 @@ export default async function AdminRunnersPage() {
     <>
       <RunnersHeading />
       <SelfHostedRunnerList
-        projects={projects}
+        projects={projects.projects}
         runners={runners.self_hosted_runners}
       />
       <div className="mt-4">

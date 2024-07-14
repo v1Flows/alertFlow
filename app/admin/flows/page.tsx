@@ -15,7 +15,11 @@ export default async function AdminFlowsPage() {
 
   return (
     <>
-      <FlowsList flows={flows} projects={projects} runners={combined_runners} />
+      <FlowsList
+        flows={flows}
+        projects={projects.projects}
+        runners={combined_runners}
+      />
     </>
   );
 }
