@@ -26,19 +26,19 @@ const statusColorMap: any = {
   Viewer: "default",
 };
 
-export default function ProjectMembers({ project, settings }: any) {
+export default function ProjectMembers({ project, members, settings }: any) {
   const addProjectMemberModal = useDisclosure();
 
   // pagination
   const [page, setPage] = React.useState(1);
   const rowsPerPage = 7;
-  const pages = Math.ceil(project.members.length / rowsPerPage);
+  const pages = Math.ceil(members.length / rowsPerPage);
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
 
-    return project.members.slice(start, end);
-  }, [page, project.members]);
+    return members.slice(start, end);
+  }, [page, members]);
 
   const renderCell = React.useCallback((user: any, columnKey: any) => {
     const cellValue = user[columnKey];
@@ -47,10 +47,11 @@ export default function ProjectMembers({ project, settings }: any) {
       case "name":
         return (
           <User
-            avatarProps={{ radius: "lg", name: user.email }}
-            name={user.email}
+            avatarProps={{ radius: "lg", name: user.username }}
+            description={user.email}
+            name={user.username}
           >
-            {user.email}
+            {user.user_id}
           </User>
         );
       case "role":
@@ -64,13 +65,26 @@ export default function ProjectMembers({ project, settings }: any) {
             {cellValue}
           </Chip>
         );
+      case "invite_pending":
+        return (
+          <Chip
+            className="capitalize"
+            color={user.invite_pending ? "warning" : "success"}
+            size="sm"
+            variant="flat"
+          >
+            {user.invite_pending ? "Pending" : "Accepted"}
+          </Chip>
+        );
+      case "invited_at":
+        return new Date(user.invited_at).toLocaleString();
       case "actions":
         return (
           <div className="relative flex items-center justify-center gap-2">
             <Tooltip content="Edit user">
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <EditProjectMemberModal
-                  mailInc={user.email}
+                  mailInc={user.user_id}
                   projectID={project.id}
                   roleInc={user.role}
                 />
@@ -79,7 +93,7 @@ export default function ProjectMembers({ project, settings }: any) {
             <Tooltip color="danger" content="Delete user">
               <span className="text-lg text-danger cursor-pointer active:opacity-50">
                 <DeleteMemberModal
-                  mailInc={user.email}
+                  mailInc={user.user_id}
                   projectID={project.id}
                   roleInc={user.role}
                 />
@@ -135,13 +149,19 @@ export default function ProjectMembers({ project, settings }: any) {
           <TableColumn key="role" align="start">
             ROLE
           </TableColumn>
+          <TableColumn key="invite_pending" align="start">
+            Status
+          </TableColumn>
+          <TableColumn key="invited_at" align="start">
+            Invited At
+          </TableColumn>
           <TableColumn key="actions" align="center">
             ACTIONS
           </TableColumn>
         </TableHeader>
         <TableBody emptyContent={"No rows to display."} items={items}>
           {(item: any) => (
-            <TableRow key={item.email}>
+            <TableRow key={item.user_id}>
               {(columnKey) => (
                 <TableCell>{renderCell(item, columnKey)}</TableCell>
               )}
@@ -151,6 +171,7 @@ export default function ProjectMembers({ project, settings }: any) {
       </Table>
       <AddProjectMemberModal
         disclosure={addProjectMemberModal}
+        members={members}
         project={project}
       />
     </>

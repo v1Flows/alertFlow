@@ -30,9 +30,11 @@ import UserCell from "./user-cell";
 export default function AddProjectMemberModal({
   disclosure,
   project,
+  members,
 }: {
   disclosure: UseDisclosureReturn;
   project: any;
+  members: any;
 }) {
   const { isOpen, onOpen, onOpenChange } = disclosure;
 
@@ -51,12 +53,12 @@ export default function AddProjectMemberModal({
   const userList = React.useMemo(
     () => (
       <div className="mt-2 flex flex-col gap-2">
-        {project.members.map((member: any) => (
+        {members.map((member: any) => (
           <>
             <UserCell
-              key={member.id}
-              avatar={member.email}
-              name={member.email}
+              key={member.user_id}
+              avatar={member.username}
+              name={member.username}
               permission={permissionLabels[member.role]}
             />
             <Divider />
@@ -81,8 +83,8 @@ export default function AddProjectMemberModal({
               <CardHeader className="justify-center px-6 pb-0 pt-6">
                 <div className="flex flex-col items-center">
                   <AvatarGroup isBordered size="sm">
-                    {project.members.map((member: any) => (
-                      <Avatar key={member.id} name={member.email} />
+                    {members.map((member: any) => (
+                      <Avatar key={member.id} name={member.username} />
                     ))}
                   </AvatarGroup>
                   <Spacer y={2} />

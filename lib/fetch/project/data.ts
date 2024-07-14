@@ -1,7 +1,6 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
 
 export default async function GetProject(projectId: any) {
   "use client";
@@ -24,7 +23,10 @@ export default async function GetProject(projectId: any) {
     );
     const data = await res.json();
 
-    return data.project;
+    return {
+      project: data.project,
+      members: data.members,
+    };
   } catch (error) {
     return { error: "Failed to fetch data" };
   }
