@@ -9,15 +9,23 @@ import HomeTerraform from "@/components/home/Terraform";
 import HomeSecurity from "@/components/home/Security";
 import HomeSelfhosting from "@/components/home/Selfhosting";
 import AdminGetSettings from "@/lib/fetch/page/settings";
+import GetUserNotifications from "@/lib/fetch/user/getNotifications";
 
 export default async function Home() {
   const user = JSON.parse(cookies().get("user")?.value || "{}");
   const session = cookies().get("session")?.value;
   const settings = await AdminGetSettings();
 
+  const notifications = session ? await GetUserNotifications(user.id) : [];
+
   return (
     <>
-      <Navbar session={session} settings={settings} user={user} />
+      <Navbar
+        notifications={notifications}
+        session={session}
+        settings={settings}
+        user={user}
+      />
       <main className="container mx-auto max-w-7xl pt-2 px-6 flex-grow">
         <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
           <div className="inline-block max-w-lg text-center justify-center">
