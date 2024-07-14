@@ -2,7 +2,11 @@
 
 import { cookies } from "next/headers";
 
-export default async function GetProject(projectId: any) {
+export default async function AddProjectMember(
+  id: string,
+  email: string,
+  role: string,
+) {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;
@@ -14,20 +18,22 @@ export default async function GetProject(projectId: any) {
     if (token) {
       headers.append("Authorization", token);
     }
+
     const res = await fetch(
-      `${process.env.API_ENDPOINT}/projects/${projectId}`,
+      `${process.env.API_ENDPOINT}/projects/${id}/member`,
       {
-        method: "GET",
+        method: "POST",
         headers: headers,
+        body: JSON.stringify({
+          email: email,
+          role: role,
+        }),
       },
     );
     const data = await res.json();
 
-    return {
-      project: data.project,
-      members: data.members,
-    };
+    return data;
   } catch (error) {
-    return { error: "Failed to fetch data" };
+    return { error: error };
   }
 }

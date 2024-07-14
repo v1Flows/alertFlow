@@ -20,7 +20,8 @@ export default async function DashboardProjectPage({
     <>
       <Project
         apiKeys={apiKeys}
-        project={project}
+        project={project.project}
+        members={project.members}
         runners={runners}
         settings={settings}
       />

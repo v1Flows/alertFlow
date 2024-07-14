@@ -6,7 +6,7 @@ export default async function AdminProjectsPage() {
 
   return (
     <>
-      <ProjectList projects={projects} />
+      <ProjectList projects={projects.projects} members={projects.members} />
     </>
   );
 }

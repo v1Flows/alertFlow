@@ -9,6 +9,7 @@
 		"lint": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix"
 	},
 	"dependencies": {
+		"@iconify/react": "^5.0.1",
 		"@nextui-org/button": "2.0.34",
 		"@nextui-org/code": "2.0.29",
 		"@nextui-org/input": "2.2.2",
@@ -24,6 +25,7 @@
 		"@nextui-org/use-disclosure": "^2.0.9",
 		"@react-aria/ssr": "3.9.4",
 		"@react-aria/visually-hidden": "3.8.12",
+		"@react-stately/utils": "^3.10.1",
 		"@types/node": "20.5.7",
 		"@types/react": "18.3.3",
 		"@types/react-dom": "18.3.0",
@@ -51,6 +53,7 @@
 		"react-dom": "18.3.1",
 		"react-timeago": "^7.2.0",
 		"sonner": "^1.5.0",
+		"tailwind-merge": "^2.4.0",
 		"tailwind-variants": "0.1.20",
 		"tailwindcss": "3.4.3",
 		"typescript": "5.4.5"

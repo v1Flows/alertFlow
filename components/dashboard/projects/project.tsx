@@ -26,7 +26,13 @@ import EditProjectModal from "@/components/functions/projects/edit";
 import ProjectBreadcrumbs from "./project/breadcrumbs";
 import ProjectTabs from "./project/tabs";
 
-export default function Project({ settings, project, runners, apiKeys }: any) {
+export default function Project({
+  settings,
+  project,
+  members,
+  runners,
+  apiKeys,
+}: any) {
   const editProjectModal = useDisclosure();
 
   return (
@@ -88,9 +94,7 @@ export default function Project({ settings, project, runners, apiKeys }: any) {
                 <p className="text-md font-bold">Members</p>
               </CardHeader>
               <CardBody>
-                <p className="text-default-500 font-bold">
-                  {project.members.length}
-                </p>
+                <p className="text-default-500 font-bold">{members.length}</p>
               </CardBody>
             </Card>
           </div>
@@ -149,6 +153,7 @@ export default function Project({ settings, project, runners, apiKeys }: any) {
       <div className="w-full mt-6">
         <ProjectTabs
           apiKeys={apiKeys}
+          members={members}
           project={project}
           runners={runners}
           settings={settings}

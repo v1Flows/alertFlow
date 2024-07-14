@@ -28,12 +28,6 @@ export default async function CreateProject(
         name: name,
         description: description,
         alertflow_runners: alertflowRunners,
-        members: [
-          {
-            role: "Owner",
-            email: userData.email,
-          },
-        ],
       }),
     });
     const data = await res.json();

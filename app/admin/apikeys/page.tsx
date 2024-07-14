@@ -7,7 +7,7 @@ export default async function AdminApiKeysPage() {
 
   return (
     <>
-      <ApiKeysList apikeys={apikeys} projects={projects} />
+      <ApiKeysList apikeys={apikeys} projects={projects.projects} />
     </>
   );
 }

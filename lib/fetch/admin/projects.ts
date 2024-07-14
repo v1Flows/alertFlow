@@ -20,7 +20,10 @@ export default async function AdminGetProjects() {
     });
     const data = await res.json();
 
-    return data.projects;
+    return {
+      projects: data.projects,
+      members: data.members,
+    };
   } catch (error) {
     return { error: "Failed to fetch data" };
   }
