@@ -10,15 +10,8 @@ import {
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Snippet,
   useDisclosure,
 } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import React from "react";
 import TimeAgo from "react-timeago";
@@ -27,10 +20,8 @@ import {
   VerticalDotsIcon,
   DeleteDocumentIcon,
   CopyDocumentIcon,
-  InfoIcon,
   PlusIcon,
 } from "@/components/icons";
-import DeleteProjectRunner from "@/lib/fetch/project/DELETE/DeleteRunner";
 import CreateRunnerModal from "@/components/functions/runner/create";
 import DeleteRunnerModal from "@/components/functions/runner/delete";
 
@@ -174,6 +165,12 @@ export default function Runners({ runners, project, settings }: any) {
                       )}
                       {runner.last_heartbeat === "0001-01-01T00:00:00Z" &&
                         "N/A"}
+                    </p>
+                    <p className="text-sm">Avl. Actions:</p>
+                    <p className="text-sm">{runner.available_actions.length}</p>
+                    <p className="text-sm">Avl. Payload Injectors:</p>
+                    <p className="text-sm">
+                      {runner.available_payload_injectors.length}
                     </p>
                   </div>
                 </CardBody>

@@ -10,9 +10,12 @@ import {
   Tooltip,
   Chip,
   Pagination,
+  useDisclosure,
+  Button,
 } from "@nextui-org/react";
 
-import AddMemberModal from "@/components/dashboard/projects/project/modals/AddMember";
+import AddProjectMemberModal from "@/components/functions/projects/members";
+import { PlusIcon } from "@/components/icons";
 
 import EditProjectMemberModal from "../modals/EditMember";
 import DeleteMemberModal from "../modals/DeleteMember";
@@ -24,6 +27,8 @@ const statusColorMap: any = {
 };
 
 export default function ProjectMembers({ project, settings }: any) {
+  const addProjectMemberModal = useDisclosure();
+
   // pagination
   const [page, setPage] = React.useState(1);
   const rowsPerPage = 7;
@@ -90,52 +95,64 @@ export default function ProjectMembers({ project, settings }: any) {
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col items-end justify-center gap-4">
-        <AddMemberModal project={project} settings={settings} />
+        <Button
+          color="primary"
+          startContent={<PlusIcon />}
+          onPress={() => addProjectMemberModal.onOpen()}
+        >
+          Add Member
+        </Button>
       </div>
     );
   }, []);
 
   return (
-    <Table
-      aria-label="Example table with custom cells"
-      bottomContent={
-        <div className="flex w-full justify-center">
-          <Pagination
-            isCompact
-            showControls
-            showShadow
-            color="primary"
-            page={page}
-            total={pages}
-            onChange={(page) => setPage(page)}
-          />
-        </div>
-      }
-      classNames={{
-        wrapper: "min-h-[222px]",
-      }}
-      topContent={topContent}
-    >
-      <TableHeader>
-        <TableColumn key="name" align="start">
-          NAME
-        </TableColumn>
-        <TableColumn key="role" align="start">
-          ROLE
-        </TableColumn>
-        <TableColumn key="actions" align="center">
-          ACTIONS
-        </TableColumn>
-      </TableHeader>
-      <TableBody emptyContent={"No rows to display."} items={items}>
-        {(item: any) => (
-          <TableRow key={item.email}>
-            {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
-            )}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+    <>
+      <Table
+        aria-label="Example table with custom cells"
+        bottomContent={
+          <div className="flex w-full justify-center">
+            <Pagination
+              isCompact
+              showControls
+              showShadow
+              color="primary"
+              page={page}
+              total={pages}
+              onChange={(page) => setPage(page)}
+            />
+          </div>
+        }
+        classNames={{
+          wrapper: "min-h-[222px]",
+        }}
+        topContent={topContent}
+      >
+        <TableHeader>
+          <TableColumn key="name" align="start">
+            NAME
+          </TableColumn>
+          <TableColumn key="role" align="start">
+            ROLE
+          </TableColumn>
+          <TableColumn key="actions" align="center">
+            ACTIONS
+          </TableColumn>
+        </TableHeader>
+        <TableBody emptyContent={"No rows to display."} items={items}>
+          {(item: any) => (
+            <TableRow key={item.email}>
+              {(columnKey) => (
+                <TableCell>{renderCell(item, columnKey)}</TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+      <AddProjectMemberModal
+        disclosure={addProjectMemberModal}
+        project={project}
+      />
+    </>
   );
 }

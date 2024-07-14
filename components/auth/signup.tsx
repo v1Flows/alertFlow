@@ -3,22 +3,18 @@
 import React from "react";
 import {
   Button,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
+  Checkbox,
   Divider,
   Input,
   Link,
   useDisclosure,
+  Image,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { Icon } from "@iconify/react";
 
 import SignUpAPI from "@/lib/auth/signup";
-
-import { EyeFilledIcon, EyeSlashFilledIcon } from "../icons";
-import SuccessSignUpModal from "../functions/auth/successSignUp";
 
 export default function SignUp({ settings }: any) {
   const router = useRouter();
@@ -27,9 +23,13 @@ export default function SignUp({ settings }: any) {
   const [username, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [passwordConfirm, setPasswordConfirm] = React.useState("");
 
   const [isVisible, setIsVisible] = React.useState(false);
+  const [isConfirmVisible, setIsConfirmVisible] = React.useState(false);
+
   const toggleVisibility = () => setIsVisible(!isVisible);
+  const toggleConfirmVisibility = () => setIsConfirmVisible(!isConfirmVisible);
 
   const successSignUpModal = useDisclosure();
 
@@ -47,86 +47,147 @@ export default function SignUp({ settings }: any) {
   }
 
   return (
-    <>
-      <div className="flex h-screen items-center justify-center">
-        <Card isBlurred>
-          <CardHeader className="flex flex-col items-start justify-start">
-            <div className="flex items-center justify-center">
-              <p className="text-2xl font-bold">SignUp to&nbsp;</p>
-              <p className="text-2xl font-bold text-primary">AlertFlow</p>
-            </div>
-            <p className="text-sm text-default-500">
-              {" "}
-              Enter your informations to create an account.
-            </p>
-          </CardHeader>
-          <Divider />
-          <CardBody className="gap-4">
-            <div className="grid lg:grid-cols-2 gap-4">
-              <Input
-                isRequired
-                label="Username"
-                size="sm"
-                type="username"
-                value={username}
-                variant="flat"
-                onValueChange={setUsername}
-              />
-              <Input
-                isRequired
-                label="Email"
-                size="sm"
-                type="email"
-                value={email}
-                variant="flat"
-                onValueChange={setEmail}
-              />
-            </div>
+    <div className="flex h-full w-full items-center justify-center">
+      <div className="flex w-full max-w-sm flex-col gap-4 rounded-large">
+        <div className="flex flex-col items-center pb-6">
+          <Image
+            alt="Logo"
+            height={32}
+            radius="none"
+            shadow="none"
+            src={`/images/af_logo_white.png`}
+            width={32}
+          />
+          <p className="text-xl font-medium">Welcome</p>
+          <p className="text-small text-default-500">
+            Create an account to get started
+          </p>
+        </div>
+        <form
+          className="flex flex-col gap-3"
+          onSubmit={(e) => e.preventDefault()}
+        >
+          <div className="flex flex-col">
             <Input
               isRequired
+              classNames={{
+                base: "-mb-[2px]",
+                inputWrapper:
+                  "rounded-b-none data-[hover=true]:z-10 group-data-[focus-visible=true]:z-10",
+              }}
+              label="Username"
+              name="username"
+              placeholder="Enter your username"
+              type="text"
+              value={username}
+              variant="bordered"
+              onValueChange={setUsername}
+            />
+            <Input
+              isRequired
+              classNames={{
+                base: "-mb-[2px]",
+                inputWrapper:
+                  "rounded-none data-[hover=true]:z-10 group-data-[focus-visible=true]:z-10",
+              }}
+              label="Email Address"
+              name="email"
+              placeholder="Enter your email"
+              type="email"
+              value={email}
+              variant="bordered"
+              onValueChange={setEmail}
+            />
+            <Input
+              isRequired
+              classNames={{
+                base: "-mb-[2px]",
+                inputWrapper:
+                  "rounded-none data-[hover=true]:z-10 group-data-[focus-visible=true]:z-10",
+              }}
               endContent={
-                <button
-                  className="focus:outline-none"
-                  type="button"
-                  onClick={toggleVisibility}
-                >
+                <button type="button" onClick={toggleVisibility}>
                   {isVisible ? (
-                    <EyeSlashFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                    <Icon
+                      className="pointer-events-none text-2xl text-default-400"
+                      icon="solar:eye-closed-linear"
+                    />
                   ) : (
-                    <EyeFilledIcon className="text-2xl text-default-400 pointer-events-none" />
+                    <Icon
+                      className="pointer-events-none text-2xl text-default-400"
+                      icon="solar:eye-bold"
+                    />
                   )}
                 </button>
               }
               label="Password"
-              size="sm"
+              name="password"
+              placeholder="Enter your password"
               type={isVisible ? "text" : "password"}
               value={password}
-              variant="flat"
+              variant="bordered"
               onValueChange={setPassword}
             />
-          </CardBody>
-          <CardFooter className="flex flex-col gap-2">
-            <Button
-              fullWidth
-              color="primary"
-              isDisabled={!settings.signup}
-              isLoading={isLoading}
-              size="md"
-              variant="flat"
-              onClick={SignUpHandler}
-            >
-              Create an account
-            </Button>
-            <p className="text-sm text-default-500">
-              Already have an account?{" "}
-              <Link color="secondary" href="/" size="sm">
-                Sign in
-              </Link>
-            </p>
-          </CardFooter>
-        </Card>
+            <Input
+              isRequired
+              classNames={{
+                inputWrapper: "rounded-t-none",
+              }}
+              endContent={
+                <button type="button" onClick={toggleConfirmVisibility}>
+                  {isConfirmVisible ? (
+                    <Icon
+                      className="pointer-events-none text-2xl text-default-400"
+                      icon="solar:eye-closed-linear"
+                    />
+                  ) : (
+                    <Icon
+                      className="pointer-events-none text-2xl text-default-400"
+                      icon="solar:eye-bold"
+                    />
+                  )}
+                </button>
+              }
+              label="Confirm Password"
+              name="confirmPassword"
+              placeholder="Confirm your password"
+              type={isConfirmVisible ? "text" : "password"}
+              value={passwordConfirm}
+              variant="bordered"
+              onValueChange={setPasswordConfirm}
+            />
+          </div>
+          <Checkbox isRequired className="py-4" size="sm">
+            I agree with the&nbsp;
+            <Link href="#" size="sm">
+              Terms
+            </Link>
+            &nbsp; and&nbsp;
+            <Link href="#" size="sm">
+              Privacy Policy
+            </Link>
+          </Checkbox>
+          <Button
+            color="primary"
+            isLoading={isLoading}
+            type="submit"
+            onClick={SignUpHandler}
+          >
+            Sign Up
+          </Button>
+        </form>
+        <div className="flex items-center gap-4 py-2">
+          <Divider className="flex-1" />
+          <p className="shrink-0 text-tiny text-default-500">OR</p>
+          <Divider className="flex-1" />
+        </div>
+        <p className="text-center text-small">
+          Already have an account?&nbsp;
+          <Link href="#" size="sm">
+            Log In
+          </Link>
+        </p>
       </div>
-      <SuccessSignUpModal disclosure={successSignUpModal} />
-    </>
+    </div>
   );
 }

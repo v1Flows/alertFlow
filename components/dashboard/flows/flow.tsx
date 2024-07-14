@@ -34,7 +34,6 @@ export function Flow({
   runners,
   settings,
 }: any) {
-  const [stopReloading, setStopReloading] = React.useState(false);
   const editFlowModal = useDisclosure();
 
   return (
@@ -79,7 +78,6 @@ export function Flow({
               isDisabled={flow.disabled}
               variant="flat"
               onPress={() => {
-                setStopReloading(true);
                 editFlowModal.onOpen();
               }}
             >
@@ -210,7 +208,7 @@ export function Flow({
             </div>
           </div>
           <div className="w-full mt-6">
-            <FlowTabs flow={flow} payloads={payloads} />
+            <FlowTabs flow={flow} payloads={payloads} runners={runners} />
           </div>
         </>
       )}
