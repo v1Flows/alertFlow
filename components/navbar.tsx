@@ -253,6 +253,7 @@ export default function Nabar({ user, notifications, session, settings }: any) {
             </PopoverTrigger>
             <PopoverContent className="max-w-[90vw] p-0 sm:max-w-[380px]">
               <NotificationsCard
+                // @ts-ignore
                 className="w-full shadow-none"
                 incNotifications={notifications}
               />
@@ -296,6 +297,7 @@ export default function Nabar({ user, notifications, session, settings }: any) {
           </PopoverTrigger>
           <PopoverContent className="max-w-[90vw] p-0 sm:max-w-[380px]">
             <NotificationsCard
+              // @ts-ignore
               className="w-full shadow-none"
               incNotifications={notifications}
             />
