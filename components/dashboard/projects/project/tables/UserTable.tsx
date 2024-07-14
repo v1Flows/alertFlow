@@ -16,9 +16,9 @@ import {
 
 import AddProjectMemberModal from "@/components/functions/projects/members";
 import { PlusIcon } from "@/components/icons";
+import EditProjectMemberModal from "@/components/functions/projects/editMember";
 
-import EditProjectMemberModal from "../modals/EditMember";
-import DeleteMemberModal from "../modals/DeleteMember";
+import DeleteMemberModal from "../../../../functions/projects/removeMember";
 
 const statusColorMap: any = {
   Owner: "danger",
@@ -81,22 +81,14 @@ export default function ProjectMembers({ project, members, settings }: any) {
       case "actions":
         return (
           <div className="relative flex items-center justify-center gap-2">
-            <Tooltip content="Edit user">
+            <Tooltip content="Edit User">
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <EditProjectMemberModal
-                  mailInc={user.user_id}
-                  projectID={project.id}
-                  roleInc={user.role}
-                />
+                <EditProjectMemberModal projectID={project.id} user={user} />
               </span>
             </Tooltip>
-            <Tooltip color="danger" content="Delete user">
+            <Tooltip color="danger" content="Remove User">
               <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                <DeleteMemberModal
-                  mailInc={user.user_id}
-                  projectID={project.id}
-                  roleInc={user.role}
-                />
+                <DeleteMemberModal projectID={project.id} user={user} />
               </span>
             </Tooltip>
           </div>

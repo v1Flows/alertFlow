@@ -24,6 +24,10 @@ import {
   ModalBody,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+
+import AddProjectMember from "@/lib/fetch/project/POST/AddProjectMember";
 
 import UserCell from "./user-cell";
 
@@ -36,12 +40,14 @@ export default function AddProjectMemberModal({
   project: any;
   members: any;
 }) {
+  const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = disclosure;
 
   const [email, setEmail] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(
     new Set(["Viewer"]),
   );
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const permissionLabels: Record<string, string> = {
     Owner: "Owner",
@@ -70,8 +76,22 @@ export default function AddProjectMemberModal({
   );
 
   async function inviteMember() {
-    console.log(email)
-    console.log(selectedKeys)
+    const role = Array.from(selectedKeys)[0];
+
+    setIsLoading(true);
+
+    const res = await AddProjectMember(project.id, email, role.toString());
+
+    if (res.error) {
+      setIsLoading(false);
+      toast.error(res.error);
+    } else {
+      setIsLoading(false);
+      setEmail("");
+      onOpenChange();
+      router.refresh();
+      toast.success("Member invited successfully");
+    }
   }
 
   return (

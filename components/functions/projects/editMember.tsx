@@ -15,23 +15,20 @@ import {
   Card,
   CardHeader,
 } from "@nextui-org/react";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 import { EditIcon, InfoIcon } from "@/components/icons";
-import UpdateProjectMembers from "@/lib/fetch/project/PUT/UpdateProjectMembers";
 import { IconWrapper } from "@/lib/IconWrapper";
+import EditProjectMember from "@/lib/fetch/project/PUT/editProjectMember";
+import { toast } from "sonner";
 
-export default function EditProjectMemberModal({
-  projectID,
-  mailInc,
-  roleInc,
-}: any) {
+// import UpdateProjectMembers from "@/lib/fetch/project/PUT/UpdateProjectMembers";
+
+export default function EditProjectMemberModal({ projectID, user }: any) {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoginLoading, setIsLoginLoading] = useState(false);
-  const [mail, setMail] = React.useState(mailInc);
-  const [role, setRole] = React.useState(roleInc);
+  const [role, setRole] = React.useState(user.role);
 
   const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState("");
@@ -43,23 +40,13 @@ export default function EditProjectMemberModal({
   async function handleUpdateUser() {
     setIsLoginLoading(true);
 
-    const response = await UpdateProjectMembers({
-      id: projectID,
-      members: [
-        {
-          email: mail,
-          role: role,
-        },
-      ],
-    });
+    const response = await EditProjectMember(projectID, role, user.user_id);
 
     if (response.result === "success") {
-      setMail("");
-      setRole("");
       setError(false);
       setErrorText("");
       onOpenChange();
-      toast.success("Member added successfully");
+      toast.success("Member edited successfully");
       router.refresh();
     } else if (response.error) {
       setError(true);
@@ -94,13 +81,6 @@ export default function EditProjectMemberModal({
                     </CardHeader>
                   </Card>
                 )}
-                <Input
-                  label="User Email"
-                  placeholder="Enter the email of the user"
-                  value={mail}
-                  variant="bordered"
-                  onValueChange={setMail}
-                />
                 <Select
                   className="w-full"
                   label="Member Role"
@@ -131,7 +111,7 @@ export default function EditProjectMemberModal({
                   Cancel
                 </Button>
                 <Button
-                  color="primary"
+                  color="warning"
                   isLoading={isLoginLoading}
                   onPress={handleUpdateUser}
                 >
