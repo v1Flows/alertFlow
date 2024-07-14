@@ -227,7 +227,54 @@ export default function Nabar({ user, notifications, session, settings }: any) {
         <NavbarItem className="hidden sm:flex gap-2">
           <ThemeSwitch />
         </NavbarItem>
-        <NavbarItem className="flex">
+        {session && (
+          <NavbarItem className="flex">
+            <Popover offset={12} placement="bottom-end">
+              <PopoverTrigger>
+                <Button
+                  disableRipple
+                  isIconOnly
+                  className="overflow-visible"
+                  radius="full"
+                  variant="light"
+                >
+                  <Badge
+                    color="danger"
+                    content={notifications.filter((n: any) => !n.is_read).length}
+                    showOutline={false}
+                    size="md"
+                  >
+                    <Icon
+                      className="text-default-500"
+                      icon="solar:bell-linear"
+                      width={22}
+                    />
+                  </Badge>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="max-w-[90vw] p-0 sm:max-w-[380px]">
+                <NotificationsCard
+                  // @ts-ignore
+                  className="w-full shadow-none"
+                  incNotifications={notifications}
+                />
+              </PopoverContent>
+            </Popover>
+          </NavbarItem>
+        )}
+        <NavbarItem className="hidden sm:flex">
+          <Login
+            session={session}
+            settings={settings}
+            showSignUp={true}
+            user={user}
+          />
+        </NavbarItem>
+      </NavbarContent>
+
+      <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
+        <ThemeSwitch />
+        {session && (
           <Popover offset={12} placement="bottom-end">
             <PopoverTrigger>
               <Button
@@ -259,50 +306,7 @@ export default function Nabar({ user, notifications, session, settings }: any) {
               />
             </PopoverContent>
           </Popover>
-        </NavbarItem>
-        <NavbarItem className="hidden sm:flex">
-          <Login
-            session={session}
-            settings={settings}
-            showSignUp={true}
-            user={user}
-          />
-        </NavbarItem>
-      </NavbarContent>
-
-      <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
-        <ThemeSwitch />
-        <Popover offset={12} placement="bottom-end">
-          <PopoverTrigger>
-            <Button
-              disableRipple
-              isIconOnly
-              className="overflow-visible"
-              radius="full"
-              variant="light"
-            >
-              <Badge
-                color="danger"
-                content={notifications.filter((n: any) => !n.is_read).length}
-                showOutline={false}
-                size="md"
-              >
-                <Icon
-                  className="text-default-500"
-                  icon="solar:bell-linear"
-                  width={22}
-                />
-              </Badge>
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="max-w-[90vw] p-0 sm:max-w-[380px]">
-            <NotificationsCard
-              // @ts-ignore
-              className="w-full shadow-none"
-              incNotifications={notifications}
-            />
-          </PopoverContent>
-        </Popover>
+        )}
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
         />
