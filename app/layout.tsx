@@ -2,12 +2,12 @@ import React from "react";
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
 import clsx from "clsx";
+import { Toaster } from "sonner";
 
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 
 import { Providers } from "./providers";
-import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: {
