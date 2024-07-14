@@ -9,6 +9,7 @@ import Runners from "@/components/dashboard/projects/project/Runners";
 
 export default function ProjectTabs({
   project,
+  members,
   runners,
   apiKeys,
   settings,
@@ -34,7 +35,11 @@ export default function ProjectTabs({
               </div>
             }
           >
-            <ProjectMembers project={project} settings={settings} />
+            <ProjectMembers
+              members={members}
+              project={project}
+              settings={settings}
+            />
           </Tab>
           <Tab
             key="runners"

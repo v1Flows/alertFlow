@@ -1,14 +1,16 @@
 "use client";
 import React from "react";
-import { Tabs, Tab } from "@nextui-org/react";
+import { Tabs, Tab, useDisclosure, Button } from "@nextui-org/react";
 
-import { Flash, MailIcon, Activity } from "@/components/icons";
+import { Flash, MailIcon, Activity, PlusIcon } from "@/components/icons";
 import FlowPattern from "@/components/dashboard/flows/flow/pattern";
+import AddFlowActionModal from "@/components/functions/flows/addAction";
 
 import PayloadsTable from "./tables/payloads";
 
-export default function FlowTabs({ flow, payloads }: any) {
-  const [selected, setSelected] = React.useState("photos");
+export default function FlowTabs({ flow, payloads, runners }: any) {
+  const addFlowActionModal = useDisclosure();
+  const [selected, setSelected] = React.useState("actions");
 
   return (
     <main>
@@ -29,6 +31,15 @@ export default function FlowTabs({ flow, payloads }: any) {
               </div>
             }
           >
+            <div className="flex justify-end">
+              <Button
+                color="primary"
+                startContent={<PlusIcon />}
+                onPress={addFlowActionModal.onOpen}
+              >
+                Add Action
+              </Button>
+            </div>
             {flow.actions.length === 0 ? (
               <div className="flex flex-col items-center justify-center">
                 <p className="text-center text-default-400">No actions found</p>
@@ -65,6 +76,7 @@ export default function FlowTabs({ flow, payloads }: any) {
           </Tab>
         </Tabs>
       </div>
+      <AddFlowActionModal disclosure={addFlowActionModal} runners={runners} />
     </main>
   );
 }

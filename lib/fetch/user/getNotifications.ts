@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-export default async function GetProject(projectId: any) {
+export default async function GetUserNotifications(id: string) {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;
@@ -15,7 +15,7 @@ export default async function GetProject(projectId: any) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.API_ENDPOINT}/projects/${projectId}`,
+      `${process.env.API_ENDPOINT}/user/${id}/notifications`,
       {
         method: "GET",
         headers: headers,
@@ -23,11 +23,8 @@ export default async function GetProject(projectId: any) {
     );
     const data = await res.json();
 
-    return {
-      project: data.project,
-      members: data.members,
-    };
+    return data.notifications;
   } catch (error) {
-    return { error: "Failed to fetch data" };
+    return { error: "Failed to get user notifications" };
   }
 }

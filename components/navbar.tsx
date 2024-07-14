@@ -17,11 +17,16 @@ import {
   DropdownTrigger,
   Button,
   Image,
+  Popover,
+  PopoverTrigger,
+  Badge,
+  PopoverContent,
 } from "@nextui-org/react";
 import React from "react";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useIsSSR } from "@react-aria/ssr";
+import { Icon } from "@iconify/react";
 
 import Login from "@/components/auth/login";
 import { ThemeSwitch } from "@/components/theme-switch";
@@ -35,8 +40,9 @@ import {
   TagUser,
   Scale,
 } from "@/components/icons";
+import NotificationsCard from "@/components/notifications/notifications";
 
-export default function Nabar({ user, session, settings }: any) {
+export default function Nabar({ user, notifications, session, settings }: any) {
   const router = useRouter();
   const { theme } = useTheme();
   const isSSR = useIsSSR();
@@ -221,6 +227,38 @@ export default function Nabar({ user, session, settings }: any) {
         <NavbarItem className="hidden sm:flex gap-2">
           <ThemeSwitch />
         </NavbarItem>
+        <NavbarItem className="flex">
+          <Popover offset={12} placement="bottom-end">
+            <PopoverTrigger>
+              <Button
+                disableRipple
+                isIconOnly
+                className="overflow-visible"
+                radius="full"
+                variant="light"
+              >
+                <Badge
+                  color="danger"
+                  content={notifications.filter((n: any) => !n.is_read).length}
+                  showOutline={false}
+                  size="md"
+                >
+                  <Icon
+                    className="text-default-500"
+                    icon="solar:bell-linear"
+                    width={22}
+                  />
+                </Badge>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="max-w-[90vw] p-0 sm:max-w-[380px]">
+              <NotificationsCard
+                className="w-full shadow-none"
+                incNotifications={notifications}
+              />
+            </PopoverContent>
+          </Popover>
+        </NavbarItem>
         <NavbarItem className="hidden sm:flex">
           <Login
             session={session}
@@ -233,6 +271,36 @@ export default function Nabar({ user, session, settings }: any) {
 
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
         <ThemeSwitch />
+        <Popover offset={12} placement="bottom-end">
+          <PopoverTrigger>
+            <Button
+              disableRipple
+              isIconOnly
+              className="overflow-visible"
+              radius="full"
+              variant="light"
+            >
+              <Badge
+                color="danger"
+                content={notifications.filter((n: any) => !n.is_read).length}
+                showOutline={false}
+                size="md"
+              >
+                <Icon
+                  className="text-default-500"
+                  icon="solar:bell-linear"
+                  width={22}
+                />
+              </Badge>
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="max-w-[90vw] p-0 sm:max-w-[380px]">
+            <NotificationsCard
+              className="w-full shadow-none"
+              incNotifications={notifications}
+            />
+          </PopoverContent>
+        </Popover>
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
         />
