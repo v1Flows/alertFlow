@@ -29,7 +29,7 @@ export default function NotificationItem({ notification }: any) {
         </p>
         <p>{notification.body}</p>
         <time className="text-tiny text-default-400">
-          {notification.created_at}
+          {new Date(notification.created_at).toLocaleString()}
         </time>
       </div>
     </div>
