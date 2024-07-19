@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { Icon } from "@iconify/react";
 
 import SignUpAPI from "@/lib/auth/signup";
+import SuccessSignUpModal from "../functions/auth/successSignUp";
 
 export default function SignUp({ settings }: any) {
   const router = useRouter();
@@ -37,12 +38,12 @@ export default function SignUp({ settings }: any) {
     setIsLoading(true);
     const res = await SignUpAPI(email, username, password);
 
-    if (res.error) {
-      setIsLoading(false);
-      toast.error(res.error);
-    } else {
+    if (res.result === "success") {
       setIsLoading(false);
       successSignUpModal.onOpen();
+    } else {
+      setIsLoading(false);
+      toast.error(res.error);
     }
   }
 
@@ -188,6 +189,7 @@ export default function SignUp({ settings }: any) {
           </Link>
         </p>
       </div>
+      <SuccessSignUpModal disclosure={successSignUpModal} />
     </div>
   );
 }
