@@ -1,79 +1,130 @@
-import { Card, CardBody, CardHeader } from "@nextui-org/react";
+import {
+  Avatar,
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Chip,
+} from "@nextui-org/react";
+import { Blocks, FolderKanban, Forklift, Workflow } from "lucide-react";
 
 import { IconWrapper } from "@/lib/IconWrapper";
-import {
-  ChevronDown,
-  Lock,
-  Activity,
-  Flash,
-  Server,
-  TagUser,
-  Scale,
-} from "@/components/icons";
+import { Activity } from "@/components/icons";
 
 export default function HomeFeatures() {
   return (
     <main>
       <div className="grid lg:grid-cols-4 items-center justify-between gap-4">
-        <Card fullWidth>
-          <CardHeader className="justify-start gap-2 items-center">
-            <IconWrapper className="bg-success/10">
-              <Server className="text-success" fill="currentColor" size={25} />
-            </IconWrapper>
-            <p className="text-md font-bold">Projects</p>
-          </CardHeader>
-          <CardBody className="py-0 mb-3">
-            <p className="text-sm text-default-500">
-              Assign your Flows to Projects and grant other people within your
-              team access to them.
+        <Card
+          className="max-w-[320px] border-small border-default-100 p-3"
+          shadow="sm"
+        >
+          <CardBody className="px-4 pb-1">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex max-w-[80%] flex-col gap-1">
+                <p className="text-medium font-medium">Projects</p>
+                <p className="text-small text-default-500">
+                  By The AlertFlow Team
+                </p>
+              </div>
+              <Avatar className="bg-success" icon={<FolderKanban />} />
+            </div>
+            <p className="pt-4 text-small text-default-500">
+              Projects are your place to be. Invite other Users, create Runners,
+              Flows and so much more.
             </p>
           </CardBody>
+          <CardFooter className="justify-between gap-2">
+            <Button isDisabled size="sm" variant="faded">
+              Learn more
+            </Button>
+            <Chip color="success" variant="dot">
+              Projects
+            </Chip>
+          </CardFooter>
         </Card>
-        <Card fullWidth>
-          <CardHeader className="justify-start gap-2 items-center">
-            <IconWrapper className="bg-blue-600/10">
-              <Flash className="text-primary" fill="currentColor" size={25} />
-            </IconWrapper>
-            <p className="text-md font-bold">Flows</p>
-          </CardHeader>
-          <CardBody className="py-0 mb-3">
-            <p className="text-sm text-default-500">
-              Create Flows to automate your alarms and define workflows.
-              Workflows can be Webhooks, Send Mail, etc.
+        <Card
+          className="max-w-[320px] border-small border-default-100 p-3"
+          shadow="sm"
+        >
+          <CardBody className="px-4 pb-1">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex max-w-[80%] flex-col gap-1">
+                <p className="text-medium font-medium">Flows</p>
+                <p className="text-small text-default-500">
+                  By The AlertFlow Team
+                </p>
+              </div>
+              <Avatar className="bg-primary" icon={<Workflow />} />
+            </div>
+            <p className="pt-4 text-small text-default-500">
+              Flows trigger all your automations. Define what you need and we
+              take care of the rest.
             </p>
           </CardBody>
+          <CardFooter className="justify-between gap-2">
+            <Button isDisabled size="sm" variant="faded">
+              Learn more
+            </Button>
+            <Chip color="primary" variant="dot">
+              Flows
+            </Chip>
+          </CardFooter>
         </Card>
-        <Card fullWidth>
-          <CardHeader className="justify-start gap-2 items-center">
-            <IconWrapper className="bg-warning/10">
-              <Scale className="text-warning" fill="currentColor" size={25} />
-            </IconWrapper>
-            <p className="text-md font-bold">Self-Hosted Runners</p>
-          </CardHeader>
-          <CardBody className="py-0 mb-3">
-            <p className="text-sm text-default-500">
-              If you are working in an isolated network or have security
-              concerns, you can host your own runners to perform your flows.
+        <Card
+          className="max-w-[320px] border-small border-default-100 p-3"
+          shadow="sm"
+        >
+          <CardBody className="px-4 pb-1">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex max-w-[80%] flex-col gap-1">
+                <p className="text-medium font-medium">Self-Hosted Runners</p>
+                <p className="text-small text-default-500">
+                  By The AlertFlow Team
+                </p>
+              </div>
+              <Avatar className="bg-warning" icon={<Forklift />} />
+            </div>
+            <p className="pt-4 text-small text-default-500">
+              Runners are the executers of your automations. You can host your
+              own ones or ours.
             </p>
           </CardBody>
+          <CardFooter className="justify-between gap-2">
+            <Button isDisabled size="sm" variant="faded">
+              Learn more
+            </Button>
+            <Chip color="warning" variant="dot">
+              Runners
+            </Chip>
+          </CardFooter>
         </Card>
-        <Card fullWidth>
-          <CardHeader className="justify-start gap-2 items-center">
-            <IconWrapper className="bg-secondary/10">
-              <Activity
-                className="text-secondary"
-                fill="currentColor"
-                size={25}
-              />
-            </IconWrapper>
-            <p className="text-md font-bold">Plugins</p>
-          </CardHeader>
-          <CardBody className="py-0 mb-3">
-            <p className="text-sm text-default-500">
-              Add your own plugins to extend the AlertFlow Runner with new
-              actions and integrations.
+        <Card
+          className="max-w-[320px] border-small border-default-100 p-3"
+          shadow="sm"
+        >
+          <CardBody className="px-4 pb-1">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex max-w-[80%] flex-col gap-1">
+                <p className="text-medium font-medium">Plugins</p>
+                <p className="text-small text-default-500">By You & Us</p>
+              </div>
+              <Avatar className="bg-secondary" icon={<Blocks />} />
+            </div>
+            <p className="pt-4 text-small text-default-500">
+              Plugins can extend the functions of your automations and runners.
+              Use existing ones or create your own.
             </p>
           </CardBody>
+          <CardFooter className="justify-between gap-2">
+            <Button isDisabled size="sm" variant="faded">
+              Learn more
+            </Button>
+            <Chip color="secondary" variant="dot">
+              Plugins
+            </Chip>
+          </CardFooter>
         </Card>
       </div>
     </main>

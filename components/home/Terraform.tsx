@@ -15,7 +15,7 @@ export default function HomeTerraform() {
           your AlertFlow experience.
         </h2>
         <div className="mt-4">
-          <Button color="primary" radius="lg" size="sm" variant="flat">
+          <Button color="primary" radius="lg" size="sm" variant="flat" isDisabled>
             Learn more
           </Button>
         </div>
