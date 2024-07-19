@@ -4,6 +4,7 @@ import React from "react";
 import { Avatar, Badge } from "@nextui-org/react";
 
 import { cn } from "@/components/functions/cn/cn";
+import { ShieldAlertIcon } from "lucide-react";
 
 export default function NotificationItem({ notification }: any) {
   return (
@@ -20,7 +21,18 @@ export default function NotificationItem({ notification }: any) {
           placement="bottom-right"
           shape="circle"
         >
-          <Avatar color="default" size="sm" src="/images/af_logo_white.png" />
+          {notification.type === "adminMessage" && (
+            <Avatar
+              color="danger"
+              size="sm"
+              fallback={
+                <ShieldAlertIcon className="h-5 w-5" aria-hidden="true" />
+              }
+            />
+          )}
+          {notification.type === "" && (
+            <Avatar color="default" size="sm" src="/images/af_logo_white.png" />
+          )}
         </Badge>
       </div>
       <div className="flex flex-col gap-1">
@@ -32,6 +44,6 @@ export default function NotificationItem({ notification }: any) {
           {new Date(notification.created_at).toLocaleString()}
         </time>
       </div>
-    </div>
+    </div >
   );
 }
