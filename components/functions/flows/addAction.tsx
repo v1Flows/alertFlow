@@ -17,12 +17,13 @@ import {
   Select,
   SelectItem,
   Spacer,
+  Snippet,
 } from "@nextui-org/react";
 import React from "react";
 
 import VerticalSteps from "@/components/functions/steps/vertical-steps";
 import { cn } from "@/components/functions/cn/cn";
-import { PlusIcon } from "@/components/icons";
+import { DeleteDocumentIcon, PlusIcon } from "@/components/icons";
 
 import SupportCard from "./support-card";
 
@@ -88,6 +89,11 @@ export default function AddFlowActionModal({
   const [currentStep, setCurrentStep] = React.useState(0);
   const [isLoading, setLoading] = React.useState(false);
 
+  // inputs
+  const [name, setName] = React.useState("");
+  const [description, setDescription] = React.useState("");
+  const [status, setStatus] = React.useState("active");
+  const [action, setAction] = React.useState("");
   const [matchPatterns, setMatchPatterns] = React.useState([
     {
       key: "",
@@ -104,6 +110,20 @@ export default function AddFlowActionModal({
       react_on: "",
     },
   ]);
+
+  function createAction() {
+    setLoading(true);
+    console.log(
+      name,
+      description,
+      status,
+      action,
+      matchPatterns,
+      excludePatterns,
+    );
+
+    setLoading(false);
+  }
 
   return (
     <main>
@@ -166,6 +186,8 @@ export default function AddFlowActionModal({
                           radius="sm"
                           size="md"
                           type="email"
+                          value={name}
+                          onValueChange={setName}
                         />
                         <Input
                           label="Action Description"
@@ -174,10 +196,14 @@ export default function AddFlowActionModal({
                           radius="sm"
                           size="md"
                           type="email"
+                          value={description}
+                          onValueChange={setDescription}
                         />
                         <RadioGroup
                           description="Selected the status of your action."
                           label="Status"
+                          value={status}
+                          onValueChange={setStatus}
                         >
                           <div className="flex flex-warp gap-4">
                             <CustomRadio
@@ -202,10 +228,11 @@ export default function AddFlowActionModal({
                       <RadioGroup
                         description="Select any of the available actions."
                         label="Actions"
+                        value={action}
+                        onValueChange={setAction}
                       >
                         {runners.map((runner: any) => {
-                          return (
-                            runner.available_actions.length > 0 &&
+                          return runner.available_actions.length > 0 ? (
                             runner.available_actions.map((action: any) => (
                               <CustomRadio
                                 key={action.name}
@@ -215,6 +242,24 @@ export default function AddFlowActionModal({
                                 {action.name} | Runner: {runner.name}
                               </CustomRadio>
                             ))
+                          ) : (
+                            <div>
+                              <Card className="border border-danger">
+                                <CardHeader>
+                                  <p className="text-danger font-bold">
+                                    😕 Seems like there are no Actions
+                                    available.
+                                  </p>
+                                </CardHeader>
+                                <CardBody>
+                                  <p className="text-default-500">
+                                    Please check if you have a dedicated runner
+                                    assign to your flow and if that runner
+                                    exposes any actions
+                                  </p>
+                                </CardBody>
+                              </Card>
+                            </div>
                           );
                         })}
                       </RadioGroup>
@@ -224,8 +269,21 @@ export default function AddFlowActionModal({
                         <div className="flex flex-col gap-4">
                           {matchPatterns.map((pattern: any, index: number) => (
                             <Card key={index}>
-                              <CardHeader>
+                              <CardHeader className="flex justify-between">
                                 <p>Pattern {index + 1}</p>
+                                <Button
+                                  isIconOnly
+                                  color="danger"
+                                  variant="light"
+                                  onPress={() => {
+                                    setMatchPatterns([
+                                      ...matchPatterns.slice(0, index),
+                                      ...matchPatterns.slice(index + 1),
+                                    ]);
+                                  }}
+                                >
+                                  <DeleteDocumentIcon />
+                                </Button>
                               </CardHeader>
                               <CardBody>
                                 <div className="grid grid-cols-2 gap-4">
@@ -234,23 +292,64 @@ export default function AddFlowActionModal({
                                     radius="sm"
                                     size="sm"
                                     value={pattern.key}
+                                    onValueChange={(value) => {
+                                      setMatchPatterns([
+                                        ...matchPatterns.slice(0, index),
+                                        {
+                                          ...pattern,
+                                          key: value,
+                                        },
+                                        ...matchPatterns.slice(index + 1),
+                                      ]);
+                                    }}
                                   />
                                   <Input
                                     label="Group"
                                     radius="sm"
                                     size="sm"
                                     value={pattern.group}
+                                    onValueChange={(value) => {
+                                      setMatchPatterns([
+                                        ...matchPatterns.slice(0, index),
+                                        {
+                                          ...pattern,
+                                          group: value,
+                                        },
+                                        ...matchPatterns.slice(index + 1),
+                                      ]);
+                                    }}
                                   />
                                   <Input
                                     label="Value"
                                     radius="sm"
                                     size="sm"
                                     value={pattern.value}
+                                    onValueChange={(value) => {
+                                      setMatchPatterns([
+                                        ...matchPatterns.slice(0, index),
+                                        {
+                                          ...pattern,
+                                          value: value,
+                                        },
+                                        ...matchPatterns.slice(index + 1),
+                                      ]);
+                                    }}
                                   />
                                   <Select
                                     label="React On"
                                     radius="sm"
+                                    selectedKeys={pattern.react_on}
                                     size="sm"
+                                    onSelectionChange={(value) => {
+                                      setMatchPatterns([
+                                        ...matchPatterns.slice(0, index),
+                                        {
+                                          ...pattern,
+                                          react_on: value,
+                                        },
+                                        ...matchPatterns.slice(index + 1),
+                                      ]);
+                                    }}
                                   >
                                     <SelectItem
                                       key="firing"
@@ -299,8 +398,21 @@ export default function AddFlowActionModal({
                           {excludePatterns.map(
                             (pattern: any, index: number) => (
                               <Card key={index}>
-                                <CardHeader>
+                                <CardHeader className="flex justify-between">
                                   <p>Pattern {index + 1}</p>
+                                  <Button
+                                    isIconOnly
+                                    color="danger"
+                                    variant="light"
+                                    onPress={() => {
+                                      setExcludePatterns([
+                                        ...excludePatterns.slice(0, index),
+                                        ...excludePatterns.slice(index + 1),
+                                      ]);
+                                    }}
+                                  >
+                                    <DeleteDocumentIcon />
+                                  </Button>
                                 </CardHeader>
                                 <CardBody>
                                   <div className="grid grid-cols-2 gap-4">
@@ -309,23 +421,64 @@ export default function AddFlowActionModal({
                                       radius="sm"
                                       size="sm"
                                       value={pattern.key}
+                                      onValueChange={(value) => {
+                                        setExcludePatterns([
+                                          ...excludePatterns.slice(0, index),
+                                          {
+                                            ...pattern,
+                                            key: value,
+                                          },
+                                          ...excludePatterns.slice(index + 1),
+                                        ]);
+                                      }}
                                     />
                                     <Input
                                       label="Group"
                                       radius="sm"
                                       size="sm"
                                       value={pattern.group}
+                                      onValueChange={(value) => {
+                                        setExcludePatterns([
+                                          ...excludePatterns.slice(0, index),
+                                          {
+                                            ...pattern,
+                                            group: value,
+                                          },
+                                          ...excludePatterns.slice(index + 1),
+                                        ]);
+                                      }}
                                     />
                                     <Input
                                       label="Value"
                                       radius="sm"
                                       size="sm"
                                       value={pattern.value}
+                                      onValueChange={(value) => {
+                                        setExcludePatterns([
+                                          ...excludePatterns.slice(0, index),
+                                          {
+                                            ...pattern,
+                                            value: value,
+                                          },
+                                          ...excludePatterns.slice(index + 1),
+                                        ]);
+                                      }}
                                     />
                                     <Select
                                       label="React On"
                                       radius="sm"
+                                      selectedKeys={pattern.react_on}
                                       size="sm"
+                                      onSelectionChange={(value) => {
+                                        setExcludePatterns([
+                                          ...excludePatterns.slice(0, index),
+                                          {
+                                            ...pattern,
+                                            react_on: value,
+                                          },
+                                          ...excludePatterns.slice(index + 1),
+                                        ]);
+                                      }}
                                     >
                                       <SelectItem
                                         key="firing"
@@ -369,6 +522,24 @@ export default function AddFlowActionModal({
                         </div>
                       </div>
                     )}
+                    {currentStep === 4 && (
+                      <div>
+                        <p>Review the details below.</p>
+                        <div className="mt-4">
+                          <Snippet
+                            hideCopyButton
+                            hideSymbol
+                            className="w-full"
+                            size="lg"
+                          >
+                            <span>Name: {name}</span>
+                            <span>Description: {description}</span>
+                            <span>Status: {status}</span>
+                            <span>Action: {action}</span>
+                          </Snippet>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </ModalBody>
@@ -400,7 +571,7 @@ export default function AddFlowActionModal({
                   <Button
                     color="primary"
                     isLoading={isLoading}
-                    onPress={() => setCurrentStep(currentStep + 1)}
+                    onPress={() => createAction()}
                   >
                     Create Action
                   </Button>
