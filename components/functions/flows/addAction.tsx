@@ -37,6 +37,10 @@ const steps = [
     description: "Select any of the available actions.",
   },
   {
+    title: "Action Parameters",
+    description: "Enter the parameters of your action.",
+  },
+  {
     title: "Match Patterns",
     description: "Select the patterns you want to match.",
   },
@@ -266,6 +270,11 @@ export default function AddFlowActionModal({
                     )}
                     {currentStep === 2 && (
                       <div>
+                        <p>Number of Required Parameters:</p>
+                      </div>
+                    )}
+                    {currentStep === 3 && (
+                      <div>
                         <div className="flex flex-col gap-4">
                           {matchPatterns.map((pattern: any, index: number) => (
                             <Card key={index}>
@@ -392,7 +401,7 @@ export default function AddFlowActionModal({
                         </div>
                       </div>
                     )}
-                    {currentStep === 3 && (
+                    {currentStep === 4 && (
                       <div>
                         <div className="flex flex-col gap-4">
                           {excludePatterns.map(
@@ -522,7 +531,7 @@ export default function AddFlowActionModal({
                         </div>
                       </div>
                     )}
-                    {currentStep === 4 && (
+                    {currentStep === 5 && (
                       <div>
                         <p>Review the details below.</p>
                         <div className="mt-4">
