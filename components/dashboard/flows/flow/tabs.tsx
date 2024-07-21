@@ -63,7 +63,7 @@ export default function FlowTabs({ flow, executions, payloads, runners }: any) {
             }
           >
             {/* <Runners project={project} runners={runners} /> */}
-            <Executions executions={executions} />
+            <Executions executions={executions} flow={flow} />
           </Tab>
           <Tab
             key="payloads"

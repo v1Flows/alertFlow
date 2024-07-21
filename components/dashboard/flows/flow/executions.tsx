@@ -9,10 +9,13 @@ import {
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import TimeAgo from "react-timeago";
+import { useRouter } from "next/navigation";
 
 import { IconWrapper } from "@/lib/IconWrapper";
 
-export default function Executions({ executions }: any) {
+export default function Executions({ flow, executions }: any) {
+  const router = useRouter();
+
   function statusColor(execution: any) {
     if (execution.running) {
       return "primary";
@@ -34,7 +37,7 @@ export default function Executions({ executions }: any) {
   }
 
   return (
-    <main className="grid grid-cols-2 gap-4">
+    <main className="grid lg:grid-cols-2 gap-4">
       {executions.map((execution: any) => (
         <Card key={execution.id} fullWidth>
           <CardHeader className="justify-between">
@@ -104,6 +107,11 @@ export default function Executions({ executions }: any) {
               size="md"
               startContent={<Icon icon="solar:eye-broken" />}
               variant="flat"
+              onPress={() =>
+                router.push(
+                  `/dashboard/flows/${flow.id}/execution/${execution.id}`,
+                )
+              }
             >
               <span className="font-bold">Go to Execution</span>
             </Button>
