@@ -1,9 +1,12 @@
-import { title } from "@/components/primitives";
+import { cookies } from "next/headers";
 
-export default function DashboardHomePage() {
-  return (
-    <div>
-      <h1 className={title()}>Dashboard Home</h1>
-    </div>
-  );
+import { DashboardHome } from "@/components/dashboard/home";
+import GetUserStats from "@/lib/fetch/user/getStats";
+
+export default async function DashboardHomePage() {
+  const user = JSON.parse(cookies().get("user")?.value || "{}");
+
+  const stats = await GetUserStats(user.id);
+
+  return <DashboardHome stats={stats} />;
 }
