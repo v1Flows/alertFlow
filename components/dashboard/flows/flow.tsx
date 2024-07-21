@@ -12,7 +12,6 @@ import React from "react";
 
 import Reloader from "@/components/reloader/Reloader";
 import FlowBreadcrumbs from "@/components/dashboard/flows/flow/breadcrumbs";
-import { subtitle } from "@/components/primitives";
 import { IconWrapper } from "@/lib/IconWrapper";
 import {
   InfoIcon,
@@ -64,10 +63,7 @@ export function Flow({
           </div>
           <div className="flex items-end justify-between mb-4 mt-2">
             <div>
-              <h1
-                className={subtitle({ className: "mb-0" })}
-                style={{ color: "violet" }}
-              >
+              <h1 className="text-2xl font-bold mb-0 text-primary">
                 {flow.name}
               </h1>
               <p className="text-sm text-default-500">{flow.description}</p>
@@ -208,7 +204,12 @@ export function Flow({
             </div>
           </div>
           <div className="w-full mt-6">
-            <FlowTabs flow={flow} payloads={payloads} runners={runners} />
+            <FlowTabs
+              executions={executions}
+              flow={flow}
+              payloads={payloads}
+              runners={runners}
+            />
           </div>
         </>
       )}

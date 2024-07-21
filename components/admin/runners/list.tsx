@@ -76,7 +76,7 @@ export function SelfHostedRunnerList({ runners, projects }: any) {
       case "project":
         return (
           <div>
-            <p>{projects.find((p: any) => p.id === runner.project_id).name}</p>
+            <p>{projects.find((p: any) => p.id === runner.project_id)?.name}</p>
             <p className="text-xs text-default-400">{runner.project_id}</p>
           </div>
         );

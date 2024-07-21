@@ -17,7 +17,7 @@ export default function PayloadModal({ payload }: any) {
 
   return (
     <>
-      <Button color="primary" size="sm" variant="flat" onPress={onOpen}>
+      <Button color="primary" size="sm" variant="shadow" onPress={onOpen}>
         <EyeIcon />
         Show Payload
       </Button>

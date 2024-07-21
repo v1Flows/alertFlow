@@ -35,12 +35,16 @@ import {
 } from "@/components/icons";
 import { setSession } from "@/lib/setSession";
 import { IconWrapper } from "@/lib/IconWrapper";
+import LoginAPI from "@/lib/auth/login";
 
 export default function Login({ user, session, showSignUp, settings }: any) {
   const router = useRouter();
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoginLoading, setIsLoginLoading] = useState(false);
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
   const [error, setError] = useState(false);
@@ -53,38 +57,16 @@ export default function Login({ user, session, showSignUp, settings }: any) {
     setError(false);
     setErrorText("");
 
-    const emailInput = document.getElementsByName(
-      "email",
-    )[0] as HTMLInputElement;
-    const email = emailInput.value;
+    const res = await LoginAPI(email, password);
 
-    const passwordInput = document.getElementsByName(
-      "password",
-    )[0] as HTMLInputElement;
-    const password = passwordInput.value;
-
-    const response = await fetch(process.env.API_ENDPOINT + "/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    });
-
-    const data = await response.json();
-
-    setSession(data.token, data.user, data.expires_at);
-
-    if (data.token) {
+    if (!res.error) {
+      setSession(res.token, res.user, res.expires_at);
       setIsLoginLoading(false);
       onOpenChange();
     } else {
       setIsLoginLoading(false);
       setError(true);
-      setErrorText(data.error);
+      setErrorText(res.error);
     }
   }
 
@@ -242,7 +224,9 @@ export default function Login({ user, session, showSignUp, settings }: any) {
                       name="email"
                       placeholder="Enter your email"
                       type="email"
+                      value={email}
                       variant="bordered"
+                      onValueChange={setEmail}
                     />
                     <Input
                       required
@@ -253,7 +237,9 @@ export default function Login({ user, session, showSignUp, settings }: any) {
                       name="password"
                       placeholder="Enter your password"
                       type="password"
+                      value={password}
                       variant="bordered"
+                      onValueChange={setPassword}
                     />
                     <div className="flex py-2 px-1 justify-between">
                       <Checkbox
