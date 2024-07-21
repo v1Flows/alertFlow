@@ -208,7 +208,12 @@ export function Flow({
             </div>
           </div>
           <div className="w-full mt-6">
-            <FlowTabs flow={flow} payloads={payloads} runners={runners} />
+            <FlowTabs
+              executions={executions}
+              flow={flow}
+              payloads={payloads}
+              runners={runners}
+            />
           </div>
         </>
       )}

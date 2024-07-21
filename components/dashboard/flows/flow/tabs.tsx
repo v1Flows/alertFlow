@@ -7,8 +7,9 @@ import FlowPattern from "@/components/dashboard/flows/flow/pattern";
 import AddFlowActionModal from "@/components/functions/flows/addAction";
 
 import PayloadsTable from "./tables/payloads";
+import Executions from "./executions";
 
-export default function FlowTabs({ flow, payloads, runners }: any) {
+export default function FlowTabs({ flow, executions, payloads, runners }: any) {
   const addFlowActionModal = useDisclosure();
   const [selected, setSelected] = React.useState("actions");
 
@@ -62,6 +63,7 @@ export default function FlowTabs({ flow, payloads, runners }: any) {
             }
           >
             {/* <Runners project={project} runners={runners} /> */}
+            <Executions executions={executions} />
           </Tab>
           <Tab
             key="payloads"
@@ -72,7 +74,12 @@ export default function FlowTabs({ flow, payloads, runners }: any) {
               </div>
             }
           >
-            <PayloadsTable payloads={payloads} />
+            <PayloadsTable
+              executions={executions}
+              flow={flow}
+              payloads={payloads}
+              runners={runners}
+            />
           </Tab>
         </Tabs>
       </div>
