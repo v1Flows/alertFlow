@@ -31,6 +31,7 @@ import {
 import CreateRunnerModal from "@/components/functions/runner/create";
 import DeleteRunnerModal from "@/components/functions/runner/delete";
 import ChangeRunnerStatusModal from "@/components/functions/runner/changeStatus";
+import EditRunnerModal from "@/components/functions/runner/edit";
 
 export function AlertflowRunnerList({ runners }: any) {
   const router = useRouter();
@@ -38,6 +39,7 @@ export function AlertflowRunnerList({ runners }: any) {
   const [status, setStatus] = React.useState(false);
   const [targetRunner, setTargetRunner] = React.useState({} as any);
   const addRunnerModal = useDisclosure();
+  const editRunnerModal = useDisclosure();
   const changeStatusModal = useDisclosure();
   const deleteRunnerModal = useDisclosure();
 
@@ -152,12 +154,15 @@ export function AlertflowRunnerList({ runners }: any) {
                     key="edit"
                     className="text-warning"
                     color="warning"
-                    description="Apply changes to this project"
                     startContent={
                       <EditDocumentIcon
                         className={cn(iconClasses, "text-warning")}
                       />
                     }
+                    onClick={() => {
+                      setTargetRunner(runner);
+                      editRunnerModal.onOpen();
+                    }}
                   >
                     Edit
                   </DropdownItem>
@@ -166,7 +171,6 @@ export function AlertflowRunnerList({ runners }: any) {
                       key="disable"
                       className="text-success"
                       color="success"
-                      description="Enable runner"
                       startContent={
                         <LockIcon className={cn(iconClasses, "text-success")} />
                       }
@@ -183,7 +187,6 @@ export function AlertflowRunnerList({ runners }: any) {
                       key="disable"
                       className="text-danger"
                       color="danger"
-                      description="Disable runner"
                       startContent={
                         <LockIcon className={cn(iconClasses, "text-danger")} />
                       }
@@ -202,7 +205,6 @@ export function AlertflowRunnerList({ runners }: any) {
                     key="delete"
                     className="text-danger"
                     color="danger"
-                    description="Permanently delete this project"
                     startContent={
                       <DeleteDocumentIcon
                         className={cn(iconClasses, "text-danger")}
@@ -305,6 +307,7 @@ export function AlertflowRunnerList({ runners }: any) {
         disclosure={addRunnerModal}
         project={"none"}
       />
+      <EditRunnerModal disclosure={editRunnerModal} runner={targetRunner} />
       <ChangeRunnerStatusModal
         disclosure={changeStatusModal}
         runner={targetRunner}

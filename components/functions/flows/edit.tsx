@@ -167,8 +167,8 @@ export default function EditFlowModal({
                   <div className="flex flex-col gap-1">
                     <p className="text-medium">Limit Runner</p>
                     <p className="text-tiny text-default-400">
-                      Do you want to use a specific runner to execute your
-                      actions on?
+                      Do you want to use a certain runner to run your
+                      executions?
                     </p>
                   </div>
                 </Switch>
@@ -180,9 +180,13 @@ export default function EditFlowModal({
                     variant="bordered"
                     onSelectionChange={handleSelectRunner}
                   >
-                    {runners.map((runner: any) => (
-                      <SelectItem key={runner.id}>{runner.name}</SelectItem>
-                    ))}
+                    {runners
+                      .filter(
+                        (runner: any) => runner.alertflow_runner === false,
+                      )
+                      .map((runner: any) => (
+                        <SelectItem key={runner.id}>{runner.name}</SelectItem>
+                      ))}
                   </Select>
                 )}
               </ModalBody>

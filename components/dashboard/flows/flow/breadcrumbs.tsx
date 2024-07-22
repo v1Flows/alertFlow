@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
+import { Breadcrumbs, BreadcrumbItem, Snippet } from "@nextui-org/react";
 
 import { Flash, HomeIcon } from "@/components/icons";
 
@@ -19,7 +19,11 @@ export default function FlowBreadcrumbs({ id }: any) {
       >
         Flows
       </BreadcrumbItem>
-      <BreadcrumbItem href={`/dashboard/flows/${id}`}>{id}</BreadcrumbItem>
+      <BreadcrumbItem href={`/dashboard/flows/${id}`}>
+        <Snippet hideSymbol className="bg-transparent" size="sm" variant="flat">
+          {id}
+        </Snippet>
+      </BreadcrumbItem>
     </Breadcrumbs>
   );
 }

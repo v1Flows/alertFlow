@@ -33,7 +33,7 @@ export default function FunctionDeletePayloadModal({
 
   async function deletePayload() {
     setIsDeleteLoading(true);
-    const res = await DeletePayload(flow.id, payload);
+    const res = await DeletePayload(flow.id, payload.id);
 
     if (res.error) {
       setIsDeleteLoading(false);
@@ -69,7 +69,7 @@ export default function FunctionDeletePayloadModal({
                 </p>
                 <Divider />
                 <Snippet hideCopyButton hideSymbol>
-                  <span>ID: {payload}</span>
+                  <span>ID: {payload.id}</span>
                 </Snippet>
               </ModalBody>
               <ModalFooter>

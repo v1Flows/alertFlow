@@ -1,13 +1,14 @@
 "use client";
 import React from "react";
 import { Tabs, Tab, useDisclosure, Button } from "@nextui-org/react";
+import { Icon } from "@iconify/react";
 
-import { Flash, MailIcon, Activity, PlusIcon } from "@/components/icons";
+import { Flash, PlusIcon } from "@/components/icons";
 import FlowPattern from "@/components/dashboard/flows/flow/pattern";
 import AddFlowActionModal from "@/components/functions/flows/addAction";
 
-import PayloadsTable from "./tables/payloads";
 import Executions from "./executions";
+import Payloads from "./payloads";
 
 export default function FlowTabs({ flow, executions, payloads, runners }: any) {
   const addFlowActionModal = useDisclosure();
@@ -57,29 +58,38 @@ export default function FlowTabs({ flow, executions, payloads, runners }: any) {
             key="executions"
             title={
               <div className="flex items-center space-x-2">
-                <Activity fill="currentColor" size={20} />
+                <Icon height={20} icon="solar:cpu-bolt-broken" width="20" />
                 <span>Executions</span>
               </div>
             }
           >
-            {/* <Runners project={project} runners={runners} /> */}
             <Executions executions={executions} flow={flow} />
           </Tab>
           <Tab
             key="payloads"
             title={
               <div className="flex items-center space-x-2">
-                <MailIcon className="h-5 w-5" />
+                <Icon
+                  height="20"
+                  icon="solar:letter-opened-broken"
+                  width="20"
+                />
                 <span>Payloads</span>
               </div>
             }
           >
-            <PayloadsTable
+            <Payloads
               executions={executions}
               flow={flow}
               payloads={payloads}
               runners={runners}
             />
+            {/* <PayloadsTable
+              executions={executions}
+              flow={flow}
+              payloads={payloads}
+              runners={runners}
+            /> */}
           </Tab>
         </Tabs>
       </div>
