@@ -11,10 +11,6 @@ import {
   Link,
   Divider,
   Chip,
-  Dropdown,
-  DropdownMenu,
-  DropdownItem,
-  DropdownTrigger,
   Button,
   Image,
   Popover,
@@ -30,7 +26,6 @@ import { Icon } from "@iconify/react";
 
 import Login from "@/components/auth/login";
 import { ThemeSwitch } from "@/components/theme-switch";
-import { PlayCircleIcon, TagIcon } from "@/components/icons";
 import {
   ChevronDown,
   Lock,
@@ -89,123 +84,28 @@ export default function Nabar({ user, notifications, session, settings }: any) {
         justify="start"
       >
         <NavbarItem isActive>
-          <Link aria-current="page" onPress={() => goTo("/")}>
+          <Link aria-current="page" color="primary" onPress={() => goTo("/")}>
             Home
           </Link>
         </NavbarItem>
-        <NavbarMenuItem>
-          <Dropdown>
-            <DropdownTrigger>
-              <Button
-                disableRipple
-                className="p-0 bg-transparent data-[hover=true]:bg-transparent"
-                endContent={icons.chevron}
-                isDisabled={!user?.email}
-                radius="sm"
-                variant="light"
-              >
-                Dashboard
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu aria-label="Static Actions">
-              <DropdownItem
-                key="home"
-                description="See your dashboard home page."
-                startContent={icons.activity}
-                onPress={() => goTo("/dashboard")}
-              >
-                Home
-              </DropdownItem>
-              <DropdownItem
-                key="projects"
-                description="Get a list of your projects and their status."
-                startContent={icons.server}
-                onPress={() => goTo("/dashboard/projects")}
-              >
-                Projects
-              </DropdownItem>
-              <DropdownItem
-                key="flows"
-                description="See all your flows and their details."
-                startContent={icons.flash}
-                onPress={() => goTo("/dashboard/flows")}
-              >
-                Flows
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
-        </NavbarMenuItem>
+        <NavbarItem>
+          <Link
+            aria-current="page"
+            color="foreground"
+            onPress={() => goTo("/dashboard")}
+          >
+            Dashboard
+          </Link>
+        </NavbarItem>
         {user.role === "Admin" && (
           <NavbarItem>
-            <Dropdown>
-              <DropdownTrigger>
-                <Button
-                  disableRipple
-                  className="p-0 bg-transparent data-[hover=true]:bg-transparent font-bold"
-                  color="danger"
-                  endContent={icons.chevron}
-                  isDisabled={!user?.email || user?.role !== "Admin"}
-                  radius="sm"
-                  variant="flat"
-                >
-                  Admin
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu aria-label="Static Actions">
-                <DropdownItem
-                  key="users"
-                  description="Manage users"
-                  startContent={icons.user}
-                  onPress={() => goTo("/admin/users")}
-                >
-                  Users
-                </DropdownItem>
-                <DropdownItem
-                  key="projects"
-                  description="Get a list of all projects and their status."
-                  startContent={icons.server}
-                  onPress={() => goTo("/admin/projects")}
-                >
-                  Projects
-                </DropdownItem>
-                <DropdownItem
-                  key="flows"
-                  description="See all flows and their details."
-                  startContent={icons.flash}
-                  onPress={() => goTo("/admin/flows")}
-                >
-                  Flows
-                </DropdownItem>
-                <DropdownItem
-                  key="runners"
-                  description="Check all runners, their status and more."
-                  startContent={
-                    <PlayCircleIcon className="h-8 w-8 text-warning" />
-                  }
-                  onPress={() => goTo("/admin/runners")}
-                >
-                  Runners
-                </DropdownItem>
-                <DropdownItem
-                  key="apikeys"
-                  description="See all api keys and disable them."
-                  startContent={
-                    <TagIcon className="h-8 w-8 text-default-500" />
-                  }
-                  onPress={() => goTo("/admin/apikeys")}
-                >
-                  API Keys
-                </DropdownItem>
-                <DropdownItem
-                  key="settings"
-                  description="Maintenance, signup and more."
-                  startContent={icons.scale}
-                  onPress={() => goTo("/admin/settings")}
-                >
-                  Page Settings
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+            <Link
+              aria-current="page"
+              color="foreground"
+              onPress={() => goTo("/admin")}
+            >
+              Admin
+            </Link>
           </NavbarItem>
         )}
       </NavbarContent>
@@ -240,7 +140,9 @@ export default function Nabar({ user, notifications, session, settings }: any) {
                 >
                   <Badge
                     color="danger"
-                    content={notifications.filter((n: any) => !n.is_read).length}
+                    content={
+                      notifications.filter((n: any) => !n.is_read).length
+                    }
                     showOutline={false}
                     size="md"
                   >
@@ -313,124 +215,29 @@ export default function Nabar({ user, notifications, session, settings }: any) {
       </NavbarContent>
 
       <NavbarMenu>
-        <NavbarMenuItem>
-          <Link color="foreground" onPress={() => goTo("/")}>
+        <NavbarItem isActive>
+          <Link color="primary" onPress={() => goTo("/")}>
             Home
           </Link>
-        </NavbarMenuItem>
-        <NavbarMenuItem>
-          <Dropdown>
-            <DropdownTrigger>
-              <Button
-                disableRipple
-                className="p-0 bg-transparent data-[hover=true]:bg-transparent"
-                endContent={icons.chevron}
-                isDisabled={!user?.email}
-                radius="sm"
-                variant="light"
-              >
-                Dashboard
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu aria-label="Static Actions">
-              <DropdownItem
-                key="home"
-                description="See your dashboard home page."
-                startContent={icons.activity}
-                onPress={() => goTo("/dashboard")}
-              >
-                Home
-              </DropdownItem>
-              <DropdownItem
-                key="projects"
-                description="Get a list of your projects and their status."
-                startContent={icons.server}
-                onPress={() => goTo("/dashboard/projects")}
-              >
-                Projects
-              </DropdownItem>
-              <DropdownItem
-                key="flows"
-                description="See all your flows and their details."
-                startContent={icons.flash}
-                onPress={() => goTo("/dashboard/flows")}
-              >
-                Flows
-              </DropdownItem>
-            </DropdownMenu>
-          </Dropdown>
-        </NavbarMenuItem>
+        </NavbarItem>
+        <NavbarItem>
+          <Link
+            aria-current="page"
+            color="foreground"
+            onPress={() => goTo("/dashboard")}
+          >
+            Dashboard
+          </Link>
+        </NavbarItem>
         {user.role === "Admin" && (
           <NavbarItem>
-            <Dropdown>
-              <DropdownTrigger>
-                <Button
-                  disableRipple
-                  className="p-0 bg-transparent data-[hover=true]:bg-transparent font-bold"
-                  color="danger"
-                  endContent={icons.chevron}
-                  isDisabled={!user?.email || user?.role !== "Admin"}
-                  radius="sm"
-                  variant="flat"
-                >
-                  Admin
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu aria-label="Static Actions">
-                <DropdownItem
-                  key="users"
-                  description="Manage users"
-                  startContent={icons.user}
-                  onPress={() => goTo("/admin/users")}
-                >
-                  Users
-                </DropdownItem>
-                <DropdownItem
-                  key="projects"
-                  description="Get a list of all projects and their status."
-                  startContent={icons.server}
-                  onPress={() => goTo("/admin/projects")}
-                >
-                  Projects
-                </DropdownItem>
-                <DropdownItem
-                  key="flows"
-                  description="See all flows and their details."
-                  startContent={icons.flash}
-                  onPress={() => goTo("/admin/flows")}
-                >
-                  Flows
-                </DropdownItem>
-                <DropdownItem
-                  key="runners"
-                  description="Check all runners, their status and more."
-                  startContent={
-                    <PlayCircleIcon className="h-8 w-8 text-warning" />
-                  }
-                  onPress={() => goTo("/admin/runners")}
-                >
-                  Runners
-                </DropdownItem>
-                <DropdownItem
-                  key="apikeys"
-                  description="See all api keys and disable them."
-                  startContent={
-                    <TagIcon className="h-8 w-8 text-default-500" />
-                  }
-                  onPress={() => goTo("/admin/apikeys")}
-                >
-                  API Keys
-                </DropdownItem>
-                <DropdownItem
-                  key="settings"
-                  description="Maintenance, signup and more."
-                  startContent={icons.scale}
-                  onPress={() => goTo("/admin/settings")}
-                >
-                  Page Settings
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+            <Link
+              aria-current="page"
+              color="foreground"
+              onPress={() => goTo("/admin")}
+            >
+              Admin
+            </Link>
           </NavbarItem>
         )}
         <NavbarMenuItem>
