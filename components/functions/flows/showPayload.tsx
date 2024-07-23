@@ -8,11 +8,8 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  useDisclosure,
   Snippet,
 } from "@nextui-org/react";
-
-import { EyeIcon } from "@/components/icons";
 
 export default function FunctionShowPayloadModal({
   disclosure,
@@ -35,10 +32,12 @@ export default function FunctionShowPayloadModal({
         <ModalContent className="w-full">
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">
-                Payload Content
-              </ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">Payload</ModalHeader>
               <ModalBody>
+                <div className="flex flex-col gap-1">
+                  <p className="text-sm text-default-500">Payload ID</p>
+                  <Snippet hideSymbol>{payload.id}</Snippet>
+                </div>
                 <Snippet hideSymbol>
                   <pre>{JSON.stringify(payload.payload, null, 2)}</pre>
                 </Snippet>

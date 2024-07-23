@@ -66,7 +66,7 @@ export function ApiKeysList({ apikeys, projects }: any) {
             {apikey.project_id !== "none" && (
               <span>
                 <p>
-                  {projects.find((p: any) => p.id === apikey.project_id)?.name}
+                  {projects.find((p: any) => p.id === apikey.project_id)?.name || "Unknown"}
                 </p>
                 <p className="text-sm text-default-400">{apikey.project_id}</p>
               </span>
@@ -226,10 +226,8 @@ export function ApiKeysList({ apikeys, projects }: any) {
           bottomContent={
             <div className="flex w-full justify-center">
               <Pagination
-                isCompact
                 showControls
                 showShadow
-                color="secondary"
                 page={page}
                 total={pages}
                 onChange={(page) => setPage(page)}

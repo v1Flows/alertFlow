@@ -1,3 +1,5 @@
+"use client"
+
 import {
   Button,
   Card,
@@ -19,7 +21,7 @@ export default function Payloads({ flow, executions, payloads, runners }: any) {
   const router = useRouter();
 
   const showPayloadModal = useDisclosure();
-  const deletePayloadMoal = useDisclosure();
+  const deletePayloadModal = useDisclosure();
   const [targetPayload, setTargetPayload] = React.useState({} as any);
 
   // pagination
@@ -40,7 +42,7 @@ export default function Payloads({ flow, executions, payloads, runners }: any) {
 
   const handleDelete = (payload: any) => {
     setTargetPayload(payload);
-    deletePayloadMoal.onOpen();
+    deletePayloadModal.onOpen();
   };
 
   return (
@@ -134,7 +136,7 @@ export default function Payloads({ flow, executions, payloads, runners }: any) {
         payload={targetPayload}
       />
       <FunctionDeletePayloadModal
-        disclosure={deletePayloadMoal}
+        disclosure={deletePayloadModal}
         flow={flow}
         payload={targetPayload}
       />

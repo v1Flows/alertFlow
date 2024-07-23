@@ -92,6 +92,7 @@ export default function Nabar({ user, notifications, session, settings }: any) {
           <Link
             aria-current="page"
             color="foreground"
+            isDisabled={!user?.email}
             onPress={() => goTo("/dashboard")}
           >
             Dashboard

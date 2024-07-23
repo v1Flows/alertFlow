@@ -7,11 +7,20 @@ import {
   Spacer,
   useDisclosure,
   Image,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  Card,
+  CardBody,
+  CardFooter,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import { useTheme } from "next-themes";
 import { useIsSSR } from "@react-aria/ssr";
 import { usePathname } from "next/navigation";
+
+import { siteConfig } from "@/config/site";
+import { Logout } from "@/lib/logout";
 
 import { sectionAdminItems, sectionItems } from "./sidebar-items";
 import SidebarDrawer from "./sidebar-drawer";
@@ -53,6 +62,10 @@ export default function SidebarMenu({
     ? `${currentPath1}_${currentPath2}`
     : currentPath1;
 
+  async function LogoutHandler() {
+    await Logout();
+  }
+
   const content = (
     <div className="relative flex h-full w-72 flex-1 flex-col p-6">
       <div className="flex items-center gap-2 px-2">
@@ -88,34 +101,68 @@ export default function SidebarMenu({
       />
 
       <Spacer y={8} />
+
+      {user.role === "Admin" && settings.maintenance && (
+        <Card className="mx-2 overflow-visible bg-danger-300" shadow="sm">
+          <CardBody className="items-center py-5 text-center">
+            <div className="flex items-center justify-center space-x-2">
+              <Icon icon="solar:danger-triangle-broken" width={20} />
+              <h3 className="text-medium font-medium">Maintenance</h3>
+            </div>
+            <p className="p-4 text-small">
+              Maintenance mode is currently active.
+            </p>
+          </CardBody>
+        </Card>
+      )}
+
+      <Spacer y={8} />
       <div className="mt-auto flex flex-col">
+        <Popover placement="top">
+          <PopoverTrigger>
+            <Button
+              fullWidth
+              className="justify-start text-default-500 data-[hover=true]:text-foreground"
+              startContent={
+                <Icon
+                  className="text-default-500"
+                  icon="solar:info-circle-line-duotone"
+                  width={24}
+                />
+              }
+              variant="light"
+            >
+              Help & Information
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent>
+            <div className="flex flex-wrap items-center gap-1 px-1 py-2">
+              <p className="text-small font-bold">Version:</p>
+              <p className="text-small">v{siteConfig.version}</p>
+            </div>
+          </PopoverContent>
+        </Popover>
         <Button
-          fullWidth
           className="justify-start text-default-500 data-[hover=true]:text-foreground"
           startContent={
             <Icon
               className="text-default-500"
-              icon="solar:info-circle-line-duotone"
+              icon="solar:logout-3-broken"
               width={24}
             />
           }
           variant="light"
-        >
-          Help & Information
-        </Button>
-        <Button
-          className="justify-start text-default-500 data-[hover=true]:text-foreground"
-          startContent={
-            <Icon
-              className="rotate-180 text-default-500"
-              icon="solar:minus-circle-line-duotone"
-              width={24}
-            />
-          }
-          variant="light"
+          onPress={LogoutHandler}
         >
           Log Out
         </Button>
+        <div className="flex items-center justify-center gap-1 pt-4">
+          <span className="text-xs text-default-600">Powered by</span>
+          <p className="text-sm text-primary font-bold">JustLab</p>
+          <p className="text-sm text-default-600">
+            &copy; {new Date().getFullYear()}
+          </p>
+        </div>
       </div>
     </div>
   );
