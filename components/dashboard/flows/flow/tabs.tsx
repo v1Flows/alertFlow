@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Tabs, Tab, useDisclosure, Button } from "@nextui-org/react";
+import { Tabs, Tab, useDisclosure, Button, Snippet } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 
 import { Flash, PlusIcon } from "@/components/icons";
@@ -33,8 +33,10 @@ export default function FlowTabs({ flow, executions, payloads, runners }: any) {
               </div>
             }
           >
-            <div className="flex justify-end">
+            <div className="flex">
               <Button
+                fullWidth
+                variant="flat"
                 color="primary"
                 startContent={<PlusIcon />}
                 onPress={addFlowActionModal.onOpen}
@@ -47,11 +49,11 @@ export default function FlowTabs({ flow, executions, payloads, runners }: any) {
                 <p className="text-center text-default-400">No actions found</p>
               </div>
             ) : (
-              <>
+              <div className="mt-4">
                 {flow.actions.map((action: any, index: number) => (
                   <FlowPattern key={index} action={action} />
                 ))}
-              </>
+              </div>
             )}
           </Tab>
           <Tab
@@ -88,16 +90,14 @@ export default function FlowTabs({ flow, executions, payloads, runners }: any) {
               payloads={payloads}
               runners={runners}
             />
-            {/* <PayloadsTable
-              executions={executions}
-              flow={flow}
-              payloads={payloads}
-              runners={runners}
-            /> */}
           </Tab>
         </Tabs>
       </div>
-      <AddFlowActionModal disclosure={addFlowActionModal} runners={runners} />
+      <AddFlowActionModal
+        disclosure={addFlowActionModal}
+        flowID={flow.id}
+        runners={runners}
+      />
     </main>
   );
 }

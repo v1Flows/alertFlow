@@ -22,6 +22,7 @@ import {
   TableRow,
   TableCell,
 } from "@nextui-org/react";
+import { Icon } from "@iconify/react";
 
 import { AnimatedBeam } from "@/components/magicui/animated-beam";
 
@@ -62,21 +63,35 @@ export default function FlowPattern({ action }: any) {
           >
             <div className="grid lg:grid-cols-6 w-full h-full gap-8">
               <div className="flex flex-col justify-center items-center">
-                <Circle ref={div1Ref}>
-                  <Library className="text-black" />
+                <Circle ref={div1Ref} className="bg-default">
+                  <Icon
+                    className="text-foreground"
+                    icon="solar:letter-opened-broken"
+                    width={24}
+                  />
                 </Circle>
                 <h4>Incoming Payload</h4>
               </div>
               <div className="flex flex-col justify-center items-center">
-                <Circle ref={div2Ref}>
-                  <Combine className="text-black" />
+                <Circle ref={div2Ref} className="bg-default">
+                  <Icon
+                    className="text-foreground"
+                    icon="solar:reorder-line-duotone"
+                    width={24}
+                  />
+                </Circle>
+                <h4>Start Execution</h4>
+              </div>
+              <div className="flex flex-col justify-center items-center">
+                <Circle ref={div3Ref} className="bg-default">
+                  <Combine className="text-foreground" />
                 </Circle>
                 <h4>Get Action Patterns</h4>
               </div>
-              <Popover showArrow backdrop="opaque" offset={10} placement="top">
+              <Popover backdrop="opaque" offset={10} placement="top">
                 <PopoverTrigger>
                   <div className="flex flex-col justify-center items-center">
-                    <Circle ref={div3Ref} className="bg-danger">
+                    <Circle ref={div4Ref} className="bg-danger">
                       <CircleSlash className="text-black" />
                     </Circle>
                     <h4>Pattern Exclude Check</h4>
@@ -91,8 +106,8 @@ export default function FlowPattern({ action }: any) {
                       <TableColumn>REACT ON</TableColumn>
                     </TableHeader>
                     <TableBody>
-                      {action.patterns &&
-                        action.patterns.exclude.map(
+                      {action.exclude_patterns &&
+                        action.exclude_patterns.map(
                           (pattern: any, index: number) => (
                             <TableRow key={index}>
                               <TableCell>{pattern.group}</TableCell>
@@ -109,7 +124,7 @@ export default function FlowPattern({ action }: any) {
               <Popover showArrow backdrop="opaque" offset={10} placement="top">
                 <PopoverTrigger>
                   <div className="flex flex-col justify-center items-center">
-                    <Circle ref={div4Ref} className="bg-green-500">
+                    <Circle ref={div5Ref} className="bg-green-500">
                       <BadgeCheck className="text-black" />
                     </Circle>
                     <h4>Pattern Match Check</h4>
@@ -124,8 +139,8 @@ export default function FlowPattern({ action }: any) {
                       <TableColumn>REACT ON</TableColumn>
                     </TableHeader>
                     <TableBody>
-                      {action.patterns &&
-                        action.patterns.match.map(
+                      {action.match_patterns &&
+                        action.match_patterns.map(
                           (pattern: any, index: number) => (
                             <TableRow key={index}>
                               <TableCell>{pattern.group}</TableCell>
@@ -139,17 +154,11 @@ export default function FlowPattern({ action }: any) {
                   </Table>
                 </PopoverContent>
               </Popover>
-              <div className="flex flex-col justify-center items-center">
-                <Circle ref={div5Ref}>
-                  <Rocket className="text-black" />
-                </Circle>
-                <h4>Start Execution</h4>
-              </div>
               <Popover showArrow backdrop="opaque" offset={10} placement="top">
                 <PopoverTrigger>
                   <div className="flex flex-col justify-center items-center">
-                    <Circle ref={div6Ref}>
-                      <Forklift className="text-black" />
+                    <Circle ref={div6Ref} className="bg-default">
+                      <Forklift className="text-foreground" />
                     </Circle>
                     <h4>{action.name}</h4>
                   </div>

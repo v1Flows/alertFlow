@@ -17,13 +17,22 @@ import {
   Select,
   SelectItem,
   Spacer,
-  Snippet,
+  TableColumn,
+  TableHeader,
+  TableCell,
+  TableBody,
+  TableRow,
+  Table,
 } from "@nextui-org/react";
 import React from "react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { Icon } from "@iconify/react";
 
 import VerticalSteps from "@/components/functions/steps/vertical-steps";
 import { cn } from "@/components/functions/cn/cn";
-import { DeleteDocumentIcon, PlusIcon } from "@/components/icons";
+import { PlusIcon } from "@/components/icons";
+import CreateFlowAction from "@/lib/fetch/flow/POST/CreateFlowAction";
 
 import SupportCard from "./support-card";
 
@@ -84,10 +93,14 @@ type matchPatterns = {
 export default function AddFlowActionModal({
   disclosure,
   runners,
+  flowID,
 }: {
   disclosure: UseDisclosureReturn;
   runners: any;
+  flowID: string;
 }) {
+  const router = useRouter();
+
   const { isOpen, onOpen, onOpenChange, onClose } = disclosure;
 
   const [currentStep, setCurrentStep] = React.useState(0);
@@ -115,16 +128,102 @@ export default function AddFlowActionModal({
     },
   ]);
 
-  function createAction() {
+  function countTotalAvailableActions() {
+    var actions = 0;
+
+    for (let i = 0; i < runners.length; i++) {
+      if (runners[i].available_actions.length > 0) {
+        actions++;
+      }
+    }
+
+    return actions;
+  }
+
+  function getUniqueActions() {
+    var actions = [] as any;
+
+    for (let i = 0; i < runners.length; i++) {
+      for (let j = 0; j < runners[i].available_actions.length; j++) {
+        if (!actions.includes(runners[i].available_actions[j])) {
+          actions.push(runners[i].available_actions[j]);
+        }
+      }
+    }
+
+    return actions;
+  }
+
+  function cancel() {
+    setName("");
+    setDescription("");
+    setStatus("active");
+    setAction("");
+    setMatchPatterns([
+      {
+        key: "",
+        group: "",
+        value: "",
+        react_on: "",
+      },
+    ]);
+    setExcludePatterns([
+      {
+        key: "",
+        group: "",
+        value: "",
+        react_on: "",
+      },
+    ]);
+    setCurrentStep(0);
+    onOpenChange();
+  }
+
+  async function createAction() {
     setLoading(true);
-    console.log(
-      name,
-      description,
-      status,
-      action,
-      matchPatterns,
-      excludePatterns,
-    );
+
+    const sendAction = {
+      name: name,
+      description: description,
+      status: status,
+      action: action,
+      match_patterns: matchPatterns,
+      exclude_patterns: excludePatterns,
+    };
+
+    const res = await CreateFlowAction(flowID, sendAction);
+
+    if (!res.error) {
+      setLoading(false);
+      setName("");
+      setDescription("");
+      setStatus("active");
+      setAction("");
+      setMatchPatterns([
+        {
+          key: "",
+          group: "",
+          value: "",
+          react_on: "",
+        },
+      ]);
+      setExcludePatterns([
+        {
+          key: "",
+          group: "",
+          value: "",
+          react_on: "",
+        },
+      ]);
+      setCurrentStep(0);
+      onOpenChange();
+      router.refresh();
+      toast.success("Action created successfully");
+    } else {
+      setLoading(false);
+      router.refresh();
+      toast.error(res.error);
+    }
 
     setLoading(false);
   }
@@ -229,44 +328,43 @@ export default function AddFlowActionModal({
                       </div>
                     )}
                     {currentStep === 1 && (
-                      <RadioGroup
-                        description="Select any of the available actions."
-                        label="Actions"
-                        value={action}
-                        onValueChange={setAction}
-                      >
-                        {runners.map((runner: any) => {
-                          return runner.available_actions.length > 0 ? (
-                            runner.available_actions.map((action: any) => (
+                      <>
+                        {countTotalAvailableActions() === 0 ? (
+                          <div>
+                            <Card className="border border-danger">
+                              <CardHeader>
+                                <p className="text-danger font-bold">
+                                  😕 Seems like there are no Actions available.
+                                </p>
+                              </CardHeader>
+                              <CardBody>
+                                <p className="text-default-500">
+                                  Please check if you have a dedicated runner
+                                  assign to your flow and if that runner exposes
+                                  any actions
+                                </p>
+                              </CardBody>
+                            </Card>
+                          </div>
+                        ) : (
+                          <RadioGroup
+                            description="Select any of the available actions."
+                            label="Actions"
+                            value={action}
+                            onValueChange={setAction}
+                          >
+                            {getUniqueActions().map((action: any) => (
                               <CustomRadio
                                 key={action.name}
                                 description={action.description}
                                 value={action.name}
                               >
-                                {action.name} | Runner: {runner.name}
+                                {action.name}
                               </CustomRadio>
-                            ))
-                          ) : (
-                            <div>
-                              <Card className="border border-danger">
-                                <CardHeader>
-                                  <p className="text-danger font-bold">
-                                    😕 Seems like there are no Actions
-                                    available.
-                                  </p>
-                                </CardHeader>
-                                <CardBody>
-                                  <p className="text-default-500">
-                                    Please check if you have a dedicated runner
-                                    assign to your flow and if that runner
-                                    exposes any actions
-                                  </p>
-                                </CardBody>
-                              </Card>
-                            </div>
-                          );
-                        })}
-                      </RadioGroup>
+                            ))}
+                          </RadioGroup>
+                        )}
+                      </>
                     )}
                     {currentStep === 2 && (
                       <div>
@@ -291,7 +389,10 @@ export default function AddFlowActionModal({
                                     ]);
                                   }}
                                 >
-                                  <DeleteDocumentIcon />
+                                  <Icon
+                                    icon="solar:trash-bin-trash-broken"
+                                    width={20}
+                                  />
                                 </Button>
                               </CardHeader>
                               <CardBody>
@@ -347,14 +448,14 @@ export default function AddFlowActionModal({
                                   <Select
                                     label="React On"
                                     radius="sm"
-                                    selectedKeys={pattern.react_on}
+                                    selectedKeys={[pattern.react_on]}
                                     size="sm"
                                     onSelectionChange={(value) => {
                                       setMatchPatterns([
                                         ...matchPatterns.slice(0, index),
                                         {
                                           ...pattern,
-                                          react_on: value,
+                                          react_on: value.currentKey,
                                         },
                                         ...matchPatterns.slice(index + 1),
                                       ]);
@@ -420,7 +521,10 @@ export default function AddFlowActionModal({
                                       ]);
                                     }}
                                   >
-                                    <DeleteDocumentIcon />
+                                    <Icon
+                                      icon="solar:trash-bin-trash-broken"
+                                      width={20}
+                                    />
                                   </Button>
                                 </CardHeader>
                                 <CardBody>
@@ -476,14 +580,14 @@ export default function AddFlowActionModal({
                                     <Select
                                       label="React On"
                                       radius="sm"
-                                      selectedKeys={pattern.react_on}
+                                      selectedKeys={[pattern.react_on]}
                                       size="sm"
                                       onSelectionChange={(value) => {
                                         setExcludePatterns([
                                           ...excludePatterns.slice(0, index),
                                           {
                                             ...pattern,
-                                            react_on: value,
+                                            react_on: value.currentKey,
                                           },
                                           ...excludePatterns.slice(index + 1),
                                         ]);
@@ -535,17 +639,96 @@ export default function AddFlowActionModal({
                       <div>
                         <p>Review the details below.</p>
                         <div className="mt-4">
-                          <Snippet
-                            hideCopyButton
-                            hideSymbol
-                            className="w-full"
-                            size="lg"
-                          >
-                            <span>Name: {name}</span>
-                            <span>Description: {description}</span>
-                            <span>Status: {status}</span>
-                            <span>Action: {action}</span>
-                          </Snippet>
+                          <div className="grid lg:grid-cols-2 gap-4">
+                            <Input
+                              isReadOnly
+                              label="Name"
+                              size="sm"
+                              value={name}
+                            />
+                            <Input
+                              isReadOnly
+                              label="Description"
+                              size="sm"
+                              value={description}
+                            />
+                            <Input
+                              isReadOnly
+                              label="Status"
+                              size="sm"
+                              value={status}
+                            />
+                            <Input
+                              isReadOnly
+                              label="Action"
+                              size="sm"
+                              value={action}
+                            />
+                          </div>
+                          <Spacer y={4} />
+                          <p className="font-bold mb-0 text-success">
+                            Match Patterns
+                          </p>
+                          {matchPatterns.filter((pattern: any) => pattern.key)
+                            .length === 0 ? (
+                            <p>Action will be triggered for all events.</p>
+                          ) : (
+                            <Table
+                              aria-label="Match Action Patterns"
+                              className="w-full"
+                            >
+                              <TableHeader>
+                                <TableColumn>GROUP</TableColumn>
+                                <TableColumn>KEY</TableColumn>
+                                <TableColumn>VALUE</TableColumn>
+                                <TableColumn>REACT ON</TableColumn>
+                              </TableHeader>
+                              <TableBody>
+                                {matchPatterns.map(
+                                  (pattern: any, index: number) => (
+                                    <TableRow key={index}>
+                                      <TableCell>{pattern.group}</TableCell>
+                                      <TableCell>{pattern.key}</TableCell>
+                                      <TableCell>{pattern.value}</TableCell>
+                                      <TableCell>{pattern.react_on}</TableCell>
+                                    </TableRow>
+                                  ),
+                                )}
+                              </TableBody>
+                            </Table>
+                          )}
+                          <Spacer y={4} />
+                          <p className="font-bold mb-0 text-danger">
+                            Exclude Patterns
+                          </p>
+                          {matchPatterns.filter((pattern: any) => pattern.key)
+                            .length === 0 ? (
+                            <p>Action will be triggered for all events.</p>
+                          ) : (
+                            <Table
+                              aria-label="Exclude Action Patterns"
+                              className="w-full"
+                            >
+                              <TableHeader>
+                                <TableColumn>GROUP</TableColumn>
+                                <TableColumn>KEY</TableColumn>
+                                <TableColumn>VALUE</TableColumn>
+                                <TableColumn>REACT ON</TableColumn>
+                              </TableHeader>
+                              <TableBody>
+                                {excludePatterns.map(
+                                  (pattern: any, index: number) => (
+                                    <TableRow key={index}>
+                                      <TableCell>{pattern.group}</TableCell>
+                                      <TableCell>{pattern.key}</TableCell>
+                                      <TableCell>{pattern.value}</TableCell>
+                                      <TableCell>{pattern.react_on}</TableCell>
+                                    </TableRow>
+                                  ),
+                                )}
+                              </TableBody>
+                            </Table>
+                          )}
                         </div>
                       </div>
                     )}
@@ -557,8 +740,7 @@ export default function AddFlowActionModal({
                   color="default"
                   variant="ghost"
                   onPress={() => {
-                    onClose();
-                    setCurrentStep(0);
+                    cancel();
                   }}
                 >
                   Cancel
