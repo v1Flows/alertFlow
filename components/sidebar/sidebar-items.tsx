@@ -82,7 +82,7 @@ export const sectionAdminItems: SidebarItem[] = [
       {
         key: "admin_executions",
         href: "/admin/executions",
-        icon: "solar:cpu-bolt-broken",
+        icon: "solar:reorder-line-duotone",
         title: "Executions",
       },
       {

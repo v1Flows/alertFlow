@@ -38,11 +38,17 @@ export function Execution({ flow, execution, runners, settings }: any) {
           key="1"
           aria-label="Incoming Payload"
           startContent={<Icon icon="solar:letter-opened-broken" width="24" />}
-          subtitle={new Date(payload.created_at).toLocaleString()}
+          subtitle={
+            payload ? new Date(payload.created_at).toLocaleString() : "N/A"
+          }
           title="Incoming Payload"
         >
           <Snippet fullWidth hideSymbol>
-            <pre>{JSON.stringify(payload.payload, null, 2)}</pre>
+            {payload ? (
+              <pre>{JSON.stringify(payload.payload, null, 2)}</pre>
+            ) : (
+              "No payload found"
+            )}
           </Snippet>
         </AccordionItem>
         <AccordionItem

@@ -8,7 +8,11 @@ export default async function DashboardProjectsPage() {
 
   return (
     <>
-      <ProjectsList projects={projects} settings={settings} />
+      <ProjectsList
+        pending_projects={projects.pending_projects}
+        projects={projects.projects}
+        settings={settings}
+      />
     </>
   );
 }

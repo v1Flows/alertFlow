@@ -124,7 +124,8 @@ export default function EditProjectModal({
                   Discard
                 </Button>
                 <Button
-                  color="primary"
+                  color="warning"
+                  variant="flat"
                   isLoading={isLoading}
                   onPress={updateProject}
                 >

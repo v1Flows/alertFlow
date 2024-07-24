@@ -20,7 +20,10 @@ export default async function GetProjects() {
     });
     const data = await res.json();
 
-    return data.projects;
+    return {
+      projects: data.projects,
+      pending_projects: data.pending_projects,
+    };
   } catch (error) {
     return { error: "Failed to fetch data" };
   }

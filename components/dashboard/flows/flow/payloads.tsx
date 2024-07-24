@@ -26,7 +26,7 @@ export default function Payloads({ flow, executions, payloads, runners }: any) {
 
   // pagination
   const [page, setPage] = React.useState(1);
-  const rowsPerPage = 6;
+  const rowsPerPage = 9;
   const pages = Math.ceil(payloads.length / rowsPerPage);
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -47,7 +47,7 @@ export default function Payloads({ flow, executions, payloads, runners }: any) {
 
   return (
     <main>
-      <div className="grid lg:grid-cols-2 gap-4">
+      <div className="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-4">
         {items.map((payload: any) => (
           <Card key={payload.id} fullWidth>
             <CardHeader className="flex items-center justify-between">
