@@ -1,3 +1,5 @@
+"use client"
+
 import {
   Button,
   Card,
@@ -19,12 +21,12 @@ export default function Payloads({ flow, executions, payloads, runners }: any) {
   const router = useRouter();
 
   const showPayloadModal = useDisclosure();
-  const deletePayloadMoal = useDisclosure();
+  const deletePayloadModal = useDisclosure();
   const [targetPayload, setTargetPayload] = React.useState({} as any);
 
   // pagination
   const [page, setPage] = React.useState(1);
-  const rowsPerPage = 6;
+  const rowsPerPage = 9;
   const pages = Math.ceil(payloads.length / rowsPerPage);
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -40,12 +42,12 @@ export default function Payloads({ flow, executions, payloads, runners }: any) {
 
   const handleDelete = (payload: any) => {
     setTargetPayload(payload);
-    deletePayloadMoal.onOpen();
+    deletePayloadModal.onOpen();
   };
 
   return (
     <main>
-      <div className="grid lg:grid-cols-2 gap-4">
+      <div className="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-4">
         {items.map((payload: any) => (
           <Card key={payload.id} fullWidth>
             <CardHeader className="flex items-center justify-between">
@@ -134,7 +136,7 @@ export default function Payloads({ flow, executions, payloads, runners }: any) {
         payload={targetPayload}
       />
       <FunctionDeletePayloadModal
-        disclosure={deletePayloadMoal}
+        disclosure={deletePayloadModal}
         flow={flow}
         payload={targetPayload}
       />

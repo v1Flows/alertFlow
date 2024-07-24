@@ -25,7 +25,7 @@ export default async function DashboardFlowPage({
         flow={flow}
         id={params.id}
         payloads={payloads}
-        projects={projects}
+        projects={projects.projects}
         runners={runners}
         settings={settings}
       />

@@ -58,7 +58,11 @@ export default function FlowTabs({ flow, executions, payloads, runners }: any) {
             key="executions"
             title={
               <div className="flex items-center space-x-2">
-                <Icon height={20} icon="solar:cpu-bolt-broken" width="20" />
+                <Icon
+                  height={20}
+                  icon="solar:reorder-line-duotone"
+                  width="20"
+                />
                 <span>Executions</span>
               </div>
             }

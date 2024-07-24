@@ -25,6 +25,7 @@ import { LibraryIcon } from "lucide-react";
 import CreateProject from "@/lib/fetch/project/POST/CreateProject";
 import { CheckIcon, InfoIcon } from "@/components/icons";
 import { IconWrapper } from "@/lib/IconWrapper";
+import { Icon } from "@iconify/react";
 
 export default function CreateProjectModal({
   disclosure,
@@ -91,8 +92,8 @@ export default function CreateProjectModal({
         <ModalContent className="w-full">
           {() => (
             <>
-              <ModalHeader className="flex flex-col gap-1">
-                Create new Project
+              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold">
+                <Icon icon="solar:box-broken" width={24} /> Create Project
               </ModalHeader>
               <ModalBody>
                 {error && (

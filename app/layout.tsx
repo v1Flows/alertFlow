@@ -45,18 +45,6 @@ export default function RootLayout({
           <Toaster richColors position="bottom-center" />
           <div className="relative flex flex-col h-screen">
             {children}
-            <footer className="w-full flex items-center justify-between py-3">
-              <div className="flex items-center justify-center gap-1 pl-4">
-                <span className="text-default-600">Powered by</span>
-                <p className="text-primary font-bold">JustLab</p>
-                <p className="text-default-600">
-                  &copy; {new Date().getFullYear()}
-                </p>
-              </div>
-              <p className="text-default-600 flex justify-end pr-4">
-                v{siteConfig.version}
-              </p>
-            </footer>
           </div>
         </Providers>
       </body>

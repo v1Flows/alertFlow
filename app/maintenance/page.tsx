@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 
 import { title, subtitle } from "@/components/primitives";
 import Login from "@/components/auth/login";
+import SparklesText from "@/components/magicui/sparkles-text";
 
 export default function MaintenancePage() {
   const user = JSON.parse(cookies().get("user")?.value || "{}");
@@ -9,9 +10,8 @@ export default function MaintenancePage() {
 
   return (
     <section className="flex h-screen items-center justify-center">
-      <div className="inline-block max-w-lg text-center justify-center">
-        <h1 className={title({ color: "blue" })}>Maintenance&nbsp;</h1>
-        <h1 className={title()}>Mode&nbsp;</h1>
+      <div className="inline-block text-center justify-center">
+        <SparklesText text="Maintenance Mode" />
         <h2 className={subtitle({ class: "mt-4" })}>
           We are currently in maintenance mode. Please come back later.
           Apologies for the inconvenience.

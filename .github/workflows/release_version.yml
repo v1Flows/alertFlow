@@ -10,10 +10,12 @@ jobs:
     runs-on: [self-hosted, alertflow]
     steps:
       - uses: actions/checkout@v4
+
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
           token: ${{ secrets.ACTIONS_TOKEN }}
+          body: ${{steps.github_release.outputs.changelog}}
   
       - name: Create pull request to main
         uses: thomaseizinger/create-pull-request@master

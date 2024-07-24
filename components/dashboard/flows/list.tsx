@@ -15,6 +15,8 @@ import {
   Chip,
   CardFooter,
   useDisclosure,
+  Select,
+  SelectItem,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 
@@ -33,10 +35,19 @@ import FunctionCreateFlow from "@/components/functions/flows/create";
 export default function FlowList({ flows, projects, settings }: any) {
   const router = useRouter();
 
+  const [projectFilter, setProjectFilter] = React.useState(new Set([]) as any);
+
   const [deleteFlow, setDeleteFlow] = React.useState({} as any);
   const deleteModal = useDisclosure();
-
   const newModal = useDisclosure();
+
+  const filteredFlows = flows.filter((flow: any) => {
+    if (projectFilter.size === 0) {
+      return true;
+    }
+
+    return projectFilter.has(flow.project_id);
+  });
 
   const copyFlowIDtoClipboard = (key: string) => {
     // eslint-disable-next-line no-undef
@@ -58,16 +69,33 @@ export default function FlowList({ flows, projects, settings }: any) {
           </p>
           <p className="text-2xl font-bold mb-0 text-primary">Flows</p>
         </div>
-        <Button
-          color="primary"
-          isDisabled={!settings.create_flows}
-          radius="sm"
-          startContent={<PlusIcon />}
-          variant="solid"
-          onPress={() => newModal.onOpen()}
-        >
-          New Flow
-        </Button>
+        <div className="flex items-center justify-end gap-4">
+          <Select
+            className="w-64"
+            placeholder="Select an project"
+            radius="sm"
+            selectedKeys={projectFilter}
+            selectionMode="multiple"
+            variant="faded"
+            onSelectionChange={(keys) => setProjectFilter(keys as any)}
+          >
+            {projects
+              .map((project: any) => (
+                <SelectItem key={project.id}>{project.name}</SelectItem>
+              ))
+              .sort()}
+          </Select>
+          <Button
+            color="primary"
+            isDisabled={!settings.create_flows}
+            radius="sm"
+            startContent={<PlusIcon />}
+            variant="solid"
+            onPress={() => newModal.onOpen()}
+          >
+            New Flow
+          </Button>
+        </div>
       </div>
       <Divider className="mb-4 mt-4" />
       {flows.error && (
@@ -84,8 +112,8 @@ export default function FlowList({ flows, projects, settings }: any) {
         </Card>
       )}
       {!flows.error && (
-        <div className="grid lg:grid-cols-2 gap-4">
-          {flows.map((flow: any) => (
+        <div className="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-4">
+          {filteredFlows.map((flow: any) => (
             <div key={flow.id} className="col-span-1">
               <Card
                 fullWidth
