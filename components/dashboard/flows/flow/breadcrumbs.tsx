@@ -2,22 +2,16 @@
 
 import React from "react";
 import { Breadcrumbs, BreadcrumbItem, Snippet } from "@nextui-org/react";
-
-import { Flash, HomeIcon } from "@/components/icons";
+import { Icon } from "@iconify/react";
 
 export default function FlowBreadcrumbs({ id }: any) {
   return (
     <Breadcrumbs>
-      <BreadcrumbItem href="/dashboard" startContent={<HomeIcon />}>
-        Dashboard
+      <BreadcrumbItem href="/dashboard">
+        <Icon icon="solar:clipboard-text-broken" width={20} />
       </BreadcrumbItem>
-      <BreadcrumbItem
-        href="/dashboard/flows"
-        startContent={
-          <Flash className="text-primary" fill="currentColor" size={15} />
-        }
-      >
-        Flows
+      <BreadcrumbItem href="/dashboard/flows">
+        <Icon icon="solar:book-bookmark-broken" width={20} />
       </BreadcrumbItem>
       <BreadcrumbItem href={`/dashboard/flows/${id}`}>
         <Snippet hideSymbol className="bg-transparent" size="sm" variant="flat">

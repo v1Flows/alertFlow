@@ -264,10 +264,8 @@ export function ProjectList({ projects, members }: any) {
           bottomContent={
             <div className="flex w-full justify-center">
               <Pagination
-                isCompact
                 showControls
                 showShadow
-                color="secondary"
                 page={page}
                 total={pages}
                 onChange={(page) => setPage(page)}

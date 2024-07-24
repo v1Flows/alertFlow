@@ -26,6 +26,7 @@ import { LibraryIcon } from "lucide-react";
 import { CheckIcon, Flash } from "@/components/icons";
 import GetProjectRunners from "@/lib/fetch/project/runners";
 import CreateFlow from "@/lib/fetch/flow/POST/CreateFlow";
+import { Icon } from "@iconify/react";
 
 export default function FunctionCreateFlow({
   projects,
@@ -109,8 +110,8 @@ export default function FunctionCreateFlow({
         <ModalContent className="w-full">
           {() => (
             <>
-              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-primary">
-                <Flash size={20} /> Create Flow
+              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold">
+                <Icon icon="solar:book-bookmark-broken" width={24} /> Create Flow
               </ModalHeader>
               <ModalBody>
                 <Input
@@ -181,9 +182,13 @@ export default function FunctionCreateFlow({
                     variant="bordered"
                     onSelectionChange={handleSelectRunner}
                   >
-                    {runners.map((runner: any) => (
-                      <SelectItem key={runner.id}>{runner.name}</SelectItem>
-                    ))}
+                    {runners
+                      .filter(
+                        (runner: any) => runner.alertflow_runner === false,
+                      )
+                      .map((runner: any) => (
+                        <SelectItem key={runner.id}>{runner.name}</SelectItem>
+                      ))}
                   </Select>
                 )}
               </ModalBody>

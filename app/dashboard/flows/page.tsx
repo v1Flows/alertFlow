@@ -11,7 +11,7 @@ export default async function DashboardFlowsPage() {
 
   return (
     <main>
-      <FlowList flows={flows} projects={projects} settings={settings} />
+      <FlowList flows={flows} projects={projects.projects} settings={settings} />
     </main>
   );
 }

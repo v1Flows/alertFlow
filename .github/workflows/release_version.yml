@@ -11,12 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build Changelog
-        id: github_release
-        uses: mikepenz/release-changelog-builder-action@v4
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
-
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:

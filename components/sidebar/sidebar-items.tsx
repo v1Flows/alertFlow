@@ -74,13 +74,25 @@ export const sectionAdminItems: SidebarItem[] = [
         title: "Runners",
       },
       {
-        key: "admin_api_keys",
+        key: "admin_payloads",
+        href: "/admin/payloads",
+        icon: "solar:letter-opened-broken",
+        title: "Payloads",
+      },
+      {
+        key: "admin_executions",
+        href: "/admin/executions",
+        icon: "solar:reorder-line-duotone",
+        title: "Executions",
+      },
+      {
+        key: "admin_apikeys",
         href: "/admin/apikeys",
         icon: "solar:key-square-2-broken",
         title: "API Keys",
       },
       {
-        key: "admin_page_settings",
+        key: "admin_settings",
         href: "/admin/settings",
         icon: "solar:settings-broken",
         title: "Page Settings",
