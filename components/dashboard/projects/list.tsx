@@ -30,6 +30,8 @@ import {
 import DeleteProjectModal from "@/components/functions/projects/delete";
 import CreateProjectModal from "@/components/functions/projects/create";
 import SparklesText from "@/components/magicui/sparkles-text";
+import AcceptProjectInvite from "@/lib/fetch/project/PUT/AcceptProjectInvite";
+import DeclineProjectInvite from "@/lib/fetch/project/PUT/DeclineProjectInvite";
 
 export function ProjectsList({ projects, pending_projects, settings }: any) {
   const router = useRouter();
@@ -56,7 +58,9 @@ export function ProjectsList({ projects, pending_projects, settings }: any) {
           <p className="text-2xl font-bold mb-0 text-default-500">
             {projects.length}
           </p>
-          <p className="text-2xl font-bold mb-0 text-primary">Projects</p>
+          <p className="text-2xl font-bold mb-0 text-primary">
+            Project{projects.length > 1 ? "s" : ""}
+          </p>
         </div>
         <Button
           color="primary"
@@ -210,42 +214,6 @@ export function ProjectsList({ projects, pending_projects, settings }: any) {
                             {project.description}
                           </p>
                         </div>
-                        <Dropdown backdrop="opaque">
-                          <DropdownTrigger>
-                            <Button isIconOnly size="sm" variant="light">
-                              <VerticalDotsIcon
-                                className="text-default-300"
-                                height={undefined}
-                                width={undefined}
-                              />
-                            </Button>
-                          </DropdownTrigger>
-                          <DropdownMenu>
-                            <DropdownSection title="Actions">
-                              <DropdownItem
-                                startContent={<CopyDocumentIcon />}
-                                onClick={() =>
-                                  copyProjectIDtoClipboard(project.id)
-                                }
-                              >
-                                Copy ID
-                              </DropdownItem>
-                            </DropdownSection>
-                            <DropdownSection title="Danger zone">
-                              <DropdownItem
-                                className="text-danger"
-                                color="danger"
-                                startContent={<DeleteDocumentIcon />}
-                                onClick={() => {
-                                  setTargetProject(project);
-                                  deleteProjectModal.onOpen();
-                                }}
-                              >
-                                Delete
-                              </DropdownItem>
-                            </DropdownSection>
-                          </DropdownMenu>
-                        </Dropdown>
                       </CardHeader>
                       <Divider />
                       <CardBody>
@@ -281,10 +249,6 @@ export function ProjectsList({ projects, pending_projects, settings }: any) {
                             </Chip>
                           )}
                         </div>
-                        <p className="text-small text-default-500 mt-2">
-                          Created At:{" "}
-                          {new Date(project.created_at).toLocaleString("de-DE")}
-                        </p>
                       </CardBody>
                       <CardFooter className="flex items-center justify-between gap-2">
                         <Button
@@ -292,6 +256,10 @@ export function ProjectsList({ projects, pending_projects, settings }: any) {
                           color="danger"
                           radius="sm"
                           variant="flat"
+                          onPress={() => {
+                            DeclineProjectInvite(project.id);
+                            router.refresh();
+                          }}
                         >
                           <Icon
                             icon="solar:danger-triangle-broken"
@@ -304,6 +272,10 @@ export function ProjectsList({ projects, pending_projects, settings }: any) {
                           color="success"
                           radius="sm"
                           variant="flat"
+                          onPress={() => {
+                            AcceptProjectInvite(project.id);
+                            router.refresh();
+                          }}
                         >
                           <Icon icon="solar:check-read-broken" width={24} />
                           Accept
