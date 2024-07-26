@@ -25,7 +25,7 @@ export default function FunctionDeleteFlow({
 }) {
   const router = useRouter();
 
-  const { isOpen, onOpen, onOpenChange, onClose } = disclosure;
+  const { isOpen, onOpenChange } = disclosure;
 
   const [isDeleteLoading, setIsDeleteLoading] = React.useState(false);
 

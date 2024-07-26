@@ -26,7 +26,7 @@ export default function CreateApiKeyModal({
   projectID: any;
 }) {
   const router = useRouter();
-  const { isOpen, onOpen, onOpenChange } = disclosure;
+  const { isOpen, onOpenChange } = disclosure;
 
   const [description, setDescription] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);

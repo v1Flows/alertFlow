@@ -103,7 +103,9 @@ export default function SidebarMenu({
                 {notifications.filter((n: any) => !n.is_read).length > 0 ? (
                   <Badge
                     color="danger"
-                    content={notifications.filter((n: any) => !n.is_read).length}
+                    content={
+                      notifications.filter((n: any) => !n.is_read).length
+                    }
                     showOutline={false}
                     size="md"
                   >

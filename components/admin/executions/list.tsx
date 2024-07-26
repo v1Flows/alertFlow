@@ -15,21 +15,12 @@ import {
   Button,
   useDisclosure,
 } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
 
 import { IconWrapper } from "@/lib/IconWrapper";
 import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
 
-export function ExecutionsList({
-  flows,
-  projects,
-  payloads,
-  executions,
-  runners,
-}: any) {
-  const router = useRouter();
-
+export function ExecutionsList({ flows, payloads, executions, runners }: any) {
   const showPayloadModal = useDisclosure();
   const [targetPayload, setTargetPayload] = React.useState({} as any);
 

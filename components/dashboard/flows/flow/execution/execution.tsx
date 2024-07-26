@@ -15,7 +15,7 @@ import GetPayload from "@/lib/fetch/payload/payload";
 
 import ExecutionBreadcrumbs from "./breadcrumbs";
 
-export function Execution({ flow, execution, runners, settings }: any) {
+export function Execution({ flow, execution, runners }: any) {
   const [payload, setPayload] = React.useState({} as any);
 
   React.useEffect(() => {

@@ -43,9 +43,7 @@ export default function RootLayout({
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <Toaster richColors position="bottom-center" />
-          <div className="relative flex flex-col h-screen">
-            {children}
-          </div>
+          <div className="relative flex flex-col h-screen">{children}</div>
         </Providers>
       </body>
     </html>

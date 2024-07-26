@@ -28,7 +28,7 @@ export default function EditTokenModal({
   const router = useRouter();
 
   // create modal
-  const { isOpen, onOpen, onOpenChange, onClose } = disclosure;
+  const { isOpen, onOpenChange, onClose } = disclosure;
 
   const [description, setDescription] = React.useState(token.description);
   const [isLoading, setIsLoading] = React.useState(false);

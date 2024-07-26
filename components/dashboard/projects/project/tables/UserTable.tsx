@@ -26,7 +26,7 @@ const statusColorMap: any = {
   Viewer: "default",
 };
 
-export default function ProjectMembers({ project, members, settings }: any) {
+export default function ProjectMembers({ project, members }: any) {
   const addProjectMemberModal = useDisclosure();
 
   // pagination

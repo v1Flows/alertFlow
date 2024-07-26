@@ -41,7 +41,7 @@ export default function AddProjectMemberModal({
   members: any;
 }) {
   const router = useRouter();
-  const { isOpen, onOpen, onOpenChange } = disclosure;
+  const { isOpen, onOpenChange } = disclosure;
 
   const [email, setEmail] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(
@@ -97,7 +97,7 @@ export default function AddProjectMemberModal({
   return (
     <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
       <ModalContent>
-        {(onClose) => (
+        {() => (
           <ModalBody>
             <Card className="w-full max-w-[400px] bg-transparent shadow-none">
               <CardHeader className="justify-center px-6 pb-0 pt-6">
@@ -151,7 +151,12 @@ export default function AddProjectMemberModal({
                     value={email}
                     onValueChange={setEmail}
                   />
-                  <Button color="primary" size="md" onPress={inviteMember}>
+                  <Button
+                    color="primary"
+                    isLoading={isLoading}
+                    size="md"
+                    onPress={inviteMember}
+                  >
                     Invite
                   </Button>
                 </div>

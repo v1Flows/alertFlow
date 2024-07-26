@@ -1,12 +1,11 @@
 "use client";
 import React from "react";
 import { Tabs, Tab } from "@nextui-org/react";
+import { Icon } from "@iconify/react";
 
-import { PlayCircleIcon, UsersIcon, TagIcon } from "@/components/icons";
 import ProjectMembers from "@/components/dashboard/projects/project/tables/UserTable";
 import ProjectAPIKeys from "@/components/dashboard/projects/project/tables/APIKeysTable";
 import Runners from "@/components/dashboard/projects/project/Runners";
-import { Icon } from "@iconify/react";
 
 export default function ProjectTabs({
   project,

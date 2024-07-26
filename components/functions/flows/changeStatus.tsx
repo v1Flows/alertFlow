@@ -28,7 +28,7 @@ export default function ChangeFlowStatusModal({
 }) {
   const router = useRouter();
 
-  const { isOpen, onOpen, onOpenChange, onClose } = disclosure;
+  const { isOpen, onOpenChange } = disclosure;
 
   const [disableReason, setDisableReason] = React.useState("");
   const [isLoading, setLoading] = React.useState(false);

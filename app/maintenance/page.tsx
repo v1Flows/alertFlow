@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 
-import { title, subtitle } from "@/components/primitives";
+import { subtitle } from "@/components/primitives";
 import Login from "@/components/auth/login";
 import SparklesText from "@/components/magicui/sparkles-text";
 

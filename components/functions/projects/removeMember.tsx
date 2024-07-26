@@ -9,15 +9,14 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-  Code,
   User,
   Divider,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import { DeleteDocumentIcon, DeleteIcon } from "@/components/icons";
 import RemoveProjectMember from "@/lib/fetch/project/DELETE/removeProjectMember";
-import { toast } from "sonner";
 
 export default function DeleteMemberModal({ projectID, user }: any) {
   const router = useRouter();
@@ -32,6 +31,7 @@ export default function DeleteMemberModal({ projectID, user }: any) {
     if (res.error) {
       setIsDeleteLoading(false);
       toast.error(res.error);
+
       return;
     } else {
       setIsDeleteLoading(false);

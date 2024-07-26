@@ -33,14 +33,11 @@ export default function CreateRunnerModal({
   alertflow_runner: any;
 }) {
   const router = useRouter();
-  const { isOpen, onOpen, onOpenChange } = disclosure;
+  const { isOpen, onOpenChange } = disclosure;
 
   // instructions modal
-  const {
-    isOpen: isOpenInstructions,
-    onOpen: onOpenInstructions,
-    onOpenChange: onOpenChangeInstructions,
-  } = useDisclosure();
+  const { isOpen: isOpenInstructions, onOpenChange: onOpenChangeInstructions } =
+    useDisclosure();
   const [inApikey, setInApikey] = React.useState("");
   const [inRunnerId, setInRunnerId] = React.useState("");
 

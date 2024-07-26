@@ -17,7 +17,13 @@ export default function HomeSecurity() {
           treated <br /> at AlertFlow.
         </h2>
         <div className="mt-4">
-          <Button color="success" radius="lg" size="sm" variant="flat" isDisabled>
+          <Button
+            isDisabled
+            color="success"
+            radius="lg"
+            size="sm"
+            variant="flat"
+          >
             Learn more
           </Button>
         </div>

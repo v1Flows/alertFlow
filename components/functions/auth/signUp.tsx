@@ -28,7 +28,7 @@ export default function SignUpModal({
   disclosure: UseDisclosureReturn;
   skipSuccessModal?: boolean;
 }) {
-  const { isOpen, onOpen, onOpenChange } = disclosure;
+  const { isOpen, onOpenChange } = disclosure;
 
   const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =

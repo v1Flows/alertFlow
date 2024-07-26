@@ -222,10 +222,13 @@ export const LoginIcon: React.FC<IconSvgProps> = (props: any) => {
       stroke-
       className="size-6"
       fill="none"
+      height={height}
       stroke="currentColor"
       viewBox="0 0 24 24"
       width="1.5"
+      widths={width}
       xmlns="http://www.w3.org/2000/svg"
+      {...props}
     >
       <path
         d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
@@ -1035,8 +1038,7 @@ export const InfoIcon = (props: any) => (
   </svg>
 );
 
-export const CheckIcon = (props: any) =>
-(
+export const CheckIcon = (props: any) => (
   <svg
     aria-hidden="true"
     fill="none"

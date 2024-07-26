@@ -18,7 +18,7 @@ export default function FunctionShowPayloadModal({
   disclosure: UseDisclosureReturn;
   payload: any;
 }) {
-  const { isOpen, onOpen, onOpenChange, onClose } = disclosure;
+  const { isOpen, onOpenChange } = disclosure;
 
   return (
     <>

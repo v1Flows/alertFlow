@@ -43,7 +43,7 @@ import SignUpModal from "@/components/functions/auth/signUp";
 
 export function UsersList({ users }: any) {
   const router = useRouter();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpenChange } = useDisclosure();
   const [disableReason, setDisableReason] = React.useState("");
   const [isDisableLoading, setIsDisableLoading] = React.useState(false);
 
