@@ -83,13 +83,6 @@ export const CustomRadio = (props: any) => {
   );
 };
 
-type matchPatterns = {
-  key: string;
-  group: string;
-  value: string;
-  react_on: string;
-};
-
 export default function AddFlowActionModal({
   disclosure,
   runners,
@@ -101,7 +94,7 @@ export default function AddFlowActionModal({
 }) {
   const router = useRouter();
 
-  const { isOpen, onOpen, onOpenChange, onClose } = disclosure;
+  const { isOpen, onOpenChange } = disclosure;
 
   const [currentStep, setCurrentStep] = React.useState(0);
   const [isLoading, setLoading] = React.useState(false);
@@ -237,7 +230,7 @@ export default function AddFlowActionModal({
         onOpenChange={onOpenChange}
       >
         <ModalContent>
-          {(onClose) => (
+          {() => (
             <>
               <ModalHeader />
               <ModalBody>

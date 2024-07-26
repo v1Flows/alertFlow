@@ -4,13 +4,9 @@ import {
   Card,
   CardBody,
   CardFooter,
-  CardHeader,
   Chip,
 } from "@nextui-org/react";
 import { Blocks, FolderKanban, Forklift, Workflow } from "lucide-react";
-
-import { IconWrapper } from "@/lib/IconWrapper";
-import { Activity } from "@/components/icons";
 
 export default function HomeFeatures() {
   return (

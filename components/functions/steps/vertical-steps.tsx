@@ -15,7 +15,9 @@ export type VerticalStepProps = {
   title?: React.ReactNode;
 };
 
-export interface VerticalStepsProps extends React.HTMLAttributes<HTMLButtonElement> {
+export interface VerticalStepsProps
+  // eslint-disable-next-line no-undef
+  extends React.HTMLAttributes<HTMLButtonElement> {
   /**
    * An array of steps.
    *
@@ -60,7 +62,13 @@ export interface VerticalStepsProps extends React.HTMLAttributes<HTMLButtonEleme
 
 function CheckIcon(props: ComponentProps<"svg">) {
   return (
-    <svg {...props} fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+    <svg
+      {...props}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      viewBox="0 0 24 24"
+    >
       <m.path
         animate={{ pathLength: 1 }}
         d="M5 13l4 4L19 7"
@@ -78,6 +86,7 @@ function CheckIcon(props: ComponentProps<"svg">) {
   );
 }
 
+// eslint-disable-next-line no-undef
 const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
   (
     {
@@ -147,7 +156,9 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
       if (!className?.includes("--step-fg-color")) colorsVars.unshift(fgColor);
       if (!className?.includes("--step-color")) colorsVars.unshift(userColor);
       if (!className?.includes("--inactive-bar-color"))
-        colorsVars.push("[--inactive-bar-color:hsl(var(--nextui-default-300))]");
+        colorsVars.push(
+          "[--inactive-bar-color:hsl(var(--nextui-default-300))]",
+        );
 
       return colorsVars;
     }, [color, className]);
@@ -157,7 +168,11 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
         <ol className={cn("flex flex-col gap-y-3", colors, className)}>
           {steps?.map((step, stepIdx) => {
             let status =
-              currentStep === stepIdx ? "active" : currentStep < stepIdx ? "inactive" : "complete";
+              currentStep === stepIdx
+                ? "active"
+                : currentStep < stepIdx
+                  ? "inactive"
+                  : "complete";
 
             return (
               <li key={stepIdx} className="relative">
@@ -199,7 +214,8 @@ const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
                                 color: "var(--active-color)",
                               },
                               complete: {
-                                backgroundColor: "var(--complete-background-color)",
+                                backgroundColor:
+                                  "var(--complete-background-color)",
                                 borderColor: "var(--complete-border-color)",
                               },
                             }}

@@ -22,7 +22,7 @@ export default function SuccessSignUpModal({
   disclosure: UseDisclosureReturn;
 }) {
   const router = useRouter();
-  const { isOpen, onOpen, onOpenChange } = disclosure;
+  const { isOpen, onOpenChange } = disclosure;
 
   return (
     <>

@@ -29,7 +29,7 @@ export default function DeleteRunnerModal({
   runner: any;
 }) {
   const router = useRouter();
-  const { isOpen, onOpen, onOpenChange } = disclosure;
+  const { isOpen, onOpenChange } = disclosure;
 
   const [flowLinks, setFlowLinks] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);

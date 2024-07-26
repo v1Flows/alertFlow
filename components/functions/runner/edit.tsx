@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
-import { PlayCircleIcon, PlusIcon } from "@/components/icons";
+import { PlayCircleIcon } from "@/components/icons";
 import EditRunner from "@/lib/fetch/runner/Edit";
 
 export default function EditRunnerModal({
@@ -26,7 +26,7 @@ export default function EditRunnerModal({
   runner: any;
 }) {
   const router = useRouter();
-  const { isOpen, onOpen, onOpenChange } = disclosure;
+  const { isOpen, onOpenChange } = disclosure;
 
   const [name, setName] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
@@ -78,8 +78,8 @@ export default function EditRunnerModal({
                 <Button
                   color="warning"
                   isLoading={isLoading}
-                  onPress={editRunner}
                   variant="flat"
+                  onPress={editRunner}
                 >
                   Change
                 </Button>

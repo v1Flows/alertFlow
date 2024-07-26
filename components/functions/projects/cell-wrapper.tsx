@@ -3,7 +3,9 @@ import React from "react";
 import { cn } from "./cn";
 
 const CellWrapper = React.forwardRef<
+  // eslint-disable-next-line no-undef
   HTMLDivElement,
+  // eslint-disable-next-line no-undef
   React.HTMLAttributes<HTMLDivElement>
 >(({ children, className, ...props }, ref) => (
   <div

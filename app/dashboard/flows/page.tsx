@@ -2,7 +2,6 @@ import FlowList from "@/components/dashboard/flows/list";
 import GetFlows from "@/lib/fetch/flow/all";
 import PageGetSettings from "@/lib/fetch/page/settings";
 import GetProjects from "@/lib/fetch/project/all";
-import { Suspense } from "react";
 
 export default async function DashboardFlowsPage() {
   const flows = await GetFlows();
@@ -11,7 +10,11 @@ export default async function DashboardFlowsPage() {
 
   return (
     <main>
-      <FlowList flows={flows} projects={projects.projects} settings={settings} />
+      <FlowList
+        flows={flows}
+        projects={projects.projects}
+        settings={settings}
+      />
     </main>
   );
 }

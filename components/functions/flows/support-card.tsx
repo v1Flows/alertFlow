@@ -6,8 +6,10 @@ import { Icon } from "@iconify/react";
 
 import { cn } from "@/components/functions/cn/cn";
 
+// eslint-disable-next-line no-undef
 export type SupportCardProps = React.HTMLAttributes<HTMLDivElement>;
 
+// eslint-disable-next-line no-undef
 const SupportCard = React.forwardRef<HTMLDivElement, SupportCardProps>(
   ({ className, ...props }, ref) => (
     <div

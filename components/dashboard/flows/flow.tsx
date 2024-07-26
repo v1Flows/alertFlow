@@ -27,7 +27,6 @@ export function Flow({
   executions,
   payloads,
   runners,
-  settings,
 }: any) {
   const editFlowModal = useDisclosure();
 
@@ -170,8 +169,8 @@ export function Flow({
                       {flow.runner_id === "any"
                         ? "Any"
                         : runners.find(
-                          (runner: any) => runner.id === flow.runner_id,
-                        )?.name}
+                            (runner: any) => runner.id === flow.runner_id,
+                          )?.name}
                     </p>
                   </CardBody>
                 </Card>

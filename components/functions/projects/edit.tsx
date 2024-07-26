@@ -28,7 +28,7 @@ export default function EditProjectModal({
   project: any;
 }) {
   const router = useRouter();
-  const { isOpen, onOpen, onOpenChange } = disclosure;
+  const { isOpen, onOpenChange } = disclosure;
 
   const [name, setName] = React.useState(project.name);
   const [description, setDescription] = React.useState(project.description);
@@ -125,8 +125,8 @@ export default function EditProjectModal({
                 </Button>
                 <Button
                   color="warning"
-                  variant="flat"
                   isLoading={isLoading}
+                  variant="flat"
                   onPress={updateProject}
                 >
                   Save Changes

@@ -22,11 +22,11 @@ import {
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { LibraryIcon } from "lucide-react";
+import { Icon } from "@iconify/react";
 
-import { CheckIcon, Flash } from "@/components/icons";
+import { CheckIcon } from "@/components/icons";
 import GetProjectRunners from "@/lib/fetch/project/runners";
 import CreateFlow from "@/lib/fetch/flow/POST/CreateFlow";
-import { Icon } from "@iconify/react";
 
 export default function FunctionCreateFlow({
   projects,
@@ -38,13 +38,10 @@ export default function FunctionCreateFlow({
   const router = useRouter();
 
   // create modal
-  const { isOpen, onOpen, onOpenChange } = disclosure;
+  const { isOpen, onOpenChange } = disclosure;
   // instructions modal
-  const {
-    isOpen: isOpenInstructions,
-    onOpen: onOpenInstructions,
-    onOpenChange: onOpenChangeInstructions,
-  } = useDisclosure();
+  const { isOpen: isOpenInstructions, onOpenChange: onOpenChangeInstructions } =
+    useDisclosure();
 
   const [name, setName] = React.useState("");
   const [description, setDescription] = React.useState("");
@@ -111,7 +108,8 @@ export default function FunctionCreateFlow({
           {() => (
             <>
               <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold">
-                <Icon icon="solar:book-bookmark-broken" width={24} /> Create Flow
+                <Icon icon="solar:book-bookmark-broken" width={24} /> Create
+                Flow
               </ModalHeader>
               <ModalBody>
                 <Input

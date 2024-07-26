@@ -28,7 +28,7 @@ export default function ChangeProjectStatusModal({
 }) {
   const router = useRouter();
 
-  const { isOpen, onOpen, onOpenChange, onClose } = disclosure;
+  const { isOpen, onOpenChange } = disclosure;
 
   const [disableReason, setDisableReason] = React.useState("");
   const [isLoading, setLoading] = React.useState(false);

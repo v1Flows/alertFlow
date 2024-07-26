@@ -6,13 +6,10 @@ export default async function CreateProject(
   name: string,
   description: string,
   alertflowRunners: boolean,
-  members: any,
 ) {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;
-  const user = cookieStore.get("user")?.value;
-  const userData = JSON.parse(user || "{}");
 
   try {
     const headers = new Headers();
