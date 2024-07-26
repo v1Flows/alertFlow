@@ -14,7 +14,7 @@ export function DashboardHome({ stats }: any) {
     <main>
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-1">
-          <p className="text-2xl font-bold mb-0 text-primary">Dashboard Home</p>
+          <p className="text-2xl font-bold mb-0">Dashboard Home</p>
         </div>
       </div>
       <Divider className="my-4" />
@@ -95,7 +95,7 @@ export function DashboardHome({ stats }: any) {
               <div className="flex h-14 w-14 flex-none items-center justify-center rounded-full bg-gradient-to-br from-primary-300 to-secondary-500">
                 <Icon
                   className="text-white"
-                  icon="solar:compass-square-broken"
+                  icon="solar:book-bookmark-broken"
                   width={30}
                 />
               </div>

@@ -67,12 +67,14 @@ export default function FlowList({ flows, projects, settings }: any) {
           <p className="text-2xl font-bold mb-0 text-default-500">
             {flows.length}
           </p>
-          <p className="text-2xl font-bold mb-0 text-primary">Flows</p>
+          <p className="text-2xl font-bold mb-0 text-primary">
+            Flow{flows.length > 1 ? "s" : ""}
+          </p>
         </div>
-        <div className="flex items-center justify-end gap-4">
+        <div className="flex items-center mr-4 gap-4">
           <Select
-            className="w-64"
-            placeholder="Select an project"
+            className="w-28"
+            placeholder="Project"
             radius="sm"
             selectedKeys={projectFilter}
             selectionMode="multiple"

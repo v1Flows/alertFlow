@@ -14,6 +14,11 @@ import {
   ScrollShadow,
   CardFooter,
 } from "@nextui-org/react";
+import { Icon } from "@iconify/react";
+import { useRouter } from "next/navigation";
+
+import ReadUserNotification from "@/lib/fetch/user/readNotification";
+import ArchiveUserNotification from "@/lib/fetch/user/archiveNotification";
 
 import NotificationItem from "./notification-item";
 
@@ -40,9 +45,26 @@ export default function Notifications({
   props: CardProps;
   incNotifications: any;
 }) {
+  const router = useRouter();
   const [activeTab, setActiveTab] = React.useState<NotificationTabs>(
     NotificationTabs.All,
   );
+
+  async function ReadAll() {
+    for (const n of incNotifications) {
+      await ReadUserNotification(n.id);
+    }
+    router.refresh();
+  }
+
+  async function ArchiveAll() {
+    for (const n of incNotifications) {
+      if (n.is_read) {
+        await ArchiveUserNotification(n.id);
+      }
+    }
+    router.refresh();
+  }
 
   return (
     <Card className="w-full max-w-[420px]" {...props}>
@@ -61,8 +83,9 @@ export default function Notifications({
             color="primary"
             radius="full"
             variant="light"
+            onPress={() => ReadAll()}
           >
-            Mark all as read
+            Mark all as read <Icon icon="solar:check-read-bold" width={24} />
           </Button>
         </div>
         <Tabs
@@ -87,7 +110,7 @@ export default function Notifications({
               <div className="flex items-center space-x-2">
                 <span>All</span>
                 <Chip size="sm" variant="flat">
-                  {incNotifications.length}
+                  {incNotifications.filter((n: any) => !n.is_archived).length}
                 </Chip>
               </div>
             }
@@ -119,12 +142,14 @@ export default function Notifications({
       <CardBody className="w-full gap-0 p-0">
         <ScrollShadow className="h-[500px] w-full">
           {activeTab === NotificationTabs.All &&
-            incNotifications.map((notification: any) => (
-              <NotificationItem
-                key={notification.id}
-                notification={notification}
-              />
-            ))}
+            incNotifications
+              .filter((n: any) => !n.is_archived)
+              .map((notification: any) => (
+                <NotificationItem
+                  key={notification.id}
+                  notification={notification}
+                />
+              ))}
           {activeTab === NotificationTabs.Unread &&
             incNotifications
               .filter((n: any) => !n.is_read)
@@ -152,7 +177,10 @@ export default function Notifications({
           Settings
         </Button>
         {activeTab !== NotificationTabs.Archive && (
-          <Button variant="flat">Archive All</Button>
+          <Button variant="flat" onPress={() => ArchiveAll()}>
+            <Icon icon="solar:archive-down-minimlistic-broken" width={20} />
+            Archive All
+          </Button>
         )}
       </CardFooter>
     </Card>

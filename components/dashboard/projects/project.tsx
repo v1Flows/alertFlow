@@ -9,15 +9,9 @@ import {
   useDisclosure,
   Button,
 } from "@nextui-org/react";
+import { Icon } from "@iconify/react";
 
-import {
-  PlayCircleIcon,
-  UsersIcon,
-  TagIcon,
-  CalendarIcon,
-  InfoIcon,
-  EditDocumentIcon,
-} from "@/components/icons";
+import { CalendarIcon, InfoIcon, EditDocumentIcon } from "@/components/icons";
 import { IconWrapper } from "@/lib/IconWrapper";
 import { subtitle } from "@/components/primitives";
 import Reloader from "@/components/reloader/Reloader";
@@ -89,7 +83,7 @@ export default function Project({
             <Card fullWidth>
               <CardHeader className="justify-start gap-2 items-center">
                 <IconWrapper className="bg-primary/10 text-primary">
-                  <UsersIcon className="text-lg" />
+                  <Icon icon="solar:smile-square-broken" width={20} />
                 </IconWrapper>
                 <p className="text-md font-bold">Members</p>
               </CardHeader>
@@ -102,7 +96,7 @@ export default function Project({
             <Card fullWidth>
               <CardHeader className="justify-start gap-2 items-center">
                 <IconWrapper className="bg-warning/10 text-warning">
-                  <PlayCircleIcon className="text-lg" />
+                  <Icon icon="solar:rocket-2-broken" width={20} />
                 </IconWrapper>
                 <p className="text-md font-bold">Runners</p>
               </CardHeader>
@@ -124,7 +118,7 @@ export default function Project({
             <Card fullWidth>
               <CardHeader className="justify-start gap-2 items-center">
                 <IconWrapper className="bg-default/50 text-foreground">
-                  <TagIcon className="text-lg" />
+                  <Icon icon="solar:key-square-2-broken" width={20} />
                 </IconWrapper>
                 <p className="text-md font-bold">API Keys</p>
               </CardHeader>

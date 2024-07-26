@@ -6,6 +6,7 @@ import { PlayCircleIcon, UsersIcon, TagIcon } from "@/components/icons";
 import ProjectMembers from "@/components/dashboard/projects/project/tables/UserTable";
 import ProjectAPIKeys from "@/components/dashboard/projects/project/tables/APIKeysTable";
 import Runners from "@/components/dashboard/projects/project/Runners";
+import { Icon } from "@iconify/react";
 
 export default function ProjectTabs({
   project,
@@ -30,7 +31,7 @@ export default function ProjectTabs({
             key="members"
             title={
               <div className="flex items-center space-x-2">
-                <UsersIcon className="h-5 w-5" />
+                <Icon icon="solar:smile-square-broken" width={20} />
                 <span>Members</span>
               </div>
             }
@@ -45,7 +46,7 @@ export default function ProjectTabs({
             key="runners"
             title={
               <div className="flex items-center space-x-2">
-                <PlayCircleIcon className="h-5 w-5" />
+                <Icon icon="solar:rocket-2-broken" width={20} />
                 <span>Runners</span>
               </div>
             }
@@ -56,7 +57,7 @@ export default function ProjectTabs({
             key="apikeys"
             title={
               <div className="flex items-center space-x-2">
-                <TagIcon className="h-5 w-5" />
+                <Icon icon="solar:key-square-2-broken" width={20} />
                 <span>API Keys</span>
               </div>
             }

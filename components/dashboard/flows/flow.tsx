@@ -7,19 +7,15 @@ import {
   CardBody,
   Button,
   useDisclosure,
+  Spinner,
 } from "@nextui-org/react";
 import React from "react";
+import { Icon } from "@iconify/react";
 
 import Reloader from "@/components/reloader/Reloader";
 import FlowBreadcrumbs from "@/components/dashboard/flows/flow/breadcrumbs";
 import { IconWrapper } from "@/lib/IconWrapper";
-import {
-  InfoIcon,
-  Server,
-  EditDocumentIcon,
-  CheckIcon,
-  PlayCircleIcon,
-} from "@/components/icons";
+import { InfoIcon, EditDocumentIcon, CheckIcon } from "@/components/icons";
 import EditFlowModal from "@/components/functions/flows/edit";
 
 import FlowTabs from "./flow/tabs";
@@ -145,12 +141,8 @@ export function Flow({
               <div className="col-span-1">
                 <Card fullWidth>
                   <CardHeader className="justify-start gap-2 items-center">
-                    <IconWrapper className="bg-success/10">
-                      <Server
-                        className="text-success"
-                        fill="currentColor"
-                        size={20}
-                      />
+                    <IconWrapper className="bg-primary/10 text-primary">
+                      <Icon icon="solar:box-broken" width={20} />
                     </IconWrapper>
                     <p className="text-md font-bold">Project</p>
                   </CardHeader>
@@ -168,8 +160,8 @@ export function Flow({
               <div className="col-span-1">
                 <Card fullWidth>
                   <CardHeader className="justify-start gap-2 items-center">
-                    <IconWrapper className="bg-primary/10 text-primary">
-                      <PlayCircleIcon className="text-lg" />
+                    <IconWrapper className="bg-warning/10 text-warning">
+                      <Icon icon="solar:rocket-2-broken" width={20} />
                     </IconWrapper>
                     <p className="text-md font-bold">Runner</p>
                   </CardHeader>
@@ -187,17 +179,37 @@ export function Flow({
               <div className="col-span-1">
                 <Card fullWidth>
                   <CardHeader className="justify-start gap-2 items-center">
-                    <IconWrapper className="bg-warning/10 text-warning">
-                      <EditDocumentIcon className="text-lg" />
+                    <IconWrapper className="bg-secondary/10 text-secondary">
+                      <Icon icon="solar:reorder-line-duotone" width={20} />
                     </IconWrapper>
-                    <p className="text-md font-bold">Last Update</p>
+                    <p className="text-md font-bold">Executions</p>
                   </CardHeader>
                   <CardBody>
-                    <p className="text-default-500 font-bold">
-                      {flow.updated_at
-                        ? new Date(flow?.updated_at).toLocaleString("de-DE")
-                        : "N/A"}
-                    </p>
+                    <div className="flex flex-wrap items-center justify-start gap-4">
+                      {executions.length === 0 && (
+                        <p className="flex items-center gap-2 text-default-500 font-bold">
+                          {executions.length} Total
+                        </p>
+                      )}
+                      {executions.filter((e: any) => e.running).length > 0 && (
+                        <p className="flex items-center gap-2 text-default-500 font-bold">
+                          <Spinner color="primary" size="sm" />
+                          {executions.filter((e: any) => e.running).length}{" "}
+                          Running
+                        </p>
+                      )}
+                      {executions.filter((e: any) => e.waiting).length > 0 && (
+                        <p className="flex items-center gap-2 text-default-500 font-bold">
+                          <Icon
+                            className="text-warning"
+                            icon="solar:pause-broken"
+                            width={20}
+                          />
+                          {executions.filter((e: any) => e.waiting).length}{" "}
+                          Waiting
+                        </p>
+                      )}
+                    </div>
                   </CardBody>
                 </Card>
               </div>

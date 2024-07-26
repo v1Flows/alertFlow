@@ -91,7 +91,7 @@ export default function SidebarMenu({
         </div>
         <span className="text-small font-bold text-foreground">AlertFlow</span>
         <div className="flex ml-auto gap-2 items-center justify-center">
-          <Popover offset={12} placement="right">
+          <Popover offset={12} placement="bottom">
             <PopoverTrigger>
               <Button
                 disableRipple
