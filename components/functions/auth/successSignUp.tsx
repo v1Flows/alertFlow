@@ -12,9 +12,9 @@ import {
 } from "@nextui-org/react";
 import React from "react";
 import { LibraryIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import { CheckIcon } from "@/components/icons";
-import { useRouter } from "next/navigation";
 
 export default function SuccessSignUpModal({
   disclosure,
@@ -53,7 +53,14 @@ export default function SuccessSignUpModal({
                   <LibraryIcon />
                   Documentation
                 </Button>
-                <Button color="primary" variant="solid" onPress={() => router.push("/")}>
+                <Button
+                  color="primary"
+                  variant="solid"
+                  onPress={() => {
+                    onOpenChange();
+                    router.push("/");
+                  }}
+                >
                   <CheckIcon />
                   Understood
                 </Button>

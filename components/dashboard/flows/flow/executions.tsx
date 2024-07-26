@@ -80,6 +80,9 @@ export default function Executions({ flow, executions }: any) {
 
   return (
     <main className="grid lg:grid-cols-1 gap-4">
+      {items.length === 0 && (
+        <p className="text-center text-default-500">No executions found</p>
+      )}
       {items.map((execution: any) => (
         <Card key={execution.id} fullWidth>
           <CardHeader className="justify-between">
@@ -165,6 +168,7 @@ export default function Executions({ flow, executions }: any) {
       <div className="flex justify-center">
         <Pagination
           showControls
+          isDisabled={items.length === 0}
           page={page}
           total={pages}
           onChange={(page) => setPage(page)}

@@ -36,9 +36,12 @@ import {
 import { setSession } from "@/lib/setSession";
 import { IconWrapper } from "@/lib/IconWrapper";
 import LoginAPI from "@/lib/auth/login";
+import SignUpModal from "../functions/auth/signUp";
 
 export default function Login({ user, session, showSignUp, settings }: any) {
   const router = useRouter();
+
+  const signUpModal = useDisclosure();
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoginLoading, setIsLoginLoading] = useState(false);
@@ -156,7 +159,7 @@ export default function Login({ user, session, showSignUp, settings }: any) {
                 color="secondary"
                 startContent={<UserPlusIcon />}
                 variant="flat"
-                onPress={() => router.push("/auth/signup")}
+                onPress={() => signUpModal.onOpen()}
               >
                 Sign Up
               </Button>
@@ -274,6 +277,7 @@ export default function Login({ user, session, showSignUp, settings }: any) {
           </Modal>
         </>
       )}
+      <SignUpModal disclosure={signUpModal} />
     </>
   );
 }
