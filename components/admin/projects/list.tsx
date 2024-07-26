@@ -21,6 +21,7 @@ import {
   cn,
   useDisclosure,
   Pagination,
+  Tooltip,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 
@@ -84,17 +85,26 @@ export function ProjectList({ projects, members }: any) {
             {members
               .filter((member: any) => member.project_id === project.id)
               .map((member: any) => (
-                <Avatar
+                <Tooltip
                   key={member.email}
-                  color={
-                    member.role === "Owner"
-                      ? "danger"
-                      : member.role === "Editor"
-                        ? "primary"
-                        : "default"
+                  content={
+                    <div className="px-1 py-2">
+                      <div className="text-small font-bold">{member.email}</div>
+                      <div className="text-tiny">{member.role}</div>
+                    </div>
                   }
-                  name={member.email}
-                />
+                >
+                  <Avatar
+                    color={
+                      member.role === "Owner"
+                        ? "danger"
+                        : member.role === "Editor"
+                          ? "primary"
+                          : "default"
+                    }
+                    name={member.email}
+                  />
+                </Tooltip>
               ))}
           </AvatarGroup>
         );

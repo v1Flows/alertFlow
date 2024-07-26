@@ -46,7 +46,7 @@ export default function FlowTabs({ flow, executions, payloads, runners }: any) {
             </div>
             {flow.actions.length === 0 ? (
               <div className="flex flex-col items-center justify-center">
-                <p className="text-center text-default-400">No actions found</p>
+                <p className="text-center text-default-400 mt-4">No actions found</p>
               </div>
             ) : (
               <div className="mt-4">

@@ -98,17 +98,6 @@ export default function Nabar({ user, notifications, session, settings }: any) {
             Dashboard
           </Link>
         </NavbarItem>
-        {user.role === "Admin" && (
-          <NavbarItem>
-            <Link
-              aria-current="page"
-              color="foreground"
-              onPress={() => goTo("/admin")}
-            >
-              Admin
-            </Link>
-          </NavbarItem>
-        )}
       </NavbarContent>
 
       {user.role === "Admin" && settings.maintenance && (
@@ -230,17 +219,6 @@ export default function Nabar({ user, notifications, session, settings }: any) {
             Dashboard
           </Link>
         </NavbarItem>
-        {user.role === "Admin" && (
-          <NavbarItem>
-            <Link
-              aria-current="page"
-              color="foreground"
-              onPress={() => goTo("/admin")}
-            >
-              Admin
-            </Link>
-          </NavbarItem>
-        )}
         <NavbarMenuItem>
           <Divider className="my-4" />
           <Login

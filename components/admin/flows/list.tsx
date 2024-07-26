@@ -129,7 +129,6 @@ export function FlowsList({ flows, projects, runners }: any) {
                     key="view"
                     className="text-primary"
                     color="primary"
-                    description="Take a look on this flow"
                     startContent={
                       <EyeIcon className={cn(iconClasses, "text-primary")} />
                     }
@@ -143,7 +142,6 @@ export function FlowsList({ flows, projects, runners }: any) {
                     key="edit"
                     className="text-warning"
                     color="warning"
-                    description="Apply changes to this flow"
                     startContent={
                       <EditDocumentIcon
                         className={cn(iconClasses, "text-warning")}
@@ -161,7 +159,6 @@ export function FlowsList({ flows, projects, runners }: any) {
                       key="disable"
                       className="text-success"
                       color="success"
-                      description="Enable access to this flow for members"
                       startContent={
                         <LockIcon className={cn(iconClasses, "text-success")} />
                       }
@@ -179,7 +176,6 @@ export function FlowsList({ flows, projects, runners }: any) {
                       key="disable"
                       className="text-danger"
                       color="danger"
-                      description="Disable access to this flow for members"
                       startContent={
                         <LockIcon className={cn(iconClasses, "text-danger")} />
                       }
@@ -198,7 +194,6 @@ export function FlowsList({ flows, projects, runners }: any) {
                     key="delete"
                     className="text-danger"
                     color="danger"
-                    description="Permanently delete this flow"
                     startContent={
                       <DeleteDocumentIcon
                         className={cn(iconClasses, "text-danger")}
@@ -275,7 +270,7 @@ export function FlowsList({ flows, projects, runners }: any) {
               STATUS
             </TableColumn>
             <TableColumn key="a_actions" align="start">
-              AVL. ACTIONS
+              FLOW ACTIONS
             </TableColumn>
             <TableColumn key="created_at" align="start">
               CREATED AT
