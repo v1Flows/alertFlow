@@ -1,0 +1,20 @@
+name: Lint
+
+on:
+  push:
+    branches: [ "work" ]
+    paths-ignore:
+      - '.github/**'
+
+jobs:
+  build:
+    name: Check Lint
+    runs-on: [self-hosted, alertflow]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Lint
+        shell: bash
+        run: |
+          yarn global add pnpm && pnpm i
+          pnpm run lint
