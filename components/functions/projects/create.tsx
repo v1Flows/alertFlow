@@ -21,11 +21,11 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 import { LibraryIcon } from "lucide-react";
+import { Icon } from "@iconify/react";
 
 import CreateProject from "@/lib/fetch/project/POST/CreateProject";
 import { CheckIcon, InfoIcon } from "@/components/icons";
 import { IconWrapper } from "@/lib/IconWrapper";
-import { Icon } from "@iconify/react";
 
 export default function CreateProjectModal({
   disclosure,
@@ -33,14 +33,11 @@ export default function CreateProjectModal({
   disclosure: UseDisclosureReturn;
 }) {
   const router = useRouter();
-  const { isOpen, onOpen, onOpenChange } = disclosure;
+  const { isOpen, onOpenChange } = disclosure;
 
   // success modal
-  const {
-    isOpen: isOpenSuccess,
-    onOpen: onOpenSuccess,
-    onOpenChange: onOpenChangeSuccess,
-  } = useDisclosure();
+  const { isOpen: isOpenSuccess, onOpenChange: onOpenChangeSuccess } =
+    useDisclosure();
 
   const [name, setName] = React.useState("");
   const [description, setDescription] = React.useState("");
@@ -53,12 +50,7 @@ export default function CreateProjectModal({
   async function createProject() {
     setIsLoading(true);
 
-    const response = await CreateProject(
-      name,
-      description,
-      alertflowRunners,
-      [],
-    );
+    const response = await CreateProject(name, description, alertflowRunners);
 
     if (response.result === "success") {
       router.refresh();

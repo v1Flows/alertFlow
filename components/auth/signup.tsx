@@ -10,16 +10,14 @@ import {
   useDisclosure,
   Image,
 } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Icon } from "@iconify/react";
 
 import SignUpAPI from "@/lib/auth/signup";
+
 import SuccessSignUpModal from "../functions/auth/successSignUp";
 
-export default function SignUp({ settings }: any) {
-  const router = useRouter();
-
+export default function SignUp() {
   const [isLoading, setIsLoading] = React.useState(false);
   const [username, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");

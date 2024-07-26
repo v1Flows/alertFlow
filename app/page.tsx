@@ -1,5 +1,4 @@
-import { Snippet } from "@nextui-org/snippet";
-import { Code } from "@nextui-org/code";
+import { Snippet, Code } from "@nextui-org/react";
 import { cookies } from "next/headers";
 
 import { title, subtitle } from "@/components/primitives";

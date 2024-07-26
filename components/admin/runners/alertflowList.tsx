@@ -19,7 +19,6 @@ import {
   Pagination,
 } from "@nextui-org/react";
 import TimeAgo from "react-timeago";
-import { useRouter } from "next/navigation";
 
 import {
   DeleteDocumentIcon,
@@ -34,8 +33,6 @@ import ChangeRunnerStatusModal from "@/components/functions/runner/changeStatus"
 import EditRunnerModal from "@/components/functions/runner/edit";
 
 export function AlertflowRunnerList({ runners }: any) {
-  const router = useRouter();
-
   const [status, setStatus] = React.useState(false);
   const [targetRunner, setTargetRunner] = React.useState({} as any);
   const addRunnerModal = useDisclosure();

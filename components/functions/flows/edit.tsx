@@ -36,7 +36,7 @@ export default function EditFlowModal({
   const router = useRouter();
 
   // create modal
-  const { isOpen, onOpen, onOpenChange, onClose } = disclosure;
+  const { isOpen, onOpenChange, onClose } = disclosure;
 
   const [name, setName] = React.useState(flow.name);
   const [description, setDescription] = React.useState(flow.description);

@@ -9,18 +9,17 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-  Input,
   Select,
   SelectItem,
   Card,
   CardHeader,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import { EditIcon, InfoIcon } from "@/components/icons";
 import { IconWrapper } from "@/lib/IconWrapper";
 import EditProjectMember from "@/lib/fetch/project/PUT/editProjectMember";
-import { toast } from "sonner";
 
 // import UpdateProjectMembers from "@/lib/fetch/project/PUT/UpdateProjectMembers";
 

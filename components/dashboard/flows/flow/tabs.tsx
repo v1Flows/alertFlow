@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Tabs, Tab, useDisclosure, Button, Snippet } from "@nextui-org/react";
+import { Tabs, Tab, useDisclosure, Button } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 
 import { Flash, PlusIcon } from "@/components/icons";
@@ -36,9 +36,9 @@ export default function FlowTabs({ flow, executions, payloads, runners }: any) {
             <div className="flex">
               <Button
                 fullWidth
-                variant="flat"
                 color="primary"
                 startContent={<PlusIcon />}
+                variant="flat"
                 onPress={addFlowActionModal.onOpen}
               >
                 Add Action
@@ -46,7 +46,9 @@ export default function FlowTabs({ flow, executions, payloads, runners }: any) {
             </div>
             {flow.actions.length === 0 ? (
               <div className="flex flex-col items-center justify-center">
-                <p className="text-center text-default-400">No actions found</p>
+                <p className="text-center text-default-400 mt-4">
+                  No actions found
+                </p>
               </div>
             ) : (
               <div className="mt-4">

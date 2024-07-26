@@ -26,15 +26,6 @@ import { Icon } from "@iconify/react";
 
 import Login from "@/components/auth/login";
 import { ThemeSwitch } from "@/components/theme-switch";
-import {
-  ChevronDown,
-  Lock,
-  Activity,
-  Flash,
-  Server,
-  TagUser,
-  Scale,
-} from "@/components/icons";
 import NotificationsCard from "@/components/notifications/notifications";
 
 export default function Nabar({ user, notifications, session, settings }: any) {
@@ -42,18 +33,6 @@ export default function Nabar({ user, notifications, session, settings }: any) {
   const { theme } = useTheme();
   const isSSR = useIsSSR();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-
-  const icons = {
-    chevron: <ChevronDown fill="currentColor" size={16} />,
-    scale: <Scale className="text-warning" fill="currentColor" size={30} />,
-    lock: <Lock className="text-success" fill="currentColor" size={30} />,
-    activity: (
-      <Activity className="text-secondary" fill="currentColor" size={30} />
-    ),
-    flash: <Flash className="text-primary" fill="currentColor" size={30} />,
-    server: <Server className="text-success" fill="currentColor" size={30} />,
-    user: <TagUser className="text-danger" fill="currentColor" size={30} />,
-  };
 
   function goTo(url: string) {
     // TDOD: fix redirect not working
@@ -98,17 +77,6 @@ export default function Nabar({ user, notifications, session, settings }: any) {
             Dashboard
           </Link>
         </NavbarItem>
-        {user.role === "Admin" && (
-          <NavbarItem>
-            <Link
-              aria-current="page"
-              color="foreground"
-              onPress={() => goTo("/admin")}
-            >
-              Admin
-            </Link>
-          </NavbarItem>
-        )}
       </NavbarContent>
 
       {user.role === "Admin" && settings.maintenance && (
@@ -230,17 +198,6 @@ export default function Nabar({ user, notifications, session, settings }: any) {
             Dashboard
           </Link>
         </NavbarItem>
-        {user.role === "Admin" && (
-          <NavbarItem>
-            <Link
-              aria-current="page"
-              color="foreground"
-              onPress={() => goTo("/admin")}
-            >
-              Admin
-            </Link>
-          </NavbarItem>
-        )}
         <NavbarMenuItem>
           <Divider className="my-4" />
           <Login

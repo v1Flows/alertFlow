@@ -1,3 +1,5 @@
+"use client";
+
 import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
 import {
@@ -14,40 +16,37 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
-import DeleteFlow from "@/lib/fetch/flow/DELETE/DeleteFlow";
+import DeleteUser from "@/lib/fetch/user/delete";
 
-export default function FunctionDeleteFlow({
+export default function DeleteUserModal({
   disclosure,
-  flow,
+  user,
 }: {
   disclosure: UseDisclosureReturn;
-  flow: any;
+  user: any;
 }) {
   const router = useRouter();
-
   const { isOpen, onOpenChange } = disclosure;
 
-  const [isDeleteLoading, setIsDeleteLoading] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
 
-  async function deleteFlow() {
-    setIsDeleteLoading(true);
-    const res = await DeleteFlow(flow.id);
+  async function deleteUser() {
+    setIsLoading(true);
+    const response = await DeleteUser(user.id);
 
-    if (res.error) {
-      setIsDeleteLoading(false);
-      toast.error("Failed to delete flow");
-
-      return;
+    if (!response.error) {
+      router.refresh();
+      onOpenChange();
+      setIsLoading(false);
+      toast.success("User deleted successfully");
+    } else {
+      setIsLoading(false);
+      toast.error("Failed to delete user");
     }
-
-    setIsDeleteLoading(false);
-    onOpenChange();
-    toast.success("Flow deleted successfully");
-    router.refresh();
   }
 
   return (
-    <main>
+    <>
       <Modal
         backdrop="blur"
         isOpen={isOpen}
@@ -62,13 +61,14 @@ export default function FunctionDeleteFlow({
               </ModalHeader>
               <ModalBody>
                 <p>
-                  You are about to delete the following flow which{" "}
+                  You are about to delete the following user which{" "}
                   <span className="font-bold">cannot be undone</span>:
                 </p>
                 <Divider />
                 <Snippet hideCopyButton hideSymbol>
-                  <span>Name: {flow.name}</span>
-                  <span>ID: {flow.id}</span>
+                  <span>Name: {user.username}</span>
+                  <span>Email: {user.email}</span>
+                  <span>ID: {user.id}</span>
                 </Snippet>
               </ModalBody>
               <ModalFooter>
@@ -77,17 +77,17 @@ export default function FunctionDeleteFlow({
                 </Button>
                 <Button
                   color="danger"
-                  isLoading={isDeleteLoading}
+                  isLoading={isLoading}
                   variant="solid"
-                  onPress={deleteFlow}
+                  onPress={deleteUser}
                 >
-                  Delete
+                  DELETE
                 </Button>
               </ModalFooter>
             </>
           )}
         </ModalContent>
       </Modal>
-    </main>
+    </>
   );
 }

@@ -20,7 +20,6 @@ import {
   useDisclosure,
   Pagination,
 } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
 
 import {
   DeleteDocumentIcon,
@@ -66,7 +65,8 @@ export function ApiKeysList({ apikeys, projects }: any) {
             {apikey.project_id !== "none" && (
               <span>
                 <p>
-                  {projects.find((p: any) => p.id === apikey.project_id)?.name || "Unknown"}
+                  {projects.find((p: any) => p.id === apikey.project_id)
+                    ?.name || "Unknown"}
                 </p>
                 <p className="text-sm text-default-400">{apikey.project_id}</p>
               </span>

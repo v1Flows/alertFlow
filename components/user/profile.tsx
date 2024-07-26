@@ -10,11 +10,11 @@ import {
   Tabs,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-
-import ChangeUserDetails from "@/lib/fetch/user/changeDetails";
 import { toast } from "sonner";
 
-export function UserProfile({ user, settings }: any) {
+import ChangeUserDetails from "@/lib/fetch/user/changeDetails";
+
+export function UserProfile({ user }: any) {
   const router = useRouter();
 
   const [username, setUsername] = React.useState(user.username);

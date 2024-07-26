@@ -5,12 +5,14 @@ import { Avatar, cn } from "@nextui-org/react";
 
 import CellWrapper from "./cell-wrapper";
 
+// eslint-disable-next-line no-undef
 export type UserCellProps = React.HTMLAttributes<HTMLDivElement> & {
   avatar: string;
   name: string;
   permission: string;
 };
 
+// eslint-disable-next-line no-undef
 const UserCell = React.forwardRef<HTMLDivElement, UserCellProps>(
   ({ avatar, name, permission, className, ...props }, ref) => (
     <CellWrapper

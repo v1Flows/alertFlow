@@ -2,11 +2,7 @@
 
 import { cookies } from "next/headers";
 
-export default async function CreateProject(
-  name: string,
-  description: string,
-  alertflowRunners: boolean,
-) {
+export default async function DeleteUser(id: any) {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;
@@ -18,19 +14,14 @@ export default async function CreateProject(
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.API_ENDPOINT}/projects/`, {
-      method: "POST",
+    const res = await fetch(`${process.env.API_ENDPOINT}/user/${id}`, {
+      method: "DELETE",
       headers: headers,
-      body: JSON.stringify({
-        name: name,
-        description: description,
-        alertflow_runners: alertflowRunners,
-      }),
     });
     const data = await res.json();
 
     return data;
   } catch (error) {
-    return { error: "Failed to create project" };
+    return { error: "Failed to delete user" };
   }
 }

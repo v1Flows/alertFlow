@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   Button,
@@ -47,6 +47,9 @@ export default function Payloads({ flow, executions, payloads, runners }: any) {
 
   return (
     <main>
+      {items.length === 0 && (
+        <p className="text-center text-default-500">No payloads found</p>
+      )}
       <div className="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-4">
         {items.map((payload: any) => (
           <Card key={payload.id} fullWidth>
@@ -91,10 +94,11 @@ export default function Payloads({ flow, executions, payloads, runners }: any) {
                     variant="flat"
                     onPress={() => {
                       router.push(
-                        `/dashboard/flows/${flow.id}/execution/${executions.find(
-                          (execution: any) =>
-                            execution.payload_id === payload.id,
-                        ).id
+                        `/dashboard/flows/${flow.id}/execution/${
+                          executions.find(
+                            (execution: any) =>
+                              execution.payload_id === payload.id,
+                          ).id
                         }`,
                       );
                     }}
@@ -126,6 +130,7 @@ export default function Payloads({ flow, executions, payloads, runners }: any) {
       <div className="flex justify-center mt-4">
         <Pagination
           showControls
+          isDisabled={items.length === 0}
           page={page}
           total={pages}
           onChange={(page) => setPage(page)}

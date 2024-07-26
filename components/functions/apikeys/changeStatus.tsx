@@ -15,7 +15,6 @@ import React from "react";
 import { toast } from "sonner";
 
 import { CheckIcon, LockIcon } from "@/components/icons";
-import ChangeFlowStatus from "@/lib/fetch/flow/PUT/ChangeFlowStatus";
 import ChangeTokenStatus from "@/lib/fetch/apikeys/ChangeStatus";
 
 export default function ChangeTokenStatusModal({
@@ -29,7 +28,7 @@ export default function ChangeTokenStatusModal({
 }) {
   const router = useRouter();
 
-  const { isOpen, onOpen, onOpenChange, onClose } = disclosure;
+  const { isOpen, onOpenChange } = disclosure;
 
   const [disableReason, setDisableReason] = React.useState("");
   const [isLoading, setLoading] = React.useState(false);

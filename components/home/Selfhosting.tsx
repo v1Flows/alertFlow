@@ -21,7 +21,13 @@ export default function HomeSelfhosting() {
           <br /> you can host your own Runners.
         </h2>
         <div className="mt-4">
-          <Button color="warning" radius="lg" size="sm" variant="flat" isDisabled>
+          <Button
+            isDisabled
+            color="warning"
+            radius="lg"
+            size="sm"
+            variant="flat"
+          >
             Learn more
           </Button>
         </div>

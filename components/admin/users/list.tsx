@@ -35,23 +35,35 @@ import {
   EditDocumentIcon,
   LockIcon,
   DeleteDocumentIcon,
+  PlusIcon,
 } from "@/components/icons";
 import UpdateUserStatus from "@/lib/fetch/admin/PUT/UpdateUserState";
+import DeleteUserModal from "@/components/functions/users/delete";
+import SignUpModal from "@/components/functions/auth/signUp";
 
 export function UsersList({ users }: any) {
   const router = useRouter();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpenChange } = useDisclosure();
   const [disableReason, setDisableReason] = React.useState("");
   const [isDisableLoading, setIsDisableLoading] = React.useState(false);
 
   const [userID, setUserID] = React.useState("");
   const [disableUser, setDisableUser] = React.useState(false);
 
+  const [targetUser, setTargetUser] = React.useState<any>(null);
+  const deleteUserModal = useDisclosure();
+  const signUpModal = useDisclosure();
+
   React.useEffect(() => {
     if (userID !== "" && !disableUser) {
       changeUserStatus();
     }
   }, [userID, disableUser]);
+
+  function handleDeleteUser(user: any) {
+    setTargetUser(user);
+    deleteUserModal.onOpen();
+  }
 
   function changeUserStatusModal(userID: string, disabled: boolean) {
     setUserID(userID);
@@ -232,12 +244,12 @@ export function UsersList({ users }: any) {
                     key="delete"
                     className="text-danger"
                     color="danger"
-                    description="Permanently delete this user"
                     startContent={
                       <DeleteDocumentIcon
                         className={cn(iconClasses, "text-danger")}
                       />
                     }
+                    onPress={() => handleDeleteUser(user)}
                   >
                     Delete
                   </DropdownItem>
@@ -259,6 +271,15 @@ export function UsersList({ users }: any) {
           <p className="text-2xl mb-0">|</p>
           <p className="text-2xl mb-0">Users</p>
         </div>
+        <Button
+          color="primary"
+          radius="sm"
+          startContent={<PlusIcon />}
+          variant="flat"
+          onPress={() => signUpModal.onOpen()}
+        >
+          Create User
+        </Button>
       </div>
       <Divider className="my-4" />
       <div>
@@ -351,6 +372,8 @@ export function UsersList({ users }: any) {
           </ModalContent>
         </Modal>
       </div>
+      <SignUpModal skipSuccessModal disclosure={signUpModal} />
+      <DeleteUserModal disclosure={deleteUserModal} user={targetUser} />
     </main>
   );
 }

@@ -71,7 +71,7 @@ export default function FlowList({ flows, projects, settings }: any) {
             Flow{flows.length > 1 ? "s" : ""}
           </p>
         </div>
-        <div className="flex items-center mr-4 gap-4">
+        <div className="flex items-center gap-4">
           <Select
             className="w-28"
             placeholder="Project"
