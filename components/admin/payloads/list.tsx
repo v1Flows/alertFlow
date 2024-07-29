@@ -70,14 +70,14 @@ export function PayloadsList({ flows, payloads, executions, runners }: any) {
       case "flow_id":
         return (
           <div>
-            <p>{flows.find((f: any) => f.id === payload.flow_id).name}</p>
+            <p>{flows.find((f: any) => f.id === payload.flow_id)?.name}</p>
             <p className="text-xs text-default-400">{payload.flow_id}</p>
           </div>
         );
       case "runner_id":
         return (
           <div>
-            <p>{runners.find((r: any) => r.id === payload.runner_id).name}</p>
+            <p>{runners.find((r: any) => r.id === payload.runner_id)?.name}</p>
             <p className="text-xs text-default-400">{payload.runner_id}</p>
           </div>
         );
