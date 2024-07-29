@@ -9,7 +9,9 @@ import {
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 
-export function DashboardHome({ stats }: any) {
+export function DashboardHome({ stats, plans, user }: any) {
+  const plan = plans.find((plan: any) => plan.id === user.plan);
+
   return (
     <main>
       <div className="flex items-center justify-between">
@@ -32,7 +34,7 @@ export function DashboardHome({ stats }: any) {
             <CardBody className="relative bg-gradient-to-br from-content1 to-default-100/50 p-8 before:inset-0 before:h-full before:w-full before:content-['']">
               <h1 className="mb-4 text-default-400">Your Plan</h1>
               <h2 className="inline bg-gradient-to-br from-foreground-800 to-foreground-500 bg-clip-text text-6xl font-semibold tracking-tight text-transparent dark:to-foreground-200">
-                Hobby
+                {plan.name}
               </h2>
             </CardBody>
             <CardFooter>
@@ -43,7 +45,9 @@ export function DashboardHome({ stats }: any) {
                     icon="ci:check"
                     width={24}
                   />
-                  <p className="text-small text-default-500">1 Project</p>
+                  <p className="text-small text-default-500">
+                    {plan.projects} Project
+                  </p>
                 </li>
                 <li className="flex items-center gap-1">
                   <Icon
@@ -51,7 +55,9 @@ export function DashboardHome({ stats }: any) {
                     icon="ci:check"
                     width={24}
                   />
-                  <p className="text-small text-default-500">2 Flows</p>
+                  <p className="text-small text-default-500">
+                    {plan.project_members} Project Members
+                  </p>
                 </li>
                 <li className="flex items-center gap-1">
                   <Icon
@@ -59,7 +65,39 @@ export function DashboardHome({ stats }: any) {
                     icon="ci:check"
                     width={24}
                   />
-                  <p className="text-small text-default-500">1 Runner</p>
+                  <p className="text-small text-default-500">
+                    {plan.flows} Flows
+                  </p>
+                </li>
+                <li className="flex items-center gap-1">
+                  <Icon
+                    className="text-default-600"
+                    icon="ci:check"
+                    width={24}
+                  />
+                  <p className="text-small text-default-500">
+                    {plan.self_hosted_runners} Self-Hosted Runner
+                  </p>
+                </li>
+                <li className="flex items-center gap-1">
+                  <Icon
+                    className="text-default-600"
+                    icon="ci:check"
+                    width={24}
+                  />
+                  <p className="text-small text-default-500">
+                    {plan.alertflow_runners} AlertFlow Runner
+                  </p>
+                </li>
+                <li className="flex items-center gap-1">
+                  <Icon
+                    className="text-default-600"
+                    icon="ci:check"
+                    width={24}
+                  />
+                  <p className="text-small text-default-500">
+                    {plan.executions_per_month} Executions per Month
+                  </p>
                 </li>
               </ul>
             </CardFooter>
@@ -85,7 +123,7 @@ export function DashboardHome({ stats }: any) {
                 label="Projects"
                 maxValue={1}
                 value={stats.projects}
-                valueLabel={stats.projects + " / 1"}
+                valueLabel={stats.projects + " / " + plan.projects}
               />
             </CardHeader>
           </Card>
@@ -110,7 +148,7 @@ export function DashboardHome({ stats }: any) {
                 label="Flows"
                 maxValue={2}
                 value={stats.flows}
-                valueLabel={stats.flows + " / 2"}
+                valueLabel={stats.flows + " / " + plan.flows}
               />
             </CardHeader>
           </Card>
@@ -131,10 +169,10 @@ export function DashboardHome({ stats }: any) {
                   value: "text-foreground/60",
                 }}
                 color="warning"
-                label="Runners"
+                label="Self-Hosted Runners"
                 maxValue={1}
                 value={stats.runners}
-                valueLabel={stats.runners + " / 1"}
+                valueLabel={stats.runners + " / " + plan.self_hosted_runners}
               />
             </CardHeader>
           </Card>
@@ -156,8 +194,8 @@ export function DashboardHome({ stats }: any) {
                 }}
                 color="primary"
                 label="Executions"
-                maxValue={35}
-                value={12}
+                maxValue={plan.executions_per_month}
+                value={2}
               />
             </CardHeader>
           </Card>
