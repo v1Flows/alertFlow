@@ -40,8 +40,9 @@ import {
 import UpdateUserStatus from "@/lib/fetch/admin/PUT/UpdateUserState";
 import DeleteUserModal from "@/components/functions/users/delete";
 import SignUpModal from "@/components/functions/auth/signUp";
+import EditUserModal from "@/components/functions/users/edit";
 
-export function UsersList({ users }: any) {
+export function UsersList({ users, plans }: any) {
   const router = useRouter();
   const { isOpen, onOpenChange } = useDisclosure();
   const [disableReason, setDisableReason] = React.useState("");
@@ -51,6 +52,7 @@ export function UsersList({ users }: any) {
   const [disableUser, setDisableUser] = React.useState(false);
 
   const [targetUser, setTargetUser] = React.useState<any>(null);
+  const editUserModal = useDisclosure();
   const deleteUserModal = useDisclosure();
   const signUpModal = useDisclosure();
 
@@ -71,6 +73,11 @@ export function UsersList({ users }: any) {
       default:
         return "secondary";
     }
+  }
+
+  function handleEditUser(user: any) {
+    setTargetUser(user);
+    editUserModal.onOpen();
   }
 
   function handleDeleteUser(user: any) {
@@ -209,7 +216,6 @@ export function UsersList({ users }: any) {
                     key="view"
                     className="text-primary"
                     color="primary"
-                    description="Take a look on this user"
                     startContent={
                       <EyeIcon className={cn(iconClasses, "text-primary")} />
                     }
@@ -222,12 +228,12 @@ export function UsersList({ users }: any) {
                     key="edit"
                     className="text-warning"
                     color="warning"
-                    description="Apply changes to this user"
                     startContent={
                       <EditDocumentIcon
                         className={cn(iconClasses, "text-warning")}
                       />
                     }
+                    onClick={() => handleEditUser(user)}
                   >
                     Edit
                   </DropdownItem>
@@ -236,7 +242,6 @@ export function UsersList({ users }: any) {
                       key="disable"
                       className="text-danger"
                       color="danger"
-                      description="Disable access to AlertFlow for this user"
                       startContent={
                         <LockIcon className={cn(iconClasses, "text-danger")} />
                       }
@@ -396,6 +401,11 @@ export function UsersList({ users }: any) {
           </ModalContent>
         </Modal>
       </div>
+      <EditUserModal
+        disclosure={editUserModal}
+        plans={plans}
+        user={targetUser}
+      />
       <SignUpModal skipSuccessModal disclosure={signUpModal} />
       <DeleteUserModal disclosure={deleteUserModal} user={targetUser} />
     </main>

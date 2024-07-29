@@ -109,7 +109,7 @@ export default function ProjectMembers({
         <Button
           color="primary"
           isDisabled={
-            settings.add_project_members ||
+            !settings.add_project_members ||
             members.length >= plan.project_members
           }
           startContent={<PlusIcon />}

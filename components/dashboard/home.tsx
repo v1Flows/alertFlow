@@ -121,7 +121,7 @@ export function DashboardHome({ stats, plans, user }: any) {
                   value: "text-foreground/60",
                 }}
                 label="Projects"
-                maxValue={1}
+                maxValue={plan.projects}
                 value={stats.projects}
                 valueLabel={stats.projects + " / " + plan.projects}
               />
@@ -146,7 +146,7 @@ export function DashboardHome({ stats, plans, user }: any) {
                   value: "text-foreground/60",
                 }}
                 label="Flows"
-                maxValue={2}
+                maxValue={plan.flows}
                 value={stats.flows}
                 valueLabel={stats.flows + " / " + plan.flows}
               />
@@ -170,7 +170,7 @@ export function DashboardHome({ stats, plans, user }: any) {
                 }}
                 color="warning"
                 label="Self-Hosted Runners"
-                maxValue={1}
+                maxValue={plan.self_hosted_runners}
                 value={stats.runners}
                 valueLabel={stats.runners + " / " + plan.self_hosted_runners}
               />
