@@ -60,6 +60,19 @@ export function UsersList({ users }: any) {
     }
   }, [userID, disableUser]);
 
+  function planColor(plan: string) {
+    switch (plan) {
+      case "hobby":
+        return "default";
+      case "pro":
+        return "primary";
+      case "advanced":
+        return "warning";
+      default:
+        return "secondary";
+    }
+  }
+
   function handleDeleteUser(user: any) {
     setTargetUser(user);
     deleteUserModal.onOpen();
@@ -137,6 +150,14 @@ export function UsersList({ users }: any) {
           >
             {user.email}
           </User>
+        );
+      case "plan":
+        return (
+          <p
+            className={`font-bold text-sm capitalize text-${planColor(cellValue)}`}
+          >
+            {cellValue}
+          </p>
         );
       case "role":
         return (
@@ -309,6 +330,9 @@ export function UsersList({ users }: any) {
             </TableColumn>
             <TableColumn key="role" align="start">
               ROLE
+            </TableColumn>
+            <TableColumn key="plan" align="start">
+              PLAN
             </TableColumn>
             <TableColumn key="disabled" align="start">
               STATUS

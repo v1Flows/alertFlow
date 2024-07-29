@@ -26,7 +26,12 @@ const statusColorMap: any = {
   Viewer: "default",
 };
 
-export default function ProjectMembers({ project, members }: any) {
+export default function ProjectMembers({
+  project,
+  members,
+  settings,
+  plan,
+}: any) {
   const addProjectMemberModal = useDisclosure();
 
   // pagination
@@ -103,6 +108,10 @@ export default function ProjectMembers({ project, members }: any) {
       <div className="flex flex-col items-end justify-center gap-4">
         <Button
           color="primary"
+          isDisabled={
+            settings.add_project_members ||
+            members.length >= plan.project_members
+          }
           startContent={<PlusIcon />}
           onPress={() => addProjectMemberModal.onOpen()}
         >
@@ -119,7 +128,6 @@ export default function ProjectMembers({ project, members }: any) {
         bottomContent={
           <div className="flex w-full justify-center">
             <Pagination
-              isCompact
               showControls
               showShadow
               color="primary"
