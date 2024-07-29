@@ -1,0 +1,16 @@
+name: Check Image Build
+
+on:
+  push:
+    branches: [ "work" ]
+    paths-ignore:
+      - '.github/**'
+
+jobs:
+  build:
+    name: Check Build
+    runs-on: [self-hosted, alertflow]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Docker Image
+        run: docker build . --file Dockerfile --tag harbor.justlab.xyz/alertflow/frontend:test

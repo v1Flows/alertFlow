@@ -74,7 +74,7 @@ export function FlowsList({ flows, projects, runners }: any) {
       case "project_id":
         return (
           <div>
-            <p>{projects.find((p: any) => p.id === flow.project_id).name}</p>
+            <p>{projects.find((p: any) => p.id === flow.project_id)?.name}</p>
             <p className="text-xs text-default-400">{flow.project_id}</p>
           </div>
         );
@@ -83,7 +83,7 @@ export function FlowsList({ flows, projects, runners }: any) {
           <div>
             {flow.runner_id !== "any" ? (
               <>
-                <p>{runners.find((r: any) => r.id === flow.runner_id).name}</p>
+                <p>{runners.find((r: any) => r.id === flow.runner_id)?.name}</p>
                 <p className="text-xs text-default-400">{flow.runner_id}</p>
               </>
             ) : (
@@ -96,15 +96,32 @@ export function FlowsList({ flows, projects, runners }: any) {
           <div>
             <Chip
               className="capitalize"
-              color={flow.disabled ? "danger" : "success"}
+              color={
+                flow.disabled
+                  ? "danger"
+                  : flow.maintenance_required
+                    ? "warning"
+                    : "success"
+              }
               radius="sm"
               size="sm"
               variant="flat"
             >
-              {flow.disabled ? "Disabled" : "Active"}
+              {flow.disabled
+                ? "Disabled"
+                : flow.maintenance_required
+                  ? "Maintenance"
+                  : "Enabled"}
             </Chip>
-            {flow.disabled && (
-              <p className="text-sm text-default-400">{flow.disabled_reason}</p>
+            {(flow.disabled || flow.maintenance_required) && (
+              <span>
+                <p className="text-sm text-default-400">
+                  {flow.disabled_reason}
+                </p>
+                <p className="text-sm text-default-400">
+                  {flow.maintenance_message}
+                </p>
+              </span>
             )}
           </div>
         );

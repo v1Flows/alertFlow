@@ -33,7 +33,12 @@ import SparklesText from "@/components/magicui/sparkles-text";
 import AcceptProjectInvite from "@/lib/fetch/project/PUT/AcceptProjectInvite";
 import DeclineProjectInvite from "@/lib/fetch/project/PUT/DeclineProjectInvite";
 
-export function ProjectsList({ projects, pending_projects, settings }: any) {
+export function ProjectsList({
+  projects,
+  pending_projects,
+  settings,
+  plan,
+}: any) {
   const router = useRouter();
 
   const [targetProject, setTargetProject] = React.useState({});
@@ -64,7 +69,9 @@ export function ProjectsList({ projects, pending_projects, settings }: any) {
         </div>
         <Button
           color="primary"
-          isDisabled={!settings.create_projects}
+          isDisabled={
+            !settings.create_projects || projects.length >= plan.projects
+          }
           radius="sm"
           startContent={<PlusIcon />}
           variant="solid"

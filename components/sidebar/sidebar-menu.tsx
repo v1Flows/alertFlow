@@ -139,10 +139,18 @@ export default function SidebarMenu({
       <Dropdown>
         <DropdownTrigger>
           <div className="flex items-center gap-3 px-3">
-            <Avatar isBordered name={user.username} size="sm" />
+            <Avatar
+              isBordered
+              color={user.role === "Admin" ? "danger" : "primary"}
+              name={user.username}
+              size="sm"
+            />
             <div className="flex flex-col">
               <p className="text-small font-medium text-default-600">
-                {user.username}
+                {user.username}{" "}
+                {user.role === "Admin" && (
+                  <span className="text-danger">(Admin)</span>
+                )}
               </p>
               <p className="text-tiny text-default-400">{user.email}</p>
             </div>

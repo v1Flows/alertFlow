@@ -32,7 +32,7 @@ import { IconWrapper } from "@/lib/IconWrapper";
 import FunctionDeleteFlow from "@/components/functions/flows/deleteFlow";
 import FunctionCreateFlow from "@/components/functions/flows/create";
 
-export default function FlowList({ flows, projects, settings }: any) {
+export default function FlowList({ flows, projects, settings, plan }: any) {
   const router = useRouter();
 
   const [projectFilter, setProjectFilter] = React.useState(new Set([]) as any);
@@ -89,7 +89,7 @@ export default function FlowList({ flows, projects, settings }: any) {
           </Select>
           <Button
             color="primary"
-            isDisabled={!settings.create_flows}
+            isDisabled={!settings.create_flows || flows.length >= plan.flows}
             radius="sm"
             startContent={<PlusIcon />}
             variant="solid"
