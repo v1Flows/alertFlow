@@ -13,13 +13,12 @@ import {
   Input,
   Select,
   SelectItem,
-  Divider,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
+import { toast } from "sonner";
 
 import UpdateUser from "@/lib/fetch/admin/PUT/UpdateUser";
-import { toast } from "sonner";
 
 export default function EditUserModal({
   user,

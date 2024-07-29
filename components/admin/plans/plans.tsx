@@ -19,9 +19,6 @@ export default function AdminPlans({ plans }: any) {
   const [targetPlan, setTargetPlan] = React.useState<any>(null);
   const editPlan = useDisclosure();
 
-  const iconClasses =
-    "text-xl text-default-500 pointer-events-none flex-shrink-0";
-
   function handleEditPlan(plan: any) {
     setTargetPlan(plan);
     editPlan.onOpen();
