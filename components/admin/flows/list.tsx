@@ -74,7 +74,7 @@ export function FlowsList({ flows, projects, runners }: any) {
       case "project_id":
         return (
           <div>
-            <p>{projects.find((p: any) => p.id === flow.project_id).name}</p>
+            <p>{projects.find((p: any) => p.id === flow.project_id)?.name}</p>
             <p className="text-xs text-default-400">{flow.project_id}</p>
           </div>
         );
@@ -83,7 +83,7 @@ export function FlowsList({ flows, projects, runners }: any) {
           <div>
             {flow.runner_id !== "any" ? (
               <>
-                <p>{runners.find((r: any) => r.id === flow.runner_id).name}</p>
+                <p>{runners.find((r: any) => r.id === flow.runner_id)?.name}</p>
                 <p className="text-xs text-default-400">{flow.runner_id}</p>
               </>
             ) : (
