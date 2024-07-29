@@ -1,3 +1,5 @@
+"use client";
+
 import { Icon } from "@iconify/react";
 import {
   Button,
@@ -7,11 +9,23 @@ import {
   CardHeader,
   Chip,
   Divider,
+  useDisclosure,
 } from "@nextui-org/react";
+import React from "react";
+
+import EditPlanModal from "@/components/functions/page/editPlan";
 
 export default function AdminPlans({ plans }: any) {
+  const [targetPlan, setTargetPlan] = React.useState<any>(null);
+  const editPlan = useDisclosure();
+
   const iconClasses =
     "text-xl text-default-500 pointer-events-none flex-shrink-0";
+
+  function handleEditPlan(plan: any) {
+    setTargetPlan(plan);
+    editPlan.onOpen();
+  }
 
   return (
     <main>
@@ -95,7 +109,13 @@ export default function AdminPlans({ plans }: any) {
               </div>
             </CardBody>
             <CardFooter>
-              <Button fullWidth color="warning" size="sm" variant="flat">
+              <Button
+                fullWidth
+                color="warning"
+                size="sm"
+                variant="flat"
+                onPress={() => handleEditPlan(plan)}
+              >
                 <Icon
                   height={20}
                   icon="solar:pen-new-square-broken"
@@ -107,6 +127,7 @@ export default function AdminPlans({ plans }: any) {
           </Card>
         ))}
       </div>
+      <EditPlanModal disclosure={editPlan} plan={targetPlan} />
     </main>
   );
 }

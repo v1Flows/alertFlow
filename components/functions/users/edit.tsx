@@ -129,7 +129,6 @@ export default function EditUserModal({
                     <SelectItem key={plan.id}>{plan.name}</SelectItem>
                   ))}
                 </Select>
-                <Divider />
               </ModalBody>
               <ModalFooter>
                 <Button variant="ghost" onPress={onClose}>
