@@ -13,6 +13,7 @@ export default function ProjectTabs({
   runners,
   apiKeys,
   settings,
+  plan,
 }: any) {
   const [selected, setSelected] = React.useState("members");
 
@@ -37,6 +38,7 @@ export default function ProjectTabs({
           >
             <ProjectMembers
               members={members}
+              plan={plan}
               project={project}
               settings={settings}
             />
@@ -50,7 +52,12 @@ export default function ProjectTabs({
               </div>
             }
           >
-            <Runners project={project} runners={runners} settings={settings} />
+            <Runners
+              plan={plan}
+              project={project}
+              runners={runners}
+              settings={settings}
+            />
           </Tab>
           <Tab
             key="apikeys"
