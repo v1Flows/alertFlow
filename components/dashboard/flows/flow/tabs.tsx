@@ -37,6 +37,7 @@ export default function FlowTabs({ flow, executions, payloads, runners }: any) {
               <Button
                 fullWidth
                 color="primary"
+                isDisabled={flow.disabled}
                 startContent={<PlusIcon />}
                 variant="flat"
                 onPress={addFlowActionModal.onOpen}

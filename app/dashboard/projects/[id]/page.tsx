@@ -1,6 +1,7 @@
 import Project from "@/components/dashboard/projects/project";
 import PageGetSettings from "@/lib/fetch/page/settings";
 import GetProjectApiKeys from "@/lib/fetch/project/apiKeys";
+import GetProjectAuditLogs from "@/lib/fetch/project/audit";
 import GetProject from "@/lib/fetch/project/data";
 import GetProjectRunners from "@/lib/fetch/project/runners";
 import GetUserPlan from "@/lib/fetch/user/getPlan";
@@ -15,11 +16,13 @@ export default async function DashboardProjectPage({
   const runners = await GetProjectRunners(params.id);
   const apiKeys = await GetProjectApiKeys(params.id);
   const plan = await GetUserPlan();
+  const audit = await GetProjectAuditLogs(params.id);
 
   return (
     <>
       <Project
         apiKeys={apiKeys}
+        audit={audit}
         members={project.members}
         plan={plan}
         project={project.project}

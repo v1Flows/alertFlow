@@ -75,6 +75,17 @@ export function UsersList({ users, plans }: any) {
     }
   }
 
+  function roleColor(role: string) {
+    switch (role) {
+      case "Admin":
+        return "danger";
+      case "VIP":
+        return "warning";
+      default:
+        return "primary";
+    }
+  }
+
   function handleEditUser(user: any) {
     setTargetUser(user);
     editUserModal.onOpen();
@@ -169,7 +180,7 @@ export function UsersList({ users, plans }: any) {
       case "role":
         return (
           <p
-            className={`font-bold text-sm capitalize text-${user.role === "Admin" ? "danger" : "success"}`}
+            className={`font-bold text-sm capitalize text-${roleColor(cellValue)}`}
           >
             {cellValue}
           </p>
