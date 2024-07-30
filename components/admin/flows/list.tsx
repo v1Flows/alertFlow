@@ -20,6 +20,7 @@ import {
   Pagination,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import { Icon } from "@iconify/react";
 
 import {
   DeleteDocumentIcon,
@@ -33,14 +34,17 @@ import FunctionDeleteFlow from "@/components/functions/flows/deleteFlow";
 import EditFlowModal from "@/components/functions/flows/edit";
 import ChangeFlowStatusModal from "@/components/functions/flows/changeStatus";
 import FunctionCreateFlow from "@/components/functions/flows/create";
+import ChangeFlowMaintenanceModal from "@/components/functions/flows/changeMaintenance";
 
 export function FlowsList({ flows, projects, runners }: any) {
   const router = useRouter();
 
   const [status, setStatus] = React.useState(false);
+  const [maintenance, setMaintenance] = React.useState(false);
   const [targetFlow, setTargetFlow] = React.useState({} as any);
   const createModal = useDisclosure();
   const editModal = useDisclosure();
+  const changeMaintenanceModal = useDisclosure();
   const changeStatusModal = useDisclosure();
   const deleteModal = useDisclosure();
 
@@ -113,15 +117,13 @@ export function FlowsList({ flows, projects, runners }: any) {
                   ? "Maintenance"
                   : "Enabled"}
             </Chip>
-            {(flow.disabled || flow.maintenance_required) && (
-              <span>
-                <p className="text-sm text-default-400">
-                  {flow.disabled_reason}
-                </p>
-                <p className="text-sm text-default-400">
-                  {flow.maintenance_message}
-                </p>
-              </span>
+            {flow.disabled && (
+              <p className="text-sm text-default-400">{flow.disabled_reason}</p>
+            )}
+            {flow.maintenance_required && (
+              <p className="text-sm text-default-400">
+                {flow.maintenance_message}
+              </p>
             )}
           </div>
         );
@@ -203,6 +205,41 @@ export function FlowsList({ flows, projects, runners }: any) {
                       }}
                     >
                       Disable
+                    </DropdownItem>
+                  )}
+                </DropdownSection>
+                <DropdownSection title="Maintenance">
+                  {flow.maintenance_required ? (
+                    <DropdownItem
+                      key="disable"
+                      className="text-warning"
+                      color="warning"
+                      startContent={
+                        <Icon icon="solar:bomb-emoji-broken" width={20} />
+                      }
+                      onClick={() => {
+                        setTargetFlow(flow);
+                        setMaintenance(false);
+                        changeMaintenanceModal.onOpen();
+                      }}
+                    >
+                      Remove Maintenance
+                    </DropdownItem>
+                  ) : (
+                    <DropdownItem
+                      key="disable"
+                      className="text-warning"
+                      color="warning"
+                      startContent={
+                        <Icon icon="solar:bomb-emoji-broken" width={20} />
+                      }
+                      onClick={() => {
+                        setTargetFlow(flow);
+                        setMaintenance(true);
+                        changeMaintenanceModal.onOpen();
+                      }}
+                    >
+                      Set Maintenance
                     </DropdownItem>
                   )}
                 </DropdownSection>
@@ -320,6 +357,11 @@ export function FlowsList({ flows, projects, runners }: any) {
         disclosure={changeStatusModal}
         flow={targetFlow}
         status={status}
+      />
+      <ChangeFlowMaintenanceModal
+        disclosure={changeMaintenanceModal}
+        flow={targetFlow}
+        maintenance={maintenance}
       />
       <FunctionDeleteFlow disclosure={deleteModal} flow={targetFlow} />
     </main>
