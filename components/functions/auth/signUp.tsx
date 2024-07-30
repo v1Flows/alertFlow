@@ -178,7 +178,12 @@ export default function SignUpModal({
 
   return (
     <main>
-      <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
+      <Modal
+        isDismissable={false}
+        isOpen={isOpen}
+        placement="center"
+        onOpenChange={onOpenChange}
+      >
         <ModalContent>
           <div className="flex h-full w-full items-center justify-center">
             <div className="flex w-full max-w-sm flex-col gap-4 overflow-hidden rounded-large bg-transparent px-8 pb-10 pt-6">
