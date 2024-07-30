@@ -141,7 +141,13 @@ export default function SidebarMenu({
           <div className="flex items-center gap-3 px-3">
             <Avatar
               isBordered
-              color={user.role === "Admin" ? "danger" : "primary"}
+              color={
+                user.role === "Admin"
+                  ? "danger"
+                  : user.role === "VIP"
+                    ? "warning"
+                    : "primary"
+              }
               name={user.username}
               size="sm"
             />
@@ -150,6 +156,9 @@ export default function SidebarMenu({
                 {user.username}{" "}
                 {user.role === "Admin" && (
                   <span className="text-danger">(Admin)</span>
+                )}
+                {user.role === "VIP" && (
+                  <span className="text-warning">(VIP)</span>
                 )}
               </p>
               <p className="text-tiny text-default-400">{user.email}</p>

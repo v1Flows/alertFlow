@@ -27,6 +27,7 @@ export default function Project({
   runners,
   apiKeys,
   plan,
+  audit,
 }: any) {
   const editProjectModal = useDisclosure();
 
@@ -148,6 +149,7 @@ export default function Project({
       <div className="w-full mt-6">
         <ProjectTabs
           apiKeys={apiKeys}
+          audit={audit}
           members={members}
           plan={plan}
           project={project}

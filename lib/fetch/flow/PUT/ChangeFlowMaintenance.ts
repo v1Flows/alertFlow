@@ -2,12 +2,10 @@
 
 import { cookies } from "next/headers";
 
-export default async function UpdateFlow(
+export default async function ChangeFlowMaintenance(
   id: string,
-  name: string,
-  description: string,
-  projectID: string,
-  runnerID: string,
+  maintenance: boolean,
+  reason: string,
 ) {
   "use client";
   const cookieStore = cookies();
@@ -20,16 +18,17 @@ export default async function UpdateFlow(
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.API_ENDPOINT}/flows/${id}`, {
-      method: "PUT",
-      headers: headers,
-      body: JSON.stringify({
-        name: name,
-        description: description,
-        project_id: projectID,
-        runner_id: runnerID,
-      }),
-    });
+    const res = await fetch(
+      `${process.env.API_ENDPOINT}/flows/${id}/maintenance`,
+      {
+        method: "PUT",
+        headers: headers,
+        body: JSON.stringify({
+          maintenance_required: maintenance,
+          maintenance_message: reason,
+        }),
+      },
+    );
     const data = await res.json();
 
     return data;

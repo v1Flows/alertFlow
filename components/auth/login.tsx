@@ -261,10 +261,16 @@ export default function Login({ user, session, showSignUp, settings }: any) {
                     </div>
                   </ModalBody>
                   <ModalFooter>
-                    <Button color="danger" variant="flat" onPress={onClose}>
+                    <Button
+                      fullWidth
+                      color="danger"
+                      variant="flat"
+                      onPress={onClose}
+                    >
                       Close
                     </Button>
                     <Button
+                      fullWidth
                       color="primary"
                       isLoading={isLoginLoading}
                       onPress={onLogin}
