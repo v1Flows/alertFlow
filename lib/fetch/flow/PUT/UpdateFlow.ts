@@ -8,7 +8,6 @@ export default async function UpdateFlow(
   description: string,
   projectID: string,
   runnerID: string,
-  maintenanceRequired: boolean,
 ) {
   "use client";
   const cookieStore = cookies();
@@ -29,7 +28,6 @@ export default async function UpdateFlow(
         description: description,
         project_id: projectID,
         runner_id: runnerID,
-        maintenance_required: maintenanceRequired,
       }),
     });
     const data = await res.json();

@@ -1,11 +1,13 @@
 "use client";
 import React from "react";
-import { Tabs, Tab } from "@nextui-org/react";
+import { Tabs, Tab, Tooltip } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 
 import ProjectMembers from "@/components/dashboard/projects/project/tables/UserTable";
 import ProjectAPIKeys from "@/components/dashboard/projects/project/tables/APIKeysTable";
 import Runners from "@/components/dashboard/projects/project/Runners";
+
+import ProjectAuditLogs from "./tables/AuditTable";
 
 export default function ProjectTabs({
   project,
@@ -14,6 +16,7 @@ export default function ProjectTabs({
   apiKeys,
   settings,
   plan,
+  audit,
 }: any) {
   const [selected, setSelected] = React.useState("members");
 
@@ -73,6 +76,27 @@ export default function ProjectTabs({
               project={project}
               settings={settings}
             />
+          </Tab>
+          <Tab
+            key="audit"
+            isDisabled={plan.id !== "enterprise"}
+            title={
+              plan.id !== "enterprise" ? (
+                <Tooltip color="secondary" content="Enterprise Feature">
+                  <div className="flex items-center space-x-2">
+                    <Icon icon="solar:notes-broken" width={20} />
+                    <span>Audit</span>
+                  </div>
+                </Tooltip>
+              ) : (
+                <div className="flex items-center space-x-2">
+                  <Icon icon="solar:notes-broken" width={20} />
+                  <span>Audit</span>
+                </div>
+              )
+            }
+          >
+            <ProjectAuditLogs audit={audit} members={members} />
           </Tab>
         </Tabs>
       </div>
