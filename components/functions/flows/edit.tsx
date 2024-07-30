@@ -84,7 +84,6 @@ export default function EditFlowModal({
       description,
       projectId,
       runnerLimit ? runnerId : "any",
-      runners.find((runner: any) => runner.id === runnerId) ? false : true,
     );
 
     if (response.result === "success") {
