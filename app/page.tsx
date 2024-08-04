@@ -9,6 +9,7 @@ import HomeSecurity from "@/components/home/Security";
 import HomeSelfhosting from "@/components/home/Selfhosting";
 import AdminGetSettings from "@/lib/fetch/page/settings";
 import GetUserNotifications from "@/lib/fetch/user/getNotifications";
+import { FeaturesSectionDemo } from "@/components/home/bento";
 
 export default async function Home() {
   const user = JSON.parse(cookies().get("user")?.value || "{}");
@@ -49,7 +50,10 @@ export default async function Home() {
             <HomeFeatures />
           </div>
         </section>
-        <section className="flex flex-col gap-4 py-8 md:py-10">
+        <section>
+          <FeaturesSectionDemo />
+        </section>
+        {/* <section className="flex flex-col gap-4 py-8 md:py-10">
           <HomeTerraform />
           <div className="mt-32">
             <HomeSecurity />
@@ -57,7 +61,7 @@ export default async function Home() {
           <div className="mt-32">
             <HomeSelfhosting />
           </div>
-        </section>
+        </section> */}
       </main>
     </>
   );

@@ -67,9 +67,6 @@ export default function FlowList({ flows, projects, settings, plan }: any) {
     }
   };
 
-  const iconClasses =
-    "text-xl text-default-500 pointer-events-none flex-shrink-0";
-
   return (
     <main>
       <div className="flex items-center justify-between">
