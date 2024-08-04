@@ -1,13 +1,12 @@
 "use client";
 
 import React from "react";
-import { Image } from "@nextui-org/react";
+import { Image, Tooltip } from "@nextui-org/react";
 import createGlobe from "cobe";
-import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
-import { IconBrandYoutubeFilled } from "@tabler/icons-react";
-import Link from "next/link";
+import { useEffect, useRef, forwardRef } from "react";
+import { Icon } from "@iconify/react";
 
+import { AnimatedBeam } from "@/components/magicui/animated-beam";
 import { cn } from "@/lib/utils";
 
 export function FeaturesSectionDemo() {
@@ -20,25 +19,25 @@ export function FeaturesSectionDemo() {
         "col-span-1 lg:col-span-4 border-b lg:border-r dark:border-neutral-800",
     },
     {
-      title: "Capture pictures with AI",
+      title: "Monitoring is a Global Operation",
       description:
-        "Capture stunning photos effortlessly using our advanced AI technology.",
-      skeleton: <SkeletonTwo />,
+        "Monitoring takes place all over the world. Your Server is located in America and you're located in Europe? We take care of the Alarms while you continue to take your well deserved sleep.",
+      skeleton: <SkeletonFour />,
       className: "border-b col-span-1 lg:col-span-2 dark:border-neutral-800",
     },
     {
-      title: "Watch our AI on YouTube",
+      title: "Enterprise ready",
       description:
-        "Whether its you or Tyler Durden, you can get to know about our product on YouTube",
+        "With the enterprise plan we offer oAuth, unlimited projects and more.",
       skeleton: <SkeletonThree />,
       className:
         "col-span-1 lg:col-span-3 lg:border-r  dark:border-neutral-800",
     },
     {
-      title: "Monitoring is a Global Operation",
+      title: "Automate your needs",
       description:
-        "With our blazing fast, state of the art, cutting edge, we are so back cloud servies (read AWS) - you can deploy your model in seconds.",
-      skeleton: <SkeletonFour />,
+        "With Flow Actions you can define automations for your alarms. For one Alarm, or just all of them.",
+      skeleton: <SkeletonTwo />,
       className: "col-span-1 lg:col-span-3 border-b lg:border-none",
     },
   ];
@@ -47,12 +46,13 @@ export function FeaturesSectionDemo() {
     <div className="relative z-20 py-10 lg:py-40 max-w-7xl mx-auto">
       <div className="px-8">
         <h4 className="text-3xl lg:text-5xl lg:leading-tight max-w-5xl mx-auto text-center tracking-tight font-medium text-black dark:text-white">
-          Packed with thousands of features
+          Packed with <span className="text-primary">fundamental features</span>
         </h4>
 
         <p className="text-sm lg:text-base  max-w-2xl  my-4 mx-auto text-neutral-500 text-center font-normal dark:text-neutral-300">
-          From Image generation to video generation, Everything AI has APIs for
-          literally everything. It can even create this website copy for you.
+          From Sending emails to triggering ansible playbooks. AlertFlow offers
+          you many ways to react on your Infrastructure Alarms. You say what you
+          want, we do the rest.
         </p>
       </div>
 
@@ -128,31 +128,113 @@ export const SkeletonOne = () => {
   );
 };
 
-export const SkeletonThree = () => {
+// eslint-disable-next-line react/display-name
+const Circle = forwardRef<
+  HTMLDivElement,
+  { className?: string; children?: React.ReactNode }
+>(({ className, children }, ref) => {
   return (
-    <Link
-      className="relative flex gap-10  h-full group/image"
-      href="https://www.youtube.com/watch?v=RPa3_AD1_Vs"
-      target="__blank"
+    <div
+      ref={ref}
+      className={cn(
+        "z-10 flex h-12 w-12 items-center justify-center rounded-full bg-default p-3 shadow-[0_0_20px_-12px_rgba(0,0,0,0.8)]",
+        className,
+      )}
     >
-      <div className="w-full  mx-auto bg-transparent dark:bg-transparent group h-full">
-        <div className="flex flex-1 w-full h-full flex-col space-y-2  relative">
-          {/* TODO */}
-          {/* <IconBrandYoutubeFilled className="h-20 w-20 absolute z-10 inset-0 text-red-500 m-auto " />
-          <Image
-            alt="header"
-            className="h-full w-full aspect-square object-cover object-center rounded-sm blur-none group-hover/image:blur-md transition-all duration-200"
-            height={800}
-            src="https://assets.aceternity.com/fireship.jpg"
-            width={800}
-          /> */}
+      {children}
+    </div>
+  );
+});
+
+export const SkeletonTwo = () => {
+  // eslint-disable-next-line no-undef
+  const containerRef = useRef<HTMLDivElement>(null);
+  // eslint-disable-next-line no-undef
+  const div1Ref = useRef<HTMLDivElement>(null);
+  // eslint-disable-next-line no-undef
+  const div2Ref = useRef<HTMLDivElement>(null);
+  // eslint-disable-next-line no-undef
+  const div3Ref = useRef<HTMLDivElement>(null);
+  // eslint-disable-next-line no-undef
+  const div6Ref = useRef<HTMLDivElement>(null);
+  // eslint-disable-next-line no-undef
+  const div7Ref = useRef<HTMLDivElement>(null);
+
+  return (
+    <div
+      ref={containerRef}
+      className={cn(
+        "relative flex w-full items-center justify-center overflow-hidden p-10",
+      )}
+    >
+      <div className="flex size-full max-w-lg flex-row items-stretch justify-between gap-10">
+        <div className="flex flex-col justify-center">
+          <Circle ref={div7Ref}>
+            <Tooltip color="primary" content="Incoming Payloads" offset={16}>
+              <Icon icon="solar:letter-opened-broken" width={24} />
+            </Tooltip>
+          </Circle>
+        </div>
+        <div className="flex flex-col justify-center">
+          <Circle ref={div6Ref} className="size-16">
+            <Tooltip color="primary" content="Flow Actions" offset={16}>
+              <Icon icon="solar:bolt-broken" width={32} />
+            </Tooltip>
+          </Circle>
+        </div>
+        <div className="flex flex-col justify-center gap-10">
+          <Circle ref={div1Ref}>
+            <Tooltip color="primary" content="Send an Email" offset={16}>
+              <Icon icon="solar:mailbox-broken" width={32} />
+            </Tooltip>
+          </Circle>
+          <Circle ref={div2Ref}>
+            <Tooltip color="primary" content="Trigger an Webhook" offset={16}>
+              <Icon icon="solar:global-broken" width={32} />
+            </Tooltip>
+          </Circle>
+          <Circle ref={div3Ref}>
+            <Tooltip
+              color="primary"
+              content="Trigger an Push Notification"
+              offset={16}
+            >
+              <Icon icon="solar:smartphone-vibration-broken" width={32} />
+            </Tooltip>
+          </Circle>
         </div>
       </div>
-    </Link>
+
+      {/* AnimatedBeams */}
+      <AnimatedBeam
+        containerRef={containerRef}
+        duration={3}
+        fromRef={div1Ref}
+        toRef={div6Ref}
+      />
+      <AnimatedBeam
+        containerRef={containerRef}
+        duration={3}
+        fromRef={div2Ref}
+        toRef={div6Ref}
+      />
+      <AnimatedBeam
+        containerRef={containerRef}
+        duration={3}
+        fromRef={div3Ref}
+        toRef={div6Ref}
+      />
+      <AnimatedBeam
+        containerRef={containerRef}
+        duration={3}
+        fromRef={div6Ref}
+        toRef={div7Ref}
+      />
+    </div>
   );
 };
 
-export const SkeletonTwo = () => {
+export const SkeletonThree = () => {
   const images = [
     "https://images.unsplash.com/photo-1517322048670-4fba75cbbb62?q=80&w=3000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     "https://images.unsplash.com/photo-1573790387438-4da905039392?q=80&w=3425&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -176,54 +258,18 @@ export const SkeletonTwo = () => {
 
   return (
     <div className="relative flex flex-col items-start p-8 gap-10 h-full overflow-hidden">
-      {/* TODO */}
-      <div className="flex flex-row -ml-20">
-        {images.map((image, idx) => (
-          <motion.div
-            key={"images-first" + idx}
-            className="rounded-xl -mr-4 mt-4 p-1 bg-white dark:bg-neutral-800 dark:border-neutral-700 border border-neutral-100 flex-shrink-0 overflow-hidden"
-            style={{
-              rotate: Math.random() * 20 - 10,
-            }}
-            variants={imageVariants}
-            whileHover="whileHover"
-            whileTap="whileTap"
-          >
-            <Image
-              alt="bali images"
-              className="rounded-lg h-20 w-20 md:h-40 md:w-40 object-cover flex-shrink-0"
-              height="500"
-              src={image}
-              width="500"
-            />
-          </motion.div>
-        ))}
-      </div>
-      <div className="flex flex-row">
-        {images.map((image, idx) => (
-          <motion.div
-            key={"images-second" + idx}
-            className="rounded-xl -mr-4 mt-4 p-1 bg-white dark:bg-neutral-800 dark:border-neutral-700 border border-neutral-100 flex-shrink-0 overflow-hidden"
-            style={{
-              rotate: Math.random() * 20 - 10,
-            }}
-            variants={imageVariants}
-            whileHover="whileHover"
-            whileTap="whileTap"
-          >
-            <Image
-              alt="bali images"
-              className="rounded-lg h-20 w-20 md:h-40 md:w-40 object-cover flex-shrink-0"
-              height="500"
-              src={image}
-              width="500"
-            />
-          </motion.div>
-        ))}
+      <div className="flex flex-1 w-full h-full flex-col space-y-2  ">
+        <Image
+          alt="header"
+          className="h-full w-full aspect-square object-cover object-left-top rounded-sm"
+          height={250}
+          src="images/dashboard_plan.png"
+          width={800}
+        />
       </div>
 
-      <div className="absolute left-0 z-[100] inset-y-0 w-20 bg-gradient-to-r from-white dark:from-black to-transparent  h-full pointer-events-none" />
-      <div className="absolute right-0 z-[100] inset-y-0 w-20 bg-gradient-to-l from-white dark:from-black  to-transparent h-full pointer-events-none" />
+      <div className="absolute bottom-0 z-40 inset-x-0 h-60 bg-gradient-to-t from-white dark:from-black via-white dark:via-black to-transparent w-full pointer-events-none" />
+      <div className="absolute top-0 z-40 inset-x-0 h-60 bg-gradient-to-b from-white dark:from-black via-transparent to-transparent w-full pointer-events-none" />
     </div>
   );
 };
@@ -260,14 +306,30 @@ export const Globe = ({ className }: { className?: string }) => {
       glowColor: [1, 1, 1],
       markers: [
         // longitude latitude
-        { location: [37.7595, -122.4367], size: 0.03 },
+        { location: [37.7595, -122.4367], size: 0.1 },
         { location: [40.7128, -74.006], size: 0.1 },
+        // Germany
+        { location: [51.4765, 10.3531], size: 0.1 },
+        // China
+        { location: [33.425, 103.1216], size: 0.1 },
+        // Philippines
+        { location: [14.5995, 120.9842], size: 0.1 },
+        // Australia
+        { location: [-33.8688, 151.2093], size: 0.1 },
+        // Africa
+        { location: [11.0063, 20.0358], size: 0.1 },
+        // Indonesia
+        { location: [-6.1751, 106.8276], size: 0.1 },
+        // Canada
+        { location: [56.1304, -106.3468], size: 0.1 },
+        // Brazil
+        { location: [-14.235, -51.9253], size: 0.1 },
       ],
       onRender: (state: any) => {
         // Called on every animation frame.
         // `state` will be an empty object, return updated params.
         state.phi = phi;
-        phi += 0.01;
+        phi += 0.005;
       },
     });
 
