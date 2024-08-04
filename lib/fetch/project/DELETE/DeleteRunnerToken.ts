@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-export default async function GetProjectApiKeys(projectId: any) {
+export default async function DeleteRunnerToken(tokenId: any) {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;
@@ -12,9 +12,9 @@ export default async function GetProjectApiKeys(projectId: any) {
   }
 
   const res = await fetch(
-    `${process.env.API_ENDPOINT}/projects/${projectId}/apikeys`,
+    `${process.env.API_ENDPOINT}/token/runner/${tokenId}`,
     {
-      method: "GET",
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: token,
@@ -28,5 +28,5 @@ export default async function GetProjectApiKeys(projectId: any) {
 
   const data = await res.json();
 
-  return data.api_keys;
+  return data;
 }

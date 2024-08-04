@@ -16,27 +16,27 @@ import {
 import { toast } from "sonner";
 
 import { CopyDocumentIcon, DeleteIcon, PlusIcon } from "@/components/icons";
-import CreateApiKeyModal from "@/components/functions/apikeys/create";
-import DeleteApiKeyModal from "@/components/functions/apikeys/delete";
+import CreateTokenModal from "@/components/functions/tokens/create";
+import DeleteTokenModal from "@/components/functions/tokens/delete";
 
-export default function ProjectAPIKeys({ apiKeys, project, settings }: any) {
-  const [targetKey, setTargetKey] = React.useState({} as any);
+export default function ProjectTokens({ tokens, project, settings }: any) {
+  const [targetToken, setTargetToken] = React.useState({} as any);
 
-  const addApiKeyModal = useDisclosure();
-  const deleteApiKeyModal = useDisclosure();
+  const addTokenModal = useDisclosure();
+  const deleteTokenModal = useDisclosure();
 
   // pagination
   const [page, setPage] = React.useState(1);
   const rowsPerPage = 7;
-  const pages = Math.ceil(apiKeys.length / rowsPerPage);
+  const pages = Math.ceil(tokens.length / rowsPerPage);
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
 
-    return apiKeys.slice(start, end);
-  }, [page, apiKeys]);
+    return tokens.slice(start, end);
+  }, [page, tokens]);
 
-  const copyAPIKeytoClipboard = (key: string) => {
+  const copyTokentoClipboard = (key: string) => {
     navigator.clipboard.writeText(key);
     toast.success("Copied to clipboard!");
   };
@@ -48,21 +48,21 @@ export default function ProjectAPIKeys({ apiKeys, project, settings }: any) {
       case "actions":
         return (
           <div className="relative flex items-center justify-center gap-2">
-            <Tooltip content="Copy API Key">
+            <Tooltip content="Copy Token">
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                 <CopyDocumentIcon
                   onClick={() => {
-                    copyAPIKeytoClipboard(key.key);
+                    copyTokentoClipboard(key.key);
                   }}
                 />
               </span>
             </Tooltip>
-            <Tooltip color="danger" content="Delete API Key">
+            <Tooltip color="danger" content="Delete Token">
               <span className="text-lg text-danger cursor-pointer active:opacity-50">
                 <DeleteIcon
                   onClick={() => {
-                    setTargetKey(key);
-                    deleteApiKeyModal.onOpen();
+                    setTargetToken(key);
+                    deleteTokenModal.onOpen();
                   }}
                 />
               </span>
@@ -102,7 +102,7 @@ export default function ProjectAPIKeys({ apiKeys, project, settings }: any) {
           color="primary"
           endContent={<PlusIcon height={undefined} width={undefined} />}
           isDisabled={!settings.create_api_keys || project.disabled}
-          onPress={() => addApiKeyModal.onOpen()}
+          onPress={() => addTokenModal.onOpen()}
         >
           Add New
         </Button>
@@ -162,8 +162,8 @@ export default function ProjectAPIKeys({ apiKeys, project, settings }: any) {
           )}
         </TableBody>
       </Table>
-      <CreateApiKeyModal disclosure={addApiKeyModal} projectID={project.id} />
-      <DeleteApiKeyModal apikey={targetKey} disclosure={deleteApiKeyModal} />
+      <CreateTokenModal disclosure={addTokenModal} projectID={project.id} />
+      <DeleteTokenModal disclosure={deleteTokenModal} token={targetToken} />
     </div>
   );
 }

@@ -14,33 +14,33 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
-import DeleteRunnerApiKey from "@/lib/fetch/project/DELETE/DeleteRunnerAPIKey";
+import DeleteRunnerToken from "@/lib/fetch/project/DELETE/DeleteRunnerToken";
 
-export default function DeleteApiKeyModal({
+export default function DeleteTokenModal({
   disclosure,
-  apikey,
+  token,
 }: {
   disclosure: UseDisclosureReturn;
-  apikey: any;
+  token: any;
 }) {
   const router = useRouter();
   const { isOpen, onOpenChange } = disclosure;
 
   const [isLoading, setIsLoading] = React.useState(false);
 
-  async function handleDeleteAPIKey() {
+  async function handleDeleteToken() {
     setIsLoading(true);
 
-    const response = await DeleteRunnerApiKey(apikey.id);
+    const response = await DeleteRunnerToken(token.id);
 
     if (response.result === "success") {
       router.refresh();
       onOpenChange();
-      toast.success("API key deleted successfully");
+      toast.success("Token deleted successfully");
       setIsLoading(false);
     } else {
       setIsLoading(false);
-      toast.error("Failed to create project");
+      toast.error("Failed to delete token");
     }
   }
 
@@ -51,14 +51,14 @@ export default function DeleteApiKeyModal({
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                <p>Delete API Key</p>
-                <p className="text-sm text-default-500">{apikey.id}</p>
+                <p>Delete Token</p>
+                <p className="text-sm text-default-500">{token.id}</p>
               </ModalHeader>
               <ModalBody>
                 <p>
-                  Are you sure you want to delete this API key? This action
-                  cannot be undone and will cause any active runner which is
-                  using this key to not work anylonger.
+                  Are you sure you want to delete this token? This action cannot
+                  be undone and will cause any active runner which is using this
+                  key to not work anylonger.
                 </p>
               </ModalBody>
               <ModalFooter>
@@ -68,7 +68,7 @@ export default function DeleteApiKeyModal({
                 <Button
                   color="danger"
                   isLoading={isLoading}
-                  onPress={handleDeleteAPIKey}
+                  onPress={handleDeleteToken}
                 >
                   Delete
                 </Button>

@@ -2,7 +2,10 @@
 
 import { cookies } from "next/headers";
 
-export default async function DeleteRunnerApiKey(apiKeyID: any) {
+export default async function CreateRunnerToken({
+  projectId,
+  description,
+}: any) {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;
@@ -12,13 +15,14 @@ export default async function DeleteRunnerApiKey(apiKeyID: any) {
   }
 
   const res = await fetch(
-    `${process.env.API_ENDPOINT}/token/runner/${apiKeyID}`,
+    `${process.env.API_ENDPOINT}/token/runner/${projectId}`,
     {
-      method: "DELETE",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: token,
       },
+      body: JSON.stringify({ description }),
     },
   );
 
