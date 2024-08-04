@@ -46,7 +46,12 @@ export function DashboardHome({ stats, plans, user }: any) {
                     width={24}
                   />
                   <p className="text-small text-default-500">
-                    {plan.projects} Project
+                    {plan.projects === 999 ? (
+                      <span className="text-secondary">Unlimited</span>
+                    ) : (
+                      plan.projects
+                    )}{" "}
+                    Project
                   </p>
                 </li>
                 <li className="flex items-center gap-1">
@@ -56,7 +61,12 @@ export function DashboardHome({ stats, plans, user }: any) {
                     width={24}
                   />
                   <p className="text-small text-default-500">
-                    {plan.project_members} Project Members
+                    {plan.project_members === 999 ? (
+                      <span className="text-secondary">Unlimited</span>
+                    ) : (
+                      plan.project_members
+                    )}{" "}
+                    Project Members
                   </p>
                 </li>
                 <li className="flex items-center gap-1">
@@ -66,7 +76,12 @@ export function DashboardHome({ stats, plans, user }: any) {
                     width={24}
                   />
                   <p className="text-small text-default-500">
-                    {plan.flows} Flows
+                    {plan.flows === 999 ? (
+                      <span className="text-secondary">Unlimited</span>
+                    ) : (
+                      plan.flows
+                    )}{" "}
+                    Flows
                   </p>
                 </li>
                 <li className="flex items-center gap-1">
@@ -76,7 +91,12 @@ export function DashboardHome({ stats, plans, user }: any) {
                     width={24}
                   />
                   <p className="text-small text-default-500">
-                    {plan.self_hosted_runners} Self-Hosted Runner
+                    {plan.self_hosted_runners === 999 ? (
+                      <span className="text-secondary">Unlimited</span>
+                    ) : (
+                      plan.self_hosted_runners
+                    )}{" "}
+                    Self-Hosted Runner
                   </p>
                 </li>
                 <li className="flex items-center gap-1">
@@ -86,7 +106,12 @@ export function DashboardHome({ stats, plans, user }: any) {
                     width={24}
                   />
                   <p className="text-small text-default-500">
-                    {plan.alertflow_runners} AlertFlow Runner
+                    {plan.alertflow_runners === 16 ? (
+                      <span className="text-secondary">Unlimited</span>
+                    ) : (
+                      plan.alertflow_runners
+                    )}{" "}
+                    AlertFlow Runner
                   </p>
                 </li>
                 <li className="flex items-center gap-1">
@@ -96,7 +121,12 @@ export function DashboardHome({ stats, plans, user }: any) {
                     width={24}
                   />
                   <p className="text-small text-default-500">
-                    {plan.executions_per_month} Executions per Month
+                    {plan.executions_per_month === 999 ? (
+                      <span className="text-secondary">Unlimited</span>
+                    ) : (
+                      plan.executions_per_month
+                    )}{" "}
+                    Executions per Month
                   </p>
                 </li>
               </ul>
