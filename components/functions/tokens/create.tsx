@@ -16,9 +16,9 @@ import React from "react";
 import { toast } from "sonner";
 
 import { PlusIcon, TagIcon } from "@/components/icons";
-import CreateRunnerApiKey from "@/lib/fetch/project/POST/CreateRunnerAPIKey";
+import CreateRunnerToken from "@/lib/fetch/project/POST/CreateRunnerToken";
 
-export default function CreateApiKeyModal({
+export default function CreateTokenModal({
   disclosure,
   projectID,
 }: {
@@ -31,10 +31,10 @@ export default function CreateApiKeyModal({
   const [description, setDescription] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
 
-  async function handleCreateAPIKey() {
+  async function handleCreateToken() {
     setIsLoading(true);
 
-    const response = await CreateRunnerApiKey({
+    const response = await CreateRunnerToken({
       projectId: projectID,
       description,
     });
@@ -58,7 +58,7 @@ export default function CreateApiKeyModal({
             <>
               <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold">
                 <TagIcon />
-                Create API Key
+                Create Token
               </ModalHeader>
               <ModalBody>
                 <Input
@@ -77,7 +77,7 @@ export default function CreateApiKeyModal({
                   color="primary"
                   isLoading={isLoading}
                   startContent={<PlusIcon />}
-                  onPress={handleCreateAPIKey}
+                  onPress={handleCreateToken}
                 >
                   Create
                 </Button>

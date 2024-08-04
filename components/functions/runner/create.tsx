@@ -21,7 +21,7 @@ import { LibraryIcon } from "lucide-react";
 
 import { CheckIcon, PlayCircleIcon, PlusIcon } from "@/components/icons";
 import AddRunner from "@/lib/fetch/runner/AddRunner";
-import CreateRunnerApiKey from "@/lib/fetch/project/POST/CreateRunnerAPIKey";
+import CreateRunnerToken from "@/lib/fetch/project/POST/CreateRunnerToken";
 
 export default function CreateRunnerModal({
   disclosure,
@@ -54,9 +54,9 @@ export default function CreateRunnerModal({
       alertflow_runner,
     });
 
-    const tokenResponse = await CreateRunnerApiKey({
+    const tokenResponse = await CreateRunnerToken({
       projectId: project.id ? project.id : "none",
-      description: name + " Runner API key",
+      description: name + " Runner Token",
     });
 
     if (response.result === "success" && tokenResponse.result === "success") {
@@ -135,12 +135,12 @@ export default function CreateRunnerModal({
                   </Snippet>
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-default-400">API Key</p>
+                  <p className="text-sm font-bold text-default-400">Token</p>
                   <Snippet hideSymbol className="w-full" codeString={inApikey}>
                     <span>{inApikey.slice(0, 30) + "..."}</span>
                   </Snippet>
                   <p className="text-sm text-default-400">
-                    The API can always be found on the &quot;API Keys&quot; tab.
+                    The Token can always be found on the &quot;Tokens&quot; tab.
                   </p>
                 </div>
                 <p className="text-sm text-default-500 mt-2">

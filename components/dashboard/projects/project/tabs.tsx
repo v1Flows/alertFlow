@@ -4,7 +4,7 @@ import { Tabs, Tab, Tooltip } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 
 import ProjectMembers from "@/components/dashboard/projects/project/tables/UserTable";
-import ProjectAPIKeys from "@/components/dashboard/projects/project/tables/APIKeysTable";
+import ProjectTokens from "@/components/dashboard/projects/project/tables/TokensTable";
 import Runners from "@/components/dashboard/projects/project/Runners";
 
 import ProjectAuditLogs from "./tables/AuditTable";
@@ -13,7 +13,7 @@ export default function ProjectTabs({
   project,
   members,
   runners,
-  apiKeys,
+  tokens,
   settings,
   plan,
   audit,
@@ -63,18 +63,18 @@ export default function ProjectTabs({
             />
           </Tab>
           <Tab
-            key="apikeys"
+            key="tokens"
             title={
               <div className="flex items-center space-x-2">
                 <Icon icon="solar:key-square-2-broken" width={20} />
-                <span>API Keys</span>
+                <span>Tokens</span>
               </div>
             }
           >
-            <ProjectAPIKeys
-              apiKeys={apiKeys}
+            <ProjectTokens
               project={project}
               settings={settings}
+              tokens={tokens}
             />
           </Tab>
           <Tab

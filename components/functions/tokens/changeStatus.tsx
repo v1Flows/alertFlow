@@ -15,7 +15,7 @@ import React from "react";
 import { toast } from "sonner";
 
 import { CheckIcon, LockIcon } from "@/components/icons";
-import ChangeTokenStatus from "@/lib/fetch/apikeys/ChangeStatus";
+import ChangeTokenStatus from "@/lib/fetch/tokens/ChangeStatus";
 
 export default function ChangeTokenStatusModal({
   disclosure,
@@ -62,7 +62,7 @@ export default function ChangeTokenStatusModal({
             {(onClose) => (
               <>
                 <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-danger">
-                  <LockIcon /> Disable API Key
+                  <LockIcon /> Disable Token
                 </ModalHeader>
                 <ModalBody>
                   <Snippet hideCopyButton hideSymbol>
@@ -97,7 +97,7 @@ export default function ChangeTokenStatusModal({
             {(onClose) => (
               <>
                 <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-success">
-                  <CheckIcon /> Enable API Key
+                  <CheckIcon /> Enable Token
                 </ModalHeader>
                 <ModalBody>
                   <Snippet hideCopyButton hideSymbol>

@@ -211,7 +211,7 @@ export function Settings({ settings }: any) {
           <CardHeader className="flex justify-between items-center">
             <div className="flex items-center space-x-1">
               <TagIcon className="h-4 w-4" />
-              <p className="text-md font-bold">Create API Keys</p>
+              <p className="text-md font-bold">Create Tokens</p>
             </div>
             <Switch
               color="success"
@@ -222,8 +222,8 @@ export function Settings({ settings }: any) {
           </CardHeader>
           <CardBody>
             <p className="text-sm text-default-500">
-              Disabling this option will prevent users from creating new api
-              keys within projects.
+              Disabling this option will prevent users from creating new tokens
+              within projects.
             </p>
           </CardBody>
         </Card>

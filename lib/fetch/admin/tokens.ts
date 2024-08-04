@@ -14,13 +14,13 @@ export default async function AdminGetApiKeys() {
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.API_ENDPOINT}/admin/apikeys`, {
+    const res = await fetch(`${process.env.API_ENDPOINT}/admin/tokens`, {
       method: "GET",
       headers: headers,
     });
     const data = await res.json();
 
-    return data.apikeys;
+    return data.tokens;
   } catch (error) {
     return { error: "Failed to fetch data" };
   }

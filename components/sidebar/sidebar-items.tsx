@@ -86,10 +86,10 @@ export const sectionAdminItems: SidebarItem[] = [
         title: "Executions",
       },
       {
-        key: "admin_apikeys",
-        href: "/admin/apikeys",
+        key: "admin_tokens",
+        href: "/admin/tokens",
         icon: "solar:key-square-2-broken",
-        title: "API Keys",
+        title: "Tokens",
       },
       {
         key: "admin_plans",

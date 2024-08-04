@@ -25,7 +25,7 @@ export default function Project({
   project,
   members,
   runners,
-  apiKeys,
+  tokens,
   plan,
   audit,
 }: any) {
@@ -122,10 +122,10 @@ export default function Project({
                 <IconWrapper className="bg-default/50 text-foreground">
                   <Icon icon="solar:key-square-2-broken" width={20} />
                 </IconWrapper>
-                <p className="text-md font-bold">API Keys</p>
+                <p className="text-md font-bold">Tokens</p>
               </CardHeader>
               <CardBody>
-                <p className="text-default-500 font-bold">{apiKeys.length}</p>
+                <p className="text-default-500 font-bold">{tokens.length}</p>
               </CardBody>
             </Card>
           </div>
@@ -148,13 +148,13 @@ export default function Project({
       </div>
       <div className="w-full mt-6">
         <ProjectTabs
-          apiKeys={apiKeys}
           audit={audit}
           members={members}
           plan={plan}
           project={project}
           runners={runners}
           settings={settings}
+          tokens={tokens}
         />
       </div>
       <EditProjectModal disclosure={editProjectModal} project={project} />

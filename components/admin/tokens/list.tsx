@@ -28,86 +28,86 @@ import {
   PlusIcon,
   VerticalDotsIcon,
 } from "@/components/icons";
-import CreateApiKeyModal from "@/components/functions/apikeys/create";
-import DeleteApiKeyModal from "@/components/functions/apikeys/delete";
-import ChangeTokenStatusModal from "@/components/functions/apikeys/changeStatus";
-import EditTokenModal from "@/components/functions/apikeys/edit";
+import CreateTokenModal from "@/components/functions/tokens/create";
+import DeleteTokenModal from "@/components/functions/tokens/delete";
+import ChangeTokenStatusModal from "@/components/functions/tokens/changeStatus";
+import EditTokenModal from "@/components/functions/tokens/edit";
 
-export function ApiKeysList({ apikeys, projects }: any) {
+export function TokensList({ tokens, projects }: any) {
   const [status, setStatus] = React.useState(false);
-  const [targetKey, setTargetKey] = React.useState({} as any);
-  const addApiKeyModal = useDisclosure();
+  const [targetToken, setTargetToken] = React.useState({} as any);
+  const addTokenModal = useDisclosure();
   const changeStatusModal = useDisclosure();
   const editModal = useDisclosure();
-  const deleteApiKeyModal = useDisclosure();
+  const deleteTokenModal = useDisclosure();
 
   // pagination
   const [page, setPage] = React.useState(1);
   const rowsPerPage = 7;
-  const pages = Math.ceil(apikeys.length / rowsPerPage);
+  const pages = Math.ceil(tokens.length / rowsPerPage);
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
 
-    return apikeys.slice(start, end);
-  }, [page, apikeys]);
+    return tokens.slice(start, end);
+  }, [page, tokens]);
 
   const iconClasses =
     "text-xl text-default-500 pointer-events-none flex-shrink-0";
 
-  const renderCell = React.useCallback((apikey: any, columnKey: any) => {
-    const cellValue = apikey[columnKey];
+  const renderCell = React.useCallback((token: any, columnKey: any) => {
+    const cellValue = token[columnKey];
 
     switch (columnKey) {
       case "project_id":
         return (
           <div>
-            {apikey.project_id !== "none" && (
+            {token.project_id !== "none" && (
               <span>
                 <p>
-                  {projects.find((p: any) => p.id === apikey.project_id)
-                    ?.name || "Unknown"}
+                  {projects.find((p: any) => p.id === token.project_id)?.name ||
+                    "Unknown"}
                 </p>
-                <p className="text-sm text-default-400">{apikey.project_id}</p>
+                <p className="text-sm text-default-400">{token.project_id}</p>
               </span>
             )}
-            {apikey.project_id === "none" && (
+            {token.project_id === "none" && (
               <span>
                 <p>None</p>
                 <p className="text-sm text-default-400">
-                  Probaply an API Key for anything Alertflow related
+                  Probaply an Token for anything Alertflow related
                 </p>
               </span>
             )}
           </div>
         );
       case "description":
-        return <p className="text-sm text-default-500">{apikey.description}</p>;
+        return <p className="text-sm text-default-500">{token.description}</p>;
       case "status":
         return (
           <div>
             <Chip
               className="capitalize"
-              color={apikey.disabled ? "danger" : "success"}
+              color={token.disabled ? "danger" : "success"}
               radius="sm"
               size="sm"
               variant="flat"
             >
-              {apikey.disabled ? "Disabled" : "Active"}
+              {token.disabled ? "Disabled" : "Active"}
             </Chip>
-            {apikey.disabled && (
+            {token.disabled && (
               <p className="text-sm text-default-400">
-                {apikey.disabled_reason}
+                {token.disabled_reason}
               </p>
             )}
           </div>
         );
       case "created_at":
-        return new Date(apikey.created_at).toLocaleString("de-DE");
+        return new Date(token.created_at).toLocaleString("de-DE");
       case "key":
         return (
-          <Snippet hideSymbol className="w-full" codeString={apikey.key}>
-            <span>{apikey.key.slice(0, 15) + "..."}</span>
+          <Snippet hideSymbol className="w-full" codeString={token.key}>
+            <span>{token.key.slice(0, 15) + "..."}</span>
           </Snippet>
         );
       case "actions":
@@ -125,30 +125,30 @@ export function ApiKeysList({ apikeys, projects }: any) {
                     key="edit"
                     className="text-warning"
                     color="warning"
-                    description="Apply changes to this api key"
+                    description="Apply changes to this token"
                     startContent={
                       <EditDocumentIcon
                         className={cn(iconClasses, "text-warning")}
                       />
                     }
                     onClick={() => {
-                      setTargetKey(apikey);
+                      setTargetToken(token);
                       editModal.onOpen();
                     }}
                   >
                     Edit
                   </DropdownItem>
-                  {apikey.disabled ? (
+                  {token.disabled ? (
                     <DropdownItem
                       key="disable"
                       className="text-success"
                       color="success"
-                      description="Enable this api key"
+                      description="Enable this token"
                       startContent={
                         <LockIcon className={cn(iconClasses, "text-success")} />
                       }
                       onClick={() => {
-                        setTargetKey(apikey);
+                        setTargetToken(token);
                         setStatus(false);
                         changeStatusModal.onOpen();
                       }}
@@ -160,12 +160,12 @@ export function ApiKeysList({ apikeys, projects }: any) {
                       key="disable"
                       className="text-danger"
                       color="danger"
-                      description="Disable this api key"
+                      description="Disable this token"
                       startContent={
                         <LockIcon className={cn(iconClasses, "text-danger")} />
                       }
                       onClick={() => {
-                        setTargetKey(apikey);
+                        setTargetToken(token);
                         setStatus(true);
                         changeStatusModal.onOpen();
                       }}
@@ -179,15 +179,15 @@ export function ApiKeysList({ apikeys, projects }: any) {
                     key="delete"
                     className="text-danger"
                     color="danger"
-                    description="Permanently delete this api key"
+                    description="Permanently delete this token"
                     startContent={
                       <DeleteDocumentIcon
                         className={cn(iconClasses, "text-danger")}
                       />
                     }
                     onClick={() => {
-                      setTargetKey(apikey);
-                      deleteApiKeyModal.onOpen();
+                      setTargetToken(token);
+                      deleteTokenModal.onOpen();
                     }}
                   >
                     Delete
@@ -208,13 +208,13 @@ export function ApiKeysList({ apikeys, projects }: any) {
         <div className="flex items-center space-x-1">
           <p className="text-2xl font-bold mb-0 text-danger">Admin</p>
           <p className="text-2xl mb-0">|</p>
-          <p className="text-2xl mb-0">API Keys</p>
+          <p className="text-2xl mb-0">Tokens</p>
         </div>
         <Button
           color="primary"
           startContent={<PlusIcon height={undefined} width={undefined} />}
           variant="flat"
-          onPress={() => addApiKeyModal.onOpen()}
+          onPress={() => addTokenModal.onOpen()}
         >
           Add New
         </Button>
@@ -272,14 +272,14 @@ export function ApiKeysList({ apikeys, projects }: any) {
           </TableBody>
         </Table>
       </div>
-      <CreateApiKeyModal disclosure={addApiKeyModal} projectID={"none"} />
+      <CreateTokenModal disclosure={addTokenModal} projectID={"none"} />
       <ChangeTokenStatusModal
         disclosure={changeStatusModal}
         status={status}
-        token={targetKey}
+        token={targetToken}
       />
-      <EditTokenModal disclosure={editModal} token={targetKey} />
-      <DeleteApiKeyModal apikey={targetKey} disclosure={deleteApiKeyModal} />
+      <EditTokenModal disclosure={editModal} token={targetToken} />
+      <DeleteTokenModal disclosure={deleteTokenModal} token={targetToken} />
     </main>
   );
 }
