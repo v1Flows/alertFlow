@@ -10,8 +10,6 @@ import HomeSelfhosting from "@/components/home/Selfhosting";
 import AdminGetSettings from "@/lib/fetch/page/settings";
 import GetUserNotifications from "@/lib/fetch/user/getNotifications";
 import { FeaturesSectionDemo } from "@/components/home/bento";
-import { SparklesCore } from "@/components/home/sparkles";
-import { SparklesPreview } from "@/components/home/heading";
 
 export default async function Home() {
   const user = JSON.parse(cookies().get("user")?.value || "{}");
