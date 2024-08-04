@@ -53,7 +53,7 @@ export default async function Home() {
         <section>
           <FeaturesSectionDemo />
         </section>
-        <section className="flex flex-col gap-4 py-8 md:py-10">
+        {/* <section className="flex flex-col gap-4 py-8 md:py-10">
           <HomeTerraform />
           <div className="mt-32">
             <HomeSecurity />
@@ -61,7 +61,7 @@ export default async function Home() {
           <div className="mt-32">
             <HomeSelfhosting />
           </div>
-        </section>
+        </section> */}
       </main>
     </>
   );
