@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Button,
   Card,
@@ -16,7 +18,7 @@ import React from "react";
 
 import { IconWrapper } from "@/lib/IconWrapper";
 
-export default function Executions({ flow, executions }: any) {
+export default function Executions({ executions, displayToFlow }: any) {
   const router = useRouter();
 
   // pagination
@@ -133,6 +135,22 @@ export default function Executions({ flow, executions }: any) {
               </div>
               <div className="flex justify-start items-center gap-4 h-full">
                 <Divider orientation="vertical" />
+                {displayToFlow && (
+                  <Button
+                    fullWidth
+                    color="primary"
+                    size="md"
+                    startContent={
+                      <Icon icon="solar:book-bookmark-broken" width={32} />
+                    }
+                    variant="flat"
+                    onPress={() =>
+                      router.push(`/dashboard/flows/${execution.flow_id}/`)
+                    }
+                  >
+                    To Flow
+                  </Button>
+                )}
                 <Button
                   fullWidth
                   color="primary"
@@ -141,7 +159,7 @@ export default function Executions({ flow, executions }: any) {
                   variant="flat"
                   onPress={() =>
                     router.push(
-                      `/dashboard/flows/${flow.id}/execution/${execution.id}`,
+                      `/dashboard/flows/${execution.flow_id}/execution/${execution.id}`,
                     )
                   }
                 >

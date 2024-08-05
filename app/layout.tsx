@@ -8,6 +8,7 @@ import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 
 import { Providers } from "./providers";
+import Footer from "./footer";
 
 export const metadata: Metadata = {
   title: {
@@ -43,7 +44,10 @@ export default function RootLayout({
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <Toaster richColors position="bottom-center" />
-          <div className="relative flex flex-col h-screen">{children}</div>
+          <div className="relative flex flex-col h-screen">
+            {children}
+            <Footer />
+          </div>
         </Providers>
       </body>
     </html>

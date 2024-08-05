@@ -5,6 +5,10 @@ const nextConfig = {
   env: {
     API_ENDPOINT: process.env.API_ENDPOINT,
   },
+  reactStrictMode: true,
+  images: {
+    domains: ['localhost', 'alertflow.org'],
+  }
 }
 
 const withPWA = require('next-pwa')({
