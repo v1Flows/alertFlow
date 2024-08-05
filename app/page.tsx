@@ -3,7 +3,6 @@ import { cookies } from "next/headers";
 import { Icon } from "@iconify/react";
 
 import { title, subtitle } from "@/components/primitives";
-import HomeFeatures from "@/components/home/Features";
 import Navbar from "@/components/navbar";
 import AdminGetSettings from "@/lib/fetch/page/settings";
 import GetUserNotifications from "@/lib/fetch/user/getNotifications";
