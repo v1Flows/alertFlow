@@ -67,16 +67,18 @@ export default function Nabar({ user, notifications, session, settings }: any) {
             Home
           </Link>
         </NavbarItem>
-        <NavbarItem>
-          <Link
-            aria-current="page"
-            color="foreground"
-            isDisabled={!user?.email}
-            onPress={() => goTo("/dashboard")}
-          >
-            Dashboard
-          </Link>
-        </NavbarItem>
+        {user?.email && (
+          <NavbarItem>
+            <Link
+              aria-current="page"
+              color="foreground"
+              isDisabled={!user?.email}
+              onPress={() => goTo("/dashboard")}
+            >
+              Dashboard
+            </Link>
+          </NavbarItem>
+        )}
       </NavbarContent>
 
       {user.role === "Admin" && settings.maintenance && (
@@ -189,15 +191,18 @@ export default function Nabar({ user, notifications, session, settings }: any) {
             Home
           </Link>
         </NavbarItem>
-        <NavbarItem>
-          <Link
-            aria-current="page"
-            color="foreground"
-            onPress={() => goTo("/dashboard")}
-          >
-            Dashboard
-          </Link>
-        </NavbarItem>
+        {user?.email && (
+          <NavbarItem>
+            <Link
+              aria-current="page"
+              color="foreground"
+              isDisabled={!user?.email}
+              onPress={() => goTo("/dashboard")}
+            >
+              Dashboard
+            </Link>
+          </NavbarItem>
+        )}
         <NavbarMenuItem>
           <Divider className="my-4" />
           <Login

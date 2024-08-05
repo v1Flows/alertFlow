@@ -72,7 +72,7 @@ export default function FlowTabs({ flow, executions, payloads, runners }: any) {
               </div>
             }
           >
-            <Executions executions={executions} flow={flow} />
+            <Executions executions={executions} />
           </Tab>
           <Tab
             key="payloads"
