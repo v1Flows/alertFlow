@@ -25,7 +25,14 @@ import {
 import CreateRunnerModal from "@/components/functions/runner/create";
 import DeleteRunnerModal from "@/components/functions/runner/delete";
 
-export default function Runners({ runners, project, settings, plan }: any) {
+export default function Runners({
+  runners,
+  project,
+  settings,
+  plan,
+  user,
+  members,
+}: any) {
   const [targetRunner, setTargetRunner] = React.useState({} as any);
   const addRunnerModal = useDisclosure();
   const deleteRunnerModal = useDisclosure();
@@ -71,13 +78,15 @@ export default function Runners({ runners, project, settings, plan }: any) {
         <p className="text-lg font-bold">Selfhosted Runners</p>
         <Button
           color="primary"
-          endContent={<PlusIcon height={undefined} width={undefined} />}
           isDisabled={
             !settings.create_runners ||
             project.disabled ||
             runners.filter((runner: any) => runner.alertflow_runner === false)
-              .length >= plan.self_hosted_runners
+              .length >= plan.self_hosted_runners ||
+            members.filter((m: any) => m.user_id === user.id)[0].role ===
+            "Viewer"
           }
+          startContent={<PlusIcon height={undefined} width={undefined} />}
           onPress={() => addRunnerModal.onOpen()}
         >
           Add Runner

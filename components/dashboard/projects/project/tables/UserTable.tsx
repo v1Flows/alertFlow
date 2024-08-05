@@ -31,6 +31,7 @@ export default function ProjectMembers({
   members,
   settings,
   plan,
+  user,
 }: any) {
   const addProjectMemberModal = useDisclosure();
 
@@ -45,25 +46,25 @@ export default function ProjectMembers({
     return members.slice(start, end);
   }, [page, members]);
 
-  const renderCell = React.useCallback((user: any, columnKey: any) => {
-    const cellValue = user[columnKey];
+  const renderCell = React.useCallback((tableUser: any, columnKey: any) => {
+    const cellValue = tableUser[columnKey];
 
     switch (columnKey) {
       case "name":
         return (
           <User
-            avatarProps={{ radius: "lg", name: user.username }}
-            description={user.email}
-            name={user.username}
+            avatarProps={{ radius: "lg", name: tableUser.username }}
+            description={tableUser.email}
+            name={tableUser.username}
           >
-            {user.user_id}
+            {tableUser.user_id}
           </User>
         );
       case "role":
         return (
           <Chip
             className="capitalize"
-            color={statusColorMap[user.role]}
+            color={statusColorMap[tableUser.role]}
             size="sm"
             variant="flat"
           >
@@ -74,26 +75,36 @@ export default function ProjectMembers({
         return (
           <Chip
             className="capitalize"
-            color={user.invite_pending ? "warning" : "success"}
+            color={tableUser.invite_pending ? "warning" : "success"}
             size="sm"
             variant="flat"
           >
-            {user.invite_pending ? "Pending" : "Accepted"}
+            {tableUser.invite_pending ? "Pending" : "Accepted"}
           </Chip>
         );
       case "invited_at":
-        return new Date(user.invited_at).toLocaleString();
+        return new Date(tableUser.invited_at).toLocaleString();
       case "actions":
         return (
           <div className="relative flex items-center justify-center gap-2">
             <Tooltip content="Edit User">
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <EditProjectMemberModal projectID={project.id} user={user} />
+                <EditProjectMemberModal
+                  currentUser={user}
+                  members={members}
+                  projectID={project.id}
+                  user={tableUser}
+                />
               </span>
             </Tooltip>
             <Tooltip color="danger" content="Remove User">
               <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                <DeleteMemberModal projectID={project.id} user={user} />
+                <DeleteMemberModal
+                  currentUser={user}
+                  members={members}
+                  projectID={project.id}
+                  user={tableUser}
+                />
               </span>
             </Tooltip>
           </div>
@@ -110,7 +121,9 @@ export default function ProjectMembers({
           color="primary"
           isDisabled={
             !settings.add_project_members ||
-            members.length >= plan.project_members
+            members.length >= plan.project_members ||
+            members.filter((m: any) => m.user_id === user.id)[0].role ===
+            "Viewer"
           }
           startContent={<PlusIcon />}
           onPress={() => addProjectMemberModal.onOpen()}

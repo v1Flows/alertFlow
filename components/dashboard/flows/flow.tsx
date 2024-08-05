@@ -15,7 +15,7 @@ import { Icon } from "@iconify/react";
 import Reloader from "@/components/reloader/Reloader";
 import FlowBreadcrumbs from "@/components/dashboard/flows/flow/breadcrumbs";
 import { IconWrapper } from "@/lib/IconWrapper";
-import { InfoIcon, EditDocumentIcon, CheckIcon } from "@/components/icons";
+import { InfoIcon, CheckIcon } from "@/components/icons";
 import EditFlowModal from "@/components/functions/flows/edit";
 
 import FlowTabs from "./flow/tabs";
@@ -65,14 +65,16 @@ export function Flow({
             </div>
             <Button
               color="warning"
-              endContent={<EditDocumentIcon />}
               isDisabled={flow.disabled}
+              startContent={
+                <Icon icon="solar:pen-new-square-broken" width={20} />
+              }
               variant="flat"
               onPress={() => {
                 editFlowModal.onOpen();
               }}
             >
-              Edit Flow
+              Edit
             </Button>
           </div>
           <Divider className="mb-4" />
@@ -159,7 +161,7 @@ export function Flow({
               <div className="col-span-1">
                 <Card fullWidth>
                   <CardHeader className="justify-start gap-2 items-center">
-                    <IconWrapper className="bg-warning/10 text-warning">
+                    <IconWrapper className="bg-primary/10 text-primary">
                       <Icon icon="solar:rocket-2-broken" width={20} />
                     </IconWrapper>
                     <p className="text-md font-bold">Runner</p>
@@ -169,8 +171,8 @@ export function Flow({
                       {flow.runner_id === "any"
                         ? "Any"
                         : runners.find(
-                            (runner: any) => runner.id === flow.runner_id,
-                          )?.name}
+                          (runner: any) => runner.id === flow.runner_id,
+                        )?.name}
                     </p>
                   </CardBody>
                 </Card>
@@ -178,7 +180,7 @@ export function Flow({
               <div className="col-span-1">
                 <Card fullWidth>
                   <CardHeader className="justify-start gap-2 items-center">
-                    <IconWrapper className="bg-secondary/10 text-secondary">
+                    <IconWrapper className="bg-primary/10 text-primary">
                       <Icon icon="solar:reorder-line-duotone" width={20} />
                     </IconWrapper>
                     <p className="text-md font-bold">Executions</p>
