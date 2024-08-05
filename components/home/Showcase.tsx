@@ -9,8 +9,8 @@ export default function HomeShowcase() {
         <Image
           isBlurred
           alt="..."
-          className="w-full"
-          height={720}
+          className="w-full h-full object-cover rounded-md"
+          loading="lazy"
           src="images/full_project.png"
         />
         <BorderBeam delay={9} duration={12} size={300} />

@@ -69,7 +69,7 @@ export default async function Home() {
             <HomeShowcase />
           </div>
         </section>
-        <section>
+        <section className="mb-8">
           <FeaturesSectionDemo />
         </section>
       </main>
