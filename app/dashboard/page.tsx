@@ -4,6 +4,10 @@ import { DashboardHome } from "@/components/dashboard/home";
 import GetUserStats from "@/lib/fetch/user/getStats";
 import PageGetPlans from "@/lib/fetch/page/plans";
 import GetUserDetails from "@/lib/fetch/user/getDetails";
+import GetUserNotifications from "@/lib/fetch/user/getNotifications";
+import GetFlows from "@/lib/fetch/flow/all";
+import GetRunners from "@/lib/fetch/runner/get";
+import GetExecutions from "@/lib/fetch/executions/all";
 
 export default async function DashboardHomePage() {
   const user = JSON.parse(cookies().get("user")?.value || "{}");
@@ -11,6 +15,20 @@ export default async function DashboardHomePage() {
   const userDetails = await GetUserDetails(user.id);
   const stats = await GetUserStats(user.id);
   const plans = await PageGetPlans();
+  const notifications = await GetUserNotifications(user.id);
+  const flows = await GetFlows();
+  const runners = await GetRunners();
+  const executions = await GetExecutions();
 
-  return <DashboardHome plans={plans} stats={stats} user={userDetails} />;
+  return (
+    <DashboardHome
+      executions={executions}
+      flows={flows}
+      notifications={notifications}
+      plans={plans}
+      runners={runners}
+      stats={stats}
+      user={userDetails}
+    />
+  );
 }

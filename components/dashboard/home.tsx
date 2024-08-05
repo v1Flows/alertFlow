@@ -9,17 +9,279 @@ import {
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 
-export function DashboardHome({ stats, plans, user }: any) {
+import { IconWrapper } from "@/lib/IconWrapper";
+
+export function DashboardHome({
+  stats,
+  plans,
+  user,
+  notifications,
+  flows,
+  runners,
+  executions,
+}: any) {
   const plan = plans.find((plan: any) => plan.id === user.plan);
+
+  function runnerHeartbeatStatus(runner: any) {
+    var timeAgo =
+      (new Date(runner.last_heartbeat).getTime() - Date.now()) / 1000;
+
+    if (timeAgo < 0 && timeAgo > -30) {
+      return true;
+    } else if (timeAgo <= -30) {
+      return false;
+    }
+  }
 
   return (
     <main>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-1">
-          <p className="text-2xl font-bold mb-0">Dashboard Home</p>
+      <div className="flex items-end justify-between mb-4 mt-2">
+        <div>
+          <p className="text-3xl font-bold mb-0">
+            👋 Welcome Back{" "}
+            <span
+              className={`text-${user.role === "Admin" ? "danger" : user.role === "VIP" ? "warning" : "primary"}`}
+            >
+              {user.username}
+            </span>
+          </p>
         </div>
       </div>
       <Divider className="my-4" />
+      <div className="flex items-end justify-between mb-4 mt-2">
+        <div>
+          <p className="text-2xl font-bold mb-0">
+            Here are your <span className="text-primary">Stats</span>
+          </p>
+        </div>
+      </div>
+      <div className="grid lg:grid-cols-4 auto-rows-fr items-start gap-4 mb-4">
+        {/* Notifications */}
+        {notifications.filter((n: any) => !n.is_read).length > 0 ? (
+          <Card
+            isHoverable
+            isPressable
+            className="h-full shadow shadow-warning shadow-sm"
+          >
+            <CardHeader className="flex justify-between items-start">
+              <div className="flex items-center gap-2">
+                <IconWrapper className="bg-warning/10 text-warning">
+                  <Icon icon="solar:bell-bing-broken" width={24} />
+                </IconWrapper>
+                <p className="text-md font-bold">
+                  <span className="text-warning">Missed</span> Notifications
+                </p>
+              </div>
+              <div>
+                <p className="flex text-5xl font-bold text-default-400 mb-0">
+                  {notifications.filter((n: any) => !n.is_read).length}
+                </p>
+              </div>
+            </CardHeader>
+          </Card>
+        ) : (
+          <Card className="h-full shadow shadow-success shadow-sm">
+            <CardHeader className="justify-start gap-2 items-center">
+              <IconWrapper className="bg-success/10 text-success">
+                <Icon icon="solar:verified-check-broken" width={24} />
+              </IconWrapper>
+              <p className="text-md font-bold">
+                <span className="text-success">No Missed</span> Notifications
+              </p>
+            </CardHeader>
+          </Card>
+        )}
+        {/* Flows */}
+        {flows.filter((f: any) => f.maintenance_required).length > 0 ? (
+          <Card
+            isHoverable
+            isPressable
+            className="h-full shadow shadow-warning shadow-sm"
+          >
+            <CardHeader className="justify-start gap-2 items-center">
+              <IconWrapper className="bg-warning/10 text-warning">
+                <Icon icon="solar:info-square-broken" width={24} />
+              </IconWrapper>
+              <p className="text-md font-bold">
+                Flows needing <span className="text-warning">attention</span>
+              </p>
+            </CardHeader>
+          </Card>
+        ) : (
+          <Card className="h-full shadow shadow-success shadow-sm">
+            <CardHeader className="justify-start gap-2 items-center">
+              <IconWrapper className="bg-success/10 text-success">
+                <Icon icon="solar:verified-check-broken" width={24} />
+              </IconWrapper>
+              <p className="text-md font-bold">
+                Flows are all{" "}
+                <span className="text-success">working properly</span>
+              </p>
+            </CardHeader>
+          </Card>
+        )}
+        {/* Executions */}
+        {executions.filter((e: any) => e.error).length > 0 ? (
+          <Card
+            isHoverable
+            isPressable
+            className="h-full shadow shadow-danger shadow-sm"
+          >
+            <CardHeader className="flex justify-between items-start">
+              <div className="flex items-center gap-2">
+                <IconWrapper className="bg-danger/10 text-danger">
+                  <Icon icon="solar:slash-circle-broken" width={24} />
+                </IconWrapper>
+                <p className="text-md font-bold">
+                  <span className="text-danger">Failed</span> Executions
+                </p>
+              </div>
+              <div>
+                <p className="flex text-5xl font-bold text-default-400 mb-0">
+                  {executions.filter((e: any) => e.error).length}
+                </p>
+              </div>
+            </CardHeader>
+          </Card>
+        ) : (
+          <Card className="h-full shadow shadow-success shadow-sm">
+            <CardHeader className="justify-start gap-2 items-center">
+              <IconWrapper className="bg-success/10 text-success">
+                <Icon icon="solar:verified-check-broken" width={24} />
+              </IconWrapper>
+              <p className="text-md font-bold">
+                All Executions{" "}
+                <span className="text-success">finished successfully</span>
+              </p>
+            </CardHeader>
+          </Card>
+        )}
+
+        {/* Runners */}
+        {runners.filter((r: any) => !runnerHeartbeatStatus(r)).length > 0 ? (
+          <Card
+            isHoverable
+            isPressable
+            className="h-full shadow shadow-danger shadow-sm"
+          >
+            <CardHeader className="flex justify-between items-start">
+              <div className="flex items-center gap-2">
+                <IconWrapper className="bg-danger/10 text-danger">
+                  <Icon icon="solar:heart-pulse-broken" width={24} />
+                </IconWrapper>
+                <p className="text-md font-bold">
+                  <span className="text-danger">Unhealthy</span> Runners
+                </p>
+              </div>
+              <div>
+                <p className="flex text-5xl font-bold text-default-400 mb-0">
+                  {runners.filter((r: any) => !runnerHeartbeatStatus(r)).length}
+                </p>
+              </div>
+            </CardHeader>
+          </Card>
+        ) : (
+          <Card className="h-full shadow shadow-success shadow-sm">
+            <CardHeader className="justify-start gap-2 items-center">
+              <IconWrapper className="bg-success/10 text-success">
+                <Icon icon="solar:verified-check-broken" width={24} />
+              </IconWrapper>
+              <p className="text-md font-bold">
+                All Runners are <span className="text-success">healthy</span>
+              </p>
+            </CardHeader>
+          </Card>
+        )}
+      </div>
+      <div className="flex items-end justify-between mb-4 mt-2">
+        <div>
+          <p className="text-2xl font-bold mb-0">
+            Your <span className="text-primary">Quota</span>
+          </p>
+        </div>
+      </div>
+      <div className="grid lg:grid-cols-4 items-start gap-4 mb-4">
+        <Card>
+          <CardHeader className="justify-start gap-2 items-center">
+            <IconWrapper className="bg-primary/10 text-primary">
+              <Icon icon="solar:box-broken" width={24} />
+            </IconWrapper>
+            <p className="text-md font-bold">Projects</p>
+          </CardHeader>
+          <CardBody>
+            {plan.projects !== 999 ? (
+              <Progress
+                showValueLabel
+                color="primary"
+                maxValue={plan.projects}
+                value={stats.projects}
+              />
+            ) : (
+              <p className="text-md font-bold text-secondary">Unlimited</p>
+            )}
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader className="justify-start gap-2 items-center">
+            <IconWrapper className="bg-primary/10 text-primary">
+              <Icon icon="solar:book-bookmark-broken" width={24} />
+            </IconWrapper>
+            <p className="text-md font-bold">Flows</p>
+          </CardHeader>
+          <CardBody>
+            {plan.flows !== 999 ? (
+              <Progress
+                showValueLabel
+                color="primary"
+                maxValue={plan.flows}
+                value={stats.flows}
+              />
+            ) : (
+              <p className="text-md font-bold text-secondary">Unlimited</p>
+            )}
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader className="justify-start gap-2 items-center">
+            <IconWrapper className="bg-primary/10 text-primary">
+              <Icon icon="solar:rocket-2-broken" width={24} />
+            </IconWrapper>
+            <p className="text-md font-bold">Self-Hosted Runners</p>
+          </CardHeader>
+          <CardBody>
+            {plan.self_hosted_runners !== 999 ? (
+              <Progress
+                showValueLabel
+                color="primary"
+                maxValue={plan.self_hosted_runners}
+                value={stats.self_hosted_runners}
+              />
+            ) : (
+              <p className="text-md font-bold text-secondary">Unlimited</p>
+            )}
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader className="justify-start gap-2 items-center">
+            <IconWrapper className="bg-primary/10 text-primary">
+              <Icon icon="solar:reorder-line-duotone" width={24} />
+            </IconWrapper>
+            <p className="text-md font-bold">Executions</p>
+          </CardHeader>
+          <CardBody>
+            {plan.executions_per_month !== 999 ? (
+              <Progress
+                showValueLabel
+                color="primary"
+                maxValue={plan.executions_per_month}
+                value={stats.executions_per_month}
+              />
+            ) : (
+              <p className="text-md font-bold text-secondary">Unlimited</p>
+            )}
+          </CardBody>
+        </Card>
+      </div>
       <div className="grid lg:grid-cols-2 items-start gap-4">
         <div>
           <Card className="relative w-full">
@@ -131,103 +393,6 @@ export function DashboardHome({ stats, plans, user }: any) {
                 </li>
               </ul>
             </CardFooter>
-          </Card>
-        </div>
-        <div className="grid lg:grid-cols-2 gap-4">
-          <Card>
-            <CardHeader className="flex items-center gap-3 px-4 pb-0 pt-3 md:px-10 md:pt-5 md:pb-4 pb-2">
-              <div className="flex h-14 w-14 flex-none items-center justify-center rounded-full bg-gradient-to-br from-success-300 to-primary-500">
-                <Icon
-                  className="text-white"
-                  icon="solar:box-broken"
-                  width={30}
-                />
-              </div>
-              <Progress
-                showValueLabel
-                classNames={{
-                  label: "font-medium",
-                  indicator: "bg-gradient-to-r from-primary-400 to-success-500",
-                  value: "text-foreground/60",
-                }}
-                label="Projects"
-                maxValue={plan.projects}
-                value={stats.projects}
-                valueLabel={stats.projects + " / " + plan.projects}
-              />
-            </CardHeader>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex items-center gap-3 px-4 pb-0 pt-3 md:px-10 md:pt-5 md:pb-4 pb-2">
-              <div className="flex h-14 w-14 flex-none items-center justify-center rounded-full bg-gradient-to-br from-primary-300 to-secondary-500">
-                <Icon
-                  className="text-white"
-                  icon="solar:book-bookmark-broken"
-                  width={30}
-                />
-              </div>
-              <Progress
-                showValueLabel
-                classNames={{
-                  label: "font-medium",
-                  indicator:
-                    "bg-gradient-to-r from-secondary-400 to-primary-500",
-                  value: "text-foreground/60",
-                }}
-                label="Flows"
-                maxValue={plan.flows}
-                value={stats.flows}
-                valueLabel={stats.flows + " / " + plan.flows}
-              />
-            </CardHeader>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex items-center gap-3 px-4 pb-0 pt-3 md:px-10 md:pt-5 md:pb-4 pb-2">
-              <div className="flex h-14 w-14 flex-none items-center justify-center rounded-full bg-warning">
-                <Icon
-                  className="text-white"
-                  icon="solar:rocket-2-broken"
-                  width={30}
-                />
-              </div>
-              <Progress
-                showValueLabel
-                classNames={{
-                  label: "font-medium",
-                  value: "text-foreground/60",
-                }}
-                color="warning"
-                label="Self-Hosted Runners"
-                maxValue={plan.self_hosted_runners}
-                value={stats.runners}
-                valueLabel={stats.runners + " / " + plan.self_hosted_runners}
-              />
-            </CardHeader>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex items-center gap-3 px-4 pb-0 pt-3 md:px-10 md:pt-5 md:pb-4 pb-2">
-              <div className="flex h-14 w-14 flex-none items-center justify-center rounded-full bg-primary">
-                <Icon
-                  className="text-white"
-                  icon="solar:reorder-line-duotone"
-                  width={30}
-                />
-              </div>
-              <Progress
-                showValueLabel
-                classNames={{
-                  label: "font-medium",
-                  value: "text-foreground/60",
-                }}
-                color="primary"
-                label="Executions"
-                maxValue={plan.executions_per_month}
-                value={2}
-              />
-            </CardHeader>
           </Card>
         </div>
       </div>
