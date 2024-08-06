@@ -182,7 +182,7 @@ export default function EditProjectModal({
                 </div>
                 <ColorPicker hideInput color={color} onChange={setColor} />
               </ModalBody>
-              <ModalFooter>
+              <ModalFooter className="grid grid-cols-2">
                 <Button color="default" variant="bordered" onPress={onClose}>
                   Discard
                 </Button>

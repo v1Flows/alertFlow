@@ -159,9 +159,15 @@ export function UsersList({ users, plans }: any) {
         return (
           <User
             avatarProps={{
-              radius: "sm",
+              radius: "full",
+              isBordered: true,
               name: user.username,
-              color: user.role === "Admin" ? "danger" : "primary",
+              color:
+                user.role === "Admin"
+                  ? "danger"
+                  : user.role === "VIP"
+                    ? "warning"
+                    : "primary",
             }}
             description={user.email}
             name={cellValue}
@@ -221,29 +227,15 @@ export function UsersList({ users, plans }: any) {
                   <VerticalDotsIcon className="text-default-300" />
                 </Button>
               </DropdownTrigger>
-              <DropdownMenu variant="faded">
+              <DropdownMenu variant="flat">
                 <DropdownSection showDivider title="Actions">
-                  <DropdownItem
-                    key="view"
-                    className="text-primary"
-                    color="primary"
-                    startContent={
-                      <EyeIcon className={cn(iconClasses, "text-primary")} />
-                    }
-                  >
+                  <DropdownItem key="view" startContent={<EyeIcon />}>
                     View
                   </DropdownItem>
-                </DropdownSection>
-                <DropdownSection title="Edit Zone">
                   <DropdownItem
                     key="edit"
-                    className="text-warning"
                     color="warning"
-                    startContent={
-                      <EditDocumentIcon
-                        className={cn(iconClasses, "text-warning")}
-                      />
-                    }
+                    startContent={<EditDocumentIcon />}
                     onClick={() => handleEditUser(user)}
                   >
                     Edit
@@ -251,11 +243,8 @@ export function UsersList({ users, plans }: any) {
                   {!user.disabled && (
                     <DropdownItem
                       key="disable"
-                      className="text-danger"
                       color="danger"
-                      startContent={
-                        <LockIcon className={cn(iconClasses, "text-danger")} />
-                      }
+                      startContent={<LockIcon />}
                       onClick={() => changeUserStatusModal(user.id, true)}
                     >
                       Disable
@@ -264,12 +253,9 @@ export function UsersList({ users, plans }: any) {
                   {user.disabled && (
                     <DropdownItem
                       key="disable"
-                      className="text-success"
                       color="success"
                       description="Enable access to AlertFlow for this user"
-                      startContent={
-                        <LockIcon className={cn(iconClasses, "text-success")} />
-                      }
+                      startContent={<LockIcon />}
                       onClick={() => changeUserStatusModal(user.id, false)}
                     >
                       Enable
@@ -310,9 +296,8 @@ export function UsersList({ users, plans }: any) {
         </div>
         <Button
           color="primary"
-          radius="sm"
+          radius="lg"
           startContent={<PlusIcon />}
-          variant="flat"
           onPress={() => signUpModal.onOpen()}
         >
           Create User
@@ -339,28 +324,25 @@ export function UsersList({ users, plans }: any) {
         >
           <TableHeader>
             <TableColumn key="username" align="start">
-              USERNAME
-            </TableColumn>
-            <TableColumn key="id" align="start">
-              ID
+              Username
             </TableColumn>
             <TableColumn key="role" align="start">
-              ROLE
+              Role
             </TableColumn>
             <TableColumn key="plan" align="start">
-              PLAN
+              Plan
             </TableColumn>
             <TableColumn key="disabled" align="start">
-              STATUS
+              Status
             </TableColumn>
             <TableColumn key="created_at" align="start">
-              CREATED AT
+              Created At
             </TableColumn>
             <TableColumn key="updated_at" align="start">
-              UPDATED AT
+              Updated At
             </TableColumn>
             <TableColumn key="actions" align="center">
-              ACTIONS
+              Actions
             </TableColumn>
           </TableHeader>
           <TableBody items={items}>

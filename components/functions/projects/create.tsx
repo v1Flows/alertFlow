@@ -239,24 +239,25 @@ export default function CreateProjectModal({
         backdrop="blur"
         isOpen={isOpenSuccess}
         placement="center"
+        size="lg"
         onOpenChange={onOpenChangeSuccess}
       >
         <ModalContent className="w-full">
           {(onInstructionsClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1 text-success">
-                Project created successfully
+              <ModalHeader className="flex flex-col gap-1 items-center text-success">
+                <Icon icon="solar:verified-check-broken" width={58} />
+                <p className="text-xl font-bold">
+                  Project successfully created
+                </p>
               </ModalHeader>
-              <ModalBody>
+              <ModalBody className="text-center">
                 <p>
                   Your new project has been created successfully and is ready to
                   be used.
                 </p>
-                <p className="text-sm font-bold text-default-400">
-                  The Project-ID can be found on the Projects page
-                </p>
               </ModalBody>
-              <ModalFooter>
+              <ModalFooter className="grid grid-cols-2">
                 <Button
                   color="default"
                   variant="bordered"
@@ -270,8 +271,8 @@ export default function CreateProjectModal({
                   variant="solid"
                   onPress={onInstructionsClose}
                 >
-                  <CheckIcon />
-                  Understood
+                  <Icon icon="solar:glasses-line-duotone" width={20} />
+                  Start Exploring
                 </Button>
               </ModalFooter>
             </>

@@ -11,7 +11,6 @@ import {
   DropdownSection,
   DropdownItem,
   Button,
-  CardFooter,
   useDisclosure,
   Chip,
   Spacer,
@@ -38,8 +37,6 @@ export function ProjectsList({
   plan,
 }: any) {
   const router = useRouter();
-
-  const [viewLoading, setViewLoading] = React.useState(false);
 
   const [targetProject, setTargetProject] = React.useState({});
   const newProjectModal = useDisclosure();
@@ -90,7 +87,7 @@ export function ProjectsList({
       )}
       {!projects.error && (
         <>
-          <div className="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-4">
+          <div className="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-1 gap-4">
             {projects.map((project: any) => (
               <div key={project.id} className="col-span-1">
                 <Card
@@ -215,11 +212,9 @@ export function ProjectsList({
                       <Button
                         className="w-full font-bold items-center"
                         color={project.disabled ? "danger" : "primary"}
-                        isLoading={viewLoading}
                         radius="sm"
                         variant="light"
                         onPress={() => {
-                          setViewLoading(true);
                           router.push(`/dashboard/projects/${project.id}`);
                         }}
                       >
@@ -240,29 +235,44 @@ export function ProjectsList({
                 text="Pending Project Invitations"
               />
               <Spacer y={4} />
-              <div className="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-4">
+              <div className="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-1 gap-4">
                 {pending_projects.map((project: any) => (
                   <div key={project.id} className="col-span-1">
                     <Card fullWidth>
-                      <CardHeader className="justify-between">
-                        <div className="flex flex-col items-start">
-                          <p className="text-md">{project.name}</p>
-                          <p className="text-sm text-default-500">
-                            {project.description}
-                          </p>
-                        </div>
-                      </CardHeader>
-                      <Divider />
                       <CardBody>
+                        <div className="bg-default-100 rounded-large w-full flex items-center justify-between p-3">
+                          <div className="flex items-center space-x-2">
+                            <Avatar
+                              classNames={{
+                                base: `text-white`,
+                              }}
+                              icon={
+                                <Icon
+                                  icon={
+                                    project.icon
+                                      ? project.icon
+                                      : "solar:question-square-broken"
+                                  }
+                                  width={24}
+                                />
+                              }
+                              radius="md"
+                              style={{
+                                backgroundColor: project.color,
+                              }}
+                            />
+                            <div className="flex flex-col items-start">
+                              <p className="text-md font-bold">
+                                {project.name}
+                              </p>
+                              <p className="text-sm text-default-500">
+                                {project.description}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <Spacer y={4} />
                         <div className="flex items-center justify-start gap-2 flex-wrap">
-                          <Chip
-                            color="secondary"
-                            radius="sm"
-                            size="sm"
-                            variant="flat"
-                          >
-                            <p className="font-bold">ID: {project.id}</p>
-                          </Chip>
                           <Chip
                             color={project.disabled ? "danger" : "success"}
                             radius="sm"
@@ -286,38 +296,53 @@ export function ProjectsList({
                             </Chip>
                           )}
                         </div>
+                        <Spacer y={2} />
+                        <div className="flex flex-wrap items-center justify-start gap-2">
+                          <p className="text-sm font-bold text-default-500">
+                            Created At:
+                          </p>
+                          <p className="text-default-500 text-sm">
+                            {new Date(project.created_at).toLocaleString(
+                              "de-DE",
+                            )}
+                          </p>
+                        </div>
+                        <Spacer y={4} />
+                        <div className="flex flex-col gap-2 w-full">
+                          <Divider />
+                          <div className="grid grid-cols-2 items-center justify-between gap-2 w-full">
+                            <Button
+                              className="font-bold"
+                              color="danger"
+                              radius="sm"
+                              variant="flat"
+                              onPress={() => {
+                                DeclineProjectInvite(project.id);
+                                router.refresh();
+                              }}
+                            >
+                              <Icon
+                                icon="solar:danger-triangle-broken"
+                                width={24}
+                              />
+                              Decline
+                            </Button>
+                            <Button
+                              className="font-bold"
+                              color="success"
+                              radius="sm"
+                              variant="flat"
+                              onPress={() => {
+                                AcceptProjectInvite(project.id);
+                                router.refresh();
+                              }}
+                            >
+                              <Icon icon="solar:check-read-broken" width={24} />
+                              Accept
+                            </Button>
+                          </div>
+                        </div>
                       </CardBody>
-                      <CardFooter className="flex items-center justify-between gap-2">
-                        <Button
-                          className="w-full font-bold"
-                          color="danger"
-                          radius="sm"
-                          variant="flat"
-                          onPress={() => {
-                            DeclineProjectInvite(project.id);
-                            router.refresh();
-                          }}
-                        >
-                          <Icon
-                            icon="solar:danger-triangle-broken"
-                            width={24}
-                          />
-                          Decline
-                        </Button>
-                        <Button
-                          className="w-full font-bold"
-                          color="success"
-                          radius="sm"
-                          variant="flat"
-                          onPress={() => {
-                            AcceptProjectInvite(project.id);
-                            router.refresh();
-                          }}
-                        >
-                          <Icon icon="solar:check-read-broken" width={24} />
-                          Accept
-                        </Button>
-                      </CardFooter>
                     </Card>
                   </div>
                 ))}

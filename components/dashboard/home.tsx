@@ -206,174 +206,186 @@ export function DashboardHome({
           </p>
         </div>
       </div>
-      <div className="grid lg:grid-cols-4 items-start gap-4 mb-4">
-        <Card>
-          <CardHeader className="justify-start gap-2 items-center">
-            <IconWrapper className="bg-primary/10 text-primary">
-              <Icon icon="solar:box-broken" width={24} />
-            </IconWrapper>
-            <p className="text-md font-bold">Projects</p>
-          </CardHeader>
-          <CardBody>
-            {plan.projects !== 999 ? (
-              <Progress
-                showValueLabel
-                color="primary"
-                maxValue={plan.projects}
-                value={stats.projects}
-              />
-            ) : (
-              <p className="text-md font-bold text-secondary">Unlimited</p>
-            )}
-          </CardBody>
-        </Card>
-        <Card>
-          <CardHeader className="justify-start gap-2 items-center">
-            <IconWrapper className="bg-primary/10 text-primary">
-              <Icon icon="solar:book-bookmark-broken" width={24} />
-            </IconWrapper>
-            <p className="text-md font-bold">Flows</p>
-          </CardHeader>
-          <CardBody>
-            {plan.flows !== 999 ? (
-              <Progress
-                showValueLabel
-                color="primary"
-                maxValue={plan.flows}
-                value={stats.flows}
-              />
-            ) : (
-              <p className="text-md font-bold text-secondary">Unlimited</p>
-            )}
-          </CardBody>
-        </Card>
-        <Card>
-          <CardHeader className="justify-start gap-2 items-center">
-            <IconWrapper className="bg-primary/10 text-primary">
-              <Icon icon="solar:rocket-2-broken" width={24} />
-            </IconWrapper>
-            <p className="text-md font-bold">Self-Hosted Runners</p>
-          </CardHeader>
-          <CardBody>
-            {plan.self_hosted_runners !== 999 ? (
-              <Progress
-                showValueLabel
-                color="primary"
-                maxValue={plan.self_hosted_runners}
-                value={stats.self_hosted_runners}
-              />
-            ) : (
-              <p className="text-md font-bold text-secondary">Unlimited</p>
-            )}
-          </CardBody>
-        </Card>
-        <Card>
-          <CardHeader className="justify-start gap-2 items-center">
-            <IconWrapper className="bg-primary/10 text-primary">
-              <Icon icon="solar:reorder-line-duotone" width={24} />
-            </IconWrapper>
-            <p className="text-md font-bold">Executions</p>
-          </CardHeader>
-          <CardBody>
-            {plan.executions_per_month !== 999 ? (
-              <Progress
-                showValueLabel
-                color="primary"
-                maxValue={plan.executions_per_month}
-                value={stats.executions_per_month}
-              />
-            ) : (
-              <p className="text-md font-bold text-secondary">Unlimited</p>
-            )}
-          </CardBody>
-        </Card>
+      <div className="grid lg:grid-cols-3 items-start gap-4">
+        <div className="col-span-1 grid lg:grid-cols-2 items-start gap-4">
+          <Card className="h-full">
+            <CardBody className="flex gap-1 items-center">
+              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-14 h-14">
+                <Icon
+                  className="text-primary"
+                  icon="solar:reorder-line-duotone"
+                  width={32}
+                />
+              </div>
+              <p className="text-default-600">Projects</p>
+              {plan.projects !== 999 ? (
+                <Progress
+                  showValueLabel
+                  color="primary"
+                  maxValue={plan.projects}
+                  value={stats.projects}
+                />
+              ) : (
+                <p className="text-lg font-bold text-secondary">Unlimited</p>
+              )}
+            </CardBody>
+          </Card>
+          <Card className="h-full">
+            <CardBody className="flex gap-1 items-center">
+              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-14 h-14">
+                <Icon
+                  className="text-primary"
+                  icon="solar:reorder-line-duotone"
+                  width={32}
+                />
+              </div>
+              <p className="text-default-600">Flows</p>
+              {plan.flows !== 999 ? (
+                <Progress
+                  showValueLabel
+                  color="primary"
+                  maxValue={plan.flows}
+                  value={stats.flows}
+                />
+              ) : (
+                <p className="text-lg font-bold text-secondary">Unlimited</p>
+              )}
+            </CardBody>
+          </Card>
+          <Card className="h-full">
+            <CardBody className="flex gap-1 items-center">
+              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-14 h-14">
+                <Icon
+                  className="text-primary"
+                  icon="solar:reorder-line-duotone"
+                  width={32}
+                />
+              </div>
+              <p className="text-default-600">Self-Hosted Runners</p>
+              {plan.self_hosted_runners !== 999 ? (
+                <Progress
+                  showValueLabel
+                  color="primary"
+                  maxValue={plan.self_hosted_runners}
+                  value={stats.self_hosted_runners}
+                />
+              ) : (
+                <p className="text-lg font-bold text-secondary">Unlimited</p>
+              )}
+            </CardBody>
+          </Card>
+          <Card className="h-full">
+            <CardBody className="flex gap-1 items-center">
+              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-14 h-14">
+                <Icon
+                  className="text-primary"
+                  icon="solar:reorder-line-duotone"
+                  width={32}
+                />
+              </div>
+              <p className="text-default-600">Executions</p>
+              {plan.executions_per_month !== 999 ? (
+                <Progress
+                  showValueLabel
+                  color="primary"
+                  maxValue={plan.executions_per_month}
+                  value={stats.executions_per_month}
+                />
+              ) : (
+                <p className="text-lg font-bold text-secondary">Unlimited</p>
+              )}
+            </CardBody>
+          </Card>
+        </div>
+        <div className="col-span-2">
+          <Card className="relative w-full">
+            <Button
+              isDisabled
+              className="absolute right-4 top-4 z-10"
+              radius="full"
+              size="sm"
+            >
+              Change Plan
+            </Button>
+            <CardBody className="relative bg-gradient-to-br from-content1 to-default-100/50 p-4 before:inset-0 before:h-full before:w-full before:content-['']">
+              <h1 className="mb-4 text-default-400">Your Plan</h1>
+              <h2 className="inline bg-gradient-to-br from-foreground-800 to-foreground-500 bg-clip-text text-6xl font-semibold tracking-tight text-transparent dark:to-foreground-200">
+                {plan.name}
+              </h2>
+            </CardBody>
+            <CardFooter>
+              <ul>
+                <li className="flex items-center gap-1">
+                  <Icon className="text-default-600" icon="ci:check" width={24} />
+                  <p className="text-small text-default-500">
+                    {plan.projects === 999 ? (
+                      <span className="text-secondary">Unlimited</span>
+                    ) : (
+                      plan.projects
+                    )}{" "}
+                    Project
+                  </p>
+                </li>
+                <li className="flex items-center gap-1">
+                  <Icon className="text-default-600" icon="ci:check" width={24} />
+                  <p className="text-small text-default-500">
+                    {plan.project_members === 999 ? (
+                      <span className="text-secondary">Unlimited</span>
+                    ) : (
+                      plan.project_members
+                    )}{" "}
+                    Project Members
+                  </p>
+                </li>
+                <li className="flex items-center gap-1">
+                  <Icon className="text-default-600" icon="ci:check" width={24} />
+                  <p className="text-small text-default-500">
+                    {plan.flows === 999 ? (
+                      <span className="text-secondary">Unlimited</span>
+                    ) : (
+                      plan.flows
+                    )}{" "}
+                    Flows
+                  </p>
+                </li>
+                <li className="flex items-center gap-1">
+                  <Icon className="text-default-600" icon="ci:check" width={24} />
+                  <p className="text-small text-default-500">
+                    {plan.self_hosted_runners === 999 ? (
+                      <span className="text-secondary">Unlimited</span>
+                    ) : (
+                      plan.self_hosted_runners
+                    )}{" "}
+                    Self-Hosted Runner
+                  </p>
+                </li>
+                <li className="flex items-center gap-1">
+                  <Icon className="text-default-600" icon="ci:check" width={24} />
+                  <p className="text-small text-default-500">
+                    {plan.alertflow_runners === 16 ? (
+                      <span className="text-secondary">Unlimited</span>
+                    ) : (
+                      plan.alertflow_runners
+                    )}{" "}
+                    AlertFlow Runner
+                  </p>
+                </li>
+                <li className="flex items-center gap-1">
+                  <Icon className="text-default-600" icon="ci:check" width={24} />
+                  <p className="text-small text-default-500">
+                    {plan.executions_per_month === 999 ? (
+                      <span className="text-secondary">Unlimited</span>
+                    ) : (
+                      plan.executions_per_month
+                    )}{" "}
+                    Executions per Month
+                  </p>
+                </li>
+              </ul>
+            </CardFooter>
+          </Card>
+        </div>
       </div>
-      <Card className="relative w-full">
-        <Button
-          isDisabled
-          className="absolute right-4 top-8 z-10"
-          radius="full"
-          size="sm"
-        >
-          Change Plan
-        </Button>
-        <CardBody className="relative bg-gradient-to-br from-content1 to-default-100/50 p-8 before:inset-0 before:h-full before:w-full before:content-['']">
-          <h1 className="mb-4 text-default-400">Your Plan</h1>
-          <h2 className="inline bg-gradient-to-br from-foreground-800 to-foreground-500 bg-clip-text text-6xl font-semibold tracking-tight text-transparent dark:to-foreground-200">
-            {plan.name}
-          </h2>
-        </CardBody>
-        <CardFooter>
-          <ul>
-            <li className="flex items-center gap-1">
-              <Icon className="text-default-600" icon="ci:check" width={24} />
-              <p className="text-small text-default-500">
-                {plan.projects === 999 ? (
-                  <span className="text-secondary">Unlimited</span>
-                ) : (
-                  plan.projects
-                )}{" "}
-                Project
-              </p>
-            </li>
-            <li className="flex items-center gap-1">
-              <Icon className="text-default-600" icon="ci:check" width={24} />
-              <p className="text-small text-default-500">
-                {plan.project_members === 999 ? (
-                  <span className="text-secondary">Unlimited</span>
-                ) : (
-                  plan.project_members
-                )}{" "}
-                Project Members
-              </p>
-            </li>
-            <li className="flex items-center gap-1">
-              <Icon className="text-default-600" icon="ci:check" width={24} />
-              <p className="text-small text-default-500">
-                {plan.flows === 999 ? (
-                  <span className="text-secondary">Unlimited</span>
-                ) : (
-                  plan.flows
-                )}{" "}
-                Flows
-              </p>
-            </li>
-            <li className="flex items-center gap-1">
-              <Icon className="text-default-600" icon="ci:check" width={24} />
-              <p className="text-small text-default-500">
-                {plan.self_hosted_runners === 999 ? (
-                  <span className="text-secondary">Unlimited</span>
-                ) : (
-                  plan.self_hosted_runners
-                )}{" "}
-                Self-Hosted Runner
-              </p>
-            </li>
-            <li className="flex items-center gap-1">
-              <Icon className="text-default-600" icon="ci:check" width={24} />
-              <p className="text-small text-default-500">
-                {plan.alertflow_runners === 16 ? (
-                  <span className="text-secondary">Unlimited</span>
-                ) : (
-                  plan.alertflow_runners
-                )}{" "}
-                AlertFlow Runner
-              </p>
-            </li>
-            <li className="flex items-center gap-1">
-              <Icon className="text-default-600" icon="ci:check" width={24} />
-              <p className="text-small text-default-500">
-                {plan.executions_per_month === 999 ? (
-                  <span className="text-secondary">Unlimited</span>
-                ) : (
-                  plan.executions_per_month
-                )}{" "}
-                Executions per Month
-              </p>
-            </li>
-          </ul>
-        </CardFooter>
-      </Card>
 
       {/* Latest executions */}
       <div className="flex items-end justify-between my-4">
