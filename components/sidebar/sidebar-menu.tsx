@@ -111,14 +111,14 @@ export default function SidebarMenu({
                   >
                     <Icon
                       className="text-default-500"
-                      icon="solar:bell-linear"
+                      icon="solar:bell-bold-duotone"
                       width={22}
                     />
                   </Badge>
                 ) : (
                   <Icon
                     className="text-default-500"
-                    icon="solar:bell-linear"
+                    icon="solar:bell-off-bold-duotone"
                     width={22}
                   />
                 )}

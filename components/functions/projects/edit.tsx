@@ -3,19 +3,26 @@
 import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
 import {
+  Avatar,
   Button,
   cn,
+  Divider,
   Input,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
+  Select,
+  SelectItem,
   Switch,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { toast } from "sonner";
+import { Icon, listIcons, loadIcons } from "@iconify/react";
+import { ColorPicker, useColor } from "react-color-palette";
+import "react-color-palette/css";
 
 import { EditDocumentIcon } from "@/components/icons";
 import UpdateProject from "@/lib/fetch/project/PUT/UpdateProject";
@@ -29,7 +36,10 @@ export default function EditProjectModal({
 }) {
   const router = useRouter();
   const { isOpen, onOpenChange } = disclosure;
+  const [icons, setIcons] = React.useState<string[]>([]);
 
+  const [color, setColor] = useColor(project.color ? project.color : "#5213d7");
+  const [projectIcon, setProjectIcon] = React.useState(project.icon);
   const [name, setName] = React.useState(project.name);
   const [description, setDescription] = React.useState(project.description);
   const [alertflowRunners, setAlertflowRunners] = React.useState(
@@ -38,10 +48,21 @@ export default function EditProjectModal({
   const [isLoading, setIsLoading] = React.useState(false);
 
   useEffect(() => {
+    setProjectIcon(project.icon);
     setName(project.name);
     setDescription(project.description);
     setAlertflowRunners(project.alertflow_runners);
+    loadAllSolarIcons();
   }, [project]);
+
+  async function loadAllSolarIcons() {
+    await loadIcons(["solar:home-2-linear", "solar:atom-broken"]);
+    setIcons((prevIcons) => listIcons("", "solar"));
+  }
+
+  const handleIconChange = (e: any) => {
+    setProjectIcon(e.target.value);
+  };
 
   async function updateProject() {
     setIsLoading(true);
@@ -50,6 +71,8 @@ export default function EditProjectModal({
       name,
       description,
       alertflowRunners,
+      projectIcon,
+      color.hex,
     );
 
     if (!response.error) {
@@ -65,35 +88,42 @@ export default function EditProjectModal({
 
   return (
     <>
-      <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
+      <Modal
+        isOpen={isOpen}
+        placement="center"
+        size="xl"
+        onOpenChange={onOpenChange}
+      >
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-warning">
+              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold">
                 <EditDocumentIcon />
                 Edit Project
               </ModalHeader>
               <ModalBody>
-                <Input
-                  label="Name"
-                  name="name"
-                  placeholder="Enter the project name"
-                  value={name}
-                  variant="bordered"
-                  onValueChange={setName}
-                />
-                <Input
-                  label="Description"
-                  name="description"
-                  placeholder="Enter the project description"
-                  value={description}
-                  variant="bordered"
-                  onValueChange={setDescription}
-                />
+                <div className="grid lg:grid-cols-2 gap-2">
+                  <Input
+                    label="Name"
+                    name="name"
+                    placeholder="Enter the project name"
+                    value={name}
+                    variant="bordered"
+                    onValueChange={setName}
+                  />
+                  <Input
+                    label="Description"
+                    name="description"
+                    placeholder="Enter the project description"
+                    value={description}
+                    variant="bordered"
+                    onValueChange={setDescription}
+                  />
+                </div>
                 <Switch
                   classNames={{
                     base: cn(
-                      "inline-flex flex-row-reverse w-full max-w-md bg-content1 hover:bg-content2 items-center",
+                      "inline-flex flex-row-reverse max-w-full bg-content1 hover:bg-content2 items-center",
                       "justify-between cursor-pointer rounded-2xl gap-2 p-4 border-2 border-transparent",
                       "data-[selected=true]:border-primary",
                     ),
@@ -118,6 +148,39 @@ export default function EditProjectModal({
                     </p>
                   </div>
                 </Switch>
+                <Divider />
+                <Select
+                  items={icons.map((icon) => ({ textValue: icon }))}
+                  label="Icon"
+                  placeholder="Select an icon"
+                  selectedKeys={[projectIcon]}
+                  size="md"
+                  startContent={<Icon icon={projectIcon} width={22} />}
+                  onChange={handleIconChange}
+                >
+                  {(item) => (
+                    <SelectItem key={item.textValue} textValue={item.textValue}>
+                      <div className="flex gap-2 items-center">
+                        <Avatar
+                          className="flex-shrink-0"
+                          color="primary"
+                          icon={<Icon icon={item.textValue} width={22} />}
+                          size="sm"
+                        />
+                        <div className="flex flex-col">
+                          <span className="text-small">{item.textValue}</span>
+                        </div>
+                      </div>
+                    </SelectItem>
+                  )}
+                </Select>
+                <div>
+                  <p className="font-bold">Project Color</p>
+                  <p className="text-sm text-default-500">
+                    This color appears on the project list
+                  </p>
+                </div>
+                <ColorPicker hideInput color={color} onChange={setColor} />
               </ModalBody>
               <ModalFooter>
                 <Button color="default" variant="bordered" onPress={onClose}>
