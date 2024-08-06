@@ -206,8 +206,8 @@ export function DashboardHome({
           </p>
         </div>
       </div>
-      <div className="grid lg:grid-cols-3 items-start gap-4">
-        <div className="col-span-1 grid lg:grid-cols-2 items-start gap-4">
+      <div className="grid lg:grid-cols-3 grid-cols-1 items-start gap-4">
+        <div className="col-span-1 grid grid-cols-2 items-start gap-4">
           <Card className="h-full">
             <CardBody className="flex gap-1 items-center">
               <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-14 h-14">
@@ -218,10 +218,12 @@ export function DashboardHome({
                 />
               </div>
               <p className="text-default-600">Projects</p>
+              <p className="text-lg font-bold">
+                {stats.projects} / {plan.projects}
+              </p>
               {plan.projects !== 999 ? (
                 <Progress
-                  showValueLabel
-                  color="primary"
+                  color={stats.projects >= plan.projects ? "danger" : "primary"}
                   maxValue={plan.projects}
                   value={stats.projects}
                 />
@@ -240,10 +242,12 @@ export function DashboardHome({
                 />
               </div>
               <p className="text-default-600">Flows</p>
+              <p className="text-lg font-bold">
+                {stats.flows} / {plan.flows}
+              </p>
               {plan.flows !== 999 ? (
                 <Progress
-                  showValueLabel
-                  color="primary"
+                  color={stats.flows >= plan.flows ? "danger" : "primary"}
                   maxValue={plan.flows}
                   value={stats.flows}
                 />
@@ -262,10 +266,17 @@ export function DashboardHome({
                 />
               </div>
               <p className="text-default-600">Self-Hosted Runners</p>
+              <p className="text-lg font-bold">
+                {stats.self_hosted_runners ? stats.self_hosted_runners : 0} /{" "}
+                {plan.self_hosted_runners}
+              </p>
               {plan.self_hosted_runners !== 999 ? (
                 <Progress
-                  showValueLabel
-                  color="primary"
+                  color={
+                    stats.self_hosted_runners >= plan.self_hosted_runners
+                      ? "danger"
+                      : "primary"
+                  }
                   maxValue={plan.self_hosted_runners}
                   value={stats.self_hosted_runners}
                 />
@@ -284,10 +295,17 @@ export function DashboardHome({
                 />
               </div>
               <p className="text-default-600">Executions</p>
+              <p className="text-lg font-bold">
+                {stats.executions ? stats.executions : 0} /{" "}
+                {plan.executions_per_month}
+              </p>
               {plan.executions_per_month !== 999 ? (
                 <Progress
-                  showValueLabel
-                  color="primary"
+                  color={
+                    stats.executions_per_month >= plan.executions_per_month
+                      ? "danger"
+                      : "primary"
+                  }
                   maxValue={plan.executions_per_month}
                   value={stats.executions_per_month}
                 />
@@ -301,13 +319,13 @@ export function DashboardHome({
           <Card className="relative w-full">
             <Button
               isDisabled
-              className="absolute right-4 top-4 z-10"
+              className="absolute right-4 top-8 z-10"
               radius="full"
               size="sm"
             >
               Change Plan
             </Button>
-            <CardBody className="relative bg-gradient-to-br from-content1 to-default-100/50 p-4 before:inset-0 before:h-full before:w-full before:content-['']">
+            <CardBody className="relative bg-gradient-to-br from-content1 to-default-100/50 p-8 before:inset-0 before:h-full before:w-full before:content-['']">
               <h1 className="mb-4 text-default-400">Your Plan</h1>
               <h2 className="inline bg-gradient-to-br from-foreground-800 to-foreground-500 bg-clip-text text-6xl font-semibold tracking-tight text-transparent dark:to-foreground-200">
                 {plan.name}
@@ -316,7 +334,11 @@ export function DashboardHome({
             <CardFooter>
               <ul>
                 <li className="flex items-center gap-1">
-                  <Icon className="text-default-600" icon="ci:check" width={24} />
+                  <Icon
+                    className="text-default-600"
+                    icon="ci:check"
+                    width={24}
+                  />
                   <p className="text-small text-default-500">
                     {plan.projects === 999 ? (
                       <span className="text-secondary">Unlimited</span>
@@ -327,7 +349,11 @@ export function DashboardHome({
                   </p>
                 </li>
                 <li className="flex items-center gap-1">
-                  <Icon className="text-default-600" icon="ci:check" width={24} />
+                  <Icon
+                    className="text-default-600"
+                    icon="ci:check"
+                    width={24}
+                  />
                   <p className="text-small text-default-500">
                     {plan.project_members === 999 ? (
                       <span className="text-secondary">Unlimited</span>
@@ -338,7 +364,11 @@ export function DashboardHome({
                   </p>
                 </li>
                 <li className="flex items-center gap-1">
-                  <Icon className="text-default-600" icon="ci:check" width={24} />
+                  <Icon
+                    className="text-default-600"
+                    icon="ci:check"
+                    width={24}
+                  />
                   <p className="text-small text-default-500">
                     {plan.flows === 999 ? (
                       <span className="text-secondary">Unlimited</span>
@@ -349,7 +379,11 @@ export function DashboardHome({
                   </p>
                 </li>
                 <li className="flex items-center gap-1">
-                  <Icon className="text-default-600" icon="ci:check" width={24} />
+                  <Icon
+                    className="text-default-600"
+                    icon="ci:check"
+                    width={24}
+                  />
                   <p className="text-small text-default-500">
                     {plan.self_hosted_runners === 999 ? (
                       <span className="text-secondary">Unlimited</span>
@@ -360,7 +394,11 @@ export function DashboardHome({
                   </p>
                 </li>
                 <li className="flex items-center gap-1">
-                  <Icon className="text-default-600" icon="ci:check" width={24} />
+                  <Icon
+                    className="text-default-600"
+                    icon="ci:check"
+                    width={24}
+                  />
                   <p className="text-small text-default-500">
                     {plan.alertflow_runners === 16 ? (
                       <span className="text-secondary">Unlimited</span>
@@ -371,7 +409,11 @@ export function DashboardHome({
                   </p>
                 </li>
                 <li className="flex items-center gap-1">
-                  <Icon className="text-default-600" icon="ci:check" width={24} />
+                  <Icon
+                    className="text-default-600"
+                    icon="ci:check"
+                    width={24}
+                  />
                   <p className="text-small text-default-500">
                     {plan.executions_per_month === 999 ? (
                       <span className="text-secondary">Unlimited</span>
