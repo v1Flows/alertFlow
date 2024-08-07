@@ -259,9 +259,9 @@ export function ProjectList({ projects, members }: any) {
         </div>
         <Button
           color="primary"
-          radius="sm"
+          radius="lg"
           startContent={<PlusIcon />}
-          variant="flat"
+          variant="solid"
           onPress={() => newProjectModal.onOpen()}
         >
           New Project

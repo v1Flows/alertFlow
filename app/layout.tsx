@@ -8,7 +8,6 @@ import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 
 import { Providers } from "./providers";
-import Footer from "./footer";
 
 export const metadata: Metadata = {
   title: {
@@ -35,7 +34,9 @@ export default function RootLayout({
 }) {
   return (
     <html suppressHydrationWarning lang="en">
-      <head />
+      <head>
+        <link href="/manifest.json" rel="manifest" />
+      </head>
       <body
         className={clsx(
           "min-h-screen bg-background font-sans antialiased",
@@ -44,10 +45,7 @@ export default function RootLayout({
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <Toaster richColors position="bottom-center" />
-          <div className="relative flex flex-col h-screen">
-            {children}
-            <Footer />
-          </div>
+          <div className="relative flex flex-col h-screen">{children}</div>
         </Providers>
       </body>
     </html>

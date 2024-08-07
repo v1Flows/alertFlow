@@ -11,7 +11,7 @@ import {
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 
-import { CalendarIcon, InfoIcon, EditDocumentIcon } from "@/components/icons";
+import { CalendarIcon, InfoIcon } from "@/components/icons";
 import { IconWrapper } from "@/lib/IconWrapper";
 import { subtitle } from "@/components/primitives";
 import Reloader from "@/components/reloader/Reloader";
@@ -21,6 +21,7 @@ import ProjectBreadcrumbs from "./project/breadcrumbs";
 import ProjectTabs from "./project/tabs";
 
 export default function Project({
+  user,
   settings,
   project,
   members,
@@ -51,12 +52,16 @@ export default function Project({
         </div>
         <Button
           color="warning"
-          endContent={<EditDocumentIcon />}
-          isDisabled={project.disabled}
+          isDisabled={
+            project.disabled ||
+            members.filter((m: any) => m.user_id === user.id)[0].role ===
+              "Viewer"
+          }
+          startContent={<Icon icon="solar:pen-new-square-broken" width={20} />}
           variant="flat"
           onPress={() => editProjectModal.onOpen()}
         >
-          Edit Project
+          Edit
         </Button>
       </div>
       <Divider className="mb-4" />
@@ -155,6 +160,7 @@ export default function Project({
           runners={runners}
           settings={settings}
           tokens={tokens}
+          user={user}
         />
       </div>
       <EditProjectModal disclosure={editProjectModal} project={project} />

@@ -232,8 +232,9 @@ export function AlertflowRunnerList({ runners }: any) {
         </p>
         <Button
           color="primary"
-          endContent={<PlusIcon height={undefined} width={undefined} />}
-          variant="flat"
+          radius="lg"
+          startContent={<PlusIcon height={undefined} width={undefined} />}
+          variant="solid"
           onPress={() => addRunnerModal.onOpen()}
         >
           Add Runner

@@ -111,14 +111,14 @@ export default function SidebarMenu({
                   >
                     <Icon
                       className="text-default-500"
-                      icon="solar:bell-linear"
+                      icon="solar:bell-bold-duotone"
                       width={22}
                     />
                   </Badge>
                 ) : (
                   <Icon
                     className="text-default-500"
-                    icon="solar:bell-linear"
+                    icon="solar:bell-off-bold-duotone"
                     width={22}
                   />
                 )}
@@ -165,13 +165,14 @@ export default function SidebarMenu({
             </div>
           </div>
         </DropdownTrigger>
-        <DropdownMenu aria-label="Static Actions">
+        <DropdownMenu aria-label="Profile Actions" variant="flat">
           <DropdownItem
             key="profile"
+            showDivider
             startContent={<Icon icon="solar:smile-square-broken" width={16} />}
             onPress={() => router.push(`/user/${user?.id}`)}
           >
-            Show Profile
+            View Profile
           </DropdownItem>
           <DropdownItem
             key="api_key"
@@ -238,14 +239,8 @@ export default function SidebarMenu({
           </PopoverContent>
         </Popover>
         <Button
-          className="justify-start text-default-500 data-[hover=true]:text-foreground"
-          startContent={
-            <Icon
-              className="text-default-500"
-              icon="solar:logout-3-broken"
-              width={24}
-            />
-          }
+          className="justify-start text-default-500 data-[hover=true]:text-danger"
+          startContent={<Icon icon="solar:logout-3-broken" width={24} />}
           variant="light"
           onPress={LogoutHandler}
         >

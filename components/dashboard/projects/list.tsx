@@ -11,27 +11,24 @@ import {
   DropdownSection,
   DropdownItem,
   Button,
-  CardFooter,
   useDisclosure,
   Chip,
   Spacer,
+  Avatar,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Icon } from "@iconify/react";
 
 import { IconWrapper } from "@/lib/IconWrapper";
-import { EyeIcon, InfoIcon, PlusIcon } from "@/components/icons";
-import {
-  CopyDocumentIcon,
-  DeleteDocumentIcon,
-  VerticalDotsIcon,
-} from "@/components/icons";
+import { EditDocumentIcon, InfoIcon, PlusIcon } from "@/components/icons";
+import { CopyDocumentIcon } from "@/components/icons";
 import DeleteProjectModal from "@/components/functions/projects/delete";
 import CreateProjectModal from "@/components/functions/projects/create";
 import SparklesText from "@/components/magicui/sparkles-text";
 import AcceptProjectInvite from "@/lib/fetch/project/PUT/AcceptProjectInvite";
 import DeclineProjectInvite from "@/lib/fetch/project/PUT/DeclineProjectInvite";
+import EditProjectModal from "@/components/functions/projects/edit";
 
 export function ProjectsList({
   projects,
@@ -42,8 +39,9 @@ export function ProjectsList({
   const router = useRouter();
 
   const [targetProject, setTargetProject] = React.useState({});
-  const deleteProjectModal = useDisclosure();
   const newProjectModal = useDisclosure();
+  const editProjectModal = useDisclosure();
+  const deleteProjectModal = useDisclosure();
 
   const copyProjectIDtoClipboard = (key: string) => {
     // eslint-disable-next-line no-undef
@@ -59,28 +57,21 @@ export function ProjectsList({
   return (
     <main>
       <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-1">
-          <p className="text-2xl font-bold mb-0 text-default-500">
-            {projects.length}
-          </p>
-          <p className="text-2xl font-bold mb-0 text-primary">
-            Project{projects.length > 1 ? "s" : ""}
-          </p>
-        </div>
+        <p className="text-2xl font-bold">Project List</p>
         <Button
           color="primary"
           isDisabled={
             !settings.create_projects || projects.length >= plan.projects
           }
-          radius="sm"
+          radius="lg"
           startContent={<PlusIcon />}
           variant="solid"
           onPress={() => newProjectModal.onOpen()}
         >
-          New Project
+          Create New
         </Button>
       </div>
-      <Divider className="mb-4 mt-4" />
+      <Spacer y={8} />
       {projects.error && (
         <Card className="shadow shadow-danger">
           <CardHeader className="justify-start gap-2 items-center">
@@ -96,66 +87,93 @@ export function ProjectsList({
       )}
       {!projects.error && (
         <>
-          <div className="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-4">
+          <div className="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-1 gap-4">
             {projects.map((project: any) => (
               <div key={project.id} className="col-span-1">
                 <Card
                   fullWidth
-                  className={`shadow hover:shadow-md ${project.disabled ? "hover:shadow-danger shadow-danger-200" : "hover:shadow-primary shadow-primary-200"}`}
+                  className={`shadow ${project.disabled ? "shadow-danger-200" : "shadow-primary-200"}`}
                 >
-                  <CardHeader className="justify-between">
-                    <div className="flex flex-col items-start">
-                      <p className="text-md">{project.name}</p>
-                      <p className="text-sm text-default-500">
-                        {project.description}
-                      </p>
-                    </div>
-                    <Dropdown backdrop="opaque">
-                      <DropdownTrigger>
-                        <Button isIconOnly size="sm" variant="light">
-                          <VerticalDotsIcon
-                            className="text-default-300"
-                            height={undefined}
-                            width={undefined}
-                          />
-                        </Button>
-                      </DropdownTrigger>
-                      <DropdownMenu>
-                        <DropdownSection title="Actions">
-                          <DropdownItem
-                            startContent={<CopyDocumentIcon />}
-                            onClick={() => copyProjectIDtoClipboard(project.id)}
-                          >
-                            Copy ID
-                          </DropdownItem>
-                        </DropdownSection>
-                        <DropdownSection title="Danger zone">
-                          <DropdownItem
-                            className="text-danger"
-                            color="danger"
-                            startContent={<DeleteDocumentIcon />}
-                            onClick={() => {
-                              setTargetProject(project);
-                              deleteProjectModal.onOpen();
-                            }}
-                          >
-                            Delete
-                          </DropdownItem>
-                        </DropdownSection>
-                      </DropdownMenu>
-                    </Dropdown>
-                  </CardHeader>
-                  <Divider />
                   <CardBody>
+                    <div className="bg-default-100 rounded-large w-full flex items-center justify-between p-3">
+                      <div className="flex items-center space-x-2">
+                        <Avatar
+                          classNames={{
+                            base: `text-white`,
+                          }}
+                          icon={
+                            <Icon
+                              icon={
+                                project.icon
+                                  ? project.icon
+                                  : "solar:question-square-broken"
+                              }
+                              width={24}
+                            />
+                          }
+                          radius="md"
+                          style={{
+                            backgroundColor: project.color,
+                          }}
+                        />
+                        <div className="flex flex-col items-start">
+                          <p className="text-md font-bold">{project.name}</p>
+                          <p className="text-sm text-default-500">
+                            {project.description}
+                          </p>
+                        </div>
+                      </div>
+                      <Dropdown backdrop="opaque">
+                        <DropdownTrigger>
+                          <Button isIconOnly size="sm" variant="light">
+                            <Icon icon="solar:menu-dots-broken" width={24} />
+                          </Button>
+                        </DropdownTrigger>
+                        <DropdownMenu variant="flat">
+                          <DropdownSection title="Actions">
+                            <DropdownItem
+                              startContent={<CopyDocumentIcon />}
+                              onClick={() =>
+                                copyProjectIDtoClipboard(project.id)
+                              }
+                            >
+                              Copy ID
+                            </DropdownItem>
+                            <DropdownItem
+                              showDivider
+                              color="warning"
+                              startContent={<EditDocumentIcon />}
+                              onClick={() => {
+                                setTargetProject(project);
+                                editProjectModal.onOpen();
+                              }}
+                            >
+                              Edit
+                            </DropdownItem>
+                          </DropdownSection>
+                          <DropdownSection title="Danger Zone">
+                            <DropdownItem
+                              className="text-danger"
+                              color="danger"
+                              startContent={
+                                <Icon
+                                  icon="solar:trash-bin-trash-broken"
+                                  width={16}
+                                />
+                              }
+                              onClick={() => {
+                                setTargetProject(project);
+                                deleteProjectModal.onOpen();
+                              }}
+                            >
+                              Delete
+                            </DropdownItem>
+                          </DropdownSection>
+                        </DropdownMenu>
+                      </Dropdown>
+                    </div>
+                    <Spacer y={4} />
                     <div className="flex items-center justify-start gap-2 flex-wrap">
-                      <Chip
-                        color="secondary"
-                        radius="sm"
-                        size="sm"
-                        variant="flat"
-                      >
-                        <p className="font-bold">ID: {project.id}</p>
-                      </Chip>
                       <Chip
                         color={project.disabled ? "danger" : "success"}
                         radius="sm"
@@ -179,25 +197,32 @@ export function ProjectsList({
                         </Chip>
                       )}
                     </div>
-                    <p className="text-small text-default-500 mt-2">
-                      Created At:{" "}
-                      {new Date(project.created_at).toLocaleString("de-DE")}
-                    </p>
+                    <Spacer y={2} />
+                    <div className="flex flex-wrap items-center justify-start gap-2">
+                      <p className="text-sm font-bold text-default-500">
+                        Created At:
+                      </p>
+                      <p className="text-default-500 text-sm">
+                        {new Date(project.created_at).toLocaleString("de-DE")}
+                      </p>
+                    </div>
+                    <Spacer y={4} />
+                    <div className="flex flex-col gap-2 w-full">
+                      <Divider />
+                      <Button
+                        className="w-full font-bold items-center"
+                        color={project.disabled ? "danger" : "primary"}
+                        radius="sm"
+                        variant="light"
+                        onPress={() => {
+                          router.push(`/dashboard/projects/${project.id}`);
+                        }}
+                      >
+                        <Icon icon="solar:eye-broken" width={18} />
+                        View Project
+                      </Button>
+                    </div>
                   </CardBody>
-                  <CardFooter>
-                    <Button
-                      className="w-full font-bold"
-                      color={project.disabled ? "danger" : "primary"}
-                      radius="sm"
-                      variant="flat"
-                      onPress={() =>
-                        router.push(`/dashboard/projects/${project.id}`)
-                      }
-                    >
-                      <EyeIcon />
-                      Go to Project
-                    </Button>
-                  </CardFooter>
                 </Card>
               </div>
             ))}
@@ -210,29 +235,44 @@ export function ProjectsList({
                 text="Pending Project Invitations"
               />
               <Spacer y={4} />
-              <div className="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-4">
+              <div className="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-1 gap-4">
                 {pending_projects.map((project: any) => (
                   <div key={project.id} className="col-span-1">
                     <Card fullWidth>
-                      <CardHeader className="justify-between">
-                        <div className="flex flex-col items-start">
-                          <p className="text-md">{project.name}</p>
-                          <p className="text-sm text-default-500">
-                            {project.description}
-                          </p>
-                        </div>
-                      </CardHeader>
-                      <Divider />
                       <CardBody>
+                        <div className="bg-default-100 rounded-large w-full flex items-center justify-between p-3">
+                          <div className="flex items-center space-x-2">
+                            <Avatar
+                              classNames={{
+                                base: `text-white`,
+                              }}
+                              icon={
+                                <Icon
+                                  icon={
+                                    project.icon
+                                      ? project.icon
+                                      : "solar:question-square-broken"
+                                  }
+                                  width={24}
+                                />
+                              }
+                              radius="md"
+                              style={{
+                                backgroundColor: project.color,
+                              }}
+                            />
+                            <div className="flex flex-col items-start">
+                              <p className="text-md font-bold">
+                                {project.name}
+                              </p>
+                              <p className="text-sm text-default-500">
+                                {project.description}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <Spacer y={4} />
                         <div className="flex items-center justify-start gap-2 flex-wrap">
-                          <Chip
-                            color="secondary"
-                            radius="sm"
-                            size="sm"
-                            variant="flat"
-                          >
-                            <p className="font-bold">ID: {project.id}</p>
-                          </Chip>
                           <Chip
                             color={project.disabled ? "danger" : "success"}
                             radius="sm"
@@ -256,38 +296,53 @@ export function ProjectsList({
                             </Chip>
                           )}
                         </div>
+                        <Spacer y={2} />
+                        <div className="flex flex-wrap items-center justify-start gap-2">
+                          <p className="text-sm font-bold text-default-500">
+                            Created At:
+                          </p>
+                          <p className="text-default-500 text-sm">
+                            {new Date(project.created_at).toLocaleString(
+                              "de-DE",
+                            )}
+                          </p>
+                        </div>
+                        <Spacer y={4} />
+                        <div className="flex flex-col gap-2 w-full">
+                          <Divider />
+                          <div className="grid grid-cols-2 items-center justify-between gap-2 w-full">
+                            <Button
+                              className="font-bold"
+                              color="danger"
+                              radius="sm"
+                              variant="flat"
+                              onPress={() => {
+                                DeclineProjectInvite(project.id);
+                                router.refresh();
+                              }}
+                            >
+                              <Icon
+                                icon="solar:danger-triangle-broken"
+                                width={24}
+                              />
+                              Decline
+                            </Button>
+                            <Button
+                              className="font-bold"
+                              color="success"
+                              radius="sm"
+                              variant="flat"
+                              onPress={() => {
+                                AcceptProjectInvite(project.id);
+                                router.refresh();
+                              }}
+                            >
+                              <Icon icon="solar:check-read-broken" width={24} />
+                              Accept
+                            </Button>
+                          </div>
+                        </div>
                       </CardBody>
-                      <CardFooter className="flex items-center justify-between gap-2">
-                        <Button
-                          className="w-full font-bold"
-                          color="danger"
-                          radius="sm"
-                          variant="flat"
-                          onPress={() => {
-                            DeclineProjectInvite(project.id);
-                            router.refresh();
-                          }}
-                        >
-                          <Icon
-                            icon="solar:danger-triangle-broken"
-                            width={24}
-                          />
-                          Decline
-                        </Button>
-                        <Button
-                          className="w-full font-bold"
-                          color="success"
-                          radius="sm"
-                          variant="flat"
-                          onPress={() => {
-                            AcceptProjectInvite(project.id);
-                            router.refresh();
-                          }}
-                        >
-                          <Icon icon="solar:check-read-broken" width={24} />
-                          Accept
-                        </Button>
-                      </CardFooter>
                     </Card>
                   </div>
                 ))}
@@ -297,6 +352,7 @@ export function ProjectsList({
         </>
       )}
       <CreateProjectModal disclosure={newProjectModal} />
+      <EditProjectModal disclosure={editProjectModal} project={targetProject} />
       <DeleteProjectModal
         disclosure={deleteProjectModal}
         project={targetProject}

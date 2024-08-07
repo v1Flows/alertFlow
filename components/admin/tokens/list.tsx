@@ -212,8 +212,9 @@ export function TokensList({ tokens, projects }: any) {
         </div>
         <Button
           color="primary"
+          radius="lg"
           startContent={<PlusIcon height={undefined} width={undefined} />}
-          variant="flat"
+          variant="solid"
           onPress={() => addTokenModal.onOpen()}
         >
           Add New

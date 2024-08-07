@@ -7,9 +7,6 @@ import { Icon } from "@iconify/react";
 export default function ExecutionBreadcrumbs({ flowID, executionID }: any) {
   return (
     <Breadcrumbs>
-      <BreadcrumbItem href="/dashboard">
-        <Icon icon="solar:clipboard-text-broken" width={20} />
-      </BreadcrumbItem>
       <BreadcrumbItem href="/dashboard/flows">
         <Icon icon="solar:book-bookmark-broken" width={20} />
       </BreadcrumbItem>

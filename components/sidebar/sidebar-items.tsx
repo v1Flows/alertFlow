@@ -25,7 +25,7 @@ export const sectionItems: SidebarItem[] = [
         key: "dashboard",
         href: "/dashboard",
         icon: "solar:clipboard-text-broken",
-        title: "Dashboard Home",
+        title: "Dashboard",
       },
       {
         key: "dashboard_projects",
