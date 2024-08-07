@@ -17,6 +17,7 @@ import {
   Select,
   SelectItem,
   Spacer,
+  Input,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
@@ -33,6 +34,7 @@ export default function FlowList({ flows, projects, settings, plan }: any) {
   const router = useRouter();
 
   const [projectFilter, setProjectFilter] = React.useState(new Set([]) as any);
+  const [search, setSearch] = React.useState("");
 
   const [status, setStatus] = React.useState(false);
   const [maintenance, setMaintenance] = React.useState(false);
@@ -43,13 +45,32 @@ export default function FlowList({ flows, projects, settings, plan }: any) {
   const deleteModal = useDisclosure();
   const newModal = useDisclosure();
 
-  const filteredFlows = flows.filter((flow: any) => {
-    if (projectFilter.size === 0) {
-      return true;
-    }
+  const filteredFlows = flows
+    .filter((flow: any) => {
+      if (projectFilter.size === 0 && !search) {
+        return true;
+      }
 
-    return projectFilter.has(flow.project_id);
-  });
+      if (projectFilter.has(flow.project_id)) {
+        return true;
+      }
+
+      if (search && flow.name.toLowerCase().includes(search.toLowerCase())) {
+        return true;
+      }
+
+      return false;
+    })
+    .sort((a: any, b: any) => {
+      if (a.name.toLowerCase() < b.name.toLowerCase()) {
+        return -1;
+      }
+      if (a.name.toLowerCase() > b.name.toLowerCase()) {
+        return 1;
+      }
+
+      return 0;
+    });
 
   const copyFlowIDtoClipboard = (key: string) => {
     // eslint-disable-next-line no-undef
@@ -65,7 +86,19 @@ export default function FlowList({ flows, projects, settings, plan }: any) {
   return (
     <main>
       <div className="grid grid-cols-2 items-center justify-between">
-        <p className="text-2xl font-bold">Flow List</p>
+        <div className="col-span-1 flex justify-start items-center gap-4">
+          <p className="text-2xl font-bold">Flow List</p>
+          <Input
+            className="max-w-xs"
+            placeholder="Search"
+            radius="full"
+            size="md"
+            startContent={<Icon icon="solar:minimalistic-magnifer-broken" />}
+            value={search}
+            variant="flat"
+            onValueChange={setSearch}
+          />
+        </div>
         <div className="col-span-1 flex justify-end items-center gap-4">
           <Select
             className="max-w-xs"
