@@ -210,23 +210,27 @@ export function DashboardHome({
         <div className="col-span-1 grid grid-cols-2 items-start gap-4">
           <Card className="h-full">
             <CardBody className="flex gap-1 items-center">
-              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-14 h-14">
+              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-12 h-12">
                 <Icon
                   className="text-primary"
-                  icon="solar:reorder-line-duotone"
-                  width={32}
+                  icon="solar:box-broken"
+                  width={28}
                 />
               </div>
               <p className="text-default-600">Projects</p>
-              <p className="text-lg font-bold">
-                {stats.projects} / {plan.projects}
-              </p>
               {plan.projects !== 999 ? (
-                <Progress
-                  color={stats.projects >= plan.projects ? "danger" : "primary"}
-                  maxValue={plan.projects}
-                  value={stats.projects}
-                />
+                <>
+                  <p className="text-lg font-bold">
+                    {stats.projects} / {plan.projects}
+                  </p>
+                  <Progress
+                    color={
+                      stats.projects >= plan.projects ? "danger" : "primary"
+                    }
+                    maxValue={plan.projects}
+                    value={stats.projects}
+                  />
+                </>
               ) : (
                 <p className="text-lg font-bold text-secondary">Unlimited</p>
               )}
@@ -234,23 +238,25 @@ export function DashboardHome({
           </Card>
           <Card className="h-full">
             <CardBody className="flex gap-1 items-center">
-              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-14 h-14">
+              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-12 h-12">
                 <Icon
                   className="text-primary"
-                  icon="solar:reorder-line-duotone"
-                  width={32}
+                  icon="solar:book-bookmark-broken"
+                  width={28}
                 />
               </div>
               <p className="text-default-600">Flows</p>
-              <p className="text-lg font-bold">
-                {stats.flows} / {plan.flows}
-              </p>
               {plan.flows !== 999 ? (
-                <Progress
-                  color={stats.flows >= plan.flows ? "danger" : "primary"}
-                  maxValue={plan.flows}
-                  value={stats.flows}
-                />
+                <>
+                  <p className="text-lg font-bold">
+                    {stats.flows} / {plan.flows}
+                  </p>
+                  <Progress
+                    color={stats.flows >= plan.flows ? "danger" : "primary"}
+                    maxValue={plan.flows}
+                    value={stats.flows}
+                  />
+                </>
               ) : (
                 <p className="text-lg font-bold text-secondary">Unlimited</p>
               )}
@@ -258,28 +264,30 @@ export function DashboardHome({
           </Card>
           <Card className="h-full">
             <CardBody className="flex gap-1 items-center">
-              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-14 h-14">
+              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-12 h-12">
                 <Icon
                   className="text-primary"
-                  icon="solar:reorder-line-duotone"
-                  width={32}
+                  icon="solar:rocket-2-broken"
+                  width={28}
                 />
               </div>
               <p className="text-default-600">Self-Hosted Runners</p>
-              <p className="text-lg font-bold">
-                {stats.self_hosted_runners ? stats.self_hosted_runners : 0} /{" "}
-                {plan.self_hosted_runners}
-              </p>
               {plan.self_hosted_runners !== 999 ? (
-                <Progress
-                  color={
-                    stats.self_hosted_runners >= plan.self_hosted_runners
-                      ? "danger"
-                      : "primary"
-                  }
-                  maxValue={plan.self_hosted_runners}
-                  value={stats.self_hosted_runners}
-                />
+                <>
+                  <p className="text-lg font-bold">
+                    {stats.self_hosted_runners ? stats.self_hosted_runners : 0}{" "}
+                    / {plan.self_hosted_runners}
+                  </p>
+                  <Progress
+                    color={
+                      stats.self_hosted_runners >= plan.self_hosted_runners
+                        ? "danger"
+                        : "primary"
+                    }
+                    maxValue={plan.self_hosted_runners}
+                    value={stats.self_hosted_runners}
+                  />
+                </>
               ) : (
                 <p className="text-lg font-bold text-secondary">Unlimited</p>
               )}
@@ -287,28 +295,30 @@ export function DashboardHome({
           </Card>
           <Card className="h-full">
             <CardBody className="flex gap-1 items-center">
-              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-14 h-14">
+              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-12 h-12">
                 <Icon
                   className="text-primary"
                   icon="solar:reorder-line-duotone"
-                  width={32}
+                  width={28}
                 />
               </div>
               <p className="text-default-600">Executions</p>
-              <p className="text-lg font-bold">
-                {stats.executions ? stats.executions : 0} /{" "}
-                {plan.executions_per_month}
-              </p>
               {plan.executions_per_month !== 999 ? (
-                <Progress
-                  color={
-                    stats.executions_per_month >= plan.executions_per_month
-                      ? "danger"
-                      : "primary"
-                  }
-                  maxValue={plan.executions_per_month}
-                  value={stats.executions_per_month}
-                />
+                <>
+                  <p className="text-lg font-bold">
+                    {stats.executions ? stats.executions : 0} /{" "}
+                    {plan.executions_per_month}
+                  </p>
+                  <Progress
+                    color={
+                      stats.executions_per_month >= plan.executions_per_month
+                        ? "danger"
+                        : "primary"
+                    }
+                    maxValue={plan.executions_per_month}
+                    value={stats.executions_per_month}
+                  />
+                </>
               ) : (
                 <p className="text-lg font-bold text-secondary">Unlimited</p>
               )}
