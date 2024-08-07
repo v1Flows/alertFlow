@@ -29,7 +29,7 @@ import { ColorPicker, useColor } from "react-color-palette";
 import "react-color-palette/css";
 
 import CreateProject from "@/lib/fetch/project/POST/CreateProject";
-import { CheckIcon, InfoIcon } from "@/components/icons";
+import { InfoIcon } from "@/components/icons";
 import { IconWrapper } from "@/lib/IconWrapper";
 
 export default function CreateProjectModal({
@@ -61,7 +61,7 @@ export default function CreateProjectModal({
 
   async function loadAllSolarIcons() {
     await loadIcons(["solar:home-2-linear", "solar:atom-broken"]);
-    setIcons((prevIcons) => listIcons("", "solar"));
+    setIcons(() => listIcons("", "solar"));
   }
 
   const handleIconChange = (e: any) => {

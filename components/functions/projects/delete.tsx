@@ -15,9 +15,9 @@ import {
 import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
+import { Icon } from "@iconify/react";
 
 import DeleteProject from "@/lib/fetch/project/DELETE/DeleteProject";
-import { Icon } from "@iconify/react";
 
 export default function DeleteProjectModal({
   disclosure,
@@ -52,8 +52,8 @@ export default function DeleteProjectModal({
         backdrop="blur"
         isOpen={isOpen}
         placement="center"
-        onOpenChange={onOpenChange}
         size="lg"
+        onOpenChange={onOpenChange}
       >
         <ModalContent className="w-full">
           {(onClose) => (

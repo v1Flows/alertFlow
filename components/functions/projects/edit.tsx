@@ -57,7 +57,7 @@ export default function EditProjectModal({
 
   async function loadAllSolarIcons() {
     await loadIcons(["solar:home-2-linear", "solar:atom-broken"]);
-    setIcons((prevIcons) => listIcons("", "solar"));
+    setIcons(() => listIcons("", "solar"));
   }
 
   const handleIconChange = (e: any) => {

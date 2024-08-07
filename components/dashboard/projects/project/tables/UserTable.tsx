@@ -123,7 +123,7 @@ export default function ProjectMembers({
             !settings.add_project_members ||
             members.length >= plan.project_members ||
             members.filter((m: any) => m.user_id === user.id)[0].role ===
-            "Viewer"
+              "Viewer"
           }
           startContent={<PlusIcon />}
           onPress={() => addProjectMemberModal.onOpen()}

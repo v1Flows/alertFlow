@@ -13,7 +13,6 @@ import {
   DropdownSection,
   Button,
   Chip,
-  CardFooter,
   useDisclosure,
   Select,
   SelectItem,
@@ -22,12 +21,7 @@ import {
 import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
 
-import {
-  VerticalDotsIcon,
-  EyeIcon,
-  InfoIcon,
-  PlusIcon,
-} from "@/components/icons";
+import { EyeIcon, InfoIcon, PlusIcon } from "@/components/icons";
 import { IconWrapper } from "@/lib/IconWrapper";
 import FunctionDeleteFlow from "@/components/functions/flows/deleteFlow";
 import FunctionCreateFlow from "@/components/functions/flows/create";
@@ -168,7 +162,10 @@ export default function FlowList({ flows, projects, settings, plan }: any) {
                               key="disable"
                               color="warning"
                               startContent={
-                                <Icon icon="solar:bomb-emoji-broken" width={20} />
+                                <Icon
+                                  icon="solar:bomb-emoji-broken"
+                                  width={20}
+                                />
                               }
                               onClick={() => {
                                 setTargetFlow(flow);
@@ -183,7 +180,10 @@ export default function FlowList({ flows, projects, settings, plan }: any) {
                               key="disable"
                               color="warning"
                               startContent={
-                                <Icon icon="solar:bomb-emoji-broken" width={20} />
+                                <Icon
+                                  icon="solar:bomb-emoji-broken"
+                                  width={20}
+                                />
                               }
                               onClick={() => {
                                 setTargetFlow(flow);
@@ -239,7 +239,10 @@ export default function FlowList({ flows, projects, settings, plan }: any) {
                             className="text-danger"
                             color="danger"
                             startContent={
-                              <Icon icon="solar:trash-bin-2-broken" width={20} />
+                              <Icon
+                                icon="solar:trash-bin-2-broken"
+                                width={20}
+                              />
                             }
                             onClick={() => {
                               setTargetFlow(flow);
