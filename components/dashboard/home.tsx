@@ -206,7 +206,7 @@ export function DashboardHome({
           </p>
         </div>
       </div>
-      <div className="grid lg:grid-cols-3 grid-cols-1 items-start gap-4">
+      <div className="grid lg:grid-cols-3 grid-cols-1 items-stretch gap-4">
         <div className="col-span-1 grid grid-cols-2 items-start gap-4">
           <Card className="h-full">
             <CardBody className="flex gap-1 items-center">
