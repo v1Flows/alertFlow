@@ -275,17 +275,17 @@ export function DashboardHome({
               {plan.self_hosted_runners !== 999 ? (
                 <>
                   <p className="text-lg font-bold">
-                    {stats.self_hosted_runners ? stats.self_hosted_runners : 0}{" "}
-                    / {plan.self_hosted_runners}
+                    {stats.runners ? stats.runners : 0} /{" "}
+                    {plan.self_hosted_runners}
                   </p>
                   <Progress
                     color={
-                      stats.self_hosted_runners >= plan.self_hosted_runners
+                      stats.runners >= plan.self_hosted_runners
                         ? "danger"
                         : "primary"
                     }
                     maxValue={plan.self_hosted_runners}
-                    value={stats.self_hosted_runners}
+                    value={stats.runners}
                   />
                 </>
               ) : (
