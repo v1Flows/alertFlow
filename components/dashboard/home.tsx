@@ -209,7 +209,7 @@ export function DashboardHome({
       <div className="grid lg:grid-cols-3 grid-cols-1 items-stretch gap-4">
         <div className="col-span-1 grid grid-cols-2 items-start gap-4">
           <Card className="h-full">
-            <CardBody className="flex gap-1 items-center">
+            <CardBody className="flex gap-1 items-center justify-center">
               <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-12 h-12">
                 <Icon
                   className="text-primary"
@@ -237,7 +237,7 @@ export function DashboardHome({
             </CardBody>
           </Card>
           <Card className="h-full">
-            <CardBody className="flex gap-1 items-center">
+            <CardBody className="flex gap-1 items-center justify-center">
               <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-12 h-12">
                 <Icon
                   className="text-primary"
@@ -263,7 +263,7 @@ export function DashboardHome({
             </CardBody>
           </Card>
           <Card className="h-full">
-            <CardBody className="flex gap-1 items-center">
+            <CardBody className="flex gap-1 items-center justify-center">
               <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-12 h-12">
                 <Icon
                   className="text-primary"
@@ -294,7 +294,7 @@ export function DashboardHome({
             </CardBody>
           </Card>
           <Card className="h-full">
-            <CardBody className="flex gap-1 items-center">
+            <CardBody className="flex gap-1 items-center justify-center">
               <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-12 h-12">
                 <Icon
                   className="text-primary"
