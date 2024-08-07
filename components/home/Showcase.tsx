@@ -1,8 +1,15 @@
+"use client";
+
 import { Image } from "@nextui-org/react";
+import { useTheme } from "next-themes";
+import { useIsSSR } from "@react-aria/ssr";
 
 import { BorderBeam } from "@/components/magicui/border-beam";
 
 export default function HomeShowcase() {
+  const { theme } = useTheme();
+  const isSSR = useIsSSR();
+
   return (
     <div className="relative flex flex-col items-start p-8 gap-10 h-full overflow-hidden">
       <div className="flex flex-1 w-full h-full flex-col space-y-2 rounded-md">
@@ -11,7 +18,7 @@ export default function HomeShowcase() {
           alt="..."
           className="w-full h-full object-cover rounded-md"
           loading="lazy"
-          src="images/full_project.png"
+          src={`/images/full_project_${theme === "light" || isSSR ? "white" : "dark"}.png`}
         />
         <BorderBeam delay={9} duration={12} size={300} />
       </div>
