@@ -280,9 +280,9 @@ export function FlowsList({ flows, projects, runners }: any) {
         </div>
         <Button
           color="primary"
-          radius="sm"
+          radius="lg"
           startContent={<PlusIcon />}
-          variant="flat"
+          variant="solid"
           onPress={() => createModal.onOpen()}
         >
           New Flow

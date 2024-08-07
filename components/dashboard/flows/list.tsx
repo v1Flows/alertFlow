@@ -17,6 +17,7 @@ import {
   useDisclosure,
   Select,
   SelectItem,
+  Spacer,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
@@ -69,18 +70,11 @@ export default function FlowList({ flows, projects, settings, plan }: any) {
 
   return (
     <main>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-1">
-          <p className="text-2xl font-bold mb-0 text-default-500">
-            {flows.length}
-          </p>
-          <p className="text-2xl font-bold mb-0 text-primary">
-            Flow{flows.length > 1 ? "s" : ""}
-          </p>
-        </div>
-        <div className="flex items-center gap-4">
+      <div className="grid grid-cols-2 items-center justify-between">
+        <p className="text-2xl font-bold">Flow List</p>
+        <div className="col-span-1 flex justify-end items-center gap-4">
           <Select
-            className="w-28"
+            className="max-w-xs"
             placeholder="Project"
             radius="sm"
             selectedKeys={projectFilter}
@@ -97,7 +91,7 @@ export default function FlowList({ flows, projects, settings, plan }: any) {
           <Button
             color="primary"
             isDisabled={!settings.create_flows || flows.length >= plan.flows}
-            radius="sm"
+            radius="lg"
             startContent={<PlusIcon />}
             variant="solid"
             onPress={() => newModal.onOpen()}
@@ -106,7 +100,7 @@ export default function FlowList({ flows, projects, settings, plan }: any) {
           </Button>
         </div>
       </div>
-      <Divider className="mb-4 mt-4" />
+      <Spacer y={8} />
       {flows.error && (
         <Card className="shadow shadow-danger">
           <CardHeader className="justify-start gap-2 items-center">
