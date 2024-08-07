@@ -15,6 +15,7 @@ import {
 import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
+import { Icon } from "@iconify/react";
 
 import DeleteProject from "@/lib/fetch/project/DELETE/DeleteProject";
 
@@ -51,16 +52,18 @@ export default function DeleteProjectModal({
         backdrop="blur"
         isOpen={isOpen}
         placement="center"
+        size="lg"
         onOpenChange={onOpenChange}
       >
         <ModalContent className="w-full">
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1 text-danger">
+              <ModalHeader className="flex flex-col gap-1 items-center text-danger">
+                <Icon icon="solar:danger-triangle-broken" width={58} />
                 Are you sure?
               </ModalHeader>
               <ModalBody>
-                <p>
+                <p className="text-center">
                   You are about to delete the following project which{" "}
                   <span className="font-bold">cannot be undone</span>:
                 </p>
@@ -70,7 +73,7 @@ export default function DeleteProjectModal({
                   <span>ID: {project.id}</span>
                 </Snippet>
               </ModalBody>
-              <ModalFooter>
+              <ModalFooter className="grid grid-cols-2">
                 <Button color="default" variant="bordered" onPress={onClose}>
                   Cancel
                 </Button>
@@ -80,7 +83,7 @@ export default function DeleteProjectModal({
                   variant="solid"
                   onPress={deleteProject}
                 >
-                  DELETE
+                  Delete
                 </Button>
               </ModalFooter>
             </>

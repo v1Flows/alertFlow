@@ -140,15 +140,12 @@ export default function Executions({ executions, displayToFlow }: any) {
                     fullWidth
                     color="primary"
                     size="md"
-                    startContent={
-                      <Icon icon="solar:book-bookmark-broken" width={32} />
-                    }
-                    variant="flat"
+                    variant="bordered"
                     onPress={() =>
                       router.push(`/dashboard/flows/${execution.flow_id}/`)
                     }
                   >
-                    To Flow
+                    View Flow
                   </Button>
                 )}
                 <Button
@@ -156,14 +153,14 @@ export default function Executions({ executions, displayToFlow }: any) {
                   color="primary"
                   size="md"
                   startContent={<Icon icon="solar:eye-broken" />}
-                  variant="flat"
+                  variant="solid"
                   onPress={() =>
                     router.push(
                       `/dashboard/flows/${execution.flow_id}/execution/${execution.id}`,
                     )
                   }
                 >
-                  View
+                  Details
                 </Button>
                 <Button
                   fullWidth

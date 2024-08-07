@@ -18,10 +18,24 @@ import { toast } from "sonner";
 import { DeleteDocumentIcon, DeleteIcon } from "@/components/icons";
 import RemoveProjectMember from "@/lib/fetch/project/DELETE/removeProjectMember";
 
-export default function DeleteMemberModal({ projectID, user }: any) {
+export default function DeleteMemberModal({
+  projectID,
+  user,
+  members,
+  currentUser,
+}: any) {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
+
+  function handleOpen() {
+    if (
+      members.filter((m: any) => m.user_id === currentUser.id)[0].role !==
+      "Viewer"
+    ) {
+      onOpen();
+    }
+  }
 
   async function handleDeleteMember() {
     setIsDeleteLoading(true);
@@ -45,7 +59,7 @@ export default function DeleteMemberModal({ projectID, user }: any) {
 
   return (
     <>
-      <DeleteIcon onClick={onOpen} />
+      <DeleteIcon onClick={handleOpen} />
       <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
@@ -60,6 +74,7 @@ export default function DeleteMemberModal({ projectID, user }: any) {
                 </p>
                 <Divider />
                 <User
+                  avatarProps={{ radius: "lg", name: user.username }}
                   className="justify-start"
                   description={
                     <p>

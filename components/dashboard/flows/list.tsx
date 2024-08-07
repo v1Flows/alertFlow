@@ -13,20 +13,16 @@ import {
   DropdownSection,
   Button,
   Chip,
-  CardFooter,
   useDisclosure,
   Select,
   SelectItem,
+  Spacer,
+  Input,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
 
-import {
-  VerticalDotsIcon,
-  EyeIcon,
-  InfoIcon,
-  PlusIcon,
-} from "@/components/icons";
+import { EyeIcon, InfoIcon, PlusIcon } from "@/components/icons";
 import { IconWrapper } from "@/lib/IconWrapper";
 import FunctionDeleteFlow from "@/components/functions/flows/deleteFlow";
 import FunctionCreateFlow from "@/components/functions/flows/create";
@@ -38,6 +34,7 @@ export default function FlowList({ flows, projects, settings, plan }: any) {
   const router = useRouter();
 
   const [projectFilter, setProjectFilter] = React.useState(new Set([]) as any);
+  const [search, setSearch] = React.useState("");
 
   const [status, setStatus] = React.useState(false);
   const [maintenance, setMaintenance] = React.useState(false);
@@ -48,13 +45,32 @@ export default function FlowList({ flows, projects, settings, plan }: any) {
   const deleteModal = useDisclosure();
   const newModal = useDisclosure();
 
-  const filteredFlows = flows.filter((flow: any) => {
-    if (projectFilter.size === 0) {
-      return true;
-    }
+  const filteredFlows = flows
+    .filter((flow: any) => {
+      if (projectFilter.size === 0 && !search) {
+        return true;
+      }
 
-    return projectFilter.has(flow.project_id);
-  });
+      if (projectFilter.has(flow.project_id)) {
+        return true;
+      }
+
+      if (search && flow.name.toLowerCase().includes(search.toLowerCase())) {
+        return true;
+      }
+
+      return false;
+    })
+    .sort((a: any, b: any) => {
+      if (a.name.toLowerCase() < b.name.toLowerCase()) {
+        return -1;
+      }
+      if (a.name.toLowerCase() > b.name.toLowerCase()) {
+        return 1;
+      }
+
+      return 0;
+    });
 
   const copyFlowIDtoClipboard = (key: string) => {
     // eslint-disable-next-line no-undef
@@ -69,18 +85,23 @@ export default function FlowList({ flows, projects, settings, plan }: any) {
 
   return (
     <main>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-1">
-          <p className="text-2xl font-bold mb-0 text-default-500">
-            {flows.length}
-          </p>
-          <p className="text-2xl font-bold mb-0 text-primary">
-            Flow{flows.length > 1 ? "s" : ""}
-          </p>
+      <div className="grid grid-cols-2 items-center justify-between">
+        <div className="col-span-1 flex justify-start items-center gap-4">
+          <p className="text-2xl font-bold">Flow List</p>
+          <Input
+            className="max-w-xs"
+            placeholder="Search"
+            radius="full"
+            size="md"
+            startContent={<Icon icon="solar:minimalistic-magnifer-broken" />}
+            value={search}
+            variant="flat"
+            onValueChange={setSearch}
+          />
         </div>
-        <div className="flex items-center gap-4">
+        <div className="col-span-1 flex justify-end items-center gap-4">
           <Select
-            className="w-28"
+            className="max-w-xs"
             placeholder="Project"
             radius="sm"
             selectedKeys={projectFilter}
@@ -97,7 +118,7 @@ export default function FlowList({ flows, projects, settings, plan }: any) {
           <Button
             color="primary"
             isDisabled={!settings.create_flows || flows.length >= plan.flows}
-            radius="sm"
+            radius="lg"
             startContent={<PlusIcon />}
             variant="solid"
             onPress={() => newModal.onOpen()}
@@ -106,7 +127,7 @@ export default function FlowList({ flows, projects, settings, plan }: any) {
           </Button>
         </div>
       </div>
-      <Divider className="mb-4 mt-4" />
+      <Spacer y={8} />
       {flows.error && (
         <Card className="shadow shadow-danger">
           <CardHeader className="justify-start gap-2 items-center">
@@ -126,149 +147,148 @@ export default function FlowList({ flows, projects, settings, plan }: any) {
             <div key={flow.id} className="col-span-1">
               <Card
                 fullWidth
-                className={`shadow hover:shadow-md ${flow.disabled ? "hover:shadow-danger shadow-danger-200" : "hover:shadow-primary shadow-primary-200"}`}
+                className={`shadow ${flow.disabled ? "shadow-danger-200" : "shadow-primary-200"}`}
               >
-                <CardHeader className="justify-between">
-                  <div className="flex flex-col items-start">
-                    <p className="text-md">{flow.name}</p>
-                    <p className="text-sm text-default-500">
-                      {flow.description}
-                    </p>
-                  </div>
-                  <Dropdown backdrop="opaque">
-                    <DropdownTrigger>
-                      <Button isIconOnly size="sm" variant="light">
-                        <VerticalDotsIcon
-                          className="text-default-300"
-                          height={undefined}
-                          width={undefined}
-                        />
-                      </Button>
-                    </DropdownTrigger>
-                    <DropdownMenu variant="faded">
-                      <DropdownSection title="Interact">
-                        <DropdownItem
-                          className="text-primary"
-                          color="primary"
-                          startContent={
-                            <Icon icon="solar:copy-broken" width={20} />
-                          }
-                          onClick={() => copyFlowIDtoClipboard(flow.id)}
-                        >
-                          Copy ID
-                        </DropdownItem>
-                      </DropdownSection>
-                      <DropdownSection title="Modify">
-                        <DropdownItem
-                          key="edit"
-                          className="text-warning"
-                          color="warning"
-                          startContent={
-                            <Icon
-                              icon="solar:pen-new-square-broken"
-                              width={20}
-                            />
-                          }
-                          onClick={() => {
-                            setTargetFlow(flow);
-                            editModal.onOpen();
-                          }}
-                        >
-                          Edit
-                        </DropdownItem>
-                        {flow.maintenance_required ? (
+                <CardBody>
+                  <div className="bg-default-100 rounded-large w-full flex items-center justify-between p-3">
+                    <div className="flex flex-col items-start">
+                      <p className="text-md font-bold">{flow.name}</p>
+                      <p className="text-sm text-default-500">
+                        {flow.description}
+                      </p>
+                    </div>
+                    <Dropdown backdrop="opaque">
+                      <DropdownTrigger>
+                        <Button isIconOnly size="sm" variant="light">
+                          <Icon icon="solar:menu-dots-broken" width={24} />
+                        </Button>
+                      </DropdownTrigger>
+                      <DropdownMenu variant="flat">
+                        <DropdownSection title="Actions">
                           <DropdownItem
-                            key="disable"
-                            className="text-warning"
-                            color="warning"
+                            color="primary"
                             startContent={
-                              <Icon icon="solar:bomb-emoji-broken" width={20} />
+                              <Icon icon="solar:copy-broken" width={20} />
                             }
-                            onClick={() => {
-                              setTargetFlow(flow);
-                              setMaintenance(false);
-                              changeMaintenanceModal.onOpen();
-                            }}
+                            onClick={() => copyFlowIDtoClipboard(flow.id)}
                           >
-                            Remove Maintenance
+                            Copy ID
                           </DropdownItem>
-                        ) : (
                           <DropdownItem
-                            key="disable"
-                            className="text-warning"
+                            key="edit"
                             color="warning"
-                            startContent={
-                              <Icon icon="solar:bomb-emoji-broken" width={20} />
-                            }
-                            onClick={() => {
-                              setTargetFlow(flow);
-                              setMaintenance(true);
-                              changeMaintenanceModal.onOpen();
-                            }}
-                          >
-                            Set Maintenance
-                          </DropdownItem>
-                        )}
-                      </DropdownSection>
-                      <DropdownSection title="Danger zone">
-                        {flow.disabled ? (
-                          <DropdownItem
-                            key="disable"
-                            className="text-success"
-                            color="success"
                             startContent={
                               <Icon
-                                icon="solar:lock-keyhole-unlocked-broken"
+                                icon="solar:pen-new-square-broken"
                                 width={20}
                               />
                             }
                             onClick={() => {
                               setTargetFlow(flow);
-                              setStatus(false);
-                              changeStatusModal.onOpen();
+                              editModal.onOpen();
                             }}
                           >
-                            Enable
+                            Edit
                           </DropdownItem>
-                        ) : (
+                          {flow.maintenance_required ? (
+                            <DropdownItem
+                              key="disable"
+                              color="warning"
+                              startContent={
+                                <Icon
+                                  icon="solar:bomb-emoji-broken"
+                                  width={20}
+                                />
+                              }
+                              onClick={() => {
+                                setTargetFlow(flow);
+                                setMaintenance(false);
+                                changeMaintenanceModal.onOpen();
+                              }}
+                            >
+                              Remove Maintenance
+                            </DropdownItem>
+                          ) : (
+                            <DropdownItem
+                              key="disable"
+                              color="warning"
+                              startContent={
+                                <Icon
+                                  icon="solar:bomb-emoji-broken"
+                                  width={20}
+                                />
+                              }
+                              onClick={() => {
+                                setTargetFlow(flow);
+                                setMaintenance(true);
+                                changeMaintenanceModal.onOpen();
+                              }}
+                            >
+                              Set Maintenance
+                            </DropdownItem>
+                          )}
+                        </DropdownSection>
+                        <DropdownSection title="Danger zone">
+                          {flow.disabled ? (
+                            <DropdownItem
+                              key="disable"
+                              className="text-success"
+                              color="success"
+                              startContent={
+                                <Icon
+                                  icon="solar:lock-keyhole-unlocked-broken"
+                                  width={20}
+                                />
+                              }
+                              onClick={() => {
+                                setTargetFlow(flow);
+                                setStatus(false);
+                                changeStatusModal.onOpen();
+                              }}
+                            >
+                              Enable
+                            </DropdownItem>
+                          ) : (
+                            <DropdownItem
+                              key="disable"
+                              className="text-danger"
+                              color="danger"
+                              startContent={
+                                <Icon
+                                  icon="solar:lock-keyhole-broken"
+                                  width={20}
+                                />
+                              }
+                              onClick={() => {
+                                setTargetFlow(flow);
+                                setStatus(true);
+                                changeStatusModal.onOpen();
+                              }}
+                            >
+                              Disable
+                            </DropdownItem>
+                          )}
                           <DropdownItem
-                            key="disable"
                             className="text-danger"
                             color="danger"
                             startContent={
                               <Icon
-                                icon="solar:lock-keyhole-broken"
+                                icon="solar:trash-bin-2-broken"
                                 width={20}
                               />
                             }
                             onClick={() => {
                               setTargetFlow(flow);
-                              setStatus(true);
-                              changeStatusModal.onOpen();
+                              deleteModal.onOpen();
                             }}
                           >
-                            Disable
+                            Delete
                           </DropdownItem>
-                        )}
-                        <DropdownItem
-                          className="text-danger"
-                          color="danger"
-                          startContent={
-                            <Icon icon="solar:trash-bin-2-broken" width={20} />
-                          }
-                          onClick={() => {
-                            setTargetFlow(flow);
-                            deleteModal.onOpen();
-                          }}
-                        >
-                          Delete
-                        </DropdownItem>
-                      </DropdownSection>
-                    </DropdownMenu>
-                  </Dropdown>
-                </CardHeader>
-                <Divider />
-                <CardBody>
+                        </DropdownSection>
+                      </DropdownMenu>
+                    </Dropdown>
+                  </div>
+                  <Spacer y={4} />
                   <div className="flex items-center justify-start gap-2 flex-wrap">
                     <Chip color="primary" radius="sm" size="sm" variant="flat">
                       <p className="font-bold">
@@ -278,14 +298,6 @@ export default function FlowList({ flows, projects, settings, plan }: any) {
                             project.id === flow.project_id && project.name,
                         )}
                       </p>
-                    </Chip>
-                    <Chip
-                      color="secondary"
-                      radius="sm"
-                      size="sm"
-                      variant="flat"
-                    >
-                      <p className="font-bold">ID: {flow.id}</p>
                     </Chip>
                     <Chip
                       color={flow.disabled ? "danger" : "success"}
@@ -320,29 +332,29 @@ export default function FlowList({ flows, projects, settings, plan }: any) {
                       </Chip>
                     )}
                   </div>
-                  <div className="flex items-end justify-between">
-                    <p className="text-small text-default-500 mt-2">
-                      Updated At:{" "}
-                      {new Date(flow.updated_at).toLocaleString("de-DE")}
+                  <Spacer y={2} />
+                  <div className="flex flex-wrap items-center justify-start gap-2">
+                    <p className="text-sm font-bold text-default-500">
+                      Created At:
                     </p>
-                    <p className="text-small text-default-500 mt-2">
-                      Created At:{" "}
+                    <p className="text-default-500 text-sm">
                       {new Date(flow.created_at).toLocaleString("de-DE")}
                     </p>
                   </div>
-                </CardBody>
-                <CardFooter>
+                  <Spacer y={4} />
+                  <Divider />
+                  <Spacer y={2} />
                   <Button
                     className="w-full font-bold"
                     color={flow.disabled ? "danger" : "primary"}
                     radius="sm"
-                    variant="flat"
+                    variant="light"
                     onPress={() => router.push(`/dashboard/flows/${flow.id}`)}
                   >
                     <EyeIcon />
                     Go to Flow
                   </Button>
-                </CardFooter>
+                </CardBody>
               </Card>
             </div>
           ))}

@@ -19,7 +19,13 @@ import { CopyDocumentIcon, DeleteIcon, PlusIcon } from "@/components/icons";
 import CreateTokenModal from "@/components/functions/tokens/create";
 import DeleteTokenModal from "@/components/functions/tokens/delete";
 
-export default function ProjectTokens({ tokens, project, settings }: any) {
+export default function ProjectTokens({
+  tokens,
+  project,
+  settings,
+  members,
+  user,
+}: any) {
   const [targetToken, setTargetToken] = React.useState({} as any);
 
   const addTokenModal = useDisclosure();
@@ -100,11 +106,16 @@ export default function ProjectTokens({ tokens, project, settings }: any) {
       <div className="flex flex-col items-end justify-center gap-4">
         <Button
           color="primary"
-          endContent={<PlusIcon height={undefined} width={undefined} />}
-          isDisabled={!settings.create_api_keys || project.disabled}
+          isDisabled={
+            !settings.create_api_keys ||
+            project.disabled ||
+            members.filter((m: any) => m.user_id === user.id)[0].role ===
+              "Viewer"
+          }
+          startContent={<PlusIcon height={undefined} width={undefined} />}
           onPress={() => addTokenModal.onOpen()}
         >
-          Add New
+          Add Token
         </Button>
       </div>
     );

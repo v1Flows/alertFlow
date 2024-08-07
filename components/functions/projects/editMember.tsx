@@ -23,7 +23,12 @@ import EditProjectMember from "@/lib/fetch/project/PUT/editProjectMember";
 
 // import UpdateProjectMembers from "@/lib/fetch/project/PUT/UpdateProjectMembers";
 
-export default function EditProjectMemberModal({ projectID, user }: any) {
+export default function EditProjectMemberModal({
+  projectID,
+  user,
+  currentUser,
+  members,
+}: any) {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isLoginLoading, setIsLoginLoading] = useState(false);
@@ -31,6 +36,15 @@ export default function EditProjectMemberModal({ projectID, user }: any) {
 
   const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState("");
+
+  function handleOpen() {
+    if (
+      members.filter((m: any) => m.user_id === currentUser.id)[0].role !==
+      "Viewer"
+    ) {
+      onOpen();
+    }
+  }
 
   const handleSelectRole = (e: any) => {
     setRole(e.currentKey);
@@ -58,7 +72,7 @@ export default function EditProjectMemberModal({ projectID, user }: any) {
 
   return (
     <>
-      <EditIcon onClick={onOpen} />
+      <EditIcon onClick={handleOpen} />
       <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (

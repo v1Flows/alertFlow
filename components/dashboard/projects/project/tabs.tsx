@@ -17,6 +17,7 @@ export default function ProjectTabs({
   settings,
   plan,
   audit,
+  user,
 }: any) {
   const [selected, setSelected] = React.useState("members");
 
@@ -44,6 +45,7 @@ export default function ProjectTabs({
               plan={plan}
               project={project}
               settings={settings}
+              user={user}
             />
           </Tab>
           <Tab
@@ -56,10 +58,12 @@ export default function ProjectTabs({
             }
           >
             <Runners
+              members={members}
               plan={plan}
               project={project}
               runners={runners}
               settings={settings}
+              user={user}
             />
           </Tab>
           <Tab
@@ -72,9 +76,11 @@ export default function ProjectTabs({
             }
           >
             <ProjectTokens
+              members={members}
               project={project}
               settings={settings}
               tokens={tokens}
+              user={user}
             />
           </Tab>
           <Tab

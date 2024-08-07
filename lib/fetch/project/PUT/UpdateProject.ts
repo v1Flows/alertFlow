@@ -7,6 +7,8 @@ export default async function UpdateProject(
   name: string,
   description: string,
   alertflowRunners: boolean,
+  icon: string,
+  color: string,
 ) {
   "use client";
   const cookieStore = cookies();
@@ -26,6 +28,8 @@ export default async function UpdateProject(
         name: name,
         description: description,
         alertflow_runners: alertflowRunners,
+        icon: icon,
+        color: color,
       }),
     });
     const data = await res.json();
