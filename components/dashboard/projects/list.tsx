@@ -56,21 +56,7 @@ export function ProjectsList({
 
   return (
     <main>
-      <div className="flex items-center justify-between">
-        <p className="text-2xl font-bold">Project List</p>
-        <Button
-          color="primary"
-          isDisabled={
-            !settings.create_projects || projects.length >= plan.projects
-          }
-          radius="lg"
-          startContent={<PlusIcon />}
-          variant="solid"
-          onPress={() => newProjectModal.onOpen()}
-        >
-          Create New
-        </Button>
-      </div>
+      <p className="text-2xl font-bold">Project List</p>
       <Spacer y={8} />
       {projects.error && (
         <Card className="shadow shadow-danger">
@@ -226,6 +212,30 @@ export function ProjectsList({
                 </Card>
               </div>
             ))}
+            <Card
+              isHoverable
+              className="border border-primary border-3 border-dashed"
+              isDisabled={
+                !settings.create_projects || projects.length >= plan.projects
+              }
+              isPressable={
+                settings.create_projects && projects.length < plan.projects
+              }
+              onPress={() => newProjectModal.onOpen()}
+            >
+              <CardBody className="flex flex-col items-center justify-center gap-2">
+                <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-25 w-12 h-12">
+                  <Icon
+                    className="text-primary"
+                    icon="solar:add-square-broken"
+                    width={38}
+                  />
+                </div>
+                <p className="text-lg font-bold text-default-500">
+                  Create new project
+                </p>
+              </CardBody>
+            </Card>
           </div>
           {pending_projects.length > 0 && (
             <>
