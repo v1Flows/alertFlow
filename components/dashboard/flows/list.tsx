@@ -139,10 +139,9 @@ export default function FlowList({ flows, projects, settings, plan }: any) {
                         />
                       </Button>
                     </DropdownTrigger>
-                    <DropdownMenu variant="faded">
-                      <DropdownSection title="Interact">
+                    <DropdownMenu variant="flat">
+                      <DropdownSection title="Actions">
                         <DropdownItem
-                          className="text-primary"
                           color="primary"
                           startContent={
                             <Icon icon="solar:copy-broken" width={20} />
@@ -151,11 +150,8 @@ export default function FlowList({ flows, projects, settings, plan }: any) {
                         >
                           Copy ID
                         </DropdownItem>
-                      </DropdownSection>
-                      <DropdownSection title="Modify">
                         <DropdownItem
                           key="edit"
-                          className="text-warning"
                           color="warning"
                           startContent={
                             <Icon
@@ -173,7 +169,6 @@ export default function FlowList({ flows, projects, settings, plan }: any) {
                         {flow.maintenance_required ? (
                           <DropdownItem
                             key="disable"
-                            className="text-warning"
                             color="warning"
                             startContent={
                               <Icon icon="solar:bomb-emoji-broken" width={20} />
@@ -189,7 +184,6 @@ export default function FlowList({ flows, projects, settings, plan }: any) {
                         ) : (
                           <DropdownItem
                             key="disable"
-                            className="text-warning"
                             color="warning"
                             startContent={
                               <Icon icon="solar:bomb-emoji-broken" width={20} />
