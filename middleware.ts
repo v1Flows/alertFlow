@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { updateSession } from "@/lib/auth/updateSession";
 
 import PageGetSettings from "./lib/fetch/page/settings";
-import { error } from "console";
 
 export async function middleware(request: NextRequest) {
   const user = JSON.parse(request.cookies.get("user")?.value || "{}");
@@ -16,10 +15,6 @@ export async function middleware(request: NextRequest) {
     !request.url.includes("/maintenance")
   ) {
     const settings = await PageGetSettings();
-
-    if (settings.error) {
-      return NextResponse.redirect(new URL("/error", request.url));
-    }
 
     // check for maintenance mode
     if (settings.maintenance && user.role !== "Admin") {

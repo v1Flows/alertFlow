@@ -12,7 +12,6 @@ import {
   ModalHeader,
   Snippet,
 } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 import { Icon } from "@iconify/react";

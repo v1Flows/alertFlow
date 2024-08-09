@@ -17,7 +17,7 @@ import { useIsSSR } from "@react-aria/ssr";
 import Login from "@/components/auth/login";
 import { ThemeSwitch } from "@/components/theme-switch";
 
-export default function Nabar({ user, notifications, session, settings }: any) {
+export default function Navbar({ user, session, settings }: any) {
   const router = useRouter();
   const { theme } = useTheme();
   const isSSR = useIsSSR();

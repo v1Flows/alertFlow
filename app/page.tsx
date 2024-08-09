@@ -16,16 +16,9 @@ export default async function Home() {
   const session = cookies().get("session")?.value;
   const settings = await AdminGetSettings();
 
-  const notifications = session ? await GetUserNotifications(user.id) : [];
-
   return (
     <>
-      <Navbar
-        notifications={notifications}
-        session={session}
-        settings={settings}
-        user={user}
-      />
+      <Navbar session={session} settings={settings} user={user} />
       <main className="container mx-auto w-full pt-2 px-6 flex-grow">
         <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
           <div className="z-10 flex mb-4 items-center justify-center">

@@ -15,9 +15,9 @@ import {
 import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
+import { Icon } from "@iconify/react";
 
 import DeleteUser from "@/lib/fetch/user/delete";
-import { Icon } from "@iconify/react";
 
 export default function DeleteUserModal({
   disclosure,

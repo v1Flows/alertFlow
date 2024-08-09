@@ -5,11 +5,11 @@ import { Image, Tooltip } from "@nextui-org/react";
 import createGlobe from "cobe";
 import { useEffect, useRef, forwardRef } from "react";
 import { Icon } from "@iconify/react";
+import { useTheme } from "next-themes";
+import { useIsSSR } from "@react-aria/ssr";
 
 import { AnimatedBeam } from "@/components/magicui/animated-beam";
 import { cn } from "@/lib/utils";
-import { useTheme } from "next-themes";
-import { useIsSSR } from "@react-aria/ssr";
 
 export function FeaturesSectionDemo() {
   const features = [

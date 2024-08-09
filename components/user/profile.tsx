@@ -8,7 +8,6 @@ import {
   Input,
   Tab,
   Tabs,
-  useDisclosure,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -17,14 +16,10 @@ import { Icon } from "@iconify/react";
 import ChangeUserDetails from "@/lib/fetch/user/changeDetails";
 import CheckUserTaken from "@/lib/auth/checkTaken";
 
-import ChangeUserPasswordModal from "../functions/users/changePassword";
-
 import SecuritySettings from "./security-settings";
 
 export function UserProfile({ user }: any) {
   const router = useRouter();
-
-  const updatePasswordModal = useDisclosure();
 
   const [username, setUsername] = React.useState(user.username);
   const [email, setEmail] = React.useState(user.email);

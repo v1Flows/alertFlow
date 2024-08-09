@@ -26,8 +26,6 @@ export default function ChangeUserPasswordModal({
   userId: string;
   disclosure: UseDisclosureReturn;
 }) {
-  const router = useRouter();
-
   const { isOpen, onOpenChange, onClose } = disclosure;
 
   const [currentPassword, setCurrentPassword] = React.useState("");
@@ -37,7 +35,8 @@ export default function ChangeUserPasswordModal({
   // loading
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const [isCurrentPasswordValid, setIsCurrentPasswordValid] = React.useState(true);
+  const [isCurrentPasswordValid, setIsCurrentPasswordValid] =
+    React.useState(true);
   const [isNewPasswordValid, setIsNewPasswordValid] = React.useState(true);
 
   function checkNewAndConfirmPassword() {
@@ -100,18 +99,20 @@ export default function ChangeUserPasswordModal({
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold">
-                <Icon icon="solar:password-minimalistic-broken" width={24} /> Change
-                Password
+                <Icon icon="solar:password-minimalistic-broken" width={24} />{" "}
+                Change Password
               </ModalHeader>
               <ModalBody>
-                <p className="text-default-500 text-center">After changing your password, you will be logged out.</p>
+                <p className="text-default-500 text-center">
+                  After changing your password, you will be logged out.
+                </p>
                 <Input
                   isRequired
                   label="Current Password"
                   placeholder="Enter the current password"
                   type="password"
-                  value={currentPassword}
                   validationState={isCurrentPasswordValid ? "valid" : "invalid"}
+                  value={currentPassword}
                   variant="flat"
                   onValueChange={setCurrentPassword}
                 />
@@ -120,8 +121,8 @@ export default function ChangeUserPasswordModal({
                   label="New Password"
                   placeholder="Enter the new password"
                   type="password"
-                  value={newPassword}
                   validationState={isNewPasswordValid ? "valid" : "invalid"}
+                  value={newPassword}
                   variant="flat"
                   onValueChange={setNewPassword}
                 />
@@ -130,8 +131,8 @@ export default function ChangeUserPasswordModal({
                   label="Confirm Password"
                   placeholder="Enter the new password again"
                   type="password"
-                  value={confirmPassword}
                   validationState={isNewPasswordValid ? "valid" : "invalid"}
+                  value={confirmPassword}
                   variant="flat"
                   onValueChange={setConfirmPassword}
                 />
