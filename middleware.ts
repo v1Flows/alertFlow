@@ -17,6 +17,10 @@ export async function middleware(request: NextRequest) {
   ) {
     const settings = await PageGetSettings();
 
+    if (settings.error) {
+      return NextResponse.redirect(new URL("/error", request.url));
+    }
+
     // check for maintenance mode
     if (settings.maintenance && user.role !== "Admin") {
       return NextResponse.redirect(new URL("/maintenance", request.url));

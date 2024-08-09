@@ -8,6 +8,8 @@ import { Icon } from "@iconify/react";
 
 import { AnimatedBeam } from "@/components/magicui/animated-beam";
 import { cn } from "@/lib/utils";
+import { useTheme } from "next-themes";
+import { useIsSSR } from "@react-aria/ssr";
 
 export function FeaturesSectionDemo() {
   const features = [
@@ -108,6 +110,9 @@ const FeatureDescription = ({ children }: { children?: React.ReactNode }) => {
 };
 
 export const SkeletonOne = () => {
+  const { theme } = useTheme();
+  const isSSR = useIsSSR();
+
   return (
     <div className="relative flex py-8 px-2 gap-10 h-full">
       <div className="w-full  p-5  mx-auto bg-white dark:bg-neutral-900 shadow-2xl group h-full">
@@ -116,7 +121,7 @@ export const SkeletonOne = () => {
             alt="header"
             className="h-full w-full aspect-square object-cover object-left-top rounded-sm"
             height={400}
-            src="images/project_page.png"
+            src={`/images/project_${theme === "light" || isSSR ? "white" : "dark"}.png`}
             width={800}
           />
         </div>
@@ -236,6 +241,9 @@ export const SkeletonTwo = () => {
 };
 
 export const SkeletonThree = () => {
+  const { theme } = useTheme();
+  const isSSR = useIsSSR();
+
   return (
     <div className="relative flex flex-col items-start p-8 gap-10 h-full overflow-hidden">
       <div className="flex flex-1 w-full h-full flex-col space-y-2  ">
@@ -243,7 +251,7 @@ export const SkeletonThree = () => {
           alt="header"
           className="h-full w-full aspect-square object-cover object-left-top rounded-sm"
           height={250}
-          src="images/enterprise.png"
+          src={`/images/plan_${theme === "light" || isSSR ? "white" : "dark"}.png`}
           width={800}
         />
       </div>

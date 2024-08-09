@@ -84,7 +84,7 @@ export default function Runners({
             runners.filter((runner: any) => runner.alertflow_runner === false)
               .length >= plan.self_hosted_runners ||
             members.filter((m: any) => m.user_id === user.id)[0].role ===
-              "Viewer"
+            "Viewer"
           }
           startContent={<PlusIcon height={undefined} width={undefined} />}
           onPress={() => addRunnerModal.onOpen()}
@@ -165,6 +165,11 @@ export default function Runners({
                 </CardHeader>
                 <Divider />
                 <CardBody>
+                  {runner.disabled && (
+                    <p className="text-lg mb-4 font-bold text-danger text-center">
+                      {runner.disabled_reason}
+                    </p>
+                  )}
                   <div className="grid grid-cols-2 grid-rows-3 items-center justify-center">
                     <p className="text-sm">Version:</p>
                     <p className="text-sm">{runner.runner_version}</p>

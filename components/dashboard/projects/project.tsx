@@ -8,6 +8,7 @@ import {
   Divider,
   useDisclosure,
   Button,
+  Avatar,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 
@@ -40,22 +41,41 @@ export default function Project({
           <Reloader />
         </div>
       </div>
-      <div className="flex items-end justify-between mb-4 mt-2">
-        <div>
-          <h1
-            className={subtitle({ className: "mb-0 font-bold" })}
-            style={{ color: "#0072f5" }}
-          >
-            {project.name}
-          </h1>
-          <p className="text-sm text-default-500">{project.description}</p>
+      <div className="flex items-center justify-between mb-2 mt-2">
+        <div className="flex items-center gap-2">
+          <Avatar
+            classNames={{
+              base: `text-white`,
+            }}
+            icon={
+              <Icon
+                icon={
+                  project.icon ? project.icon : "solar:question-square-broken"
+                }
+                width={24}
+              />
+            }
+            radius="md"
+            style={{
+              backgroundColor: project.color,
+            }}
+          />
+          <div className="flex flex-col items-start">
+            <h1
+              className={subtitle({ className: "mb-0 font-bold" })}
+              style={{ color: "#0072f5" }}
+            >
+              {project.name}
+            </h1>
+            <p className="text-sm text-default-500">{project.description}</p>
+          </div>
         </div>
         <Button
           color="warning"
           isDisabled={
             project.disabled ||
             members.filter((m: any) => m.user_id === user.id)[0].role ===
-              "Viewer"
+            "Viewer"
           }
           startContent={<Icon icon="solar:pen-new-square-broken" width={20} />}
           variant="flat"
