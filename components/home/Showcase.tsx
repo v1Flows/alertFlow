@@ -18,7 +18,7 @@ export default function HomeShowcase() {
           alt="..."
           className="w-full h-full object-cover rounded-md"
           loading="lazy"
-          src={`/images/full_project_${theme === "light" || isSSR ? "white" : "dark"}.png`}
+          src={`/images/full_dashboard_${theme === "light" || isSSR ? "white" : "dark"}.png`}
         />
         <BorderBeam delay={9} duration={12} size={300} />
       </div>

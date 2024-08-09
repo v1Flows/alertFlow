@@ -11,8 +11,12 @@ import {
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { Icon } from "@iconify/react";
 
 import ChangeUserDetails from "@/lib/fetch/user/changeDetails";
+import CheckUserTaken from "@/lib/auth/checkTaken";
+
+import SecuritySettings from "./security-settings";
 
 export function UserProfile({ user }: any) {
   const router = useRouter();
@@ -20,6 +24,16 @@ export function UserProfile({ user }: any) {
   const [username, setUsername] = React.useState(user.username);
   const [email, setEmail] = React.useState(user.email);
   const [isLoading, setIsLoading] = React.useState(false);
+
+  async function checkUserTaken() {
+    const res = await CheckUserTaken(email, username);
+
+    if (res.result === "success") {
+      UpdateUser();
+    } else {
+      toast.error(res.error);
+    }
+  }
 
   async function UpdateUser() {
     setIsLoading(true);
@@ -48,16 +62,6 @@ export function UserProfile({ user }: any) {
       <Divider className="mb-4 mt-4" />
       <div className="flex w-full flex-col">
         <Tabs aria-label="Options" color="primary">
-          <Tab key="profile" title="Profile">
-            <Card>
-              <CardBody>
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-                dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                fugiat nulla pariatur.
-              </CardBody>
-            </Card>
-          </Tab>
           <Tab key="account" title="Account">
             <div className="flex flex-col gap-4">
               <Input
@@ -86,12 +90,9 @@ export function UserProfile({ user }: any) {
                   isLoading={isLoading}
                   radius="sm"
                   variant="flat"
-                  onPress={() => UpdateUser()}
+                  onPress={() => checkUserTaken()}
                 >
                   Update Account
-                </Button>
-                <Button color="secondary" radius="sm" variant="flat">
-                  Change Password
                 </Button>
               </div>
             </div>
@@ -105,6 +106,17 @@ export function UserProfile({ user }: any) {
                 fugiat nulla pariatur.
               </CardBody>
             </Card>
+          </Tab>
+          <Tab
+            key="security"
+            title={
+              <div className="flex items-center gap-1.5">
+                <Icon icon="solar:shield-keyhole-bold" width={20} />
+                <p>Security</p>
+              </div>
+            }
+          >
+            <SecuritySettings user={user} />
           </Tab>
           <Tab key="billing" title="Billing">
             <Card>

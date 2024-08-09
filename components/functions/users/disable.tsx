@@ -12,37 +12,36 @@ import {
   ModalHeader,
   Snippet,
 } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 import { Icon } from "@iconify/react";
 
-import DeleteUser from "@/lib/fetch/user/delete";
+import DisableUser from "@/lib/fetch/user/disable";
+import { deleteSession } from "@/lib/auth/deleteSession";
 
-export default function DeleteUserModal({
+export default function DisableUserModal({
   disclosure,
   user,
 }: {
   disclosure: UseDisclosureReturn;
   user: any;
 }) {
-  const router = useRouter();
   const { isOpen, onOpenChange } = disclosure;
 
   const [isLoading, setIsLoading] = React.useState(false);
 
-  async function deleteUser() {
+  async function disableUser() {
     setIsLoading(true);
-    const response = await DeleteUser(user.id);
+    const response = await DisableUser(user.id);
 
     if (!response.error) {
-      router.refresh();
-      onOpenChange();
       setIsLoading(false);
-      toast.success("User deleted successfully");
+      onOpenChange();
+      toast.success("User disabled successfully");
+      deleteSession();
     } else {
       setIsLoading(false);
-      toast.error("Failed to delete user");
+      toast.error("Failed to disable user");
     }
   }
 
@@ -58,13 +57,16 @@ export default function DeleteUserModal({
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-danger">
-                <Icon icon="solar:sad-square-broken" width={24} /> Delete Your
+                <Icon icon="solar:sad-square-broken" width={24} /> Disable Your
                 Account
               </ModalHeader>
               <ModalBody>
                 <p className="text-center">
-                  You are about to delete your account. This action{" "}
-                  <span className="font-bold">cannot be undone</span>:
+                  You are about to disable your account which can only be undone
+                  by an support request.
+                </p>
+                <p className="text-center my-2 text-danger font-bold">
+                  You will be logged out and will not be able to log in again.
                 </p>
                 <Divider />
                 <Snippet hideCopyButton hideSymbol>
@@ -81,9 +83,9 @@ export default function DeleteUserModal({
                   color="danger"
                   isLoading={isLoading}
                   variant="solid"
-                  onPress={deleteUser}
+                  onPress={disableUser}
                 >
-                  Delete
+                  Disable Account
                 </Button>
               </ModalFooter>
             </>

@@ -22,7 +22,7 @@ import {
 import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
 
-import { EyeIcon, InfoIcon, PlusIcon } from "@/components/icons";
+import { EyeIcon, InfoIcon } from "@/components/icons";
 import { IconWrapper } from "@/lib/IconWrapper";
 import FunctionDeleteFlow from "@/components/functions/flows/deleteFlow";
 import FunctionCreateFlow from "@/components/functions/flows/create";
@@ -86,23 +86,21 @@ export default function FlowList({ flows, projects, settings, plan }: any) {
   return (
     <main>
       <div className="grid grid-cols-2 items-center justify-between">
-        <div className="col-span-1 flex justify-start items-center gap-4">
-          <p className="text-2xl font-bold">Flow List</p>
+        <p className="text-2xl font-bold">Flow List</p>
+        <div className="col-span-1 flex flex-wrap justify-end items-center gap-4">
           <Input
             className="max-w-xs"
             placeholder="Search"
-            radius="full"
+            radius="sm"
             size="md"
             startContent={<Icon icon="solar:minimalistic-magnifer-broken" />}
             value={search}
             variant="flat"
             onValueChange={setSearch}
           />
-        </div>
-        <div className="col-span-1 flex justify-end items-center gap-4">
           <Select
             className="max-w-xs"
-            placeholder="Project"
+            placeholder="Project Filter"
             radius="sm"
             selectedKeys={projectFilter}
             selectionMode="multiple"
@@ -115,16 +113,6 @@ export default function FlowList({ flows, projects, settings, plan }: any) {
               ))
               .sort()}
           </Select>
-          <Button
-            color="primary"
-            isDisabled={!settings.create_flows || flows.length >= plan.flows}
-            radius="lg"
-            startContent={<PlusIcon />}
-            variant="solid"
-            onPress={() => newModal.onOpen()}
-          >
-            New Flow
-          </Button>
         </div>
       </div>
       <Spacer y={8} />
@@ -358,6 +346,26 @@ export default function FlowList({ flows, projects, settings, plan }: any) {
               </Card>
             </div>
           ))}
+          <Card
+            isHoverable
+            className="border border-primary border-3 border-dashed"
+            isDisabled={!settings.create_flows || flows.length >= plan.flows}
+            isPressable={settings.create_flows && flows.length < plan.flows}
+            onPress={() => newModal.onOpen()}
+          >
+            <CardBody className="flex flex-col items-center justify-center gap-2">
+              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-25 w-12 h-12">
+                <Icon
+                  className="text-primary"
+                  icon="solar:add-square-broken"
+                  width={38}
+                />
+              </div>
+              <p className="text-lg font-bold text-default-500">
+                Create new flow
+              </p>
+            </CardBody>
+          </Card>
         </div>
       )}
       <FunctionCreateFlow disclosure={newModal} projects={projects} />

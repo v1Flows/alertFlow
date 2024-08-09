@@ -34,6 +34,10 @@ export async function middleware(request: NextRequest) {
     !request.url.includes("_next") &&
     request.cookies.get("session")
   ) {
-    return await updateSession();
+    const updatedSession = await updateSession();
+
+    if (!updatedSession) {
+      return NextResponse.redirect(new URL("/error", request.url));
+    }
   }
 }
