@@ -165,6 +165,11 @@ export default function Runners({
                 </CardHeader>
                 <Divider />
                 <CardBody>
+                  {runner.disabled && (
+                    <p className="text-lg mb-4 font-bold text-danger text-center">
+                      {runner.disabled_reason}
+                    </p>
+                  )}
                   <div className="grid grid-cols-2 grid-rows-3 items-center justify-center">
                     <p className="text-sm">Version:</p>
                     <p className="text-sm">{runner.runner_version}</p>

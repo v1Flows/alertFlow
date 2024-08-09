@@ -21,7 +21,7 @@ import { toast } from "sonner";
 import { Icon } from "@iconify/react";
 
 import { IconWrapper } from "@/lib/IconWrapper";
-import { EditDocumentIcon, InfoIcon, PlusIcon } from "@/components/icons";
+import { EditDocumentIcon, InfoIcon } from "@/components/icons";
 import { CopyDocumentIcon } from "@/components/icons";
 import DeleteProjectModal from "@/components/functions/projects/delete";
 import CreateProjectModal from "@/components/functions/projects/create";

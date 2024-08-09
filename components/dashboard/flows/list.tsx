@@ -22,7 +22,7 @@ import {
 import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
 
-import { EyeIcon, InfoIcon, PlusIcon } from "@/components/icons";
+import { EyeIcon, InfoIcon } from "@/components/icons";
 import { IconWrapper } from "@/lib/IconWrapper";
 import FunctionDeleteFlow from "@/components/functions/flows/deleteFlow";
 import FunctionCreateFlow from "@/components/functions/flows/create";

@@ -225,7 +225,7 @@ export default function AddFlowActionModal({
     <main>
       <Modal
         isOpen={isOpen}
-        placement="top-center"
+        placement="center"
         size="5xl"
         onOpenChange={onOpenChange}
       >

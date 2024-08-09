@@ -55,8 +55,9 @@ export default function Payloads({ flow, executions, payloads, runners }: any) {
           <Card key={payload.id} fullWidth>
             <CardHeader className="flex items-center justify-between">
               <div>
-                <p className="text-md font-bold">{payload.id}</p>
-                <p className="text-sm">
+                <p className="text-md">{payload.id}</p>
+                <p className="text-sm text-default-500">
+                  Runner:{" "}
                   {
                     runners.find(
                       (runner: any) => runner.id === payload.runner_id,

@@ -77,7 +77,7 @@ export default function EditProjectMemberModal({
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 text-warning">
+              <ModalHeader className="flex flex-wrap items-center justify-center gap-2">
                 <EditIcon />
                 Edit Member
               </ModalHeader>
