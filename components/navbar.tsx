@@ -51,16 +51,11 @@ export default function Navbar({ user, session, settings }: any) {
         className="hidden sm:flex basis-1/5 sm:basis-full"
         justify="start"
       >
-        <NavbarItem isActive>
-          <Link aria-current="page" color="primary" onPress={() => goTo("/")}>
-            Home
-          </Link>
-        </NavbarItem>
         {user?.email && (
-          <NavbarItem>
+          <NavbarItem isActive>
             <Link
               aria-current="page"
-              color="foreground"
+              color="primary"
               isDisabled={!user?.email}
               onPress={() => goTo("/dashboard")}
             >

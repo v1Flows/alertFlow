@@ -10,6 +10,7 @@ import {
   Divider,
   Pagination,
   Spinner,
+  useDisclosure,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import TimeAgo from "react-timeago";
@@ -17,9 +18,14 @@ import { useRouter } from "next/navigation";
 import React from "react";
 
 import { IconWrapper } from "@/lib/IconWrapper";
+import DeleteExecutionModal from "@/components/functions/flows/deleteExecution";
 
 export default function Executions({ executions, displayToFlow }: any) {
   const router = useRouter();
+
+  const deleteExecutionModal = useDisclosure();
+
+  const [targetExecution, setTargetExecution] = React.useState({} as any);
 
   // pagination
   const [page, setPage] = React.useState(1);
@@ -168,6 +174,10 @@ export default function Executions({ executions, displayToFlow }: any) {
                   color="danger"
                   size="md"
                   variant="flat"
+                  onPress={() => {
+                    setTargetExecution(execution);
+                    deleteExecutionModal.onOpen();
+                  }}
                 >
                   <Icon
                     height="20"
@@ -189,6 +199,7 @@ export default function Executions({ executions, displayToFlow }: any) {
           onChange={(page) => setPage(page)}
         />
       </div>
+      <DeleteExecutionModal execution={targetExecution} disclosure={deleteExecutionModal} />
     </main>
   );
 }
