@@ -3,9 +3,11 @@
 import {
   Accordion,
   AccordionItem,
+  Code,
   Divider,
   Progress,
   Snippet,
+  Spacer,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import React from "react";
@@ -18,6 +20,7 @@ import { IconWrapper } from "@/lib/IconWrapper";
 import GetExecutionSteps from "@/lib/fetch/executions/steps";
 
 import ExecutionBreadcrumbs from "./breadcrumbs";
+import ExecutionDetails from "./details";
 
 export function Execution({ flow, execution, runners }: any) {
   const [payload, setPayload] = React.useState({} as any);
@@ -65,6 +68,8 @@ export function Execution({ flow, execution, runners }: any) {
         </div>
       </div>
       <Divider className="mt-4 mb-4" />
+      <ExecutionDetails execution={execution} steps={steps} />
+      <Spacer y={4} />
       <Accordion variant="splitted">
         {payload && (
           <AccordionItem
@@ -94,9 +99,9 @@ export function Execution({ flow, execution, runners }: any) {
           subtitle={<TimeAgo date={execution.created_at} />}
           title="Execution Registered"
         >
-          <Snippet fullWidth hideCopyButton hideSymbol>
+          <Code className="w-full">
             Execution got registered at API Backend
-          </Snippet>
+          </Code>
         </AccordionItem>
         <AccordionItem
           key="3"
@@ -109,7 +114,7 @@ export function Execution({ flow, execution, runners }: any) {
           title="Waiting for Runner to pick execution up"
         >
           {flow.runner_id != "any" ? (
-            <Snippet fullWidth hideCopyButton hideSymbol>
+            <Code className="w-full">
               <div>
                 Waiting for{" "}
                 <span className="font-bold text-primary">
@@ -120,7 +125,7 @@ export function Execution({ flow, execution, runners }: any) {
                 </span>{" "}
                 to pick execution up
               </div>
-            </Snippet>
+            </Code>
           ) : (
             <Snippet fullWidth hideCopyButton hideSymbol>
               Waiting for any available runner to pick up
@@ -139,7 +144,7 @@ export function Execution({ flow, execution, runners }: any) {
             subtitle={<TimeAgo date={execution.executed_at} />}
             title="Runner picked execution up"
           >
-            <Snippet fullWidth hideCopyButton hideSymbol>
+            <Code className="w-full">
               <div>
                 Runner{" "}
                 <span className="font-bold text-primary">
@@ -151,7 +156,7 @@ export function Execution({ flow, execution, runners }: any) {
                 </span>{" "}
                 picked execution up
               </div>
-            </Snippet>
+            </Code>
           </AccordionItem>
         )}
         {steps.map((step: any) => (
@@ -168,7 +173,7 @@ export function Execution({ flow, execution, runners }: any) {
             subtitle={<TimeAgo date={step.started_at} />}
             title={step.action_name}
           >
-            {step.action_message}
+            <Code className="w-full">{step.action_message}</Code>
           </AccordionItem>
         ))}
       </Accordion>
