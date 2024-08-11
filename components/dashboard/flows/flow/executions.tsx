@@ -82,7 +82,15 @@ export default function Executions({ executions, displayToFlow }: any) {
     } else if (execution.no_match) {
       return <CircularProgress color="secondary" size="sm" value={100} />;
     } else {
-      return <CircularProgress color="success" size="sm" value={100} />;
+      return (
+        <div className="border border-2 border-success flex items-center justify-center rounded-full w-8 h-8">
+          <Icon
+            className="text-success"
+            icon="solar:check-read-broken"
+            width={24}
+          />
+        </div>
+      );
     }
   }
 
@@ -95,11 +103,9 @@ export default function Executions({ executions, displayToFlow }: any) {
         <Card key={execution.id} fullWidth>
           <CardHeader className="justify-between">
             <div className="flex justify-start items-center gap-4">
-              <IconWrapper
-                className={`bg-${statusColor(execution)}/10 text-${statusColor(execution)}`}
-              >
+              <div className="flex items-center rounded-large justify-center bg-default bg-opacity-40 w-10 h-10">
                 {statusIcon(execution)}
-              </IconWrapper>
+              </div>
               <p className="text-md font-bold">{execution.id}</p>
 
               <Chip

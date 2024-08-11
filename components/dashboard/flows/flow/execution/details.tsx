@@ -47,7 +47,15 @@ export default function ExecutionDetails({ execution, steps }: any) {
     } else if (execution.no_match) {
       return <CircularProgress color="secondary" size="sm" value={100} />;
     } else {
-      return <CircularProgress color="success" size="sm" value={100} />;
+      return (
+        <div className="border border-2 border-success flex items-center justify-center rounded-full w-8 h-8">
+          <Icon
+            className="text-success"
+            icon="solar:check-read-broken"
+            width={24}
+          />
+        </div>
+      );
     }
   }
 
