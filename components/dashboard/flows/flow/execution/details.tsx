@@ -59,9 +59,30 @@ export default function ExecutionDetails({ execution, steps }: any) {
     }
   }
 
+  function getDuration(execution: any) {
+    if (execution.finished_at === "0001-01-01T00:00:00Z") return "-";
+    const ms =
+      new Date(execution.finished_at).getTime() -
+      new Date(execution.executed_at).getTime();
+    const sec = Math.floor(ms / 1000);
+    const min = Math.floor(sec / 60);
+    const hr = Math.floor(min / 60);
+    const day = Math.floor(hr / 24);
+
+    if (day > 0) {
+      return `${day}d ${hr % 24}h ${min % 60}m ${sec % 60}s`;
+    } else if (hr > 0) {
+      return `${hr}h ${min % 60}m ${sec % 60}s`;
+    } else if (min > 0) {
+      return `${min}m ${sec % 60}s`;
+    } else {
+      return `${sec}s`;
+    }
+  }
+
   return (
     <>
-      <div className="grid grid-cols-4 items-start gap-4">
+      <div className="grid lg:grid-cols-5 grid-cols-2 items-start gap-4">
         <Card>
           <CardBody>
             <div className="flex gap-4 items-center justify-start">
@@ -122,6 +143,19 @@ export default function ExecutionDetails({ execution, steps }: any) {
                     "N/A"
                   )}
                 </p>
+              </div>
+            </div>
+          </CardBody>
+        </Card>
+        <Card>
+          <CardBody>
+            <div className="flex gap-4 items-center justify-start">
+              <div className="flex items-center rounded-large justify-center bg-default bg-opacity-40 w-12 h-12">
+                <Icon icon="solar:clock-circle-broken" width={28} />
+              </div>
+              <div>
+                <p className="text-default-600">Duration</p>
+                <p className="text-lg font-bold">{getDuration(execution)}</p>
               </div>
             </div>
           </CardBody>

@@ -46,11 +46,13 @@ export function Execution({ flow, execution, runners }: any) {
   function statusIcon(step: any) {
     if (step.finished) {
       return (
-        <Icon
-          className="text-success"
-          icon="solar:check-read-broken"
-          width={24}
-        />
+        <div className="border border-2 border-success flex items-center justify-center rounded-full w-8 h-8">
+          <Icon
+            className="text-success"
+            icon="solar:check-read-broken"
+            width={24}
+          />
+        </div>
       );
     } else if (step.paused) {
       return <Icon icon="solar:pause-broken" />;
