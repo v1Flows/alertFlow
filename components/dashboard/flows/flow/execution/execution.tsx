@@ -3,16 +3,24 @@
 import {
   Accordion,
   AccordionItem,
+  CircularProgress,
   Code,
   Divider,
   Progress,
   Snippet,
   Spacer,
+  Spinner,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+  User,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import React from "react";
 import TimeAgo from "react-timeago";
-import ReactTimeago from "react-timeago";
 
 import Reloader from "@/components/reloader/Reloader";
 import GetPayload from "@/lib/fetch/payload/payload";
@@ -34,6 +42,24 @@ export function Execution({ flow, execution, runners }: any) {
       setSteps(steps);
     });
   }, [execution]);
+
+  function statusIcon(step: any) {
+    if (step.finished) {
+      return (
+        <Icon
+          className="text-success"
+          icon="solar:check-read-broken"
+          width={24}
+        />
+      );
+    } else if (step.paused) {
+      return <Icon icon="solar:pause-broken" />;
+    } else if (step.error) {
+      return <CircularProgress color="danger" size="sm" value={100} />;
+    } else {
+      return <Spinner color="primary" size="sm" />;
+    }
+  }
 
   function stepIcon(step: any) {
     if (step.error) {
@@ -59,6 +85,89 @@ export function Execution({ flow, execution, runners }: any) {
     }
   }
 
+  function getDuration(step: any) {
+    if (step.finished_at === "0001-01-01T00:00:00Z") return "0s";
+    const ms =
+      new Date(step.finished_at).getTime() - new Date(step.started_at).getTime();
+    const sec = Math.floor(ms / 1000);
+    const min = Math.floor(sec / 60);
+    const hr = Math.floor(min / 60);
+    const day = Math.floor(hr / 24);
+
+    if (day > 0) {
+      return `${day}d ${hr % 24}h ${min % 60}m ${sec % 60}s`;
+    } else if (hr > 0) {
+      return `${hr}h ${min % 60}m ${sec % 60}s`;
+    } else if (min > 0) {
+      return `${min}m ${sec % 60}s`;
+    } else {
+      return `${sec}s`;
+    }
+  }
+
+  const defaultSteps = [
+    {
+      id: 1,
+      name: "Incoming Payload",
+      icon: <Icon icon="solar:letter-opened-broken" width={24} />,
+      data: payload.payload,
+      finished: true,
+      started_at: payload.created_at,
+      finished_at: payload.created_at,
+    },
+    {
+      id: 2,
+      name: "Execution Registered",
+      icon: <Icon icon="solar:cpu-bolt-broken" width={24} />,
+      data: "Execution got registered at API Backend",
+      finished: true,
+      started_at: execution.created_at,
+      finished_at: execution.executed_at,
+    },
+    ...steps.map((step: any) => {
+      return {
+        ...step,
+        icon: stepIcon(step),
+        name: step.action_name,
+        data: step.action_message,
+        started_at: step.started_at,
+        finished_at: step.finished_at,
+      };
+    }),
+  ];
+
+  const renderCell = React.useCallback((step: any, columnKey: any) => {
+    const cellValue = step[columnKey];
+
+    switch (columnKey) {
+      case "name":
+        return (
+          <div className="flex flex-col items-center gap-2">
+            {step.icon}
+            <p className="text-md font-medium">{step.name}</p>
+          </div>
+        );
+      case "data":
+        return (
+          <Snippet fullWidth hideSymbol>
+            <pre>{JSON.stringify(step.data, null, 2)}</pre>
+          </Snippet>
+        );
+      case "duration":
+        return <p>{getDuration(step)}</p>;
+      case "status":
+        return (
+          <div className="flex items-center rounded-large justify-center bg-default bg-opacity-40 w-10 h-10">
+            {statusIcon(step)}
+          </div>
+        );
+      case "created":
+        return <TimeAgo date={step.started_at} />;
+      default:
+        return cellValue;
+    }
+  }, []);
+
   return (
     <>
       <div className="grid lg:grid-cols-2 items-center justify-between">
@@ -70,113 +179,35 @@ export function Execution({ flow, execution, runners }: any) {
       <Divider className="mt-4 mb-4" />
       <ExecutionDetails execution={execution} steps={steps} />
       <Spacer y={4} />
-      <Accordion variant="splitted">
-        {payload && (
-          <AccordionItem
-            key="1"
-            aria-label="Incoming Payload"
-            startContent={
-              <IconWrapper className="bg-success/10 text-success">
-                <Icon icon="solar:letter-opened-broken" width={24} />
-              </IconWrapper>
-            }
-            subtitle={<ReactTimeago date={payload.created_at} />}
-            title="Incoming Payload"
-          >
-            <Snippet fullWidth hideSymbol>
-              <pre>{JSON.stringify(payload.payload, null, 2)}</pre>
-            </Snippet>
-          </AccordionItem>
-        )}
-        <AccordionItem
-          key="2"
-          aria-label="Execution Registered"
-          startContent={
-            <IconWrapper className="bg-success/10 text-success">
-              <Icon icon="solar:cpu-bolt-broken" width={24} />
-            </IconWrapper>
-          }
-          subtitle={<TimeAgo date={execution.created_at} />}
-          title="Execution Registered"
-        >
-          <Code className="w-full">
-            Execution got registered at API Backend
-          </Code>
-        </AccordionItem>
-        <AccordionItem
-          key="3"
-          aria-label="Waiting for Runner to pick up"
-          startContent={
-            <IconWrapper className="bg-warning/10 text-warning">
-              <Icon icon="solar:delivery-broken" width={24} />
-            </IconWrapper>
-          }
-          title="Waiting for Runner to pick execution up"
-        >
-          {flow.runner_id != "any" ? (
-            <Code className="w-full">
-              <div>
-                Waiting for{" "}
-                <span className="font-bold text-primary">
-                  {
-                    runners.find((runner: any) => runner.id === flow.runner_id)
-                      ?.name
-                  }
-                </span>{" "}
-                to pick execution up
-              </div>
-            </Code>
-          ) : (
-            <Snippet fullWidth hideCopyButton hideSymbol>
-              Waiting for any available runner to pick up
-            </Snippet>
+      {/* Tabelle */}
+      <Table aria-label="Example static collection table" isStriped>
+        <TableHeader>
+          <TableColumn key="status" align="start">
+            Status
+          </TableColumn>
+          <TableColumn key="name" align="center">
+            Step
+          </TableColumn>
+          <TableColumn key="data" align="start">
+            Data
+          </TableColumn>
+          <TableColumn key="duration" align="center">
+            Duration
+          </TableColumn>
+          <TableColumn key="created" align="center">
+            Created
+          </TableColumn>
+        </TableHeader>
+        <TableBody items={defaultSteps}>
+          {(item) => (
+            <TableRow key={item.id}>
+              {(columnKey) => (
+                <TableCell>{renderCell(item, columnKey)}</TableCell>
+              )}
+            </TableRow>
           )}
-        </AccordionItem>
-        {execution.runner_id != "" && (
-          <AccordionItem
-            key="4"
-            aria-label="Runner picked up"
-            startContent={
-              <IconWrapper className="bg-primary/10 text-primary">
-                <Icon icon="solar:delivery-broken" width={24} />
-              </IconWrapper>
-            }
-            subtitle={<TimeAgo date={execution.executed_at} />}
-            title="Runner picked execution up"
-          >
-            <Code className="w-full">
-              <div>
-                Runner{" "}
-                <span className="font-bold text-primary">
-                  {
-                    runners.find(
-                      (runner: any) => runner.id === execution.runner_id,
-                    )?.name
-                  }
-                </span>{" "}
-                picked execution up
-              </div>
-            </Code>
-          </AccordionItem>
-        )}
-        {steps.map((step: any) => (
-          <AccordionItem
-            key={step.id}
-            aria-label="Execution Step"
-            startContent={
-              <IconWrapper
-                className={`bg-${stepColor(step)}/10 text-${stepColor(step)}`}
-              >
-                {stepIcon(step)}
-              </IconWrapper>
-            }
-            subtitle={<TimeAgo date={step.started_at} />}
-            title={step.action_name}
-          >
-            <Code className="w-full">{step.action_message}</Code>
-          </AccordionItem>
-        ))}
-      </Accordion>
+        </TableBody>
+      </Table>
       <div className="mt-4 flex justify-center items-center w-full">
         {(execution.running || execution.waiting || execution.paused) && (
           <>

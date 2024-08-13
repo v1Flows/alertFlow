@@ -87,7 +87,7 @@ export default function ExecutionDetails({ execution, steps }: any) {
               </div>
               <div>
                 <p className="text-default-600">Total Steps</p>
-                <p className="text-lg font-bold">{steps.length}</p>
+                <p className="text-lg font-bold">{steps.length + 2}</p>
               </div>
             </div>
           </CardBody>
