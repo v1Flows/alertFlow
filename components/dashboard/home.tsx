@@ -85,7 +85,7 @@ export function DashboardHome({
             </CardHeader>
           </Card>
         ) : (
-          <Card className="h-full shadow shadow-success shadow-sm">
+          <Card className="h-full">
             <CardHeader className="justify-start gap-2 items-center">
               <IconWrapper className="bg-success/10 text-success">
                 <Icon icon="solar:verified-check-broken" width={24} />
@@ -113,7 +113,7 @@ export function DashboardHome({
             </CardHeader>
           </Card>
         ) : (
-          <Card className="h-full shadow shadow-success shadow-sm">
+          <Card className="h-full">
             <CardHeader className="justify-start gap-2 items-center">
               <IconWrapper className="bg-success/10 text-success">
                 <Icon icon="solar:verified-check-broken" width={24} />
@@ -149,7 +149,7 @@ export function DashboardHome({
             </CardHeader>
           </Card>
         ) : (
-          <Card className="h-full shadow shadow-success shadow-sm">
+          <Card className="h-full">
             <CardHeader className="justify-start gap-2 items-center">
               <IconWrapper className="bg-success/10 text-success">
                 <Icon icon="solar:verified-check-broken" width={24} />
@@ -186,7 +186,7 @@ export function DashboardHome({
             </CardHeader>
           </Card>
         ) : (
-          <Card className="h-full shadow shadow-success shadow-sm">
+          <Card className="h-full">
             <CardHeader className="justify-start gap-2 items-center">
               <IconWrapper className="bg-success/10 text-success">
                 <Icon icon="solar:verified-check-broken" width={24} />
