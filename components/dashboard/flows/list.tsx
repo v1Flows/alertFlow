@@ -85,9 +85,9 @@ export default function FlowList({ flows, projects, settings, plan }: any) {
 
   return (
     <main>
-      <div className="grid grid-cols-2 items-center justify-between">
+      <div className="grid lg:grid-cols-2 grid-cols-1 gap-2 items-center justify-between">
         <p className="text-2xl font-bold">Flow List</p>
-        <div className="col-span-1 flex flex-wrap justify-end items-center gap-4">
+        <div className="flex flex-cols justify-end items-center gap-4">
           <Input
             className="max-w-xs"
             placeholder="Search"

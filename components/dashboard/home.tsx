@@ -3,7 +3,6 @@ import {
   Card,
   CardBody,
   CardFooter,
-  CardHeader,
   Divider,
   Progress,
 } from "@nextui-org/react";
@@ -12,6 +11,7 @@ import { Icon } from "@iconify/react";
 import { IconWrapper } from "@/lib/IconWrapper";
 
 import Executions from "./flows/flow/executions";
+import ExecutionChartCard from "./executionChartCard";
 
 export function DashboardHome({
   stats,
@@ -60,143 +60,98 @@ export function DashboardHome({
           </p>
         </div>
       </div>
-      <div className="grid lg:grid-cols-4 auto-rows-fr items-start gap-4 mb-4">
-        {/* Notifications */}
-        {notifications.filter((n: any) => !n.is_read).length > 0 ? (
-          <Card
-            isHoverable
-            isPressable
-            className="h-full shadow shadow-warning shadow-sm"
-          >
-            <CardHeader className="flex justify-between items-start">
-              <div className="flex items-center gap-2">
-                <IconWrapper className="bg-warning/10 text-warning">
-                  <Icon icon="solar:bell-bing-broken" width={24} />
-                </IconWrapper>
-                <p className="text-md font-bold">
-                  <span className="text-warning">Missed</span> Notifications
-                </p>
-              </div>
-              <div>
-                <p className="flex text-5xl font-bold text-default-400 mb-0">
-                  {notifications.filter((n: any) => !n.is_read).length}
-                </p>
-              </div>
-            </CardHeader>
-          </Card>
-        ) : (
-          <Card className="h-full">
-            <CardHeader className="justify-start gap-2 items-center">
-              <IconWrapper className="bg-success/10 text-success">
-                <Icon icon="solar:verified-check-broken" width={24} />
-              </IconWrapper>
-              <p className="text-md font-bold">
-                <span className="text-success">No Missed</span> Notifications
-              </p>
-            </CardHeader>
-          </Card>
-        )}
-        {/* Flows */}
-        {flows.filter((f: any) => f.maintenance_required).length > 0 ? (
-          <Card
-            isHoverable
-            isPressable
-            className="h-full shadow shadow-warning shadow-sm"
-          >
-            <CardHeader className="justify-start gap-2 items-center">
-              <IconWrapper className="bg-warning/10 text-warning">
-                <Icon icon="solar:info-square-broken" width={24} />
-              </IconWrapper>
-              <p className="text-md font-bold">
-                Flows needing <span className="text-warning">attention</span>
-              </p>
-            </CardHeader>
-          </Card>
-        ) : (
-          <Card className="h-full">
-            <CardHeader className="justify-start gap-2 items-center">
-              <IconWrapper className="bg-success/10 text-success">
-                <Icon icon="solar:verified-check-broken" width={24} />
-              </IconWrapper>
-              <p className="text-md font-bold">
-                Flows are all{" "}
-                <span className="text-success">working properly</span>
-              </p>
-            </CardHeader>
-          </Card>
-        )}
-        {/* Executions */}
-        {executions.filter((e: any) => e.error).length > 0 ? (
-          <Card
-            isHoverable
-            isPressable
-            className="h-full shadow shadow-danger shadow-sm"
-          >
-            <CardHeader className="flex justify-between items-start">
-              <div className="flex items-center gap-2">
-                <IconWrapper className="bg-danger/10 text-danger">
-                  <Icon icon="solar:slash-circle-broken" width={24} />
-                </IconWrapper>
-                <p className="text-md font-bold">
-                  <span className="text-danger">Failed</span> Executions
-                </p>
-              </div>
-              <div>
-                <p className="flex text-5xl font-bold text-default-400 mb-0">
-                  {executions.filter((e: any) => e.error).length}
-                </p>
-              </div>
-            </CardHeader>
-          </Card>
-        ) : (
-          <Card className="h-full">
-            <CardHeader className="justify-start gap-2 items-center">
-              <IconWrapper className="bg-success/10 text-success">
-                <Icon icon="solar:verified-check-broken" width={24} />
-              </IconWrapper>
-              <p className="text-md font-bold">
-                All Executions{" "}
-                <span className="text-success">finished without errors</span>
-              </p>
-            </CardHeader>
-          </Card>
-        )}
-
-        {/* Runners */}
-        {runners.filter((r: any) => !runnerHeartbeatStatus(r)).length > 0 ? (
-          <Card
-            isHoverable
-            isPressable
-            className="h-full shadow shadow-danger shadow-sm"
-          >
-            <CardHeader className="flex justify-between items-start">
-              <div className="flex items-center gap-2">
-                <IconWrapper className="bg-danger/10 text-danger">
-                  <Icon icon="solar:heart-pulse-broken" width={24} />
-                </IconWrapper>
-                <p className="text-md font-bold">
-                  <span className="text-danger">Unhealthy</span> Runners
-                </p>
-              </div>
-              <div>
-                <p className="flex text-5xl font-bold text-default-400 mb-0">
-                  {runners.filter((r: any) => !runnerHeartbeatStatus(r)).length}
-                </p>
-              </div>
-            </CardHeader>
-          </Card>
-        ) : (
-          <Card className="h-full">
-            <CardHeader className="justify-start gap-2 items-center">
-              <IconWrapper className="bg-success/10 text-success">
-                <Icon icon="solar:verified-check-broken" width={24} />
-              </IconWrapper>
-              <p className="text-md font-bold">
-                All Runners are <span className="text-success">healthy</span>
-              </p>
-            </CardHeader>
-          </Card>
-        )}
+      <div className="grid lg:grid-cols-4 items-center justify-between gap-4">
+        <Card>
+          <CardBody>
+            <ul className="flex flex-col gap-2">
+              {/* Notifications */}
+              {notifications.filter((n: any) => !n.is_read).length > 0 ? (
+                <li className="flex items-center gap-2">
+                  <IconWrapper className="bg-warning/10 text-warning">
+                    <Icon icon="solar:bell-bing-broken" width={24} />
+                  </IconWrapper>
+                  <p className="text-md font-bold">
+                    Notifications:{" "}
+                    {notifications.filter((n: any) => !n.is_read).length}{" "}
+                    <span className="text-warning">Missed</span>
+                  </p>
+                </li>
+              ) : (
+                <li className="flex items-center gap-2">
+                  <IconWrapper className="bg-success/10 text-success">
+                    <Icon icon="solar:verified-check-broken" width={24} />
+                  </IconWrapper>
+                  <p className="text-md font-bold">
+                    Notifications: <span className="text-success">OK</span>
+                  </p>
+                </li>
+              )}
+              {/* Flows */}
+              {flows.filter((f: any) => f.maintenance_required).length > 0 ? (
+                <li className="flex items-center gap-2">
+                  <IconWrapper className="bg-warning/10 text-warning">
+                    <Icon icon="solar:info-square-broken" width={24} />
+                  </IconWrapper>
+                  <p className="text-md font-bold">
+                    Flows: <span className="text-warning">need attention</span>
+                  </p>
+                </li>
+              ) : (
+                <li className="flex items-center gap-2">
+                  <IconWrapper className="bg-success/10 text-success">
+                    <Icon icon="solar:verified-check-broken" width={24} />
+                  </IconWrapper>
+                  <p className="text-md font-bold">
+                    Flows: <span className="text-success">OK</span>
+                  </p>
+                </li>
+              )}
+              {/* Executions */}
+              {executions.filter((e: any) => e.error).length > 0 ? (
+                <li className="flex items-center gap-2">
+                  <IconWrapper className="bg-danger/10 text-danger">
+                    <Icon icon="solar:slash-circle-broken" width={24} />
+                  </IconWrapper>
+                  <p className="text-md font-bold">
+                    Executions: {executions.filter((e: any) => e.error).length}{" "}
+                    <span className="text-danger">Failed</span>
+                  </p>
+                </li>
+              ) : (
+                <li className="flex items-center gap-2">
+                  <IconWrapper className="bg-success/10 text-success">
+                    <Icon icon="solar:verified-check-broken" width={24} />
+                  </IconWrapper>
+                  <p className="text-md font-bold">
+                    Executions: <span className="text-success">OK</span>
+                  </p>
+                </li>
+              )}
+              {/* Runners */}
+              {runners.filter((r: any) => !runnerHeartbeatStatus(r)).length >
+                0 ? (
+                <li className="flex items-center gap-2">
+                  <IconWrapper className="bg-success/10 text-success">
+                    <Icon icon="solar:heart-pulse-broken" width={24} />
+                  </IconWrapper>
+                  <p className="text-md font-bold">
+                    Runners: <span className="text-danger">Unhealthy</span>
+                  </p>
+                </li>
+              ) : (
+                <li className="flex items-center gap-2">
+                  <IconWrapper className="bg-success/10 text-success">
+                    <Icon icon="solar:verified-check-broken" width={24} />
+                  </IconWrapper>
+                  <p className="text-md font-bold">
+                    Runners: <span className="text-success">OK</span>
+                  </p>
+                </li>
+              )}
+            </ul>
+          </CardBody>
+        </Card>
+        <ExecutionChartCard />
       </div>
 
       {/* Quota */}
