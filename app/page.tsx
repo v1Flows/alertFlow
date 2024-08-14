@@ -5,7 +5,6 @@ import { Icon } from "@iconify/react";
 import { title, subtitle } from "@/components/primitives";
 import Navbar from "@/components/navbar";
 import AdminGetSettings from "@/lib/fetch/page/settings";
-import GetUserNotifications from "@/lib/fetch/user/getNotifications";
 import { FeaturesSectionDemo } from "@/components/home/bento";
 import AnimatedGradientText from "@/components/magicui/animated-gradient-text";
 import { cn } from "@/lib/utils";

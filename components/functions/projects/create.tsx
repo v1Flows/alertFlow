@@ -177,7 +177,7 @@ export default function CreateProjectModal({
                       </Tooltip>
                     </div>
                     <div>
-                      <ButtonGroup variant="flat" radius="sm">
+                      <ButtonGroup radius="sm" variant="flat">
                         <Button
                           className={`${alertflowRunners ? "bg-primary" : ""}`}
                           onPress={() => setAlertflowRunners(true)}

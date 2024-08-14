@@ -180,14 +180,14 @@ export function Execution({ flow, execution, runners }: any) {
     },
     execution.runner_id === ""
       ? {
-        id: 3,
-        name: "Runner Pick Up",
-        icon: <Icon icon="solar:rocket-2-broken" width={24} />,
-        data: ["Waiting for Runner to pick up Execution"],
-        finished: false,
-        started_at: execution.created_at,
-        finished_at: "0001-01-01T00:00:00Z",
-      }
+          id: 3,
+          name: "Runner Pick Up",
+          icon: <Icon icon="solar:rocket-2-broken" width={24} />,
+          data: ["Waiting for Runner to pick up Execution"],
+          finished: false,
+          started_at: execution.created_at,
+          finished_at: "0001-01-01T00:00:00Z",
+        }
       : null,
     ...steps.map((step: any) => {
       return {
@@ -214,7 +214,7 @@ export function Execution({ flow, execution, runners }: any) {
         );
       case "data":
         return (
-          <Snippet fullWidth hideSymbol hideCopyButton radius="sm">
+          <Snippet fullWidth hideCopyButton hideSymbol radius="sm">
             {step.name == "Incoming Payload" ? (
               <pre>{step.data}</pre>
             ) : (

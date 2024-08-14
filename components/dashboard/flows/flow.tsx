@@ -171,8 +171,8 @@ export function Flow({
                       {flow.runner_id === "any"
                         ? "Any"
                         : runners.find(
-                          (runner: any) => runner.id === flow.runner_id,
-                        )?.name}
+                            (runner: any) => runner.id === flow.runner_id,
+                          )?.name}
                     </p>
                   </CardBody>
                 </Card>
@@ -195,7 +195,9 @@ export function Flow({
                           <Divider className="h-6" orientation="vertical" />
                           <p className="flex items-center gap-2 text-default-500 font-bold">
                             <Spinner color="primary" size="sm" />
-                            {executions.filter((e: any) => e.running).length}{" "}
+                            {
+                              executions.filter((e: any) => e.running).length
+                            }{" "}
                             Running
                           </p>
                         </>
