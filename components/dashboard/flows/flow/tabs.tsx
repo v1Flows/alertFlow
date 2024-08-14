@@ -65,6 +65,7 @@ export default function FlowTabs({ flow, executions, payloads, runners }: any) {
             )}
             <Button
               fullWidth
+              className="mt-4"
               color="primary"
               isDisabled={flow.disabled}
               startContent={<PlusIcon />}
