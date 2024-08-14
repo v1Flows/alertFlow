@@ -270,7 +270,7 @@ export default function Executions({
             Actions
           </TableColumn>
         </TableHeader>
-        <TableBody items={items}>
+        <TableBody emptyContent="No executions found" items={items}>
           {(item: any) => (
             <TableRow key={item.id}>
               {(columnKey) => (
