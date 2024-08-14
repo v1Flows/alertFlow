@@ -38,46 +38,26 @@ export function Execution({ flow, execution, runners }: any) {
     });
   }, [execution]);
 
-  function status(execution: any) {
-    if (execution.running) {
-      return "Running";
-    } else if (execution.waiting) {
-      return "Waiting";
-    } else if (execution.paused) {
-      return "Paused";
-    } else if (execution.error) {
+  function status(step: any) {
+    if (step.error) {
       return "Error";
-    } else if (execution.no_match) {
-      return "No Match";
-    } else {
+    } else if (step.paused) {
+      return "Paused";
+    } else if (step.no_result) {
+      return "No Result";
+    } else if (step.finished) {
       return "Finished";
+    } else {
+      return "Running";
     }
   }
 
   function statusIcon(step: any) {
-    if (step.finished) {
-      return (
-        <Tooltip content={`${status(execution)}. Steps 5 / 5`}>
-          <CircularProgress
-            aria-label="Step"
-            color="success"
-            maxValue={5}
-            showValueLabel={true}
-            size="md"
-            value={5}
-            valueLabel={
-              <Icon
-                className="text-success"
-                icon="solar:check-read-broken"
-                width={22}
-              />
-            }
-          />
-        </Tooltip>
-      );
+    if (step.error) {
+      return <CircularProgress color="danger" size="sm" value={100} />;
     } else if (step.paused) {
       return (
-        <Tooltip content={`${status(execution)}`}>
+        <Tooltip content={`${status(step)}`}>
           <CircularProgress
             aria-label="Step"
             color="warning"
@@ -95,11 +75,49 @@ export function Execution({ flow, execution, runners }: any) {
           />
         </Tooltip>
       );
-    } else if (step.error) {
-      return <CircularProgress color="danger" size="sm" value={100} />;
+    } else if (step.no_result) {
+      return (
+        <Tooltip content={`${status(step)}`}>
+          <CircularProgress
+            aria-label="Step"
+            color="default"
+            maxValue={5}
+            showValueLabel={true}
+            size="md"
+            value={5}
+            valueLabel={
+              <Icon
+                className="text-default-500"
+                icon="solar:ghost-broken"
+                width={20}
+              />
+            }
+          />
+        </Tooltip>
+      );
+    } else if (step.finished) {
+      return (
+        <Tooltip content={`${status(step)}. Steps 5 / 5`}>
+          <CircularProgress
+            aria-label="Step"
+            color="success"
+            maxValue={5}
+            showValueLabel={true}
+            size="md"
+            value={5}
+            valueLabel={
+              <Icon
+                className="text-success"
+                icon="solar:check-read-broken"
+                width={22}
+              />
+            }
+          />
+        </Tooltip>
+      );
     } else {
       return (
-        <Tooltip content={`${status(execution)}`}>
+        <Tooltip content={`${status(step)}`}>
           <CircularProgress aria-label="Step" color="primary" size="md" />
         </Tooltip>
       );

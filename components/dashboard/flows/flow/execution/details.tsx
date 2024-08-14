@@ -14,6 +14,8 @@ export default function ExecutionDetails({ execution, steps }: any) {
       return "Error";
     } else if (execution.no_match) {
       return "No Match";
+    } else if (execution.ghost) {
+      return "No Flow Actions found";
     } else {
       return "Finished";
     }
@@ -30,6 +32,8 @@ export default function ExecutionDetails({ execution, steps }: any) {
       return "danger";
     } else if (execution.no_match) {
       return "secondary";
+    } else if (execution.ghost) {
+      return "default-500";
     } else {
       return "success";
     }
@@ -68,6 +72,24 @@ export default function ExecutionDetails({ execution, steps }: any) {
       return <CircularProgress color="danger" size="sm" value={100} />;
     } else if (execution.no_match) {
       return <CircularProgress color="secondary" size="sm" value={100} />;
+    } else if (execution.ghost) {
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress
+            color="default"
+            showValueLabel={true}
+            size="md"
+            value={100}
+            valueLabel={
+              <Icon
+                className="text-default-500"
+                icon="solar:ghost-broken"
+                width={20}
+              />
+            }
+          />
+        </Tooltip>
+      );
     } else {
       return (
         <Tooltip content={`${status(execution)}. Steps 5 / 5`}>
