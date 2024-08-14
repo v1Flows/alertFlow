@@ -2,7 +2,7 @@ import { Icon } from "@iconify/react";
 import { Card, CardBody, CircularProgress, Tooltip } from "@nextui-org/react";
 import ReactTimeago from "react-timeago";
 
-export default function ExecutionDetails({ execution, steps }: any) {
+export default function ExecutionDetails({ runners, execution, steps }: any) {
   function status(execution: any) {
     if (execution.running) {
       return "Running";
@@ -136,7 +136,23 @@ export default function ExecutionDetails({ execution, steps }: any) {
 
   return (
     <>
-      <div className="grid lg:grid-cols-5 grid-cols-2 items-start gap-4">
+      <div className="grid lg:grid-cols-6 grid-cols-2 items-start gap-4">
+        <Card>
+          <CardBody>
+            <div className="flex gap-4 items-center justify-start">
+              <div className="flex items-center rounded-large justify-center bg-secondary bg-opacity-40 w-10 h-10">
+                <Icon icon="solar:rocket-2-broken" width={24} />
+              </div>
+              <div>
+                <p className="text-default-600">Runner</p>
+                <p className="text-lg font-bold">
+                  {runners.find((r: any) => r.id === execution.runner_id)
+                    ?.name || "-"}
+                </p>
+              </div>
+            </div>
+          </CardBody>
+        </Card>
         <Card>
           <CardBody>
             <div className="flex gap-4 items-center justify-start">
@@ -155,7 +171,7 @@ export default function ExecutionDetails({ execution, steps }: any) {
         <Card>
           <CardBody>
             <div className="flex gap-4 items-center justify-start">
-              <div className="flex items-center rounded-large justify-center bg-default bg-opacity-40 w-10 h-10">
+              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-40 w-10 h-10">
                 <Icon icon="solar:bill-list-broken" width={24} />
               </div>
               <div>
@@ -202,7 +218,7 @@ export default function ExecutionDetails({ execution, steps }: any) {
         <Card>
           <CardBody>
             <div className="flex gap-4 items-center justify-start">
-              <div className="flex items-center rounded-large justify-center bg-default bg-opacity-40 w-12 h-12">
+              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-40 w-12 h-12">
                 <Icon icon="solar:clock-circle-broken" width={28} />
               </div>
               <div>
