@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { Card, CardBody, CircularProgress, Spinner } from "@nextui-org/react";
+import { Card, CardBody, CircularProgress, Tooltip } from "@nextui-org/react";
 import ReactTimeago from "react-timeago";
 
 export default function ExecutionDetails({ execution, steps }: any) {
@@ -37,9 +37,31 @@ export default function ExecutionDetails({ execution, steps }: any) {
 
   function statusIcon(execution: any) {
     if (execution.running) {
-      return <Spinner color="primary" size="sm" />;
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress aria-label="Step" color="primary" size="md" />
+        </Tooltip>
+      );
     } else if (execution.waiting) {
-      return <Icon icon="solar:pause-broken" />;
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress
+            aria-label="Step"
+            color="warning"
+            maxValue={5}
+            showValueLabel={true}
+            size="md"
+            value={5}
+            valueLabel={
+              <Icon
+                className="text-warning"
+                icon="solar:pause-broken"
+                width={16}
+              />
+            }
+          />
+        </Tooltip>
+      );
     } else if (execution.paused) {
       return <CircularProgress color="warning" size="sm" value={100} />;
     } else if (execution.error) {
@@ -48,13 +70,23 @@ export default function ExecutionDetails({ execution, steps }: any) {
       return <CircularProgress color="secondary" size="sm" value={100} />;
     } else {
       return (
-        <div className="border border-2 border-success flex items-center justify-center rounded-full w-8 h-8">
-          <Icon
-            className="text-success"
-            icon="solar:check-read-broken"
-            width={24}
+        <Tooltip content={`${status(execution)}. Steps 5 / 5`}>
+          <CircularProgress
+            aria-label="Step"
+            color="success"
+            maxValue={5}
+            showValueLabel={true}
+            size="md"
+            value={5}
+            valueLabel={
+              <Icon
+                className="text-success"
+                icon="solar:check-read-broken"
+                width={22}
+              />
+            }
           />
-        </div>
+        </Tooltip>
       );
     }
   }
@@ -86,9 +118,7 @@ export default function ExecutionDetails({ execution, steps }: any) {
         <Card>
           <CardBody>
             <div className="flex gap-4 items-center justify-start">
-              <div className="flex items-center rounded-large justify-center bg-default bg-opacity-40 w-10 h-10">
-                {statusIcon(execution)}
-              </div>
+              <div>{statusIcon(execution)}</div>
               <div>
                 <p className="text-default-600">Status</p>
                 <p

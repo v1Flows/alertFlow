@@ -21,6 +21,7 @@ export function DashboardHome({
   flows,
   runners,
   executions,
+  payloads,
 }: any) {
   const plan = plans.find((plan: any) => plan.id === user.plan);
 
@@ -447,7 +448,7 @@ export function DashboardHome({
           </p>
         </div>
       </div>
-      <Executions displayToFlow executions={executions} />
+      <Executions displayToFlow executions={executions} payloads={payloads} />
     </main>
   );
 }

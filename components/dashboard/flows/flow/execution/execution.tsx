@@ -1,22 +1,18 @@
 "use client";
 
 import {
-  Accordion,
-  AccordionItem,
   CircularProgress,
-  Code,
   Divider,
   Progress,
   Snippet,
   Spacer,
-  Spinner,
   Table,
   TableBody,
   TableCell,
   TableColumn,
   TableHeader,
   TableRow,
-  User,
+  Tooltip,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import React from "react";
@@ -24,7 +20,6 @@ import TimeAgo from "react-timeago";
 
 import Reloader from "@/components/reloader/Reloader";
 import GetPayload from "@/lib/fetch/payload/payload";
-import { IconWrapper } from "@/lib/IconWrapper";
 import GetExecutionSteps from "@/lib/fetch/executions/steps";
 
 import ExecutionBreadcrumbs from "./breadcrumbs";
@@ -43,23 +38,71 @@ export function Execution({ flow, execution, runners }: any) {
     });
   }, [execution]);
 
+  function status(execution: any) {
+    if (execution.running) {
+      return "Running";
+    } else if (execution.waiting) {
+      return "Waiting";
+    } else if (execution.paused) {
+      return "Paused";
+    } else if (execution.error) {
+      return "Error";
+    } else if (execution.no_match) {
+      return "No Match";
+    } else {
+      return "Finished";
+    }
+  }
+
   function statusIcon(step: any) {
     if (step.finished) {
       return (
-        <div className="border border-2 border-success flex items-center justify-center rounded-full w-8 h-8">
-          <Icon
-            className="text-success"
-            icon="solar:check-read-broken"
-            width={24}
+        <Tooltip content={`${status(execution)}. Steps 5 / 5`}>
+          <CircularProgress
+            aria-label="Step"
+            color="success"
+            maxValue={5}
+            showValueLabel={true}
+            size="md"
+            value={5}
+            valueLabel={
+              <Icon
+                className="text-success"
+                icon="solar:check-read-broken"
+                width={22}
+              />
+            }
           />
-        </div>
+        </Tooltip>
       );
     } else if (step.paused) {
-      return <Icon icon="solar:pause-broken" />;
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress
+            aria-label="Step"
+            color="warning"
+            maxValue={5}
+            showValueLabel={true}
+            size="md"
+            value={5}
+            valueLabel={
+              <Icon
+                className="text-warning"
+                icon="solar:pause-broken"
+                width={16}
+              />
+            }
+          />
+        </Tooltip>
+      );
     } else if (step.error) {
       return <CircularProgress color="danger" size="sm" value={100} />;
     } else {
-      return <Spinner color="primary" size="sm" />;
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress aria-label="Step" color="primary" size="md" />
+        </Tooltip>
+      );
     }
   }
 
@@ -75,22 +118,11 @@ export function Execution({ flow, execution, runners }: any) {
     }
   }
 
-  function stepColor(step: any) {
-    if (step.error) {
-      return "danger";
-    } else if (step.paused) {
-      return "warning";
-    } else if (step.finished) {
-      return "success";
-    } else {
-      return "primary";
-    }
-  }
-
   function getDuration(step: any) {
     if (step.finished_at === "0001-01-01T00:00:00Z") return "0s";
     const ms =
-      new Date(step.finished_at).getTime() - new Date(step.started_at).getTime();
+      new Date(step.finished_at).getTime() -
+      new Date(step.started_at).getTime();
     const sec = Math.floor(ms / 1000);
     const min = Math.floor(sec / 60);
     const hr = Math.floor(min / 60);
@@ -112,10 +144,10 @@ export function Execution({ flow, execution, runners }: any) {
       id: 1,
       name: "Incoming Payload",
       icon: <Icon icon="solar:letter-opened-broken" width={24} />,
-      data: payload.payload,
+      data: payload ? payload.payload : "No data found",
       finished: true,
-      started_at: payload.created_at,
-      finished_at: payload.created_at,
+      started_at: payload ? payload.created_at : "0001-01-01T00:00:00Z",
+      finished_at: payload ? payload.created_at : "0001-01-01T00:00:00Z",
     },
     {
       id: 2,
@@ -158,11 +190,7 @@ export function Execution({ flow, execution, runners }: any) {
       case "duration":
         return <p>{getDuration(step)}</p>;
       case "status":
-        return (
-          <div className="flex items-center rounded-large justify-center bg-default bg-opacity-40 w-10 h-10">
-            {statusIcon(step)}
-          </div>
-        );
+        return <div>{statusIcon(step)}</div>;
       case "created":
         return <TimeAgo date={step.started_at} />;
       default:
@@ -182,7 +210,7 @@ export function Execution({ flow, execution, runners }: any) {
       <ExecutionDetails execution={execution} steps={steps} />
       <Spacer y={4} />
       {/* Tabelle */}
-      <Table aria-label="Example static collection table" isStriped>
+      <Table isStriped aria-label="Example static collection table">
         <TableHeader>
           <TableColumn key="status" align="start">
             Status
