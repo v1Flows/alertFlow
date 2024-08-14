@@ -2,6 +2,7 @@
 import React from "react";
 import { Tabs, Tab, useDisclosure, Button } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { Flash, PlusIcon } from "@/components/icons";
 import FlowPattern from "@/components/dashboard/flows/flow/pattern";
@@ -14,6 +15,22 @@ export default function FlowTabs({ flow, executions, payloads, runners }: any) {
   const addFlowActionModal = useDisclosure();
   const [selected, setSelected] = React.useState("actions");
 
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams.toString());
+
+  React.useEffect(() => {
+    const tab = params.get("tab") || "actions";
+
+    setSelected(tab);
+  }, [params]);
+
+  const handleTabChange = (key: any) => {
+    params.set("tab", key);
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
   return (
     <main>
       <div className="flex w-full flex-col">
@@ -22,7 +39,7 @@ export default function FlowTabs({ flow, executions, payloads, runners }: any) {
           color="primary"
           selectedKey={selected}
           variant="solid"
-          onSelectionChange={(key: any) => setSelected(key as string)}
+          onSelectionChange={handleTabChange}
         >
           <Tab
             key="actions"
