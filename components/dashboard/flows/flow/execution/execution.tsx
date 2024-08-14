@@ -162,7 +162,9 @@ export function Execution({ flow, execution, runners }: any) {
       id: 1,
       name: "Incoming Payload",
       icon: <Icon icon="solar:letter-opened-broken" width={24} />,
-      data: payload ? payload.payload : "No data found",
+      data: payload
+        ? JSON.stringify(payload.payload, null, 2)
+        : "No data found",
       finished: true,
       started_at: payload ? payload.created_at : "0001-01-01T00:00:00Z",
       finished_at: payload ? payload.created_at : "0001-01-01T00:00:00Z",
@@ -171,7 +173,7 @@ export function Execution({ flow, execution, runners }: any) {
       id: 2,
       name: "Execution Registered",
       icon: <Icon icon="solar:cpu-bolt-broken" width={24} />,
-      data: "Execution got registered at API Backend",
+      data: ["Execution got registered at API Backend"],
       finished: true,
       started_at: execution.created_at,
       finished_at: execution.executed_at,
@@ -181,7 +183,7 @@ export function Execution({ flow, execution, runners }: any) {
         ...step,
         icon: stepIcon(step),
         name: step.action_name,
-        data: step.action_message,
+        data: step.action_messages,
         started_at: step.started_at,
         finished_at: step.finished_at,
       };
@@ -202,7 +204,13 @@ export function Execution({ flow, execution, runners }: any) {
       case "data":
         return (
           <Snippet fullWidth hideSymbol>
-            <pre>{JSON.stringify(step.data, null, 2)}</pre>
+            {step.name == "Incoming Payload" ? (
+              <pre>{step.data}</pre>
+            ) : (
+              step.data.map((data: any, index: any) => (
+                <p key={index}>&gt; {data}</p>
+              ))
+            )}
           </Snippet>
         );
       case "duration":
