@@ -214,7 +214,7 @@ export function Execution({ flow, execution, runners }: any) {
         );
       case "data":
         return (
-          <Snippet fullWidth hideSymbol>
+          <Snippet fullWidth hideSymbol hideCopyButton radius="sm">
             {step.name == "Incoming Payload" ? (
               <pre>{step.data}</pre>
             ) : (
