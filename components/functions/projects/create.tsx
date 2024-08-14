@@ -49,7 +49,7 @@ export default function CreateProjectModal({
   const [projectIcon, setProjectIcon] = React.useState("solar:home-2-linear");
   const [name, setName] = React.useState("");
   const [description, setDescription] = React.useState("");
-  const [alertflowRunners, setAlertflowRunners] = React.useState(false);
+  const [alertflowRunners, setAlertflowRunners] = React.useState(true);
   const [error, setError] = React.useState(false);
   const [errorText, setErrorText] = React.useState("");
 
@@ -154,7 +154,7 @@ export default function CreateProjectModal({
                     isRequired
                     label="Description"
                     labelPlacement="outside"
-                    placeholder="Enter the project description"
+                    placeholder="Enter description"
                     radius="sm"
                     type="description"
                     value={description}
@@ -234,13 +234,13 @@ export default function CreateProjectModal({
                 <div>
                   <p className="font-bold">Project Color</p>
                   <p className="text-sm text-default-500">
-                    This color appears on the project list
+                    This color appears on the project list and page.
                   </p>
                 </div>
                 <ColorPicker hideInput color={color} onChange={setColor} />
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="flat" onPress={cancel}>
+                <Button color="default" variant="flat" onPress={cancel}>
                   Cancel
                 </Button>
                 <Button

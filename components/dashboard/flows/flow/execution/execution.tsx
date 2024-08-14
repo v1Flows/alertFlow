@@ -271,7 +271,7 @@ export function Execution({ flow, execution, runners }: any) {
           )}
         </TableBody>
       </Table>
-      <div className="mt-4 flex justify-center items-center w-full">
+      <div className="mt flex justify-center items-center w-full">
         {(execution.running || execution.waiting || execution.paused) && (
           <>
             <Progress
@@ -284,6 +284,7 @@ export function Execution({ flow, execution, runners }: any) {
           </>
         )}
       </div>
+      <Spacer y={4} />
     </>
   );
 }
