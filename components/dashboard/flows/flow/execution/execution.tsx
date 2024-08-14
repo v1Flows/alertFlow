@@ -125,14 +125,10 @@ export function Execution({ flow, execution, runners }: any) {
   }
 
   function stepIcon(step: any) {
-    if (step.error) {
-      return <Icon icon="solar:bill-list-broken" width={24} />;
-    } else if (step.paused) {
-      return <Icon icon="solar:stopwatch-pause-broken" width={24} />;
-    } else if (step.finished) {
-      return <Icon icon="solar:bill-check-broken" width={24} />;
+    if (step.action_name === "Runner Pick Up") {
+      return <Icon icon="solar:rocket-2-broken" width={24} />;
     } else {
-      return <Icon icon="solar:bill-list-broken" width={24} />;
+      return <Icon icon="solar:bolt-line-duotone" width={24} />;
     }
   }
 
@@ -180,14 +176,14 @@ export function Execution({ flow, execution, runners }: any) {
     },
     execution.runner_id === ""
       ? {
-          id: 3,
-          name: "Runner Pick Up",
-          icon: <Icon icon="solar:rocket-2-broken" width={24} />,
-          data: ["Waiting for Runner to pick up Execution"],
-          finished: false,
-          started_at: execution.created_at,
-          finished_at: "0001-01-01T00:00:00Z",
-        }
+        id: 3,
+        name: "Runner Pick Up",
+        icon: <Icon icon="solar:rocket-2-broken" width={24} />,
+        data: ["Waiting for Runner to pick up Execution"],
+        finished: false,
+        started_at: execution.created_at,
+        finished_at: "0001-01-01T00:00:00Z",
+      }
       : null,
     ...steps.map((step: any) => {
       return {
