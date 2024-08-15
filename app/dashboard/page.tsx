@@ -8,6 +8,7 @@ import GetUserNotifications from "@/lib/fetch/user/getNotifications";
 import GetFlows from "@/lib/fetch/flow/all";
 import GetRunners from "@/lib/fetch/runner/get";
 import GetExecutions from "@/lib/fetch/executions/all";
+import GetPayloads from "@/lib/fetch/payload/payloads";
 
 export default async function DashboardHomePage() {
   const user = JSON.parse(cookies().get("user")?.value || "{}");
@@ -19,12 +20,14 @@ export default async function DashboardHomePage() {
   const flows = await GetFlows();
   const runners = await GetRunners();
   const executions = await GetExecutions();
+  const payloads = await GetPayloads();
 
   return (
     <DashboardHome
       executions={executions}
       flows={flows}
       notifications={notifications}
+      payloads={payloads}
       plans={plans}
       runners={runners}
       stats={stats}

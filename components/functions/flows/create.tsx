@@ -15,9 +15,9 @@ import {
   Select,
   SelectItem,
   Divider,
-  Switch,
-  cn,
   Snippet,
+  Tooltip,
+  ButtonGroup,
 } from "@nextui-org/react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -107,91 +107,110 @@ export default function FunctionCreateFlow({
         <ModalContent className="w-full">
           {() => (
             <>
-              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold">
-                <Icon icon="solar:book-bookmark-broken" width={24} /> Create
-                Flow
+              <ModalHeader className="flex flex-wrap items-center">
+                <div className="flex flex-col gap-2">
+                  <p className="text-lg font-bold">Create new flow</p>
+                  <p className="text-sm text-default-500">
+                    Flows are the entrypoint for incoming payloads. You define
+                    actions and can view ongoing and completed executions.
+                  </p>
+                </div>
               </ModalHeader>
               <ModalBody>
-                <Input
-                  isRequired
-                  label="Name"
-                  placeholder="Enter the flow name"
-                  type="name"
-                  value={name}
-                  variant="bordered"
-                  onValueChange={setName}
-                />
-                <Input
-                  isRequired
-                  label="Description"
-                  placeholder="Enter the flow description"
-                  type="description"
-                  value={description}
-                  variant="bordered"
-                  onValueChange={setDescription}
-                />
-                <Select
-                  isRequired
-                  label="Project"
-                  placeholder="Select the project to assign the flow to"
-                  selectedKeys={[projectId]}
-                  variant="bordered"
-                  onSelectionChange={projectSelected}
-                >
-                  {projects.map((project: any) => (
-                    <SelectItem key={project.id}>{project.name}</SelectItem>
-                  ))}
-                </Select>
-                <Divider />
-                <Switch
-                  classNames={{
-                    base: cn(
-                      "inline-flex flex-row-reverse w-full max-w-md bg-content1 hover:bg-content2 items-center",
-                      "justify-between cursor-pointer rounded-lg gap-2 p-3 border-2 border-content3",
-                      "data-[selected=true]:border-primary",
-                    ),
-                    wrapper: "p-0 h-4 overflow-visible",
-                    thumb: cn(
-                      "w-6 h-6 border-2 shadow-lg",
-                      "group-data-[hover=true]:border-primary",
-                      //selected
-                      "group-data-[selected=true]:ml-6",
-                      // pressed
-                      "group-data-[pressed=true]:w-7",
-                      "group-data-[selected]:group-data-[pressed]:ml-4",
-                    ),
-                  }}
-                  isSelected={runnerLimit}
-                  onValueChange={setRunnerLimit}
-                >
-                  <div className="flex flex-col gap-1">
-                    <p className="text-medium">Limit Runner</p>
-                    <p className="text-tiny text-default-400">
-                      Do you want to use a specific runner to execute your
-                      actions on?
-                    </p>
-                  </div>
-                </Switch>
-                {runnerLimit && (
+                <div className="flex flex-col gap-4">
+                  <Input
+                    isRequired
+                    label="Name"
+                    labelPlacement="outside"
+                    placeholder="Enter name"
+                    type="name"
+                    value={name}
+                    variant="flat"
+                    onValueChange={setName}
+                  />
+                  <Input
+                    isRequired
+                    label="Description"
+                    labelPlacement="outside"
+                    placeholder="Enter description"
+                    type="description"
+                    value={description}
+                    variant="flat"
+                    onValueChange={setDescription}
+                  />
                   <Select
-                    label="Runner"
-                    placeholder="All Actions will be executed on this runner"
-                    selectedKeys={[runnerId]}
-                    variant="bordered"
-                    onSelectionChange={handleSelectRunner}
+                    isRequired
+                    label="Project"
+                    labelPlacement="outside"
+                    placeholder="Select the project to assign the flow to"
+                    selectedKeys={[projectId]}
+                    variant="flat"
+                    onSelectionChange={projectSelected}
                   >
-                    {runners
-                      .filter(
-                        (runner: any) => runner.alertflow_runner === false,
-                      )
-                      .map((runner: any) => (
-                        <SelectItem key={runner.id}>{runner.name}</SelectItem>
-                      ))}
+                    {projects.map((project: any) => (
+                      <SelectItem key={project.id}>{project.name}</SelectItem>
+                    ))}
                   </Select>
-                )}
+                  <div className="flex flex-col gap-2">
+                    <div className="flex flex-cols items-center gap-2">
+                      <p className="text-sm">Limit Runner</p>
+                      <Tooltip content="You can specify a specific runner which should take care of executing your flow.">
+                        <Icon
+                          className="text-default-500"
+                          icon="solar:info-circle-linear"
+                          width={18}
+                        />
+                      </Tooltip>
+                    </div>
+                    <div>
+                      <ButtonGroup radius="sm" variant="flat">
+                        <Button
+                          className={`${runnerLimit ? "bg-primary" : ""}`}
+                          onPress={() => setRunnerLimit(true)}
+                        >
+                          <Icon
+                            className="text-success"
+                            icon="solar:check-circle-linear"
+                            width={18}
+                          />
+                          Enabled
+                        </Button>
+                        <Button
+                          className={`${!runnerLimit ? "bg-primary" : ""}`}
+                          onPress={() => setRunnerLimit(false)}
+                        >
+                          <Icon
+                            className="text-danger"
+                            icon="solar:close-circle-linear"
+                            width={18}
+                          />
+                          Disabled
+                        </Button>
+                      </ButtonGroup>
+                    </div>
+                  </div>
+                  {runnerLimit && (
+                    <Select
+                      label="Runner"
+                      labelPlacement="outside"
+                      placeholder="All Actions will be executed on this runner"
+                      selectedKeys={[runnerId]}
+                      variant="flat"
+                      onSelectionChange={handleSelectRunner}
+                    >
+                      {runners
+                        .filter(
+                          (runner: any) => runner.alertflow_runner === false,
+                        )
+                        .map((runner: any) => (
+                          <SelectItem key={runner.id}>{runner.name}</SelectItem>
+                        ))}
+                    </Select>
+                  )}
+                </div>
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="flat" onPress={cancel}>
+                <Button variant="flat" onPress={cancel}>
                   Cancel
                 </Button>
                 <Button
