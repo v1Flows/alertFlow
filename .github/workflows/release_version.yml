@@ -20,13 +20,13 @@ jobs:
           skipIfReleaseExists: true
           generateReleaseNotes: true
   
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
+      - name: Create pull request to main
+        uses: thomaseizinger/create-pull-request@master
         with:
-          token: ${{ secrets.ACTIONS_TOKEN }}
-          branch: develop
+          github_token: ${{ secrets.ACTIONS_TOKEN }}
+          head: develop
           base: main
-          title: "Automatically created PR from develop to main!"
+          title: "An automatically created PR from develop to main!"
   
       - name: Build Docker Image
         run: docker build . --file Dockerfile --tag harbor.justlab.xyz/alertflow/frontend:${{ github.ref_name }}
