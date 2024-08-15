@@ -6,7 +6,7 @@ const withPWA = require('next-pwa')({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
-  trailingSlash: true,
+  trailingSlash: false,
   env: {
     API_ENDPOINT: process.env.API_ENDPOINT,
   },

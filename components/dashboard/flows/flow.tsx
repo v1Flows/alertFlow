@@ -187,28 +187,34 @@ export function Flow({
                   </CardHeader>
                   <CardBody>
                     <div className="flex flex-wrap items-center justify-start gap-4">
-                      {executions.length === 0 && (
-                        <p className="flex items-center gap-2 text-default-500 font-bold">
-                          {executions.length} Total
-                        </p>
-                      )}
+                      <p className="flex items-center gap-2 text-default-500 font-bold">
+                        {executions.length} Total
+                      </p>
                       {executions.filter((e: any) => e.running).length > 0 && (
-                        <p className="flex items-center gap-2 text-default-500 font-bold">
-                          <Spinner color="primary" size="sm" />
-                          {executions.filter((e: any) => e.running).length}{" "}
-                          Running
-                        </p>
+                        <>
+                          <Divider className="h-6" orientation="vertical" />
+                          <p className="flex items-center gap-2 text-default-500 font-bold">
+                            <Spinner color="primary" size="sm" />
+                            {
+                              executions.filter((e: any) => e.running).length
+                            }{" "}
+                            Running
+                          </p>
+                        </>
                       )}
                       {executions.filter((e: any) => e.waiting).length > 0 && (
-                        <p className="flex items-center gap-2 text-default-500 font-bold">
-                          <Icon
-                            className="text-warning"
-                            icon="solar:pause-broken"
-                            width={20}
-                          />
-                          {executions.filter((e: any) => e.waiting).length}{" "}
-                          Waiting
-                        </p>
+                        <>
+                          <Divider className="h-6" orientation="vertical" />
+                          <p className="flex items-center gap-2 text-default-500 font-bold">
+                            <Icon
+                              className="text-warning"
+                              icon="solar:pause-broken"
+                              width={20}
+                            />
+                            {executions.filter((e: any) => e.waiting).length}{" "}
+                            Waiting
+                          </p>
+                        </>
                       )}
                     </div>
                   </CardBody>

@@ -5,9 +5,9 @@ import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 import {
   Avatar,
   Button,
+  ButtonGroup,
   Card,
   CardHeader,
-  cn,
   Divider,
   Input,
   Modal,
@@ -17,7 +17,7 @@ import {
   ModalHeader,
   Select,
   SelectItem,
-  Switch,
+  Tooltip,
   useDisclosure,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
@@ -49,7 +49,7 @@ export default function CreateProjectModal({
   const [projectIcon, setProjectIcon] = React.useState("solar:home-2-linear");
   const [name, setName] = React.useState("");
   const [description, setDescription] = React.useState("");
-  const [alertflowRunners, setAlertflowRunners] = React.useState(false);
+  const [alertflowRunners, setAlertflowRunners] = React.useState(true);
   const [error, setError] = React.useState(false);
   const [errorText, setErrorText] = React.useState("");
 
@@ -116,8 +116,14 @@ export default function CreateProjectModal({
         <ModalContent className="w-full">
           {() => (
             <>
-              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold">
-                <Icon icon="solar:box-broken" width={24} /> Create Project
+              <ModalHeader className="flex flex-wrap items-center">
+                <div className="flex flex-col gap-2">
+                  <p className="text-lg font-bold">Create new project</p>
+                  <p className="text-sm text-default-500">
+                    Projects are where you manage team members, create flows or
+                    runners. Depending on your Plan you also see Audit logs.{" "}
+                  </p>
+                </div>
               </ModalHeader>
               <ModalBody>
                 {error && (
@@ -132,60 +138,77 @@ export default function CreateProjectModal({
                     </CardHeader>
                   </Card>
                 )}
-                <div className="grid lg:grid-cols-2 gap-2">
+                <div className="flex flex-col gap-4">
                   <Input
                     isRequired
                     label="Name"
-                    placeholder="Enter the project name"
+                    labelPlacement="outside"
+                    placeholder="Enter name"
+                    radius="sm"
                     type="name"
                     value={name}
-                    variant="bordered"
+                    variant="flat"
                     onValueChange={setName}
                   />
                   <Input
                     isRequired
                     label="Description"
-                    placeholder="Enter the project description"
+                    labelPlacement="outside"
+                    placeholder="Enter description"
+                    radius="sm"
                     type="description"
                     value={description}
-                    variant="bordered"
+                    variant="flat"
                     onValueChange={setDescription}
                   />
-                </div>
-                <Switch
-                  classNames={{
-                    base: cn(
-                      "inline-flex flex-row-reverse w-full max-w-full bg-content1 hover:bg-content2 items-center",
-                      "justify-between cursor-pointer rounded-lg gap-2 p-3 border-2 border-content3",
-                      "data-[selected=true]:border-primary",
-                    ),
-                    wrapper: "p-0 h-4 overflow-visible",
-                    thumb: cn(
-                      "w-6 h-6 border-2 shadow-lg",
-                      "group-data-[hover=true]:border-primary",
-                      //selected
-                      "group-data-[selected=true]:ml-6",
-                      // pressed
-                      "group-data-[pressed=true]:w-7",
-                      "group-data-[selected]:group-data-[pressed]:ml-4",
-                    ),
-                  }}
-                  isSelected={alertflowRunners}
-                  onValueChange={setAlertflowRunners}
-                >
-                  <div className="flex flex-col gap-1">
-                    <p className="text-medium">Enable Alertflow Runners</p>
-                    <p className="text-tiny text-default-400">
-                      Do you want to enable Alertflow Runners? If you enable
-                      this, actions will also be executed on runners hosted by
-                      AlertFlow.
-                    </p>
+                  <div className="flex flex-col gap-2">
+                    <div className="flex flex-cols items-center gap-2">
+                      <p className="text-sm">AlertFlow Runners</p>
+                      <Tooltip
+                        content="We are hosting our own Runners to make the usage of
+                        AlertFlow for you easier. With this option you can
+                        either enable or disable the usage of them."
+                      >
+                        <Icon
+                          className="text-default-500"
+                          icon="solar:info-circle-linear"
+                          width={18}
+                        />
+                      </Tooltip>
+                    </div>
+                    <div>
+                      <ButtonGroup radius="sm" variant="flat">
+                        <Button
+                          className={`${alertflowRunners ? "bg-primary" : ""}`}
+                          onPress={() => setAlertflowRunners(true)}
+                        >
+                          <Icon
+                            className="text-success"
+                            icon="solar:check-circle-linear"
+                            width={18}
+                          />
+                          Enabled
+                        </Button>
+                        <Button
+                          className={`${!alertflowRunners ? "bg-primary" : ""}`}
+                          onPress={() => setAlertflowRunners(false)}
+                        >
+                          <Icon
+                            className="text-danger"
+                            icon="solar:close-circle-linear"
+                            width={18}
+                          />
+                          Disabled
+                        </Button>
+                      </ButtonGroup>
+                    </div>
                   </div>
-                </Switch>
+                </div>
                 <Divider />
                 <Select
                   items={icons.map((icon) => ({ textValue: icon }))}
                   label="Icon"
+                  labelPlacement="outside"
                   placeholder="Select an icon"
                   selectedKeys={[projectIcon]}
                   size="md"
@@ -211,13 +234,13 @@ export default function CreateProjectModal({
                 <div>
                   <p className="font-bold">Project Color</p>
                   <p className="text-sm text-default-500">
-                    This color appears on the project list
+                    This color appears on the project list and page.
                   </p>
                 </div>
                 <ColorPicker hideInput color={color} onChange={setColor} />
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="flat" onPress={cancel}>
+                <Button color="default" variant="flat" onPress={cancel}>
                   Cancel
                 </Button>
                 <Button
