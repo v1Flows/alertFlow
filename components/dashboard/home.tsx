@@ -264,17 +264,17 @@ export function DashboardHome({
               {plan.executions_per_month !== 999 ? (
                 <>
                   <p className="text-lg font-bold">
-                    {stats.executions ? stats.executions : 0} /{" "}
+                    {stats.total_executions ? stats.total_executions : 0} /{" "}
                     {plan.executions_per_month}
                   </p>
                   <Progress
                     color={
-                      stats.executions_per_month >= plan.executions_per_month
+                      stats.total_executions >= plan.executions_per_month
                         ? "danger"
                         : "primary"
                     }
                     maxValue={plan.executions_per_month}
-                    value={stats.executions_per_month}
+                    value={stats.total_executions}
                   />
                 </>
               ) : (
