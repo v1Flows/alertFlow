@@ -12,6 +12,7 @@ import { IconWrapper } from "@/lib/IconWrapper";
 
 import Executions from "./flows/flow/executions";
 import ExecutionChartCard from "./executionChartCard";
+import PayloadChartCard from "./payloadChartCard";
 
 export function DashboardHome({
   stats,
@@ -60,7 +61,7 @@ export function DashboardHome({
           </p>
         </div>
       </div>
-      <div className="grid lg:grid-cols-4 items-center justify-between gap-4">
+      <div className="grid lg:grid-cols-3 grid-cols-1 items-stretch items-center justify-between gap-4">
         <Card>
           <CardBody>
             <ul className="flex flex-col gap-2">
@@ -131,7 +132,7 @@ export function DashboardHome({
               {runners.filter((r: any) => !runnerHeartbeatStatus(r)).length >
                 0 ? (
                 <li className="flex items-center gap-2">
-                  <IconWrapper className="bg-success/10 text-success">
+                  <IconWrapper className="bg-danger/10 text-danger">
                     <Icon icon="solar:heart-pulse-broken" width={24} />
                   </IconWrapper>
                   <p className="text-md font-bold">
@@ -151,7 +152,8 @@ export function DashboardHome({
             </ul>
           </CardBody>
         </Card>
-        <ExecutionChartCard />
+        <ExecutionChartCard stats={stats} />
+        <PayloadChartCard stats={stats} />
       </div>
 
       {/* Quota */}
