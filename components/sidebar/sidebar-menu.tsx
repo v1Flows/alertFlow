@@ -17,6 +17,7 @@ import {
   DropdownMenu,
   DropdownItem,
   Badge,
+  DropdownSection,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import { useTheme } from "next-themes";
@@ -169,22 +170,35 @@ export default function SidebarMenu({
           <DropdownItem
             key="profile"
             showDivider
-            startContent={<Icon icon="solar:smile-square-broken" width={16} />}
+            startContent={<Icon icon="solar:smile-square-broken" width={18} />}
             onPress={() => router.push(`/user/${user?.id}`)}
           >
             View Profile
           </DropdownItem>
-          <DropdownItem
-            key="api_key"
-            startContent={<Icon icon="solar:copy-broken" width={16} />}
-            onPress={() => {
-              // eslint-disable-next-line no-undef
-              navigator.clipboard.writeText(session);
-              toast.success("Copied to clipboard!");
-            }}
-          >
-            Copy Token
-          </DropdownItem>
+          <DropdownSection title="Copy">
+            <DropdownItem
+              key="userid"
+              startContent={<Icon icon="solar:user-id-line-duotone" width={18} />}
+              onPress={() => {
+                // eslint-disable-next-line no-undef
+                navigator.clipboard.writeText(user.id);
+                toast.success("Copied to clipboard!");
+              }}
+            >
+              UserID
+            </DropdownItem>
+            <DropdownItem
+              key="api_key"
+              startContent={<Icon icon="solar:key-square-2-broken" width={18} />}
+              onPress={() => {
+                // eslint-disable-next-line no-undef
+                navigator.clipboard.writeText(session);
+                toast.success("Copied to clipboard!");
+              }}
+            >
+              Token
+            </DropdownItem>
+          </DropdownSection>
         </DropdownMenu>
       </Dropdown>
 
