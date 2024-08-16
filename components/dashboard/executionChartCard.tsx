@@ -35,7 +35,7 @@ export default function ExecutionChartCard({ stats }: { stats: any }) {
               dataKey="value"
               dot={false}
               stroke="#006fed"
-              strokeWidth={2}
+              strokeWidth={3}
               type="monotone"
             />
           </LineChart>
