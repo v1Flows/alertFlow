@@ -11,7 +11,6 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  Progress,
   Radio,
   RadioGroup,
   Select,
@@ -23,46 +22,19 @@ import {
   TableBody,
   TableRow,
   Table,
+  Tooltip,
+  ButtonGroup,
 } from "@nextui-org/react";
 import React from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
 
-import VerticalSteps from "@/components/functions/steps/vertical-steps";
 import { cn } from "@/components/functions/cn/cn";
 import { PlusIcon } from "@/components/icons";
 import CreateFlowAction from "@/lib/fetch/flow/POST/CreateFlowAction";
 
-import SupportCard from "./support-card";
-
-const steps = [
-  {
-    title: "Basic Details",
-    description: "Enter the basic informations of your new action.",
-  },
-  {
-    title: "Select Action",
-    description: "Select any of the available actions.",
-  },
-  {
-    title: "Action Parameters",
-    description: "Enter the parameters of your action.",
-  },
-  {
-    title: "Match Patterns",
-    description: "Select the patterns you want to match.",
-  },
-  {
-    title: "Exclude Patterns",
-    description: "Select the patterns you want to exclude.",
-  },
-  {
-    title: "Review",
-    description:
-      "Final review of the action and make sure everything is correct.",
-  },
-];
+import MinimalRowSteps from "../steps/minimal-row-steps";
 
 export const CustomRadio = (props: any) => {
   const { children, ...otherProps } = props;
@@ -96,8 +68,14 @@ export default function AddFlowActionModal({
 
   const { isOpen, onOpenChange } = disclosure;
 
+  const [steps, setSteps] = React.useState(4);
   const [currentStep, setCurrentStep] = React.useState(0);
   const [isLoading, setLoading] = React.useState(false);
+
+  // logic input
+  const [enableMatchPatterns, setEnableMatchPatterns] = React.useState(false);
+  const [enableExcludePatterns, setEnableExcludePatterns] =
+    React.useState(false);
 
   // inputs
   const [name, setName] = React.useState("");
@@ -145,6 +123,22 @@ export default function AddFlowActionModal({
     }
 
     return actions;
+  }
+
+  function enablePatterns() {
+    if (!enableMatchPatterns) {
+      setSteps(steps + 1);
+    } else {
+      setSteps(steps - 1);
+    }
+  }
+
+  function disablePatterns() {
+    if (!enableExcludePatterns) {
+      setSteps(steps + 1);
+    } else {
+      setSteps(steps - 1);
+    }
   }
 
   function cancel() {
@@ -226,57 +220,37 @@ export default function AddFlowActionModal({
       <Modal
         isOpen={isOpen}
         placement="center"
-        size="5xl"
+        size="3xl"
         onOpenChange={onOpenChange}
       >
         <ModalContent>
           {() => (
             <>
-              <ModalHeader />
+              <ModalHeader className="flex flex-wrap items-center">
+                <div className="flex flex-col gap-2">
+                  <p className="text-lg font-bold">Create new Action</p>
+                  <p className="text-sm text-default-500">
+                    Actions are the building blocks of your flows. They are the
+                    steps that are executed when a flow is triggered.
+                  </p>
+                </div>
+              </ModalHeader>
               <ModalBody>
+                <div className="flex items-center justify-center">
+                  <MinimalRowSteps
+                    className="w-full"
+                    currentStep={currentStep}
+                    label={`Step ${currentStep + 1} of ${steps}`}
+                    stepsCount={steps}
+                    onStepChange={setCurrentStep}
+                  />
+                </div>
                 <div className="w-full flex flex-cols gap-4">
-                  <div className="w-full col-span-1">
-                    <section className="max-w-sm">
-                      <h1
-                        className="mb-2 text-xl font-medium"
-                        id="getting-started"
-                      >
-                        Getting started
-                      </h1>
-                      <p className="mb-5 text-small text-default-500">
-                        Follow the steps to configure your action. This allows
-                        you to process incoming payloads.
-                      </p>
-                      <Progress
-                        classNames={{
-                          base: "px-0.5 mb-5",
-                          label: "text-small",
-                          value: "text-small text-default-400",
-                        }}
-                        label="Steps"
-                        maxValue={steps.length - 1}
-                        minValue={0}
-                        showValueLabel={true}
-                        size="md"
-                        value={currentStep}
-                        valueLabel={`${currentStep + 1} of ${steps.length}`}
-                      />
-                      <VerticalSteps
-                        hideProgressBars
-                        currentStep={currentStep}
-                        stepClassName="border border-default-200 dark:border-default-50 aria-[current]:bg-default-100 dark:aria-[current]:bg-default-50"
-                        steps={steps}
-                        onStepChange={setCurrentStep}
-                      />
-                      <Spacer y={4} />
-                      <SupportCard className="!m-0 border border-default-200 !bg-default-50 px-2 shadow-none dark:border-default-100 dark:!bg-default-50/50" />
-                    </section>
-                  </div>
                   <div className="w-full col-span-1">
                     {currentStep === 0 && (
                       <div className="flex flex-col gap-4">
                         <Input
-                          label="Action Name"
+                          label="Name"
                           labelPlacement="outside"
                           placeholder="My Action Name"
                           radius="sm"
@@ -286,7 +260,7 @@ export default function AddFlowActionModal({
                           onValueChange={setName}
                         />
                         <Input
-                          label="Action Description"
+                          label="Description"
                           labelPlacement="outside"
                           placeholder="My Action Description"
                           radius="sm"
@@ -318,10 +292,100 @@ export default function AddFlowActionModal({
                             </CustomRadio>
                           </div>
                         </RadioGroup>
+                        <div className="flex flex-cols gap-4 justify-between items-center">
+                          <div className="flex flex-col gap-2">
+                            <div className="flex flex-cols items-center gap-2">
+                              <p className="text-sm">Match Patterns</p>
+                              <Tooltip content="With Match Patterns you can controll which key-value pair has to be pressent in the incoming payload in order to execute your flow.">
+                                <Icon
+                                  className="text-default-500"
+                                  icon="solar:info-circle-linear"
+                                  width={18}
+                                />
+                              </Tooltip>
+                            </div>
+                            <div>
+                              <ButtonGroup radius="sm" variant="flat">
+                                <Button
+                                  className={`${enableMatchPatterns ? "bg-primary" : ""}`}
+                                  onPress={() => {
+                                    setEnableMatchPatterns(true);
+                                    enablePatterns();
+                                  }}
+                                >
+                                  <Icon
+                                    className="text-success"
+                                    icon="solar:check-circle-linear"
+                                    width={18}
+                                  />
+                                  Enabled
+                                </Button>
+                                <Button
+                                  className={`${!enableMatchPatterns ? "bg-primary" : ""}`}
+                                  onPress={() => {
+                                    setEnableMatchPatterns(false);
+                                    enablePatterns();
+                                  }}
+                                >
+                                  <Icon
+                                    className="text-danger"
+                                    icon="solar:close-circle-linear"
+                                    width={18}
+                                  />
+                                  Disabled
+                                </Button>
+                              </ButtonGroup>
+                            </div>
+                          </div>
+                          <div className="flex flex-col gap-2">
+                            <div className="flex flex-cols items-center gap-2">
+                              <p className="text-sm">Exclude Patterns</p>
+                              <Tooltip content="With Exclude Patterns you can controll which key-value pair has to be pressent in the incoming payload in order to NOT execute your flow.">
+                                <Icon
+                                  className="text-default-500"
+                                  icon="solar:info-circle-linear"
+                                  width={18}
+                                />
+                              </Tooltip>
+                            </div>
+                            <div>
+                              <ButtonGroup radius="sm" variant="flat">
+                                <Button
+                                  className={`${enableExcludePatterns ? "bg-primary" : ""}`}
+                                  onPress={() => {
+                                    setEnableExcludePatterns(true);
+                                    disablePatterns();
+                                  }}
+                                >
+                                  <Icon
+                                    className="text-success"
+                                    icon="solar:check-circle-linear"
+                                    width={18}
+                                  />
+                                  Enabled
+                                </Button>
+                                <Button
+                                  className={`${!enableExcludePatterns ? "bg-primary" : ""}`}
+                                  onPress={() => {
+                                    setEnableExcludePatterns(false);
+                                    disablePatterns();
+                                  }}
+                                >
+                                  <Icon
+                                    className="text-danger"
+                                    icon="solar:close-circle-linear"
+                                    width={18}
+                                  />
+                                  Disabled
+                                </Button>
+                              </ButtonGroup>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     )}
                     {currentStep === 1 && (
-                      <>
+                      <div>
                         {countTotalAvailableActions() === 0 ? (
                           <div>
                             <Card className="border border-danger">
@@ -340,31 +404,33 @@ export default function AddFlowActionModal({
                             </Card>
                           </div>
                         ) : (
-                          <RadioGroup
-                            description="Select any of the available actions."
-                            label="Actions"
-                            value={action}
-                            onValueChange={setAction}
-                          >
-                            {getUniqueActions().map((action: any) => (
-                              <CustomRadio
-                                key={action.name}
-                                description={action.description}
-                                value={action.name}
-                              >
-                                {action.name}
-                              </CustomRadio>
-                            ))}
-                          </RadioGroup>
+                          <>
+                            <p className="mb-2">Available Action</p>
+                            <RadioGroup
+                              description="Select any of the available actions."
+                              value={action}
+                              onValueChange={setAction}
+                            >
+                              {getUniqueActions().map((action: any) => (
+                                <CustomRadio
+                                  key={action.name}
+                                  description={action.description}
+                                  value={action.name}
+                                >
+                                  {action.name}
+                                </CustomRadio>
+                              ))}
+                            </RadioGroup>
+                          </>
                         )}
-                      </>
+                      </div>
                     )}
                     {currentStep === 2 && (
                       <div>
                         <p>Number of Required Parameters:</p>
                       </div>
                     )}
-                    {currentStep === 3 && (
+                    {currentStep === 3 && enableMatchPatterns && (
                       <div>
                         <div className="flex flex-col gap-4">
                           {matchPatterns.map((pattern: any, index: number) => (
@@ -495,7 +561,7 @@ export default function AddFlowActionModal({
                         </div>
                       </div>
                     )}
-                    {currentStep === 4 && (
+                    {currentStep === 4 && enableExcludePatterns && (
                       <div>
                         <div className="flex flex-col gap-4">
                           {excludePatterns.map(
@@ -628,7 +694,7 @@ export default function AddFlowActionModal({
                         </div>
                       </div>
                     )}
-                    {currentStep === 5 && (
+                    {currentStep + 1 === steps && (
                       <div>
                         <p>Review the details below.</p>
                         <div className="mt-4">
@@ -658,69 +724,83 @@ export default function AddFlowActionModal({
                               value={action}
                             />
                           </div>
-                          <Spacer y={4} />
-                          <p className="font-bold mb-0 text-success">
-                            Match Patterns
-                          </p>
-                          {matchPatterns.filter((pattern: any) => pattern.key)
-                            .length === 0 ? (
-                            <p>Action will be triggered for all events.</p>
-                          ) : (
-                            <Table
-                              aria-label="Match Action Patterns"
-                              className="w-full"
-                            >
-                              <TableHeader>
-                                <TableColumn>GROUP</TableColumn>
-                                <TableColumn>KEY</TableColumn>
-                                <TableColumn>VALUE</TableColumn>
-                                <TableColumn>REACT ON</TableColumn>
-                              </TableHeader>
-                              <TableBody>
-                                {matchPatterns.map(
-                                  (pattern: any, index: number) => (
-                                    <TableRow key={index}>
-                                      <TableCell>{pattern.group}</TableCell>
-                                      <TableCell>{pattern.key}</TableCell>
-                                      <TableCell>{pattern.value}</TableCell>
-                                      <TableCell>{pattern.react_on}</TableCell>
-                                    </TableRow>
-                                  ),
-                                )}
-                              </TableBody>
-                            </Table>
+                          {enableMatchPatterns && (
+                            <>
+                              <Spacer y={4} />
+                              <p className="font-bold mb-0 text-success">
+                                Match Patterns
+                              </p>
+                              {matchPatterns.filter(
+                                (pattern: any) => pattern.key,
+                              ).length === 0 ? (
+                                <p>Action will be triggered for all events.</p>
+                              ) : (
+                                <Table
+                                  aria-label="Match Action Patterns"
+                                  className="w-full"
+                                >
+                                  <TableHeader>
+                                    <TableColumn>GROUP</TableColumn>
+                                    <TableColumn>KEY</TableColumn>
+                                    <TableColumn>VALUE</TableColumn>
+                                    <TableColumn>REACT ON</TableColumn>
+                                  </TableHeader>
+                                  <TableBody>
+                                    {matchPatterns.map(
+                                      (pattern: any, index: number) => (
+                                        <TableRow key={index}>
+                                          <TableCell>{pattern.group}</TableCell>
+                                          <TableCell>{pattern.key}</TableCell>
+                                          <TableCell>{pattern.value}</TableCell>
+                                          <TableCell>
+                                            {pattern.react_on}
+                                          </TableCell>
+                                        </TableRow>
+                                      ),
+                                    )}
+                                  </TableBody>
+                                </Table>
+                              )}
+                            </>
                           )}
-                          <Spacer y={4} />
-                          <p className="font-bold mb-0 text-danger">
-                            Exclude Patterns
-                          </p>
-                          {matchPatterns.filter((pattern: any) => pattern.key)
-                            .length === 0 ? (
-                            <p>Action will be triggered for all events.</p>
-                          ) : (
-                            <Table
-                              aria-label="Exclude Action Patterns"
-                              className="w-full"
-                            >
-                              <TableHeader>
-                                <TableColumn>GROUP</TableColumn>
-                                <TableColumn>KEY</TableColumn>
-                                <TableColumn>VALUE</TableColumn>
-                                <TableColumn>REACT ON</TableColumn>
-                              </TableHeader>
-                              <TableBody>
-                                {excludePatterns.map(
-                                  (pattern: any, index: number) => (
-                                    <TableRow key={index}>
-                                      <TableCell>{pattern.group}</TableCell>
-                                      <TableCell>{pattern.key}</TableCell>
-                                      <TableCell>{pattern.value}</TableCell>
-                                      <TableCell>{pattern.react_on}</TableCell>
-                                    </TableRow>
-                                  ),
-                                )}
-                              </TableBody>
-                            </Table>
+                          {enableExcludePatterns && (
+                            <>
+                              <Spacer y={4} />
+                              <p className="font-bold mb-0 text-danger">
+                                Exclude Patterns
+                              </p>
+                              {matchPatterns.filter(
+                                (pattern: any) => pattern.key,
+                              ).length === 0 ? (
+                                <p>Action will be triggered for all events.</p>
+                              ) : (
+                                <Table
+                                  aria-label="Exclude Action Patterns"
+                                  className="w-full"
+                                >
+                                  <TableHeader>
+                                    <TableColumn>GROUP</TableColumn>
+                                    <TableColumn>KEY</TableColumn>
+                                    <TableColumn>VALUE</TableColumn>
+                                    <TableColumn>REACT ON</TableColumn>
+                                  </TableHeader>
+                                  <TableBody>
+                                    {excludePatterns.map(
+                                      (pattern: any, index: number) => (
+                                        <TableRow key={index}>
+                                          <TableCell>{pattern.group}</TableCell>
+                                          <TableCell>{pattern.key}</TableCell>
+                                          <TableCell>{pattern.value}</TableCell>
+                                          <TableCell>
+                                            {pattern.react_on}
+                                          </TableCell>
+                                        </TableRow>
+                                      ),
+                                    )}
+                                  </TableBody>
+                                </Table>
+                              )}
+                            </>
                           )}
                         </div>
                       </div>
@@ -751,7 +831,7 @@ export default function AddFlowActionModal({
                     Back
                   </Button>
                 )}
-                {currentStep === steps.length - 1 ? (
+                {currentStep + 1 === steps ? (
                   <Button
                     color="primary"
                     isLoading={isLoading}
