@@ -63,7 +63,7 @@ export function DashboardHome({
       </div>
       <div className="grid lg:grid-cols-3 grid-cols-1 items-stretch items-center justify-between gap-4">
         <Card>
-          <CardBody>
+          <CardBody className="flex justify-center">
             <ul className="flex flex-col gap-2">
               {/* Notifications */}
               {notifications.filter((n: any) => !n.is_read).length > 0 ? (
