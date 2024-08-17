@@ -213,7 +213,7 @@ export default function AddFlowActionModal({
               <ModalBody>
                 <div className="flex items-center justify-center">
                   <MinimalRowSteps
-                    className="w-full"
+                    className="w-fit"
                     currentStep={currentStep}
                     label={`Step ${currentStep + 1} of ${steps}`}
                     stepsCount={steps}
@@ -244,7 +244,7 @@ export default function AddFlowActionModal({
                           value={description}
                           onValueChange={setDescription}
                         />
-                        <div className="flex flex-cols items-center justify-between gap-4">
+                        <div className="flex flex-wrap items-center justify-between gap-4">
                           <div className="flex flex-col gap-2">
                             <div className="flex flex-cols items-center gap-2">
                               <p className="text-sm">Execution Order</p>
@@ -335,7 +335,7 @@ export default function AddFlowActionModal({
                           <p className="text-lg font-bold text-default-500">
                             Patterns
                           </p>
-                          <div className="flex flex-cols gap-4 justify-between items-center">
+                          <div className="flex flex-wrap gap-4 justify-between items-center">
                             <div className="flex flex-col gap-2">
                               <div className="flex flex-cols items-center gap-2">
                                 <p className="text-sm">Match</p>
