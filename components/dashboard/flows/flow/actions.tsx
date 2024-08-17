@@ -61,8 +61,8 @@ export default function Actions({ actions }: { actions: any }) {
                   />
                 </div>
                 <div>
-                  <p className="text-md font-bold">Execution Order</p>
-                  <p>{action.exec_parallel ? "Parallel" : "Sequential"}</p>
+                  <p className="text-md font-bold">{action.exec_parallel ? "Parallel" : "Sequential"}</p>
+                  <p className="text-sm text-default-500">Execution Order</p>
                 </div>
               </div>
 
@@ -72,8 +72,8 @@ export default function Actions({ actions }: { actions: any }) {
                   <Icon icon="solar:bolt-bold-duotone" width={26} />
                 </div>
                 <div>
-                  <p className="text-md font-bold">Actions</p>
-                  <p>{action.actions.length}</p>
+                  <p className="text-md font-bold">{action.actions.length}</p>
+                  <p className="text-sm text-default-500">Actions</p>
                 </div>
               </div>
 
@@ -83,8 +83,8 @@ export default function Actions({ actions }: { actions: any }) {
                   <Icon icon="solar:clipboard-check-broken" width={26} />
                 </div>
                 <div>
-                  <p className="text-md font-bold">Match Patterns</p>
-                  <p>{action.match_patterns.length}</p>
+                  <p className="text-md font-bold">{action.match_patterns.length}</p>
+                  <p className="text-sm text-default-500">Match Patterns</p>
                 </div>
               </div>
 
@@ -94,8 +94,8 @@ export default function Actions({ actions }: { actions: any }) {
                   <Icon icon="solar:clipboard-remove-broken" width={26} />
                 </div>
                 <div>
-                  <p className="text-md font-bold">Exclude Patterns</p>
-                  <p>{action.exclude_patterns.length}</p>
+                  <p className="text-md font-bold">{action.exclude_patterns.length}</p>
+                  <p className="text-sm text-default-500">Exclude Patterns</p>
                 </div>
               </div>
             </div>
@@ -113,13 +113,14 @@ export default function Actions({ actions }: { actions: any }) {
                   </div>
                   <div>
                     <p className="text-md font-bold">{action}</p>
+                    <p className="text-sm text-default-500">Action</p>
                   </div>
                 </div>
               ))}
             </div>
 
             {/* Action Match Patterns */}
-            <Spacer y={2} />
+            <Spacer y={4} />
             <p className="text-lg font-bold text-success-500 mb-2">
               Match Patterns
             </p>
