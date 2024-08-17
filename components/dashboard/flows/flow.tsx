@@ -24,6 +24,7 @@ export function Flow({
   id,
   projects,
   flow,
+  actions,
   executions,
   payloads,
   runners,
@@ -171,8 +172,8 @@ export function Flow({
                       {flow.runner_id === "any"
                         ? "Any"
                         : runners.find(
-                            (runner: any) => runner.id === flow.runner_id,
-                          )?.name}
+                          (runner: any) => runner.id === flow.runner_id,
+                        )?.name}
                     </p>
                   </CardBody>
                 </Card>
@@ -224,6 +225,7 @@ export function Flow({
           </div>
           <div className="w-full mt-6">
             <FlowTabs
+              actions={actions}
               executions={executions}
               flow={flow}
               payloads={payloads}

@@ -5,13 +5,19 @@ import { Icon } from "@iconify/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { Flash, PlusIcon } from "@/components/icons";
-import FlowPattern from "@/components/dashboard/flows/flow/pattern";
 import AddFlowActionModal from "@/components/functions/flows/addAction";
 
 import Executions from "./executions";
 import Payloads from "./payloads";
+import Actions from "./actions";
 
-export default function FlowTabs({ flow, executions, payloads, runners }: any) {
+export default function FlowTabs({
+  actions,
+  flow,
+  executions,
+  payloads,
+  runners,
+}: any) {
   const addFlowActionModal = useDisclosure();
   const [selected, setSelected] = React.useState("actions");
 
@@ -50,7 +56,7 @@ export default function FlowTabs({ flow, executions, payloads, runners }: any) {
               </div>
             }
           >
-            {flow.actions.length === 0 ? (
+            {actions.length === 0 ? (
               <div className="flex flex-col items-center justify-center">
                 <p className="text-center text-default-400 mt-4">
                   No actions found
@@ -58,9 +64,7 @@ export default function FlowTabs({ flow, executions, payloads, runners }: any) {
               </div>
             ) : (
               <div className="mt-4">
-                {flow.actions.map((action: any, index: number) => (
-                  <FlowPattern key={index} action={action} />
-                ))}
+                <Actions actions={actions} />
               </div>
             )}
             <Button

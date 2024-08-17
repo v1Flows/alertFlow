@@ -20,7 +20,10 @@ export default async function GetFlow(flowID: any) {
     });
     const data = await res.json();
 
-    return data.flow;
+    return {
+      flow: data.flow,
+      actions: data.actions,
+    };
   } catch (error) {
     return { error: "Failed to fetch data" };
   }
