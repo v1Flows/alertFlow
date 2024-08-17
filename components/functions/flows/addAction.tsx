@@ -12,9 +12,6 @@ import {
   ModalFooter,
   ModalHeader,
   Radio,
-  RadioGroup,
-  Select,
-  SelectItem,
   Spacer,
   TableColumn,
   TableHeader,
@@ -24,6 +21,9 @@ import {
   Table,
   Tooltip,
   ButtonGroup,
+  CheckboxGroup,
+  Checkbox,
+  Divider,
 } from "@nextui-org/react";
 import React from "react";
 import { toast } from "sonner";
@@ -68,7 +68,7 @@ export default function AddFlowActionModal({
 
   const { isOpen, onOpenChange } = disclosure;
 
-  const [steps, setSteps] = React.useState(4);
+  const [steps, setSteps] = React.useState(6);
   const [currentStep, setCurrentStep] = React.useState(0);
   const [isLoading, setLoading] = React.useState(false);
 
@@ -80,22 +80,19 @@ export default function AddFlowActionModal({
   // inputs
   const [name, setName] = React.useState("");
   const [description, setDescription] = React.useState("");
-  const [status, setStatus] = React.useState("active");
-  const [action, setAction] = React.useState("");
+  const [execParallel, setExecParallel] = React.useState(true);
+  const [status, setStatus] = React.useState(true);
+  const [actions, setActions] = React.useState([] as any);
   const [matchPatterns, setMatchPatterns] = React.useState([
     {
       key: "",
-      group: "",
       value: "",
-      react_on: "",
     },
   ]);
   const [excludePatterns, setExcludePatterns] = React.useState([
     {
       key: "",
-      group: "",
       value: "",
-      react_on: "",
     },
   ]);
 
@@ -125,41 +122,21 @@ export default function AddFlowActionModal({
     return actions;
   }
 
-  function enablePatterns() {
-    if (!enableMatchPatterns) {
-      setSteps(steps + 1);
-    } else {
-      setSteps(steps - 1);
-    }
-  }
-
-  function disablePatterns() {
-    if (!enableExcludePatterns) {
-      setSteps(steps + 1);
-    } else {
-      setSteps(steps - 1);
-    }
-  }
-
   function cancel() {
     setName("");
     setDescription("");
-    setStatus("active");
-    setAction("");
+    setStatus(true);
+    setActions([] as any);
     setMatchPatterns([
       {
         key: "",
-        group: "",
         value: "",
-        react_on: "",
       },
     ]);
     setExcludePatterns([
       {
         key: "",
-        group: "",
         value: "",
-        react_on: "",
       },
     ]);
     setCurrentStep(0);
@@ -172,8 +149,10 @@ export default function AddFlowActionModal({
     const sendAction = {
       name: name,
       description: description,
+      flow_id: flowID,
       status: status,
-      action: action,
+      actions: actions,
+      exec_parallel: execParallel,
       match_patterns: matchPatterns,
       exclude_patterns: excludePatterns,
     };
@@ -184,22 +163,18 @@ export default function AddFlowActionModal({
       setLoading(false);
       setName("");
       setDescription("");
-      setStatus("active");
-      setAction("");
+      setStatus(true);
+      setActions([] as any);
       setMatchPatterns([
         {
           key: "",
-          group: "",
           value: "",
-          react_on: "",
         },
       ]);
       setExcludePatterns([
         {
           key: "",
-          group: "",
           value: "",
-          react_on: "",
         },
       ]);
       setCurrentStep(0);
@@ -269,34 +244,11 @@ export default function AddFlowActionModal({
                           value={description}
                           onValueChange={setDescription}
                         />
-                        <RadioGroup
-                          description="Selected the status of your action."
-                          label="Status"
-                          value={status}
-                          onValueChange={setStatus}
-                        >
-                          <div className="flex flex-warp gap-4">
-                            <CustomRadio
-                              color="success"
-                              description="Action can be directly used."
-                              value="active"
-                            >
-                              Active
-                            </CustomRadio>
-                            <CustomRadio
-                              color="danger"
-                              description="Action can not be used and has no effect."
-                              value="disabled"
-                            >
-                              Disabled
-                            </CustomRadio>
-                          </div>
-                        </RadioGroup>
-                        <div className="flex flex-cols gap-4 justify-between items-center">
+                        <div className="flex flex-cols items-center justify-between gap-4">
                           <div className="flex flex-col gap-2">
                             <div className="flex flex-cols items-center gap-2">
-                              <p className="text-sm">Match Patterns</p>
-                              <Tooltip content="With Match Patterns you can controll which key-value pair has to be pressent in the incoming payload in order to execute your flow.">
+                              <p className="text-sm">Execution Order</p>
+                              <Tooltip content="Defined Actions will either be executed one after the other or all in parallel. If in Sequential order one action fails, the others won't be processed anymore.">
                                 <Icon
                                   className="text-default-500"
                                   icon="solar:info-circle-linear"
@@ -307,40 +259,37 @@ export default function AddFlowActionModal({
                             <div>
                               <ButtonGroup radius="sm" variant="flat">
                                 <Button
-                                  className={`${enableMatchPatterns ? "bg-primary" : ""}`}
+                                  className={`${execParallel ? "bg-primary" : ""}`}
                                   onPress={() => {
-                                    setEnableMatchPatterns(true);
-                                    enablePatterns();
+                                    setExecParallel(true);
                                   }}
                                 >
                                   <Icon
-                                    className="text-success"
-                                    icon="solar:check-circle-linear"
-                                    width={18}
+                                    icon="solar:align-horizontal-center-outline"
+                                    width={22}
                                   />
-                                  Enabled
+                                  Parallel
                                 </Button>
                                 <Button
-                                  className={`${!enableMatchPatterns ? "bg-primary" : ""}`}
+                                  className={`${!execParallel ? "bg-primary" : ""}`}
                                   onPress={() => {
-                                    setEnableMatchPatterns(false);
-                                    enablePatterns();
+                                    setExecParallel(false);
                                   }}
                                 >
                                   <Icon
-                                    className="text-danger"
-                                    icon="solar:close-circle-linear"
-                                    width={18}
+                                    icon="solar:align-vertical-center-linear"
+                                    width={22}
                                   />
-                                  Disabled
+                                  Sequential
                                 </Button>
                               </ButtonGroup>
                             </div>
                           </div>
+
                           <div className="flex flex-col gap-2">
                             <div className="flex flex-cols items-center gap-2">
-                              <p className="text-sm">Exclude Patterns</p>
-                              <Tooltip content="With Exclude Patterns you can controll which key-value pair has to be pressent in the incoming payload in order to NOT execute your flow.">
+                              <p className="text-sm">Status</p>
+                              <Tooltip content="Defined Actions will either be executed one after the other or all in parallel. If in Sequential type one action fails, the others won't be processed anymore.">
                                 <Icon
                                   className="text-default-500"
                                   icon="solar:info-circle-linear"
@@ -351,34 +300,125 @@ export default function AddFlowActionModal({
                             <div>
                               <ButtonGroup radius="sm" variant="flat">
                                 <Button
-                                  className={`${enableExcludePatterns ? "bg-primary" : ""}`}
+                                  className={`${status ? "bg-success" : ""}`}
                                   onPress={() => {
-                                    setEnableExcludePatterns(true);
-                                    disablePatterns();
+                                    setStatus(true);
                                   }}
                                 >
                                   <Icon
-                                    className="text-success"
+                                    className={`${status ? "" : "text-success"}`}
                                     icon="solar:check-circle-linear"
                                     width={18}
                                   />
                                   Enabled
                                 </Button>
                                 <Button
-                                  className={`${!enableExcludePatterns ? "bg-primary" : ""}`}
+                                  className={`${!status ? "bg-danger" : ""}`}
                                   onPress={() => {
-                                    setEnableExcludePatterns(false);
-                                    disablePatterns();
+                                    setStatus(false);
                                   }}
                                 >
                                   <Icon
-                                    className="text-danger"
+                                    className={`${!status ? "" : "text-danger"}`}
                                     icon="solar:close-circle-linear"
                                     width={18}
                                   />
                                   Disabled
                                 </Button>
                               </ButtonGroup>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Patterns */}
+                        <div className="flex flex-col gap-2">
+                          <p className="text-lg font-bold text-default-500">
+                            Patterns
+                          </p>
+                          <div className="flex flex-cols gap-4 justify-between items-center">
+                            <div className="flex flex-col gap-2">
+                              <div className="flex flex-cols items-center gap-2">
+                                <p className="text-sm">Match</p>
+                                <Tooltip content="With Match Patterns you can controll which key-value pair has to be pressent in the incoming payload in order to execute your flow.">
+                                  <Icon
+                                    className="text-default-500"
+                                    icon="solar:info-circle-linear"
+                                    width={18}
+                                  />
+                                </Tooltip>
+                              </div>
+                              <div>
+                                <ButtonGroup radius="sm" variant="flat">
+                                  <Button
+                                    className={`${enableMatchPatterns ? "bg-primary" : ""}`}
+                                    onPress={() => {
+                                      setEnableMatchPatterns(true);
+                                    }}
+                                  >
+                                    <Icon
+                                      className="text-success"
+                                      icon="solar:check-circle-linear"
+                                      width={18}
+                                    />
+                                    Enabled
+                                  </Button>
+                                  <Button
+                                    className={`${!enableMatchPatterns ? "bg-primary" : ""}`}
+                                    onPress={() => {
+                                      setEnableMatchPatterns(false);
+                                    }}
+                                  >
+                                    <Icon
+                                      className="text-danger"
+                                      icon="solar:close-circle-linear"
+                                      width={18}
+                                    />
+                                    Disabled
+                                  </Button>
+                                </ButtonGroup>
+                              </div>
+                            </div>
+                            <div className="flex flex-col gap-2">
+                              <div className="flex flex-cols items-center gap-2">
+                                <p className="text-sm">Exclude</p>
+                                <Tooltip content="With Exclude Patterns you can controll which key-value pair has to be pressent in the incoming payload in order to NOT execute your flow.">
+                                  <Icon
+                                    className="text-default-500"
+                                    icon="solar:info-circle-linear"
+                                    width={18}
+                                  />
+                                </Tooltip>
+                              </div>
+                              <div>
+                                <ButtonGroup radius="sm" variant="flat">
+                                  <Button
+                                    className={`${enableExcludePatterns ? "bg-primary" : ""}`}
+                                    onPress={() => {
+                                      setEnableExcludePatterns(true);
+                                    }}
+                                  >
+                                    <Icon
+                                      className="text-success"
+                                      icon="solar:check-circle-linear"
+                                      width={18}
+                                    />
+                                    Enabled
+                                  </Button>
+                                  <Button
+                                    className={`${!enableExcludePatterns ? "bg-primary" : ""}`}
+                                    onPress={() => {
+                                      setEnableExcludePatterns(false);
+                                    }}
+                                  >
+                                    <Icon
+                                      className="text-danger"
+                                      icon="solar:close-circle-linear"
+                                      width={18}
+                                    />
+                                    Disabled
+                                  </Button>
+                                </ButtonGroup>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -405,293 +445,228 @@ export default function AddFlowActionModal({
                           </div>
                         ) : (
                           <>
-                            <p className="mb-2">Available Action</p>
-                            <RadioGroup
-                              description="Select any of the available actions."
-                              value={action}
-                              onValueChange={setAction}
+                            <p className="text-lg text-default-500 font-bold">
+                              Available Actions
+                            </p>
+                            <Spacer y={2} />
+                            <CheckboxGroup
+                              classNames={{
+                                base: "w-full",
+                              }}
+                              value={actions}
+                              onChange={setActions}
                             >
                               {getUniqueActions().map((action: any) => (
-                                <CustomRadio
-                                  key={action.name}
-                                  description={action.description}
-                                  value={action.name}
-                                >
+                                <Checkbox key={action.name} value={action.name}>
                                   {action.name}
-                                </CustomRadio>
+                                </Checkbox>
                               ))}
-                            </RadioGroup>
+                            </CheckboxGroup>
                           </>
                         )}
                       </div>
                     )}
                     {currentStep === 2 && (
                       <div>
-                        <p>Number of Required Parameters:</p>
+                        <p className="text-lg text-default-500 font-bold">
+                          Required Parameters
+                        </p>
                       </div>
                     )}
-                    {currentStep === 3 && enableMatchPatterns && (
+                    {currentStep === 3 && (
                       <div>
-                        <div className="flex flex-col gap-4">
-                          {matchPatterns.map((pattern: any, index: number) => (
-                            <Card key={index}>
-                              <CardHeader className="flex justify-between">
-                                <p>Pattern {index + 1}</p>
-                                <Button
-                                  isIconOnly
-                                  color="danger"
-                                  variant="light"
-                                  onPress={() => {
-                                    setMatchPatterns([
-                                      ...matchPatterns.slice(0, index),
-                                      ...matchPatterns.slice(index + 1),
-                                    ]);
-                                  }}
-                                >
-                                  <Icon
-                                    icon="solar:trash-bin-trash-broken"
-                                    width={20}
-                                  />
-                                </Button>
-                              </CardHeader>
-                              <CardBody>
-                                <div className="grid grid-cols-2 gap-4">
-                                  <Input
-                                    label="Key"
-                                    radius="sm"
-                                    size="sm"
-                                    value={pattern.key}
-                                    onValueChange={(value) => {
-                                      setMatchPatterns([
-                                        ...matchPatterns.slice(0, index),
-                                        {
-                                          ...pattern,
-                                          key: value,
-                                        },
-                                        ...matchPatterns.slice(index + 1),
-                                      ]);
-                                    }}
-                                  />
-                                  <Input
-                                    label="Group"
-                                    radius="sm"
-                                    size="sm"
-                                    value={pattern.group}
-                                    onValueChange={(value) => {
-                                      setMatchPatterns([
-                                        ...matchPatterns.slice(0, index),
-                                        {
-                                          ...pattern,
-                                          group: value,
-                                        },
-                                        ...matchPatterns.slice(index + 1),
-                                      ]);
-                                    }}
-                                  />
-                                  <Input
-                                    label="Value"
-                                    radius="sm"
-                                    size="sm"
-                                    value={pattern.value}
-                                    onValueChange={(value) => {
-                                      setMatchPatterns([
-                                        ...matchPatterns.slice(0, index),
-                                        {
-                                          ...pattern,
-                                          value: value,
-                                        },
-                                        ...matchPatterns.slice(index + 1),
-                                      ]);
-                                    }}
-                                  />
-                                  <Select
-                                    label="React On"
-                                    radius="sm"
-                                    selectedKeys={[pattern.react_on]}
-                                    size="sm"
-                                    onSelectionChange={(value) => {
-                                      setMatchPatterns([
-                                        ...matchPatterns.slice(0, index),
-                                        {
-                                          ...pattern,
-                                          react_on: value.currentKey,
-                                        },
-                                        ...matchPatterns.slice(index + 1),
-                                      ]);
-                                    }}
-                                  >
-                                    <SelectItem
-                                      key="firing"
-                                      value={pattern.react_on}
-                                    >
-                                      Firing
-                                    </SelectItem>
-                                    <SelectItem
-                                      key="resolved"
-                                      value={pattern.react_on}
-                                    >
-                                      Resolved
-                                    </SelectItem>
-                                  </Select>
-                                </div>
-                              </CardBody>
-                            </Card>
-                          ))}
-                        </div>
-                        <div className="mt-4">
-                          <Button
-                            fullWidth
-                            color="primary"
-                            startContent={<PlusIcon />}
-                            variant="flat"
-                            onPress={() => {
-                              setMatchPatterns([
-                                ...matchPatterns,
-                                {
-                                  key: "",
-                                  group: "",
-                                  value: "",
-                                  react_on: "",
-                                },
-                              ]);
-                            }}
-                          >
-                            Add Pattern
-                          </Button>
-                        </div>
-                      </div>
-                    )}
-                    {currentStep === 4 && enableExcludePatterns && (
-                      <div>
-                        <div className="flex flex-col gap-4">
-                          {excludePatterns.map(
-                            (pattern: any, index: number) => (
-                              <Card key={index}>
-                                <CardHeader className="flex justify-between">
-                                  <p>Pattern {index + 1}</p>
-                                  <Button
-                                    isIconOnly
-                                    color="danger"
-                                    variant="light"
-                                    onPress={() => {
-                                      setExcludePatterns([
-                                        ...excludePatterns.slice(0, index),
-                                        ...excludePatterns.slice(index + 1),
-                                      ]);
-                                    }}
-                                  >
-                                    <Icon
-                                      icon="solar:trash-bin-trash-broken"
-                                      width={20}
-                                    />
-                                  </Button>
-                                </CardHeader>
-                                <CardBody>
-                                  <div className="grid grid-cols-2 gap-4">
-                                    <Input
-                                      label="Key"
-                                      radius="sm"
-                                      size="sm"
-                                      value={pattern.key}
-                                      onValueChange={(value) => {
-                                        setExcludePatterns([
-                                          ...excludePatterns.slice(0, index),
-                                          {
-                                            ...pattern,
-                                            key: value,
-                                          },
-                                          ...excludePatterns.slice(index + 1),
-                                        ]);
-                                      }}
-                                    />
-                                    <Input
-                                      label="Group"
-                                      radius="sm"
-                                      size="sm"
-                                      value={pattern.group}
-                                      onValueChange={(value) => {
-                                        setExcludePatterns([
-                                          ...excludePatterns.slice(0, index),
-                                          {
-                                            ...pattern,
-                                            group: value,
-                                          },
-                                          ...excludePatterns.slice(index + 1),
-                                        ]);
-                                      }}
-                                    />
-                                    <Input
-                                      label="Value"
-                                      radius="sm"
-                                      size="sm"
-                                      value={pattern.value}
-                                      onValueChange={(value) => {
-                                        setExcludePatterns([
-                                          ...excludePatterns.slice(0, index),
-                                          {
-                                            ...pattern,
-                                            value: value,
-                                          },
-                                          ...excludePatterns.slice(index + 1),
-                                        ]);
-                                      }}
-                                    />
-                                    <Select
-                                      label="React On"
-                                      radius="sm"
-                                      selectedKeys={[pattern.react_on]}
-                                      size="sm"
-                                      onSelectionChange={(value) => {
-                                        setExcludePatterns([
-                                          ...excludePatterns.slice(0, index),
-                                          {
-                                            ...pattern,
-                                            react_on: value.currentKey,
-                                          },
-                                          ...excludePatterns.slice(index + 1),
-                                        ]);
-                                      }}
-                                    >
-                                      <SelectItem
-                                        key="firing"
-                                        value={pattern.react_on}
+                        <p className="text-lg text-default-500 font-bold">
+                          Match Patterns
+                        </p>
+                        <Spacer y={2} />
+                        {enableMatchPatterns ? (
+                          <div>
+                            <div className="flex flex-col gap-4">
+                              {matchPatterns.map(
+                                (pattern: any, index: number) => (
+                                  <div key={index}>
+                                    <div className="flex flex-cols items-center justify-between">
+                                      <p>Pattern {index + 1}</p>
+                                      <Button
+                                        isIconOnly
+                                        color="danger"
+                                        variant="light"
+                                        onPress={() => {
+                                          setMatchPatterns([
+                                            ...matchPatterns.slice(0, index),
+                                            ...matchPatterns.slice(index + 1),
+                                          ]);
+                                        }}
                                       >
-                                        Firing
-                                      </SelectItem>
-                                      <SelectItem
-                                        key="resolved"
-                                        value={pattern.react_on}
-                                      >
-                                        Resolved
-                                      </SelectItem>
-                                    </Select>
+                                        <Icon
+                                          icon="solar:trash-bin-trash-broken"
+                                          width={20}
+                                        />
+                                      </Button>
+                                    </div>
+                                    <Divider />
+                                    <Spacer y={2} />
+                                    <div className="grid grid-cols-2 gap-4">
+                                      <Input
+                                        label="Key"
+                                        radius="sm"
+                                        size="sm"
+                                        value={pattern.key}
+                                        onValueChange={(value) => {
+                                          setMatchPatterns([
+                                            ...matchPatterns.slice(0, index),
+                                            {
+                                              ...pattern,
+                                              key: value,
+                                            },
+                                            ...matchPatterns.slice(index + 1),
+                                          ]);
+                                        }}
+                                      />
+                                      <Input
+                                        label="Value"
+                                        radius="sm"
+                                        size="sm"
+                                        value={pattern.value}
+                                        onValueChange={(value) => {
+                                          setMatchPatterns([
+                                            ...matchPatterns.slice(0, index),
+                                            {
+                                              ...pattern,
+                                              value: value,
+                                            },
+                                            ...matchPatterns.slice(index + 1),
+                                          ]);
+                                        }}
+                                      />
+                                    </div>
                                   </div>
-                                </CardBody>
-                              </Card>
-                            ),
-                          )}
-                        </div>
-                        <div className="mt-4">
-                          <Button
-                            fullWidth
-                            color="primary"
-                            startContent={<PlusIcon />}
-                            variant="flat"
-                            onPress={() => {
-                              setExcludePatterns([
-                                ...excludePatterns,
-                                {
-                                  key: "",
-                                  group: "",
-                                  value: "",
-                                  react_on: "",
-                                },
-                              ]);
-                            }}
-                          >
-                            Add Pattern
-                          </Button>
-                        </div>
+                                ),
+                              )}
+                            </div>
+                            <div className="mt-4">
+                              <Button
+                                fullWidth
+                                color="primary"
+                                startContent={<PlusIcon />}
+                                variant="flat"
+                                onPress={() => {
+                                  setMatchPatterns([
+                                    ...matchPatterns,
+                                    {
+                                      key: "",
+                                      value: "",
+                                    },
+                                  ]);
+                                }}
+                              >
+                                Add Pattern
+                              </Button>
+                            </div>
+                          </div>
+                        ) : (
+                          <p className="text-danger">
+                            Match Patterns are disabled
+                          </p>
+                        )}
+                      </div>
+                    )}
+                    {currentStep === 4 && (
+                      <div>
+                        <p className="text-lg text-default-500 font-bold">
+                          Exclude Patterns
+                        </p>
+                        <Spacer y={2} />
+                        {enableExcludePatterns ? (
+                          <div>
+                            <div className="flex flex-col gap-4">
+                              {excludePatterns.map(
+                                (pattern: any, index: number) => (
+                                  <div key={index}>
+                                    <div className="flex flex-cols items-center justify-between">
+                                      <p>Pattern {index + 1}</p>
+                                      <Button
+                                        isIconOnly
+                                        color="danger"
+                                        variant="light"
+                                        onPress={() => {
+                                          setExcludePatterns([
+                                            ...excludePatterns.slice(0, index),
+                                            ...excludePatterns.slice(index + 1),
+                                          ]);
+                                        }}
+                                      >
+                                        <Icon
+                                          icon="solar:trash-bin-trash-broken"
+                                          width={20}
+                                        />
+                                      </Button>
+                                    </div>
+                                    <Divider />
+                                    <Spacer y={2} />
+                                    <div className="grid grid-cols-2 gap-4">
+                                      <Input
+                                        label="Key"
+                                        radius="sm"
+                                        size="sm"
+                                        value={pattern.key}
+                                        onValueChange={(value) => {
+                                          setExcludePatterns([
+                                            ...excludePatterns.slice(0, index),
+                                            {
+                                              ...pattern,
+                                              key: value,
+                                            },
+                                            ...excludePatterns.slice(index + 1),
+                                          ]);
+                                        }}
+                                      />
+                                      <Input
+                                        label="Value"
+                                        radius="sm"
+                                        size="sm"
+                                        value={pattern.value}
+                                        onValueChange={(value) => {
+                                          setExcludePatterns([
+                                            ...excludePatterns.slice(0, index),
+                                            {
+                                              ...pattern,
+                                              value: value,
+                                            },
+                                            ...excludePatterns.slice(index + 1),
+                                          ]);
+                                        }}
+                                      />
+                                    </div>
+                                  </div>
+                                ),
+                              )}
+                            </div>
+                            <div className="mt-4">
+                              <Button
+                                fullWidth
+                                color="primary"
+                                startContent={<PlusIcon />}
+                                variant="flat"
+                                onPress={() => {
+                                  setExcludePatterns([
+                                    ...excludePatterns,
+                                    {
+                                      key: "",
+                                      value: "",
+                                    },
+                                  ]);
+                                }}
+                              >
+                                Add Pattern
+                              </Button>
+                            </div>
+                          </div>
+                        ) : (
+                          <p className="text-danger">
+                            Exclude Patterns are disabled
+                          </p>
+                        )}
                       </div>
                     )}
                     {currentStep + 1 === steps && (
@@ -715,13 +690,13 @@ export default function AddFlowActionModal({
                               isReadOnly
                               label="Status"
                               size="sm"
-                              value={status}
+                              value={status ? "Enabled" : "Disabled"}
                             />
                             <Input
                               isReadOnly
                               label="Action"
                               size="sm"
-                              value={action}
+                              value={actions}
                             />
                           </div>
                           {enableMatchPatterns && (
@@ -733,28 +708,23 @@ export default function AddFlowActionModal({
                               {matchPatterns.filter(
                                 (pattern: any) => pattern.key,
                               ).length === 0 ? (
-                                <p>Action will be triggered for all events.</p>
+                                <p>Actions will be triggered for all events.</p>
                               ) : (
                                 <Table
+                                  removeWrapper
                                   aria-label="Match Action Patterns"
                                   className="w-full"
                                 >
                                   <TableHeader>
-                                    <TableColumn>GROUP</TableColumn>
-                                    <TableColumn>KEY</TableColumn>
-                                    <TableColumn>VALUE</TableColumn>
-                                    <TableColumn>REACT ON</TableColumn>
+                                    <TableColumn>Key</TableColumn>
+                                    <TableColumn>Value</TableColumn>
                                   </TableHeader>
                                   <TableBody>
                                     {matchPatterns.map(
                                       (pattern: any, index: number) => (
                                         <TableRow key={index}>
-                                          <TableCell>{pattern.group}</TableCell>
                                           <TableCell>{pattern.key}</TableCell>
                                           <TableCell>{pattern.value}</TableCell>
-                                          <TableCell>
-                                            {pattern.react_on}
-                                          </TableCell>
                                         </TableRow>
                                       ),
                                     )}
@@ -775,25 +745,20 @@ export default function AddFlowActionModal({
                                 <p>Action will be triggered for all events.</p>
                               ) : (
                                 <Table
+                                  removeWrapper
                                   aria-label="Exclude Action Patterns"
                                   className="w-full"
                                 >
                                   <TableHeader>
-                                    <TableColumn>GROUP</TableColumn>
-                                    <TableColumn>KEY</TableColumn>
-                                    <TableColumn>VALUE</TableColumn>
-                                    <TableColumn>REACT ON</TableColumn>
+                                    <TableColumn>Key</TableColumn>
+                                    <TableColumn>Value</TableColumn>
                                   </TableHeader>
                                   <TableBody>
                                     {excludePatterns.map(
                                       (pattern: any, index: number) => (
                                         <TableRow key={index}>
-                                          <TableCell>{pattern.group}</TableCell>
                                           <TableCell>{pattern.key}</TableCell>
                                           <TableCell>{pattern.value}</TableCell>
-                                          <TableCell>
-                                            {pattern.react_on}
-                                          </TableCell>
                                         </TableRow>
                                       ),
                                     )}
