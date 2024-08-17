@@ -9,8 +9,6 @@ import {
   TableCell,
   Divider,
   Pagination,
-  Chip,
-  Spinner,
   CircularProgress,
   Button,
   useDisclosure,
@@ -18,7 +16,6 @@ import {
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 
-import { IconWrapper } from "@/lib/IconWrapper";
 import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
 
 export function ExecutionsList({ flows, payloads, executions, runners }: any) {
@@ -45,22 +42,6 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
       return "No Flow Actions found";
     } else {
       return "Finished";
-    }
-  }
-
-  function statusColor(execution: any) {
-    if (execution.running) {
-      return "primary";
-    } else if (execution.waiting) {
-      return "warning";
-    } else if (execution.paused) {
-      return "warning";
-    } else if (execution.error) {
-      return "danger";
-    } else if (execution.no_match) {
-      return "secondary";
-    } else {
-      return "success";
     }
   }
 

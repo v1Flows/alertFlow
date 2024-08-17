@@ -68,7 +68,7 @@ export default function AddFlowActionModal({
 
   const { isOpen, onOpenChange } = disclosure;
 
-  const [steps, setSteps] = React.useState(6);
+  const [steps] = React.useState(6);
   const [currentStep, setCurrentStep] = React.useState(0);
   const [isLoading, setLoading] = React.useState(false);
 
