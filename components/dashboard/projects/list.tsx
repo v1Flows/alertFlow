@@ -73,7 +73,7 @@ export function ProjectsList({
       )}
       {!projects.error && (
         <>
-          <div className="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-1 gap-4">
+          <div className="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-4">
             {projects.map((project: any) => (
               <div key={project.id} className="col-span-1">
                 <Card
