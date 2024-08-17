@@ -6,6 +6,10 @@ import {
   CardHeader,
   Chip,
   Divider,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
   Spacer,
   Table,
   TableBody,
@@ -38,12 +42,35 @@ export default function Actions({ actions }: { actions: any }) {
               </Chip>
             </div>
             <div>
-              <Button isIconOnly color="warning" variant="light">
-                <Icon icon="solar:pen-new-square-broken" width={22} />
-              </Button>
-              <Button isIconOnly color="danger" variant="light">
-                <Icon icon="solar:trash-bin-trash-broken" width={22} />
-              </Button>
+              <Dropdown>
+                <DropdownTrigger>
+                  <Button isIconOnly variant="light">
+                    <Icon icon="solar:menu-dots-broken" width={24} />
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu aria-label="Static Actions" variant="flat">
+                  <DropdownItem
+                    key="edit"
+                    showDivider
+                    color="warning"
+                    startContent={
+                      <Icon icon="solar:pen-new-square-broken" width={18} />
+                    }
+                  >
+                    Edit
+                  </DropdownItem>
+                  <DropdownItem
+                    key="delete"
+                    color="danger"
+                    className="text-danger"
+                    startContent={
+                      <Icon icon="solar:trash-bin-2-broken" width={18} />
+                    }
+                  >
+                    Delete
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
             </div>
           </CardHeader>
           <CardBody>
@@ -61,7 +88,9 @@ export default function Actions({ actions }: { actions: any }) {
                   />
                 </div>
                 <div>
-                  <p className="text-md font-bold">{action.exec_parallel ? "Parallel" : "Sequential"}</p>
+                  <p className="text-md font-bold">
+                    {action.exec_parallel ? "Parallel" : "Sequential"}
+                  </p>
                   <p className="text-sm text-default-500">Execution Order</p>
                 </div>
               </div>
@@ -83,7 +112,9 @@ export default function Actions({ actions }: { actions: any }) {
                   <Icon icon="solar:clipboard-check-broken" width={26} />
                 </div>
                 <div>
-                  <p className="text-md font-bold">{action.match_patterns.length}</p>
+                  <p className="text-md font-bold">
+                    {action.match_patterns.length}
+                  </p>
                   <p className="text-sm text-default-500">Match Patterns</p>
                 </div>
               </div>
@@ -94,7 +125,9 @@ export default function Actions({ actions }: { actions: any }) {
                   <Icon icon="solar:clipboard-remove-broken" width={26} />
                 </div>
                 <div>
-                  <p className="text-md font-bold">{action.exclude_patterns.length}</p>
+                  <p className="text-md font-bold">
+                    {action.exclude_patterns.length}
+                  </p>
                   <p className="text-sm text-default-500">Exclude Patterns</p>
                 </div>
               </div>
