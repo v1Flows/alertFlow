@@ -130,7 +130,7 @@ export function DashboardHome({
               )}
               {/* Runners */}
               {runners.filter((r: any) => !runnerHeartbeatStatus(r)).length >
-                0 ? (
+              0 ? (
                 <li className="flex items-center gap-2">
                   <IconWrapper className="bg-danger/10 text-danger">
                     <Icon icon="solar:heart-pulse-broken" width={24} />

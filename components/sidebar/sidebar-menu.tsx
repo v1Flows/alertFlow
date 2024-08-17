@@ -178,7 +178,9 @@ export default function SidebarMenu({
           <DropdownSection title="Copy">
             <DropdownItem
               key="userid"
-              startContent={<Icon icon="solar:user-id-line-duotone" width={18} />}
+              startContent={
+                <Icon icon="solar:user-id-line-duotone" width={18} />
+              }
               onPress={() => {
                 // eslint-disable-next-line no-undef
                 navigator.clipboard.writeText(user.id);
@@ -189,7 +191,9 @@ export default function SidebarMenu({
             </DropdownItem>
             <DropdownItem
               key="api_key"
-              startContent={<Icon icon="solar:key-square-2-broken" width={18} />}
+              startContent={
+                <Icon icon="solar:key-square-2-broken" width={18} />
+              }
               onPress={() => {
                 // eslint-disable-next-line no-undef
                 navigator.clipboard.writeText(session);

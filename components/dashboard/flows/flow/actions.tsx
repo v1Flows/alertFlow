@@ -61,8 +61,8 @@ export default function Actions({ actions }: { actions: any }) {
                   </DropdownItem>
                   <DropdownItem
                     key="delete"
-                    color="danger"
                     className="text-danger"
+                    color="danger"
                     startContent={
                       <Icon icon="solar:trash-bin-2-broken" width={18} />
                     }
