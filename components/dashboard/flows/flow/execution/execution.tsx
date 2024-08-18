@@ -190,14 +190,14 @@ export function Execution({ flow, execution, runners }: any) {
     },
     execution.runner_id === ""
       ? {
-        id: 3,
-        name: "Runner Pick Up",
-        icon: <Icon icon="solar:rocket-2-broken" width={24} />,
-        data: ["Waiting for Runner to pick up Execution"],
-        finished: false,
-        started_at: execution.created_at,
-        finished_at: "0001-01-01T00:00:00Z",
-      }
+          id: 3,
+          name: "Runner Pick Up",
+          icon: <Icon icon="solar:rocket-2-broken" width={24} />,
+          data: ["Waiting for Runner to pick up Execution"],
+          finished: false,
+          started_at: execution.created_at,
+          finished_at: "0001-01-01T00:00:00Z",
+        }
       : null,
     ...steps.map((step: any) => {
       return {
@@ -283,7 +283,10 @@ export function Execution({ flow, execution, runners }: any) {
   return (
     <>
       <div className="grid lg:grid-cols-2 items-center justify-between">
-        <ExecutionBreadcrumbs executionID={execution.id} flowID={flow.flow.id} />
+        <ExecutionBreadcrumbs
+          executionID={execution.id}
+          flowID={flow.flow.id}
+        />
         <div className="lg:justify-self-end lg:mt-0 mt-2">
           <Reloader />
         </div>

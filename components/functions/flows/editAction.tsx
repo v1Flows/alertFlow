@@ -32,10 +32,9 @@ import { Icon } from "@iconify/react";
 
 import { cn } from "@/components/functions/cn/cn";
 import { PlusIcon } from "@/components/icons";
-import CreateFlowAction from "@/lib/fetch/flow/POST/CreateFlowAction";
+import UpdateFlowAction from "@/lib/fetch/flow/PUT/UpdateAction";
 
 import MinimalRowSteps from "../steps/minimal-row-steps";
-import UpdateFlowAction from "@/lib/fetch/flow/PUT/UpdateAction";
 
 export const CustomRadio = (props: any) => {
   const { children, ...otherProps } = props;
