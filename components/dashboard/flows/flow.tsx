@@ -7,7 +7,6 @@ import {
   CardBody,
   Button,
   useDisclosure,
-  Spinner,
 } from "@nextui-org/react";
 import React from "react";
 import { Icon } from "@iconify/react";
@@ -15,7 +14,7 @@ import { Icon } from "@iconify/react";
 import Reloader from "@/components/reloader/Reloader";
 import FlowBreadcrumbs from "@/components/dashboard/flows/flow/breadcrumbs";
 import { IconWrapper } from "@/lib/IconWrapper";
-import { InfoIcon, CheckIcon } from "@/components/icons";
+import { InfoIcon } from "@/components/icons";
 import EditFlowModal from "@/components/functions/flows/edit";
 
 import FlowTabs from "./flow/tabs";
@@ -121,102 +120,89 @@ export function Flow({
             <div className="grid lg:grid-cols-4 grid-cols-2 gap-4">
               <div className="col-span-1">
                 <Card fullWidth>
-                  <CardHeader className="justify-start gap-2 items-center">
-                    <IconWrapper
-                      className={`bg-${flow.disabled ? "danger" : "success"}/10 text-${flow.disabled ? "danger" : "success"}`}
-                    >
-                      {flow.disabled ? (
-                        <InfoIcon className="text-lg" />
-                      ) : (
-                        <CheckIcon className="text-lg" />
-                      )}
-                    </IconWrapper>
-                    <p className="text-md font-bold">Status</p>
-                  </CardHeader>
                   <CardBody>
-                    <p className="text-default-500 font-bold">
-                      {flow.disabled ? "Disabled" : "Active"}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <div
+                        className={`flex bg-${flow.disabled ? "danger" : "success"}/10 text-${flow.disabled ? "danger" : "success"} items-center rounded-small justify-center w-10 h-10`}
+                      >
+                        <Icon
+                          icon={
+                            flow.disabled
+                              ? "solar:danger-triangle-broken"
+                              : "solar:check-read-broken"
+                          }
+                          width={26}
+                        />
+                      </div>
+                      <div>
+                        <p className="text-md font-bold">
+                          {flow.disabled ? "Disabled" : "Active"}
+                        </p>
+                        <p className="text-sm text-default-500">Status</p>
+                      </div>
+                    </div>
                   </CardBody>
                 </Card>
               </div>
               <div className="col-span-1">
                 <Card fullWidth>
-                  <CardHeader className="justify-start gap-2 items-center">
-                    <IconWrapper className="bg-primary/10 text-primary">
-                      <Icon icon="solar:box-broken" width={20} />
-                    </IconWrapper>
-                    <p className="text-md font-bold">Project</p>
-                  </CardHeader>
                   <CardBody>
-                    <p className="text-default-500 font-bold">
-                      {
-                        projects.find(
-                          (project: any) => project.id === flow.project_id,
-                        )?.name
-                      }
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                        <Icon icon="solar:box-broken" width={20} />
+                      </div>
+                      <div>
+                        <p className="text-md font-bold">
+                          {
+                            projects.find(
+                              (project: any) => project.id === flow.project_id,
+                            )?.name
+                          }
+                        </p>
+                        <p className="text-sm text-default-500">Project</p>
+                      </div>
+                    </div>
                   </CardBody>
                 </Card>
               </div>
               <div className="col-span-1">
                 <Card fullWidth>
-                  <CardHeader className="justify-start gap-2 items-center">
-                    <IconWrapper className="bg-primary/10 text-primary">
-                      <Icon icon="solar:rocket-2-broken" width={20} />
-                    </IconWrapper>
-                    <p className="text-md font-bold">Runner</p>
-                  </CardHeader>
                   <CardBody>
-                    <p className="text-default-500 font-bold">
-                      {flow.runner_id === "any"
-                        ? "Any"
-                        : runners.find(
-                            (runner: any) => runner.id === flow.runner_id,
-                          )?.name}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                        <Icon icon="solar:rocket-2-broken" width={20} />
+                      </div>
+                      <div>
+                        <p className="text-md font-bold">
+                          {flow.runner_id === "any"
+                            ? "Any"
+                            : runners.find(
+                              (runner: any) => runner.id === flow.runner_id,
+                            )?.name}
+                        </p>
+                        <p className="text-sm text-default-500">Runner</p>
+                      </div>
+                    </div>
                   </CardBody>
                 </Card>
               </div>
               <div className="col-span-1">
                 <Card fullWidth>
-                  <CardHeader className="justify-start gap-2 items-center">
-                    <IconWrapper className="bg-primary/10 text-primary">
-                      <Icon icon="solar:reorder-line-duotone" width={20} />
-                    </IconWrapper>
-                    <p className="text-md font-bold">Executions</p>
-                  </CardHeader>
                   <CardBody>
-                    <div className="flex flex-wrap items-center justify-start gap-4">
-                      <p className="flex items-center gap-2 text-default-500 font-bold">
-                        {executions.length} Total
-                      </p>
-                      {executions.filter((e: any) => e.running).length > 0 && (
-                        <>
-                          <Divider className="h-6" orientation="vertical" />
-                          <p className="flex items-center gap-2 text-default-500 font-bold">
-                            <Spinner color="primary" size="sm" />
-                            {
-                              executions.filter((e: any) => e.running).length
-                            }{" "}
-                            Running
-                          </p>
-                        </>
-                      )}
-                      {executions.filter((e: any) => e.waiting).length > 0 && (
-                        <>
-                          <Divider className="h-6" orientation="vertical" />
-                          <p className="flex items-center gap-2 text-default-500 font-bold">
-                            <Icon
-                              className="text-warning"
-                              icon="solar:pause-broken"
-                              width={20}
-                            />
-                            {executions.filter((e: any) => e.waiting).length}{" "}
-                            Waiting
-                          </p>
-                        </>
-                      )}
+                    <div className="flex items-center gap-2">
+                      <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                        <Icon icon="solar:reorder-line-duotone" width={20} />
+                      </div>
+                      <div>
+                        <p className="text-md font-bold">
+                          {
+                            executions.filter(
+                              (execution: any) => execution.flow_id === flow.id,
+                            ).length
+                          }
+                        </p>
+                        <p className="text-sm text-default-500">Executions</p>
+                      </div>
                     </div>
                   </CardBody>
                 </Card>
