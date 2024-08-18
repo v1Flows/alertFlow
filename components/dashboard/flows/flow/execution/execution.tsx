@@ -283,7 +283,7 @@ export function Execution({ flow, execution, runners }: any) {
   return (
     <>
       <div className="grid lg:grid-cols-2 items-center justify-between">
-        <ExecutionBreadcrumbs executionID={execution.id} flowID={flow.id} />
+        <ExecutionBreadcrumbs executionID={execution.id} flowID={flow.flow.id} />
         <div className="lg:justify-self-end lg:mt-0 mt-2">
           <Reloader />
         </div>
