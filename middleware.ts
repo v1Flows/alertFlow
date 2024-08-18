@@ -12,7 +12,13 @@ export async function middleware(request: NextRequest) {
     !request.url.includes("_next") &&
     !request.url.includes("/favicon.ico") &&
     !request.url.includes("/admin") &&
-    !request.url.includes("/maintenance")
+    !request.url.includes("/maintenance") &&
+    !request.url.includes(".png") &&
+    !request.url.includes(".jpg") &&
+    !request.url.includes(".jpeg") &&
+    !request.url.includes(".svg") &&
+    !request.url.includes(".gif") &&
+    !request.url.includes(".json")
   ) {
     const settings = await PageGetSettings();
 

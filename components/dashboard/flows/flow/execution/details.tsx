@@ -69,7 +69,24 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
     } else if (execution.paused) {
       return <CircularProgress color="warning" size="sm" value={100} />;
     } else if (execution.error) {
-      return <CircularProgress color="danger" size="sm" value={100} />;
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress
+            aria-label="Step"
+            color="danger"
+            showValueLabel={true}
+            size="md"
+            value={100}
+            valueLabel={
+              <Icon
+                className="text-danger"
+                icon="solar:danger-triangle-broken"
+                width={20}
+              />
+            }
+          />
+        </Tooltip>
+      );
     } else if (execution.no_match) {
       return <CircularProgress color="secondary" size="sm" value={100} />;
     } else if (execution.ghost) {
@@ -140,15 +157,14 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
         <Card>
           <CardBody>
             <div className="flex gap-4 items-center justify-start">
-              <div className="flex items-center rounded-large justify-center bg-secondary bg-opacity-40 w-10 h-10">
-                <Icon icon="solar:rocket-2-broken" width={24} />
-              </div>
+              <div>{statusIcon(execution)}</div>
               <div>
-                <p className="text-default-600">Runner</p>
-                <p className="text-lg font-bold">
-                  {runners.find((r: any) => r.id === execution.runner_id)
-                    ?.name || "-"}
+                <p
+                  className={`text-md font-bold text-${statusColor(execution)}`}
+                >
+                  {status(execution)}
                 </p>
+                <p className="text-sm text-default-500">Status</p>
               </div>
             </div>
           </CardBody>
@@ -156,14 +172,15 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
         <Card>
           <CardBody>
             <div className="flex gap-4 items-center justify-start">
-              <div>{statusIcon(execution)}</div>
+              <div className="flex items-center rounded-large justify-center bg-secondary bg-opacity-40 w-10 h-10">
+                <Icon icon="solar:rocket-2-broken" width={24} />
+              </div>
               <div>
-                <p className="text-default-600">Status</p>
-                <p
-                  className={`text-lg font-bold text-${statusColor(execution)}`}
-                >
-                  {status(execution)}
+                <p className="text-md font-bold">
+                  {runners.find((r: any) => r.id === execution.runner_id)
+                    ?.name || "-"}
                 </p>
+                <p className="text-sm text-default-500">Runner</p>
               </div>
             </div>
           </CardBody>
@@ -175,8 +192,8 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
                 <Icon icon="solar:bill-list-broken" width={24} />
               </div>
               <div>
-                <p className="text-default-600">Total Steps</p>
-                <p className="text-lg font-bold">{steps.length + 2}</p>
+                <p className="text-md font-bold">{steps.length + 2}</p>
+                <p className="text-sm text-default-500">Total Steps</p>
               </div>
             </div>
           </CardBody>
@@ -188,10 +205,10 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
                 <Icon icon="solar:delivery-line-duotone" width={28} />
               </div>
               <div>
-                <p className="text-default-600">Executed At</p>
-                <p className="text-lg font-bold">
+                <p className="text-md font-bold">
                   <ReactTimeago date={execution.executed_at} />
                 </p>
+                <p className="text-sm text-default-500">Executed At</p>
               </div>
             </div>
           </CardBody>
@@ -203,14 +220,14 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
                 <Icon icon="solar:delivery-outline" width={28} />
               </div>
               <div>
-                <p className="text-default-600">Finished At</p>
-                <p className="text-lg font-bold">
+                <p className="text-md font-bold">
                   {execution.finished_at != "0001-01-01T00:00:00Z" ? (
                     <ReactTimeago date={execution.finished_at} />
                   ) : (
                     "N/A"
                   )}
                 </p>
+                <p className="text-sm text-default-500">Finished At</p>
               </div>
             </div>
           </CardBody>
@@ -222,8 +239,8 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
                 <Icon icon="solar:clock-circle-broken" width={28} />
               </div>
               <div>
-                <p className="text-default-600">Duration</p>
-                <p className="text-lg font-bold">{getDuration(execution)}</p>
+                <p className="text-md font-bold">{getDuration(execution)}</p>
+                <p className="text-sm text-default-500">Duration</p>
               </div>
             </div>
           </CardBody>

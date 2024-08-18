@@ -15,7 +15,7 @@ import {
   Tooltip,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
-import React from "react";
+import React, { useMemo } from "react";
 import TimeAgo from "react-timeago";
 
 import Reloader from "@/components/reloader/Reloader";
@@ -54,17 +54,33 @@ export function Execution({ flow, execution, runners }: any) {
 
   function statusIcon(step: any) {
     if (step.error) {
-      return <CircularProgress color="danger" size="sm" value={100} />;
+      return (
+        <Tooltip content={`${status(step)}`}>
+          <CircularProgress
+            aria-label="Step"
+            color="danger"
+            showValueLabel={true}
+            size="md"
+            value={100}
+            valueLabel={
+              <Icon
+                className="text-danger"
+                icon="solar:danger-triangle-broken"
+                width={20}
+              />
+            }
+          />
+        </Tooltip>
+      );
     } else if (step.paused) {
       return (
         <Tooltip content={`${status(step)}`}>
           <CircularProgress
             aria-label="Step"
             color="warning"
-            maxValue={5}
             showValueLabel={true}
             size="md"
-            value={5}
+            value={100}
             valueLabel={
               <Icon
                 className="text-warning"
@@ -81,10 +97,9 @@ export function Execution({ flow, execution, runners }: any) {
           <CircularProgress
             aria-label="Step"
             color="default"
-            maxValue={5}
             showValueLabel={true}
             size="md"
-            value={5}
+            value={100}
             valueLabel={
               <Icon
                 className="text-default-500"
@@ -97,14 +112,13 @@ export function Execution({ flow, execution, runners }: any) {
       );
     } else if (step.finished) {
       return (
-        <Tooltip content={`${status(step)}. Steps 5 / 5`}>
+        <Tooltip content={`${status(step)}`}>
           <CircularProgress
             aria-label="Step"
             color="success"
-            maxValue={5}
             showValueLabel={true}
             size="md"
-            value={5}
+            value={100}
             valueLabel={
               <Icon
                 className="text-success"
@@ -188,6 +202,7 @@ export function Execution({ flow, execution, runners }: any) {
     ...steps.map((step: any) => {
       return {
         ...step,
+        id: step.id,
         icon: stepIcon(step),
         name: step.action_name,
         data: step.action_messages,
@@ -210,15 +225,31 @@ export function Execution({ flow, execution, runners }: any) {
         );
       case "data":
         return (
-          <Snippet fullWidth hideCopyButton hideSymbol radius="sm">
+          <div className="flex flex-col gap-2">
             {step.name == "Incoming Payload" ? (
-              <pre>{step.data}</pre>
+              <Snippet fullWidth hideCopyButton hideSymbol radius="sm">
+                <pre>{step.data}</pre>
+              </Snippet>
             ) : (
               step.data.map((data: any, index: any) => (
-                <p key={index}>&gt; {data}</p>
+                <Snippet
+                  key={index}
+                  fullWidth
+                  hideCopyButton
+                  hideSymbol
+                  radius="sm"
+                >
+                  <p className="flex flex-cols items-center gap-2">
+                    <Icon
+                      icon="solar:double-alt-arrow-right-bold-duotone"
+                      width={16}
+                    />
+                    {data}
+                  </p>
+                </Snippet>
               ))
             )}
-          </Snippet>
+          </div>
         );
       case "duration":
         return <p>{getDuration(step)}</p>;
@@ -231,10 +262,31 @@ export function Execution({ flow, execution, runners }: any) {
     }
   }, []);
 
+  const bottomContent = useMemo(() => {
+    return (
+      <div className="mt flex justify-center items-center w-full">
+        {(execution.running || execution.waiting || execution.paused) && (
+          <>
+            <Progress
+              isIndeterminate
+              aria-label="Loading..."
+              className="max-w-md"
+              label="Waiting for new data..."
+              size="sm"
+            />
+          </>
+        )}
+      </div>
+    );
+  }, [execution]);
+
   return (
     <>
       <div className="grid lg:grid-cols-2 items-center justify-between">
-        <ExecutionBreadcrumbs executionID={execution.id} flowID={flow.id} />
+        <ExecutionBreadcrumbs
+          executionID={execution.id}
+          flowID={flow.flow.id}
+        />
         <div className="lg:justify-self-end lg:mt-0 mt-2">
           <Reloader />
         </div>
@@ -243,7 +295,11 @@ export function Execution({ flow, execution, runners }: any) {
       <ExecutionDetails execution={execution} runners={runners} steps={steps} />
       <Spacer y={4} />
       {/* Tabelle */}
-      <Table isStriped aria-label="Example static collection table">
+      <Table
+        isStriped
+        aria-label="Example static collection table"
+        bottomContent={bottomContent}
+      >
         <TableHeader>
           <TableColumn key="status" align="start">
             Status
@@ -271,19 +327,6 @@ export function Execution({ flow, execution, runners }: any) {
           )}
         </TableBody>
       </Table>
-      <div className="mt flex justify-center items-center w-full">
-        {(execution.running || execution.waiting || execution.paused) && (
-          <>
-            <Progress
-              isIndeterminate
-              aria-label="Loading..."
-              className="max-w-md"
-              label="Waiting for new data..."
-              size="sm"
-            />
-          </>
-        )}
-      </div>
       <Spacer y={4} />
     </>
   );

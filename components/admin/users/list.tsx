@@ -25,6 +25,7 @@ import {
   ModalFooter,
   useDisclosure,
   Pagination,
+  Snippet,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -174,6 +175,12 @@ export function UsersList({ users, plans }: any) {
           >
             {user.email}
           </User>
+        );
+      case "id":
+        return (
+          <Snippet hideSymbol size="sm" variant="flat">
+            {cellValue}
+          </Snippet>
         );
       case "plan":
         return (
@@ -325,6 +332,9 @@ export function UsersList({ users, plans }: any) {
           <TableHeader>
             <TableColumn key="username" align="start">
               Username
+            </TableColumn>
+            <TableColumn key="id" align="start">
+              ID
             </TableColumn>
             <TableColumn key="role" align="start">
               Role

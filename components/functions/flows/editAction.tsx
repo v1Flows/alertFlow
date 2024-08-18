@@ -25,14 +25,14 @@ import {
   Checkbox,
   Divider,
 } from "@nextui-org/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
 
 import { cn } from "@/components/functions/cn/cn";
 import { PlusIcon } from "@/components/icons";
-import CreateFlowAction from "@/lib/fetch/flow/POST/CreateFlowAction";
+import UpdateFlowAction from "@/lib/fetch/flow/PUT/UpdateAction";
 
 import MinimalRowSteps from "../steps/minimal-row-steps";
 
@@ -55,14 +55,16 @@ export const CustomRadio = (props: any) => {
   );
 };
 
-export default function AddFlowActionModal({
+export default function EditActionModal({
   disclosure,
   runners,
   flowID,
+  action,
 }: {
   disclosure: UseDisclosureReturn;
   runners: any;
   flowID: string;
+  action: any;
 }) {
   const router = useRouter();
 
@@ -122,31 +124,26 @@ export default function AddFlowActionModal({
     return actions;
   }
 
-  function cancel() {
-    setName("");
-    setDescription("");
-    setStatus(true);
-    setActions([] as any);
-    setMatchPatterns([
-      {
-        key: "",
-        value: "",
-      },
-    ]);
-    setExcludePatterns([
-      {
-        key: "",
-        value: "",
-      },
-    ]);
-    setCurrentStep(0);
-    onOpenChange();
-  }
+  useEffect(() => {
+    if (action?.name) {
+      setName(action.name);
+      setDescription(action.description);
+      setStatus(action.status);
+      setActions(action.actions);
+      setMatchPatterns(action.match_patterns);
+      setExcludePatterns(action.exclude_patterns);
 
-  async function createAction() {
+      setExecParallel(action.exec_parallel);
+      setEnableMatchPatterns(action.match_patterns.length > 0);
+      setEnableExcludePatterns(action.exclude_patterns.length > 0);
+    }
+  }, [disclosure.isOpen]);
+
+  async function updateAction() {
     setLoading(true);
 
     const sendAction = {
+      id: action.id,
       name: name,
       description: description,
       flow_id: flowID,
@@ -155,32 +152,17 @@ export default function AddFlowActionModal({
       exec_parallel: execParallel,
       match_patterns: matchPatterns,
       exclude_patterns: excludePatterns,
+      created_at: action.created_at,
     };
 
-    const res = await CreateFlowAction(flowID, sendAction);
+    const res = await UpdateFlowAction(flowID, sendAction);
 
     if (!res.error) {
       setLoading(false);
-      setName("");
-      setDescription("");
-      setStatus(true);
-      setActions([] as any);
-      setMatchPatterns([
-        {
-          key: "",
-          value: "",
-        },
-      ]);
-      setExcludePatterns([
-        {
-          key: "",
-          value: "",
-        },
-      ]);
       setCurrentStep(0);
       onOpenChange();
       router.refresh();
-      toast.success("Action created successfully");
+      toast.success("Action updated successfully");
     } else {
       setLoading(false);
       router.refresh();
@@ -204,10 +186,9 @@ export default function AddFlowActionModal({
             <>
               <ModalHeader className="flex flex-wrap items-center">
                 <div className="flex flex-col gap-2">
-                  <p className="text-lg font-bold">Create new Action</p>
+                  <p className="text-lg font-bold">Edit Action</p>
                   <p className="text-sm text-default-500">
-                    Actions are the building blocks of your flows. They are the
-                    steps that are executed when a flow is triggered.
+                    Edit an existing action.
                   </p>
                 </div>
               </ModalHeader>
@@ -779,7 +760,8 @@ export default function AddFlowActionModal({
                   color="default"
                   variant="ghost"
                   onPress={() => {
-                    cancel();
+                    onOpenChange();
+                    setCurrentStep(0);
                   }}
                 >
                   Cancel
@@ -799,11 +781,11 @@ export default function AddFlowActionModal({
                 )}
                 {currentStep + 1 === steps ? (
                   <Button
-                    color="primary"
+                    color="warning"
                     isLoading={isLoading}
-                    onPress={() => createAction()}
+                    onPress={() => updateAction()}
                   >
-                    Create Action
+                    Update Action
                   </Button>
                 ) : (
                   <Button
