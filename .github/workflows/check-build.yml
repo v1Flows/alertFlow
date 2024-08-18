@@ -1,8 +1,9 @@
 name: Check Image Build
 
 on:
-  push:
-    branches: [ "work" ]
+  pull_request:
+    types: [opened, reopened]
+    branches: [ "prepare/release" ]
     paths-ignore:
       - '.github/**'
 

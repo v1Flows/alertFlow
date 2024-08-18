@@ -9,15 +9,13 @@ import {
   TableCell,
   Divider,
   Pagination,
-  Chip,
-  Spinner,
   CircularProgress,
   Button,
   useDisclosure,
+  Tooltip,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 
-import { IconWrapper } from "@/lib/IconWrapper";
 import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
 
 export function ExecutionsList({ flows, payloads, executions, runners }: any) {
@@ -40,46 +38,111 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
       return "Error";
     } else if (execution.no_match) {
       return "No Match";
+    } else if (execution.ghost) {
+      return "No Flow Actions found";
     } else {
       return "Finished";
     }
   }
 
-  function statusColor(execution: any) {
-    if (execution.running) {
-      return "primary";
-    } else if (execution.waiting) {
-      return "warning";
-    } else if (execution.paused) {
-      return "warning";
-    } else if (execution.error) {
-      return "danger";
-    } else if (execution.no_match) {
-      return "secondary";
+  function getDuration(execution: any) {
+    if (execution.finished_at === "0001-01-01T00:00:00Z") return "0s";
+    const ms =
+      new Date(execution.finished_at).getTime() -
+      new Date(execution.executed_at).getTime();
+    const sec = Math.floor(ms / 1000);
+    const min = Math.floor(sec / 60);
+    const hr = Math.floor(min / 60);
+    const day = Math.floor(hr / 24);
+
+    if (day > 0) {
+      return `${day}d ${hr % 24}h ${min % 60}m ${sec % 60}s`;
+    } else if (hr > 0) {
+      return `${hr}h ${min % 60}m ${sec % 60}s`;
+    } else if (min > 0) {
+      return `${min}m ${sec % 60}s`;
     } else {
-      return "success";
+      return `${sec}s`;
     }
   }
 
   function statusIcon(execution: any) {
     if (execution.running) {
-      return <Spinner color="primary" size="sm" />;
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress aria-label="Step" color="primary" size="md" />
+        </Tooltip>
+      );
     } else if (execution.waiting) {
-      return <Icon icon="solar:pause-broken" />;
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress
+            aria-label="Step"
+            color="warning"
+            maxValue={5}
+            showValueLabel={true}
+            size="md"
+            value={5}
+            valueLabel={
+              <Icon
+                className="text-warning"
+                icon="solar:pause-broken"
+                width={16}
+              />
+            }
+          />
+        </Tooltip>
+      );
     } else if (execution.paused) {
-      return <CircularProgress color="warning" size="sm" value={100} />;
+      return <CircularProgress color="warning" size="md" value={100} />;
     } else if (execution.error) {
-      return <CircularProgress color="danger" size="sm" value={100} />;
+      return <CircularProgress color="danger" size="md" value={100} />;
     } else if (execution.no_match) {
-      return <CircularProgress color="secondary" size="sm" value={100} />;
+      return <CircularProgress color="secondary" size="md" value={100} />;
+    } else if (execution.ghost) {
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress
+            color="default"
+            showValueLabel={true}
+            size="md"
+            value={100}
+            valueLabel={
+              <Icon
+                className="text-default-500"
+                icon="solar:ghost-broken"
+                width={20}
+              />
+            }
+          />
+        </Tooltip>
+      );
     } else {
-      return <CircularProgress color="success" size="sm" value={100} />;
+      return (
+        <Tooltip content={`${status(execution)}. Steps 5 / 5`}>
+          <CircularProgress
+            aria-label="Step"
+            color="success"
+            maxValue={5}
+            showValueLabel={true}
+            size="md"
+            value={5}
+            valueLabel={
+              <Icon
+                className="text-success"
+                icon="solar:check-read-broken"
+                width={22}
+              />
+            }
+          />
+        </Tooltip>
+      );
     }
   }
 
   // pagination
   const [page, setPage] = React.useState(1);
-  const rowsPerPage = 7;
+  const rowsPerPage = 15;
   const pages = Math.ceil(executions.length / rowsPerPage);
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -141,24 +204,9 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
           </div>
         );
       case "status":
-        return (
-          <div className="flex justify-start items-center gap-4">
-            <IconWrapper
-              className={`bg-${statusColor(execution)}/10 text-${statusColor(execution)}`}
-            >
-              {statusIcon(execution)}
-            </IconWrapper>
-
-            <Chip
-              color={statusColor(execution)}
-              radius="sm"
-              size="sm"
-              variant="flat"
-            >
-              {status(execution)}
-            </Chip>
-          </div>
-        );
+        return <div>{statusIcon(execution)}</div>;
+      case "duration":
+        return <p>{getDuration(execution)}</p>;
       case "created_at":
         return new Date(execution.created_at).toLocaleString("de-DE");
       case "executed_at":
@@ -200,28 +248,31 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
         >
           <TableHeader>
             <TableColumn key="status" align="start">
-              STATUS
+              Status
+            </TableColumn>
+            <TableColumn key="flow_id" align="start">
+              Flow
             </TableColumn>
             <TableColumn key="id" align="start">
               ID
             </TableColumn>
-            <TableColumn key="flow_id" align="start">
-              FLOW
-            </TableColumn>
             <TableColumn key="payload_id" align="start">
-              PAYLOAD
+              Payload
             </TableColumn>
             <TableColumn key="runner_id" align="start">
-              RUNNER
+              Runner
+            </TableColumn>
+            <TableColumn key="duration" align="start">
+              Duration
             </TableColumn>
             <TableColumn key="created_at" align="start">
-              CREATED AT
+              Created At
             </TableColumn>
             <TableColumn key="executed_at" align="start">
-              EXECUTED AT
+              Executed At
             </TableColumn>
             <TableColumn key="finished_at" align="start">
-              FINISHED AT
+              Finished At
             </TableColumn>
           </TableHeader>
           <TableBody emptyContent={"No rows to display."} items={items}>

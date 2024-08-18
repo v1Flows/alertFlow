@@ -18,6 +18,7 @@ import {
   cn,
   useDisclosure,
   Pagination,
+  Snippet,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
@@ -67,7 +68,11 @@ export function FlowsList({ flows, projects, runners }: any) {
 
     switch (columnKey) {
       case "id":
-        return <p className="text-sm text-default-500">{flow.id}</p>;
+        return (
+          <Snippet hideSymbol size="sm" variant="flat">
+            {cellValue}
+          </Snippet>
+        );
       case "name":
         return (
           <div>
