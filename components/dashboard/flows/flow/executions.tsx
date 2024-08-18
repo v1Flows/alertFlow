@@ -94,7 +94,24 @@ export default function Executions({
     } else if (execution.paused) {
       return <CircularProgress color="warning" size="md" value={100} />;
     } else if (execution.error) {
-      return <CircularProgress color="danger" size="md" value={100} />;
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress
+            aria-label="Step"
+            color="danger"
+            showValueLabel={true}
+            size="md"
+            value={100}
+            valueLabel={
+              <Icon
+                className="text-danger"
+                icon="solar:danger-triangle-broken"
+                width={20}
+              />
+            }
+          />
+        </Tooltip>
+      );
     } else if (execution.no_match) {
       return <CircularProgress color="secondary" size="md" value={100} />;
     } else if (execution.ghost) {
