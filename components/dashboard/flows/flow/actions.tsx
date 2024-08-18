@@ -17,9 +17,26 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
+  useDisclosure,
 } from "@nextui-org/react";
+import React from "react";
 
-export default function Actions({ actions }: { actions: any }) {
+import DeleteActionModal from "@/components/functions/flows/deleteAction";
+import EditActionModal from "@/components/functions/flows/editAction";
+
+export default function Actions({
+  actions,
+  flow,
+  runners,
+}: {
+  actions: any;
+  flow: any;
+  runners: any;
+}) {
+  const [targetAction, setTargetAction] = React.useState(null);
+  const editActionModal = useDisclosure();
+  const deleteActionModal = useDisclosure();
+
   return (
     <div className="grid grid-cols-2 gap-4">
       {actions.map((action: any, index: number) => (
@@ -56,6 +73,10 @@ export default function Actions({ actions }: { actions: any }) {
                     startContent={
                       <Icon icon="solar:pen-new-square-broken" width={18} />
                     }
+                    onPress={() => {
+                      setTargetAction(action);
+                      editActionModal.onOpen();
+                    }}
                   >
                     Edit
                   </DropdownItem>
@@ -66,6 +87,10 @@ export default function Actions({ actions }: { actions: any }) {
                     startContent={
                       <Icon icon="solar:trash-bin-2-broken" width={18} />
                     }
+                    onPress={() => {
+                      setTargetAction(action.id);
+                      deleteActionModal.onOpen();
+                    }}
                   >
                     Delete
                   </DropdownItem>
@@ -214,6 +239,17 @@ export default function Actions({ actions }: { actions: any }) {
           </CardBody>
         </Card>
       ))}
+      <EditActionModal
+        action={targetAction}
+        disclosure={editActionModal}
+        flowID={flow.id}
+        runners={runners}
+      />
+      <DeleteActionModal
+        actionID={targetAction}
+        disclosure={deleteActionModal}
+        flowID={flow.id}
+      />
     </div>
   );
 }

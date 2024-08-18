@@ -63,9 +63,7 @@ export default function FlowTabs({
                 </p>
               </div>
             ) : (
-              <div className="mt-4">
-                <Actions actions={actions} />
-              </div>
+              <Actions actions={actions} flow={flow} runners={runners} />
             )}
             <Button
               fullWidth
