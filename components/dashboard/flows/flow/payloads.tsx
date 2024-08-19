@@ -76,7 +76,7 @@ export default function Payloads({ flow, executions, payloads, runners }: any) {
                     fullWidth
                     color="primary"
                     size="md"
-                    startContent={<Icon icon="solar:eye-broken" />}
+                    startContent={<Icon icon="solar:eye-broken" width={20} />}
                     variant="flat"
                     onPress={() => handleShow(payload)}
                   >
@@ -84,22 +84,23 @@ export default function Payloads({ flow, executions, payloads, runners }: any) {
                   </Button>
                   <Button
                     fullWidth
-                    color="secondary"
+                    color="default"
                     isDisabled={
                       !executions.find(
                         (execution: any) => execution.payload_id === payload.id,
                       )
                     }
                     size="md"
-                    startContent={<Icon icon="solar:eye-broken" />}
-                    variant="flat"
+                    startContent={
+                      <Icon icon="solar:reorder-line-duotone" width={20} />
+                    }
+                    variant="solid"
                     onPress={() => {
                       router.push(
-                        `/dashboard/flows/${flow.id}/execution/${
-                          executions.find(
-                            (execution: any) =>
-                              execution.payload_id === payload.id,
-                          ).id
+                        `/dashboard/flows/${flow.id}/execution/${executions.find(
+                          (execution: any) =>
+                            execution.payload_id === payload.id,
+                        ).id
                         }`,
                       );
                     }}
