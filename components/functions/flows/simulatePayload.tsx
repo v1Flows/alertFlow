@@ -122,7 +122,7 @@ export default function SimulatePayloadModal({
                 </Button>
                 <Button
                   color="secondary"
-                  variant="bordered"
+                  variant="flat"
                   onPress={sendPayload}
                 >
                   <Icon icon="solar:play-bold-duotone" width={20} />
