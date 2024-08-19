@@ -72,6 +72,8 @@ export default function AddFlowActionModal({
   const [currentStep, setCurrentStep] = React.useState(0);
   const [isLoading, setLoading] = React.useState(false);
 
+  const [disableNext, setDisableNext] = React.useState(false);
+
   // logic input
   const [enableMatchPatterns, setEnableMatchPatterns] = React.useState(false);
   const [enableExcludePatterns, setEnableExcludePatterns] =
@@ -100,9 +102,22 @@ export default function AddFlowActionModal({
     var actions = 0;
 
     for (let i = 0; i < runners.length; i++) {
+      var timeAgo =
+        (new Date(runners[i].last_heartbeat).getTime() - Date.now()) / 1000;
+
+      if (runners[i].disabled || !runners[i].registered || timeAgo <= -30) {
+        continue;
+      }
+
       if (runners[i].available_actions.length > 0) {
         actions++;
       }
+    }
+
+    if (actions === 0) {
+      setDisableNext(true);
+    } else {
+      setDisableNext(false);
     }
 
     return actions;
@@ -113,6 +128,13 @@ export default function AddFlowActionModal({
 
     for (let i = 0; i < runners.length; i++) {
       for (let j = 0; j < runners[i].available_actions.length; j++) {
+        var timeAgo =
+          (new Date(runners[i].last_heartbeat).getTime() - Date.now()) / 1000;
+
+        if (runners[i].disabled || !runners[i].registered || timeAgo <= -30) {
+          continue;
+        }
+
         if (!actions.includes(runners[i].available_actions[j])) {
           actions.push(runners[i].available_actions[j]);
         }
@@ -430,12 +452,10 @@ export default function AddFlowActionModal({
                         {countTotalAvailableActions() === 0 ? (
                           <div>
                             <Card className="border border-danger">
-                              <CardHeader>
+                              <CardBody>
                                 <p className="text-danger font-bold">
                                   😕 Seems like there are no Actions available.
                                 </p>
-                              </CardHeader>
-                              <CardBody>
                                 <p className="text-default-500">
                                   Please check if you have a dedicated runner
                                   assign to your flow and if that runner exposes
@@ -788,7 +808,10 @@ export default function AddFlowActionModal({
                   <Button
                     color="default"
                     variant="flat"
-                    onPress={() => setCurrentStep(currentStep - 1)}
+                    onPress={() => {
+                      setCurrentStep(currentStep - 1);
+                      setDisableNext(false);
+                    }}
                   >
                     Back
                   </Button>
@@ -810,6 +833,7 @@ export default function AddFlowActionModal({
                     color="primary"
                     isLoading={isLoading}
                     onPress={() => setCurrentStep(currentStep + 1)}
+                    isDisabled={disableNext}
                   >
                     Next Step
                   </Button>
