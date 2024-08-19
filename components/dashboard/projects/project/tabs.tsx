@@ -28,12 +28,19 @@ export default function ProjectTabs({
   const params = new URLSearchParams(searchParams.toString());
 
   React.useEffect(() => {
-    const tab = params.get("tab") || "members";
+    var tab = params.get("tab") || "members";
+
+    if (tab === "audit" && plan.id !== "enterprise") {
+      tab = "members";
+    }
 
     setSelected(tab);
   }, [params]);
 
   const handleTabChange = (key: any) => {
+    if (key === "audit" && plan.id !== "enterprise") {
+      return;
+    }
     params.set("tab", key);
     router.push(`${pathname}?${params.toString()}`);
   };
