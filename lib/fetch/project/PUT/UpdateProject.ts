@@ -21,7 +21,7 @@ export default async function UpdateProject(
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.API_ENDPOINT}/projects/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects/${id}`, {
       method: "PUT",
       headers: headers,
       body: JSON.stringify({

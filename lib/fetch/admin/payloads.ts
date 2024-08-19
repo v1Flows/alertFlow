@@ -14,7 +14,7 @@ export default async function AdminGetPayloads() {
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.API_ENDPOINT}/admin/payloads`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/payloads`, {
       method: "GET",
       headers: headers,
     });

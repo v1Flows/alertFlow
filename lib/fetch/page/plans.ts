@@ -14,7 +14,7 @@ export default async function PageGetPlans() {
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.API_ENDPOINT}/page/plans`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/page/plans`, {
       method: "GET",
       headers: headers,
     });

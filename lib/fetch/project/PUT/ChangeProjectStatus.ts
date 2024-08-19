@@ -19,7 +19,7 @@ export default async function ChangeProjectStatus(
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.API_ENDPOINT}/projects/${id}/status`,
+      `${process.env.NEXT_PUBLIC_API_URL}/projects/${id}/status`,
       {
         method: "PUT",
         headers: headers,

@@ -15,7 +15,7 @@ export default async function GetExecutionSteps(executionID: any) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.API_ENDPOINT}/executions/${executionID}/steps`,
+      `${process.env.NEXT_PUBLIC_API_URL}/executions/${executionID}/steps`,
       {
         method: "GET",
         headers: headers,

@@ -14,7 +14,7 @@ export async function updateSession() {
       headers.append("Authorization", session);
     }
 
-    const response = await fetch(process.env.API_ENDPOINT + "/token/refresh", {
+    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/token/refresh", {
       method: "POST",
       headers: headers,
     });
