@@ -7,19 +7,22 @@ import GetProjectAuditLogs from "@/lib/fetch/project/audit";
 import GetProject from "@/lib/fetch/project/data";
 import GetProjectRunners from "@/lib/fetch/project/runners";
 import GetUserPlan from "@/lib/fetch/user/getPlan";
+import GetUserDetails from "@/lib/fetch/user/getDetails";
 
 export default async function DashboardProjectPage({
   params,
 }: {
   params: { id: string };
 }) {
+  const user = JSON.parse(cookies().get("user")?.value || "{}");
+
   const settings = await PageGetSettings();
   const project = await GetProject(params.id);
   const runners = await GetProjectRunners(params.id);
   const tokens = await GetProjectApiKeys(params.id);
   const plan = await GetUserPlan();
   const audit = await GetProjectAuditLogs(params.id);
-  const user = JSON.parse(cookies().get("user")?.value || "{}");
+  const userDetails = await GetUserDetails(user.id);
 
   return (
     <>
@@ -31,7 +34,7 @@ export default async function DashboardProjectPage({
         runners={runners}
         settings={settings}
         tokens={tokens}
-        user={user}
+        user={userDetails}
       />
     </>
   );

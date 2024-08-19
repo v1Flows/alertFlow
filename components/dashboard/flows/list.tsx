@@ -30,7 +30,13 @@ import ChangeFlowMaintenanceModal from "@/components/functions/flows/changeMaint
 import ChangeFlowStatusModal from "@/components/functions/flows/changeStatus";
 import EditFlowModal from "@/components/functions/flows/edit";
 
-export default function FlowList({ flows, projects, settings, plan }: any) {
+export default function FlowList({
+  flows,
+  projects,
+  settings,
+  plan,
+  user,
+}: any) {
   const router = useRouter();
 
   const [projectFilter, setProjectFilter] = React.useState(new Set([]) as any);
@@ -82,6 +88,31 @@ export default function FlowList({ flows, projects, settings, plan }: any) {
       toast.error("Failed to copy flow ID to clipboard");
     }
   };
+
+  function createButtonDisabled() {
+    if (!settings.create_flows) {
+      return true;
+    } else if (user.role === "VIP") {
+      return false;
+    } else if (flows.length >= plan.flows) {
+      return true;
+    }
+
+    return false;
+  }
+
+  function createButtonPressable() {
+    if (!settings.create_flows) {
+      return false;
+    } else if (user.role === "VIP") {
+      return true;
+    } else if (flows.length >= plan.flows) {
+      return false;
+    }
+
+    return true;
+  }
+
 
   return (
     <main>
@@ -349,8 +380,8 @@ export default function FlowList({ flows, projects, settings, plan }: any) {
           <Card
             isHoverable
             className="border border-primary border-3 border-dashed"
-            isDisabled={!settings.create_flows || flows.length >= plan.flows}
-            isPressable={settings.create_flows && flows.length < plan.flows}
+            isDisabled={createButtonDisabled()}
+            isPressable={createButtonPressable()}
             onPress={() => newModal.onOpen()}
           >
             <CardBody className="flex flex-col items-center justify-center gap-2">

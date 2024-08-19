@@ -130,7 +130,7 @@ export function DashboardHome({
               )}
               {/* Runners */}
               {runners.filter((r: any) => !runnerHeartbeatStatus(r)).length >
-              0 ? (
+                0 ? (
                 <li className="flex items-center gap-2">
                   <IconWrapper className="bg-danger/10 text-danger">
                     <Icon icon="solar:heart-pulse-broken" width={24} />
@@ -176,7 +176,7 @@ export function DashboardHome({
                 />
               </div>
               <p className="text-default-600">Projects</p>
-              {plan.projects !== 999 ? (
+              {plan.projects !== 999 && user.role !== "VIP" ? (
                 <>
                   <p className="text-lg font-bold">
                     {stats.projects} / {plan.projects}
@@ -190,7 +190,11 @@ export function DashboardHome({
                   />
                 </>
               ) : (
-                <p className="text-lg font-bold text-secondary">Unlimited</p>
+                <p
+                  className={`text-lg font-bold text-${user.role === "VIP" ? "warning" : "secondary"}`}
+                >
+                  Unlimited
+                </p>
               )}
             </CardBody>
           </Card>
@@ -204,7 +208,7 @@ export function DashboardHome({
                 />
               </div>
               <p className="text-default-600">Flows</p>
-              {plan.flows !== 999 ? (
+              {plan.flows !== 999 && user.role !== "VIP" ? (
                 <>
                   <p className="text-lg font-bold">
                     {stats.flows} / {plan.flows}
@@ -216,7 +220,11 @@ export function DashboardHome({
                   />
                 </>
               ) : (
-                <p className="text-lg font-bold text-secondary">Unlimited</p>
+                <p
+                  className={`text-lg font-bold text-${user.role === "VIP" ? "warning" : "secondary"}`}
+                >
+                  Unlimited
+                </p>
               )}
             </CardBody>
           </Card>
@@ -230,7 +238,7 @@ export function DashboardHome({
                 />
               </div>
               <p className="text-default-600">Self-Hosted Runners</p>
-              {plan.self_hosted_runners !== 999 ? (
+              {plan.self_hosted_runners !== 999 && user.role !== "VIP" ? (
                 <>
                   <p className="text-lg font-bold">
                     {stats.runners ? stats.runners : 0} /{" "}
@@ -247,7 +255,11 @@ export function DashboardHome({
                   />
                 </>
               ) : (
-                <p className="text-lg font-bold text-secondary">Unlimited</p>
+                <p
+                  className={`text-lg font-bold text-${user.role === "VIP" ? "warning" : "secondary"}`}
+                >
+                  Unlimited
+                </p>
               )}
             </CardBody>
           </Card>
@@ -261,7 +273,7 @@ export function DashboardHome({
                 />
               </div>
               <p className="text-default-600">Executions</p>
-              {plan.executions_per_month !== 999 ? (
+              {plan.executions_per_month !== 999 && user.role !== "VIP" ? (
                 <>
                   <p className="text-lg font-bold">
                     {stats.total_executions ? stats.total_executions : 0} /{" "}
@@ -278,7 +290,11 @@ export function DashboardHome({
                   />
                 </>
               ) : (
-                <p className="text-lg font-bold text-secondary">Unlimited</p>
+                <p
+                  className={`text-lg font-bold text-${user.role === "VIP" ? "warning" : "secondary"}`}
+                >
+                  Unlimited
+                </p>
               )}
             </CardBody>
           </Card>
@@ -295,9 +311,21 @@ export function DashboardHome({
             </Button>
             <CardBody className="relative bg-gradient-to-br from-content1 to-default-100/50 p-8 before:inset-0 before:h-full before:w-full before:content-['']">
               <h1 className="mb-4 text-default-400">Your Plan</h1>
-              <h2 className="inline bg-gradient-to-br from-foreground-800 to-foreground-500 bg-clip-text text-6xl font-semibold tracking-tight text-transparent dark:to-foreground-200">
-                {plan.name}
-              </h2>
+              {user.role === "Admin" && (
+                <h2 className="inline bg-clip-text text-6xl font-semibold tracking-tight text-danger">
+                  Admin
+                </h2>
+              )}
+              {user.role === "VIP" && (
+                <h2 className="flex gap-1 items-center inline bg-clip-text text-6xl font-semibold tracking-tight text-warning">
+                  <Icon icon="solar:crown-broken" /> VIP
+                </h2>
+              )}
+              {user.role === "User" && (
+                <h2 className="inline bg-gradient-to-br from-foreground-800 to-foreground-500 bg-clip-text text-6xl font-semibold tracking-tight text-transparent dark:to-foreground-200">
+                  {plan.name}
+                </h2>
+              )}
             </CardBody>
             <CardFooter>
               <ul>
@@ -308,8 +336,12 @@ export function DashboardHome({
                     width={24}
                   />
                   <p className="text-small text-default-500">
-                    {plan.projects === 999 ? (
-                      <span className="text-secondary">Unlimited</span>
+                    {plan.projects === 999 || user.role === "VIP" ? (
+                      <span
+                        className={`text-${user.role === "VIP" ? "warning" : "secondary"}`}
+                      >
+                        Unlimited
+                      </span>
                     ) : (
                       plan.projects
                     )}{" "}
@@ -323,8 +355,12 @@ export function DashboardHome({
                     width={24}
                   />
                   <p className="text-small text-default-500">
-                    {plan.project_members === 999 ? (
-                      <span className="text-secondary">Unlimited</span>
+                    {plan.project_members === 999 || user.role === "VIP" ? (
+                      <span
+                        className={`text-${user.role === "VIP" ? "warning" : "secondary"}`}
+                      >
+                        Unlimited
+                      </span>
                     ) : (
                       plan.project_members
                     )}{" "}
@@ -338,8 +374,12 @@ export function DashboardHome({
                     width={24}
                   />
                   <p className="text-small text-default-500">
-                    {plan.flows === 999 ? (
-                      <span className="text-secondary">Unlimited</span>
+                    {plan.flows === 999 || user.role === "VIP" ? (
+                      <span
+                        className={`text-${user.role === "VIP" ? "warning" : "secondary"}`}
+                      >
+                        Unlimited
+                      </span>
                     ) : (
                       plan.flows
                     )}{" "}
@@ -353,8 +393,12 @@ export function DashboardHome({
                     width={24}
                   />
                   <p className="text-small text-default-500">
-                    {plan.self_hosted_runners === 999 ? (
-                      <span className="text-secondary">Unlimited</span>
+                    {plan.self_hosted_runners === 999 || user.role === "VIP" ? (
+                      <span
+                        className={`text-${user.role === "VIP" ? "warning" : "secondary"}`}
+                      >
+                        Unlimited
+                      </span>
                     ) : (
                       plan.self_hosted_runners
                     )}{" "}
@@ -368,8 +412,12 @@ export function DashboardHome({
                     width={24}
                   />
                   <p className="text-small text-default-500">
-                    {plan.alertflow_runners === 16 ? (
-                      <span className="text-secondary">Unlimited</span>
+                    {plan.alertflow_runners === 16 || user.role === "VIP" ? (
+                      <span
+                        className={`text-${user.role === "VIP" ? "warning" : "secondary"}`}
+                      >
+                        Unlimited
+                      </span>
                     ) : (
                       plan.alertflow_runners
                     )}{" "}
@@ -383,8 +431,13 @@ export function DashboardHome({
                     width={24}
                   />
                   <p className="text-small text-default-500">
-                    {plan.executions_per_month === 999 ? (
-                      <span className="text-secondary">Unlimited</span>
+                    {plan.executions_per_month === 999 ||
+                      user.role === "VIP" ? (
+                      <span
+                        className={`text-${user.role === "VIP" ? "warning" : "secondary"}`}
+                      >
+                        Unlimited
+                      </span>
                     ) : (
                       plan.executions_per_month
                     )}{" "}

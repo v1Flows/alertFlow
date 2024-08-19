@@ -119,12 +119,7 @@ export default function ProjectMembers({
       <div className="flex flex-col items-end justify-center gap-4">
         <Button
           color="primary"
-          isDisabled={
-            !settings.add_project_members ||
-            members.length >= plan.project_members ||
-            members.filter((m: any) => m.user_id === user.id)[0].role ===
-              "Viewer"
-          }
+          isDisabled={checkQuotaDisabled()}
           startContent={<PlusIcon />}
           onPress={() => addProjectMemberModal.onOpen()}
         >
@@ -133,6 +128,24 @@ export default function ProjectMembers({
       </div>
     );
   }, []);
+
+  function checkQuotaDisabled() {
+    if (!settings.add_project_members) {
+      return true;
+    } else if (project.disabled) {
+      return true;
+    } else if (user.role === "VIP") {
+      return false;
+    } else if (members.length >= plan.project_members) {
+      return true;
+    } else if (
+      members.filter((m: any) => m.user_id === user.id)[0].role === "Viewer"
+    ) {
+      return true;
+    }
+
+    return false;
+  }
 
   return (
     <>
