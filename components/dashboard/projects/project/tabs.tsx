@@ -28,7 +28,7 @@ export default function ProjectTabs({
           aria-label="Options"
           color="primary"
           selectedKey={selected}
-          variant="underlined"
+          variant="solid"
           onSelectionChange={(key: any) => setSelected(key as string)}
         >
           <Tab
