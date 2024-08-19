@@ -132,8 +132,6 @@ export function FlowsList({ flows, projects, runners }: any) {
             )}
           </div>
         );
-      case "a_actions":
-        return <p>{flow.actions.length}</p>;
       case "created_at":
         return new Date(flow.created_at).toLocaleString("de-DE");
       case "updated_at":
@@ -314,31 +312,28 @@ export function FlowsList({ flows, projects, runners }: any) {
         >
           <TableHeader>
             <TableColumn key="name" align="start">
-              NAME
+              Name
             </TableColumn>
             <TableColumn key="id" align="start">
               ID
             </TableColumn>
             <TableColumn key="project_id" align="start">
-              PROJECT
+              Project
             </TableColumn>
             <TableColumn key="runner_id" align="start">
-              RUNNER
+              Runner
             </TableColumn>
             <TableColumn key="disabled" align="start">
-              STATUS
-            </TableColumn>
-            <TableColumn key="a_actions" align="start">
-              FLOW ACTIONS
+              Status
             </TableColumn>
             <TableColumn key="created_at" align="start">
-              CREATED AT
+              Created At
             </TableColumn>
             <TableColumn key="updated_at" align="start">
-              UPDATED AT
+              Updated At
             </TableColumn>
             <TableColumn key="actions" align="center">
-              ACTIONS
+              Actions
             </TableColumn>
           </TableHeader>
           <TableBody emptyContent={"No rows to display."} items={items}>
