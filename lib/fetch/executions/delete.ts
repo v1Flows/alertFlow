@@ -15,7 +15,7 @@ export default async function DeleteExecution(executionID: any) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.API_ENDPOINT}/executions/${executionID}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/executions/${executionID}`,
       {
         method: "DELETE",
         headers: headers,

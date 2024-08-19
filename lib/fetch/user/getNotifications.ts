@@ -15,7 +15,7 @@ export default async function GetUserNotifications(id: string) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.API_ENDPOINT}/user/${id}/notifications`,
+      `${process.env.NEXT_PUBLIC_API_URL}/user/${id}/notifications`,
       {
         method: "GET",
         headers: headers,

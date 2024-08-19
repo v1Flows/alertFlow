@@ -15,7 +15,7 @@ export default async function DeleteAction(flowID: any, actionID: any) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.API_ENDPOINT}/flows/${flowID}/actions/${actionID}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/flows/${flowID}/actions/${actionID}`,
       {
         method: "DELETE",
         headers: headers,

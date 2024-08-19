@@ -20,7 +20,7 @@ export default async function AddProjectMember(
     }
 
     const res = await fetch(
-      `${process.env.API_ENDPOINT}/projects/${id}/member`,
+      `${process.env.NEXT_PUBLIC_API_URL}/projects/${id}/member`,
       {
         method: "POST",
         headers: headers,

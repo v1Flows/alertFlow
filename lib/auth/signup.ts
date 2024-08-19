@@ -10,7 +10,7 @@ export default async function SignUpAPI(
     const headers = new Headers();
 
     headers.append("Content-Type", "application/json");
-    const res = await fetch(`${process.env.API_ENDPOINT}/auth/register`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/register`, {
       method: "POST",
       headers: headers,
       body: JSON.stringify({

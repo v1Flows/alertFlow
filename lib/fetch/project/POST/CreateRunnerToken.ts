@@ -15,7 +15,7 @@ export default async function CreateRunnerToken({
   }
 
   const res = await fetch(
-    `${process.env.API_ENDPOINT}/token/runner/${projectId}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/token/runner/${projectId}`,
     {
       method: "POST",
       headers: {

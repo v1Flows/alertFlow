@@ -15,7 +15,7 @@ export default async function AcceptProjectInvite(id: string) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.API_ENDPOINT}/projects/${id}/invite`,
+      `${process.env.NEXT_PUBLIC_API_URL}/projects/${id}/invite`,
       {
         method: "PUT",
         headers: headers,
