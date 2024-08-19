@@ -15,7 +15,7 @@ export default async function GetFlowExecutions(flowID: any) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.API_ENDPOINT}/flows/${flowID}/executions`,
+      `${process.env.NEXT_PUBLIC_API_URL}/flows/${flowID}/executions`,
       {
         method: "GET",
         headers: headers,

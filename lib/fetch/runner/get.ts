@@ -14,7 +14,7 @@ export default async function GetRunners() {
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.API_ENDPOINT}/runners/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/runners/`, {
       method: "GET",
       headers: headers,
     });

@@ -14,7 +14,7 @@ export default async function GetUserStats(id: string) {
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.API_ENDPOINT}/user/${id}/stats`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/${id}/stats`, {
       method: "GET",
       headers: headers,
     });

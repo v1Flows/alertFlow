@@ -12,7 +12,7 @@ export default function MaintenancePage({ reason }: any) {
 
   async function pingBackend() {
     try {
-      const res = await fetch(process.env.API_ENDPOINT + "/health", {
+      const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/health", {
         method: "GET",
       });
 

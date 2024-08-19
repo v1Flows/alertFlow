@@ -20,7 +20,7 @@ export default async function UpdateUser(
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.API_ENDPOINT}/admin/users/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/users/${id}`, {
       method: "PUT",
       headers: headers,
       body: JSON.stringify({

@@ -23,7 +23,7 @@ export default async function UpdatePlan(
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.API_ENDPOINT}/admin/plans/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/plans/${id}`, {
       method: "PUT",
       headers: headers,
       body: JSON.stringify({

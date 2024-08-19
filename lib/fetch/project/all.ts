@@ -14,7 +14,7 @@ export default async function GetProjects() {
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.API_ENDPOINT}/projects/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects/`, {
       method: "GET",
       headers: headers,
     });

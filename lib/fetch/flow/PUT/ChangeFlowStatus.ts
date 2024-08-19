@@ -18,7 +18,7 @@ export default async function ChangeFlowStatus(
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.API_ENDPOINT}/flows/${id}/status`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/flows/${id}/status`, {
       method: "PUT",
       headers: headers,
       body: JSON.stringify({
