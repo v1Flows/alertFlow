@@ -8,7 +8,7 @@ const nextConfig = {
   output: 'standalone',
   trailingSlash: false,
   env: {
-    API_ENDPOINT: process.env.API_ENDPOINT,
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
   },
   reactStrictMode: true,
   images: {

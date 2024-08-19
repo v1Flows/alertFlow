@@ -256,7 +256,7 @@ export default function FunctionCreateFlow({
                     Payload URL
                   </p>
                   <Snippet hideSymbol className="w-full">
-                    {`${process.env.API_ENDPOINT}/payloads`}
+                    {`${process.env.NEXT_PUBLIC_API_URL}/payloads`}
                   </Snippet>
                 </div>
                 <div>

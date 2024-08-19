@@ -12,7 +12,7 @@ export default async function GetProjectApiKeys(projectId: any) {
   }
 
   const res = await fetch(
-    `${process.env.API_ENDPOINT}/projects/${projectId}/tokens`,
+    `${process.env.NEXT_PUBLIC_API_URL}/projects/${projectId}/tokens`,
     {
       method: "GET",
       headers: {

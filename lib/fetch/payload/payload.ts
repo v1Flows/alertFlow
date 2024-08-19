@@ -15,7 +15,7 @@ export default async function GetPayload(payloadID: any) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.API_ENDPOINT}/payloads/${payloadID}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/payloads/${payloadID}`,
       {
         method: "GET",
         headers: headers,

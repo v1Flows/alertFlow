@@ -14,7 +14,7 @@ export default async function DeleteProject(id: any) {
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.API_ENDPOINT}/projects/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects/${id}`, {
       method: "DELETE",
       headers: headers,
     });

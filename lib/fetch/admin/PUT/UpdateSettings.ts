@@ -25,7 +25,7 @@ export default async function UpdateSettings(
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.API_ENDPOINT}/admin/settings`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/settings`, {
       method: "PUT",
       headers: headers,
       body: JSON.stringify({

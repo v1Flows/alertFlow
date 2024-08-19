@@ -19,7 +19,7 @@ export default async function ChangeUserPassword(
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.API_ENDPOINT}/user/${id}/password`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/${id}/password`, {
       method: "PUT",
       headers: headers,
       body: JSON.stringify({
