@@ -2,6 +2,7 @@
 import React from "react";
 import { Tabs, Tab, Tooltip } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import ProjectMembers from "@/components/dashboard/projects/project/tables/UserTable";
 import ProjectTokens from "@/components/dashboard/projects/project/tables/TokensTable";
@@ -21,6 +22,29 @@ export default function ProjectTabs({
 }: any) {
   const [selected, setSelected] = React.useState("members");
 
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams.toString());
+
+  React.useEffect(() => {
+    var tab = params.get("tab") || "members";
+
+    if (tab === "audit" && plan.id !== "enterprise") {
+      tab = "members";
+    }
+
+    setSelected(tab);
+  }, [params]);
+
+  const handleTabChange = (key: any) => {
+    if (key === "audit" && plan.id !== "enterprise") {
+      return;
+    }
+    params.set("tab", key);
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
   return (
     <main>
       <div className="flex w-full flex-col">
@@ -29,7 +53,7 @@ export default function ProjectTabs({
           color="primary"
           selectedKey={selected}
           variant="solid"
-          onSelectionChange={(key: any) => setSelected(key as string)}
+          onSelectionChange={handleTabChange}
         >
           <Tab
             key="members"
