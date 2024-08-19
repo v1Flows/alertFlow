@@ -138,7 +138,11 @@ export default function Actions({
                 </div>
                 <div>
                   <p className="text-md font-bold">
-                    {action.match_patterns.length}
+                    {
+                      action.match_patterns.filter(
+                        (pattern: any) => pattern.key,
+                      ).length
+                    }
                   </p>
                   <p className="text-sm text-default-500">Match Patterns</p>
                 </div>
@@ -151,7 +155,11 @@ export default function Actions({
                 </div>
                 <div>
                   <p className="text-md font-bold">
-                    {action.exclude_patterns.length}
+                    {
+                      action.exclude_patterns.filter(
+                        (pattern: any) => pattern.key,
+                      ).length
+                    }
                   </p>
                   <p className="text-sm text-default-500">Exclude Patterns</p>
                 </div>
