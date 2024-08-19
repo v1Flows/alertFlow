@@ -87,16 +87,16 @@ export default function Project({
       <Divider className="mb-4" />
       {project.disabled && (
         <div className="mb-4">
-          <Card className="bg-danger/10">
-            <CardHeader className="justify-start gap-2 items-center">
-              <IconWrapper className="bg-danger/10 text-danger">
-                <InfoIcon className="text-lg" />
-              </IconWrapper>
-              <p className="text-md font-bold text-danger">
-                Project is currently disabled
-              </p>
-            </CardHeader>
+          <Card className="bg-danger/20">
             <CardBody>
+              <div className="flex items-center gap-2">
+                <IconWrapper className="bg-danger/10 text-danger">
+                  <InfoIcon className="text-lg" />
+                </IconWrapper>
+                <p className="text-md font-bold text-danger">
+                  Project is currently disabled
+                </p>
+              </div>
               <p className="text-default-500 font-bold">
                 Reason: {project.disabled_reason}
               </p>

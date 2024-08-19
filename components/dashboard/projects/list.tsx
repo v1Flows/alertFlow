@@ -35,6 +35,7 @@ export function ProjectsList({
   pending_projects,
   settings,
   plan,
+  user,
 }: any) {
   const router = useRouter();
 
@@ -53,6 +54,30 @@ export function ProjectsList({
       toast.error("Failed to copy project ID to clipboard");
     }
   };
+
+  function createButtonDisabled() {
+    if (!settings.create_projects) {
+      return true;
+    } else if (user.role === "VIP") {
+      return false;
+    } else if (projects.length >= plan.projects) {
+      return true;
+    }
+
+    return false;
+  }
+
+  function createButtonPressable() {
+    if (!settings.create_projects) {
+      return false;
+    } else if (user.role === "VIP") {
+      return true;
+    } else if (projects.length >= plan.projects) {
+      return false;
+    }
+
+    return true;
+  }
 
   return (
     <main>
@@ -215,12 +240,8 @@ export function ProjectsList({
             <Card
               isHoverable
               className="border border-primary border-3 border-dashed"
-              isDisabled={
-                !settings.create_projects || projects.length >= plan.projects
-              }
-              isPressable={
-                settings.create_projects && projects.length < plan.projects
-              }
+              isDisabled={createButtonDisabled()}
+              isPressable={createButtonPressable()}
               onPress={() => newProjectModal.onOpen()}
             >
               <CardBody className="flex flex-col items-center justify-center gap-2">
