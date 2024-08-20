@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -8,7 +8,6 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  useDisclosure,
   Select,
   SelectItem,
   Card,
@@ -16,39 +15,36 @@ import {
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
 import { EditIcon, InfoIcon } from "@/components/icons";
 import { IconWrapper } from "@/lib/IconWrapper";
 import EditProjectMember from "@/lib/fetch/project/PUT/editProjectMember";
 
-// import UpdateProjectMembers from "@/lib/fetch/project/PUT/UpdateProjectMembers";
-
 export default function EditProjectMemberModal({
+  disclosure,
   projectID,
   user,
-  currentUser,
-  members,
-}: any) {
+}: {
+  disclosure: UseDisclosureReturn;
+  projectID: string;
+  user: any;
+}) {
   const router = useRouter();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpenChange } = disclosure;
   const [isLoginLoading, setIsLoginLoading] = useState(false);
   const [role, setRole] = React.useState(user.role);
 
   const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState("");
 
-  function handleOpen() {
-    if (
-      members.filter((m: any) => m.user_id === currentUser.id)[0].role !==
-      "Viewer"
-    ) {
-      onOpen();
-    }
-  }
-
   const handleSelectRole = (e: any) => {
     setRole(e.currentKey);
   };
+
+  useEffect(() => {
+    setRole(user.role);
+  }, [user]);
 
   async function handleUpdateUser() {
     setIsLoginLoading(true);
@@ -72,7 +68,6 @@ export default function EditProjectMemberModal({
 
   return (
     <>
-      <EditIcon onClick={handleOpen} />
       <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
