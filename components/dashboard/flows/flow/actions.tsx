@@ -38,7 +38,7 @@ export default function Actions({
   const deleteActionModal = useDisclosure();
 
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="grid lg:grid-cols-2 gap-4">
       {actions.map((action: any, index: number) => (
         <Card key={index}>
           <CardHeader className="flex justify-between gap-4">
