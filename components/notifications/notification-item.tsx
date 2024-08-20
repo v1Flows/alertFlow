@@ -1,45 +1,16 @@
 "use client";
 
 import React from "react";
-import { Avatar, Badge, Button, Tooltip } from "@nextui-org/react";
+import { Avatar, Badge, Button, Spacer, Tooltip } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
+import ReactTimeago from "react-timeago";
 
 import { cn } from "@/components/functions/cn/cn";
 import ReadUserNotification from "@/lib/fetch/user/readNotification";
 import UnreadUserNotification from "@/lib/fetch/user/unreadNotification";
 import ArchiveUserNotification from "@/lib/fetch/user/archiveNotification";
 import UnarchiveUserNotification from "@/lib/fetch/user/unarchiveNotification";
-
-function notifyIcon(type: string) {
-  switch (type) {
-    case "adminMessage":
-      return <Icon height={24} icon="solar:shield-warning-broken" width={24} />;
-    case "project":
-      return <Icon height={24} icon="solar:box-broken" width={24} />;
-    case "success":
-      return <Icon height={24} icon="mdi:check-circle-outline" width={24} />;
-    case "info":
-      return <Icon height={24} icon="mdi:information-outline" width={24} />;
-    default:
-      return <Icon height={24} icon="mdi:alert-circle-outline" width={24} />;
-  }
-}
-
-function notifyColor(type: string) {
-  switch (type) {
-    case "adminMessage":
-      return "danger";
-    case "project":
-      return "primary";
-    case "success":
-      return "success";
-    case "info":
-      return "secondary";
-    default:
-      return "primary";
-  }
-}
 
 export default function NotificationItem({ notification }: any) {
   const router = useRouter();
@@ -52,32 +23,54 @@ export default function NotificationItem({ notification }: any) {
     >
       <div className="relative flex-none">
         <Badge
-          color="primary"
+          color="success"
           content=""
           isInvisible={notification.is_read}
           placement="bottom-right"
           shape="circle"
         >
-          <Avatar
-            color={notifyColor(notification.type)}
-            fallback={notifyIcon(notification.type)}
-            size="sm"
-          />
-          {notification.type === "" && (
-            <Avatar color="default" size="sm" src="/images/af_logo_white.png" />
+          {notification.icon === "" ? (
+            <Avatar
+              color={notification.color || "default"}
+              size="sm"
+              src="/images/af_logo_white.png"
+            />
+          ) : (
+            <Avatar
+              color={notification.color || "default"}
+              fallback={<Icon icon={notification.icon} width={22} />}
+              size="sm"
+            />
           )}
         </Badge>
       </div>
       <div className="flex flex-col gap-1">
-        <p className="text-small text-foreground">
-          <strong className="font-medium">{notification.title}</strong>
-        </p>
-        <p>{notification.body}</p>
+        <div>
+          <p className="text-sm text-default-500 font-bold">
+            {notification.title}
+          </p>
+          <p>{notification.body}</p>
+        </div>
         <time className="text-tiny text-default-400">
-          {new Date(notification.created_at).toLocaleString()}
+          <ReactTimeago date={notification.created_at} />
         </time>
+        {notification.link && (
+          <>
+            <Spacer y={1} />
+            <Button
+              size="sm"
+              variant="flat"
+              onPress={() => {
+                router.push(notification.link);
+              }}
+            >
+              {notification.link_text || "View"}
+            </Button>
+          </>
+        )}
       </div>
-      <div className="grid grid-rows-2 items-center">
+
+      <div className="flex flex-col flex-grow items-end justify-center">
         {notification.is_read ? (
           <>
             <Tooltip content="Mark as unread">
