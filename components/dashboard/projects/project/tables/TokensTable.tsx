@@ -67,8 +67,13 @@ export default function ProjectTokens({
               <span className="text-lg text-danger cursor-pointer active:opacity-50">
                 <DeleteIcon
                   onClick={() => {
-                    setTargetToken(key);
-                    deleteTokenModal.onOpen();
+                    if (
+                      members.filter((m: any) => m.user_id === user.id)[0]
+                        .role !== "Viewer"
+                    ) {
+                      setTargetToken(key);
+                      deleteTokenModal.onOpen();
+                    }
                   }}
                 />
               </span>
@@ -110,7 +115,7 @@ export default function ProjectTokens({
             !settings.create_api_keys ||
             project.disabled ||
             members.filter((m: any) => m.user_id === user.id)[0].role ===
-              "Viewer"
+            "Viewer"
           }
           startContent={<PlusIcon height={undefined} width={undefined} />}
           onPress={() => addTokenModal.onOpen()}
