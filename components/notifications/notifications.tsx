@@ -37,7 +37,7 @@ export default function Notifications({
 }) {
   const router = useRouter();
   const [activeTab, setActiveTab] = React.useState<NotificationTabs>(
-    NotificationTabs.All,
+    NotificationTabs.Unread,
   );
 
   async function ReadAll() {

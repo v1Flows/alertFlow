@@ -8,34 +8,28 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  useDisclosure,
   User,
   Divider,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
-import { DeleteDocumentIcon, DeleteIcon } from "@/components/icons";
+import { DeleteDocumentIcon } from "@/components/icons";
 import RemoveProjectMember from "@/lib/fetch/project/DELETE/removeProjectMember";
 
-export default function DeleteMemberModal({
+export default function DeleteProjectMemberModal({
+  disclosure,
   projectID,
   user,
-  members,
-  currentUser,
-}: any) {
+}: {
+  disclosure: UseDisclosureReturn;
+  projectID: string;
+  user: any;
+}) {
   const router = useRouter();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange } = disclosure;
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
-
-  function handleOpen() {
-    if (
-      members.filter((m: any) => m.user_id === currentUser.id)[0].role !==
-      "Viewer"
-    ) {
-      onOpen();
-    }
-  }
 
   async function handleDeleteMember() {
     setIsDeleteLoading(true);
@@ -59,7 +53,6 @@ export default function DeleteMemberModal({
 
   return (
     <>
-      <DeleteIcon onClick={handleOpen} />
       <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
