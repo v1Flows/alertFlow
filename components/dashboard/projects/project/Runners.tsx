@@ -164,6 +164,11 @@ export default function Runners({
                           <DropdownItem
                             className="text-danger"
                             color="danger"
+                            isDisabled={
+                              members.filter(
+                                (m: any) => m.user_id === user.id,
+                              )[0].role === "Viewer"
+                            }
                             startContent={<DeleteDocumentIcon />}
                             onClick={() => {
                               setTargetRunner(runner);
