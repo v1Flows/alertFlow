@@ -4,7 +4,6 @@ import {
   Button,
   Card,
   CardBody,
-  CardHeader,
   Input,
   Modal,
   ModalBody,
@@ -22,7 +21,6 @@ import {
   Tooltip,
   ButtonGroup,
   CheckboxGroup,
-  Checkbox,
   Divider,
 } from "@nextui-org/react";
 import React from "react";
@@ -33,6 +31,7 @@ import { Icon } from "@iconify/react";
 import { cn } from "@/components/functions/cn/cn";
 import { PlusIcon } from "@/components/icons";
 import CreateFlowAction from "@/lib/fetch/flow/POST/CreateFlowAction";
+import { CustomCheckbox } from "@/components/ui/CustomCheckbox";
 
 import MinimalRowSteps from "../steps/minimal-row-steps";
 
@@ -236,7 +235,7 @@ export default function AddFlowActionModal({
               <ModalBody>
                 <div className="flex items-center justify-center">
                   <MinimalRowSteps
-                    className="w-fit"
+                    className="w-fit overflow-hidden"
                     currentStep={currentStep}
                     label={`Step ${currentStep + 1} of ${steps}`}
                     stepsCount={steps}
@@ -471,16 +470,15 @@ export default function AddFlowActionModal({
                             </p>
                             <Spacer y={2} />
                             <CheckboxGroup
-                              classNames={{
-                                base: "w-full",
-                              }}
+                              orientation="horizontal"
                               value={actions}
                               onChange={setActions}
                             >
                               {getUniqueActions().map((action: any) => (
-                                <Checkbox key={action.name} value={action.name}>
-                                  {action.name}
-                                </Checkbox>
+                                <CustomCheckbox
+                                  key={action.name}
+                                  action={action}
+                                />
                               ))}
                             </CheckboxGroup>
                           </>
@@ -831,9 +829,9 @@ export default function AddFlowActionModal({
                 ) : (
                   <Button
                     color="primary"
+                    isDisabled={disableNext}
                     isLoading={isLoading}
                     onPress={() => setCurrentStep(currentStep + 1)}
-                    isDisabled={disableNext}
                   >
                     Next Step
                   </Button>
