@@ -21,17 +21,20 @@ export default async function UpdateProject(
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/projects/${id}`, {
-      method: "PUT",
-      headers: headers,
-      body: JSON.stringify({
-        name: name,
-        description: description,
-        alertflow_runners: alertflowRunners,
-        icon: icon,
-        color: color,
-      }),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/projects/${id}`,
+      {
+        method: "PUT",
+        headers: headers,
+        body: JSON.stringify({
+          name: name,
+          description: description,
+          alertflow_runners: alertflowRunners,
+          icon: icon,
+          color: color,
+        }),
+      },
+    );
     const data = await res.json();
 
     return data;

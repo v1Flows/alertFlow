@@ -12,6 +12,7 @@ import {
   Input,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
+import { toast } from "sonner";
 
 import SimulatePayload from "@/lib/fetch/payload/send";
 
@@ -71,10 +72,12 @@ export default function SimulatePayloadModal({
     const res = await SimulatePayload(target, payload);
 
     if (res && !res.error) {
-      console.log("Payload sent");
+      toast.error(res.error);
+    } else {
+      onOpenChange();
+      toast.success("Payload sent successfully!");
     }
 
-    onOpenChange();
     setIsLoading(false);
   }
 
@@ -122,6 +125,7 @@ export default function SimulatePayloadModal({
                 </Button>
                 <Button
                   color="secondary"
+                  isLoading={isLoading}
                   variant="flat"
                   onPress={sendPayload}
                 >
