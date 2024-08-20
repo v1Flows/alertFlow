@@ -27,7 +27,7 @@ export default function SimulatePayloadModal({
 
   const [isLoading, setIsLoading] = React.useState(false);
   const [target, setTarget] = React.useState(
-    `${process.env.NEXT_PUBLIC_API_URL}/payloads/alertmanager`,
+    "https://alertflow.org/payloads/alertmanager",
   );
   const [payload, setPayload] = React.useState(`{
   "receiver": "${flow.id}",
