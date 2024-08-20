@@ -8,6 +8,10 @@ import {
   Link,
   Chip,
   Image,
+  NavbarMenuToggle,
+  NavbarMenu,
+  NavbarMenuItem,
+  Divider,
 } from "@nextui-org/react";
 import React from "react";
 import { useRouter } from "next/navigation";
@@ -75,19 +79,48 @@ export default function Navbar({ user, session, settings }: any) {
         </NavbarContent>
       )}
 
-      <NavbarContent className="sm:flex basis-1/5 sm:basis-full" justify="end">
+      <NavbarContent
+        className="hidden sm:flex basis-1/5 sm:basis-full"
+        justify="end"
+      >
         <NavbarItem className="sm:flex gap-2">
           <ThemeSwitch />
         </NavbarItem>
         <NavbarItem className="sm:flex">
-          <Login
-            session={session}
-            settings={settings}
-            showSignUp={true}
-            user={user}
-          />
+          <Login showSignUp session={session} settings={settings} user={user} />
         </NavbarItem>
       </NavbarContent>
+
+      <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
+        <ThemeSwitch />
+        <NavbarMenuToggle
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+        />
+      </NavbarContent>
+
+      <NavbarMenu>
+        <NavbarItem isActive>
+          <Link color="primary" onPress={() => goTo("/")}>
+            Home
+          </Link>
+        </NavbarItem>
+        {user?.email && (
+          <NavbarItem>
+            <Link
+              aria-current="page"
+              color="foreground"
+              isDisabled={!user?.email}
+              onPress={() => goTo("/dashboard")}
+            >
+              Dashboard
+            </Link>
+          </NavbarItem>
+        )}
+        <NavbarMenuItem>
+          <Divider className="my-4" />
+          <Login showSignUp session={session} settings={settings} user={user} />
+        </NavbarMenuItem>
+      </NavbarMenu>
     </NextUINavbar>
   );
 }
