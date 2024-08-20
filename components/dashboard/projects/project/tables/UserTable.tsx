@@ -19,9 +19,9 @@ import { Icon } from "@iconify/react";
 import AddProjectMemberModal from "@/components/functions/projects/members";
 import { PlusIcon } from "@/components/icons";
 import EditProjectMemberModal from "@/components/functions/projects/editMember";
+import LeaveProjectModal from "@/components/functions/projects/leave";
 
 import DeleteProjectMemberModal from "../../../../functions/projects/removeMember";
-import LeaveProjectModal from "@/components/functions/projects/leave";
 
 const statusColorMap: any = {
   Owner: "danger",
