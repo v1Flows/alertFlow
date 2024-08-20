@@ -9,7 +9,10 @@ import {
   TableCell,
   Pagination,
   User,
+  Tooltip,
+  Chip,
 } from "@nextui-org/react";
+import { Icon } from "@iconify/react";
 
 export default function ProjectAuditLogs({ audit, members }: any) {
   // pagination
@@ -31,6 +34,8 @@ export default function ProjectAuditLogs({ audit, members }: any) {
         return "warning";
       case "delete":
         return "danger";
+      case "info":
+        return "primary";
       default:
         return "default";
     }
@@ -45,21 +50,48 @@ export default function ProjectAuditLogs({ audit, members }: any) {
     switch (columnKey) {
       case "user_id":
         return (
-          <User
-            avatarProps={{
-              name: user.username,
-            }}
-            description={user.email}
-            name={user.username}
-          />
+          <Tooltip
+            content={
+              <div>
+                <p className="text-default-500 font-bold">User ID</p>
+                <p>{entry.user_id}</p>
+              </div>
+            }
+          >
+            <User
+              avatarProps={{
+                name: entry?.username,
+              }}
+              description={entry?.email}
+              name={
+                <div className="flex items-center gap-2">
+                  <p>{entry?.username}</p>
+                  {!user?.username && (
+                    <Tooltip content="User left the project">
+                      <Icon icon="solar:ghost-broken" />
+                    </Tooltip>
+                  )}
+                  {entry?.username === user?.username && (
+                    <Chip color="primary" radius="sm" size="sm" variant="flat">
+                      You
+                    </Chip>
+                  )}
+                </div>
+              }
+            />
+          </Tooltip>
         );
       case "operation":
         return (
-          <p
-            className={`text-${operationColor(entry.operation)} capitalize font-bold`}
+          <Chip
+            className="capitalize"
+            color={operationColor(entry.operation)}
+            radius="sm"
+            size="sm"
+            variant="flat"
           >
             {entry.operation}
-          </p>
+          </Chip>
         );
       case "created_at":
         return new Date(entry.created_at).toLocaleString();
@@ -75,7 +107,6 @@ export default function ProjectAuditLogs({ audit, members }: any) {
         bottomContent={
           <div className="flex w-full justify-center">
             <Pagination
-              isCompact
               showControls
               showShadow
               color="primary"
@@ -90,9 +121,6 @@ export default function ProjectAuditLogs({ audit, members }: any) {
         }}
       >
         <TableHeader>
-          <TableColumn key="id" align="start">
-            ID
-          </TableColumn>
           <TableColumn key="user_id" align="start">
             USER
           </TableColumn>
@@ -101,6 +129,9 @@ export default function ProjectAuditLogs({ audit, members }: any) {
           </TableColumn>
           <TableColumn key="details" align="start">
             DETAILS
+          </TableColumn>
+          <TableColumn key="id" align="start">
+            ID
           </TableColumn>
           <TableColumn key="created_at" align="start">
             CREATED AT
