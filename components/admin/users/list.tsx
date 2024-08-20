@@ -29,6 +29,7 @@ import {
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { Icon } from "@iconify/react";
 
 import {
   EyeIcon,
@@ -42,6 +43,7 @@ import UpdateUserStatus from "@/lib/fetch/admin/PUT/UpdateUserState";
 import DeleteUserModal from "@/components/functions/users/delete";
 import SignUpModal from "@/components/functions/auth/signUp";
 import EditUserModal from "@/components/functions/users/edit";
+import AdminSendUserNotificationModal from "@/components/functions/admin/sendNotification";
 
 export function UsersList({ users, plans }: any) {
   const router = useRouter();
@@ -54,6 +56,7 @@ export function UsersList({ users, plans }: any) {
 
   const [targetUser, setTargetUser] = React.useState<any>(null);
   const editUserModal = useDisclosure();
+  const sendUserNotificationModal = useDisclosure();
   const deleteUserModal = useDisclosure();
   const signUpModal = useDisclosure();
 
@@ -236,8 +239,23 @@ export function UsersList({ users, plans }: any) {
               </DropdownTrigger>
               <DropdownMenu variant="flat">
                 <DropdownSection showDivider title="Actions">
-                  <DropdownItem key="view" startContent={<EyeIcon />}>
+                  <DropdownItem
+                    key="view"
+                    color="primary"
+                    startContent={<EyeIcon />}
+                  >
                     View
+                  </DropdownItem>
+                  <DropdownItem
+                    key="send_notification"
+                    color="primary"
+                    startContent={<Icon icon="solar:bell-bold-duotone" />}
+                    onPress={() => {
+                      setTargetUser(user);
+                      sendUserNotificationModal.onOpen();
+                    }}
+                  >
+                    Send Notification
                   </DropdownItem>
                   <DropdownItem
                     key="edit"
@@ -407,6 +425,10 @@ export function UsersList({ users, plans }: any) {
       <EditUserModal
         disclosure={editUserModal}
         plans={plans}
+        user={targetUser}
+      />
+      <AdminSendUserNotificationModal
+        disclosure={sendUserNotificationModal}
         user={targetUser}
       />
       <SignUpModal skipSuccessModal disclosure={signUpModal} />

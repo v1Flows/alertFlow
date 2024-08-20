@@ -3,7 +3,6 @@
 import React from "react";
 import {
   Card,
-  CardHeader,
   CardBody,
   Divider,
   useDisclosure,
@@ -12,7 +11,7 @@ import {
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 
-import { CalendarIcon, InfoIcon } from "@/components/icons";
+import { InfoIcon } from "@/components/icons";
 import { IconWrapper } from "@/lib/IconWrapper";
 import { subtitle } from "@/components/primitives";
 import Reloader from "@/components/reloader/Reloader";
@@ -75,7 +74,7 @@ export default function Project({
           isDisabled={
             project.disabled ||
             members.filter((m: any) => m.user_id === user.id)[0].role ===
-              "Viewer"
+            "Viewer"
           }
           startContent={<Icon icon="solar:pen-new-square-broken" width={20} />}
           variant="flat"
@@ -87,16 +86,16 @@ export default function Project({
       <Divider className="mb-4" />
       {project.disabled && (
         <div className="mb-4">
-          <Card className="bg-danger/10">
-            <CardHeader className="justify-start gap-2 items-center">
-              <IconWrapper className="bg-danger/10 text-danger">
-                <InfoIcon className="text-lg" />
-              </IconWrapper>
-              <p className="text-md font-bold text-danger">
-                Project is currently disabled
-              </p>
-            </CardHeader>
+          <Card className="bg-danger/20">
             <CardBody>
+              <div className="flex items-center gap-2">
+                <IconWrapper className="bg-danger/10 text-danger">
+                  <InfoIcon className="text-lg" />
+                </IconWrapper>
+                <p className="text-md font-bold text-danger">
+                  Project is currently disabled
+                </p>
+              </div>
               <p className="text-default-500 font-bold">
                 Reason: {project.disabled_reason}
               </p>
@@ -108,64 +107,75 @@ export default function Project({
         <div className="grid lg:grid-cols-4 grid-cols-2 gap-4">
           <div className="col-span-1">
             <Card fullWidth>
-              <CardHeader className="justify-start gap-2 items-center">
-                <IconWrapper className="bg-primary/10 text-primary">
-                  <Icon icon="solar:smile-square-broken" width={20} />
-                </IconWrapper>
-                <p className="text-md font-bold">Members</p>
-              </CardHeader>
               <CardBody>
-                <p className="text-default-500 font-bold">{members.length}</p>
+                <div className="flex items-center gap-2">
+                  <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                    <Icon icon="solar:smile-square-broken" width={20} />
+                  </div>
+                  <div>
+                    <p className="text-md font-bold">{members.length}</p>
+                    <p className="text-sm text-default-500">Members</p>
+                  </div>
+                </div>
               </CardBody>
             </Card>
           </div>
           <div className="col-span-1">
             <Card fullWidth>
-              <CardHeader className="justify-start gap-2 items-center">
-                <IconWrapper className="bg-warning/10 text-warning">
-                  <Icon icon="solar:rocket-2-broken" width={20} />
-                </IconWrapper>
-                <p className="text-md font-bold">Runners</p>
-              </CardHeader>
               <CardBody>
-                {project.alertflow_runners ? (
-                  <p className="text-default-500 font-bold">{runners.length}</p>
-                ) : (
-                  <p className="text-default-500 font-bold">
-                    {
-                      runners.filter((r: any) => r.alertflow_runner === false)
-                        .length
-                    }
-                  </p>
-                )}
+                <div className="flex items-center gap-2">
+                  <div className="flex bg-warning/10 text-warning items-center rounded-small justify-center w-10 h-10">
+                    <Icon icon="solar:rocket-2-broken" width={20} />
+                  </div>
+                  <div>
+                    <p className="text-md font-bold">
+                      {project.alertflow_runners ? (
+                        <p>{runners.length}</p>
+                      ) : (
+                        <p>
+                          {
+                            runners.filter(
+                              (r: any) => r.alertflow_runner === false,
+                            ).length
+                          }
+                        </p>
+                      )}
+                    </p>
+                    <p className="text-sm text-default-500">Runners</p>
+                  </div>
+                </div>
               </CardBody>
             </Card>
           </div>
           <div className="col-span-1">
             <Card fullWidth>
-              <CardHeader className="justify-start gap-2 items-center">
-                <IconWrapper className="bg-default/50 text-foreground">
-                  <Icon icon="solar:key-square-2-broken" width={20} />
-                </IconWrapper>
-                <p className="text-md font-bold">Tokens</p>
-              </CardHeader>
               <CardBody>
-                <p className="text-default-500 font-bold">{tokens.length}</p>
+                <div className="flex items-center gap-2">
+                  <div className="flex bg-default/50 text-foreground items-center rounded-small justify-center w-10 h-10">
+                    <Icon icon="solar:key-square-2-broken" width={20} />
+                  </div>
+                  <div>
+                    <p className="text-md font-bold">{tokens.length}</p>
+                    <p className="text-sm text-default-500">Tokens</p>
+                  </div>
+                </div>
               </CardBody>
             </Card>
           </div>
           <div className="col-span-1">
             <Card fullWidth>
-              <CardHeader className="justify-start gap-2 items-center">
-                <IconWrapper className="bg-secondary/10 text-secondary">
-                  <CalendarIcon className="text-lg" />
-                </IconWrapper>
-                <p className="text-md font-bold">Created At</p>
-              </CardHeader>
               <CardBody>
-                <p className="text-default-500 font-bold">
-                  {new Date(project.created_at).toLocaleString("de-DE")}
-                </p>
+                <div className="flex items-center gap-2">
+                  <div className="flex bg-secondary/10 text-secondary items-center rounded-small justify-center w-10 h-10">
+                    <Icon icon="solar:calendar-broken" width={20} />
+                  </div>
+                  <div>
+                    <p className="text-md font-bold">
+                      {new Date(project.created_at).toLocaleString("de-DE")}
+                    </p>
+                    <p className="text-sm text-default-500">Created At</p>
+                  </div>
+                </div>
               </CardBody>
             </Card>
           </div>

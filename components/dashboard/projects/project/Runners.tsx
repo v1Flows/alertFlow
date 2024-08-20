@@ -72,20 +72,34 @@ export default function Runners({
     }
   }
 
+  function checkQuotaDisabled() {
+    if (!settings.create_runners) {
+      return true;
+    } else if (project.disabled) {
+      return true;
+    } else if (user.role === "VIP") {
+      return false;
+    } else if (
+      runners.filter((runner: any) => runner.alertflow_runner === false)
+        .length >= plan.self_hosted_runners
+    ) {
+      return true;
+    } else if (
+      members.filter((m: any) => m.user_id === user.id)[0].role === "Viewer"
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
   return (
     <main>
       <div className="flex items-center justify-between mb-4">
         <p className="text-lg font-bold">Selfhosted Runners</p>
         <Button
           color="primary"
-          isDisabled={
-            !settings.create_runners ||
-            project.disabled ||
-            runners.filter((runner: any) => runner.alertflow_runner === false)
-              .length >= plan.self_hosted_runners ||
-            members.filter((m: any) => m.user_id === user.id)[0].role ===
-              "Viewer"
-          }
+          isDisabled={checkQuotaDisabled()}
           startContent={<PlusIcon height={undefined} width={undefined} />}
           onPress={() => addRunnerModal.onOpen()}
         >
@@ -150,6 +164,11 @@ export default function Runners({
                           <DropdownItem
                             className="text-danger"
                             color="danger"
+                            isDisabled={
+                              members.filter(
+                                (m: any) => m.user_id === user.id,
+                              )[0].role === "Viewer"
+                            }
                             startContent={<DeleteDocumentIcon />}
                             onClick={() => {
                               setTargetRunner(runner);

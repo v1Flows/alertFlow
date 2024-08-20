@@ -7,6 +7,7 @@ import {
   CardBody,
   Button,
   useDisclosure,
+  Spacer,
 } from "@nextui-org/react";
 import React from "react";
 import { Icon } from "@iconify/react";
@@ -18,6 +19,7 @@ import { InfoIcon } from "@/components/icons";
 import EditFlowModal from "@/components/functions/flows/edit";
 
 import FlowTabs from "./flow/tabs";
+import SimulatePayloadModal from "@/components/functions/flows/simulatePayload";
 
 export function Flow({
   id,
@@ -29,6 +31,7 @@ export function Flow({
   runners,
 }: any) {
   const editFlowModal = useDisclosure();
+  const simulatePayloadModal = useDisclosure();
 
   return (
     <main>
@@ -56,28 +59,44 @@ export function Flow({
               <Reloader />
             </div>
           </div>
-          <div className="flex items-end justify-between mb-4 mt-2">
+          <Spacer y={2} />
+          <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold mb-0 text-primary">
                 {flow.name}
               </h1>
               <p className="text-sm text-default-500">{flow.description}</p>
             </div>
-            <Button
-              color="warning"
-              isDisabled={flow.disabled}
-              startContent={
-                <Icon icon="solar:pen-new-square-broken" width={20} />
-              }
-              variant="flat"
-              onPress={() => {
-                editFlowModal.onOpen();
-              }}
-            >
-              Edit
-            </Button>
+            <div className="flex gap-4">
+              <Button
+                color="secondary"
+                isDisabled={flow.disabled}
+                startContent={
+                  <Icon icon="solar:play-bold-duotone" width={20} />
+                }
+                variant="ghost"
+                onPress={() => {
+                  simulatePayloadModal.onOpen();
+                }}
+              >
+                Simulate Payload
+              </Button>
+              <Button
+                color="warning"
+                isDisabled={flow.disabled}
+                startContent={
+                  <Icon icon="solar:pen-new-square-broken" width={20} />
+                }
+                variant="flat"
+                onPress={() => {
+                  editFlowModal.onOpen();
+                }}
+              >
+                Edit
+              </Button>
+            </div>
           </div>
-          <Divider className="mb-4" />
+          <Divider className="my-4" />
           {flow.disabled && (
             <div className="mb-4">
               <Card className="bg-danger/10">
@@ -177,8 +196,8 @@ export function Flow({
                           {flow.runner_id === "any"
                             ? "Any"
                             : runners.find(
-                                (runner: any) => runner.id === flow.runner_id,
-                              )?.name}
+                              (runner: any) => runner.id === flow.runner_id,
+                            )?.name}
                         </p>
                         <p className="text-sm text-default-500">Runner</p>
                       </div>
@@ -225,6 +244,7 @@ export function Flow({
         flow={flow}
         projects={projects}
       />
+      <SimulatePayloadModal disclosure={simulatePayloadModal} flow={flow} />
     </main>
   );
 }

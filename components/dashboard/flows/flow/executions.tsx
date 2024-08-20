@@ -251,7 +251,7 @@ export default function Executions({
             <Button
               color="primary"
               size="md"
-              startContent={<Icon icon="solar:eye-broken" />}
+              startContent={<Icon icon="solar:eye-broken" width={18} />}
               variant="solid"
               onPress={() =>
                 router.push(
