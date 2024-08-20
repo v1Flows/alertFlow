@@ -14,13 +14,16 @@ export default async function EditRunner(id: string, name: string) {
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/runners/${id}`, {
-      method: "PUT",
-      headers: headers,
-      body: JSON.stringify({
-        name: name,
-      }),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/runners/${id}`,
+      {
+        method: "PUT",
+        headers: headers,
+        body: JSON.stringify({
+          name: name,
+        }),
+      },
+    );
     const data = await res.json();
 
     return data;

@@ -97,10 +97,11 @@ export default function Payloads({ flow, executions, payloads, runners }: any) {
                     variant="solid"
                     onPress={() => {
                       router.push(
-                        `/dashboard/flows/${flow.id}/execution/${executions.find(
-                          (execution: any) =>
-                            execution.payload_id === payload.id,
-                        ).id
+                        `/dashboard/flows/${flow.id}/execution/${
+                          executions.find(
+                            (execution: any) =>
+                              execution.payload_id === payload.id,
+                          ).id
                         }`,
                       );
                     }}

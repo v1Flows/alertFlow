@@ -15,10 +15,13 @@ export default async function AdminGetRunners() {
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/runners`, {
-      method: "GET",
-      headers: headers,
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/admin/runners`,
+      {
+        method: "GET",
+        headers: headers,
+      },
+    );
     const data = await res.json();
 
     return {
