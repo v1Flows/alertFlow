@@ -12,13 +12,16 @@ import {
   Pagination,
   useDisclosure,
   Button,
+  ButtonGroup,
 } from "@nextui-org/react";
+import { Icon } from "@iconify/react";
 
 import AddProjectMemberModal from "@/components/functions/projects/members";
 import { PlusIcon } from "@/components/icons";
 import EditProjectMemberModal from "@/components/functions/projects/editMember";
 
-import DeleteMemberModal from "../../../../functions/projects/removeMember";
+import DeleteProjectMemberModal from "../../../../functions/projects/removeMember";
+import LeaveProjectModal from "@/components/functions/projects/leave";
 
 const statusColorMap: any = {
   Owner: "danger",
@@ -34,6 +37,11 @@ export default function ProjectMembers({
   user,
 }: any) {
   const addProjectMemberModal = useDisclosure();
+  const editProjectMemberModal = useDisclosure();
+  const leaveProjectModal = useDisclosure();
+  const deleteProjectMemberModal = useDisclosure();
+
+  const [targetUser, setTargetUser] = React.useState({});
 
   // pagination
   const [page, setPage] = React.useState(1);
@@ -55,7 +63,16 @@ export default function ProjectMembers({
           <User
             avatarProps={{ radius: "lg", name: tableUser.username }}
             description={tableUser.email}
-            name={tableUser.username}
+            name={
+              <div className="flex items-center gap-2">
+                <p>{tableUser.username}</p>
+                {tableUser.user_id === user.id && (
+                  <Chip color="primary" radius="sm" size="sm" variant="flat">
+                    You
+                  </Chip>
+                )}
+              </div>
+            }
           >
             {tableUser.user_id}
           </User>
@@ -86,28 +103,37 @@ export default function ProjectMembers({
         return new Date(tableUser.invited_at).toLocaleString();
       case "actions":
         return (
-          <div className="relative flex items-center justify-center gap-2">
+          <ButtonGroup variant="light">
             <Tooltip content="Edit User">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <EditProjectMemberModal
-                  currentUser={user}
-                  members={members}
-                  projectID={project.id}
-                  user={tableUser}
+              <Button
+                isIconOnly
+                isDisabled={checkViewerButtonDisabled()}
+                onPress={() => {
+                  setTargetUser(tableUser);
+                  editProjectMemberModal.onOpen();
+                }}
+              >
+                <Icon
+                  className="text-default-400"
+                  icon="solar:pen-2-broken"
+                  width={20}
                 />
-              </span>
+              </Button>
             </Tooltip>
             <Tooltip color="danger" content="Remove User">
-              <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                <DeleteMemberModal
-                  currentUser={user}
-                  members={members}
-                  projectID={project.id}
-                  user={tableUser}
-                />
-              </span>
+              <Button
+                isIconOnly
+                color="danger"
+                isDisabled={checkViewerButtonDisabled()}
+                onPress={() => {
+                  setTargetUser(tableUser);
+                  deleteProjectMemberModal.onOpen();
+                }}
+              >
+                <Icon icon="solar:trash-bin-2-broken" width={20} />
+              </Button>
             </Tooltip>
-          </div>
+          </ButtonGroup>
         );
       default:
         return cellValue;
@@ -116,10 +142,19 @@ export default function ProjectMembers({
 
   const topContent = React.useMemo(() => {
     return (
-      <div className="flex flex-col items-end justify-center gap-4">
+      <div className="flex flex-cols items-center justify-end gap-4">
+        <Button
+          color="secondary"
+          isDisabled={checkLeaveProjectDisabled()}
+          startContent={<Icon icon="solar:undo-left-round-broken" width={20} />}
+          variant="ghost"
+          onPress={() => leaveProjectModal.onOpen()}
+        >
+          Leave Project
+        </Button>
         <Button
           color="primary"
-          isDisabled={checkQuotaDisabled()}
+          isDisabled={checkAddMemberDisabled()}
           startContent={<PlusIcon />}
           onPress={() => addProjectMemberModal.onOpen()}
         >
@@ -129,7 +164,7 @@ export default function ProjectMembers({
     );
   }, []);
 
-  function checkQuotaDisabled() {
+  function checkAddMemberDisabled() {
     if (!settings.add_project_members) {
       return true;
     } else if (project.disabled) {
@@ -139,6 +174,24 @@ export default function ProjectMembers({
     } else if (members.length >= plan.project_members) {
       return true;
     } else if (
+      members.filter((m: any) => m.user_id === user.id)[0].role === "Viewer"
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
+  function checkLeaveProjectDisabled() {
+    if (members.filter((m: any) => m.user_id === user.id)[0].role === "Owner") {
+      return true;
+    }
+
+    return false;
+  }
+
+  function checkViewerButtonDisabled() {
+    if (
       members.filter((m: any) => m.user_id === user.id)[0].role === "Viewer"
     ) {
       return true;
@@ -199,6 +252,20 @@ export default function ProjectMembers({
         disclosure={addProjectMemberModal}
         members={members}
         project={project}
+      />
+      <EditProjectMemberModal
+        disclosure={editProjectMemberModal}
+        projectID={project.id}
+        user={targetUser}
+      />
+      <LeaveProjectModal
+        disclosure={leaveProjectModal}
+        projectID={project.id}
+      />
+      <DeleteProjectMemberModal
+        disclosure={deleteProjectMemberModal}
+        projectID={project.id}
+        user={targetUser}
       />
     </>
   );
