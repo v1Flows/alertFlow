@@ -17,8 +17,9 @@ export const CustomCheckbox = ({ action }: { action: any }) => {
       }}
       value={action.name}
     >
-      <div className="w-full flex justify-between gap-2">
+      <div className="w-full flex flex-col justify-between gap-1">
         <p>{action.name}</p>
+        <p className="text-default-500">{action.description}</p>
       </div>
     </Checkbox>
   );

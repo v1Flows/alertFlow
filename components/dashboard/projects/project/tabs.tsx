@@ -126,7 +126,7 @@ export default function ProjectTabs({
               )
             }
           >
-            <ProjectAuditLogs audit={audit} members={members} />
+            <ProjectAuditLogs audit={audit} members={members} user={user} />
           </Tab>
         </Tabs>
       </div>

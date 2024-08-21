@@ -127,15 +127,12 @@ export default function AddFlowActionModal({
 
     for (let i = 0; i < runners.length; i++) {
       for (let j = 0; j < runners[i].available_actions.length; j++) {
-        var timeAgo =
-          (new Date(runners[i].last_heartbeat).getTime() - Date.now()) / 1000;
+        const action = runners[i].available_actions[j];
 
-        if (runners[i].disabled || !runners[i].registered || timeAgo <= -30) {
+        if (actions.find((x: any) => x.type === action.type)) {
           continue;
-        }
-
-        if (!actions.includes(runners[i].available_actions[j])) {
-          actions.push(runners[i].available_actions[j]);
+        } else {
+          actions.push(action);
         }
       }
     }
@@ -490,6 +487,7 @@ export default function AddFlowActionModal({
                         <p className="text-lg text-default-500 font-bold">
                           Required Parameters
                         </p>
+                        <p>No parameters for this action found.</p>
                       </div>
                     )}
                     {currentStep === 3 && (

@@ -23,19 +23,22 @@ export default async function UpdatePlan(
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/plans/${id}`, {
-      method: "PUT",
-      headers: headers,
-      body: JSON.stringify({
-        price: price,
-        projects: projects,
-        project_members: project_members,
-        flows: flows,
-        self_hosted_runners: self_hosted_runners,
-        alertflow_runners: alertflow_runners,
-        executions_per_month: executions_per_month,
-      }),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/admin/plans/${id}`,
+      {
+        method: "PUT",
+        headers: headers,
+        body: JSON.stringify({
+          price: price,
+          projects: projects,
+          project_members: project_members,
+          flows: flows,
+          self_hosted_runners: self_hosted_runners,
+          alertflow_runners: alertflow_runners,
+          executions_per_month: executions_per_month,
+        }),
+      },
+    );
     const data = await res.json();
 
     return data;

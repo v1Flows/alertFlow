@@ -6,14 +6,17 @@ export default async function CheckUserTaken(email: string, username: string) {
     const headers = new Headers();
 
     headers.append("Content-Type", "application/json");
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/user/taken`, {
-      method: "POST",
-      headers: headers,
-      body: JSON.stringify({
-        email: email,
-        username: username,
-      }),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/user/taken`,
+      {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify({
+          email: email,
+          username: username,
+        }),
+      },
+    );
     const data = await res.json();
 
     return data;

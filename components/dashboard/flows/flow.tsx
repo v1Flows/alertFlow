@@ -17,9 +17,9 @@ import FlowBreadcrumbs from "@/components/dashboard/flows/flow/breadcrumbs";
 import { IconWrapper } from "@/lib/IconWrapper";
 import { InfoIcon } from "@/components/icons";
 import EditFlowModal from "@/components/functions/flows/edit";
+import SimulatePayloadModal from "@/components/functions/flows/simulatePayload";
 
 import FlowTabs from "./flow/tabs";
-import SimulatePayloadModal from "@/components/functions/flows/simulatePayload";
 
 export function Flow({
   id,
@@ -196,8 +196,8 @@ export function Flow({
                           {flow.runner_id === "any"
                             ? "Any"
                             : runners.find(
-                              (runner: any) => runner.id === flow.runner_id,
-                            )?.name}
+                                (runner: any) => runner.id === flow.runner_id,
+                              )?.name}
                         </p>
                         <p className="text-sm text-default-500">Runner</p>
                       </div>

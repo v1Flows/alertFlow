@@ -25,22 +25,25 @@ export default async function UpdateSettings(
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/settings`, {
-      method: "PUT",
-      headers: headers,
-      body: JSON.stringify({
-        maintenance: maintenance,
-        signup: signup,
-        create_projects: create_projects,
-        create_flows: create_flows,
-        create_runners: create_runners,
-        create_api_keys: create_api_keys,
-        add_project_members: add_project_members,
-        add_flow_actions: add_flow_actions,
-        start_executions: start_executions,
-        inject_payloads: inject_payloads,
-      }),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/admin/settings`,
+      {
+        method: "PUT",
+        headers: headers,
+        body: JSON.stringify({
+          maintenance: maintenance,
+          signup: signup,
+          create_projects: create_projects,
+          create_flows: create_flows,
+          create_runners: create_runners,
+          create_api_keys: create_api_keys,
+          add_project_members: add_project_members,
+          add_flow_actions: add_flow_actions,
+          start_executions: start_executions,
+          inject_payloads: inject_payloads,
+        }),
+      },
+    );
     const data = await res.json();
 
     return data;
