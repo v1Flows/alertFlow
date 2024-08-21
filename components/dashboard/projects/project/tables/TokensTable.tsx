@@ -68,6 +68,7 @@ export default function ProjectTokens({
                 <DeleteIcon
                   onClick={() => {
                     if (
+                      members.find((m: any) => m.user_id === user.id) &&
                       members.filter((m: any) => m.user_id === user.id)[0]
                         .role !== "Viewer"
                     ) {
@@ -114,8 +115,9 @@ export default function ProjectTokens({
           isDisabled={
             !settings.create_api_keys ||
             project.disabled ||
-            members.filter((m: any) => m.user_id === user.id)[0].role ===
-              "Viewer"
+            (members.find((m: any) => m.user_id === user.id) &&
+              members.filter((m: any) => m.user_id === user.id)[0].role ===
+              "Viewer")
           }
           startContent={<PlusIcon height={undefined} width={undefined} />}
           onPress={() => addTokenModal.onOpen()}
