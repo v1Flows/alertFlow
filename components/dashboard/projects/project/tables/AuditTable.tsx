@@ -66,10 +66,10 @@ export default function ProjectAuditLogs({ audit, members, user }: any) {
                   {!members.find(
                     (member: any) => member.user_id === entry.user_id,
                   ) && (
-                      <Tooltip content="User left the project">
-                        <Icon icon="solar:ghost-broken" />
-                      </Tooltip>
-                    )}
+                    <Tooltip content="User left the project">
+                      <Icon icon="solar:ghost-broken" />
+                    </Tooltip>
+                  )}
                   {entry.user_id === user.id && (
                     <Chip color="primary" radius="sm" size="sm" variant="flat">
                       You
