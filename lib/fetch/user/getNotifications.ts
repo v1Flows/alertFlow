@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-export default async function GetUserNotifications(id: string) {
+export default async function GetUserNotifications() {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;

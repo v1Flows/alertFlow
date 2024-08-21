@@ -6,7 +6,6 @@ export default async function UnreadUserNotification(id: string) {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;
-  const user = JSON.parse(cookies().get("user")?.value || "{}");
 
   try {
     const headers = new Headers();

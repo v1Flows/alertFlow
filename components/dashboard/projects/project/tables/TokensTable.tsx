@@ -117,7 +117,7 @@ export default function ProjectTokens({
             project.disabled ||
             (members.find((m: any) => m.user_id === user.id) &&
               members.filter((m: any) => m.user_id === user.id)[0].role ===
-              "Viewer")
+                "Viewer")
           }
           startContent={<PlusIcon height={undefined} width={undefined} />}
           onPress={() => addTokenModal.onOpen()}

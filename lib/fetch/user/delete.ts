@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-export default async function DeleteUser(id: any) {
+export default async function DeleteUser() {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;

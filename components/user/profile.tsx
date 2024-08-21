@@ -110,7 +110,7 @@ export function UserProfile({ user }: any) {
           >
             <SecuritySettings user={user} />
           </Tab>
-          <Tab key="appearance" title="Appearance" isDisabled>
+          <Tab key="appearance" isDisabled title="Appearance">
             <Card>
               <CardBody>
                 Ut enim ad minim veniam, quis nostrud exercitation ullamco
@@ -120,7 +120,7 @@ export function UserProfile({ user }: any) {
               </CardBody>
             </Card>
           </Tab>
-          <Tab key="billing" title="Billing" isDisabled>
+          <Tab key="billing" isDisabled title="Billing">
             <Card>
               <CardBody>
                 Excepteur sint occaecat cupidatat non proident, sunt in culpa
