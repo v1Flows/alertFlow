@@ -46,6 +46,7 @@ export default function SecuritySettings({ user }: { user: any }) {
                 <p className="text-small text-success">Verified</p>
               </div>
               <Button
+                isDisabled
                 endContent={<Icon icon="solar:pen-2-linear" />}
                 radius="full"
                 variant="bordered"
@@ -72,7 +73,8 @@ export default function SecuritySettings({ user }: { user: any }) {
           </CellWrapper>
           {/* Two-Factor Authentication */}
           <SwitchCell
-            defaultSelected
+            isDisabled
+            defaultSelected={false}
             description="Add an extra layer of security to your account."
             label="Two-Factor Authentication"
           />
