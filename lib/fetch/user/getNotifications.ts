@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-export default async function GetUserNotifications(id: string) {
+export default async function GetUserNotifications() {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;
@@ -15,7 +15,7 @@ export default async function GetUserNotifications(id: string) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/${id}/notifications`,
+      `${process.env.NEXT_PUBLIC_API_URL}/user/notifications`,
       {
         method: "GET",
         headers: headers,

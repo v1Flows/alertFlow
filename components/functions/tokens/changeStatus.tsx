@@ -15,7 +15,7 @@ import React from "react";
 import { toast } from "sonner";
 
 import { CheckIcon, LockIcon } from "@/components/icons";
-import ChangeTokenStatus from "@/lib/fetch/tokens/ChangeStatus";
+import ChangeTokenStatus from "@/lib/fetch/admin/PUT/ChangeTokenStatus";
 
 export default function ChangeTokenStatusModal({
   disclosure,

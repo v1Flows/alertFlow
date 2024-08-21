@@ -11,12 +11,10 @@ export default async function DashboardHomeLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = JSON.parse(cookies().get("user")?.value || "{}");
-
   const session = cookies().get("session")?.value;
   const settings = await AdminGetSettings();
-  const notifications = await GetUserNotifications(user.id);
-  const userDetails = await GetUserDetails(user.id);
+  const notifications = await GetUserNotifications();
+  const userDetails = await GetUserDetails();
 
   return (
     <SidebarMenu

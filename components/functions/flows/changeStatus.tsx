@@ -15,7 +15,7 @@ import React from "react";
 import { toast } from "sonner";
 
 import { CheckIcon, LockIcon } from "@/components/icons";
-import ChangeFlowStatus from "@/lib/fetch/flow/PUT/ChangeFlowStatus";
+import ChangeFlowStatus from "@/lib/fetch/admin/PUT/ChangeFlowStatus";
 
 export default function ChangeFlowStatusModal({
   disclosure,

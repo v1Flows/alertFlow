@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-export default async function ChangeProjectStatus(
+export default async function ChangeFlowStatus(
   id: string,
   status: boolean,
   reason: string,
@@ -19,7 +19,7 @@ export default async function ChangeProjectStatus(
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/projects/${id}/status`,
+      `${process.env.NEXT_PUBLIC_API_URL}/admin/flows/${id}/status`,
       {
         method: "PUT",
         headers: headers,
@@ -33,6 +33,6 @@ export default async function ChangeProjectStatus(
 
     return data;
   } catch (error) {
-    return { error: "Failed to update project" };
+    return { error: "Failed to update flow" };
   }
 }

@@ -32,7 +32,7 @@ export default function DisableUserModal({
 
   async function disableUser() {
     setIsLoading(true);
-    const response = await DisableUser(user.id);
+    const response = await DisableUser();
 
     if (!response.error) {
       setIsLoading(false);

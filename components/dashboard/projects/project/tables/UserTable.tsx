@@ -174,6 +174,7 @@ export default function ProjectMembers({
     } else if (members.length >= plan.project_members) {
       return true;
     } else if (
+      members.find((m: any) => m.user_id === user.id) &&
       members.filter((m: any) => m.user_id === user.id)[0].role === "Viewer"
     ) {
       return true;
@@ -183,7 +184,10 @@ export default function ProjectMembers({
   }
 
   function checkLeaveProjectDisabled() {
-    if (members.filter((m: any) => m.user_id === user.id)[0].role === "Owner") {
+    if (
+      members.find((m: any) => m.user_id === user.id) &&
+      members.filter((m: any) => m.user_id === user.id)[0].role === "Owner"
+    ) {
       return true;
     }
 
@@ -192,6 +196,7 @@ export default function ProjectMembers({
 
   function checkViewerButtonDisabled() {
     if (
+      members.find((m: any) => m.user_id === user.id) &&
       members.filter((m: any) => m.user_id === user.id)[0].role === "Viewer"
     ) {
       return true;

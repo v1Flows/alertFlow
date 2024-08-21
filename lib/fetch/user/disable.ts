@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-export default async function DisableUser(id: string) {
+export default async function DisableUser() {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;
@@ -14,13 +14,10 @@ export default async function DisableUser(id: string) {
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/${id}/disable`,
-      {
-        method: "PUT",
-        headers: headers,
-      },
-    );
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/disable`, {
+      method: "PUT",
+      headers: headers,
+    });
     const data = await res.json();
 
     return data;
