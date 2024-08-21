@@ -121,6 +121,7 @@ export default function EditProjectMemberModal({
                 <Button
                   color="warning"
                   isLoading={isLoginLoading}
+                  variant="flat"
                   onPress={handleUpdateUser}
                 >
                   Update Member

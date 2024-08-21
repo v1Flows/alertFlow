@@ -26,6 +26,18 @@ export async function middleware(request: NextRequest) {
     if (settings.maintenance && user.role !== "Admin") {
       return NextResponse.redirect(new URL("/maintenance", request.url));
     }
+
+    if (request.url.includes("/auth/signup") && !settings.signup) {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+  }
+
+  if (request.url.includes("/auth/login") && request.cookies.get("session")) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+
+  if (request.url.includes("/auth/signup") && request.cookies.get("session")) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
   if (

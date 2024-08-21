@@ -28,7 +28,7 @@ export default function DeleteProjectMemberModal({
   user: any;
 }) {
   const router = useRouter();
-  const { isOpen, onOpen, onOpenChange } = disclosure;
+  const { isOpen, onOpenChange } = disclosure;
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
 
   async function handleDeleteMember() {
