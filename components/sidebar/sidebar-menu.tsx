@@ -139,7 +139,7 @@ export default function SidebarMenu({
       <Spacer y={8} />
       <Dropdown>
         <DropdownTrigger>
-          <div className="flex items-center gap-3 px-3">
+          <div className="flex items-center gap-3 px-3 hover:cursor-pointer">
             <Avatar
               isBordered
               color={
@@ -150,6 +150,7 @@ export default function SidebarMenu({
                     : "primary"
               }
               name={user.username}
+              radius="sm"
               size="sm"
             />
             <div className="flex flex-col">
@@ -171,7 +172,7 @@ export default function SidebarMenu({
             key="profile"
             showDivider
             startContent={<Icon icon="solar:smile-square-broken" width={18} />}
-            onPress={() => router.push(`/user/${user?.id}`)}
+            onPress={() => router.push(`/profile`)}
           >
             View Profile
           </DropdownItem>

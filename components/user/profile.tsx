@@ -53,7 +53,9 @@ export function UserProfile({ user }: any) {
     <main>
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-1">
-          <p className="text-2xl font-bold mb-0 text-default-500">👋 Hey</p>
+          <p className="text-2xl font-bold mb-0 text-default-500">
+            👋 Welcome on your profile
+          </p>
           <p className="text-2xl font-bold mb-0 text-primary">
             {user.username}
           </p>
@@ -97,16 +99,6 @@ export function UserProfile({ user }: any) {
               </div>
             </div>
           </Tab>
-          <Tab key="appearance" title="Appearance">
-            <Card>
-              <CardBody>
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-                dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                fugiat nulla pariatur.
-              </CardBody>
-            </Card>
-          </Tab>
           <Tab
             key="security"
             title={
@@ -118,7 +110,17 @@ export function UserProfile({ user }: any) {
           >
             <SecuritySettings user={user} />
           </Tab>
-          <Tab key="billing" title="Billing">
+          <Tab key="appearance" title="Appearance" isDisabled>
+            <Card>
+              <CardBody>
+                Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+                dolor in reprehenderit in voluptate velit esse cillum dolore eu
+                fugiat nulla pariatur.
+              </CardBody>
+            </Card>
+          </Tab>
+          <Tab key="billing" title="Billing" isDisabled>
             <Card>
               <CardBody>
                 Excepteur sint occaecat cupidatat non proident, sunt in culpa
