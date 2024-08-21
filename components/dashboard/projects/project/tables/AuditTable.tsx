@@ -14,7 +14,7 @@ import {
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 
-export default function ProjectAuditLogs({ audit, members }: any) {
+export default function ProjectAuditLogs({ audit, members, user }: any) {
   // pagination
   const [page, setPage] = React.useState(1);
   const rowsPerPage = 10;
@@ -43,9 +43,6 @@ export default function ProjectAuditLogs({ audit, members }: any) {
 
   const renderCell = React.useCallback((entry: any, columnKey: any) => {
     const cellValue = entry[columnKey];
-    const user = members.find(
-      (member: any) => member.user_id === entry.user_id,
-    );
 
     switch (columnKey) {
       case "user_id":
@@ -66,12 +63,14 @@ export default function ProjectAuditLogs({ audit, members }: any) {
               name={
                 <div className="flex items-center gap-2">
                   <p>{entry?.username}</p>
-                  {!user?.username && (
-                    <Tooltip content="User left the project">
-                      <Icon icon="solar:ghost-broken" />
-                    </Tooltip>
-                  )}
-                  {entry?.username === user?.username && (
+                  {!members.find(
+                    (member: any) => member.user_id === entry.user_id,
+                  ) && (
+                      <Tooltip content="User left the project">
+                        <Icon icon="solar:ghost-broken" />
+                      </Tooltip>
+                    )}
+                  {entry.user_id === user.id && (
                     <Chip color="primary" radius="sm" size="sm" variant="flat">
                       You
                     </Chip>
