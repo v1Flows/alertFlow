@@ -85,6 +85,7 @@ export default function Runners({
     ) {
       return true;
     } else if (
+      members.find((m: any) => m.user_id === user.id) &&
       members.filter((m: any) => m.user_id === user.id)[0].role === "Viewer"
     ) {
       return true;
@@ -165,6 +166,7 @@ export default function Runners({
                             className="text-danger"
                             color="danger"
                             isDisabled={
+                              members.find((m: any) => m.user_id === user.id) &&
                               members.filter(
                                 (m: any) => m.user_id === user.id,
                               )[0].role === "Viewer"

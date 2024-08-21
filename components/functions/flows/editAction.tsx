@@ -195,7 +195,7 @@ export default function EditActionModal({
               <ModalBody>
                 <div className="flex items-center justify-center">
                   <MinimalRowSteps
-                    className="w-fit"
+                    className="w-fit overflow-hidden"
                     currentStep={currentStep}
                     label={`Step ${currentStep + 1} of ${steps}`}
                     stepsCount={steps}

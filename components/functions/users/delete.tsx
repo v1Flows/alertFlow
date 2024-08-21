@@ -33,7 +33,7 @@ export default function DeleteUserModal({
 
   async function deleteUser() {
     setIsLoading(true);
-    const response = await DeleteUser(user.id);
+    const response = await DeleteUser();
 
     if (!response.error) {
       router.refresh();

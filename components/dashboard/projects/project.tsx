@@ -73,8 +73,9 @@ export default function Project({
           color="warning"
           isDisabled={
             project.disabled ||
-            members.filter((m: any) => m.user_id === user.id)[0].role ===
-              "Viewer"
+            (members.find((m: any) => m.user_id === user.id) &&
+              members.filter((m: any) => m.user_id === user.id)[0].role ===
+                "Viewer")
           }
           startContent={<Icon icon="solar:pen-new-square-broken" width={20} />}
           variant="flat"

@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
-import ChangeProjectStatus from "@/lib/fetch/project/PUT/ChangeProjectStatus";
+import ChangeProjectStatus from "@/lib/fetch/admin/PUT/ChangeProjectStatus";
 import { CheckIcon, LockIcon } from "@/components/icons";
 
 export default function ChangeProjectStatusModal({

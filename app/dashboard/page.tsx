@@ -11,12 +11,10 @@ import GetExecutions from "@/lib/fetch/executions/all";
 import GetPayloads from "@/lib/fetch/payload/payloads";
 
 export default async function DashboardHomePage() {
-  const user = JSON.parse(cookies().get("user")?.value || "{}");
-
-  const userDetails = await GetUserDetails(user.id);
-  const stats = await GetUserStats(user.id);
+  const userDetails = await GetUserDetails();
+  const stats = await GetUserStats();
   const plans = await PageGetPlans();
-  const notifications = await GetUserNotifications(user.id);
+  const notifications = await GetUserNotifications();
   const flows = await GetFlows();
   const runners = await GetRunners();
   const executions = await GetExecutions();

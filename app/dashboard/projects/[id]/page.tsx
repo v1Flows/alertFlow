@@ -1,5 +1,3 @@
-import { cookies } from "next/headers";
-
 import Project from "@/components/dashboard/projects/project";
 import PageGetSettings from "@/lib/fetch/page/settings";
 import GetProjectApiKeys from "@/lib/fetch/project/tokens";
@@ -14,15 +12,13 @@ export default async function DashboardProjectPage({
 }: {
   params: { id: string };
 }) {
-  const user = JSON.parse(cookies().get("user")?.value || "{}");
-
   const settings = await PageGetSettings();
   const project = await GetProject(params.id);
   const runners = await GetProjectRunners(params.id);
   const tokens = await GetProjectApiKeys(params.id);
   const plan = await GetUserPlan();
   const audit = await GetProjectAuditLogs(params.id);
-  const userDetails = await GetUserDetails(user.id);
+  const userDetails = await GetUserDetails();
 
   return (
     <>

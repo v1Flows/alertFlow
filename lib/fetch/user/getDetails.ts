@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-export default async function GetUserDetails(id: string) {
+export default async function GetUserDetails() {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;
@@ -14,7 +14,7 @@ export default async function GetUserDetails(id: string) {
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/`, {
       method: "GET",
       headers: headers,
     });

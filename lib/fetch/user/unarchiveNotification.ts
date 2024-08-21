@@ -6,7 +6,6 @@ export default async function UnarchiveUserNotification(id: string) {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;
-  const user = JSON.parse(cookies().get("user")?.value || "{}");
 
   try {
     const headers = new Headers();
@@ -16,7 +15,7 @@ export default async function UnarchiveUserNotification(id: string) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/${user.id}/notifications/${id}/unarchive`,
+      `${process.env.NEXT_PUBLIC_API_URL}/user/notifications/${id}/unarchive`,
       {
         method: "PUT",
         headers: headers,
