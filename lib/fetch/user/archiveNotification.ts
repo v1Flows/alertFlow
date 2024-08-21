@@ -16,7 +16,7 @@ export default async function ArchiveUserNotification(id: string) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/${user.id}/notifications/${id}/archive`,
+      `${process.env.NEXT_PUBLIC_API_URL}/user/notifications/${id}/archive`,
       {
         method: "PUT",
         headers: headers,

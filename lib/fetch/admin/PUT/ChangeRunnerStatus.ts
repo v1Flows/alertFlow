@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-export default async function ChangeFlowStatus(
+export default async function ChangeRunnerStatus(
   id: string,
   status: boolean,
   reason: string,
@@ -19,7 +19,7 @@ export default async function ChangeFlowStatus(
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/flows/${id}/status`,
+      `${process.env.NEXT_PUBLIC_API_URL}/admin/runners/${id}/status`,
       {
         method: "PUT",
         headers: headers,
@@ -33,6 +33,6 @@ export default async function ChangeFlowStatus(
 
     return data;
   } catch (error) {
-    return { error: "Failed to update flow" };
+    return { error: "Failed to update runner" };
   }
 }

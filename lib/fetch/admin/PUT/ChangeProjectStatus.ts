@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-export default async function ChangeRunnerStatus(
+export default async function ChangeProjectStatus(
   id: string,
   status: boolean,
   reason: string,
@@ -19,7 +19,7 @@ export default async function ChangeRunnerStatus(
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/runners/${id}/status`,
+      `${process.env.NEXT_PUBLIC_API_URL}/admin/projects/${id}/status`,
       {
         method: "PUT",
         headers: headers,
@@ -33,6 +33,6 @@ export default async function ChangeRunnerStatus(
 
     return data;
   } catch (error) {
-    return { error: "Failed to update runner" };
+    return { error: "Failed to update project" };
   }
 }

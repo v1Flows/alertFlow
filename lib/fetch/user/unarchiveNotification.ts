@@ -16,7 +16,7 @@ export default async function UnarchiveUserNotification(id: string) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/${user.id}/notifications/${id}/unarchive`,
+      `${process.env.NEXT_PUBLIC_API_URL}/user/notifications/${id}/unarchive`,
       {
         method: "PUT",
         headers: headers,

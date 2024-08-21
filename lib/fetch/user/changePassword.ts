@@ -20,7 +20,7 @@ export default async function ChangeUserPassword(
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/${id}/password`,
+      `${process.env.NEXT_PUBLIC_API_URL}/user/password`,
       {
         method: "PUT",
         headers: headers,

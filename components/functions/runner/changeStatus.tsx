@@ -15,7 +15,7 @@ import React from "react";
 import { toast } from "sonner";
 
 import { CheckIcon, LockIcon } from "@/components/icons";
-import ChangeRunnerStatus from "@/lib/fetch/runner/ChangeStatus";
+import ChangeRunnerStatus from "@/lib/fetch/admin/PUT/ChangeRunnerStatus";
 
 export default function ChangeRunnerStatusModal({
   disclosure,
