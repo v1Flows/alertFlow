@@ -17,7 +17,7 @@ import {
 import { Icon } from "@iconify/react";
 import TimeAgo from "react-timeago";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useMemo } from "react";
 
 import DeleteExecutionModal from "@/components/functions/flows/deleteExecution";
 import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
@@ -284,9 +284,27 @@ export default function Executions({
     }
   }, []);
 
+  const bottomContent = useMemo(() => {
+    return (
+      <div className="flex justify-center">
+        <Pagination
+          showControls
+          isDisabled={items.length === 0}
+          page={page}
+          total={pages}
+          onChange={(page) => setPage(page)}
+        />
+      </div>
+    );
+  }, [items]);
+
   return (
-    <main className="grid lg:grid-cols-1 gap-4">
-      <Table isStriped aria-label="Executions Table">
+    <>
+      <Table
+        isStriped
+        aria-label="Executions Table"
+        bottomContent={bottomContent}
+      >
         <TableHeader>
           <TableColumn key="status" align="start">
             Status
@@ -317,15 +335,6 @@ export default function Executions({
           )}
         </TableBody>
       </Table>
-      <div className="flex justify-center">
-        <Pagination
-          showControls
-          isDisabled={items.length === 0}
-          page={page}
-          total={pages}
-          onChange={(page) => setPage(page)}
-        />
-      </div>
       <FunctionShowPayloadModal
         disclosure={showPayloadModal}
         payload={targetPayload}
@@ -334,6 +343,6 @@ export default function Executions({
         disclosure={deleteExecutionModal}
         execution={targetExecution}
       />
-    </main>
+    </>
   );
 }
