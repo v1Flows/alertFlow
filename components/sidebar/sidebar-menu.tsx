@@ -277,15 +277,17 @@ export default function SidebarMenu({
   );
 
   return (
-    <div className="flex h-dvh w-full">
-      <SidebarDrawer
-        className="overflow-y-hidden !border-r-small border-divider"
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-      >
-        {content}
-      </SidebarDrawer>
-      <div className="w-full flex-1 flex-col p-4">
+    <div className="flex h-screen w-full">
+      <div className="overflow-y-auto border-r border-divider h-full">
+        <SidebarDrawer
+          className="overflow-y-hidden !border-r-small border-divider"
+          isOpen={isOpen}
+          onOpenChange={onOpenChange}
+        >
+          {content}
+        </SidebarDrawer>
+      </div>
+      <div className="w-full flex-1 flex-col p-4 overflow-y-auto">
         <header className="flex sm:hidden items-center gap-2">
           <Button
             isIconOnly
