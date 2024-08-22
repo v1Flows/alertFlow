@@ -2,7 +2,6 @@ import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
 import {
   Button,
-  Divider,
   Modal,
   ModalBody,
   ModalContent,
@@ -13,7 +12,6 @@ import {
 import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
-import { Icon } from "@iconify/react";
 
 import DeleteExecution from "@/lib/fetch/executions/delete";
 
@@ -58,22 +56,22 @@ export default function DeleteExecutionModal({
         <ModalContent className="w-full">
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-danger">
-                <Icon icon="solar:reorder-line-duotone" width={24} /> Delete
-                Execution
+              <ModalHeader className="flex flex-wrap items-center">
+                <div className="flex flex-col gap-2">
+                  <p className="text-lg font-bold">Are you sure?</p>
+                  <p className="text-sm text-default-500">
+                    You are about to delete the following execution which{" "}
+                    <span className="font-bold">cannot be undone</span>
+                  </p>
+                </div>
               </ModalHeader>
               <ModalBody>
-                <p className="text-center">
-                  You are about to delete the following execution which{" "}
-                  <span className="font-bold">cannot be undone</span>:
-                </p>
-                <Divider />
                 <Snippet hideCopyButton hideSymbol>
                   <span>ID: {execution.id}</span>
                 </Snippet>
               </ModalBody>
-              <ModalFooter>
-                <Button color="default" variant="bordered" onPress={onClose}>
+              <ModalFooter className="grid grid-cols-2">
+                <Button color="default" variant="ghost" onPress={onClose}>
                   Cancel
                 </Button>
                 <Button

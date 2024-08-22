@@ -15,7 +15,6 @@ import {
   SelectItem,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { Icon } from "@iconify/react";
 import { toast } from "sonner";
 
 import UpdateUser from "@/lib/fetch/admin/PUT/UpdateUser";
@@ -82,34 +81,42 @@ export default function EditUserModal({
         <ModalContent className="w-full">
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-warning">
-                <Icon icon="solar:smile-square-broken" width={24} /> Edit User
+              <ModalHeader className="flex flex-wrap items-center">
+                <div className="flex flex-col gap-2">
+                  <p className="text-lg font-bold">Edit User</p>
+                  <p className="text-sm text-default-500">
+                    Edit the user details below and click apply changes to save.
+                  </p>
+                </div>
               </ModalHeader>
               <ModalBody>
                 <Input
                   isRequired
                   label="Username"
+                  labelPlacement="outside"
                   placeholder="Enter the username"
                   type="name"
                   value={username}
-                  variant="bordered"
+                  variant="flat"
                   onValueChange={setUsername}
                 />
                 <Input
                   isRequired
                   label="Email"
+                  labelPlacement="outside"
                   placeholder="Enter the email"
                   type="email"
                   value={email}
-                  variant="bordered"
+                  variant="flat"
                   onValueChange={setEmail}
                 />
                 <Select
                   isRequired
                   label="Role"
+                  labelPlacement="outside"
                   placeholder="Select the user role"
                   selectedKeys={role}
-                  variant="bordered"
+                  variant="flat"
                   onSelectionChange={setRole}
                 >
                   <SelectItem key="User">User</SelectItem>
@@ -119,9 +126,10 @@ export default function EditUserModal({
                 <Select
                   isRequired
                   label="Plan"
+                  labelPlacement="outside"
                   placeholder="Select the user plan"
                   selectedKeys={plan}
-                  variant="bordered"
+                  variant="flat"
                   onSelectionChange={setPlan}
                 >
                   {plans.map((plan: any) => (
@@ -139,7 +147,7 @@ export default function EditUserModal({
                   variant="flat"
                   onPress={editUser}
                 >
-                  Update User
+                  Apply Changes
                 </Button>
               </ModalFooter>
             </>

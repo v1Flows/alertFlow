@@ -58,23 +58,23 @@ export default function DeleteProjectModal({
         <ModalContent className="w-full">
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1 items-center text-danger">
-                <Icon icon="solar:danger-triangle-broken" width={58} />
-                Are you sure?
+              <ModalHeader className="flex flex-wrap items-center">
+                <div className="flex flex-col gap-2">
+                  <p className="text-lg font-bold">Are you sure?</p>
+                  <p className="text-sm text-default-500">
+                    You are about to delete the following project which{" "}
+                    <span className="font-bold">cannot be undone</span>
+                  </p>
+                </div>
               </ModalHeader>
               <ModalBody>
-                <p className="text-center">
-                  You are about to delete the following project which{" "}
-                  <span className="font-bold">cannot be undone</span>:
-                </p>
-                <Divider />
                 <Snippet hideCopyButton hideSymbol>
                   <span>Name: {project.name}</span>
                   <span>ID: {project.id}</span>
                 </Snippet>
               </ModalBody>
               <ModalFooter className="grid grid-cols-2">
-                <Button color="default" variant="bordered" onPress={onClose}>
+                <Button color="default" variant="ghost" onPress={onClose}>
                   Cancel
                 </Button>
                 <Button

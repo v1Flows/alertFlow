@@ -72,9 +72,13 @@ export default function EditProjectMemberModal({
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-wrap items-center justify-center gap-2">
-                <EditIcon />
-                Edit Member
+              <ModalHeader className="flex flex-wrap items-center">
+                <div className="flex flex-col gap-2">
+                  <p className="text-lg font-bold">Edit Member</p>
+                  <p className="text-sm text-default-500">
+                    Change the role of the member by selecting it below
+                  </p>
+                </div>
               </ModalHeader>
               <ModalBody>
                 {error && (
@@ -92,9 +96,10 @@ export default function EditProjectMemberModal({
                 <Select
                   className="w-full"
                   label="Member Role"
+                  labelPlacement="outside"
                   placeholder="Select the role of the member"
                   selectedKeys={[role]}
-                  variant="bordered"
+                  variant="flat"
                   onSelectionChange={handleSelectRole}
                 >
                   <SelectItem
@@ -114,8 +119,8 @@ export default function EditProjectMemberModal({
                   <SelectItem key="Viewer">Viewer</SelectItem>
                 </Select>
               </ModalBody>
-              <ModalFooter>
-                <Button color="default" variant="bordered" onPress={onClose}>
+              <ModalFooter className="grid grid-cols-2">
+                <Button color="default" variant="ghost" onPress={onClose}>
                   Cancel
                 </Button>
                 <Button

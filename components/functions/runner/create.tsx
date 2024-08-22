@@ -81,27 +81,31 @@ export default function CreateRunnerModal({
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold">
-                <PlayCircleIcon />
-                Add Runner
+              <ModalHeader className="flex flex-wrap items-center">
+                <div className="flex flex-col gap-2">
+                  <p className="text-lg font-bold">Add Runner</p>
+                  <p className="text-sm text-default-500">
+                    Add a new runner to your project.
+                  </p>
+                </div>
               </ModalHeader>
               <ModalBody>
                 <Input
                   label="Name"
+                  labelPlacement="outside"
                   placeholder="Enter the runner name"
                   value={name}
-                  variant="bordered"
+                  variant="flat"
                   onValueChange={setName}
                 />
               </ModalBody>
               <ModalFooter>
-                <Button color="default" variant="bordered" onPress={onClose}>
+                <Button color="default" variant="ghost" onPress={onClose}>
                   Cancel
                 </Button>
                 <Button
                   color="primary"
                   isLoading={isLoading}
-                  startContent={<PlusIcon />}
                   onPress={createRunner}
                 >
                   Add

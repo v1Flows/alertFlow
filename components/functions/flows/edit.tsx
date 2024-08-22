@@ -20,7 +20,6 @@ import {
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-import { Flash } from "@/components/icons";
 import GetProjectRunners from "@/lib/fetch/project/runners";
 import UpdateFlow from "@/lib/fetch/flow/PUT/UpdateFlow";
 
@@ -107,8 +106,13 @@ export default function EditFlowModal({
         <ModalContent className="w-full">
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-warning">
-                <Flash size={20} /> Edit Flow
+              <ModalHeader className="flex flex-wrap items-center">
+                <div className="flex flex-col gap-2">
+                  <p className="text-lg font-bold">Edit Flow</p>
+                  <p className="text-sm text-default-500">
+                    Edit the flow details below and click apply changes to save.
+                  </p>
+                </div>
               </ModalHeader>
               <ModalBody>
                 <Input
@@ -199,7 +203,7 @@ export default function EditFlowModal({
                   variant="flat"
                   onPress={editFlow}
                 >
-                  Apply Changes
+                  Save Changes
                 </Button>
               </ModalFooter>
             </>
