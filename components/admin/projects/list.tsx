@@ -18,21 +18,14 @@ import {
   DropdownMenu,
   DropdownItem,
   DropdownSection,
-  cn,
   useDisclosure,
   Pagination,
   Tooltip,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import { Icon } from "@iconify/react";
 
-import {
-  DeleteDocumentIcon,
-  EditDocumentIcon,
-  EyeIcon,
-  LockIcon,
-  PlusIcon,
-  VerticalDotsIcon,
-} from "@/components/icons";
+import { PlusIcon } from "@/components/icons";
 import ChangeProjectStatusModal from "@/components/functions/projects/changeStatus";
 import EditProjectModal from "@/components/functions/projects/edit";
 import DeleteProjectModal from "@/components/functions/projects/delete";
@@ -58,9 +51,6 @@ export function ProjectList({ projects, members }: any) {
 
     return projects.slice(start, end);
   }, [page, projects]);
-
-  const iconClasses =
-    "text-xl text-default-500 pointer-events-none flex-shrink-0";
 
   const renderCell = React.useCallback((project: any, columnKey: any) => {
     const cellValue = project[columnKey];
@@ -146,20 +136,20 @@ export function ProjectList({ projects, members }: any) {
             <Dropdown>
               <DropdownTrigger>
                 <Button isIconOnly size="sm" variant="light">
-                  <VerticalDotsIcon className="text-default-300" />
+                  <Icon
+                    className="text-default-400"
+                    icon="solar:menu-dots-broken"
+                    width={24}
+                  />
                 </Button>
               </DropdownTrigger>
               <DropdownMenu variant="faded">
                 <DropdownSection showDivider title="Actions">
                   <DropdownItem
                     key="view"
-                    className="text-primary"
                     color="primary"
-                    description="Take a look on this project"
-                    startContent={
-                      <EyeIcon className={cn(iconClasses, "text-primary")} />
-                    }
-                    onClick={() =>
+                    startContent={<Icon icon="solar:eye-broken" width={20} />}
+                    onPress={() =>
                       router.push(`/dashboard/projects/${project.id}`)
                     }
                   >
@@ -171,13 +161,10 @@ export function ProjectList({ projects, members }: any) {
                     key="edit"
                     className="text-warning"
                     color="warning"
-                    description="Apply changes to this project"
                     startContent={
-                      <EditDocumentIcon
-                        className={cn(iconClasses, "text-warning")}
-                      />
+                      <Icon icon="solar:pen-new-square-broken" width={20} />
                     }
-                    onClick={() => {
+                    onPress={() => {
                       setTargetProject(project);
                       editProjectModal.onOpen();
                     }}
@@ -186,14 +173,16 @@ export function ProjectList({ projects, members }: any) {
                   </DropdownItem>
                   {project.disabled && (
                     <DropdownItem
-                      key="disable"
+                      key="enable"
                       className="text-success"
                       color="success"
-                      description="Disable access to this project for members"
                       startContent={
-                        <LockIcon className={cn(iconClasses, "text-success")} />
+                        <Icon
+                          icon="solar:lock-keyhole-minimalistic-unlocked-broken"
+                          width={20}
+                        />
                       }
-                      onClick={() => {
+                      onPress={() => {
                         setTargetProject(project);
                         setStatus(false);
                         changeStatusModal.onOpen();
@@ -207,11 +196,13 @@ export function ProjectList({ projects, members }: any) {
                       key="disable"
                       className="text-danger"
                       color="danger"
-                      description="Disable access to this project for members"
                       startContent={
-                        <LockIcon className={cn(iconClasses, "text-danger")} />
+                        <Icon
+                          icon="solar:lock-keyhole-minimalistic-broken"
+                          width={20}
+                        />
                       }
-                      onClick={() => {
+                      onPress={() => {
                         setTargetProject(project);
                         setStatus(true);
                         changeStatusModal.onOpen();
@@ -226,13 +217,10 @@ export function ProjectList({ projects, members }: any) {
                     key="delete"
                     className="text-danger"
                     color="danger"
-                    description="Permanently delete this project"
                     startContent={
-                      <DeleteDocumentIcon
-                        className={cn(iconClasses, "text-danger")}
-                      />
+                      <Icon icon="solar:trash-bin-2-broken" width={20} />
                     }
-                    onClick={() => {
+                    onPress={() => {
                       setTargetProject(project);
                       deleteProjectModal.onOpen();
                     }}

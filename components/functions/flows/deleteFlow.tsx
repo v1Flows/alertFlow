@@ -2,7 +2,6 @@ import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
 import {
   Button,
-  Divider,
   Modal,
   ModalBody,
   ModalContent,
@@ -57,22 +56,23 @@ export default function FunctionDeleteFlow({
         <ModalContent className="w-full">
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1 text-danger">
-                Are you sure?
+              <ModalHeader className="flex flex-wrap items-center">
+                <div className="flex flex-col gap-2">
+                  <p className="text-lg font-bold">Are you sure?</p>
+                  <p className="text-sm text-default-500">
+                    You are about to delete the following flow which{" "}
+                    <span className="font-bold">cannot be undone</span>
+                  </p>
+                </div>
               </ModalHeader>
               <ModalBody>
-                <p>
-                  You are about to delete the following flow which{" "}
-                  <span className="font-bold">cannot be undone</span>:
-                </p>
-                <Divider />
                 <Snippet hideCopyButton hideSymbol>
                   <span>Name: {flow.name}</span>
                   <span>ID: {flow.id}</span>
                 </Snippet>
               </ModalBody>
-              <ModalFooter>
-                <Button color="default" variant="bordered" onPress={onClose}>
+              <ModalFooter className="grid grid-cols-2">
+                <Button color="default" variant="ghost" onPress={onClose}>
                   Cancel
                 </Button>
                 <Button

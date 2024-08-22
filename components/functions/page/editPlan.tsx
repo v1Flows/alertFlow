@@ -13,7 +13,6 @@ import {
   Input,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { Icon } from "@iconify/react";
 import { toast } from "sonner";
 
 import UpdatePlan from "@/lib/fetch/admin/PUT/UpdatePlan";
@@ -88,8 +87,13 @@ export default function EditPlanModal({
         <ModalContent className="w-full">
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-warning">
-                <Icon icon="solar:planet-broken" width={24} /> Edit Plan
+              <ModalHeader className="flex flex-wrap items-center">
+                <div className="flex flex-col gap-2">
+                  <p className="text-lg font-bold">Edit Plan</p>
+                  <p className="text-sm text-default-500">
+                    Edit the plan details below and click apply changes to save.
+                  </p>
+                </div>
               </ModalHeader>
               <ModalBody>
                 <Input
@@ -100,71 +104,78 @@ export default function EditPlanModal({
                     </div>
                   }
                   label="Price"
+                  labelPlacement="outside"
                   max={999}
                   placeholder="Enter the price"
                   type="number"
                   value={price.toString()}
-                  variant="bordered"
+                  variant="flat"
                   onValueChange={(value) => setPrice(Number(value))}
                 />
                 <Input
                   isRequired
                   label="Projects"
+                  labelPlacement="outside"
                   max={999}
                   placeholder="Amount of projects"
                   type="number"
                   value={projects.toString()}
-                  variant="bordered"
+                  variant="flat"
                   onValueChange={(value) => setProjects(Number(value))}
                 />
                 <Input
                   isRequired
                   label="Project Members"
+                  labelPlacement="outside"
                   max={999}
                   placeholder="Amount of project members"
                   type="number"
                   value={projectMembers.toString()}
-                  variant="bordered"
+                  variant="flat"
                   onValueChange={(value) => setProjectMembers(Number(value))}
                 />
                 <Input
                   isRequired
                   label="Flows"
+                  labelPlacement="outside"
                   max={999}
                   placeholder="Amount of flows"
                   type="number"
                   value={flows.toString()}
-                  variant="bordered"
+                  variant="flat"
                   onValueChange={(value) => setFlows(Number(value))}
                 />
                 <Input
                   isRequired
                   label="Self-Hosted Runners"
+                  labelPlacement="outside"
                   max={999}
                   placeholder="Amount of self-hosted runners"
                   type="number"
                   value={selfHostedRunners.toString()}
-                  variant="bordered"
+                  variant="flat"
                   onValueChange={(value) => setSelfHostedRunners(Number(value))}
                 />
                 <Input
                   isRequired
                   label="AlertFlow Runners"
+                  labelPlacement="outside"
                   max={16}
                   placeholder="Amount of alertflow runners"
                   type="number"
                   value={alertflowRunners.toString()}
-                  variant="bordered"
+                  variant="flat"
                   onValueChange={(value) => setAlertflowRunners(Number(value))}
                 />
                 <Input
                   isRequired
                   label="Executions Per Month"
+                  labelPlacement="outside"
                   max={999}
                   placeholder="Amount of executions per month"
                   type="number"
                   value={executionsPerMonth.toString()}
-                  variant="bordered"
+                  variant="flat"
                   onValueChange={(value) =>
                     setExecutionsPerMonth(Number(value))
                   }
@@ -180,7 +191,7 @@ export default function EditPlanModal({
                   variant="flat"
                   onPress={editPlan}
                 >
-                  Update Plan
+                  Apply Changes
                 </Button>
               </ModalFooter>
             </>

@@ -15,7 +15,6 @@ import {
   DropdownMenu,
   DropdownItem,
   DropdownSection,
-  cn,
   useDisclosure,
   Pagination,
   Snippet,
@@ -23,14 +22,7 @@ import {
 import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
 
-import {
-  DeleteDocumentIcon,
-  EditDocumentIcon,
-  EyeIcon,
-  LockIcon,
-  PlusIcon,
-  VerticalDotsIcon,
-} from "@/components/icons";
+import { PlusIcon } from "@/components/icons";
 import FunctionDeleteFlow from "@/components/functions/flows/deleteFlow";
 import EditFlowModal from "@/components/functions/flows/edit";
 import ChangeFlowStatusModal from "@/components/functions/flows/changeStatus";
@@ -59,9 +51,6 @@ export function FlowsList({ flows, projects, runners }: any) {
 
     return flows.slice(start, end);
   }, [page, flows]);
-
-  const iconClasses =
-    "text-xl text-default-500 pointer-events-none flex-shrink-0";
 
   const renderCell = React.useCallback((flow: any, columnKey: any) => {
     const cellValue = flow[columnKey];
@@ -142,19 +131,20 @@ export function FlowsList({ flows, projects, runners }: any) {
             <Dropdown>
               <DropdownTrigger>
                 <Button isIconOnly size="sm" variant="light">
-                  <VerticalDotsIcon className="text-default-300" />
+                  <Icon
+                    className="text-default-400"
+                    icon="solar:menu-dots-broken"
+                    width={24}
+                  />
                 </Button>
               </DropdownTrigger>
               <DropdownMenu variant="faded">
                 <DropdownSection showDivider title="Actions">
                   <DropdownItem
                     key="view"
-                    className="text-primary"
                     color="primary"
-                    startContent={
-                      <EyeIcon className={cn(iconClasses, "text-primary")} />
-                    }
-                    onClick={() => router.push(`/dashboard/flows/${flow.id}`)}
+                    startContent={<Icon icon="solar:eye-broken" width={20} />}
+                    onPress={() => router.push(`/dashboard/flows/${flow.id}`)}
                   >
                     View
                   </DropdownItem>
@@ -165,53 +155,15 @@ export function FlowsList({ flows, projects, runners }: any) {
                     className="text-warning"
                     color="warning"
                     startContent={
-                      <EditDocumentIcon
-                        className={cn(iconClasses, "text-warning")}
-                      />
+                      <Icon icon="solar:pen-new-square-broken" width={20} />
                     }
-                    onClick={() => {
+                    onPress={() => {
                       setTargetFlow(flow);
                       editModal.onOpen();
                     }}
                   >
                     Edit
                   </DropdownItem>
-                  {flow.disabled && (
-                    <DropdownItem
-                      key="disable"
-                      className="text-success"
-                      color="success"
-                      startContent={
-                        <LockIcon className={cn(iconClasses, "text-success")} />
-                      }
-                      onClick={() => {
-                        setTargetFlow(flow);
-                        setStatus(false);
-                        changeStatusModal.onOpen();
-                      }}
-                    >
-                      Enable
-                    </DropdownItem>
-                  )}
-                  {!flow.disabled && (
-                    <DropdownItem
-                      key="disable"
-                      className="text-danger"
-                      color="danger"
-                      startContent={
-                        <LockIcon className={cn(iconClasses, "text-danger")} />
-                      }
-                      onClick={() => {
-                        setTargetFlow(flow);
-                        setStatus(true);
-                        changeStatusModal.onOpen();
-                      }}
-                    >
-                      Disable
-                    </DropdownItem>
-                  )}
-                </DropdownSection>
-                <DropdownSection title="Maintenance">
                   {flow.maintenance_required ? (
                     <DropdownItem
                       key="disable"
@@ -220,7 +172,7 @@ export function FlowsList({ flows, projects, runners }: any) {
                       startContent={
                         <Icon icon="solar:bomb-emoji-broken" width={20} />
                       }
-                      onClick={() => {
+                      onPress={() => {
                         setTargetFlow(flow);
                         setMaintenance(false);
                         changeMaintenanceModal.onOpen();
@@ -236,13 +188,53 @@ export function FlowsList({ flows, projects, runners }: any) {
                       startContent={
                         <Icon icon="solar:bomb-emoji-broken" width={20} />
                       }
-                      onClick={() => {
+                      onPress={() => {
                         setTargetFlow(flow);
                         setMaintenance(true);
                         changeMaintenanceModal.onOpen();
                       }}
                     >
                       Set Maintenance
+                    </DropdownItem>
+                  )}
+                  {flow.disabled && (
+                    <DropdownItem
+                      key="disable"
+                      className="text-success"
+                      color="success"
+                      startContent={
+                        <Icon
+                          icon="solar:lock-keyhole-minimalistic-unlocked-broken"
+                          width={20}
+                        />
+                      }
+                      onPress={() => {
+                        setTargetFlow(flow);
+                        setStatus(false);
+                        changeStatusModal.onOpen();
+                      }}
+                    >
+                      Enable
+                    </DropdownItem>
+                  )}
+                  {!flow.disabled && (
+                    <DropdownItem
+                      key="disable"
+                      className="text-danger"
+                      color="danger"
+                      startContent={
+                        <Icon
+                          icon="solar:lock-keyhole-minimalistic-broken"
+                          width={20}
+                        />
+                      }
+                      onPress={() => {
+                        setTargetFlow(flow);
+                        setStatus(true);
+                        changeStatusModal.onOpen();
+                      }}
+                    >
+                      Disable
                     </DropdownItem>
                   )}
                 </DropdownSection>
@@ -252,11 +244,9 @@ export function FlowsList({ flows, projects, runners }: any) {
                     className="text-danger"
                     color="danger"
                     startContent={
-                      <DeleteDocumentIcon
-                        className={cn(iconClasses, "text-danger")}
-                      />
+                      <Icon icon="solar:trash-bin-2-broken" width={20} />
                     }
-                    onClick={() => {
+                    onPress={() => {
                       setTargetFlow(flow);
                       deleteModal.onOpen();
                     }}

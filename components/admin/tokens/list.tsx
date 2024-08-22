@@ -16,18 +16,12 @@ import {
   DropdownMenu,
   DropdownItem,
   DropdownSection,
-  cn,
   useDisclosure,
   Pagination,
 } from "@nextui-org/react";
+import { Icon } from "@iconify/react";
 
-import {
-  DeleteDocumentIcon,
-  EditDocumentIcon,
-  LockIcon,
-  PlusIcon,
-  VerticalDotsIcon,
-} from "@/components/icons";
+import { PlusIcon } from "@/components/icons";
 import CreateTokenModal from "@/components/functions/tokens/create";
 import DeleteTokenModal from "@/components/functions/tokens/delete";
 import ChangeTokenStatusModal from "@/components/functions/tokens/changeStatus";
@@ -51,9 +45,6 @@ export function TokensList({ tokens, projects }: any) {
 
     return tokens.slice(start, end);
   }, [page, tokens]);
-
-  const iconClasses =
-    "text-xl text-default-500 pointer-events-none flex-shrink-0";
 
   const renderCell = React.useCallback((token: any, columnKey: any) => {
     const cellValue = token[columnKey];
@@ -116,7 +107,11 @@ export function TokensList({ tokens, projects }: any) {
             <Dropdown>
               <DropdownTrigger>
                 <Button isIconOnly size="sm" variant="light">
-                  <VerticalDotsIcon className="text-default-300" />
+                  <Icon
+                    className="text-default-400"
+                    icon="solar:menu-dots-broken"
+                    width={24}
+                  />
                 </Button>
               </DropdownTrigger>
               <DropdownMenu variant="faded">
@@ -125,13 +120,10 @@ export function TokensList({ tokens, projects }: any) {
                     key="edit"
                     className="text-warning"
                     color="warning"
-                    description="Apply changes to this token"
                     startContent={
-                      <EditDocumentIcon
-                        className={cn(iconClasses, "text-warning")}
-                      />
+                      <Icon icon="solar:pen-new-square-broken" width={20} />
                     }
-                    onClick={() => {
+                    onPress={() => {
                       setTargetToken(token);
                       editModal.onOpen();
                     }}
@@ -143,11 +135,13 @@ export function TokensList({ tokens, projects }: any) {
                       key="disable"
                       className="text-success"
                       color="success"
-                      description="Enable this token"
                       startContent={
-                        <LockIcon className={cn(iconClasses, "text-success")} />
+                        <Icon
+                          icon="solar:lock-keyhole-minimalistic-unlocked-broken"
+                          width={20}
+                        />
                       }
-                      onClick={() => {
+                      onPress={() => {
                         setTargetToken(token);
                         setStatus(false);
                         changeStatusModal.onOpen();
@@ -160,11 +154,13 @@ export function TokensList({ tokens, projects }: any) {
                       key="disable"
                       className="text-danger"
                       color="danger"
-                      description="Disable this token"
                       startContent={
-                        <LockIcon className={cn(iconClasses, "text-danger")} />
+                        <Icon
+                          icon="solar:lock-keyhole-minimalistic-broken"
+                          width={20}
+                        />
                       }
-                      onClick={() => {
+                      onPress={() => {
                         setTargetToken(token);
                         setStatus(true);
                         changeStatusModal.onOpen();
@@ -179,13 +175,10 @@ export function TokensList({ tokens, projects }: any) {
                     key="delete"
                     className="text-danger"
                     color="danger"
-                    description="Permanently delete this token"
                     startContent={
-                      <DeleteDocumentIcon
-                        className={cn(iconClasses, "text-danger")}
-                      />
+                      <Icon icon="solar:trash-bin-2-broken" width={20} />
                     }
-                    onClick={() => {
+                    onPress={() => {
                       setTargetToken(token);
                       deleteTokenModal.onOpen();
                     }}

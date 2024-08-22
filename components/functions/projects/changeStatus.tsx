@@ -15,7 +15,6 @@ import React from "react";
 import { toast } from "sonner";
 
 import ChangeProjectStatus from "@/lib/fetch/admin/PUT/ChangeProjectStatus";
-import { CheckIcon, LockIcon } from "@/components/icons";
 
 export default function ChangeProjectStatusModal({
   disclosure,
@@ -61,8 +60,13 @@ export default function ChangeProjectStatusModal({
           <ModalContent>
             {(onClose) => (
               <>
-                <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-danger">
-                  <LockIcon /> Disable Project
+                <ModalHeader className="flex flex-wrap items-center">
+                  <div className="flex flex-col gap-2">
+                    <p className="text-lg font-bold">Disable Project</p>
+                    <p className="text-sm text-default-500">
+                      Are you sure you want to disable this project?
+                    </p>
+                  </div>
                 </ModalHeader>
                 <ModalBody>
                   <Snippet hideCopyButton hideSymbol>
@@ -70,14 +74,15 @@ export default function ChangeProjectStatusModal({
                   </Snippet>
                   <Input
                     label="Disable Reason"
+                    labelPlacement="outside"
                     placeholder="Enter the reason for disabling this project"
                     value={disableReason}
-                    variant="bordered"
+                    variant="flat"
                     onValueChange={setDisableReason}
                   />
                 </ModalBody>
-                <ModalFooter>
-                  <Button color="default" variant="flat" onPress={onClose}>
+                <ModalFooter className="grid grid-cols-2">
+                  <Button color="default" variant="ghost" onPress={onClose}>
                     Cancel
                   </Button>
                   <Button
@@ -96,16 +101,21 @@ export default function ChangeProjectStatusModal({
           <ModalContent>
             {(onClose) => (
               <>
-                <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-success">
-                  <CheckIcon /> Enable Project
+                <ModalHeader className="flex flex-wrap items-center">
+                  <div className="flex flex-col gap-2">
+                    <p className="text-lg font-bold">Enable Project</p>
+                    <p className="text-sm text-default-500">
+                      Are you sure you want to enable this project?
+                    </p>
+                  </div>
                 </ModalHeader>
                 <ModalBody>
                   <Snippet hideCopyButton hideSymbol>
                     <span>ID: {project.id}</span>
                   </Snippet>
                 </ModalBody>
-                <ModalFooter>
-                  <Button color="default" variant="flat" onPress={onClose}>
+                <ModalFooter className="grid grid-cols-2">
+                  <Button color="default" variant="ghost" onPress={onClose}>
                     Cancel
                   </Button>
                   <Button

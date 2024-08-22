@@ -13,9 +13,7 @@ import {
 import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
-import { Icon } from "@iconify/react";
 
-import { CheckIcon } from "@/components/icons";
 import ChangeFlowMaintenance from "@/lib/fetch/flow/PUT/ChangeFlowMaintenance";
 
 export default function ChangeFlowMaintenanceModal({
@@ -62,9 +60,13 @@ export default function ChangeFlowMaintenanceModal({
           <ModalContent>
             {(onClose) => (
               <>
-                <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-warning">
-                  <Icon icon="solar:bomb-emoji-broken" width={24} /> Set
-                  Maintenance
+                <ModalHeader className="flex flex-wrap items-center">
+                  <div className="flex flex-col gap-2">
+                    <p className="text-lg font-bold">Set Maintenance</p>
+                    <p className="text-sm text-default-500">
+                      Are you sure you want to set maintenance for this flow?
+                    </p>
+                  </div>
                 </ModalHeader>
                 <ModalBody>
                   <Snippet hideCopyButton hideSymbol>
@@ -72,19 +74,21 @@ export default function ChangeFlowMaintenanceModal({
                   </Snippet>
                   <Input
                     label="Maintenance Message"
+                    labelPlacement="outside"
                     placeholder="Enter the reason for the maintenance"
                     value={maintenanceReason}
-                    variant="bordered"
+                    variant="flat"
                     onValueChange={setMaintenanceReason}
                   />
                 </ModalBody>
-                <ModalFooter>
-                  <Button color="default" variant="flat" onPress={onClose}>
+                <ModalFooter className="grid grid-cols-2">
+                  <Button color="default" variant="ghost" onPress={onClose}>
                     Cancel
                   </Button>
                   <Button
                     color="warning"
                     isLoading={isLoading}
+                    variant="flat"
                     onPress={changeFlowMaintenance}
                   >
                     Set Maintenance
@@ -98,16 +102,22 @@ export default function ChangeFlowMaintenanceModal({
           <ModalContent>
             {(onClose) => (
               <>
-                <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-success">
-                  <CheckIcon /> Disable Maintenance
+                <ModalHeader className="flex flex-wrap items-center">
+                  <div className="flex flex-col gap-2">
+                    <p className="text-lg font-bold">Remove Maintenance</p>
+                    <p className="text-sm text-default-500">
+                      Are you sure you want to remove the maintenance for this
+                      flow?
+                    </p>
+                  </div>
                 </ModalHeader>
                 <ModalBody>
                   <Snippet hideCopyButton hideSymbol>
                     <span>ID: {flow.id}</span>
                   </Snippet>
                 </ModalBody>
-                <ModalFooter>
-                  <Button color="default" variant="flat" onPress={onClose}>
+                <ModalFooter className="grid grid-cols-2">
+                  <Button color="default" variant="ghost" onPress={onClose}>
                     Cancel
                   </Button>
                   <Button

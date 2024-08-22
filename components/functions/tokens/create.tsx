@@ -15,7 +15,6 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
-import { PlusIcon, TagIcon } from "@/components/icons";
 import CreateRunnerToken from "@/lib/fetch/project/POST/CreateRunnerToken";
 
 export default function CreateTokenModal({
@@ -56,27 +55,31 @@ export default function CreateTokenModal({
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold">
-                <TagIcon />
-                Create Token
+              <ModalHeader className="flex flex-wrap items-center">
+                <div className="flex flex-col gap-2">
+                  <p className="text-lg font-bold">Create Token</p>
+                  <p className="text-sm text-default-500">
+                    Create a new token for your project.
+                  </p>
+                </div>
               </ModalHeader>
               <ModalBody>
                 <Input
                   label="Description"
+                  labelPlacement="outside"
                   placeholder="Enter the project description"
                   value={description}
-                  variant="bordered"
+                  variant="flat"
                   onValueChange={setDescription}
                 />
               </ModalBody>
               <ModalFooter>
-                <Button color="default" variant="bordered" onPress={onClose}>
+                <Button color="default" variant="ghost" onPress={onClose}>
                   Discard
                 </Button>
                 <Button
                   color="primary"
                   isLoading={isLoading}
-                  startContent={<PlusIcon />}
                   onPress={handleCreateToken}
                 >
                   Create

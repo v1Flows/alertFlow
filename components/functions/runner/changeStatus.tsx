@@ -14,7 +14,6 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
-import { CheckIcon, LockIcon } from "@/components/icons";
 import ChangeRunnerStatus from "@/lib/fetch/admin/PUT/ChangeRunnerStatus";
 
 export default function ChangeRunnerStatusModal({
@@ -61,8 +60,13 @@ export default function ChangeRunnerStatusModal({
           <ModalContent>
             {(onClose) => (
               <>
-                <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-danger">
-                  <LockIcon /> Disable Runner
+                <ModalHeader className="flex flex-wrap items-center">
+                  <div className="flex flex-col gap-2">
+                    <p className="text-lg font-bold">Disable Runner</p>
+                    <p className="text-sm text-default-500">
+                      Are you sure you want to disable this runner?
+                    </p>
+                  </div>
                 </ModalHeader>
                 <ModalBody>
                   <Snippet hideCopyButton hideSymbol>
@@ -70,14 +74,15 @@ export default function ChangeRunnerStatusModal({
                   </Snippet>
                   <Input
                     label="Disable Reason"
+                    labelPlacement="outside"
                     placeholder="Enter the reason for disabling this runner"
                     value={disableReason}
-                    variant="bordered"
+                    variant="flat"
                     onValueChange={setDisableReason}
                   />
                 </ModalBody>
-                <ModalFooter>
-                  <Button color="default" variant="flat" onPress={onClose}>
+                <ModalFooter className="grid grid-cols-2">
+                  <Button color="default" variant="ghost" onPress={onClose}>
                     Cancel
                   </Button>
                   <Button
@@ -96,16 +101,21 @@ export default function ChangeRunnerStatusModal({
           <ModalContent>
             {(onClose) => (
               <>
-                <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-success">
-                  <CheckIcon /> Enable Runner
+                <ModalHeader className="flex flex-wrap items-center">
+                  <div className="flex flex-col gap-2">
+                    <p className="text-lg font-bold">Enable Runner</p>
+                    <p className="text-sm text-default-500">
+                      Are you sure you want to enable this runner?
+                    </p>
+                  </div>
                 </ModalHeader>
                 <ModalBody>
                   <Snippet hideCopyButton hideSymbol>
                     <span>ID: {runner.id}</span>
                   </Snippet>
                 </ModalBody>
-                <ModalFooter>
-                  <Button color="default" variant="flat" onPress={onClose}>
+                <ModalFooter className="grid grid-cols-2">
+                  <Button color="default" variant="ghost" onPress={onClose}>
                     Cancel
                   </Button>
                   <Button

@@ -12,7 +12,6 @@ import {
   Button,
   Input,
 } from "@nextui-org/react";
-import { Icon } from "@iconify/react";
 import { toast } from "sonner";
 
 import ChangeUserPassword from "@/lib/fetch/user/changePassword";
@@ -97,14 +96,15 @@ export default function ChangeUserPasswordModal({
         <ModalContent className="w-full">
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold">
-                <Icon icon="solar:password-minimalistic-broken" width={24} />{" "}
-                Change Password
+              <ModalHeader className="flex flex-wrap items-center">
+                <div className="flex flex-col gap-2">
+                  <p className="text-lg font-bold">Change Password</p>
+                  <p className="text-sm text-default-500">
+                    After changing your password you will be logged out.
+                  </p>
+                </div>
               </ModalHeader>
               <ModalBody>
-                <p className="text-default-500 text-center">
-                  After changing your password, you will be logged out.
-                </p>
                 <Input
                   isRequired
                   label="Current Password"
