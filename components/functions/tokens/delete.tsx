@@ -9,6 +9,7 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
+  Snippet,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -50,19 +51,23 @@ export default function DeleteTokenModal({
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">
-                <p>Delete Token</p>
-                <p className="text-sm text-default-500">{token.id}</p>
+              <ModalHeader className="flex flex-wrap items-center">
+                <div className="flex flex-col gap-2">
+                  <p className="text-lg font-bold">Are you sure?</p>
+                  <p className="text-sm text-default-500">
+                    You are about to delete the following token which{" "}
+                    <span className="font-bold">cannot be undone</span>. <br />{" "}
+                    Any runners using this token will become unusable.
+                  </p>
+                </div>
               </ModalHeader>
               <ModalBody>
-                <p>
-                  Are you sure you want to delete this token? This action cannot
-                  be undone and will cause any active runner which is using this
-                  key to not work anylonger.
-                </p>
+                <Snippet hideCopyButton hideSymbol>
+                  <span>ID: {token.id}</span>
+                </Snippet>
               </ModalBody>
-              <ModalFooter>
-                <Button color="default" variant="light" onPress={onClose}>
+              <ModalFooter className="grid grid-cols-2">
+                <Button color="default" variant="ghost" onPress={onClose}>
                   Cancel
                 </Button>
                 <Button

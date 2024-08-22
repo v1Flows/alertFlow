@@ -43,7 +43,7 @@ export default function FunctionShowPayloadModal({
                 </Snippet>
               </ModalBody>
               <ModalFooter>
-                <Button color="default" variant="bordered" onPress={onClose}>
+                <Button color="default" variant="ghost" onPress={onClose}>
                   Close
                 </Button>
               </ModalFooter>

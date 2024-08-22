@@ -5,7 +5,6 @@ import {
   Modal,
   ModalContent,
   ModalHeader,
-  ModalBody,
   ModalFooter,
   Button,
 } from "@nextui-org/react";
@@ -53,21 +52,16 @@ export default function LeaveProjectModal({
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-wrap items-center">
-                <div className="flex flex-col gap-1">
-                  <p className="text-lg font-bold text-danger">Leave Project</p>
+                <div className="flex flex-col gap-2">
+                  <p className="text-lg font-bold">Are you sure?</p>
                   <p className="text-sm text-default-500">
-                    Are you sure you want to leave this project?
+                    You will lose all access to this project. You can always
+                    rejoin if you are invited back.
                   </p>
                 </div>
               </ModalHeader>
-              <ModalBody>
-                <p>
-                  You will lose all access to this project. You can always
-                  rejoin if you are invited back.
-                </p>
-              </ModalBody>
-              <ModalFooter>
-                <Button color="default" variant="light" onPress={onClose}>
+              <ModalFooter className="grid grid-cols-2">
+                <Button color="default" variant="ghost" onPress={onClose}>
                   Cancel
                 </Button>
                 <Button
@@ -75,7 +69,7 @@ export default function LeaveProjectModal({
                   isLoading={isLeaveLoading}
                   onPress={handleLeaveProject}
                 >
-                  Leave
+                  Leave Project
                 </Button>
               </ModalFooter>
             </>

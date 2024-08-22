@@ -38,7 +38,7 @@ export default function NotificationItem({ notification }: any) {
           ) : (
             <Avatar
               color={notification.color || "default"}
-              fallback={<Icon icon={notification.icon} width={22} />}
+              fallback={<Icon icon={notification.icon} width={20} />}
               size="sm"
             />
           )}

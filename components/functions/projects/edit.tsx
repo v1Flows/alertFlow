@@ -24,7 +24,6 @@ import { Icon, listIcons, loadIcons } from "@iconify/react";
 import { ColorPicker, useColor } from "react-color-palette";
 import "react-color-palette/css";
 
-import { EditDocumentIcon } from "@/components/icons";
 import UpdateProject from "@/lib/fetch/project/PUT/UpdateProject";
 
 export default function EditProjectModal({
@@ -97,9 +96,14 @@ export default function EditProjectModal({
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold">
-                <EditDocumentIcon />
-                Edit Project
+              <ModalHeader className="flex flex-wrap items-center">
+                <div className="flex flex-col gap-2">
+                  <p className="text-lg font-bold">Edit Project</p>
+                  <p className="text-sm text-default-500">
+                    Edit the project details below and click apply changes to
+                    save.
+                  </p>
+                </div>
               </ModalHeader>
               <ModalBody>
                 <div className="grid lg:grid-cols-2 gap-2">
@@ -183,8 +187,8 @@ export default function EditProjectModal({
                 <ColorPicker hideInput color={color} onChange={setColor} />
               </ModalBody>
               <ModalFooter className="grid grid-cols-2">
-                <Button color="default" variant="bordered" onPress={onClose}>
-                  Discard
+                <Button color="default" variant="ghost" onPress={onClose}>
+                  Cancel
                 </Button>
                 <Button
                   color="warning"

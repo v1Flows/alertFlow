@@ -14,19 +14,13 @@ import {
   DropdownMenu,
   DropdownItem,
   DropdownSection,
-  cn,
   useDisclosure,
   Pagination,
 } from "@nextui-org/react";
 import TimeAgo from "react-timeago";
+import { Icon } from "@iconify/react";
 
-import {
-  DeleteDocumentIcon,
-  EditDocumentIcon,
-  LockIcon,
-  PlusIcon,
-  VerticalDotsIcon,
-} from "@/components/icons";
+import { PlusIcon } from "@/components/icons";
 import CreateRunnerModal from "@/components/functions/runner/create";
 import DeleteRunnerModal from "@/components/functions/runner/delete";
 import ChangeRunnerStatusModal from "@/components/functions/runner/changeStatus";
@@ -50,9 +44,6 @@ export function AlertflowRunnerList({ runners }: any) {
 
     return runners.slice(start, end);
   }, [page, runners]);
-
-  const iconClasses =
-    "text-xl text-default-500 pointer-events-none flex-shrink-0";
 
   function heartbeatColor(runner: any) {
     var timeAgo =
@@ -142,21 +133,23 @@ export function AlertflowRunnerList({ runners }: any) {
             <Dropdown>
               <DropdownTrigger>
                 <Button isIconOnly size="sm" variant="light">
-                  <VerticalDotsIcon className="text-default-300" />
+                  <Icon
+                    className="text-default-400"
+                    icon="solar:menu-dots-broken"
+                    width={24}
+                  />
                 </Button>
               </DropdownTrigger>
               <DropdownMenu variant="faded">
-                <DropdownSection title="Edit Zone">
+                <DropdownSection showDivider title="Edit Zone">
                   <DropdownItem
                     key="edit"
                     className="text-warning"
                     color="warning"
                     startContent={
-                      <EditDocumentIcon
-                        className={cn(iconClasses, "text-warning")}
-                      />
+                      <Icon icon="solar:pen-new-square-broken" width={20} />
                     }
-                    onClick={() => {
+                    onPress={() => {
                       setTargetRunner(runner);
                       editRunnerModal.onOpen();
                     }}
@@ -169,9 +162,12 @@ export function AlertflowRunnerList({ runners }: any) {
                       className="text-success"
                       color="success"
                       startContent={
-                        <LockIcon className={cn(iconClasses, "text-success")} />
+                        <Icon
+                          icon="solar:lock-keyhole-minimalistic-unlocked-broken"
+                          width={20}
+                        />
                       }
-                      onClick={() => {
+                      onPress={() => {
                         setTargetRunner(runner);
                         setStatus(false);
                         changeStatusModal.onOpen();
@@ -185,9 +181,12 @@ export function AlertflowRunnerList({ runners }: any) {
                       className="text-danger"
                       color="danger"
                       startContent={
-                        <LockIcon className={cn(iconClasses, "text-danger")} />
+                        <Icon
+                          icon="solar:lock-keyhole-minimalistic-broken"
+                          width={20}
+                        />
                       }
-                      onClick={() => {
+                      onPress={() => {
                         setTargetRunner(runner);
                         setStatus(true);
                         changeStatusModal.onOpen();
@@ -203,11 +202,9 @@ export function AlertflowRunnerList({ runners }: any) {
                     className="text-danger"
                     color="danger"
                     startContent={
-                      <DeleteDocumentIcon
-                        className={cn(iconClasses, "text-danger")}
-                      />
+                      <Icon icon="solar:trash-bin-2-broken" width={20} />
                     }
-                    onClick={() => {
+                    onPress={() => {
                       setTargetRunner(runner);
                       deleteRunnerModal.onOpen();
                     }}

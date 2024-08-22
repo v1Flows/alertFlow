@@ -17,7 +17,6 @@ import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { toast } from "sonner";
 
-import { DeleteDocumentIcon, InfoIcon } from "@/components/icons";
 import DeleteProjectRunner from "@/lib/fetch/project/DELETE/DeleteRunner";
 import GetRunnerFlowLinks from "@/lib/fetch/runner/GetRunnerFlowLinks";
 
@@ -73,15 +72,16 @@ export default function DeleteRunnerModal({
         <ModalContent className="w-full">
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-danger">
-                <InfoIcon />
-                Are you sure?
+              <ModalHeader className="flex flex-wrap items-center">
+                <div className="flex flex-col gap-2">
+                  <p className="text-lg font-bold">Are you sure?</p>
+                  <p className="text-sm text-default-500">
+                    You are about to delete the following runner which{" "}
+                    <span className="font-bold">cannot be undone</span>
+                  </p>
+                </div>
               </ModalHeader>
               <ModalBody>
-                <p>
-                  You are about to delete the following runner which{" "}
-                  <span className="font-bold">cannot be undone.</span>
-                </p>
                 <Snippet hideCopyButton hideSymbol>
                   <span>Name: {runner.name}</span>
                   <span>ID: {runner.id}</span>
@@ -112,14 +112,13 @@ export default function DeleteRunnerModal({
                   </>
                 )}
               </ModalBody>
-              <ModalFooter>
-                <Button color="default" variant="bordered" onPress={onClose}>
+              <ModalFooter className="grid grid-cols-2">
+                <Button color="default" variant="ghost" onPress={onClose}>
                   Cancel
                 </Button>
                 <Button
                   color="danger"
                   isLoading={isLoading}
-                  startContent={<DeleteDocumentIcon />}
                   variant="solid"
                   onPress={deleteRunner}
                 >

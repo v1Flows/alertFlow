@@ -14,17 +14,12 @@ import {
   DropdownMenu,
   DropdownItem,
   DropdownSection,
-  cn,
   useDisclosure,
   Pagination,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import { Icon } from "@iconify/react";
 
-import {
-  DeleteDocumentIcon,
-  EyeIcon,
-  VerticalDotsIcon,
-} from "@/components/icons";
 import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
 import FunctionDeletePayloadModal from "@/components/functions/flows/deletePayload";
 
@@ -58,9 +53,6 @@ export function PayloadsList({ flows, payloads, executions, runners }: any) {
     return payloads.slice(start, end);
   }, [page, payloads]);
 
-  const iconClasses =
-    "text-xl text-default-500 pointer-events-none flex-shrink-0";
-
   const renderCell = React.useCallback((payload: any, columnKey: any) => {
     const cellValue = payload[columnKey];
 
@@ -85,7 +77,8 @@ export function PayloadsList({ flows, payloads, executions, runners }: any) {
         return (
           <div>
             <p className="text-sm text-default-500">
-              {executions.find((e: any) => e.payload_id === payload.id).id}
+              {executions.find((e: any) => e.payload_id === payload.id)?.id ||
+                "No Execution found"}
             </p>
           </div>
         );
@@ -97,32 +90,41 @@ export function PayloadsList({ flows, payloads, executions, runners }: any) {
             <Dropdown>
               <DropdownTrigger>
                 <Button isIconOnly size="sm" variant="light">
-                  <VerticalDotsIcon className="text-default-300" />
+                  <Icon
+                    className="text-default-400"
+                    icon="solar:menu-dots-broken"
+                    width={24}
+                  />
                 </Button>
               </DropdownTrigger>
               <DropdownMenu variant="faded">
-                <DropdownSection showDivider title="Actions">
+                <DropdownSection showDivider title="View">
                   <DropdownItem
                     key="view_payload"
-                    className="text-primary"
                     color="primary"
-                    startContent={<EyeIcon />}
+                    startContent={
+                      <Icon icon="solar:letter-opened-broken" width={20} />
+                    }
                     onClick={() => handleShow(payload)}
                   >
-                    Show Payload
+                    Payload
                   </DropdownItem>
                   <DropdownItem
                     key="view_execution"
-                    className="text-primary"
                     color="primary"
-                    startContent={<EyeIcon />}
+                    isDisabled={
+                      !executions.find((e: any) => e.payload_id === payload.id)
+                    }
+                    startContent={
+                      <Icon icon="solar:reorder-line-duotone" width={20} />
+                    }
                     onClick={() =>
                       router.push(
-                        `/dashboard/flows/${payload.flow_id}/execution/${executions.find((e: any) => e.payload_id === payload.id).id}`,
+                        `/dashboard/flows/${payload.flow_id}/execution/${executions.find((e: any) => e.payload_id === payload.id)?.id}`,
                       )
                     }
                   >
-                    View Execution
+                    Execution
                   </DropdownItem>
                 </DropdownSection>
                 <DropdownSection title="Danger Zone">
@@ -131,9 +133,7 @@ export function PayloadsList({ flows, payloads, executions, runners }: any) {
                     className="text-danger"
                     color="danger"
                     startContent={
-                      <DeleteDocumentIcon
-                        className={cn(iconClasses, "text-danger")}
-                      />
+                      <Icon icon="solar:trash-bin-2-broken" width={20} />
                     }
                     onClick={() => handleDelete(payload, payload.flow_id)}
                   >
@@ -182,19 +182,19 @@ export function PayloadsList({ flows, payloads, executions, runners }: any) {
               ID
             </TableColumn>
             <TableColumn key="flow_id" align="start">
-              FLOW
+              Flow
             </TableColumn>
             <TableColumn key="runner_id" align="start">
-              RUNNER
+              Runner
             </TableColumn>
             <TableColumn key="execution_id" align="start">
-              EXECUTION
+              Execution
             </TableColumn>
             <TableColumn key="created_at" align="start">
-              CREATED AT
+              Created At
             </TableColumn>
             <TableColumn key="actions" align="center">
-              ACTIONS
+              Actions
             </TableColumn>
           </TableHeader>
           <TableBody emptyContent={"No rows to display."} items={items}>

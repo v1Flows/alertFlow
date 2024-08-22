@@ -17,6 +17,7 @@
 		"@nextui-org/use-disclosure": "^2.0.10",
 		"@react-aria/ssr": "3.9.4",
 		"@react-aria/visually-hidden": "3.8.12",
+		"@react-stately/data": "^3.11.6",
 		"@react-stately/utils": "^3.10.2",
 		"@tabler/icons-react": "^3.11.0",
 		"@tsparticles/engine": "^3.5.0",

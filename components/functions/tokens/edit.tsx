@@ -15,7 +15,6 @@ import {
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-import { TagIcon } from "@/components/icons";
 import UpdateToken from "@/lib/fetch/tokens/update";
 
 export default function EditTokenModal({
@@ -63,21 +62,28 @@ export default function EditTokenModal({
         <ModalContent className="w-full">
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-warning">
-                <TagIcon size={20} /> Edit Token
+              <ModalHeader className="flex flex-wrap items-center">
+                <div className="flex flex-col gap-2">
+                  <p className="text-lg font-bold">Edit Token</p>
+                  <p className="text-sm text-default-500">
+                    Edit the token details below and click apply changes to
+                    save.
+                  </p>
+                </div>
               </ModalHeader>
               <ModalBody>
                 <Input
                   isRequired
                   label="Description"
+                  labelPlacement="outside"
                   placeholder="Enter the flow description"
                   type="description"
                   value={description}
-                  variant="bordered"
+                  variant="flat"
                   onValueChange={setDescription}
                 />
               </ModalBody>
-              <ModalFooter>
+              <ModalFooter className="grid grid-cols-2">
                 <Button variant="ghost" onPress={onClose}>
                   Cancel
                 </Button>
@@ -87,7 +93,7 @@ export default function EditTokenModal({
                   variant="flat"
                   onPress={updateToken}
                 >
-                  Apply Change
+                  Apply Changes
                 </Button>
               </ModalFooter>
             </>
