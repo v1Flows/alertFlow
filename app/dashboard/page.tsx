@@ -1,5 +1,3 @@
-import { cookies } from "next/headers";
-
 import { DashboardHome } from "@/components/dashboard/home";
 import GetUserStats from "@/lib/fetch/user/getStats";
 import PageGetPlans from "@/lib/fetch/page/plans";

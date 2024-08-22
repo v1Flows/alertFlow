@@ -33,7 +33,6 @@ import { Icon } from "@iconify/react";
 
 import {
   EyeIcon,
-  VerticalDotsIcon,
   EditDocumentIcon,
   LockIcon,
   DeleteDocumentIcon,
@@ -234,22 +233,28 @@ export function UsersList({ users, plans }: any) {
             <Dropdown>
               <DropdownTrigger>
                 <Button isIconOnly size="sm" variant="light">
-                  <VerticalDotsIcon className="text-default-300" />
+                  <Icon
+                    className="text-default-400"
+                    icon="solar:menu-dots-broken"
+                    width={24}
+                  />
                 </Button>
               </DropdownTrigger>
-              <DropdownMenu variant="flat">
+              <DropdownMenu variant="faded">
                 <DropdownSection showDivider title="Actions">
                   <DropdownItem
                     key="view"
                     color="primary"
-                    startContent={<EyeIcon />}
+                    startContent={<Icon icon="solar:eye-broken" width={20} />}
                   >
                     View
                   </DropdownItem>
                   <DropdownItem
                     key="send_notification"
                     color="primary"
-                    startContent={<Icon icon="solar:bell-bold-duotone" />}
+                    startContent={
+                      <Icon icon="solar:bell-bold-duotone" width={20} />
+                    }
                     onPress={() => {
                       setTargetUser(user);
                       sendUserNotificationModal.onOpen();
@@ -257,19 +262,30 @@ export function UsersList({ users, plans }: any) {
                   >
                     Send Notification
                   </DropdownItem>
+                </DropdownSection>
+                <DropdownSection showDivider title="Edit Zone">
                   <DropdownItem
                     key="edit"
+                    className="text-warning"
                     color="warning"
-                    startContent={<EditDocumentIcon />}
-                    onClick={() => handleEditUser(user)}
+                    startContent={
+                      <Icon icon="solar:pen-new-square-broken" width={20} />
+                    }
+                    onPress={() => handleEditUser(user)}
                   >
                     Edit
                   </DropdownItem>
                   {!user.disabled && (
                     <DropdownItem
                       key="disable"
+                      className="text-danger"
                       color="danger"
-                      startContent={<LockIcon />}
+                      startContent={
+                        <Icon
+                          icon="solar:lock-keyhole-minimalistic-broken"
+                          width={20}
+                        />
+                      }
                       onClick={() => changeUserStatusModal(user.id, true)}
                     >
                       Disable
@@ -277,11 +293,16 @@ export function UsersList({ users, plans }: any) {
                   )}
                   {user.disabled && (
                     <DropdownItem
-                      key="disable"
+                      key="enable"
+                      className="text-success"
                       color="success"
-                      description="Enable access to AlertFlow for this user"
-                      startContent={<LockIcon />}
-                      onClick={() => changeUserStatusModal(user.id, false)}
+                      startContent={
+                        <Icon
+                          icon="solar:lock-keyhole-minimalistic-unlocked-broken"
+                          width={20}
+                        />
+                      }
+                      onPress={() => changeUserStatusModal(user.id, false)}
                     >
                       Enable
                     </DropdownItem>
@@ -293,9 +314,7 @@ export function UsersList({ users, plans }: any) {
                     className="text-danger"
                     color="danger"
                     startContent={
-                      <DeleteDocumentIcon
-                        className={cn(iconClasses, "text-danger")}
-                      />
+                      <Icon icon="solar:trash-bin-2-broken" width={20} />
                     }
                     onPress={() => handleDeleteUser(user)}
                   >

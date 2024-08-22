@@ -29,6 +29,7 @@ import {
 import DeleteRunnerModal from "@/components/functions/runner/delete";
 import ChangeRunnerStatusModal from "@/components/functions/runner/changeStatus";
 import EditRunnerModal from "@/components/functions/runner/edit";
+import { Icon } from "@iconify/react";
 
 export function SelfHostedRunnerList({ runners, projects }: any) {
   const [status, setStatus] = React.useState(false);
@@ -144,7 +145,11 @@ export function SelfHostedRunnerList({ runners, projects }: any) {
             <Dropdown>
               <DropdownTrigger>
                 <Button isIconOnly size="sm" variant="light">
-                  <VerticalDotsIcon className="text-default-300" />
+                  <Icon
+                    className="text-default-400"
+                    icon="solar:menu-dots-broken"
+                    width={24}
+                  />
                 </Button>
               </DropdownTrigger>
               <DropdownMenu variant="faded">
@@ -154,11 +159,9 @@ export function SelfHostedRunnerList({ runners, projects }: any) {
                     className="text-warning"
                     color="warning"
                     startContent={
-                      <EditDocumentIcon
-                        className={cn(iconClasses, "text-warning")}
-                      />
+                      <Icon icon="solar:pen-new-square-broken" width={20} />
                     }
-                    onClick={() => {
+                    onPress={() => {
                       setTargetRunner(runner);
                       editRunnerModal.onOpen();
                     }}
@@ -171,9 +174,12 @@ export function SelfHostedRunnerList({ runners, projects }: any) {
                       className="text-success"
                       color="success"
                       startContent={
-                        <LockIcon className={cn(iconClasses, "text-success")} />
+                        <Icon
+                          icon="solar:lock-keyhole-minimalistic-unlocked-broken"
+                          width={20}
+                        />
                       }
-                      onClick={() => {
+                      onPress={() => {
                         setTargetRunner(runner);
                         setStatus(false);
                         changeStatusModal.onOpen();
@@ -187,9 +193,12 @@ export function SelfHostedRunnerList({ runners, projects }: any) {
                       className="text-danger"
                       color="danger"
                       startContent={
-                        <LockIcon className={cn(iconClasses, "text-danger")} />
+                        <Icon
+                          icon="solar:lock-keyhole-minimalistic-broken"
+                          width={20}
+                        />
                       }
-                      onClick={() => {
+                      onPress={() => {
                         setTargetRunner(runner);
                         setStatus(true);
                         changeStatusModal.onOpen();
@@ -205,11 +214,9 @@ export function SelfHostedRunnerList({ runners, projects }: any) {
                     className="text-danger"
                     color="danger"
                     startContent={
-                      <DeleteDocumentIcon
-                        className={cn(iconClasses, "text-danger")}
-                      />
+                      <Icon icon="solar:trash-bin-2-broken" width={20} />
                     }
-                    onClick={() => {
+                    onPress={() => {
                       setTargetRunner(runner);
                       deleteRunnerModal.onOpen();
                     }}
