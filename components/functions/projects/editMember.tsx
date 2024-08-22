@@ -17,7 +17,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
-import { EditIcon, InfoIcon } from "@/components/icons";
+import { InfoIcon } from "@/components/icons";
 import { IconWrapper } from "@/lib/IconWrapper";
 import EditProjectMember from "@/lib/fetch/project/PUT/editProjectMember";
 

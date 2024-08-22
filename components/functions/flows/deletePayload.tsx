@@ -2,7 +2,6 @@ import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
 import {
   Button,
-  Divider,
   Modal,
   ModalBody,
   ModalContent,

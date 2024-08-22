@@ -16,23 +16,16 @@ import {
   DropdownMenu,
   DropdownItem,
   DropdownSection,
-  cn,
   useDisclosure,
   Pagination,
 } from "@nextui-org/react";
+import { Icon } from "@iconify/react";
 
-import {
-  DeleteDocumentIcon,
-  EditDocumentIcon,
-  LockIcon,
-  PlusIcon,
-  VerticalDotsIcon,
-} from "@/components/icons";
+import { PlusIcon } from "@/components/icons";
 import CreateTokenModal from "@/components/functions/tokens/create";
 import DeleteTokenModal from "@/components/functions/tokens/delete";
 import ChangeTokenStatusModal from "@/components/functions/tokens/changeStatus";
 import EditTokenModal from "@/components/functions/tokens/edit";
-import { Icon } from "@iconify/react";
 
 export function TokensList({ tokens, projects }: any) {
   const [status, setStatus] = React.useState(false);
@@ -52,9 +45,6 @@ export function TokensList({ tokens, projects }: any) {
 
     return tokens.slice(start, end);
   }, [page, tokens]);
-
-  const iconClasses =
-    "text-xl text-default-500 pointer-events-none flex-shrink-0";
 
   const renderCell = React.useCallback((token: any, columnKey: any) => {
     const cellValue = token[columnKey];

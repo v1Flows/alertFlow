@@ -19,7 +19,7 @@ import React from "react";
 import { toast } from "sonner";
 import { LibraryIcon } from "lucide-react";
 
-import { CheckIcon, PlayCircleIcon, PlusIcon } from "@/components/icons";
+import { CheckIcon } from "@/components/icons";
 import AddRunner from "@/lib/fetch/runner/AddRunner";
 import CreateRunnerToken from "@/lib/fetch/project/POST/CreateRunnerToken";
 

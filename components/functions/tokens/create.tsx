@@ -15,7 +15,6 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
-import { PlusIcon, TagIcon } from "@/components/icons";
 import CreateRunnerToken from "@/lib/fetch/project/POST/CreateRunnerToken";
 
 export default function CreateTokenModal({

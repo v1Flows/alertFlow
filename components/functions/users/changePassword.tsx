@@ -12,7 +12,6 @@ import {
   Button,
   Input,
 } from "@nextui-org/react";
-import { Icon } from "@iconify/react";
 import { toast } from "sonner";
 
 import ChangeUserPassword from "@/lib/fetch/user/changePassword";

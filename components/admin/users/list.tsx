@@ -16,7 +16,6 @@ import {
   DropdownMenu,
   DropdownSection,
   DropdownItem,
-  cn,
   Modal,
   ModalContent,
   ModalHeader,
@@ -31,13 +30,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Icon } from "@iconify/react";
 
-import {
-  EyeIcon,
-  EditDocumentIcon,
-  LockIcon,
-  DeleteDocumentIcon,
-  PlusIcon,
-} from "@/components/icons";
+import { LockIcon, PlusIcon } from "@/components/icons";
 import UpdateUserStatus from "@/lib/fetch/admin/PUT/UpdateUserState";
 import DeleteUserModal from "@/components/functions/users/delete";
 import SignUpModal from "@/components/functions/auth/signUp";
@@ -150,9 +143,6 @@ export function UsersList({ users, plans }: any) {
 
     return users.slice(start, end);
   }, [page, users]);
-
-  const iconClasses =
-    "text-xl text-default-500 pointer-events-none flex-shrink-0";
 
   const renderCell = React.useCallback((user: any, columnKey: any) => {
     const cellValue = user[columnKey];

@@ -4,7 +4,6 @@ import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
 import {
   Button,
-  Divider,
   Modal,
   ModalBody,
   ModalContent,
@@ -15,7 +14,6 @@ import {
 import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
-import { Icon } from "@iconify/react";
 
 import DeleteProject from "@/lib/fetch/project/DELETE/DeleteProject";
 

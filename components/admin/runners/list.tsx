@@ -14,22 +14,15 @@ import {
   DropdownMenu,
   DropdownItem,
   DropdownSection,
-  cn,
   useDisclosure,
   Pagination,
 } from "@nextui-org/react";
 import TimeAgo from "react-timeago";
+import { Icon } from "@iconify/react";
 
-import {
-  DeleteDocumentIcon,
-  EditDocumentIcon,
-  LockIcon,
-  VerticalDotsIcon,
-} from "@/components/icons";
 import DeleteRunnerModal from "@/components/functions/runner/delete";
 import ChangeRunnerStatusModal from "@/components/functions/runner/changeStatus";
 import EditRunnerModal from "@/components/functions/runner/edit";
-import { Icon } from "@iconify/react";
 
 export function SelfHostedRunnerList({ runners, projects }: any) {
   const [status, setStatus] = React.useState(false);
@@ -48,9 +41,6 @@ export function SelfHostedRunnerList({ runners, projects }: any) {
 
     return runners.slice(start, end);
   }, [page, runners]);
-
-  const iconClasses =
-    "text-xl text-default-500 pointer-events-none flex-shrink-0";
 
   function heartbeatColor(runner: any) {
     var timeAgo =

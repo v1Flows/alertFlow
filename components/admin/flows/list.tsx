@@ -22,7 +22,7 @@ import {
 import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
 
-import { PlusIcon, VerticalDotsIcon } from "@/components/icons";
+import { PlusIcon } from "@/components/icons";
 import FunctionDeleteFlow from "@/components/functions/flows/deleteFlow";
 import EditFlowModal from "@/components/functions/flows/edit";
 import ChangeFlowStatusModal from "@/components/functions/flows/changeStatus";
@@ -51,9 +51,6 @@ export function FlowsList({ flows, projects, runners }: any) {
 
     return flows.slice(start, end);
   }, [page, flows]);
-
-  const iconClasses =
-    "text-xl text-default-500 pointer-events-none flex-shrink-0";
 
   const renderCell = React.useCallback((flow: any, columnKey: any) => {
     const cellValue = flow[columnKey];

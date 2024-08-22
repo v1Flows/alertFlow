@@ -17,7 +17,6 @@ import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { toast } from "sonner";
 
-import { DeleteDocumentIcon, InfoIcon } from "@/components/icons";
 import DeleteProjectRunner from "@/lib/fetch/project/DELETE/DeleteRunner";
 import GetRunnerFlowLinks from "@/lib/fetch/runner/GetRunnerFlowLinks";
 

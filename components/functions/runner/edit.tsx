@@ -15,7 +15,6 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
-import { PlayCircleIcon } from "@/components/icons";
 import EditRunner from "@/lib/fetch/runner/Edit";
 
 export default function EditRunnerModal({

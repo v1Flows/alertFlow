@@ -5,7 +5,6 @@ import {
   Modal,
   ModalContent,
   ModalHeader,
-  ModalBody,
   ModalFooter,
   Button,
 } from "@nextui-org/react";
@@ -56,7 +55,8 @@ export default function LeaveProjectModal({
                 <div className="flex flex-col gap-2">
                   <p className="text-lg font-bold">Are you sure?</p>
                   <p className="text-sm text-default-500">
-                    You will lose all access to this project. You can always rejoin if you are invited back.
+                    You will lose all access to this project. You can always
+                    rejoin if you are invited back.
                   </p>
                 </div>
               </ModalHeader>

@@ -15,7 +15,6 @@ import {
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-import { TagIcon } from "@/components/icons";
 import UpdateToken from "@/lib/fetch/tokens/update";
 
 export default function EditTokenModal({

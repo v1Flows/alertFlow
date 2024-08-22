@@ -26,13 +26,13 @@ const UserCell = React.forwardRef<HTMLDivElement, UserCellProps>(
           showFallback
           color={
             color as
-            | "default"
-            | "primary"
-            | "secondary"
-            | "success"
-            | "warning"
-            | "danger"
-            | undefined
+              | "default"
+              | "primary"
+              | "secondary"
+              | "success"
+              | "warning"
+              | "danger"
+              | undefined
           }
           name={avatar}
           size="sm"

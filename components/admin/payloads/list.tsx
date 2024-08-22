@@ -53,9 +53,6 @@ export function PayloadsList({ flows, payloads, executions, runners }: any) {
     return payloads.slice(start, end);
   }, [page, payloads]);
 
-  const iconClasses =
-    "text-xl text-default-500 pointer-events-none flex-shrink-0";
-
   const renderCell = React.useCallback((payload: any, columnKey: any) => {
     const cellValue = payload[columnKey];
 

@@ -18,26 +18,18 @@ import {
   DropdownMenu,
   DropdownItem,
   DropdownSection,
-  cn,
   useDisclosure,
   Pagination,
   Tooltip,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import { Icon } from "@iconify/react";
 
-import {
-  DeleteDocumentIcon,
-  EditDocumentIcon,
-  EyeIcon,
-  LockIcon,
-  PlusIcon,
-  VerticalDotsIcon,
-} from "@/components/icons";
+import { PlusIcon } from "@/components/icons";
 import ChangeProjectStatusModal from "@/components/functions/projects/changeStatus";
 import EditProjectModal from "@/components/functions/projects/edit";
 import DeleteProjectModal from "@/components/functions/projects/delete";
 import CreateProjectModal from "@/components/functions/projects/create";
-import { Icon } from "@iconify/react";
 
 export function ProjectList({ projects, members }: any) {
   const router = useRouter();
@@ -59,9 +51,6 @@ export function ProjectList({ projects, members }: any) {
 
     return projects.slice(start, end);
   }, [page, projects]);
-
-  const iconClasses =
-    "text-xl text-default-500 pointer-events-none flex-shrink-0";
 
   const renderCell = React.useCallback((project: any, columnKey: any) => {
     const cellValue = project[columnKey];
