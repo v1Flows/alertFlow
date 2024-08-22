@@ -49,6 +49,12 @@ export default function AddProjectMemberModal({
   );
   const [isLoading, setIsLoading] = React.useState(false);
 
+  const statusColorMap: any = {
+    Owner: "danger",
+    Editor: "primary",
+    Viewer: "default",
+  };
+
   const permissionLabels: Record<string, string> = {
     Owner: "Owner",
     Viewer: "Can View",
@@ -64,6 +70,7 @@ export default function AddProjectMemberModal({
             <UserCell
               key={member.user_id}
               avatar={member.username}
+              color={statusColorMap[member.role]}
               name={member.username}
               permission={permissionLabels[member.role]}
             />
@@ -95,16 +102,25 @@ export default function AddProjectMemberModal({
   }
 
   return (
-    <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
+    <Modal
+      isOpen={isOpen}
+      placement="center"
+      size="lg"
+      onOpenChange={onOpenChange}
+    >
       <ModalContent>
         {() => (
           <ModalBody>
-            <Card className="w-full max-w-[400px] bg-transparent shadow-none">
+            <Card className="w-full bg-transparent shadow-none">
               <CardHeader className="justify-center px-6 pb-0 pt-6">
                 <div className="flex flex-col items-center">
                   <AvatarGroup isBordered size="sm">
                     {members.map((member: any) => (
-                      <Avatar key={member.id} name={member.username} />
+                      <Avatar
+                        key={member.id}
+                        color={statusColorMap[member.role]}
+                        name={member.username}
+                      />
                     ))}
                   </AvatarGroup>
                   <Spacer y={2} />
@@ -115,8 +131,9 @@ export default function AddProjectMemberModal({
                 </div>
               </CardHeader>
               <CardBody>
-                <div className="flex items-end gap-2">
+                <div className="flex items-center gap-2">
                   <Input
+                    description="User must have an account"
                     endContent={
                       <Dropdown>
                         <DropdownTrigger>
@@ -147,7 +164,7 @@ export default function AddProjectMemberModal({
                     }
                     label="Email Address"
                     labelPlacement="outside"
-                    placeholder="User must have an account"
+                    placeholder="Enter email address"
                     value={email}
                     onValueChange={setEmail}
                   />
@@ -164,7 +181,7 @@ export default function AddProjectMemberModal({
                 {userList}
               </CardBody>
               <CardFooter className="justify-end gap-2">
-                <Button size="sm" variant="flat">
+                <Button isDisabled size="sm" variant="flat">
                   Copy Link
                 </Button>
               </CardFooter>

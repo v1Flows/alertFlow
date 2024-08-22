@@ -109,7 +109,7 @@ export default function FunctionCreateFlow({
             <>
               <ModalHeader className="flex flex-wrap items-center">
                 <div className="flex flex-col gap-2">
-                  <p className="text-lg font-bold">Create new flow</p>
+                  <p className="text-lg font-bold">Create new Flow</p>
                   <p className="text-sm text-default-500">
                     Flows are the entrypoint for incoming payloads. You define
                     actions and can view ongoing and completed executions.
@@ -210,7 +210,7 @@ export default function FunctionCreateFlow({
                 </div>
               </ModalBody>
               <ModalFooter>
-                <Button variant="flat" onPress={cancel}>
+                <Button variant="ghost" onPress={cancel}>
                   Cancel
                 </Button>
                 <Button

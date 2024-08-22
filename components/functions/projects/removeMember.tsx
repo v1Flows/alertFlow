@@ -9,13 +9,12 @@ import {
   ModalFooter,
   Button,
   User,
-  Divider,
+  Chip,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
-import { DeleteDocumentIcon } from "@/components/icons";
 import RemoveProjectMember from "@/lib/fetch/project/DELETE/removeProjectMember";
 
 export default function DeleteProjectMemberModal({
@@ -30,6 +29,12 @@ export default function DeleteProjectMemberModal({
   const router = useRouter();
   const { isOpen, onOpenChange } = disclosure;
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
+
+  const statusColorMap: any = {
+    Owner: "danger",
+    Editor: "primary",
+    Viewer: "default",
+  };
 
   async function handleDeleteMember() {
     setIsDeleteLoading(true);
@@ -57,28 +62,37 @@ export default function DeleteProjectMemberModal({
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 text-danger">
-                <DeleteDocumentIcon />
-                Remove Member from Project
+              <ModalHeader className="flex flex-wrap items-center">
+                <div className="flex flex-col gap-2">
+                  <p className="text-lg font-bold">Remove Member</p>
+                  <p className="text-sm text-default-500">
+                    By removing this member, they will no longer have access to
+                    the project.
+                  </p>
+                </div>
               </ModalHeader>
               <ModalBody>
-                <p>
-                  Are you sure you want to remove this User from the Project?
-                </p>
-                <Divider />
                 <User
                   avatarProps={{ radius: "lg", name: user.username }}
                   className="justify-start"
-                  description={
-                    <p>
-                      {user.email} | {user.role}
-                    </p>
+                  description={user.email}
+                  name={
+                    <div className="flex items-center gap-2">
+                      <p>{user.username}</p>
+                      <Chip
+                        className="capitalize"
+                        color={statusColorMap[user.role]}
+                        size="sm"
+                        variant="flat"
+                      >
+                        {user.role}
+                      </Chip>
+                    </div>
                   }
-                  name={user.username}
                 />
               </ModalBody>
-              <ModalFooter>
-                <Button color="default" variant="light" onPress={onClose}>
+              <ModalFooter className="grid grid-cols-2">
+                <Button color="default" variant="ghost" onPress={onClose}>
                   Cancel
                 </Button>
                 <Button

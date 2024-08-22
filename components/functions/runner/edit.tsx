@@ -58,21 +58,27 @@ export default function EditRunnerModal({
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-warning">
-                <PlayCircleIcon />
-                Edit Runner
+              <ModalHeader className="flex flex-wrap items-center">
+                <div className="flex flex-col gap-2">
+                  <p className="text-lg font-bold">Edit Runner</p>
+                  <p className="text-sm text-default-500">
+                    Edit the runner details below and click apply changes to
+                    save.
+                  </p>
+                </div>
               </ModalHeader>
               <ModalBody>
                 <Input
                   label="Name"
+                  labelPlacement="outside"
                   placeholder="Enter the new runner name"
                   value={name}
-                  variant="bordered"
+                  variant="flat"
                   onValueChange={setName}
                 />
               </ModalBody>
-              <ModalFooter>
-                <Button color="default" variant="bordered" onPress={onClose}>
+              <ModalFooter className="grid grid-cols-2">
+                <Button color="default" variant="ghost" onPress={onClose}>
                   Cancel
                 </Button>
                 <Button
@@ -81,7 +87,7 @@ export default function EditRunnerModal({
                   variant="flat"
                   onPress={editRunner}
                 >
-                  Change
+                  Apply Changes
                 </Button>
               </ModalFooter>
             </>

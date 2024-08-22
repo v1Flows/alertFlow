@@ -4,18 +4,17 @@ import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
 import {
   Button,
-  Divider,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
   Snippet,
+  Spacer,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
-import { Icon } from "@iconify/react";
 
 import DeleteUser from "@/lib/fetch/user/delete";
 
@@ -57,24 +56,26 @@ export default function DeleteUserModal({
         <ModalContent className="w-full">
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-wrap items-center justify-center gap-2 font-bold text-danger">
-                <Icon icon="solar:sad-square-broken" width={24} /> Delete Your
-                Account
+              <ModalHeader className="flex flex-wrap items-center">
+                <div className="flex flex-col gap-2">
+                  <p className="text-lg font-bold">Are you sure?</p>
+                  <p className="text-sm text-default-500">
+                    You are about to delete your account which{" "}
+                    <span className="font-bold">cannot be undone</span>.
+                    <Spacer y={1} />
+                    Any known data related to your account will be removed.
+                  </p>
+                </div>
               </ModalHeader>
               <ModalBody>
-                <p className="text-center">
-                  You are about to delete your account. This action{" "}
-                  <span className="font-bold">cannot be undone</span>:
-                </p>
-                <Divider />
                 <Snippet hideCopyButton hideSymbol>
                   <span>Name: {user.username}</span>
                   <span>Email: {user.email}</span>
                   <span>ID: {user.id}</span>
                 </Snippet>
               </ModalBody>
-              <ModalFooter>
-                <Button color="default" variant="bordered" onPress={onClose}>
+              <ModalFooter className="grid grid-cols-2">
+                <Button color="default" variant="ghost" onPress={onClose}>
                   Cancel
                 </Button>
                 <Button
