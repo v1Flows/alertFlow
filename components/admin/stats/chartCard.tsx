@@ -36,10 +36,10 @@ export default function ChartCard({
             <h4 className="text-large font-bold">{lastEntry.value} today</h4>
           </CardHeader>
           <CardBody className="py-2">
-            <ResponsiveContainer height="100%" width="100%">
+            <ResponsiveContainer height={70} width="100%">
               <LineChart data={stats}>
                 <XAxis hide dataKey="date" />
-                <YAxis />
+                <YAxis hide />
                 <Tooltip
                   contentStyle={{ background: "transparent", border: "none" }}
                 />
