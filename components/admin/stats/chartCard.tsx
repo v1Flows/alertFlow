@@ -16,11 +16,13 @@ export default function ChartCard({
   interval,
   color,
   stats,
+  showTotal = false,
 }: {
   name: string;
   interval: number;
   color: string;
   stats: any;
+  showTotal?: boolean;
 }) {
   const lastEntry = stats[stats.length - 1];
 
@@ -33,7 +35,12 @@ export default function ChartCard({
             <small className="text-default-500">
               Overview of the {name} within the last {interval} days
             </small>
-            <h4 className="text-large font-bold">{lastEntry.value} today</h4>
+            <div className="flex items-center gap-2">
+              <p className="text-large font-bold">{lastEntry.value} today</p>
+              {showTotal && (
+                <p className="text-large font-bold">~ {stats.filter((s: any) => s.value > 0).length} total</p>
+              )}
+            </div>
           </CardHeader>
           <CardBody className="py-2">
             <ResponsiveContainer height={70} width="100%">

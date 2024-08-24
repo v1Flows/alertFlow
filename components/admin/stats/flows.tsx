@@ -70,18 +70,28 @@ export default function FlowsStats({
           stats={stats.flow_creation_stats}
         />
         <ChartCard
+          showTotal
           color="#9353d3"
           interval={interval}
           name="started executions"
           stats={stats.started_execution_stats}
         />
         <ChartCard
+          showTotal
           color="#f31260"
           interval={interval}
           name="failed executions"
           stats={stats.failed_execution_stats}
         />
       </div>
+      <Spacer y={2} />
+      <ChartCard
+        showTotal
+        color="#006fed"
+        interval={interval}
+        name="incoming payloads"
+        stats={stats.incoming_payload_stats}
+      />
     </div>
   );
 }
