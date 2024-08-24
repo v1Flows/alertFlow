@@ -53,7 +53,7 @@ export default function UsersStats({
         </Card>
       </div>
       <Spacer y={2} />
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid lg:grid-cols-3 gap-4">
         <ChartCard
           color="#006fed"
           interval={interval}
@@ -64,7 +64,7 @@ export default function UsersStats({
           <CardBody>
             <p className="font-bold">Amount of Users per Plan</p>
             <Spacer y={1} />
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid lg:grid-cols-2 gap-2">
               {stats.users_per_plan_stats.length === 0 && (
                 <div className="space-y-3">
                   <Skeleton className="w-3/5 rounded-lg">

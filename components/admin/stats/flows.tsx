@@ -16,7 +16,7 @@ export default function FlowsStats({
     <div>
       <p className="text-xl font-bold">Flows</p>
       <Spacer y={1} />
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid lg:grid-cols-3 gap-4">
         <Card>
           <CardBody>
             <div className="flex items-center gap-2">
@@ -62,7 +62,7 @@ export default function FlowsStats({
         </Card>
       </div>
       <Spacer y={2} />
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid lg:grid-cols-3 gap-4">
         <ChartCard
           color="#006fed"
           interval={interval}

@@ -16,7 +16,7 @@ export default function ProjectsStats({
     <div>
       <p className="text-xl font-bold">Projects</p>
       <Spacer y={1} />
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid lg:grid-cols-3 gap-4">
         <Card>
           <CardBody>
             <div className="flex items-center gap-2">
