@@ -3,18 +3,15 @@ import {
   Button,
   Card,
   CardBody,
-  CardHeader,
   Divider,
   Switch,
   Tooltip,
 } from "@nextui-org/react";
-import { FileTerminalIcon } from "lucide-react";
 import React from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Icon } from "@iconify/react";
 
-import { MailIcon } from "@/components/icons";
 import UpdateSettings from "@/lib/fetch/admin/PUT/UpdateSettings";
 
 export function Settings({ settings }: any) {
