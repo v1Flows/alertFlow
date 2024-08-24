@@ -38,7 +38,9 @@ export default function ChartCard({
             <div className="flex items-center gap-2">
               <p className="text-large font-bold">{lastEntry.value} today</p>
               {showTotal && (
-                <p className="text-large font-bold">~ {stats.filter((s: any) => s.value > 0).length} total</p>
+                <p className="text-large font-bold">
+                  ~ {stats.filter((s: any) => s.value > 0).length} total
+                </p>
               )}
             </div>
           </CardHeader>

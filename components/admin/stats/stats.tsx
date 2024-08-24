@@ -4,7 +4,6 @@ import { Divider, Input, Spacer } from "@nextui-org/react";
 
 import AdminGetStats from "@/lib/fetch/admin/stats";
 
-import ChartCard from "./chartCard";
 import ProjectsStats from "./projects";
 import FlowsStats from "./flows";
 import UsersStats from "./users";
