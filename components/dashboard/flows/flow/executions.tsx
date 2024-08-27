@@ -56,7 +56,7 @@ export default function Executions({
     } else if (execution.error) {
       return "Error";
     } else if (execution.no_match) {
-      return "No Match";
+      return "No Pattern Match";
     } else if (execution.ghost) {
       return "No Flow Actions found";
     } else {
@@ -113,7 +113,23 @@ export default function Executions({
         </Tooltip>
       );
     } else if (execution.no_match) {
-      return <CircularProgress color="secondary" size="md" value={100} />;
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress
+            color="secondary"
+            showValueLabel={true}
+            size="md"
+            value={100}
+            valueLabel={
+              <Icon
+                className="text-secondary"
+                icon="solar:bill-cross-broken"
+                width={20}
+              />
+            }
+          />
+        </Tooltip>
+      );
     } else if (execution.ghost) {
       return (
         <Tooltip content={`${status(execution)}`}>
