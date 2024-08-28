@@ -59,7 +59,7 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
             valueLabel={
               <Icon
                 className="text-warning"
-                icon="solar:pause-broken"
+                icon="solar:clock-circle-broken"
                 width={16}
               />
             }
