@@ -39,7 +39,12 @@ export default function ChartCard({
               <p className="text-large font-bold">{lastEntry.value} today</p>
               {showTotal && (
                 <p className="text-large font-bold">
-                  ~ {stats.filter((s: any) => s.value > 0).length} total
+                  ~{" "}
+                  {stats.reduce(
+                    (total: number, entry: any) => total + entry.value,
+                    0,
+                  )}{" "}
+                  total
                 </p>
               )}
             </div>
