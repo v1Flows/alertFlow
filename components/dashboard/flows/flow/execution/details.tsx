@@ -208,7 +208,7 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
                 <Icon icon="solar:bill-list-broken" width={24} />
               </div>
               <div>
-                <p className="text-md font-bold">{steps.length + 2}</p>
+                <p className="text-md font-bold">{steps.length - 1}</p>
                 <p className="text-sm text-default-500">Total Steps</p>
               </div>
             </div>

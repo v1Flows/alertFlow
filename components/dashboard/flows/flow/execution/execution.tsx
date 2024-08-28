@@ -35,24 +35,24 @@ export function Execution({ flow, execution, runners }: any) {
     {
       id: 2,
       action_name: "Execution Registered",
-      icon: <Icon icon="solar:cpu-bolt-broken" width={24} />,
       action_messages: ["Execution got registered at API Backend"],
       finished: true,
       started_at: execution.created_at,
-      finished_at: execution.executed_at,
+      finished_at: execution.created_at,
       parent_id: "",
       is_hidden: false,
+      icon: "solar:cpu-bolt-broken",
     },
     execution.runner_id === "" && {
       id: 3,
       action_name: "Runner Pick Up",
-      icon: <Icon icon="solar:rocket-2-broken" width={24} />,
       action_messages: ["Waiting for Runner to pick up Execution"],
       finished: false,
       started_at: execution.created_at,
       finished_at: "0001-01-01T00:00:00Z",
       parent_id: "",
       is_hidden: false,
+      icon: "solar:rocket-2-bold-duotone",
     },
   ];
 
@@ -185,33 +185,10 @@ export function Execution({ flow, execution, runners }: any) {
     }
   }
 
-  function stepIcon(step: any) {
-    if (step.action_name === "Runner Pick Up") {
-      return <Icon icon="solar:rocket-2-broken" width={24} />;
-    } else if (step.action_name === "Automated Check") {
-      return <Icon icon="lucide:bot" width={24} />;
-    } else if (step.parent_id !== "") {
-      return (
-        <Badge
-          color="secondary"
-          content=""
-          placement="bottom-right"
-          shape="circle"
-        >
-          <Tooltip
-            content={`Child Step of: ${steps.find((s: any) => step.parent_id === s.id).action_name}`}
-          >
-            <Icon icon="solar:branching-paths-down-line-duotone" width={28} />
-          </Tooltip>
-        </Badge>
-      );
-    } else {
-      return <Icon icon="solar:bolt-line-duotone" width={24} />;
-    }
-  }
-
   function getDuration(step: any) {
-    if (step.finished_at === "0001-01-01T00:00:00Z") return "0s";
+    if (step.finished_at === "0001-01-01T00:00:00Z") {
+      step.finished_at = new Date().toISOString();
+    }
     const ms =
       new Date(step.finished_at).getTime() -
       new Date(step.started_at).getTime();
@@ -241,7 +218,10 @@ export function Execution({ flow, execution, runners }: any) {
             <div
               className={`flex flex-col items-center gap-2 ${step.parent_id !== "" && "text-default-500"}`}
             >
-              {stepIcon(step)}
+              <Icon
+                icon={`${step.icon || "solar:question-square-line-duotone"}`}
+                width={24}
+              />
               <p className="text-md font-medium">{step.action_name}</p>
             </div>
           );
@@ -280,30 +260,23 @@ export function Execution({ flow, execution, runners }: any) {
         case "data":
           return (
             <div className="flex flex-col gap-2">
-              {step.name == "Incoming Payload" ? (
-                <Snippet fullWidth hideCopyButton hideSymbol radius="sm">
-                  <pre>{step.data}</pre>
-                </Snippet>
-              ) : (
-                step.action_messages.map((data: any, index: any) => (
-                  <Snippet
-                    key={index}
-                    fullWidth
-                    hideCopyButton
-                    hideSymbol
-                    className={`${step.parent_id !== "" && "text-default-500"}`}
-                    radius="sm"
-                  >
-                    <p className="flex flex-cols items-center gap-2">
-                      <Icon
-                        icon="solar:double-alt-arrow-right-bold-duotone"
-                        width={16}
-                      />
-                      {data}
-                    </p>
-                  </Snippet>
-                ))
-              )}
+              <Snippet
+                fullWidth
+                hideCopyButton
+                hideSymbol
+                className={`${step.parent_id !== "" && "text-default-500"}`}
+                radius="sm"
+              >
+                {step.action_messages.map((data: any, index: any) => (
+                  <p key={index} className="flex flex-cols items-center gap-1">
+                    <Icon
+                      icon="solar:double-alt-arrow-right-bold-duotone"
+                      width={16}
+                    />
+                    {data}
+                  </p>
+                ))}
+              </Snippet>
             </div>
           );
         case "duration":

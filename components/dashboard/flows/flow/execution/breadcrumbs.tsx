@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Breadcrumbs, BreadcrumbItem } from "@nextui-org/react";
+import { Breadcrumbs, BreadcrumbItem, Snippet } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 
 export default function ExecutionBreadcrumbs({ flowID, executionID }: any) {
@@ -15,7 +15,9 @@ export default function ExecutionBreadcrumbs({ flowID, executionID }: any) {
         isCurrent
         href={`/dashboard/flows/${flowID}/execution/${executionID}`}
       >
-        {executionID}
+        <Snippet hideSymbol className="bg-transparent" size="sm" variant="flat">
+          {executionID}
+        </Snippet>
       </BreadcrumbItem>
     </Breadcrumbs>
   );
