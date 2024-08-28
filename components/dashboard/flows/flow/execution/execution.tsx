@@ -15,6 +15,7 @@ import {
   TableHeader,
   TableRow,
   Tooltip,
+  useDisclosure,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import React, { useMemo, useState } from "react";
@@ -23,6 +24,7 @@ import TimeAgo from "react-timeago";
 import Reloader from "@/components/reloader/Reloader";
 import GetPayload from "@/lib/fetch/payload/payload";
 import GetExecutionSteps from "@/lib/fetch/executions/steps";
+import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
 
 import ExecutionBreadcrumbs from "./breadcrumbs";
 import ExecutionDetails from "./details";
@@ -30,6 +32,8 @@ import ExecutionDetails from "./details";
 export function Execution({ flow, execution, runners }: any) {
   const [payload, setPayload] = useState({} as any);
   const [steps, setSteps] = useState([] as any);
+
+  const showPayloadModal = useDisclosure();
 
   const defaultSteps = [
     {
@@ -218,10 +222,28 @@ export function Execution({ flow, execution, runners }: any) {
             <div
               className={`flex flex-col items-center gap-2 ${step.parent_id !== "" && "text-default-500"}`}
             >
-              <Icon
-                icon={`${step.icon || "solar:question-square-line-duotone"}`}
-                width={24}
-              />
+              {step.parent_id !== "" ? (
+                <Badge
+                  color="secondary"
+                  content=""
+                  placement="bottom-right"
+                  shape="circle"
+                >
+                  <Tooltip
+                    content={`Child Step of ${steps.find((s: any) => s.id == step.parent_id).action_name}`}
+                  >
+                    <Icon
+                      icon={`${step.icon || "solar:question-square-line-duotone"}`}
+                      width={24}
+                    />
+                  </Tooltip>
+                </Badge>
+              ) : (
+                <Icon
+                  icon={`${step.icon || "solar:question-square-line-duotone"}`}
+                  width={24}
+                />
+              )}
               <p className="text-md font-medium">{step.action_name}</p>
             </div>
           );
@@ -327,11 +349,22 @@ export function Execution({ flow, execution, runners }: any) {
           executionID={execution.id}
           flowID={flow.flow.id}
         />
-        {execution.running || execution.waiting || execution.paused ? (
-          <div className="lg:justify-self-end lg:mt-0 mt-2">
-            <Reloader />
-          </div>
-        ) : null}
+        <div className="flex flex-cols items-center lg:justify-end justify-center mt-2 lg:mt-0 gap-4">
+          <Button
+            color="secondary"
+            variant="flat"
+            onPress={() => showPayloadModal.onOpen()}
+          >
+            <Icon icon="solar:letter-opened-broken" width={20} />
+            Show Payload
+          </Button>
+
+          {execution.running || execution.waiting || execution.paused ? (
+            <div>
+              <Reloader />
+            </div>
+          ) : null}
+        </div>
       </div>
       <Divider className="mt-4 mb-4" />
       <ExecutionDetails execution={execution} runners={runners} steps={steps} />
@@ -372,6 +405,10 @@ export function Execution({ flow, execution, runners }: any) {
         </TableBody>
       </Table>
       <Spacer y={4} />
+      <FunctionShowPayloadModal
+        disclosure={showPayloadModal}
+        payload={payload}
+      />
     </>
   );
 }
