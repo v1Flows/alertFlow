@@ -35,6 +35,7 @@ import { PlusIcon } from "@/components/icons";
 import UpdateFlowAction from "@/lib/fetch/flow/PUT/UpdateAction";
 
 import MinimalRowSteps from "../steps/minimal-row-steps";
+import { CustomCheckbox } from "@/components/ui/CustomCheckbox";
 
 export const CustomRadio = (props: any) => {
   const { children, ...otherProps } = props;
@@ -115,8 +116,12 @@ export default function EditActionModal({
 
     for (let i = 0; i < runners.length; i++) {
       for (let j = 0; j < runners[i].available_actions.length; j++) {
-        if (!actions.includes(runners[i].available_actions[j])) {
-          actions.push(runners[i].available_actions[j]);
+        const action = runners[i].available_actions[j];
+
+        if (actions.find((x: any) => x.type === action.type)) {
+          continue;
+        } else {
+          actions.push(action);
         }
       }
     }
@@ -432,16 +437,15 @@ export default function EditActionModal({
                             </p>
                             <Spacer y={2} />
                             <CheckboxGroup
-                              classNames={{
-                                base: "w-full",
-                              }}
+                              orientation="horizontal"
                               value={actions}
                               onChange={setActions}
                             >
                               {getUniqueActions().map((action: any) => (
-                                <Checkbox key={action.name} value={action.name}>
-                                  {action.name}
-                                </Checkbox>
+                                <CustomCheckbox
+                                  key={action.name}
+                                  action={action}
+                                />
                               ))}
                             </CheckboxGroup>
                           </>
