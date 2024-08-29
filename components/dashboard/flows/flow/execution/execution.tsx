@@ -5,6 +5,11 @@ import {
   Button,
   CircularProgress,
   Divider,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownSection,
+  DropdownTrigger,
   Progress,
   Snippet,
   Spacer,
@@ -28,8 +33,10 @@ import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
 
 import ExecutionBreadcrumbs from "./breadcrumbs";
 import ExecutionDetails from "./details";
+import AdminExecutionActions from "./adminExecutionActions";
+import AdminStepActions from "./adminStepActions";
 
-export function Execution({ flow, execution, runners }: any) {
+export function Execution({ flow, execution, runners, userDetails }: any) {
   const [payload, setPayload] = useState({} as any);
   const [steps, setSteps] = useState([] as any);
 
@@ -219,9 +226,7 @@ export function Execution({ flow, execution, runners }: any) {
       switch (columnKey) {
         case "name":
           return (
-            <div
-              className={`flex flex-col items-center gap-2 ${step.parent_id !== "" && "text-default-500"}`}
-            >
+            <div className={`flex flex-col items-center gap-2`}>
               {step.parent_id !== "" ? (
                 <Badge
                   color="secondary"
@@ -282,13 +287,7 @@ export function Execution({ flow, execution, runners }: any) {
         case "data":
           return (
             <div className="flex flex-col gap-2">
-              <Snippet
-                fullWidth
-                hideCopyButton
-                hideSymbol
-                className={`${step.parent_id !== "" && "text-default-500"}`}
-                radius="sm"
-              >
+              <Snippet fullWidth hideCopyButton hideSymbol radius="sm">
                 {step.action_messages.map((data: any, index: any) => (
                   <p key={index} className="flex flex-cols items-center gap-1">
                     <Icon
@@ -302,20 +301,18 @@ export function Execution({ flow, execution, runners }: any) {
             </div>
           );
         case "duration":
-          return (
-            <p className={`${step.parent_id !== "" && "text-default-500"}`}>
-              {getDuration(step)}
-            </p>
-          );
+          return <p>{getDuration(step)}</p>;
         case "status":
           return <div>{statusIcon(step)}</div>;
         case "created":
+          return <TimeAgo live date={step.started_at} />;
+        case "admin_actions":
           return (
-            <TimeAgo
-              live
-              className={`${step.parent_id !== "" && "text-default-500"}`}
-              date={step.started_at}
-            />
+            <div className="flex flex-col justify-center items-center">
+              {userDetails.role === "Admin" && (
+                <AdminStepActions execution={execution} step={step} />
+              )}
+            </div>
           );
         default:
           return cellValue;
@@ -358,6 +355,9 @@ export function Execution({ flow, execution, runners }: any) {
             <Icon icon="solar:letter-opened-broken" width={20} />
             Show Payload
           </Button>
+          {userDetails.role === "Admin" && (
+            <AdminExecutionActions execution={execution} />
+          )}
 
           {execution.running || execution.waiting || execution.paused ? (
             <div>
@@ -393,10 +393,20 @@ export function Execution({ flow, execution, runners }: any) {
           <TableColumn key="created" align="center">
             Created
           </TableColumn>
+          <TableColumn
+            key="admin_actions"
+            align="center"
+            hideHeader={userDetails.role !== "Admin"}
+          >
+            Admin Actions
+          </TableColumn>
         </TableHeader>
         <TableBody items={steps.filter((s: any) => s.is_hidden == false)}>
           {(item: any) => (
-            <TableRow key={item.id}>
+            <TableRow
+              key={item.id}
+              className={item.parent_id !== "" ? "bg-default-100" : ""}
+            >
               {(columnKey) => (
                 <TableCell>{renderCell(item, columnKey)}</TableCell>
               )}
