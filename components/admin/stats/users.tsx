@@ -7,7 +7,7 @@ import {
   Spacer,
 } from "@nextui-org/react";
 
-import ChartCard from "./chartCard";
+import ChartCard from "../../charts/chartCard";
 
 export default function UsersStats({
   users,
