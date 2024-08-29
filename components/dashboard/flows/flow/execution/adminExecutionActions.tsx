@@ -102,7 +102,7 @@ export default function AdminExecutionActions({
 
   return (
     <Dropdown>
-      <DropdownTrigger className="hidden sm:flex">
+      <DropdownTrigger>
         <Button color="danger" variant="flat">
           <Icon icon="solar:shield-up-broken" width={20} />
           Admin Actions
