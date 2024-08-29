@@ -108,23 +108,6 @@ export default function ProjectTabs({
             />
           </Tab>
           <Tab
-            key="stats"
-            title={
-              <div className="flex items-center space-x-2">
-                <Icon icon="solar:chart-2-broken" width={20} />
-                <span>Stats</span>
-              </div>
-            }
-          >
-            <ProjectTokens
-              members={members}
-              project={project}
-              settings={settings}
-              tokens={tokens}
-              user={user}
-            />
-          </Tab>
-          <Tab
             key="audit"
             isDisabled={plan.id !== "enterprise"}
             title={

@@ -1,7 +1,7 @@
 import { Icon } from "@iconify/react";
 import { Card, CardBody, Spacer } from "@nextui-org/react";
 
-import ChartCard from "./chartCard";
+import ChartCard from "../../charts/chartCard";
 
 export default function FlowsStats({
   flows,

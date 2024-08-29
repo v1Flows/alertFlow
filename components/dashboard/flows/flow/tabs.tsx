@@ -10,6 +10,7 @@ import AddFlowActionModal from "@/components/functions/flows/addAction";
 import Executions from "./executions";
 import Payloads from "./payloads";
 import Actions from "./actions";
+import FlowStats from "./stats";
 
 export default function FlowTabs({
   actions,
@@ -111,6 +112,17 @@ export default function FlowTabs({
               payloads={payloads}
               runners={runners}
             />
+          </Tab>
+          <Tab
+            key="stats"
+            title={
+              <div className="flex items-center space-x-2">
+                <Icon height="20" icon="solar:chart-2-broken" width="20" />
+                <span>Stats</span>
+              </div>
+            }
+          >
+            <FlowStats flowID={flow.id} />
           </Tab>
         </Tabs>
       </div>
