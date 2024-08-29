@@ -49,7 +49,7 @@ export default function ChartCard({
               )}
             </div>
           </CardHeader>
-          <CardBody className="py-2">
+          <CardBody className="py-2 overflow-hidden">
             <ResponsiveContainer height={70} width="100%">
               <LineChart data={stats}>
                 <XAxis hide dataKey="date" />

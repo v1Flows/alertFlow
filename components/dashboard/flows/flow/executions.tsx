@@ -355,7 +355,7 @@ export default function Executions({
         <div className="flex justify-between gap-3 items-end">
           <div className="flex gap-3">
             <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
+              <DropdownTrigger>
                 <Button
                   color={statusFilter.size > 0 ? "primary" : "default"}
                   endContent={
@@ -489,6 +489,7 @@ export default function Executions({
             fullWidth
             isHoverable
             isPressable
+            className={statusFilter.has("finished") ? "bg-success/30" : ""}
             onPress={() => {
               setStatusFilter(new Set(["finished"]));
               setPage(1);
@@ -518,6 +519,7 @@ export default function Executions({
             fullWidth
             isHoverable
             isPressable
+            className={statusFilter.has("running") ? "bg-primary/30" : ""}
             onPress={() => {
               setStatusFilter(new Set(["running"]));
               setPage(1);
@@ -547,6 +549,7 @@ export default function Executions({
             fullWidth
             isHoverable
             isPressable
+            className={statusFilter.has("waiting") ? "bg-warning/30" : ""}
             onPress={() => {
               setStatusFilter(new Set(["waiting"]));
               setPage(1);
@@ -576,6 +579,7 @@ export default function Executions({
             fullWidth
             isHoverable
             isPressable
+            className={statusFilter.has("paused") ? "bg-warning/30" : ""}
             onPress={() => {
               setStatusFilter(new Set(["paused"]));
               setPage(1);
@@ -605,6 +609,9 @@ export default function Executions({
             fullWidth
             isHoverable
             isPressable
+            className={
+              statusFilter.has("no_pattern_match") ? "bg-secondary/30" : ""
+            }
             onPress={() => {
               setStatusFilter(new Set(["no_pattern_match"]));
               setPage(1);
@@ -635,6 +642,9 @@ export default function Executions({
             fullWidth
             isHoverable
             isPressable
+            className={
+              statusFilter.has("no_flow_actions_found") ? "bg-default/60" : ""
+            }
             onPress={() => {
               setStatusFilter(new Set(["no_flow_actions_found"]));
               setPage(1);
@@ -665,6 +675,7 @@ export default function Executions({
             fullWidth
             isHoverable
             isPressable
+            className={statusFilter.has("error") ? "bg-danger/30" : ""}
             onPress={() => {
               setStatusFilter(new Set(["error"]));
               setPage(1);

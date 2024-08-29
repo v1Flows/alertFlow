@@ -1,4 +1,3 @@
-import UpdateExecutionStep from "@/lib/fetch/executions/updateStep";
 import { Icon } from "@iconify/react";
 import {
   Button,
@@ -10,6 +9,8 @@ import {
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+
+import UpdateExecutionStep from "@/lib/fetch/executions/updateStep";
 
 export default function AdminStepActions({
   execution,
@@ -100,7 +101,7 @@ export default function AdminStepActions({
 
   return (
     <Dropdown>
-      <DropdownTrigger className="hidden sm:flex">
+      <DropdownTrigger>
         <Button isIconOnly color="danger" variant="flat">
           <Icon icon="solar:shield-up-broken" width={20} />
         </Button>

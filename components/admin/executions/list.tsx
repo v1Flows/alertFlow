@@ -486,6 +486,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
             fullWidth
             isHoverable
             isPressable
+            className={statusFilter.has("finished") ? "bg-success/30" : ""}
             onPress={() => {
               setStatusFilter(new Set(["finished"]));
               setPage(1);
@@ -515,6 +516,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
             fullWidth
             isHoverable
             isPressable
+            className={statusFilter.has("running") ? "bg-primary/30" : ""}
             onPress={() => {
               setStatusFilter(new Set(["running"]));
               setPage(1);
@@ -544,6 +546,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
             fullWidth
             isHoverable
             isPressable
+            className={statusFilter.has("waiting") ? "bg-warning/30" : ""}
             onPress={() => {
               setStatusFilter(new Set(["waiting"]));
               setPage(1);
@@ -573,6 +576,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
             fullWidth
             isHoverable
             isPressable
+            className={statusFilter.has("paused") ? "bg-warning/30" : ""}
             onPress={() => {
               setStatusFilter(new Set(["paused"]));
               setPage(1);
@@ -602,6 +606,9 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
             fullWidth
             isHoverable
             isPressable
+            className={
+              statusFilter.has("no_pattern_match") ? "bg-secondary/30" : ""
+            }
             onPress={() => {
               setStatusFilter(new Set(["no_pattern_match"]));
               setPage(1);
@@ -632,6 +639,9 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
             fullWidth
             isHoverable
             isPressable
+            className={
+              statusFilter.has("no_flow_actions_found") ? "bg-default/60" : ""
+            }
             onPress={() => {
               setStatusFilter(new Set(["no_flow_actions_found"]));
               setPage(1);
@@ -662,6 +672,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
             fullWidth
             isHoverable
             isPressable
+            className={statusFilter.has("error") ? "bg-danger/30" : ""}
             onPress={() => {
               setStatusFilter(new Set(["error"]));
               setPage(1);

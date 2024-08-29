@@ -7,7 +7,7 @@ import ChartCard from "@/components/charts/chartCard";
 import GetFlowStats from "@/lib/fetch/flow/stats";
 
 export default function FlowStats({ flowID }: any) {
-  const [interval, setInterval] = useState(7);
+  const [interval] = useState(7);
   const [stats, setStats] = useState({
     started_execution_stats: [],
     failed_execution_stats: [],

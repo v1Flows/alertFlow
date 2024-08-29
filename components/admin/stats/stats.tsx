@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { Divider, Input, Spacer } from "@nextui-org/react";
+import { toast } from "sonner";
 
 import AdminGetStats from "@/lib/fetch/admin/stats";
 
@@ -12,18 +13,10 @@ export function PageStats({
   flows,
   projects,
   users,
-  selfhosted_runners,
-  alertflow_runners,
-  payloads,
-  executions,
 }: {
   flows: any;
   projects: any;
   users: any;
-  selfhosted_runners: any;
-  alertflow_runners: any;
-  payloads: any;
-  executions: any;
 }) {
   const [interval, setInterval] = React.useState(7);
   const [stats, setStats] = React.useState({
@@ -41,7 +34,7 @@ export function PageStats({
     const stats = await AdminGetStats(interval);
 
     if (stats.error) {
-      console.error(stats.error);
+      toast.error(stats.error);
     }
     setStats(stats);
   }
