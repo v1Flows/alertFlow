@@ -1,4 +1,3 @@
-import UpdateExecutionStep from "@/lib/fetch/executions/updateStep";
 import { Icon } from "@iconify/react";
 import {
   Button,
@@ -10,6 +9,8 @@ import {
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+
+import UpdateExecutionStep from "@/lib/fetch/executions/updateStep";
 
 export default function AdminStepActions({
   execution,

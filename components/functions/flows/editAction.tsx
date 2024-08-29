@@ -22,7 +22,6 @@ import {
   Tooltip,
   ButtonGroup,
   CheckboxGroup,
-  Checkbox,
   Divider,
 } from "@nextui-org/react";
 import React, { useEffect } from "react";
@@ -33,9 +32,9 @@ import { Icon } from "@iconify/react";
 import { cn } from "@/components/functions/cn/cn";
 import { PlusIcon } from "@/components/icons";
 import UpdateFlowAction from "@/lib/fetch/flow/PUT/UpdateAction";
+import { CustomCheckbox } from "@/components/ui/CustomCheckbox";
 
 import MinimalRowSteps from "../steps/minimal-row-steps";
-import { CustomCheckbox } from "@/components/ui/CustomCheckbox";
 
 export const CustomRadio = (props: any) => {
   const { children, ...otherProps } = props;
