@@ -224,7 +224,7 @@ export default function Executions({
     if (execution.finished_at === "0001-01-01T00:00:00Z") return "0s";
     const ms =
       new Date(execution.finished_at).getTime() -
-      new Date(execution.executed_at).getTime();
+      new Date(execution.created_at).getTime();
     const sec = Math.floor(ms / 1000);
     const min = Math.floor(sec / 60);
     const hr = Math.floor(min / 60);
@@ -708,10 +708,10 @@ export default function Executions({
           <TableColumn key="status" align="start">
             Status
           </TableColumn>
-          <TableColumn key="id" align="start">
+          <TableColumn key="id" align="center">
             ID
           </TableColumn>
-          <TableColumn key="trigger" align="start">
+          <TableColumn key="trigger" align="center">
             Trigger
           </TableColumn>
           <TableColumn key="duration" align="center">

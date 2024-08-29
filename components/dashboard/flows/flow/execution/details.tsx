@@ -146,11 +146,11 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
     }
   }
 
-  function getDuration(execution: any) {
+  function getDuration() {
     if (execution.finished_at === "0001-01-01T00:00:00Z") return "-";
     const ms =
       new Date(execution.finished_at).getTime() -
-      new Date(execution.executed_at).getTime();
+      new Date(execution.created_at).getTime();
     const sec = Math.floor(ms / 1000);
     const min = Math.floor(sec / 60);
     const hr = Math.floor(min / 60);
@@ -255,7 +255,7 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
                 <Icon icon="solar:clock-circle-broken" width={28} />
               </div>
               <div>
-                <p className="text-md font-bold">{getDuration(execution)}</p>
+                <p className="text-md font-bold">{getDuration()}</p>
                 <p className="text-sm text-default-500">Duration</p>
               </div>
             </div>
