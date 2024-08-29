@@ -16,15 +16,7 @@ export default async function AdminStatsPage() {
 
   return (
     <>
-      <PageStats
-        alertflow_runners={runners.alertflow_runners}
-        executions={executions}
-        flows={flows}
-        payloads={payloads}
-        projects={projects}
-        selfhosted_runners={runners.self_hosted_runners}
-        users={users}
-      />
+      <PageStats flows={flows} projects={projects} users={users} />
     </>
   );
 }
