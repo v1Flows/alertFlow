@@ -50,6 +50,12 @@ export const sectionAdminItems: SidebarItem[] = [
     title: "Admin",
     items: [
       {
+        key: "admin_stats",
+        href: "/admin/stats",
+        icon: "solar:chart-2-broken",
+        title: "Stats",
+      },
+      {
         key: "admin_users",
         href: "/admin/users",
         icon: "solar:smile-square-broken",
