@@ -2,9 +2,16 @@
 
 import {
   Button,
+  Card,
+  CardBody,
   CircularProgress,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
   Pagination,
   Snippet,
+  Spacer,
   Table,
   TableBody,
   TableCell,
@@ -17,7 +24,7 @@ import {
 import { Icon } from "@iconify/react";
 import TimeAgo from "react-timeago";
 import { useRouter } from "next/navigation";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 
 import DeleteExecutionModal from "@/components/functions/flows/deleteExecution";
 import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
@@ -32,19 +39,43 @@ export default function Executions({
   const showPayloadModal = useDisclosure();
   const deleteExecutionModal = useDisclosure();
 
-  const [targetPayload, setTargetPayload] = React.useState({} as any);
-  const [targetExecution, setTargetExecution] = React.useState({} as any);
+  const [targetPayload, setTargetPayload] = useState({} as any);
+  const [targetExecution, setTargetExecution] = useState({} as any);
+
+  const [statusFilter, setStatusFilter] = useState(new Set([]) as any);
 
   // pagination
-  const [page, setPage] = React.useState(1);
+  const [page, setPage] = useState(1);
   const rowsPerPage = 10;
-  const pages = Math.ceil(executions.length / rowsPerPage);
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
 
+    if (statusFilter.size > 0) {
+      return executions
+        .filter((execution: any) =>
+          statusFilter.has(statusFilterReturn(execution)),
+        )
+        .slice(start, end);
+    }
+
     return executions.slice(start, end);
-  }, [page, executions]);
+  }, [page, executions, statusFilter]);
+
+  function pages() {
+    var length = 0;
+
+    if (statusFilter.size > 0) {
+      length =
+        executions.filter((execution: any) =>
+          statusFilter.has(statusFilterReturn(execution)),
+        ).length / rowsPerPage;
+    } else {
+      length = executions.length / rowsPerPage;
+    }
+
+    return Math.ceil(length);
+  }
 
   function status(execution: any) {
     if (execution.running) {
@@ -56,11 +87,29 @@ export default function Executions({
     } else if (execution.error) {
       return "Error";
     } else if (execution.no_match) {
-      return "No Match";
+      return "No Pattern Match";
     } else if (execution.ghost) {
       return "No Flow Actions found";
     } else {
       return "Finished";
+    }
+  }
+
+  function statusFilterReturn(execution: any) {
+    if (execution.running) {
+      return "running";
+    } else if (execution.waiting) {
+      return "waiting";
+    } else if (execution.paused) {
+      return "paused";
+    } else if (execution.error) {
+      return "error";
+    } else if (execution.no_match) {
+      return "no_pattern_match";
+    } else if (execution.ghost) {
+      return "no_flow_actions_found";
+    } else {
+      return "finished";
     }
   }
 
@@ -84,7 +133,7 @@ export default function Executions({
             valueLabel={
               <Icon
                 className="text-warning"
-                icon="solar:pause-broken"
+                icon="solar:clock-circle-broken"
                 width={16}
               />
             }
@@ -113,7 +162,23 @@ export default function Executions({
         </Tooltip>
       );
     } else if (execution.no_match) {
-      return <CircularProgress color="secondary" size="md" value={100} />;
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress
+            color="secondary"
+            showValueLabel={true}
+            size="md"
+            value={100}
+            valueLabel={
+              <Icon
+                className="text-secondary"
+                icon="solar:bill-cross-broken"
+                width={20}
+              />
+            }
+          />
+        </Tooltip>
+      );
     } else if (execution.ghost) {
       return (
         <Tooltip content={`${status(execution)}`}>
@@ -284,6 +349,124 @@ export default function Executions({
     }
   }, []);
 
+  const topContent = useMemo(() => {
+    return (
+      <div className="flex flex-col gap-4">
+        <div className="flex justify-between gap-3 items-end">
+          <div className="flex gap-3">
+            <Dropdown>
+              <DropdownTrigger className="hidden sm:flex">
+                <Button
+                  color={statusFilter.size > 0 ? "primary" : "default"}
+                  endContent={
+                    <Icon icon="solar:alt-arrow-down-line-duotone" width={18} />
+                  }
+                  variant="flat"
+                >
+                  Status
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu
+                aria-label="Table Columns"
+                closeOnSelect={false}
+                selectedKeys={statusFilter}
+                selectionMode="multiple"
+                variant="flat"
+                onSelectionChange={(keys) => {
+                  setStatusFilter(keys);
+                  setPage(1);
+                }}
+              >
+                <DropdownItem key="finished" className="capitalize">
+                  <div className="flex flex-cols gap-2">
+                    <Icon
+                      className="text-success"
+                      icon="solar:check-read-broken"
+                      width={18}
+                    />
+                    Finished
+                  </div>
+                </DropdownItem>
+                <DropdownItem key="running" className="capitalize">
+                  <div className="flex flex-cols gap-2">
+                    <Icon
+                      className="text-primary"
+                      icon="solar:play-bold-duotone"
+                      width={18}
+                    />
+                    Running
+                  </div>
+                </DropdownItem>
+                <DropdownItem key="waiting" className="capitalize">
+                  <div className="flex flex-cols gap-2">
+                    <Icon
+                      className="text-warning"
+                      icon="solar:clock-circle-broken"
+                      width={18}
+                    />
+                    Waiting
+                  </div>
+                </DropdownItem>
+                <DropdownItem key="paused" className="capitalize">
+                  <div className="flex flex-cols gap-2">
+                    <Icon
+                      className="text-warning"
+                      icon="solar:pause-broken"
+                      width={18}
+                    />
+                    Paused
+                  </div>
+                </DropdownItem>
+                <DropdownItem key="no_pattern_match" className="capitalize">
+                  <div className="flex flex-cols gap-2">
+                    <Icon
+                      className="text-secondary"
+                      icon="solar:bill-cross-broken"
+                      width={18}
+                    />
+                    No Match
+                  </div>
+                </DropdownItem>
+                <DropdownItem
+                  key="no_flow_actions_found"
+                  className="capitalize"
+                >
+                  <div className="flex flex-cols gap-2">
+                    <Icon
+                      className="text-default-500"
+                      icon="solar:ghost-broken"
+                      width={18}
+                    />
+                    Ghost
+                  </div>
+                </DropdownItem>
+                <DropdownItem key="error" className="capitalize">
+                  <div className="flex flex-cols gap-2">
+                    <Icon
+                      className="text-danger"
+                      icon="solar:danger-triangle-broken"
+                      width={18}
+                    />
+                    Error
+                  </div>
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+            <Button
+              variant="flat"
+              onPress={() => {
+                setStatusFilter(new Set([]));
+                setPage(1);
+              }}
+            >
+              Reset Filter
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }, [items, executions, statusFilter]);
+
   const bottomContent = useMemo(() => {
     return (
       <div className="flex justify-center">
@@ -291,19 +474,224 @@ export default function Executions({
           showControls
           isDisabled={items.length === 0}
           page={page}
-          total={pages}
+          total={pages()}
           onChange={(page) => setPage(page)}
         />
       </div>
     );
-  }, [items]);
+  }, [items, statusFilter]);
 
   return (
     <>
+      <div className="grid lg:grid-cols-7 grid-cols-2 gap-4">
+        <div className="col-span-1">
+          <Card
+            fullWidth
+            isHoverable
+            isPressable
+            onPress={() => {
+              setStatusFilter(new Set(["finished"]));
+              setPage(1);
+            }}
+          >
+            <CardBody>
+              <div className="flex items-center gap-2">
+                <div className="flex bg-success/10 text-success items-center rounded-small justify-center w-10 h-10">
+                  <Icon icon="solar:check-read-broken" width={20} />
+                </div>
+                <div>
+                  <p className="text-md font-bold">
+                    {
+                      executions.filter((e: any) => status(e) == "Finished")
+                        .length
+                    }
+                  </p>
+                  <p className="text-sm text-default-500">Finished</p>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
+
+        <div className="col-span-1">
+          <Card
+            fullWidth
+            isHoverable
+            isPressable
+            onPress={() => {
+              setStatusFilter(new Set(["running"]));
+              setPage(1);
+            }}
+          >
+            <CardBody>
+              <div className="flex items-center gap-2">
+                <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                  <Icon icon="solar:play-bold-duotone" width={20} />
+                </div>
+                <div>
+                  <p className="text-md font-bold">
+                    {
+                      executions.filter((e: any) => status(e) == "Running")
+                        .length
+                    }
+                  </p>
+                  <p className="text-sm text-default-500">Running</p>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
+
+        <div className="col-span-1">
+          <Card
+            fullWidth
+            isHoverable
+            isPressable
+            onPress={() => {
+              setStatusFilter(new Set(["waiting"]));
+              setPage(1);
+            }}
+          >
+            <CardBody>
+              <div className="flex items-center gap-2">
+                <div className="flex bg-warning/10 text-warning items-center rounded-small justify-center w-10 h-10">
+                  <Icon icon="solar:clock-circle-broken" width={20} />
+                </div>
+                <div>
+                  <p className="text-md font-bold">
+                    {
+                      executions.filter((e: any) => status(e) == "Waiting")
+                        .length
+                    }
+                  </p>
+                  <p className="text-sm text-default-500">Waiting</p>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
+
+        <div className="col-span-1">
+          <Card
+            fullWidth
+            isHoverable
+            isPressable
+            onPress={() => {
+              setStatusFilter(new Set(["paused"]));
+              setPage(1);
+            }}
+          >
+            <CardBody>
+              <div className="flex items-center gap-2">
+                <div className="flex bg-warning/10 text-warning items-center rounded-small justify-center w-10 h-10">
+                  <Icon icon="solar:pause-broken" width={20} />
+                </div>
+                <div>
+                  <p className="text-md font-bold">
+                    {
+                      executions.filter((e: any) => status(e) == "Paused")
+                        .length
+                    }
+                  </p>
+                  <p className="text-sm text-default-500">Paused</p>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
+
+        <div className="col-span-1">
+          <Card
+            fullWidth
+            isHoverable
+            isPressable
+            onPress={() => {
+              setStatusFilter(new Set(["no_pattern_match"]));
+              setPage(1);
+            }}
+          >
+            <CardBody>
+              <div className="flex items-center gap-2">
+                <div className="flex bg-secondary/10 text-secondary items-center rounded-small justify-center w-10 h-10">
+                  <Icon icon="solar:bill-cross-broken" width={20} />
+                </div>
+                <div>
+                  <p className="text-md font-bold">
+                    {
+                      executions.filter(
+                        (e: any) => status(e) == "No Pattern Match",
+                      ).length
+                    }
+                  </p>
+                  <p className="text-sm text-default-500">No Match</p>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
+
+        <div className="col-span-1">
+          <Card
+            fullWidth
+            isHoverable
+            isPressable
+            onPress={() => {
+              setStatusFilter(new Set(["no_flow_actions_found"]));
+              setPage(1);
+            }}
+          >
+            <CardBody>
+              <div className="flex items-center gap-2">
+                <div className="flex bg-default/20 text-default-500 items-center rounded-small justify-center w-10 h-10">
+                  <Icon icon="solar:ghost-broken" width={20} />
+                </div>
+                <div>
+                  <p className="text-md font-bold">
+                    {
+                      executions.filter(
+                        (e: any) => status(e) == "No Flow Actions found",
+                      ).length
+                    }
+                  </p>
+                  <p className="text-sm text-default-500">Ghost</p>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
+
+        <div className="col-span-1">
+          <Card
+            fullWidth
+            isHoverable
+            isPressable
+            onPress={() => {
+              setStatusFilter(new Set(["error"]));
+              setPage(1);
+            }}
+          >
+            <CardBody>
+              <div className="flex items-center gap-2">
+                <div className="flex bg-danger/10 text-danger items-center rounded-small justify-center w-10 h-10">
+                  <Icon icon="solar:danger-triangle-broken" width={20} />
+                </div>
+                <div>
+                  <p className="text-md font-bold">
+                    {executions.filter((e: any) => status(e) == "Error").length}
+                  </p>
+                  <p className="text-sm text-default-500">Error</p>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
+      </div>
+      <Spacer y={2} />
       <Table
         isStriped
         aria-label="Executions Table"
         bottomContent={bottomContent}
+        topContent={topContent}
       >
         <TableHeader>
           <TableColumn key="status" align="start">

@@ -13,7 +13,7 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
     } else if (execution.error) {
       return "Error";
     } else if (execution.no_match) {
-      return "No Match";
+      return "No Pattern Match";
     } else if (execution.ghost) {
       return "No Flow Actions found";
     } else {
@@ -59,7 +59,7 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
             valueLabel={
               <Icon
                 className="text-warning"
-                icon="solar:pause-broken"
+                icon="solar:clock-circle-broken"
                 width={16}
               />
             }
@@ -88,7 +88,23 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
         </Tooltip>
       );
     } else if (execution.no_match) {
-      return <CircularProgress color="secondary" size="sm" value={100} />;
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress
+            color="secondary"
+            showValueLabel={true}
+            size="md"
+            value={100}
+            valueLabel={
+              <Icon
+                className="text-secondary"
+                icon="solar:bill-cross-broken"
+                width={20}
+              />
+            }
+          />
+        </Tooltip>
+      );
     } else if (execution.ghost) {
       return (
         <Tooltip content={`${status(execution)}`}>
@@ -192,7 +208,7 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
                 <Icon icon="solar:bill-list-broken" width={24} />
               </div>
               <div>
-                <p className="text-md font-bold">{steps.length + 2}</p>
+                <p className="text-md font-bold">{steps.length - 1}</p>
                 <p className="text-sm text-default-500">Total Steps</p>
               </div>
             </div>

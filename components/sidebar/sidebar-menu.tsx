@@ -218,11 +218,11 @@ export default function SidebarMenu({
       <Spacer y={8} />
 
       {user.role === "Admin" && settings.maintenance && (
-        <Card className="mx-2 overflow-visible bg-danger-300" shadow="sm">
+        <Card isBlurred className="mx-2 border-3 border-danger" shadow="sm">
           <CardBody className="items-center py-5 text-center">
-            <div className="flex items-center justify-center space-x-2">
+            <div className="flex items-center justify-center text-danger font-bold space-x-2">
               <Icon icon="solar:danger-triangle-broken" width={20} />
-              <h3 className="text-medium font-medium">Maintenance</h3>
+              <h3 className="text-lg">Maintenance</h3>
             </div>
             <p className="p-4 text-small">
               Maintenance mode is currently active.
