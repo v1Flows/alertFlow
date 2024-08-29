@@ -100,7 +100,7 @@ export default function AdminStepActions({
 
   return (
     <Dropdown>
-      <DropdownTrigger className="hidden sm:flex">
+      <DropdownTrigger>
         <Button isIconOnly color="danger" variant="flat">
           <Icon icon="solar:shield-up-broken" width={20} />
         </Button>

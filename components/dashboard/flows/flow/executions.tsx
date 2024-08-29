@@ -355,7 +355,7 @@ export default function Executions({
         <div className="flex justify-between gap-3 items-end">
           <div className="flex gap-3">
             <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
+              <DropdownTrigger>
                 <Button
                   color={statusFilter.size > 0 ? "primary" : "default"}
                   endContent={
