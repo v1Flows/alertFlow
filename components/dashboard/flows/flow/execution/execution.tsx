@@ -191,6 +191,30 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
     }
   }
 
+  function getTotalDurationSeconds() {
+    if (execution.finished_at === "0001-01-01T00:00:00Z") {
+      execution.finished_at = new Date().toISOString();
+    }
+    const ms =
+      new Date(execution.finished_at).getTime() -
+      new Date(execution.created_at).getTime();
+    const sec = Math.floor(ms / 1000);
+
+    return sec;
+  }
+
+  function getDurationSeconds(step: any) {
+    if (step.finished_at === "0001-01-01T00:00:00Z") {
+      step.finished_at = new Date().toISOString();
+    }
+    const ms =
+      new Date(step.finished_at).getTime() -
+      new Date(step.started_at).getTime();
+    const sec = Math.floor(ms / 1000);
+
+    return sec;
+  }
+
   function getDuration(step: any) {
     if (step.finished_at === "0001-01-01T00:00:00Z") {
       step.finished_at = new Date().toISOString();
@@ -296,11 +320,38 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
             </div>
           );
         case "duration":
-          return <p>{getDuration(step)}</p>;
+          return (
+            <div className="flex flex-col items-center justify-center">
+              <Tooltip
+                content={
+                  <div className="px-1 py-2">
+                    <div className="text-small font-bold">Started at</div>
+                    <div className="text-small">
+                      {new Date(step.started_at).toLocaleString()}
+                    </div>
+                    <Divider className="mt-2 mb-2" />
+                    <div className="text-small font-bold">Finished at</div>
+                    <div className="text-small">
+                      {new Date(step.finished_at).toLocaleString()}
+                    </div>
+                  </div>
+                }
+              >
+                <div className="flex flex-col items-center gap-1">
+                  <CircularProgress
+                    aria-label="StepDuration"
+                    maxValue={getTotalDurationSeconds()}
+                    showValueLabel={true}
+                    size="lg"
+                    value={getDurationSeconds(step)}
+                  />
+                  <p className="text-xs">{getDuration(step)}</p>
+                </div>
+              </Tooltip>
+            </div>
+          );
         case "status":
           return <div>{statusIcon(step)}</div>;
-        case "created":
-          return <TimeAgo live date={step.started_at} />;
         case "admin_actions":
           return (
             <div className="flex flex-col justify-center items-center">
@@ -384,9 +435,6 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
           </TableColumn>
           <TableColumn key="duration" align="center">
             Duration
-          </TableColumn>
-          <TableColumn key="created" align="center">
-            Created
           </TableColumn>
           <TableColumn
             key="admin_actions"
