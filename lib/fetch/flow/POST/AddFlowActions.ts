@@ -2,7 +2,11 @@
 
 import { cookies } from "next/headers";
 
-export default async function CreateFlowAction(flowID: string, action: any) {
+export default async function AddFlowActions(
+  flowID: string,
+  projectID: string,
+  actions: any,
+) {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;
@@ -20,7 +24,8 @@ export default async function CreateFlowAction(flowID: string, action: any) {
         method: "POST",
         headers: headers,
         body: JSON.stringify({
-          ...action,
+          project_id: projectID,
+          actions: actions,
         }),
       },
     );
@@ -28,6 +33,6 @@ export default async function CreateFlowAction(flowID: string, action: any) {
 
     return data;
   } catch (error) {
-    return { error: "Failed to fetch data" };
+    return { error: "Failed to add actions" };
   }
 }

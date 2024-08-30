@@ -1,25 +1,17 @@
 "use client";
 import React from "react";
-import { Tabs, Tab, useDisclosure, Button } from "@nextui-org/react";
+import { Tabs, Tab } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-import { Flash, PlusIcon } from "@/components/icons";
-import AddFlowActionModal from "@/components/functions/flows/addAction";
+import { Flash } from "@/components/icons";
 
 import Executions from "./executions";
 import Payloads from "./payloads";
 import Actions from "./actions";
 import FlowStats from "./stats";
 
-export default function FlowTabs({
-  actions,
-  flow,
-  executions,
-  payloads,
-  runners,
-}: any) {
-  const addFlowActionModal = useDisclosure();
+export default function FlowTabs({ flow, executions, payloads, runners }: any) {
   const [selected, setSelected] = React.useState("actions");
 
   const router = useRouter();
@@ -57,26 +49,7 @@ export default function FlowTabs({
               </div>
             }
           >
-            {actions.length === 0 ? (
-              <div className="flex flex-col items-center justify-center">
-                <p className="text-center text-default-400 mt-4">
-                  No actions found
-                </p>
-              </div>
-            ) : (
-              <Actions actions={actions} flow={flow} runners={runners} />
-            )}
-            <Button
-              fullWidth
-              className="mt-4"
-              color="primary"
-              isDisabled={flow.disabled}
-              startContent={<PlusIcon />}
-              variant="flat"
-              onPress={addFlowActionModal.onOpen}
-            >
-              Add Action
-            </Button>
+            <Actions flow={flow} runners={runners} />
           </Tab>
           <Tab
             key="executions"
@@ -126,11 +99,6 @@ export default function FlowTabs({
           </Tab>
         </Tabs>
       </div>
-      <AddFlowActionModal
-        disclosure={addFlowActionModal}
-        flowID={flow.id}
-        runners={runners}
-      />
     </main>
   );
 }
