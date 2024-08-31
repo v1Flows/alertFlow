@@ -238,6 +238,14 @@ export default function Actions({
             strategy={verticalListSortingStrategy}
           >
             <div className="flex flex-col gap-2">
+              <div className="flex flex-cols items-center gap-2">
+                <Icon
+                  className="text-default-500"
+                  icon="solar:info-circle-linear"
+                  width={18}
+                />
+                <p className="text-sm text-default-500">You can reorder actions by dragging them</p>
+              </div>
               {actions.map((action: any) => (
                 <SortableItem key={action.id} action={action} />
               ))}
