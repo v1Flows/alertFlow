@@ -60,7 +60,7 @@ export default function EditFlowActionsDetails({
   useEffect(() => {
     setExecParallel(flow.exec_parallel);
     setPatterns(flow.patterns);
-  }, [flow]);
+  }, [isOpen]);
 
   function cancel() {
     onOpenChange();

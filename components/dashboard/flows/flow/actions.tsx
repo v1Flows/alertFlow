@@ -248,19 +248,24 @@ export default function Actions({
           fullWidth
           isHoverable
           isPressable
-          className="border border-primary/50 border-3 border-dashed bg-opacity-50"
+          className="border border-dashed border-default-200 hover:border-primary bg-opacity-60"
           isDisabled={flow.disabled}
           onPress={addFlowActionModal.onOpen}
         >
-          <CardBody className="flex flex-col items-center justify-center gap-2">
-            <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-25 w-12 h-12">
-              <Icon
-                className="text-primary"
-                icon="solar:add-square-broken"
-                width={38}
-              />
+          <CardBody>
+            <div className="flex flex-cols items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                  <Icon icon="solar:add-square-broken" width={26} />
+                </div>
+                <div>
+                  <p className="text-md font-bold">Add Action</p>
+                  <p className="text-sm text-default-500">
+                    Add a new action to the flow
+                  </p>
+                </div>
+              </div>
             </div>
-            <p className="text-lg font-bold text-default-500">Add Action</p>
           </CardBody>
         </Card>
       </div>
