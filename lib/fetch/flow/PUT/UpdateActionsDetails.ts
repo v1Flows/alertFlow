@@ -2,7 +2,11 @@
 
 import { cookies } from "next/headers";
 
-export default async function GetFlow(flowID: any) {
+export default async function UpdateFlowActionsDetails(
+  flowID: string,
+  execParallel: boolean,
+  patterns: any,
+) {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;
@@ -15,16 +19,20 @@ export default async function GetFlow(flowID: any) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/flows/${flowID}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/flows/${flowID}/actions/details`,
       {
-        method: "GET",
+        method: "PUT",
         headers: headers,
+        body: JSON.stringify({
+          exec_parallel: execParallel,
+          patterns: patterns,
+        }),
       },
     );
     const data = await res.json();
 
-    return data.flow;
+    return data;
   } catch (error) {
-    return { error: "Failed to fetch data" };
+    return { error: "Failed to update actions details" };
   }
 }

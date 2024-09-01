@@ -34,7 +34,10 @@ export default function AdminStepActions({
         newStep.action_messages = [
           "Action Status changed by Admin to Finished",
         ];
-        newStep.finished_at = new Date().toISOString();
+        newStep.finished_at =
+          newStep.finished_at !== "0001-01-01T00:00:00Z"
+            ? newStep.finished_at
+            : new Date().toISOString();
         break;
       case "running":
         newStep.error = false;
@@ -63,7 +66,10 @@ export default function AdminStepActions({
         newStep.action_messages = [
           "Action Status changed by Admin to No Pattern Match",
         ];
-        newStep.finished_at = new Date().toISOString();
+        newStep.finished_at =
+          newStep.finished_at !== "0001-01-01T00:00:00Z"
+            ? newStep.finished_at
+            : new Date().toISOString();
         break;
       case "no_result":
         newStep.error = false;
@@ -74,7 +80,10 @@ export default function AdminStepActions({
         newStep.action_messages = [
           "Action Status changed by Admin to No Result",
         ];
-        newStep.finished_at = new Date().toISOString();
+        newStep.finished_at =
+          newStep.finished_at !== "0001-01-01T00:00:00Z"
+            ? newStep.finished_at
+            : new Date().toISOString();
         break;
       case "error":
         newStep.error = true;
@@ -83,7 +92,10 @@ export default function AdminStepActions({
         newStep.no_result = false;
         newStep.paused = false;
         newStep.action_messages = ["Action Status changed by Admin to Error"];
-        newStep.finished_at = new Date().toISOString();
+        newStep.finished_at =
+          newStep.finished_at !== "0001-01-01T00:00:00Z"
+            ? newStep.finished_at
+            : new Date().toISOString();
         break;
       default:
         break;

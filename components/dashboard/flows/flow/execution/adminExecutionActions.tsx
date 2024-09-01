@@ -30,7 +30,10 @@ export default function AdminExecutionActions({
         newExecution.paused = false;
         newExecution.running = false;
         newExecution.waiting = false;
-        newExecution.finished_at = new Date().toISOString();
+        newExecution.finished_at =
+          newExecution.finished_at !== "0001-01-01T00:00:00Z"
+            ? newExecution.finished_at
+            : new Date().toISOString();
         break;
       case "running":
         newExecution.error = false;
@@ -66,7 +69,10 @@ export default function AdminExecutionActions({
         newExecution.paused = false;
         newExecution.running = false;
         newExecution.waiting = false;
-        newExecution.finished_at = new Date().toISOString();
+        newExecution.finished_at =
+          newExecution.finished_at !== "0001-01-01T00:00:00Z"
+            ? newExecution.finished_at
+            : new Date().toISOString();
         break;
       case "ghost":
         newExecution.error = false;
@@ -75,7 +81,10 @@ export default function AdminExecutionActions({
         newExecution.paused = false;
         newExecution.running = false;
         newExecution.waiting = false;
-        newExecution.finished_at = new Date().toISOString();
+        newExecution.finished_at =
+          newExecution.finished_at !== "0001-01-01T00:00:00Z"
+            ? newExecution.finished_at
+            : new Date().toISOString();
         break;
       case "error":
         newExecution.error = true;
@@ -84,7 +93,10 @@ export default function AdminExecutionActions({
         newExecution.paused = false;
         newExecution.running = false;
         newExecution.waiting = false;
-        newExecution.finished_at = new Date().toISOString();
+        newExecution.finished_at =
+          newExecution.finished_at !== "0001-01-01T00:00:00Z"
+            ? newExecution.finished_at
+            : new Date().toISOString();
         break;
       default:
         break;
