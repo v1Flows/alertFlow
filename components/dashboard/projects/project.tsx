@@ -75,7 +75,7 @@ export default function Project({
             project.disabled ||
             (members.find((m: any) => m.user_id === user.id) &&
               members.filter((m: any) => m.user_id === user.id)[0].role ===
-                "Viewer")
+              "Viewer")
           }
           startContent={<Icon icon="solar:pen-new-square-broken" width={20} />}
           variant="flat"
@@ -105,9 +105,9 @@ export default function Project({
         </div>
       )}
       <div>
-        <div className="grid lg:grid-cols-4 grid-cols-2 gap-4">
+        <div className="grid lg:grid-cols-4 grid-cols-2 items-stretch gap-4">
           <div className="col-span-1">
-            <Card fullWidth>
+            <Card fullWidth className="h-full">
               <CardBody>
                 <div className="flex items-center gap-2">
                   <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
@@ -122,7 +122,7 @@ export default function Project({
             </Card>
           </div>
           <div className="col-span-1">
-            <Card fullWidth>
+            <Card fullWidth className="h-full">
               <CardBody>
                 <div className="flex items-center gap-2">
                   <div className="flex bg-warning/10 text-warning items-center rounded-small justify-center w-10 h-10">
@@ -149,7 +149,7 @@ export default function Project({
             </Card>
           </div>
           <div className="col-span-1">
-            <Card fullWidth>
+            <Card fullWidth className="h-full">
               <CardBody>
                 <div className="flex items-center gap-2">
                   <div className="flex bg-default/50 text-foreground items-center rounded-small justify-center w-10 h-10">

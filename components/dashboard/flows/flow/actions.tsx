@@ -170,7 +170,7 @@ export default function Actions({
               </Button>
             </div>
             <Divider className="my-4" />
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid xl:grid-cols-2 gap-4">
               <p>Execution Order</p>
               <Chip
                 color={flow.exec_parallel ? "secondary" : "primary"}
