@@ -19,7 +19,6 @@ import {
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import React, { useMemo, useState } from "react";
-import TimeAgo from "react-timeago";
 
 import Reloader from "@/components/reloader/Reloader";
 import GetPayload from "@/lib/fetch/payload/payload";
@@ -388,10 +387,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
   return (
     <>
       <div className="grid lg:grid-cols-2 items-center justify-between">
-        <ExecutionBreadcrumbs
-          executionID={execution.id}
-          flowID={flow.flow.id}
-        />
+        <ExecutionBreadcrumbs executionID={execution.id} flowID={flow.id} />
         <div className="flex flex-cols items-center lg:justify-end justify-center mt-2 lg:mt-0 gap-4">
           <Button
             color="secondary"
