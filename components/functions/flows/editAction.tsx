@@ -12,7 +12,6 @@ import {
   Tooltip,
 } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
 import { toast } from "sonner";
 
@@ -49,7 +48,6 @@ export default function EditActionModal({
   flow: any;
   targetAction: any;
 }) {
-  const router = useRouter();
   const { isOpen, onOpenChange } = disclosure;
 
   const [isLoading, setLoading] = useState(false);

@@ -121,7 +121,6 @@ export default function Actions({
     const { active, over } = event;
 
     if (active.id !== over.id) {
-      console.log(1);
       const items = [...actions];
       const oldIndex = items.findIndex((item: any) => item.id === active.id);
       const newIndex = items.findIndex((item: any) => item.id === over.id);

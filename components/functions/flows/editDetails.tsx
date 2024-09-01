@@ -174,6 +174,10 @@ export default function EditFlowActionsDetails({
                                     disallowEmptySelection
                                     className="max-w-xs"
                                     defaultSelectedKeys={[pattern.type]}
+                                    label="Type"
+                                    radius="sm"
+                                    size="sm"
+                                    variant="flat"
                                     onSelectionChange={(key: any) => {
                                       setPatterns([
                                         ...patterns.slice(0, index),
@@ -184,10 +188,6 @@ export default function EditFlowActionsDetails({
                                         ...patterns.slice(index + 1),
                                       ]);
                                     }}
-                                    label="Type"
-                                    radius="sm"
-                                    size="sm"
-                                    variant="flat"
                                   >
                                     <SelectItem key="equals">equals</SelectItem>
                                     <SelectItem key="not_equals">
