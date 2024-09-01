@@ -5,6 +5,7 @@ import {
   CardBody,
   Chip,
   Divider,
+  Spacer,
   Table,
   TableBody,
   TableCell,
@@ -111,6 +112,26 @@ export default function Actions({
                 </Button>
               </div>
             </div>
+            {action.params.length > 0 && (
+              <>
+                <Spacer y={2} />
+                <p>Parameters</p>
+                <Table removeWrapper aria-label="Parameters" className="w-full">
+                  <TableHeader>
+                    <TableColumn align="center">Key</TableColumn>
+                    <TableColumn align="center">Value</TableColumn>
+                  </TableHeader>
+                  <TableBody emptyContent={"No patterns defined."}>
+                    {action.params.map((param: any, index: number) => (
+                      <TableRow key={index}>
+                        <TableCell>{param.key}</TableCell>
+                        <TableCell>{param.value}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </>
+            )}
           </CardBody>
         </Card>
       </div>
