@@ -65,6 +65,9 @@ export default function AddActionModal({
   const [status, setStatus] = useState(true);
   const [action, setAction] = useState({
     id: uuidv4(),
+    name: "",
+    description: "",
+    icon: "",
     type: "",
     active: true,
     params: [],
@@ -114,10 +117,21 @@ export default function AddActionModal({
     return actions;
   }
 
+  function handleActionSelect(action: any) {
+    const selectedAction = getUniqueActions().find(
+      (x: any) => x.type === action,
+    );
+
+    setAction(selectedAction);
+  }
+
   function cancel() {
     setStatus(true);
     setAction({
       id: uuidv4(),
+      name: "",
+      description: "",
+      icon: "",
       type: "",
       active: true,
       params: [],
@@ -130,10 +144,13 @@ export default function AddActionModal({
     setLoading(true);
 
     const sendAction = {
-      id: action.id,
+      id: uuidv4(),
+      name: action.name,
+      description: action.description,
+      icon: action.icon,
       type: action.type,
-      active: action.active,
-      params: action.params,
+      active: true,
+      params: action.params || [],
     };
 
     const updatedActions = [...flow.actions, sendAction];
@@ -145,6 +162,9 @@ export default function AddActionModal({
       setStatus(true);
       setAction({
         id: uuidv4(),
+        name: "",
+        description: "",
+        icon: "",
         type: "",
         active: true,
         params: [],
@@ -222,7 +242,7 @@ export default function AddActionModal({
                               orientation="horizontal"
                               value={action.type}
                               onValueChange={(value) =>
-                                setAction({ ...action, type: value })
+                                handleActionSelect(value)
                               }
                             >
                               {getUniqueActions().map((action: any) => (

@@ -23,7 +23,6 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
 import DeleteActionModal from "@/components/functions/flows/deleteAction";
 import EditActionModal from "@/components/functions/flows/editAction";
@@ -38,7 +37,6 @@ export default function Actions({
   flow: any;
   runners: any;
 }) {
-  const router = useRouter();
   const [actions, setActions] = React.useState([] as any);
   const [targetAction, setTargetAction] = React.useState({} as any);
   const editFlowActionsDetails = useDisclosure();
@@ -49,22 +47,6 @@ export default function Actions({
   useEffect(() => {
     setActions(flow.actions);
   }, [flow]);
-
-  function getActionDetails(type: string) {
-    var action = {} as any;
-
-    const runner = runners.find((runner: any) =>
-      runner.available_actions.some((action: any) => action.type === type),
-    );
-
-    if (runner) {
-      action = runner.available_actions.find(
-        (action: any) => action.type === type,
-      );
-    }
-
-    return action || null;
-  }
 
   const SortableItem = ({ action }: { action: any }) => {
     const { attributes, listeners, setNodeRef, transform, transition } =
@@ -82,13 +64,11 @@ export default function Actions({
             <div className="flex flex-cols items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                  <Icon icon={getActionDetails(action.type)?.icon} width={26} />
+                  <Icon icon={action.icon} width={26} />
                 </div>
                 <div>
                   <div className="flex flex-cols gap-2">
-                    <p className="text-md font-bold">
-                      {getActionDetails(action.type)?.name}
-                    </p>
+                    <p className="text-md font-bold">{action.name}</p>
                     <Chip color="primary" radius="sm" size="sm" variant="dot">
                       {action.id}
                     </Chip>
@@ -102,7 +82,7 @@ export default function Actions({
                     </Chip>
                   </div>
                   <p className="text-sm text-default-500">
-                    {getActionDetails(action.type)?.description}
+                    {action.description}
                   </p>
                 </div>
               </div>
@@ -244,7 +224,9 @@ export default function Actions({
                   icon="solar:info-circle-linear"
                   width={18}
                 />
-                <p className="text-sm text-default-500">You can reorder actions by dragging them</p>
+                <p className="text-sm text-default-500">
+                  You can reorder actions by dragging them
+                </p>
               </div>
               {actions.map((action: any) => (
                 <SortableItem key={action.id} action={action} />

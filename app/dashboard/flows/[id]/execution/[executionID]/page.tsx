@@ -12,7 +12,7 @@ export default async function DashboardExecutionPage({
 }) {
   const flow = await GetFlow(params.id);
   const execution = await GetFlowExecution(params.id, params.executionID);
-  const runners = await GetProjectRunners(flow.flow.project_id);
+  const runners = await GetProjectRunners(flow.project_id);
   const settings = await PageGetSettings();
   const userDetails = await GetUserDetails();
 

@@ -174,6 +174,16 @@ export default function EditFlowActionsDetails({
                                     disallowEmptySelection
                                     className="max-w-xs"
                                     defaultSelectedKeys={[pattern.type]}
+                                    onSelectionChange={(key: any) => {
+                                      setPatterns([
+                                        ...patterns.slice(0, index),
+                                        {
+                                          ...pattern,
+                                          type: key.currentKey,
+                                        },
+                                        ...patterns.slice(index + 1),
+                                      ]);
+                                    }}
                                     label="Type"
                                     radius="sm"
                                     size="sm"
