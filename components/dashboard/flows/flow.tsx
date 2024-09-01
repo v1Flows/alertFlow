@@ -25,7 +25,6 @@ export function Flow({
   id,
   projects,
   flow,
-  actions,
   executions,
   payloads,
   runners,
@@ -230,7 +229,6 @@ export function Flow({
           </div>
           <div className="w-full mt-6">
             <FlowTabs
-              actions={actions}
               executions={executions}
               flow={flow}
               payloads={payloads}

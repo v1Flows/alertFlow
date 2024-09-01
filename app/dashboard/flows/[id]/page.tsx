@@ -15,15 +15,14 @@ export default async function DashboardFlowPage({
   const flow = await GetFlow(params.id);
   const executions = await GetFlowExecutions(params.id);
   const payloads = await GetFlowPayloads(params.id);
-  const runners = await GetProjectRunners(flow.flow.project_id);
+  const runners = await GetProjectRunners(flow.project_id);
   const settings = await PageGetSettings();
 
   return (
     <>
       <Flow
-        actions={flow.actions}
         executions={executions}
-        flow={flow.flow}
+        flow={flow}
         id={params.id}
         payloads={payloads}
         projects={projects.projects}
