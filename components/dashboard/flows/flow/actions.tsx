@@ -5,6 +5,7 @@ import {
   CardBody,
   Chip,
   Divider,
+  Spacer,
   Table,
   TableBody,
   TableCell,
@@ -69,7 +70,13 @@ export default function Actions({
                 <div>
                   <div className="flex flex-cols gap-2">
                     <p className="text-md font-bold">{action.name}</p>
-                    <Chip color="primary" radius="sm" size="sm" variant="dot">
+                    <Chip
+                      className="max-lg:hidden"
+                      color="primary"
+                      radius="sm"
+                      size="sm"
+                      variant="dot"
+                    >
                       {action.id}
                     </Chip>
                     <Chip
@@ -111,6 +118,36 @@ export default function Actions({
                 </Button>
               </div>
             </div>
+            <Spacer y={2} />
+            <Chip
+              className="lg:hidden"
+              color="primary"
+              radius="sm"
+              size="sm"
+              variant="dot"
+            >
+              {action.id}
+            </Chip>
+            {action.params.length > 0 && (
+              <>
+                <Spacer y={2} />
+                <p>Parameters</p>
+                <Table removeWrapper aria-label="Parameters" className="w-full">
+                  <TableHeader>
+                    <TableColumn align="center">Key</TableColumn>
+                    <TableColumn align="center">Value</TableColumn>
+                  </TableHeader>
+                  <TableBody emptyContent={"No patterns defined."}>
+                    {action.params.map((param: any, index: number) => (
+                      <TableRow key={index}>
+                        <TableCell>{param.key}</TableCell>
+                        <TableCell>{param.value}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </>
+            )}
           </CardBody>
         </Card>
       </div>
@@ -149,9 +186,9 @@ export default function Actions({
   }
 
   return (
-    <div className="grid lg:grid-cols-3 gap-4">
+    <div className="grid lg:grid-cols-3 grid-cols-1 gap-4">
       <div className="col-span-1">
-        <Card>
+        <Card fullWidth>
           <CardBody>
             <div className="flex flex-cols items-start justify-between">
               <div className="flex flex-col">
