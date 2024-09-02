@@ -10,6 +10,7 @@ import {
   ModalFooter,
   ModalHeader,
   Radio,
+  Spacer,
   Textarea,
   Tooltip,
 } from "@nextui-org/react";
@@ -117,7 +118,7 @@ export default function EditActionModal({
               <ModalBody>
                 <div className="w-full flex flex-col gap-4">
                   {/* Status */}
-                  <div className="flex flex-col gap-1">
+                  <div className="flex flex-col">
                     <div className="flex flex-cols items-center gap-2">
                       <p className="font-bold">Status</p>
                       <Tooltip content="Defined Actions will either be executed one after the other or all in parallel. If in Sequential type one action fails, the others won't be processed anymore.">
@@ -128,6 +129,7 @@ export default function EditActionModal({
                         />
                       </Tooltip>
                     </div>
+                    <Spacer y={2} />
                     <div>
                       <ButtonGroup radius="sm" variant="flat">
                         <Button
@@ -161,6 +163,7 @@ export default function EditActionModal({
                   </div>
                   <div>
                     <p className="font-bold">Parameters</p>
+                    <Spacer y={2} />
                     {params?.length > 0 ? (
                       <div className="grid grid-cols-2 gap-2">
                         {params.map((param: any) => {

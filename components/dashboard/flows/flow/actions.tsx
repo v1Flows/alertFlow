@@ -70,7 +70,13 @@ export default function Actions({
                 <div>
                   <div className="flex flex-cols gap-2">
                     <p className="text-md font-bold">{action.name}</p>
-                    <Chip color="primary" radius="sm" size="sm" variant="dot">
+                    <Chip
+                      className="max-lg:hidden"
+                      color="primary"
+                      radius="sm"
+                      size="sm"
+                      variant="dot"
+                    >
                       {action.id}
                     </Chip>
                     <Chip
@@ -112,6 +118,16 @@ export default function Actions({
                 </Button>
               </div>
             </div>
+            <Spacer y={2} />
+            <Chip
+              className="lg:hidden"
+              color="primary"
+              radius="sm"
+              size="sm"
+              variant="dot"
+            >
+              {action.id}
+            </Chip>
             {action.params.length > 0 && (
               <>
                 <Spacer y={2} />
@@ -170,9 +186,9 @@ export default function Actions({
   }
 
   return (
-    <div className="grid lg:grid-cols-3 gap-4">
+    <div className="grid lg:grid-cols-3 grid-cols-1 gap-4">
       <div className="col-span-1">
-        <Card>
+        <Card fullWidth>
           <CardBody>
             <div className="flex flex-cols items-start justify-between">
               <div className="flex flex-col">

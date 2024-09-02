@@ -67,7 +67,24 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
         </Tooltip>
       );
     } else if (execution.paused) {
-      return <CircularProgress color="warning" size="sm" value={100} />;
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress
+            aria-label="Step"
+            color="warning"
+            showValueLabel={true}
+            size="md"
+            value={100}
+            valueLabel={
+              <Icon
+                className="text-warning"
+                icon="solar:pause-broken"
+                width={16}
+              />
+            }
+          />
+        </Tooltip>
+      );
     } else if (execution.error) {
       return (
         <Tooltip content={`${status(execution)}`}>

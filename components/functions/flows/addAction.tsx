@@ -253,7 +253,7 @@ export default function AddActionModal({
                               Available Actions
                             </p>
                             <Spacer y={2} />
-                            <div className="flex flex-wrap gap-4">
+                            <div className="grid grid-cols-2 gap-4">
                               {getUniqueActions().map((act: any) => (
                                 <Card
                                   key={act.type}
@@ -290,6 +290,7 @@ export default function AddActionModal({
                         <p className="text-lg text-default-500 font-bold">
                           Required Parameters
                         </p>
+                        <Spacer y={2} />
                         {action.params.length > 0 || action?.params ? (
                           <div className="grid grid-cols-2 gap-2">
                             {action.params.map((param: any) => {
