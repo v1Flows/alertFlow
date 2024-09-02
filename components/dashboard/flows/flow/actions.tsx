@@ -132,6 +132,7 @@ export default function Actions({
               <>
                 <Spacer y={2} />
                 <p>Parameters</p>
+                <Spacer y={1} />
                 <Table removeWrapper aria-label="Parameters" className="w-full">
                   <TableHeader>
                     <TableColumn align="center">Key</TableColumn>
