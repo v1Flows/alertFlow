@@ -12,22 +12,17 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  Spacer,
 } from "@nextui-org/react";
 import { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 import { AnimatePresence, domAnimation, LazyMotion, m } from "framer-motion";
-import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 
-import { useTheme } from "next-themes";
-import { useIsSSR } from "@react-aria/ssr";
-
-import CreateIntent from "@/lib/fetch/payment/CreateIntent";
+import CreateSubscription from "@/lib/fetch/payment/CreateSubscription";
 
 import PlanRadio from "./plan-radio";
-import PaymentForm from "./paymentForm";
+import { toast } from "sonner";
 
 export default function SelectPlanModal({
   plans,
@@ -40,14 +35,9 @@ export default function SelectPlanModal({
 }) {
   const { isOpen, onOpenChange, onClose } = disclosure;
 
-  const { theme } = useTheme();
-  const isSSR = useIsSSR();
-
   const [isLoading, setIsLoading] = React.useState(false);
   const [[page, direction], setPage] = React.useState([0, 0]);
   const [selectedPlan, setSelectedPlan] = React.useState(user.plan);
-
-  const [clientSecret, setClientSecret] = React.useState("");
 
   const titleContent = React.useMemo(() => {
     return page === 0 ? "Select your plan" : "Checkout";
@@ -63,19 +53,20 @@ export default function SelectPlanModal({
     setPage([page + newDirection, newDirection]);
   };
 
-  async function createIntent() {
+  async function pay(planStripeID: string) {
     setIsLoading(true);
-    const res = await CreateIntent(selectedPlan.price, user.email);
+    const res = await CreateSubscription(planStripeID);
 
-    if (res.client_secret === "") {
+    if (res.error) {
+      toast.error(res.error);
       setIsLoading(false);
 
       return;
-    } else {
-      setClientSecret(res.client_secret);
-      paginate(1);
-      setIsLoading(false);
     }
+
+    setIsLoading(false);
+    toast.success("Subscription created successfully");
+    onClose();
   }
 
   return (
@@ -119,7 +110,7 @@ export default function SelectPlanModal({
                                   description={plan.description}
                                   icon={
                                     <Icon
-                                      className="text-secondary"
+                                      className="text-primary"
                                       icon="solar:box-minimalistic-linear"
                                       width={18}
                                     />
@@ -133,48 +124,23 @@ export default function SelectPlanModal({
                         )}
                         {page === 1 && (
                           <>
-                            <Card className="bg-transparent border-2 border-secondary">
+                            <Card className="bg-transparent" shadow="none">
                               <CardBody>
-                                <div className="flex flex-cols items-center justify-between">
-                                  <h4 className="text-large font-bold">
-                                    Summary
-                                  </h4>
-                                  <div>
-                                    <p className="text-default-500">
-                                      {selectedPlan.name} plan
-                                    </p>
-                                    <h5 className="text-medium font-medium">
-                                      Total:{" "}
-                                      <span className="text-success">
-                                        ${selectedPlan.price.toFixed(2)}
-                                      </span>
-                                    </h5>
-                                  </div>
+                                <div className="grid grid-cols-2 items-center">
+                                  <p className="text-large text-default-500">
+                                    Plan
+                                  </p>
+                                  <p>{selectedPlan.name}</p>
+
+                                  <p className="text-large text-default-500">
+                                    Price
+                                  </p>
+                                  <p className="text-success">
+                                    {selectedPlan.price.toFixed(2)}€
+                                  </p>
                                 </div>
                               </CardBody>
                             </Card>
-                            <Spacer y={2} />
-                            <Elements
-                              options={{
-                                mode: "payment",
-                                amount: selectedPlan.price * 100,
-                                currency: "eur",
-                                appearance: {
-                                  theme:
-                                    theme === "light" || isSSR
-                                      ? "stripe"
-                                      : "night",
-                                },
-                              }}
-                              stripe={stripePromise}
-                            >
-                              {clientSecret !== "" && (
-                                <PaymentForm
-                                  amount={selectedPlan.price}
-                                  clientSecret={clientSecret}
-                                />
-                              )}
-                            </Elements>
                           </>
                         )}
                       </m.div>
@@ -194,13 +160,26 @@ export default function SelectPlanModal({
               )}
               {page === 0 && (
                 <Button
-                  color="secondary"
+                  color="primary"
                   isDisabled={!selectedPlan.id}
-                  isLoading={isLoading}
                   variant="solid"
-                  onPress={() => createIntent()}
+                  onPress={() => paginate(1)}
                 >
                   Checkout new Plan
+                </Button>
+              )}
+              {page === 1 && (
+                <Button
+                  color="primary"
+                  isDisabled={!selectedPlan.id}
+                  isLoading={isLoading}
+                  startContent={
+                    <Icon icon="solar:wallet-money-broken" width={20} />
+                  }
+                  variant="solid"
+                  onPress={() => pay(selectedPlan.stripe_id)}
+                >
+                  Pay
                 </Button>
               )}
             </ModalFooter>

@@ -13,7 +13,7 @@ import { Icon } from "@iconify/react";
 
 import { IconWrapper } from "@/lib/IconWrapper";
 
-import SelectPlanModal from "../functions/page/selectPlan";
+import SelectPlanModal from "../functions/payment/selectPlan";
 
 import Executions from "./flows/flow/executions";
 import ExecutionChartCard from "./executionChartCard";
