@@ -43,6 +43,7 @@ export default function AdminPlans({ plans }: any) {
                   {plan.name}
                 </p>
                 <p className="text-sm text-default-500">{plan.description}</p>
+                <p className="text-sm text-default-500">{plan.stripe_id}</p>
               </div>
               {plan.is_default && (
                 <Chip color="primary" radius="sm" size="md" variant="dot">

@@ -17,8 +17,9 @@ import ChangeUserDetails from "@/lib/fetch/user/changeDetails";
 import CheckUserTaken from "@/lib/auth/checkTaken";
 
 import SecuritySettings from "./security-settings";
+import BillingSettings from "./billing-settings";
 
-export function UserProfile({ user }: any) {
+export function UserProfile({ user, paymentMethods }: any) {
   const router = useRouter();
 
   const [username, setUsername] = React.useState(user.username);
@@ -120,13 +121,8 @@ export function UserProfile({ user }: any) {
               </CardBody>
             </Card>
           </Tab>
-          <Tab key="billing" isDisabled title="Billing">
-            <Card>
-              <CardBody>
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa
-                qui officia deserunt mollit anim id est laborum.
-              </CardBody>
-            </Card>
+          <Tab key="billing" title="Billing">
+            <BillingSettings paymentMethods={paymentMethods} user={user} />
           </Tab>
         </Tabs>
       </div>
