@@ -2,7 +2,10 @@
 
 import { cookies } from "next/headers";
 
-export default async function RemoveCard(cardID: string) {
+export default async function CreateSubscription(
+  planID: string,
+  planStripeID: string,
+) {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;
@@ -15,16 +18,20 @@ export default async function RemoveCard(cardID: string) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/payment/card/${cardID}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/user/subscription`,
       {
-        method: "DELETE",
+        method: "POST",
         headers: headers,
+        body: JSON.stringify({
+          id: planID,
+          stripe_id: planStripeID,
+        }),
       },
     );
     const data = await res.json();
 
     return data;
   } catch (error) {
-    return { error: error };
+    return { error: "Failed to set subscription" };
   }
 }

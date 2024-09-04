@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-export default async function SetupNewCard() {
+export default async function GetPaymentMethods() {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;
@@ -15,17 +15,16 @@ export default async function SetupNewCard() {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/payment/new_card`,
+      `${process.env.NEXT_PUBLIC_API_URL}/user/payment/methods`,
       {
-        method: "POST",
+        method: "GET",
         headers: headers,
-        body: "",
       },
     );
     const data = await res.json();
 
     return data;
   } catch (error) {
-    return { error: "Failed to setup new payment card" };
+    return { error: "Failed to get payment methods" };
   }
 }

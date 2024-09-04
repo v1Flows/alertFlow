@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-export default async function CreateSubscription(planStripeID: string) {
+export default async function GetUserSubscription() {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;
@@ -15,19 +15,16 @@ export default async function CreateSubscription(planStripeID: string) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/payment/subscription`,
+      `${process.env.NEXT_PUBLIC_API_URL}/user/subscription`,
       {
-        method: "POST",
+        method: "GET",
         headers: headers,
-        body: JSON.stringify({
-          stripe_id: planStripeID,
-        }),
       },
     );
     const data = await res.json();
 
-    return data;
+    return data.subscriptions;
   } catch (error) {
-    return { error: "Failed to set subscription" };
+    return { error: "Failed to get user subscriptions" };
   }
 }

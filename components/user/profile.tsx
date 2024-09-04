@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Button,
   Card,
@@ -9,7 +9,7 @@ import {
   Tab,
   Tabs,
 } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { Icon } from "@iconify/react";
 
@@ -19,12 +19,33 @@ import CheckUserTaken from "@/lib/auth/checkTaken";
 import SecuritySettings from "./security-settings";
 import BillingSettings from "./billing-settings";
 
-export function UserProfile({ user, paymentMethods }: any) {
+export function UserProfile({
+  user,
+  paymentMethods,
+  plans,
+  subscription,
+}: any) {
+  const [selected, setSelected] = React.useState("account");
+
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams.toString());
 
   const [username, setUsername] = React.useState(user.username);
   const [email, setEmail] = React.useState(user.email);
   const [isLoading, setIsLoading] = React.useState(false);
+
+  useEffect(() => {
+    const tab = params.get("tab") || "account";
+
+    setSelected(tab);
+  }, [params]);
+
+  const handleTabChange = (key: any) => {
+    params.set("tab", key);
+    router.push(`${pathname}?${params.toString()}`);
+  };
 
   async function checkUserTaken() {
     const res = await CheckUserTaken(email, username);
@@ -64,8 +85,21 @@ export function UserProfile({ user, paymentMethods }: any) {
       </div>
       <Divider className="mb-4 mt-4" />
       <div className="flex w-full flex-col">
-        <Tabs aria-label="Options" color="primary">
-          <Tab key="account" title="Account">
+        <Tabs
+          aria-label="Options"
+          color="primary"
+          selectedKey={selected}
+          onSelectionChange={handleTabChange}
+        >
+          <Tab
+            key="account"
+            title={
+              <div className="flex items-center gap-1.5">
+                <Icon icon="solar:emoji-funny-square-broken" width={20} />
+                <p>Account</p>
+              </div>
+            }
+          >
             <div className="flex flex-col gap-4">
               <Input
                 description="Username must be unique"
@@ -111,6 +145,22 @@ export function UserProfile({ user, paymentMethods }: any) {
           >
             <SecuritySettings user={user} />
           </Tab>
+          <Tab
+            key="subscription"
+            title={
+              <div className="flex items-center gap-1.5">
+                <Icon icon="solar:card-2-broken" width={20} />
+                <p>Subscription & Billing</p>
+              </div>
+            }
+          >
+            <BillingSettings
+              paymentMethods={paymentMethods}
+              plans={plans}
+              subscription={subscription}
+              user={user}
+            />
+          </Tab>
           <Tab key="appearance" isDisabled title="Appearance">
             <Card>
               <CardBody>
@@ -120,9 +170,6 @@ export function UserProfile({ user, paymentMethods }: any) {
                 fugiat nulla pariatur.
               </CardBody>
             </Card>
-          </Tab>
-          <Tab key="billing" title="Billing">
-            <BillingSettings paymentMethods={paymentMethods} user={user} />
           </Tab>
         </Tabs>
       </div>

@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-export default async function GetPaymentMethods() {
+export default async function SetDefaultCard(cardID: string) {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;
@@ -15,16 +15,19 @@ export default async function GetPaymentMethods() {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/payment/methods`,
+      `${process.env.NEXT_PUBLIC_API_URL}/user/payment/card/default`,
       {
-        method: "GET",
+        method: "POST",
         headers: headers,
+        body: JSON.stringify({
+          default_card: cardID,
+        }),
       },
     );
     const data = await res.json();
 
     return data;
   } catch (error) {
-    return { error: "Failed to get payment methods" };
+    return { error: "Failed to set new default card" };
   }
 }

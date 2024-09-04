@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-export default async function SetDefaultCard(cardID: string) {
+export default async function CreateCustomer() {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;
@@ -15,19 +15,17 @@ export default async function SetDefaultCard(cardID: string) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/payment/card/default`,
+      `${process.env.NEXT_PUBLIC_API_URL}/user/customer`,
       {
         method: "POST",
         headers: headers,
-        body: JSON.stringify({
-          default_card: cardID,
-        }),
+        body: "",
       },
     );
     const data = await res.json();
 
     return data;
   } catch (error) {
-    return { error: "Failed to set new default card" };
+    return { error: "Failed to setup customer" };
   }
 }

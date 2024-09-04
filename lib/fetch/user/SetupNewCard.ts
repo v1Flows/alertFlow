@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-export default async function CreateIntent(amount: number, email: string) {
+export default async function SetupNewCard() {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;
@@ -15,20 +15,17 @@ export default async function CreateIntent(amount: number, email: string) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/payment/intents`,
+      `${process.env.NEXT_PUBLIC_API_URL}/user/payment/card`,
       {
         method: "POST",
         headers: headers,
-        body: JSON.stringify({
-          amount: amount,
-          email: email,
-        }),
+        body: "",
       },
     );
     const data = await res.json();
 
     return data;
   } catch (error) {
-    return { error: "Failed to create intent" };
+    return { error: "Failed to setup new payment card" };
   }
 }

@@ -19,10 +19,12 @@ import { loadStripe } from "@stripe/stripe-js";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
 
-import CreateSubscription from "@/lib/fetch/payment/CreateSubscription";
+import CreateSubscription from "@/lib/fetch/user/CreateSubscription";
 
 import PlanRadio from "./plan-radio";
 import { toast } from "sonner";
+import { Router } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function SelectPlanModal({
   plans,
@@ -33,6 +35,8 @@ export default function SelectPlanModal({
   user: any;
   disclosure: UseDisclosureReturn;
 }) {
+  const router = useRouter();
+
   const { isOpen, onOpenChange, onClose } = disclosure;
 
   const [isLoading, setIsLoading] = React.useState(false);
@@ -53,18 +57,19 @@ export default function SelectPlanModal({
     setPage([page + newDirection, newDirection]);
   };
 
-  async function pay(planStripeID: string) {
+  async function pay(planID: string, planStripeID: string) {
     setIsLoading(true);
-    const res = await CreateSubscription(planStripeID);
+    const res = await CreateSubscription(planID, planStripeID);
 
     if (res.error) {
-      toast.error(res.error);
+      toast.error(res.message);
       setIsLoading(false);
 
       return;
     }
 
     setIsLoading(false);
+    router.refresh();
     toast.success("Subscription created successfully");
     onClose();
   }
@@ -177,7 +182,7 @@ export default function SelectPlanModal({
                     <Icon icon="solar:wallet-money-broken" width={20} />
                   }
                   variant="solid"
-                  onPress={() => pay(selectedPlan.stripe_id)}
+                  onPress={() => pay(selectedPlan.id, selectedPlan.stripe_id)}
                 >
                   Pay
                 </Button>
