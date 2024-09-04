@@ -3,12 +3,15 @@ import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 import {
   Button,
   ButtonGroup,
+  Input,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
   Radio,
+  Spacer,
+  Textarea,
   Tooltip,
 } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
@@ -62,7 +65,7 @@ export default function EditActionModal({
   function searchActionOnRunners() {
     runners.map((runner: any) => {
       runner.available_actions.map((availableAction: any) => {
-        if (availableAction.id === targetAction.id) {
+        if (availableAction.type === targetAction.type) {
           setParams(availableAction.params);
         }
       });
@@ -75,10 +78,10 @@ export default function EditActionModal({
 
   function updateAction() {
     setLoading(true);
-    // Update action
     flow.actions.map((flowAction: any) => {
       if (flowAction.id === action.id) {
         flowAction.active = action.active;
+        flowAction.params = action.params;
       }
     });
 
@@ -115,7 +118,7 @@ export default function EditActionModal({
               <ModalBody>
                 <div className="w-full flex flex-col gap-4">
                   {/* Status */}
-                  <div className="flex flex-col gap-1">
+                  <div className="flex flex-col">
                     <div className="flex flex-cols items-center gap-2">
                       <p className="font-bold">Status</p>
                       <Tooltip content="Defined Actions will either be executed one after the other or all in parallel. If in Sequential type one action fails, the others won't be processed anymore.">
@@ -126,6 +129,7 @@ export default function EditActionModal({
                         />
                       </Tooltip>
                     </div>
+                    <Spacer y={2} />
                     <div>
                       <ButtonGroup radius="sm" variant="flat">
                         <Button
@@ -159,7 +163,63 @@ export default function EditActionModal({
                   </div>
                   <div>
                     <p className="font-bold">Parameters</p>
-                    <p>No parameters for this action found.</p>
+                    <Spacer y={2} />
+                    {params?.length > 0 ? (
+                      <div className="grid grid-cols-2 gap-2">
+                        {params.map((param: any) => {
+                          return param.type === "text" ||
+                            param.type === "number" ? (
+                            <Input
+                              key={param.key}
+                              isRequired={param.required}
+                              label={param.key}
+                              type={param.type}
+                              value={
+                                action.params.find((x: any) => x.key === param.key)
+                                  ?.value || ""
+                              }
+                              onValueChange={(e) => {
+                                setAction({
+                                  ...action,
+                                  params: action.params.map((x: any) => {
+                                    if (x.key === param.key) {
+                                      return { ...x, value: e };
+                                    }
+
+                                    return x;
+                                  }),
+                                });
+                              }}
+                            />
+                          ) : param.type === "textarea" ? (
+                            <Textarea
+                              key={param.key}
+                              isRequired={param.required}
+                              label={param.key}
+                              type={param.type}
+                              value={
+                                action.params.find((x: any) => x.key === param.key)
+                                  ?.value || ""
+                              }
+                              onValueChange={(e) => {
+                                setAction({
+                                  ...action,
+                                  params: action.params.map((x: any) => {
+                                    if (x.key === param.key) {
+                                      return { ...x, value: e };
+                                    }
+
+                                    return x;
+                                  }),
+                                });
+                              }}
+                            />
+                          ) : null;
+                        })}
+                      </div>
+                    ) : (
+                      <p>No parameters for this action found.</p>
+                    )}
                   </div>
                 </div>
               </ModalBody>

@@ -141,7 +141,24 @@ export default function Executions({
         </Tooltip>
       );
     } else if (execution.paused) {
-      return <CircularProgress color="warning" size="md" value={100} />;
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress
+            aria-label="Step"
+            color="warning"
+            showValueLabel={true}
+            size="md"
+            value={100}
+            valueLabel={
+              <Icon
+                className="text-warning"
+                icon="solar:pause-broken"
+                width={16}
+              />
+            }
+          />
+        </Tooltip>
+      );
     } else if (execution.error) {
       return (
         <Tooltip content={`${status(execution)}`}>
@@ -483,7 +500,7 @@ export default function Executions({
 
   return (
     <>
-      <div className="grid lg:grid-cols-7 grid-cols-2 gap-4">
+      <div className="grid xl:grid-cols-7 lg:grid-cols-4 grid-cols-2 gap-4">
         <div className="col-span-1">
           <Card
             fullWidth

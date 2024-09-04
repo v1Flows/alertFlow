@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   CardBody,
+  Input,
   Modal,
   ModalBody,
   ModalContent,
@@ -11,12 +12,13 @@ import {
   ModalHeader,
   Radio,
   Spacer,
-  RadioGroup,
+  Textarea,
 } from "@nextui-org/react";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
+import { Icon } from "@iconify/react";
 
 import { cn } from "@/components/functions/cn/cn";
 import AddFlowActions from "@/lib/fetch/flow/POST/AddFlowActions";
@@ -123,6 +125,19 @@ export default function AddActionModal({
     );
 
     setAction(selectedAction);
+
+    if (selectedAction.params?.length > 0) {
+      const fnParams = [] as any;
+
+      selectedAction.params.map((param: any) => {
+        fnParams.push({
+          key: param.key,
+          value: param.default || "",
+        });
+      });
+
+      setParams(fnParams);
+    }
   }
 
   function cancel() {
@@ -150,7 +165,7 @@ export default function AddActionModal({
       icon: action.icon,
       type: action.type,
       active: true,
-      params: action.params || [],
+      params: params,
     };
 
     const updatedActions = [...flow.actions, sendAction];
@@ -238,27 +253,34 @@ export default function AddActionModal({
                               Available Actions
                             </p>
                             <Spacer y={2} />
-                            <RadioGroup
-                              orientation="horizontal"
-                              value={action.type}
-                              onValueChange={(value) =>
-                                handleActionSelect(value)
-                              }
-                            >
-                              {getUniqueActions().map((action: any) => (
-                                <CustomRadio
-                                  key={action.type}
-                                  value={action.type}
+                            <div className="grid grid-cols-2 gap-4">
+                              {getUniqueActions().map((act: any) => (
+                                <Card
+                                  key={act.type}
+                                  isHoverable
+                                  isPressable
+                                  className={`border-2 border-default-200 ${act.type === action.type ? "border-primary" : ""}`}
+                                  radius="sm"
+                                  onPress={() => handleActionSelect(act.type)}
                                 >
-                                  <div className="w-full flex flex-col justify-between gap-1">
-                                    <p>{action.name}</p>
-                                    <p className="text-default-500">
-                                      {action.description}
-                                    </p>
-                                  </div>
-                                </CustomRadio>
+                                  <CardBody>
+                                    <div className="flex items-center gap-2">
+                                      <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                                        <Icon icon={act.icon} width={26} />
+                                      </div>
+                                      <div className="flex flex-col gap-2">
+                                        <p className="text-lg font-bold">
+                                          {act.name}
+                                        </p>
+                                        <p className="text-sm text-default-500">
+                                          {act.description}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </CardBody>
+                                </Card>
                               ))}
-                            </RadioGroup>
+                            </div>
                           </>
                         )}
                       </div>
@@ -268,7 +290,63 @@ export default function AddActionModal({
                         <p className="text-lg text-default-500 font-bold">
                           Required Parameters
                         </p>
-                        <p>No parameters for this action found.</p>
+                        <Spacer y={2} />
+                        {action.params.length > 0 || action?.params ? (
+                          <div className="grid grid-cols-2 gap-2">
+                            {action.params.map((param: any) => {
+                              return param.type === "text" ||
+                                param.type === "number" ? (
+                                <Input
+                                  key={param.key}
+                                  description={param?.description}
+                                  isRequired={param.required}
+                                  label={param.key}
+                                  type={param.type}
+                                  value={
+                                    params.find((x: any) => x.key === param.key)
+                                      ?.value || ""
+                                  }
+                                  onValueChange={(e) => {
+                                    setParams(
+                                      params.map((x: any) => {
+                                        if (x.key === param.key) {
+                                          return { ...x, value: e };
+                                        }
+
+                                        return x;
+                                      }),
+                                    );
+                                  }}
+                                />
+                              ) : param.type === "textarea" ? (
+                                <Textarea
+                                  key={param.key}
+                                  description={param?.description}
+                                  isRequired={param.required}
+                                  label={param.key}
+                                  type={param.type}
+                                  value={
+                                    params.find((x: any) => x.key === param.key)
+                                      ?.value || ""
+                                  }
+                                  onValueChange={(e) => {
+                                    setParams(
+                                      params.map((x: any) => {
+                                        if (x.key === param.key) {
+                                          return { ...x, value: e };
+                                        }
+
+                                        return x;
+                                      }),
+                                    );
+                                  }}
+                                />
+                              ) : null;
+                            })}
+                          </div>
+                        ) : (
+                          <p>No parameters for this action found.</p>
+                        )}
                       </div>
                     )}
                   </div>
