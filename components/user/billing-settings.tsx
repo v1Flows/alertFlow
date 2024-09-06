@@ -23,6 +23,7 @@ import RemoveCard from "@/lib/fetch/user/RemoveCard";
 
 import AddPaymentCardModal from "../functions/payment/addCard";
 import SelectPlanModal from "../functions/payment/selectPlan";
+import CancelSubscriptionModal from "../functions/users/cancelSubscription";
 
 import CellWrapper from "./cell-wrapper";
 import SubscriptionOnboarding from "./subscription-onboarding";
@@ -43,6 +44,7 @@ export default function BillingSettings({
   const router = useRouter();
   const addPaymentCardModal = useDisclosure();
   const selectPlanModal = useDisclosure();
+  const cancelSubscriptionModal = useDisclosure();
 
   const [isLoading, setIsLoading] = React.useState(false);
   const [clientSecret, setClientSecret] = React.useState("");
@@ -117,9 +119,9 @@ export default function BillingSettings({
 
   return (
     <>
-      {(user.customer_id === "" ||
+      {user.customer_id === "" ||
         paymentMethods.payment_methods.length === 0 ||
-        user.plan === "hobby") ? (
+        user.plan === "hobby" ? (
         <>
           <SubscriptionOnboarding
             paymentMethods={paymentMethods}
@@ -215,13 +217,21 @@ export default function BillingSettings({
                 />
               </div>
               <div>
-                <p
-                  className={`text-md font-bold text-${currentSubscription.plan && currentSubscription.plan.active ? "success" : "danger"}`}
-                >
-                  {currentSubscription.plan && currentSubscription.plan.active
-                    ? "Active"
-                    : "Inactive"}
-                </p>
+                <div className="flex flex-cols gap-1">
+                  <p
+                    className={`text-md font-bold text-${currentSubscription.plan && currentSubscription.plan.active ? "success" : "danger"}`}
+                  >
+                    {currentSubscription.plan && currentSubscription.plan.active
+                      ? "Active"
+                      : "Inactive"}
+                  </p>
+                  {currentSubscription.cancel_at_period_end && (
+                    <>
+                      <p>&</p>
+                      <p className="text-md font-bold text-danger">Canceled</p>
+                    </>
+                  )}
+                </div>
                 <p className="text-sm text-default-500">Status</p>
               </div>
             </div>
@@ -340,7 +350,10 @@ export default function BillingSettings({
                             </p>
                           </div>
                           <Button
-                            isDisabled={!currentSubscription.plan}
+                            isDisabled={
+                              !currentSubscription.plan ||
+                              currentSubscription.cancel_at_period_end
+                            }
                             radius="full"
                             variant="bordered"
                           >
@@ -361,9 +374,13 @@ export default function BillingSettings({
                         </div>
                         <Button
                           color="danger"
-                          isDisabled={!currentSubscription.plan}
+                          isDisabled={
+                            !currentSubscription.plan ||
+                            currentSubscription.cancel_at_period_end
+                          }
                           radius="full"
                           variant="ghost"
+                          onPress={cancelSubscriptionModal.onOpen}
                         >
                           Cancel Subscription
                         </Button>
@@ -491,6 +508,7 @@ export default function BillingSettings({
         />
       </Elements>
       <SelectPlanModal disclosure={selectPlanModal} plans={plans} user={user} />
+      <CancelSubscriptionModal disclosure={cancelSubscriptionModal} />
     </>
   );
 }
