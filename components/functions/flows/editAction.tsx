@@ -175,8 +175,9 @@ export default function EditActionModal({
                               label={param.key}
                               type={param.type}
                               value={
-                                action.params.find((x: any) => x.key === param.key)
-                                  ?.value || ""
+                                action.params.find(
+                                  (x: any) => x.key === param.key,
+                                )?.value || ""
                               }
                               onValueChange={(e) => {
                                 setAction({
@@ -198,8 +199,9 @@ export default function EditActionModal({
                               label={param.key}
                               type={param.type}
                               value={
-                                action.params.find((x: any) => x.key === param.key)
-                                  ?.value || ""
+                                action.params.find(
+                                  (x: any) => x.key === param.key,
+                                )?.value || ""
                               }
                               onValueChange={(e) => {
                                 setAction({

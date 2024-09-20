@@ -29,7 +29,6 @@ export default function AddPaymentCardModal({
   const [isLoading, setIsLoading] = useState(false);
 
   const { theme } = useTheme();
-  const isSSR = useIsSSR();
   const stripe = useStripe();
   const elements = useElements();
 

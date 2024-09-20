@@ -120,8 +120,8 @@ export default function BillingSettings({
   return (
     <>
       {user.customer_id === "" ||
-        paymentMethods.payment_methods.length === 0 ||
-        user.plan === "hobby" ? (
+      paymentMethods.payment_methods.length === 0 ||
+      user.plan === "hobby" ? (
         <>
           <SubscriptionOnboarding
             paymentMethods={paymentMethods}
@@ -170,8 +170,8 @@ export default function BillingSettings({
                 <p className="text-md font-bold capitalize">
                   {currentSubscription.plan
                     ? plans.find(
-                      (p: any) => p.stripe_id === currentSubscription.plan.id,
-                    ).name
+                        (p: any) => p.stripe_id === currentSubscription.plan.id,
+                      ).name
                     : user.plan}
                 </p>
                 <p className="text-sm text-default-500">Your Plan</p>
@@ -251,8 +251,8 @@ export default function BillingSettings({
                 <p className="text-md font-bold">
                   {currentSubscription.start_date
                     ? new Date(
-                      currentSubscription.start_date * 1000,
-                    ).toLocaleDateString()
+                        currentSubscription.start_date * 1000,
+                      ).toLocaleDateString()
                     : "No Date"}
                 </p>
                 <p className="text-sm text-default-500">Subscription Start</p>
@@ -274,14 +274,14 @@ export default function BillingSettings({
                 <p className="text-md font-bold">
                   {currentSubscription.current_period_start
                     ? new Date(
-                      subscription[0].current_period_start * 1000,
-                    ).toLocaleDateString()
+                        subscription[0].current_period_start * 1000,
+                      ).toLocaleDateString()
                     : "No Date"}{" "}
                   -&gt;{" "}
                   {currentSubscription.current_period_end
                     ? new Date(
-                      subscription[0].current_period_end * 1000,
-                    ).toLocaleDateString()
+                        subscription[0].current_period_end * 1000,
+                      ).toLocaleDateString()
                     : "No Date"}
                 </p>
                 <p className="text-sm text-default-500">Current Period</p>

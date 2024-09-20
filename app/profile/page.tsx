@@ -18,8 +18,8 @@ export default async function UserProfilePage() {
         paymentMethods={paymentMethods}
         plans={plans}
         settings={settings}
-        user={userDetails}
         subscription={subscription}
+        user={userDetails}
       />
     </>
   );

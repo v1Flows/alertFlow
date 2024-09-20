@@ -15,16 +15,12 @@ import {
 } from "@nextui-org/react";
 import { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 import { AnimatePresence, domAnimation, LazyMotion, m } from "framer-motion";
-import { loadStripe } from "@stripe/stripe-js";
-
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY);
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 import CreateSubscription from "@/lib/fetch/user/CreateSubscription";
 
 import PlanRadio from "./plan-radio";
-import { toast } from "sonner";
-import { Router } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 export default function SelectPlanModal({
   plans,
@@ -40,7 +36,7 @@ export default function SelectPlanModal({
   const { isOpen, onOpenChange, onClose } = disclosure;
 
   const [isLoading, setIsLoading] = React.useState(false);
-  const [[page, direction], setPage] = React.useState([0, 0]);
+  const [[page], setPage] = React.useState([0, 0]);
   const [selectedPlan, setSelectedPlan] = React.useState(user.plan);
 
   const titleContent = React.useMemo(() => {

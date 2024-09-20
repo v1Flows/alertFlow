@@ -35,7 +35,6 @@ export default function CancelSubscriptionModal({
       router.refresh();
       onOpenChange();
       setIsLoading(false);
-      console.log(response)
       toast.success("Your subscription has been cancelled");
     } else {
       setIsLoading(false);

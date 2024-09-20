@@ -440,7 +440,7 @@ export function DashboardHome({
                   />
                   <p className="text-small text-default-500">
                     {plan.executions_per_month === 999 ||
-                      user.role === "VIP" ? (
+                    user.role === "VIP" ? (
                       <span
                         className={`text-${user.role === "VIP" ? "warning" : "secondary"}`}
                       >
