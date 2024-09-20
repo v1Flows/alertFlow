@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Button,
   Card,
@@ -5,10 +7,13 @@ import {
   CardFooter,
   Divider,
   Progress,
+  useDisclosure,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 
 import { IconWrapper } from "@/lib/IconWrapper";
+
+import SelectPlanModal from "../functions/payment/selectPlan";
 
 import Executions from "./flows/flow/executions";
 import ExecutionChartCard from "./executionChartCard";
@@ -24,6 +29,8 @@ export function DashboardHome({
   executions,
   payloads,
 }: any) {
+  const selectPlanModal = useDisclosure();
+
   const plan = plans.find((plan: any) => plan.id === user.plan);
 
   function runnerHeartbeatStatus(runner: any) {
@@ -303,10 +310,10 @@ export function DashboardHome({
         <div className="col-span-2">
           <Card className="relative w-full">
             <Button
-              isDisabled
               className="absolute right-4 top-8 z-10"
               radius="full"
               size="sm"
+              onPress={selectPlanModal.onOpen}
             >
               Change Plan
             </Button>
@@ -460,6 +467,8 @@ export function DashboardHome({
         </div>
       </div>
       <Executions displayToFlow executions={executions} payloads={payloads} />
+
+      <SelectPlanModal disclosure={selectPlanModal} plans={plans} user={user} />
     </main>
   );
 }
