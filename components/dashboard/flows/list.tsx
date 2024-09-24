@@ -116,7 +116,7 @@ export default function FlowList({
   return (
     <main>
       <div className="grid lg:grid-cols-2 grid-cols-1 gap-2 items-center justify-between">
-        <p className="text-2xl font-bold">Flow List</p>
+        <p className="text-2xl font-bold">Flows</p>
         <div className="flex flex-cols justify-end items-center gap-4">
           <Input
             className="max-w-xs"
