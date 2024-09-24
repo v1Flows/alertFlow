@@ -15,6 +15,7 @@ import {
 import { toast } from "sonner";
 import React from "react";
 import TimeAgo from "react-timeago";
+import { Icon } from "@iconify/react";
 
 import {
   VerticalDotsIcon,
@@ -72,6 +73,19 @@ export default function Runners({
     }
   }
 
+  function cardBorderColor(runner: any) {
+    var timeAgo =
+      (new Date(runner.last_heartbeat).getTime() - Date.now()) / 1000;
+
+    if (timeAgo < 0 && timeAgo > -30) {
+      return "border-success";
+    } else if (timeAgo <= -30 && timeAgo > -60) {
+      return "border-warning";
+    } else if (timeAgo <= -60) {
+      return "border-danger";
+    }
+  }
+
   function checkQuotaDisabled() {
     if (!settings.create_runners) {
       return true;
@@ -114,32 +128,29 @@ export default function Runners({
             runner.alertflow_runner === false && (
               <Card key={runner.id}>
                 <CardHeader className="justify-between items-center">
-                  <div>
-                    <p className="text-md">{runner.name}</p>
+                  <div className="flex flex-col gap-1">
+                    <div className="flex gap-2">
+                      <p className="text-md">{runner.name}</p>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Chip
+                          color={runner.disabled ? "danger" : "success"}
+                          radius="sm"
+                          size="sm"
+                          variant="flat"
+                        >
+                          {runner.disabled ? "Disabled" : "Enabled"}
+                        </Chip>
+                        <Chip
+                          color={heartbeatColor(runner)}
+                          radius="sm"
+                          size="sm"
+                          variant="flat"
+                        >
+                          {heartbeatStatus(runner) ? "Healthy" : "Unhealthy"}
+                        </Chip>
+                      </div>
+                    </div>
                     <p className="text-sm text-default-500">{runner.id}</p>
-                  </div>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <Chip
-                      color={runner.registered ? "success" : "danger"}
-                      size="sm"
-                      variant="dot"
-                    >
-                      {runner.registered ? "Registered" : "Unregistered"}
-                    </Chip>
-                    <Chip
-                      color={heartbeatColor(runner)}
-                      size="sm"
-                      variant="flat"
-                    >
-                      {heartbeatStatus(runner) ? "Healthy" : "Unhealthy"}
-                    </Chip>
-                    <Chip
-                      color={runner.disabled ? "danger" : "success"}
-                      size="sm"
-                      variant="flat"
-                    >
-                      {runner.disabled ? "Disabled" : "Enabled"}
-                    </Chip>
                   </div>
                   <div className="relative flex justify-end items-center gap-2">
                     <Dropdown backdrop="opaque">
@@ -185,33 +196,105 @@ export default function Runners({
                   </div>
                 </CardHeader>
                 <Divider />
-                <CardBody>
+                <CardBody className="flex flex-col">
                   {runner.disabled && (
                     <p className="text-lg mb-4 font-bold text-danger text-center">
                       {runner.disabled_reason}
                     </p>
                   )}
-                  <div className="grid grid-cols-2 grid-rows-3 items-center justify-center">
-                    <p className="text-sm">Version:</p>
-                    <p className="text-sm">{runner.runner_version}</p>
-                    <p className="text-sm">Active:</p>
-                    <p className="text-sm">{runner.active ? "Yes" : "No"}</p>
-                    <p className="text-sm">Last Heartbeat:</p>
-                    <p
-                      className={"text-" + heartbeatColor(runner) + " text-sm"}
-                    >
-                      {runner.last_heartbeat !== "0001-01-01T00:00:00Z" && (
-                        <TimeAgo date={runner.last_heartbeat} />
-                      )}
-                      {runner.last_heartbeat === "0001-01-01T00:00:00Z" &&
-                        "N/A"}
-                    </p>
-                    <p className="text-sm">Avl. Actions:</p>
-                    <p className="text-sm">{runner.available_actions.length}</p>
-                    <p className="text-sm">Avl. Payload Injectors:</p>
-                    <p className="text-sm">
-                      {runner.available_payload_injectors.length}
-                    </p>
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-center">
+                    <div className="flex flex-col items-center justify-center gap-1">
+                      <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                        <Icon icon="solar:diploma-verified-broken" width={20} />
+                      </div>
+                      <div>
+                        <p
+                          className={`text-md text-${runner.registered ? "success" : "danger"} font-bold`}
+                        >
+                          {runner.registered ? "Registered" : "Unregistered"}
+                        </p>
+                        <p className="text-sm text-default-500">
+                          Authentication
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col items-center justify-center gap-1">
+                      <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                        <Icon icon="solar:heart-pulse-broken" width={20} />
+                      </div>
+                      <div>
+                        <p
+                          className={`text-md text-${heartbeatColor(runner)} font-bold`}
+                        >
+                          {runner.last_heartbeat !== "0001-01-01T00:00:00Z" && (
+                            <TimeAgo date={runner.last_heartbeat} />
+                          )}
+                          {runner.last_heartbeat === "0001-01-01T00:00:00Z" &&
+                            "N/A"}
+                        </p>
+                        <p className="text-sm text-default-500">
+                          Last Heartbeat
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col items-center justify-center gap-1">
+                      <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                        <Icon
+                          icon="solar:gamepad-minimalistic-broken"
+                          width={20}
+                        />
+                      </div>
+                      <div>
+                        <p className="text-md font-bold">
+                          {runner.active ? "Active" : "Idle"}
+                        </p>
+                        <p className="text-sm text-default-500">Status</p>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col items-center justify-center gap-1">
+                      <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                        <Icon icon="solar:sd-card-broken" width={20} />
+                      </div>
+                      <div>
+                        <p className="text-md font-bold">
+                          {runner.runner_version
+                            ? runner.runner_version
+                            : "N/A"}
+                        </p>
+                        <p className="text-sm text-default-500">Version</p>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col items-center justify-center gap-1">
+                      <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                        <Icon icon="solar:bolt-broken" width={20} />
+                      </div>
+                      <div>
+                        <p className="text-md font-bold">
+                          {runner.available_actions.length}
+                        </p>
+                        <p className="text-sm text-default-500">
+                          Available Actions
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col items-center justify-center gap-1">
+                      <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                        <Icon icon="solar:letter-opened-broken" width={20} />
+                      </div>
+                      <div>
+                        <p className="text-md font-bold">
+                          {runner.available_payload_injectors.length}
+                        </p>
+                        <p className="text-sm text-default-500">
+                          Available Payload Injectors
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </CardBody>
               </Card>
@@ -229,57 +312,136 @@ export default function Runners({
                 runner.alertflow_runner === true && (
                   <Card key={runner.id}>
                     <CardHeader className="justify-between items-center">
-                      <div>
-                        <p className="text-md">{runner.name}</p>
+                      <div className="flex flex-col gap-1">
+                        <div className="flex gap-2">
+                          <p className="text-md">{runner.name}</p>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <Chip
+                              color={runner.disabled ? "danger" : "success"}
+                              radius="sm"
+                              size="sm"
+                              variant="flat"
+                            >
+                              {runner.disabled ? "Disabled" : "Enabled"}
+                            </Chip>
+                            <Chip
+                              color={heartbeatColor(runner)}
+                              radius="sm"
+                              size="sm"
+                              variant="flat"
+                            >
+                              {heartbeatStatus(runner)
+                                ? "Healthy"
+                                : "Unhealthy"}
+                            </Chip>
+                          </div>
+                        </div>
                         <p className="text-sm text-default-500">{runner.id}</p>
                       </div>
-                      <div className="flex flex-wrap items-center gap-2">
-                        <Chip
-                          color={heartbeatColor(runner)}
-                          size="sm"
-                          variant="flat"
-                        >
-                          {heartbeatStatus(runner) ? "Healthy" : "Unhealthy"}
-                        </Chip>
-                        <Chip
-                          color={runner.disabled ? "danger" : "success"}
-                          size="sm"
-                          variant="flat"
-                        >
-                          {runner.disabled ? "Disabled" : "Enabled"}
-                        </Chip>
-                        {runner.disabled && (
-                          <Chip
-                            color={runner.disabled ? "danger" : "success"}
-                            size="sm"
-                            variant="flat"
-                          >
-                            Disabled Reason: {runner.disabled_reason}
-                          </Chip>
-                        )}
+                      <div className="relative flex justify-end items-center gap-2">
+                        <Dropdown backdrop="opaque">
+                          <DropdownTrigger>
+                            <Button isIconOnly size="sm" variant="light">
+                              <VerticalDotsIcon
+                                className="text-default-300"
+                                height={undefined}
+                                width={undefined}
+                              />
+                            </Button>
+                          </DropdownTrigger>
+                          <DropdownMenu>
+                            <DropdownSection title="Actions">
+                              <DropdownItem
+                                startContent={<CopyDocumentIcon />}
+                                onClick={() =>
+                                  copyRunnerIDtoClipboard(runner.id)
+                                }
+                              >
+                                Copy ID
+                              </DropdownItem>
+                            </DropdownSection>
+                            <DropdownSection title="Danger zone">
+                              <DropdownItem
+                                className="text-danger"
+                                color="danger"
+                                isDisabled={
+                                  members.find(
+                                    (m: any) => m.user_id === user.id,
+                                  ) &&
+                                  members.filter(
+                                    (m: any) => m.user_id === user.id,
+                                  )[0].role === "Viewer"
+                                }
+                                startContent={<DeleteDocumentIcon />}
+                                onClick={() => {
+                                  setTargetRunner(runner);
+                                  deleteRunnerModal.onOpen();
+                                }}
+                              >
+                                Delete
+                              </DropdownItem>
+                            </DropdownSection>
+                          </DropdownMenu>
+                        </Dropdown>
                       </div>
                     </CardHeader>
                     <Divider />
-                    <CardBody>
-                      <div className="grid grid-cols-2 grid-rows-3 items-center justify-center">
-                        <p className="text-sm">Version:</p>
-                        <p className="text-sm">{runner.runner_version}</p>
-                        <p className="text-sm">Active:</p>
-                        <p className="text-sm">
-                          {runner.active ? "Yes" : "No"}
+                    <CardBody className="flex flex-col">
+                      {runner.disabled && (
+                        <p className="text-lg mb-4 font-bold text-danger text-center">
+                          {runner.disabled_reason}
                         </p>
-                        <p className="text-sm">Last Heartbeat:</p>
-                        <p
-                          className={
-                            "text-" + heartbeatColor(runner) + " text-sm"
-                          }
-                        >
-                          {runner.last_heartbeat !== "0001-01-01T00:00:00Z" && (
-                            <TimeAgo date={runner.last_heartbeat} />
-                          )}
-                          {runner.last_heartbeat === "0001-01-01T00:00:00Z" &&
-                            "N/A"}
-                        </p>
+                      )}
+                      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-center">
+                        <div className="flex flex-col items-center justify-center gap-1">
+                          <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                            <Icon icon="solar:heart-pulse-broken" width={20} />
+                          </div>
+                          <div>
+                            <p
+                              className={`text-md text-${heartbeatColor(runner)} font-bold`}
+                            >
+                              {runner.last_heartbeat !==
+                                "0001-01-01T00:00:00Z" && (
+                                  <TimeAgo date={runner.last_heartbeat} />
+                                )}
+                              {runner.last_heartbeat ===
+                                "0001-01-01T00:00:00Z" && "N/A"}
+                            </p>
+                            <p className="text-sm text-default-500">
+                              Last Heartbeat
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col items-center justify-center gap-1">
+                          <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                            <Icon
+                              icon="solar:gamepad-minimalistic-broken"
+                              width={20}
+                            />
+                          </div>
+                          <div>
+                            <p className="text-md font-bold">
+                              {runner.active ? "Active" : "Idle"}
+                            </p>
+                            <p className="text-sm text-default-500">Status</p>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col items-center justify-center gap-1">
+                          <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                            <Icon icon="solar:sd-card-broken" width={20} />
+                          </div>
+                          <div>
+                            <p className="text-md font-bold">
+                              {runner.runner_version
+                                ? runner.runner_version
+                                : "N/A"}
+                            </p>
+                            <p className="text-sm text-default-500">Version</p>
+                          </div>
+                        </div>
                       </div>
                     </CardBody>
                   </Card>
