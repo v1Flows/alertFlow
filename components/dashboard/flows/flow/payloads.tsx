@@ -130,7 +130,7 @@ export default function Payloads({ flow, executions, payloads, runners }: any) {
               </div>
             </CardHeader>
             <CardBody>
-              <div className="grid lg:grid-cols-3 gap-2">
+              <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-2">
                 <div className="flex items-center gap-2">
                   <div
                     className={`flex bg-${endpointColor(payload.endpoint)}/10 text-${endpointColor(payload.endpoint)} items-center rounded-small justify-center w-10 h-10`}
