@@ -1,5 +1,7 @@
 import { Icon } from "@iconify/react";
 import {
+  Accordion,
+  AccordionItem,
   Button,
   Card,
   CardBody,
@@ -44,6 +46,8 @@ export default function Actions({
   const addFlowActionModal = useDisclosure();
   const editActionModal = useDisclosure();
   const deleteActionModal = useDisclosure();
+
+  const [expandedParams, setExpandedParams] = React.useState([] as any);
 
   useEffect(() => {
     setActions(flow.actions);
@@ -130,23 +134,39 @@ export default function Actions({
             </Chip>
             {action.params.length > 0 && (
               <>
-                <Spacer y={2} />
-                <p>Parameters</p>
-                <Spacer y={1} />
-                <Table removeWrapper aria-label="Parameters" className="w-full">
-                  <TableHeader>
-                    <TableColumn align="center">Key</TableColumn>
-                    <TableColumn align="center">Value</TableColumn>
-                  </TableHeader>
-                  <TableBody emptyContent={"No patterns defined."}>
-                    {action.params.map((param: any, index: number) => (
-                      <TableRow key={index}>
-                        <TableCell>{param.key}</TableCell>
-                        <TableCell>{param.value}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                <Accordion
+                  isCompact
+                  selectedKeys={expandedParams}
+                  onSelectionChange={setExpandedParams}
+                  variant="light"
+                  selectionMode="multiple"
+                >
+                  <AccordionItem
+                    key={action.id}
+                    aria-label="Parameters"
+                    title="Parameters"
+                    subtitle="View action parameters (click to expand)"
+                  >
+                    <Table
+                      removeWrapper
+                      aria-label="Parameters"
+                      className="w-full"
+                    >
+                      <TableHeader>
+                        <TableColumn align="center">Key</TableColumn>
+                        <TableColumn align="center">Value</TableColumn>
+                      </TableHeader>
+                      <TableBody emptyContent={"No patterns defined."}>
+                        {action.params.map((param: any, index: number) => (
+                          <TableRow key={index}>
+                            <TableCell>{param.key}</TableCell>
+                            <TableCell>{param.value}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </AccordionItem>
+                </Accordion>
               </>
             )}
           </CardBody>
