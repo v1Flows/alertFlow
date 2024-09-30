@@ -247,8 +247,10 @@ export default function Runners({
                         />
                       </div>
                       <div>
-                        <p className="text-md font-bold">
-                          {runner.active ? "Active" : "Idle"}
+                        <p
+                          className={`text-md font-bold ${runner.executing_job && "text-success"}`}
+                        >
+                          {runner.executing_job ? "Executing Job" : "Idle"}
                         </p>
                         <p className="text-sm text-default-500">Status</p>
                       </div>
@@ -422,8 +424,10 @@ export default function Runners({
                             />
                           </div>
                           <div>
-                            <p className="text-md font-bold">
-                              {runner.active ? "Active" : "Idle"}
+                            <p
+                              className={`text-md font-bold ${runner.executing_job && "text-success"}`}
+                            >
+                              {runner.executing_job ? "Executing Job" : "Idle"}
                             </p>
                             <p className="text-sm text-default-500">Status</p>
                           </div>
