@@ -76,10 +76,10 @@ export default function Actions({
                     <p className="text-md font-bold">{action.name}</p>
                     <Chip
                       className="max-lg:hidden"
-                      color="primary"
+                      color="default"
                       radius="sm"
                       size="sm"
-                      variant="dot"
+                      variant="flat"
                     >
                       {action.id}
                     </Chip>
@@ -125,10 +125,10 @@ export default function Actions({
             <Spacer y={2} />
             <Chip
               className="lg:hidden"
-              color="primary"
+              color="default"
               radius="sm"
               size="sm"
-              variant="dot"
+              variant="flat"
             >
               {action.id}
             </Chip>
