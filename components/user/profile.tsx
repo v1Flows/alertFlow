@@ -22,6 +22,7 @@ import Quota from "./quota";
 
 export function UserProfile({
   user,
+  session,
   paymentMethods,
   plans,
   subscription,
@@ -128,10 +129,34 @@ export function UserProfile({
                   color="primary"
                   isLoading={isLoading}
                   radius="sm"
-                  variant="flat"
+                  variant="solid"
                   onPress={() => checkUserTaken()}
                 >
                   Update Account
+                </Button>
+                <Button
+                  isLoading={isLoading}
+                  radius="sm"
+                  variant="flat"
+                  onPress={() => {
+                    // eslint-disable-next-line no-undef
+                    navigator.clipboard.writeText(user.id);
+                    toast.success("UserID copied to clipboard!");
+                  }}
+                >
+                  Copy UserID
+                </Button>
+                <Button
+                  isLoading={isLoading}
+                  radius="sm"
+                  variant="flat"
+                  onPress={() => {
+                    // eslint-disable-next-line no-undef
+                    navigator.clipboard.writeText(session);
+                    toast.success("Session Token copied to clipboard!");
+                  }}
+                >
+                  Copy Token
                 </Button>
               </div>
             </div>
