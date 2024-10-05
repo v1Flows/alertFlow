@@ -7,6 +7,7 @@ import {
   CardFooter,
   Divider,
   Progress,
+  Spacer,
   useDisclosure,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
@@ -26,6 +27,7 @@ export function DashboardHome({
   runners,
   executions,
   payloads,
+  user,
 }: any) {
   function runnerHeartbeatStatus(runner: any) {
     var timeAgo =
@@ -40,106 +42,104 @@ export function DashboardHome({
 
   return (
     <main>
-      {/* Stats */}
-      <div className="flex items-end justify-between my-4">
-        <div>
-          <p className="text-2xl font-bold mb-0">
-            Here are your <span className="text-primary">Stats</span>
-          </p>
+      <p className="text-xl font-bold">Hello, {user.username} 👋</p>
+      <p className="text-default-500">Here's the current status for today.</p>
+
+      <Spacer y={2} />
+      <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 items-stretch gap-4">
+        <div className="col-span-1">
+          <Card fullWidth>
+            <CardBody>
+              <div className="flex items-center gap-2">
+                <div className="flex bg-default/50 text-foreground items-center rounded-small justify-center w-10 h-10">
+                  <Icon icon="solar:bell-broken" width={20} />
+                </div>
+                <div>
+                  <p className="text-md font-bold">
+                    {notifications.filter((n: any) => !n.is_read).length}
+                  </p>
+                  <p className="text-sm text-default-500">Notifications</p>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
+
+        <div className="col-span-1">
+          <Card fullWidth>
+            <CardBody>
+              <div className="flex items-center gap-2">
+                <div className="flex bg-default/50 text-foreground items-center rounded-small justify-center w-10 h-10">
+                  <Icon icon="solar:book-bookmark-broken" width={20} />
+                </div>
+                <div>
+                  {flows.filter((f: any) => f.maintenance_required).length > 0 ? (
+                    <p className="text-md font-bold text-warning">
+                      Needs attention
+                    </p>
+                  ) : (
+                    <p className="text-md font-bold text-success">OK</p>
+                  )}
+                  <p className="text-sm text-default-500">Flows</p>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
+
+        <div className="col-span-1">
+          <Card fullWidth>
+            <CardBody>
+              <div className="flex items-center gap-2">
+                <div className="flex bg-default/50 text-foreground items-center rounded-small justify-center w-10 h-10">
+                  <Icon icon="solar:reorder-line-duotone" width={20} />
+                </div>
+                <div>
+                  {executions.filter((e: any) => e.error && new Date(e.created_at).getTime() > Date.now() - 24 * 60 * 60 * 1000).length > 0 ? (
+                    <p className="text-md font-bold text-danger">
+                      {executions.filter((e: any) => e.error && new Date(e.created_at).getTime() > Date.now() - 24 * 60 * 60 * 1000).length} failed
+                    </p>
+                  ) : (
+                    <p className="text-md font-bold text-success">OK</p>
+                  )}
+                  <p className="text-sm text-default-500">Executions (last 24hours)</p>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
+
+        <div className="col-span-1">
+          <Card fullWidth>
+            <CardBody>
+              <div className="flex items-center gap-2">
+                <div className="flex bg-default/50 text-foreground items-center rounded-small justify-center w-10 h-10">
+                  <Icon icon="solar:rocket-2-broken" width={20} />
+                </div>
+                <div>
+                  {runners.filter(
+                    (r: any) => !r.alertflow_runner && !runnerHeartbeatStatus(r),
+                  ).length > 0 ? (
+                    <p className="text-md font-bold text-danger">
+                      {runners.filter(
+                        (r: any) => !r.alertflow_runner && !runnerHeartbeatStatus(r),
+                      ).length} with issues
+                    </p>
+                  ) : (
+                    <p className="text-md font-bold text-success">OK</p>
+                  )}
+                  <p className="text-sm text-default-500">Runners</p>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
         </div>
       </div>
-      <div className="grid lg:grid-cols-3 grid-cols-1 items-stretch items-center justify-between gap-4">
-        <Card>
-          <CardBody className="flex justify-center">
-            <ul className="flex flex-col gap-2">
-              {/* Notifications */}
-              {notifications.filter((n: any) => !n.is_read).length > 0 ? (
-                <li className="flex items-center gap-2">
-                  <IconWrapper className="bg-warning/10 text-warning">
-                    <Icon icon="solar:bell-bing-broken" width={24} />
-                  </IconWrapper>
-                  <p className="text-md font-bold">
-                    Notifications:{" "}
-                    {notifications.filter((n: any) => !n.is_read).length}{" "}
-                    <span className="text-warning">Missed</span>
-                  </p>
-                </li>
-              ) : (
-                <li className="flex items-center gap-2">
-                  <IconWrapper className="bg-success/10 text-success">
-                    <Icon icon="solar:verified-check-broken" width={24} />
-                  </IconWrapper>
-                  <p className="text-md font-bold">
-                    Notifications: <span className="text-success">OK</span>
-                  </p>
-                </li>
-              )}
-              {/* Flows */}
-              {flows.filter((f: any) => f.maintenance_required).length > 0 ? (
-                <li className="flex items-center gap-2">
-                  <IconWrapper className="bg-warning/10 text-warning">
-                    <Icon icon="solar:info-square-broken" width={24} />
-                  </IconWrapper>
-                  <p className="text-md font-bold">
-                    Flows: <span className="text-warning">need attention</span>
-                  </p>
-                </li>
-              ) : (
-                <li className="flex items-center gap-2">
-                  <IconWrapper className="bg-success/10 text-success">
-                    <Icon icon="solar:verified-check-broken" width={24} />
-                  </IconWrapper>
-                  <p className="text-md font-bold">
-                    Flows: <span className="text-success">OK</span>
-                  </p>
-                </li>
-              )}
-              {/* Executions */}
-              {executions.filter((e: any) => e.error).length > 0 ? (
-                <li className="flex items-center gap-2">
-                  <IconWrapper className="bg-danger/10 text-danger">
-                    <Icon icon="solar:slash-circle-broken" width={24} />
-                  </IconWrapper>
-                  <p className="text-md font-bold">
-                    Executions: {executions.filter((e: any) => e.error).length}{" "}
-                    <span className="text-danger">Failed</span>
-                  </p>
-                </li>
-              ) : (
-                <li className="flex items-center gap-2">
-                  <IconWrapper className="bg-success/10 text-success">
-                    <Icon icon="solar:verified-check-broken" width={24} />
-                  </IconWrapper>
-                  <p className="text-md font-bold">
-                    Executions: <span className="text-success">OK</span>
-                  </p>
-                </li>
-              )}
-              {/* Runners */}
-              {runners.filter(
-                (r: any) => !r.alertflow_runner && !runnerHeartbeatStatus(r),
-              ).length > 0 ? (
-                <li className="flex items-center gap-2">
-                  <IconWrapper className="bg-danger/10 text-danger">
-                    <Icon icon="solar:heart-pulse-broken" width={24} />
-                  </IconWrapper>
-                  <p className="text-md font-bold">
-                    Runners: <span className="text-danger">Unhealthy</span>
-                  </p>
-                </li>
-              ) : (
-                <li className="flex items-center gap-2">
-                  <IconWrapper className="bg-success/10 text-success">
-                    <Icon icon="solar:verified-check-broken" width={24} />
-                  </IconWrapper>
-                  <p className="text-md font-bold">
-                    Runners: <span className="text-success">OK</span>
-                  </p>
-                </li>
-              )}
-            </ul>
-          </CardBody>
-        </Card>
+
+      <Spacer y={2} />
+
+      {/* Stats */}
+      <div className="grid lg:grid-cols-2 grid-cols-1 items-stretch items-center justify-between gap-4">
         <ExecutionChartCard stats={stats} />
         <PayloadChartCard stats={stats} />
       </div>

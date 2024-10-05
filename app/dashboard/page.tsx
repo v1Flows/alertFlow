@@ -15,6 +15,7 @@ export default async function DashboardHomePage() {
   const runners = await GetRunners();
   const executions = await GetExecutions();
   const payloads = await GetPayloads();
+  const user = await GetUserDetails();
 
   return (
     <DashboardHome
@@ -24,6 +25,7 @@ export default async function DashboardHomePage() {
       payloads={payloads}
       runners={runners}
       stats={stats}
+      user={user}
     />
   );
 }
