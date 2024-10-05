@@ -18,6 +18,7 @@ import {
   DropdownItem,
   Badge,
   DropdownSection,
+  ButtonGroup,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import { useTheme } from "next-themes";
@@ -171,39 +172,16 @@ export default function SidebarMenu({
           <DropdownItem
             key="profile"
             showDivider
-            startContent={<Icon icon="solar:smile-square-broken" width={18} />}
+            startContent={<Icon icon="solar:settings-broken" width={18} />}
             onPress={() => router.push(`/profile`)}
           >
-            View Profile
+            Settings
           </DropdownItem>
-          <DropdownSection title="Copy">
-            <DropdownItem
-              key="userid"
-              startContent={
-                <Icon icon="solar:user-id-line-duotone" width={18} />
-              }
-              onPress={() => {
-                // eslint-disable-next-line no-undef
-                navigator.clipboard.writeText(user.id);
-                toast.success("Copied to clipboard!");
-              }}
-            >
-              UserID
-            </DropdownItem>
-            <DropdownItem
-              key="api_key"
-              startContent={
-                <Icon icon="solar:key-square-2-broken" width={18} />
-              }
-              onPress={() => {
-                // eslint-disable-next-line no-undef
-                navigator.clipboard.writeText(session);
-                toast.success("Copied to clipboard!");
-              }}
-            >
-              Token
-            </DropdownItem>
-          </DropdownSection>
+          <DropdownItem key="logout" color="danger" onPress={LogoutHandler} startContent={
+            <Icon icon="solar:logout-3-broken" width={18} />
+          }>
+            Log Out
+          </DropdownItem>
         </DropdownMenu>
       </Dropdown>
 
@@ -257,14 +235,6 @@ export default function SidebarMenu({
             </div>
           </PopoverContent>
         </Popover>
-        <Button
-          className="justify-start text-default-500 data-[hover=true]:text-danger"
-          startContent={<Icon icon="solar:logout-3-broken" width={24} />}
-          variant="light"
-          onPress={LogoutHandler}
-        >
-          Log Out
-        </Button>
         <div className="flex items-center justify-center gap-1 pt-4">
           <span className="text-xs text-default-600">Powered by</span>
           <p className="text-sm text-primary font-bold">JustLab</p>
