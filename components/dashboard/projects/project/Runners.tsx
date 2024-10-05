@@ -405,8 +405,8 @@ export default function Runners({
                             >
                               {runner.last_heartbeat !==
                                 "0001-01-01T00:00:00Z" && (
-                                  <TimeAgo date={runner.last_heartbeat} />
-                                )}
+                                <TimeAgo date={runner.last_heartbeat} />
+                              )}
                               {runner.last_heartbeat ===
                                 "0001-01-01T00:00:00Z" && "N/A"}
                             </p>

@@ -163,13 +163,16 @@ export function UserProfile({
               user={user}
             />
           </Tab>
-          <Tab key="quota" title={
+          <Tab
+            key="quota"
+            title={
               <div className="flex items-center gap-1.5">
                 <Icon icon="solar:pie-chart-2-broken" width={20} />
                 <p>Quota</p>
               </div>
-            }>
-            <Quota user={user} plans={plans} stats={stats} />
+            }
+          >
+            <Quota plans={plans} stats={stats} user={user} />
           </Tab>
           <Tab key="appearance" isDisabled title="Appearance">
             <Card>

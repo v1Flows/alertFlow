@@ -20,9 +20,9 @@ export default async function UserProfilePage() {
         paymentMethods={paymentMethods}
         plans={plans}
         settings={settings}
+        stats={stats}
         subscription={subscription}
         user={userDetails}
-        stats={stats}
       />
     </>
   );

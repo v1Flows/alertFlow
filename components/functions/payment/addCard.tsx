@@ -8,7 +8,6 @@ import {
   ModalHeader,
 } from "@nextui-org/react";
 import { UseDisclosureReturn } from "@nextui-org/use-disclosure";
-import { useIsSSR } from "@react-aria/ssr";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { StripeCardElement } from "@stripe/stripe-js";
 import { useTheme } from "next-themes";

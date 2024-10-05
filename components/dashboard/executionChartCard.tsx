@@ -1,10 +1,8 @@
 "use client";
 
 import React from "react";
-import { Card, CardBody, CardHeader } from "@nextui-org/react";
+import { Card, CardBody } from "@nextui-org/react";
 import {
-  LineChart,
-  Line,
   XAxis,
   YAxis,
   Tooltip,
@@ -18,15 +16,20 @@ import { useTheme } from "next-themes";
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div style={{
-        background: "rgba(255, 255, 255, 0.9)",
-        border: "1px solid #ccc",
-        borderRadius: "5px",
-        boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-        padding: "10px",
-        color: "#333",
-      }}>
-        <p className="text-sm">{payload[0].value} <span className="text-default-500">Executions</span></p>
+      <div
+        style={{
+          background: "rgba(255, 255, 255, 0.9)",
+          border: "1px solid #ccc",
+          borderRadius: "5px",
+          boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+          padding: "10px",
+          color: "#333",
+        }}
+      >
+        <p className="text-sm">
+          {payload[0].value}{" "}
+          <span className="text-default-500">Executions</span>
+        </p>
         <p className="text-xs text-default-500">{label}</p>
       </div>
     );
@@ -60,18 +63,30 @@ export default function ExecutionChartCard({ stats }: { stats: any }) {
           </div>
           <div className="col-span-1">
             {stats.executions.filter((e: any) => e.count > 0).length > 0 ? (
-            <div style={{ height: '60px' }}>
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={stats.executions} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                  <XAxis dataKey="date" hide={true} />
-                  <YAxis hide={true} />
-                  <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(136, 132, 216, 0.2)' }} />
-                  <Bar dataKey="count" fill={barsColor()} radius={[5, 5, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
+              <div style={{ height: "60px" }}>
+                <ResponsiveContainer height="100%" width="100%">
+                  <BarChart
+                    data={stats.executions}
+                    margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+                  >
+                    <XAxis dataKey="date" hide={true} />
+                    <YAxis hide={true} />
+                    <Tooltip
+                      content={<CustomTooltip />}
+                      cursor={{ fill: "rgba(136, 132, 216, 0.2)" }}
+                    />
+                    <Bar
+                      dataKey="count"
+                      fill={barsColor()}
+                      radius={[5, 5, 0, 0]}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
             ) : (
-              <p className="text-sm text-default-400">No executions found for the last 7 days.</p>
+              <p className="text-sm text-default-400">
+                No executions found for the last 7 days.
+              </p>
             )}
           </div>
         </div>

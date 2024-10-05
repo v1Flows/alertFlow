@@ -1,20 +1,7 @@
 "use client";
 
-import {
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  Divider,
-  Progress,
-  Spacer,
-  useDisclosure,
-} from "@nextui-org/react";
+import { Card, CardBody, Spacer } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
-
-import { IconWrapper } from "@/lib/IconWrapper";
-
-import SelectPlanModal from "../functions/payment/selectPlan";
 
 import Executions from "./flows/flow/executions";
 import ExecutionChartCard from "./executionChartCard";
@@ -43,7 +30,7 @@ export function DashboardHome({
   return (
     <main>
       <p className="text-xl font-bold">Hello, {user.username} 👋</p>
-      <p className="text-default-500">Here's the current status for today.</p>
+      <p className="text-default-500">Here&apos;s the current status for today.</p>
 
       <Spacer y={2} />
       <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 items-stretch gap-4">
@@ -73,7 +60,8 @@ export function DashboardHome({
                   <Icon icon="solar:book-bookmark-broken" width={20} />
                 </div>
                 <div>
-                  {flows.filter((f: any) => f.maintenance_required).length > 0 ? (
+                  {flows.filter((f: any) => f.maintenance_required).length >
+                  0 ? (
                     <p className="text-md font-bold text-warning">
                       Needs attention
                     </p>
@@ -95,14 +83,29 @@ export function DashboardHome({
                   <Icon icon="solar:reorder-line-duotone" width={20} />
                 </div>
                 <div>
-                  {executions.filter((e: any) => e.error && new Date(e.created_at).getTime() > Date.now() - 24 * 60 * 60 * 1000).length > 0 ? (
+                  {executions.filter(
+                    (e: any) =>
+                      e.error &&
+                      new Date(e.created_at).getTime() >
+                        Date.now() - 24 * 60 * 60 * 1000,
+                  ).length > 0 ? (
                     <p className="text-md font-bold text-danger">
-                      {executions.filter((e: any) => e.error && new Date(e.created_at).getTime() > Date.now() - 24 * 60 * 60 * 1000).length} failed
+                      {
+                        executions.filter(
+                          (e: any) =>
+                            e.error &&
+                            new Date(e.created_at).getTime() >
+                              Date.now() - 24 * 60 * 60 * 1000,
+                        ).length
+                      }{" "}
+                      failed
                     </p>
                   ) : (
                     <p className="text-md font-bold text-success">OK</p>
                   )}
-                  <p className="text-sm text-default-500">Executions (last 24hours)</p>
+                  <p className="text-sm text-default-500">
+                    Executions (last 24hours)
+                  </p>
                 </div>
               </div>
             </CardBody>
@@ -118,12 +121,17 @@ export function DashboardHome({
                 </div>
                 <div>
                   {runners.filter(
-                    (r: any) => !r.alertflow_runner && !runnerHeartbeatStatus(r),
+                    (r: any) =>
+                      !r.alertflow_runner && !runnerHeartbeatStatus(r),
                   ).length > 0 ? (
                     <p className="text-md font-bold text-danger">
-                      {runners.filter(
-                        (r: any) => !r.alertflow_runner && !runnerHeartbeatStatus(r),
-                      ).length} with issues
+                      {
+                        runners.filter(
+                          (r: any) =>
+                            !r.alertflow_runner && !runnerHeartbeatStatus(r),
+                        ).length
+                      }{" "}
+                      with issues
                     </p>
                   ) : (
                     <p className="text-md font-bold text-success">OK</p>
