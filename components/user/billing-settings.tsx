@@ -171,7 +171,7 @@ export default function BillingSettings({
                   {currentSubscription.plan
                     ? plans.find(
                         (p: any) => p.stripe_id === currentSubscription.plan.id,
-                      ).name
+                      )?.name
                     : user.plan}
                 </p>
                 <p className="text-sm text-default-500">Your Plan</p>
