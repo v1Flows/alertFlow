@@ -47,7 +47,10 @@ export function PayloadsList({ flows, payloads, executions, runners }: any) {
   const rowsPerPage = 7;
   const pages = Math.ceil(payloads.length / rowsPerPage);
   const items = React.useMemo(() => {
-    const sortedPayloads = [...payloads].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+    const sortedPayloads = [...payloads].sort(
+      (a, b) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+    );
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
 

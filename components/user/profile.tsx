@@ -18,12 +18,14 @@ import CheckUserTaken from "@/lib/auth/checkTaken";
 
 import SecuritySettings from "./security-settings";
 import BillingSettings from "./billing-settings";
+import Quota from "./quota";
 
 export function UserProfile({
   user,
   paymentMethods,
   plans,
   subscription,
+  stats,
 }: any) {
   const [selected, setSelected] = React.useState("account");
 
@@ -160,6 +162,17 @@ export function UserProfile({
               subscription={subscription}
               user={user}
             />
+          </Tab>
+          <Tab
+            key="quota"
+            title={
+              <div className="flex items-center gap-1.5">
+                <Icon icon="solar:pie-chart-2-broken" width={20} />
+                <p>Quota</p>
+              </div>
+            }
+          >
+            <Quota plans={plans} stats={stats} user={user} />
           </Tab>
           <Tab key="appearance" isDisabled title="Appearance">
             <Card>

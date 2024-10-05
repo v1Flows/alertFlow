@@ -137,15 +137,15 @@ export default function Actions({
                 <Accordion
                   isCompact
                   selectedKeys={expandedParams}
-                  onSelectionChange={setExpandedParams}
-                  variant="light"
                   selectionMode="multiple"
+                  variant="light"
+                  onSelectionChange={setExpandedParams}
                 >
                   <AccordionItem
                     key={action.id}
                     aria-label="Parameters"
-                    title="Parameters"
                     subtitle="View action parameters (click to expand)"
+                    title="Parameters"
                   >
                     <Table
                       removeWrapper
