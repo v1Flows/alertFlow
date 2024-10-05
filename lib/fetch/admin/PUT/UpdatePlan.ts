@@ -4,6 +4,8 @@ import { cookies } from "next/headers";
 
 export default async function UpdatePlan(
   id: string,
+  name: string,
+  description: string,
   price: number,
   projects: number,
   project_members: number,
@@ -11,6 +13,7 @@ export default async function UpdatePlan(
   self_hosted_runners: number,
   alertflow_runners: number,
   executions_per_month: number,
+  stripe_id: string,
 ) {
   "use client";
   const cookieStore = cookies();
@@ -29,6 +32,8 @@ export default async function UpdatePlan(
         method: "PUT",
         headers: headers,
         body: JSON.stringify({
+          name: name,
+          description: description,
           price: price,
           projects: projects,
           project_members: project_members,
@@ -36,6 +41,7 @@ export default async function UpdatePlan(
           self_hosted_runners: self_hosted_runners,
           alertflow_runners: alertflow_runners,
           executions_per_month: executions_per_month,
+          stripe_id: stripe_id,
         }),
       },
     );

@@ -182,6 +182,8 @@ export function UsersList({ users, plans }: any) {
             {cellValue}
           </p>
         );
+      case "plan_valid_until":
+        return new Date(user.plan_valid_until).toLocaleString("de-DE");
       case "role":
         return (
           <p
@@ -368,6 +370,9 @@ export function UsersList({ users, plans }: any) {
             </TableColumn>
             <TableColumn key="plan" align="start">
               Plan
+            </TableColumn>
+            <TableColumn key="plan_valid_until" align="start">
+              Valid Until
             </TableColumn>
             <TableColumn key="disabled" align="start">
               Status

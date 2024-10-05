@@ -291,7 +291,8 @@ export default function AddActionModal({
                           Required Parameters
                         </p>
                         <Spacer y={2} />
-                        {action.params.length > 0 || action?.params ? (
+                        {(action.params && action.params.length > 0) ||
+                        action?.params ? (
                           <div className="grid grid-cols-2 gap-2">
                             {action.params.map((param: any) => {
                               return param.type === "text" ||

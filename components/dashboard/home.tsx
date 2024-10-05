@@ -1,14 +1,7 @@
-import {
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  Divider,
-  Progress,
-} from "@nextui-org/react";
-import { Icon } from "@iconify/react";
+"use client";
 
-import { IconWrapper } from "@/lib/IconWrapper";
+import { Card, CardBody, Spacer } from "@nextui-org/react";
+import { Icon } from "@iconify/react";
 
 import Executions from "./flows/flow/executions";
 import ExecutionChartCard from "./executionChartCard";
@@ -16,16 +9,13 @@ import PayloadChartCard from "./payloadChartCard";
 
 export function DashboardHome({
   stats,
-  plans,
-  user,
   notifications,
   flows,
   runners,
   executions,
   payloads,
+  user,
 }: any) {
-  const plan = plans.find((plan: any) => plan.id === user.plan);
-
   function runnerHeartbeatStatus(runner: any) {
     var timeAgo =
       (new Date(runner.last_heartbeat).getTime() - Date.now()) / 1000;
@@ -39,416 +29,129 @@ export function DashboardHome({
 
   return (
     <main>
-      <div className="flex items-end justify-between mb-4 mt-2">
-        <div>
-          <p className="text-3xl font-bold mb-0">
-            👋 Welcome Back{" "}
-            <span
-              className={`text-${user.role === "Admin" ? "danger" : user.role === "VIP" ? "warning" : "primary"}`}
-            >
-              {user.username}
-            </span>
-          </p>
+      <p className="text-xl font-bold">Hello, {user.username} 👋</p>
+      <p className="text-default-500">
+        Here&apos;s the current status for today.
+      </p>
+
+      <Spacer y={2} />
+      <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 items-stretch gap-4">
+        <div className="col-span-1">
+          <Card fullWidth>
+            <CardBody>
+              <div className="flex items-center gap-2">
+                <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
+                  <Icon icon="solar:bell-broken" width={20} />
+                </div>
+                <div>
+                  <p className="text-md font-bold">
+                    {notifications.filter((n: any) => !n.is_read).length}
+                  </p>
+                  <p className="text-sm text-default-500">Notifications</p>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
+
+        <div className="col-span-1">
+          <Card fullWidth>
+            <CardBody>
+              <div className="flex items-center gap-2">
+                <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
+                  <Icon icon="solar:book-bookmark-broken" width={20} />
+                </div>
+                <div>
+                  {flows.filter((f: any) => f.maintenance_required).length >
+                  0 ? (
+                    <p className="text-md font-bold text-warning">
+                      Need attention
+                    </p>
+                  ) : (
+                    <p className="text-md font-bold text-success">OK</p>
+                  )}
+                  <p className="text-sm text-default-500">Flows</p>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
+
+        <div className="col-span-1">
+          <Card fullWidth>
+            <CardBody>
+              <div className="flex items-center gap-2">
+                <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
+                  <Icon icon="solar:reorder-line-duotone" width={20} />
+                </div>
+                <div>
+                  {executions.filter(
+                    (e: any) =>
+                      e.error &&
+                      new Date(e.created_at).getTime() >
+                        Date.now() - 24 * 60 * 60 * 1000,
+                  ).length > 0 ? (
+                    <p className="text-md font-bold text-danger">
+                      {
+                        executions.filter(
+                          (e: any) =>
+                            e.error &&
+                            new Date(e.created_at).getTime() >
+                              Date.now() - 24 * 60 * 60 * 1000,
+                        ).length
+                      }{" "}
+                      failed
+                    </p>
+                  ) : (
+                    <p className="text-md font-bold text-success">OK</p>
+                  )}
+                  <p className="text-sm text-default-500">
+                    Executions (last 24hours)
+                  </p>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
+
+        <div className="col-span-1">
+          <Card fullWidth>
+            <CardBody>
+              <div className="flex items-center gap-2">
+                <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
+                  <Icon icon="solar:rocket-2-broken" width={20} />
+                </div>
+                <div>
+                  {runners.filter(
+                    (r: any) =>
+                      !r.alertflow_runner && !runnerHeartbeatStatus(r),
+                  ).length > 0 ? (
+                    <p className="text-md font-bold text-danger">
+                      {
+                        runners.filter(
+                          (r: any) =>
+                            !r.alertflow_runner && !runnerHeartbeatStatus(r),
+                        ).length
+                      }{" "}
+                      with issues
+                    </p>
+                  ) : (
+                    <p className="text-md font-bold text-success">OK</p>
+                  )}
+                  <p className="text-sm text-default-500">Runners</p>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
         </div>
       </div>
-      <Divider className="my-4" />
+
+      <Spacer y={2} />
 
       {/* Stats */}
-      <div className="flex items-end justify-between my-4">
-        <div>
-          <p className="text-2xl font-bold mb-0">
-            Here are your <span className="text-primary">Stats</span>
-          </p>
-        </div>
-      </div>
-      <div className="grid lg:grid-cols-3 grid-cols-1 items-stretch items-center justify-between gap-4">
-        <Card>
-          <CardBody className="flex justify-center">
-            <ul className="flex flex-col gap-2">
-              {/* Notifications */}
-              {notifications.filter((n: any) => !n.is_read).length > 0 ? (
-                <li className="flex items-center gap-2">
-                  <IconWrapper className="bg-warning/10 text-warning">
-                    <Icon icon="solar:bell-bing-broken" width={24} />
-                  </IconWrapper>
-                  <p className="text-md font-bold">
-                    Notifications:{" "}
-                    {notifications.filter((n: any) => !n.is_read).length}{" "}
-                    <span className="text-warning">Missed</span>
-                  </p>
-                </li>
-              ) : (
-                <li className="flex items-center gap-2">
-                  <IconWrapper className="bg-success/10 text-success">
-                    <Icon icon="solar:verified-check-broken" width={24} />
-                  </IconWrapper>
-                  <p className="text-md font-bold">
-                    Notifications: <span className="text-success">OK</span>
-                  </p>
-                </li>
-              )}
-              {/* Flows */}
-              {flows.filter((f: any) => f.maintenance_required).length > 0 ? (
-                <li className="flex items-center gap-2">
-                  <IconWrapper className="bg-warning/10 text-warning">
-                    <Icon icon="solar:info-square-broken" width={24} />
-                  </IconWrapper>
-                  <p className="text-md font-bold">
-                    Flows: <span className="text-warning">need attention</span>
-                  </p>
-                </li>
-              ) : (
-                <li className="flex items-center gap-2">
-                  <IconWrapper className="bg-success/10 text-success">
-                    <Icon icon="solar:verified-check-broken" width={24} />
-                  </IconWrapper>
-                  <p className="text-md font-bold">
-                    Flows: <span className="text-success">OK</span>
-                  </p>
-                </li>
-              )}
-              {/* Executions */}
-              {executions.filter((e: any) => e.error).length > 0 ? (
-                <li className="flex items-center gap-2">
-                  <IconWrapper className="bg-danger/10 text-danger">
-                    <Icon icon="solar:slash-circle-broken" width={24} />
-                  </IconWrapper>
-                  <p className="text-md font-bold">
-                    Executions: {executions.filter((e: any) => e.error).length}{" "}
-                    <span className="text-danger">Failed</span>
-                  </p>
-                </li>
-              ) : (
-                <li className="flex items-center gap-2">
-                  <IconWrapper className="bg-success/10 text-success">
-                    <Icon icon="solar:verified-check-broken" width={24} />
-                  </IconWrapper>
-                  <p className="text-md font-bold">
-                    Executions: <span className="text-success">OK</span>
-                  </p>
-                </li>
-              )}
-              {/* Runners */}
-              {runners.filter(
-                (r: any) => !r.alertflow_runner && !runnerHeartbeatStatus(r),
-              ).length > 0 ? (
-                <li className="flex items-center gap-2">
-                  <IconWrapper className="bg-danger/10 text-danger">
-                    <Icon icon="solar:heart-pulse-broken" width={24} />
-                  </IconWrapper>
-                  <p className="text-md font-bold">
-                    Runners: <span className="text-danger">Unhealthy</span>
-                  </p>
-                </li>
-              ) : (
-                <li className="flex items-center gap-2">
-                  <IconWrapper className="bg-success/10 text-success">
-                    <Icon icon="solar:verified-check-broken" width={24} />
-                  </IconWrapper>
-                  <p className="text-md font-bold">
-                    Runners: <span className="text-success">OK</span>
-                  </p>
-                </li>
-              )}
-            </ul>
-          </CardBody>
-        </Card>
+      <div className="grid lg:grid-cols-2 grid-cols-1 items-stretch items-center justify-between gap-4">
         <ExecutionChartCard stats={stats} />
         <PayloadChartCard stats={stats} />
-      </div>
-
-      {/* Quota */}
-      <div className="flex items-end justify-between mb-4 mt-2">
-        <div>
-          <p className="text-2xl font-bold mb-0">
-            Your <span className="text-primary">Quota</span>
-          </p>
-        </div>
-      </div>
-      <div className="grid lg:grid-cols-3 grid-cols-1 items-stretch gap-4">
-        <div className="col-span-1 grid grid-cols-2 items-start gap-4">
-          <Card className="h-full">
-            <CardBody className="flex gap-1 items-center justify-center">
-              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-12 h-12">
-                <Icon
-                  className="text-primary"
-                  icon="solar:box-broken"
-                  width={28}
-                />
-              </div>
-              <p className="text-default-600">Projects</p>
-              {plan.projects !== 999 && user.role !== "VIP" ? (
-                <>
-                  <p className="text-lg font-bold">
-                    {stats.projects} / {plan.projects}
-                  </p>
-                  <Progress
-                    color={
-                      stats.projects >= plan.projects ? "danger" : "primary"
-                    }
-                    maxValue={plan.projects}
-                    value={stats.projects}
-                  />
-                </>
-              ) : (
-                <p
-                  className={`text-lg font-bold text-${user.role === "VIP" ? "warning" : "secondary"}`}
-                >
-                  Unlimited
-                </p>
-              )}
-            </CardBody>
-          </Card>
-          <Card className="h-full">
-            <CardBody className="flex gap-1 items-center justify-center">
-              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-12 h-12">
-                <Icon
-                  className="text-primary"
-                  icon="solar:book-bookmark-broken"
-                  width={28}
-                />
-              </div>
-              <p className="text-default-600">Flows</p>
-              {plan.flows !== 999 && user.role !== "VIP" ? (
-                <>
-                  <p className="text-lg font-bold">
-                    {stats.flows} / {plan.flows}
-                  </p>
-                  <Progress
-                    color={stats.flows >= plan.flows ? "danger" : "primary"}
-                    maxValue={plan.flows}
-                    value={stats.flows}
-                  />
-                </>
-              ) : (
-                <p
-                  className={`text-lg font-bold text-${user.role === "VIP" ? "warning" : "secondary"}`}
-                >
-                  Unlimited
-                </p>
-              )}
-            </CardBody>
-          </Card>
-          <Card className="h-full">
-            <CardBody className="flex gap-1 items-center justify-center">
-              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-12 h-12">
-                <Icon
-                  className="text-primary"
-                  icon="solar:rocket-2-broken"
-                  width={28}
-                />
-              </div>
-              <p className="text-default-600">Self-Hosted Runners</p>
-              {plan.self_hosted_runners !== 999 && user.role !== "VIP" ? (
-                <>
-                  <p className="text-lg font-bold">
-                    {stats.runners ? stats.runners : 0} /{" "}
-                    {plan.self_hosted_runners}
-                  </p>
-                  <Progress
-                    color={
-                      stats.runners >= plan.self_hosted_runners
-                        ? "danger"
-                        : "primary"
-                    }
-                    maxValue={plan.self_hosted_runners}
-                    value={stats.runners}
-                  />
-                </>
-              ) : (
-                <p
-                  className={`text-lg font-bold text-${user.role === "VIP" ? "warning" : "secondary"}`}
-                >
-                  Unlimited
-                </p>
-              )}
-            </CardBody>
-          </Card>
-          <Card className="h-full">
-            <CardBody className="flex gap-1 items-center justify-center">
-              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-12 h-12">
-                <Icon
-                  className="text-primary"
-                  icon="solar:reorder-line-duotone"
-                  width={28}
-                />
-              </div>
-              <p className="text-default-600">Executions</p>
-              {plan.executions_per_month !== 999 && user.role !== "VIP" ? (
-                <>
-                  <p className="text-lg font-bold">
-                    {stats.total_executions ? stats.total_executions : 0} /{" "}
-                    {plan.executions_per_month}
-                  </p>
-                  <Progress
-                    color={
-                      stats.total_executions >= plan.executions_per_month
-                        ? "danger"
-                        : "primary"
-                    }
-                    maxValue={plan.executions_per_month}
-                    value={stats.total_executions}
-                  />
-                </>
-              ) : (
-                <p
-                  className={`text-lg font-bold text-${user.role === "VIP" ? "warning" : "secondary"}`}
-                >
-                  Unlimited
-                </p>
-              )}
-            </CardBody>
-          </Card>
-        </div>
-        <div className="col-span-2">
-          <Card className="relative w-full">
-            <Button
-              isDisabled
-              className="absolute right-4 top-8 z-10"
-              radius="full"
-              size="sm"
-            >
-              Change Plan
-            </Button>
-            <CardBody className="relative bg-gradient-to-br from-content1 to-default-100/50 p-8 before:inset-0 before:h-full before:w-full before:content-['']">
-              <h1 className="mb-4 text-default-400">Your Plan</h1>
-              {user.role === "Admin" && (
-                <h2 className="inline bg-clip-text text-6xl font-semibold tracking-tight text-danger">
-                  Admin
-                </h2>
-              )}
-              {user.role === "VIP" && (
-                <h2 className="flex gap-1 items-center inline bg-clip-text text-6xl font-semibold tracking-tight text-warning">
-                  <Icon icon="solar:crown-broken" /> VIP
-                </h2>
-              )}
-              {user.role === "User" && (
-                <h2 className="inline bg-gradient-to-br from-foreground-800 to-foreground-500 bg-clip-text text-6xl font-semibold tracking-tight text-transparent dark:to-foreground-200">
-                  {plan.name}
-                </h2>
-              )}
-            </CardBody>
-            <CardFooter>
-              <ul>
-                <li className="flex items-center gap-1">
-                  <Icon
-                    className="text-default-600"
-                    icon="ci:check"
-                    width={24}
-                  />
-                  <p className="text-small text-default-500">
-                    {plan.projects === 999 || user.role === "VIP" ? (
-                      <span
-                        className={`text-${user.role === "VIP" ? "warning" : "secondary"}`}
-                      >
-                        Unlimited
-                      </span>
-                    ) : (
-                      plan.projects
-                    )}{" "}
-                    Project
-                  </p>
-                </li>
-                <li className="flex items-center gap-1">
-                  <Icon
-                    className="text-default-600"
-                    icon="ci:check"
-                    width={24}
-                  />
-                  <p className="text-small text-default-500">
-                    {plan.project_members === 999 || user.role === "VIP" ? (
-                      <span
-                        className={`text-${user.role === "VIP" ? "warning" : "secondary"}`}
-                      >
-                        Unlimited
-                      </span>
-                    ) : (
-                      plan.project_members
-                    )}{" "}
-                    Project Members
-                  </p>
-                </li>
-                <li className="flex items-center gap-1">
-                  <Icon
-                    className="text-default-600"
-                    icon="ci:check"
-                    width={24}
-                  />
-                  <p className="text-small text-default-500">
-                    {plan.flows === 999 || user.role === "VIP" ? (
-                      <span
-                        className={`text-${user.role === "VIP" ? "warning" : "secondary"}`}
-                      >
-                        Unlimited
-                      </span>
-                    ) : (
-                      plan.flows
-                    )}{" "}
-                    Flows
-                  </p>
-                </li>
-                <li className="flex items-center gap-1">
-                  <Icon
-                    className="text-default-600"
-                    icon="ci:check"
-                    width={24}
-                  />
-                  <p className="text-small text-default-500">
-                    {plan.self_hosted_runners === 999 || user.role === "VIP" ? (
-                      <span
-                        className={`text-${user.role === "VIP" ? "warning" : "secondary"}`}
-                      >
-                        Unlimited
-                      </span>
-                    ) : (
-                      plan.self_hosted_runners
-                    )}{" "}
-                    Self-Hosted Runner
-                  </p>
-                </li>
-                <li className="flex items-center gap-1">
-                  <Icon
-                    className="text-default-600"
-                    icon="ci:check"
-                    width={24}
-                  />
-                  <p className="text-small text-default-500">
-                    {plan.alertflow_runners === 16 || user.role === "VIP" ? (
-                      <span
-                        className={`text-${user.role === "VIP" ? "warning" : "secondary"}`}
-                      >
-                        Unlimited
-                      </span>
-                    ) : (
-                      plan.alertflow_runners
-                    )}{" "}
-                    AlertFlow Runner
-                  </p>
-                </li>
-                <li className="flex items-center gap-1">
-                  <Icon
-                    className="text-default-600"
-                    icon="ci:check"
-                    width={24}
-                  />
-                  <p className="text-small text-default-500">
-                    {plan.executions_per_month === 999 ||
-                    user.role === "VIP" ? (
-                      <span
-                        className={`text-${user.role === "VIP" ? "warning" : "secondary"}`}
-                      >
-                        Unlimited
-                      </span>
-                    ) : (
-                      plan.executions_per_month
-                    )}{" "}
-                    Executions per Month
-                  </p>
-                </li>
-              </ul>
-            </CardFooter>
-          </Card>
-        </div>
       </div>
 
       {/* Latest executions */}

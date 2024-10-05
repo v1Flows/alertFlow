@@ -6,18 +6,6 @@ import { type SidebarItem } from "./sidebar";
 
 export const sectionItems: SidebarItem[] = [
   {
-    key: "home",
-    title: "Home",
-    items: [
-      {
-        key: "home",
-        href: "/",
-        icon: "solar:home-2-linear",
-        title: "Home",
-      },
-    ],
-  },
-  {
     key: "dashboard",
     title: "Dashboard",
     items: [

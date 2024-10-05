@@ -47,16 +47,22 @@ export function PayloadsList({ flows, payloads, executions, runners }: any) {
   const rowsPerPage = 7;
   const pages = Math.ceil(payloads.length / rowsPerPage);
   const items = React.useMemo(() => {
+    const sortedPayloads = [...payloads].sort(
+      (a, b) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+    );
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
 
-    return payloads.slice(start, end);
+    return sortedPayloads.slice(start, end);
   }, [page, payloads]);
 
   const renderCell = React.useCallback((payload: any, columnKey: any) => {
     const cellValue = payload[columnKey];
 
     switch (columnKey) {
+      case "endpoint":
+        return <p className="capitalize">{payload.endpoint}</p>;
       case "id":
         return <p className="text-sm text-default-500">{payload.id}</p>;
       case "flow_id":
@@ -178,6 +184,9 @@ export function PayloadsList({ flows, payloads, executions, runners }: any) {
           }}
         >
           <TableHeader>
+            <TableColumn key="endpoint" align="start">
+              Endpoint
+            </TableColumn>
             <TableColumn key="id" align="start">
               ID
             </TableColumn>

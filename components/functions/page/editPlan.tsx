@@ -28,6 +28,8 @@ export default function EditPlanModal({
 
   const { isOpen, onOpenChange, onClose } = disclosure;
 
+  const [name, setName] = React.useState("");
+  const [description, setDescription] = React.useState("");
   const [price, setPrice] = React.useState(0);
   const [projects, setProjects] = React.useState(0);
   const [projectMembers, setProjectMembers] = React.useState(0);
@@ -35,12 +37,15 @@ export default function EditPlanModal({
   const [selfHostedRunners, setSelfHostedRunners] = React.useState(0);
   const [alertflowRunners, setAlertflowRunners] = React.useState(0);
   const [executionsPerMonth, setExecutionsPerMonth] = React.useState(0);
+  const [stripeID, setStripeID] = React.useState("");
 
   // loading
   const [isLoading, setIsLoading] = React.useState(false);
 
   useEffect(() => {
     if (plan !== null) {
+      setName(plan.name);
+      setDescription(plan.description);
       setPrice(plan.price);
       setProjects(plan.projects);
       setProjectMembers(plan.project_members);
@@ -48,6 +53,7 @@ export default function EditPlanModal({
       setSelfHostedRunners(plan.self_hosted_runners);
       setAlertflowRunners(plan.alertflow_runners);
       setExecutionsPerMonth(plan.executions_per_month);
+      setStripeID(plan.stripe_id);
     }
   }, [plan]);
 
@@ -56,6 +62,8 @@ export default function EditPlanModal({
 
     const response = await UpdatePlan(
       plan.id,
+      name,
+      description,
       price,
       projects,
       projectMembers,
@@ -63,6 +71,7 @@ export default function EditPlanModal({
       selfHostedRunners,
       alertflowRunners,
       executionsPerMonth,
+      stripeID,
     );
 
     if (response.result === "success") {
@@ -96,6 +105,26 @@ export default function EditPlanModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                <Input
+                  isRequired
+                  label="Name"
+                  labelPlacement="outside"
+                  placeholder="Enter the name"
+                  type="text"
+                  value={name}
+                  variant="flat"
+                  onValueChange={(value) => setName(value)}
+                />
+                <Input
+                  isRequired
+                  label="Description"
+                  labelPlacement="outside"
+                  placeholder="Enter the description"
+                  type="text"
+                  value={description}
+                  variant="flat"
+                  onValueChange={(value) => setDescription(value)}
+                />
                 <Input
                   isRequired
                   endContent={
@@ -179,6 +208,16 @@ export default function EditPlanModal({
                   onValueChange={(value) =>
                     setExecutionsPerMonth(Number(value))
                   }
+                />
+                <Input
+                  isRequired
+                  label="Stripe ID"
+                  labelPlacement="outside"
+                  placeholder="Enter the stripe ID"
+                  type="text"
+                  value={stripeID}
+                  variant="flat"
+                  onValueChange={(value) => setStripeID(value)}
                 />
               </ModalBody>
               <ModalFooter>

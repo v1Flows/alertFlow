@@ -15,6 +15,7 @@ import {
   Chip,
   Spacer,
   Avatar,
+  Tooltip,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -81,8 +82,8 @@ export function ProjectsList({
 
   return (
     <main>
-      <p className="text-2xl font-bold">Project List</p>
-      <Spacer y={8} />
+      <p className="text-2xl font-bold">Projects</p>
+      <Spacer y={4} />
       {projects.error && (
         <Card className="shadow shadow-danger">
           <CardHeader className="justify-start gap-2 items-center">
@@ -98,7 +99,7 @@ export function ProjectsList({
       )}
       {!projects.error && (
         <>
-          <div className="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-4">
+          <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
             {projects.map((project: any) => (
               <div key={project.id} className="col-span-1">
                 <Card
@@ -130,7 +131,18 @@ export function ProjectsList({
                         <div className="flex flex-col items-start">
                           <p className="text-md font-bold">{project.name}</p>
                           <p className="text-sm text-default-500">
-                            {project.description}
+                            {project.description.length > 50 ? (
+                              <Tooltip
+                                content={project.description}
+                                style={{ maxWidth: "450px" }}
+                              >
+                                <span>
+                                  {project.description.slice(0, 50)}...
+                                </span>
+                              </Tooltip>
+                            ) : (
+                              project.description
+                            )}
                           </p>
                         </div>
                       </div>
@@ -266,7 +278,7 @@ export function ProjectsList({
                 text="Pending Project Invitations"
               />
               <Spacer y={4} />
-              <div className="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-1 gap-4">
+              <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
                 {pending_projects.map((project: any) => (
                   <div key={project.id} className="col-span-1">
                     <Card fullWidth>
