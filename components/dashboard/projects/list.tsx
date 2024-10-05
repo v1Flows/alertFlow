@@ -132,10 +132,17 @@ export function ProjectsList({
                           <p className="text-md font-bold">{project.name}</p>
                           <p className="text-sm text-default-500">
                             {project.description.length > 50 ? (
-                              <Tooltip content={project.description} style={{ maxWidth: "450px" }}>
-                                <span>{project.description.slice(0, 50)}...</span>
+                              <Tooltip
+                                content={project.description}
+                                style={{ maxWidth: "450px" }}
+                              >
+                                <span>
+                                  {project.description.slice(0, 50)}...
+                                </span>
                               </Tooltip>
-                            ) : project.description}
+                            ) : (
+                              project.description
+                            )}
                           </p>
                         </div>
                       </div>

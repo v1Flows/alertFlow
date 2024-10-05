@@ -174,10 +174,15 @@ export default function FlowList({
                       <p className="text-md font-bold">{flow.name}</p>
                       <p className="text-sm text-default-500">
                         {flow.description.length > 50 ? (
-                          <Tooltip content={flow.description} style={{ maxWidth: "450px" }}>
+                          <Tooltip
+                            content={flow.description}
+                            style={{ maxWidth: "450px" }}
+                          >
                             <span>{flow.description.slice(0, 50)}...</span>
                           </Tooltip>
-                        ) : flow.description}
+                        ) : (
+                          flow.description
+                        )}
                       </p>
                     </div>
                     <Dropdown backdrop="opaque">

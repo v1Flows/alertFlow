@@ -17,14 +17,11 @@ import {
   DropdownMenu,
   DropdownItem,
   Badge,
-  DropdownSection,
-  ButtonGroup,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import { useTheme } from "next-themes";
 import { useIsSSR } from "@react-aria/ssr";
 import { usePathname, useRouter } from "next/navigation";
-import { toast } from "sonner";
 
 import NotificationsCard from "@/components/notifications/notifications";
 import { siteConfig } from "@/config/site";
@@ -52,13 +49,11 @@ import Sidebar from "./sidebar";
 export default function SidebarMenu({
   children,
   user,
-  session,
   settings,
   notifications,
 }: {
   children: React.ReactNode;
   user: any;
-  session: any;
   settings: any;
   notifications: any;
 }) {
@@ -177,9 +172,12 @@ export default function SidebarMenu({
           >
             Settings
           </DropdownItem>
-          <DropdownItem key="logout" color="danger" onPress={LogoutHandler} startContent={
-            <Icon icon="solar:logout-3-broken" width={18} />
-          }>
+          <DropdownItem
+            key="logout"
+            color="danger"
+            startContent={<Icon icon="solar:logout-3-broken" width={18} />}
+            onPress={LogoutHandler}
+          >
             Log Out
           </DropdownItem>
         </DropdownMenu>

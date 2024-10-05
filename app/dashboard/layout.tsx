@@ -1,5 +1,4 @@
 import React from "react";
-import { cookies } from "next/headers";
 
 import AdminGetSettings from "@/lib/fetch/page/settings";
 import GetUserNotifications from "@/lib/fetch/user/getNotifications";
@@ -11,7 +10,6 @@ export default async function DashboardHomeLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = cookies().get("session")?.value;
   const settings = await AdminGetSettings();
   const notifications = await GetUserNotifications();
   const userDetails = await GetUserDetails();
@@ -19,7 +17,6 @@ export default async function DashboardHomeLayout({
   return (
     <SidebarMenu
       notifications={notifications}
-      session={session}
       settings={settings}
       user={userDetails}
     >

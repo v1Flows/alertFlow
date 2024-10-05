@@ -1,3 +1,5 @@
+import { cookies } from "next/headers";
+
 import { UserProfile } from "@/components/user/profile";
 import PageGetPlans from "@/lib/fetch/page/plans";
 import PageGetSettings from "@/lib/fetch/page/settings";
@@ -5,7 +7,6 @@ import GetPaymentMethods from "@/lib/fetch/user/GetPaymentMethods";
 import GetUserDetails from "@/lib/fetch/user/getDetails";
 import GetUserStats from "@/lib/fetch/user/getStats";
 import GetUserSubscription from "@/lib/fetch/user/getSubscription";
-import { cookies } from "next/headers";
 
 export default async function UserProfilePage() {
   const settings = await PageGetSettings();
@@ -21,11 +22,11 @@ export default async function UserProfilePage() {
       <UserProfile
         paymentMethods={paymentMethods}
         plans={plans}
+        session={session}
         settings={settings}
         stats={stats}
         subscription={subscription}
         user={userDetails}
-        session={session}
       />
     </>
   );
