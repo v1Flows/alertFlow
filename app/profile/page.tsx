@@ -3,6 +3,7 @@ import PageGetPlans from "@/lib/fetch/page/plans";
 import PageGetSettings from "@/lib/fetch/page/settings";
 import GetPaymentMethods from "@/lib/fetch/user/GetPaymentMethods";
 import GetUserDetails from "@/lib/fetch/user/getDetails";
+import GetUserStats from "@/lib/fetch/user/getStats";
 import GetUserSubscription from "@/lib/fetch/user/getSubscription";
 
 export default async function UserProfilePage() {
@@ -11,6 +12,7 @@ export default async function UserProfilePage() {
   const paymentMethods = await GetPaymentMethods();
   const plans = await PageGetPlans();
   const subscription = await GetUserSubscription();
+  const stats = await GetUserStats();
 
   return (
     <>
@@ -20,6 +22,7 @@ export default async function UserProfilePage() {
         settings={settings}
         subscription={subscription}
         user={userDetails}
+        stats={stats}
       />
     </>
   );

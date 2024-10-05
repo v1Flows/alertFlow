@@ -9,9 +9,7 @@ import GetExecutions from "@/lib/fetch/executions/all";
 import GetPayloads from "@/lib/fetch/payload/payloads";
 
 export default async function DashboardHomePage() {
-  const userDetails = await GetUserDetails();
   const stats = await GetUserStats();
-  const plans = await PageGetPlans();
   const notifications = await GetUserNotifications();
   const flows = await GetFlows();
   const runners = await GetRunners();
@@ -24,10 +22,8 @@ export default async function DashboardHomePage() {
       flows={flows}
       notifications={notifications}
       payloads={payloads}
-      plans={plans}
       runners={runners}
       stats={stats}
-      user={userDetails}
     />
   );
 }
