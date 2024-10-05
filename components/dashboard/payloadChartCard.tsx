@@ -56,7 +56,7 @@ export default function PayloadChartCard({ stats }: { stats: any }) {
               </div>
               <div>
                 <h4 className="text-large font-bold">{lastPayload.value}</h4>
-                <p className="text-sm">Payloads today</p>
+                <p className="text-sm text-default-500">Payloads today</p>
               </div>
             </div>
           </div>

@@ -57,7 +57,7 @@ export default function ExecutionChartCard({ stats }: { stats: any }) {
               </div>
               <div>
                 <h4 className="text-large font-bold">{lastExecution.value}</h4>
-                <p className="text-sm">Executions today</p>
+                <p className="text-sm text-default-500">Executions today</p>
               </div>
             </div>
           </div>
