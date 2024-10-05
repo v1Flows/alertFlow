@@ -65,7 +65,7 @@ export function DashboardHome({
                   {flows.filter((f: any) => f.maintenance_required).length >
                   0 ? (
                     <p className="text-md font-bold text-warning">
-                      Needs attention
+                      Need attention
                     </p>
                   ) : (
                     <p className="text-md font-bold text-success">OK</p>

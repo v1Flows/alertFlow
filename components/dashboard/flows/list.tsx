@@ -18,6 +18,7 @@ import {
   SelectItem,
   Spacer,
   Input,
+  Tooltip,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
@@ -145,7 +146,7 @@ export default function FlowList({
           </Select>
         </div>
       </div>
-      <Spacer y={8} />
+      <Spacer y={4} />
       {flows.error && (
         <Card className="shadow shadow-danger">
           <CardHeader className="justify-start gap-2 items-center">
@@ -160,7 +161,7 @@ export default function FlowList({
         </Card>
       )}
       {!flows.error && (
-        <div className="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-4">
+        <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
           {filteredFlows.map((flow: any) => (
             <div key={flow.id} className="col-span-1">
               <Card
@@ -172,7 +173,11 @@ export default function FlowList({
                     <div className="flex flex-col items-start">
                       <p className="text-md font-bold">{flow.name}</p>
                       <p className="text-sm text-default-500">
-                        {flow.description}
+                        {flow.description.length > 50 ? (
+                          <Tooltip content={flow.description} style={{ maxWidth: "450px" }}>
+                            <span>{flow.description.slice(0, 50)}...</span>
+                          </Tooltip>
+                        ) : flow.description}
                       </p>
                     </div>
                     <Dropdown backdrop="opaque">
