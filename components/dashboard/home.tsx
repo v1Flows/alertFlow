@@ -51,7 +51,7 @@ export function DashboardHome({
           <Card fullWidth>
             <CardBody>
               <div className="flex items-center gap-2">
-                <div className="flex bg-default/50 text-foreground items-center rounded-small justify-center w-10 h-10">
+                <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
                   <Icon icon="solar:bell-broken" width={20} />
                 </div>
                 <div>
@@ -69,7 +69,7 @@ export function DashboardHome({
           <Card fullWidth>
             <CardBody>
               <div className="flex items-center gap-2">
-                <div className="flex bg-default/50 text-foreground items-center rounded-small justify-center w-10 h-10">
+                <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
                   <Icon icon="solar:book-bookmark-broken" width={20} />
                 </div>
                 <div>
@@ -91,7 +91,7 @@ export function DashboardHome({
           <Card fullWidth>
             <CardBody>
               <div className="flex items-center gap-2">
-                <div className="flex bg-default/50 text-foreground items-center rounded-small justify-center w-10 h-10">
+                <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
                   <Icon icon="solar:reorder-line-duotone" width={20} />
                 </div>
                 <div>
@@ -113,7 +113,7 @@ export function DashboardHome({
           <Card fullWidth>
             <CardBody>
               <div className="flex items-center gap-2">
-                <div className="flex bg-default/50 text-foreground items-center rounded-small justify-center w-10 h-10">
+                <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
                   <Icon icon="solar:rocket-2-broken" width={20} />
                 </div>
                 <div>
