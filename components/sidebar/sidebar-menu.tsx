@@ -280,7 +280,7 @@ export default function SidebarMenu({
     <div className="flex h-screen w-full">
       <div className="overflow-y-auto border-r border-divider h-full">
         <SidebarDrawer
-          className="overflow-y-hidden !border-r-small border-divider"
+          className="!border-r-small border-divider"
           isOpen={isOpen}
           onOpenChange={onOpenChange}
         >
