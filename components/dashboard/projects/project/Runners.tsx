@@ -73,19 +73,6 @@ export default function Runners({
     }
   }
 
-  function cardBorderColor(runner: any) {
-    var timeAgo =
-      (new Date(runner.last_heartbeat).getTime() - Date.now()) / 1000;
-
-    if (timeAgo < 0 && timeAgo > -30) {
-      return "border-success";
-    } else if (timeAgo <= -30 && timeAgo > -60) {
-      return "border-warning";
-    } else if (timeAgo <= -60) {
-      return "border-danger";
-    }
-  }
-
   function checkQuotaDisabled() {
     if (!settings.create_runners) {
       return true;

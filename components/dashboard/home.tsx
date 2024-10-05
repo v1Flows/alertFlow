@@ -30,7 +30,9 @@ export function DashboardHome({
   return (
     <main>
       <p className="text-xl font-bold">Hello, {user.username} 👋</p>
-      <p className="text-default-500">Here&apos;s the current status for today.</p>
+      <p className="text-default-500">
+        Here&apos;s the current status for today.
+      </p>
 
       <Spacer y={2} />
       <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 items-stretch gap-4">
