@@ -98,38 +98,48 @@ export function Flow({
           <Divider className="my-4" />
           {flow.disabled && (
             <div className="mb-4">
-              <Card className="bg-danger/10">
-                <CardHeader className="justify-start gap-2 items-center">
-                  <IconWrapper className="bg-danger/10 text-danger">
-                    <InfoIcon className="text-lg" />
-                  </IconWrapper>
-                  <p className="text-md font-bold text-danger">
-                    Flow is currently disabled
-                  </p>
-                </CardHeader>
+              <Card fullWidth className="bg-danger/10">
                 <CardBody>
-                  <p className="text-default-500 font-bold">
-                    Reason: {flow.disabled_reason}
-                  </p>
+                  <div className="flex items-center gap-2">
+                    <div
+                      className={`flex bg-danger/10 text-danger items-center rounded-small justify-center w-10 h-10`}
+                    >
+                      <Icon
+                        icon="solar:siren-broken"
+                        width={26}
+                      />
+                    </div>
+                    <div>
+                      <p className="text-md font-bold text-danger">
+                        Flow is currently disabled
+                      </p>
+                      <p className="text-sm text-default-500">Reason: {flow.disabled_reason}</p>
+                    </div>
+                  </div>
                 </CardBody>
               </Card>
             </div>
           )}
           {flow.maintenance_required && (
             <div className="mb-4">
-              <Card className="bg-warning/10">
-                <CardHeader className="justify-start gap-2 items-center">
-                  <IconWrapper className="bg-warning/10 text-warning">
-                    <InfoIcon className="text-lg" />
-                  </IconWrapper>
-                  <p className="text-md font-bold text-warning">
-                    Flow is currently in maintenance mode
-                  </p>
-                </CardHeader>
+              <Card fullWidth className="bg-warning/10">
                 <CardBody>
-                  <p className="text-default-500 font-bold">
-                    Reason: {flow.maintenance_message}
-                  </p>
+                  <div className="flex items-center gap-2">
+                    <div
+                      className={`flex bg-warning/10 text-warning items-center rounded-small justify-center w-10 h-10`}
+                    >
+                      <Icon
+                        icon="solar:siren-broken"
+                        width={26}
+                      />
+                    </div>
+                    <div>
+                      <p className="text-md font-bold text-warning">
+                        Flow is currently in maintenance mode
+                      </p>
+                      <p className="text-sm text-default-500">Reason: {flow.maintenance_message}</p>
+                    </div>
+                  </div>
                 </CardBody>
               </Card>
             </div>
@@ -195,8 +205,8 @@ export function Flow({
                           {flow.runner_id === "any"
                             ? "Any"
                             : runners.find(
-                                (runner: any) => runner.id === flow.runner_id,
-                              )?.name}
+                              (runner: any) => runner.id === flow.runner_id,
+                            )?.name}
                         </p>
                         <p className="text-sm text-default-500">Runner</p>
                       </div>

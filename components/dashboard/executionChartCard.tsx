@@ -62,8 +62,8 @@ export default function ExecutionChartCard({ stats }: { stats: any }) {
             </div>
           </div>
           <div className="col-span-1">
-            {stats.executions.filter((e: any) => e.count > 0).length > 0 ? (
-              <div style={{ height: "60px" }}>
+            {stats.executions.filter((e: any) => e.value > 0).length > 0 ? (
+              <div style={{ height: "50px" }}>
                 <ResponsiveContainer height="100%" width="100%">
                   <BarChart
                     data={stats.executions}
@@ -76,7 +76,7 @@ export default function ExecutionChartCard({ stats }: { stats: any }) {
                       cursor={{ fill: "rgba(136, 132, 216, 0.2)" }}
                     />
                     <Bar
-                      dataKey="count"
+                      dataKey="value"
                       fill={barsColor()}
                       radius={[5, 5, 0, 0]}
                     />

@@ -8,6 +8,7 @@ import {
   Chip,
   Divider,
   Spacer,
+  Switch,
   Table,
   TableBody,
   TableCell,
@@ -48,6 +49,7 @@ export default function Actions({
   const deleteActionModal = useDisclosure();
 
   const [expandedParams, setExpandedParams] = React.useState([] as any);
+  const [isDragEnabled, setIsDragEnabled] = React.useState(false);
 
   useEffect(() => {
     setActions(flow.actions);
@@ -63,112 +65,121 @@ export default function Actions({
     };
 
     return (
-      <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+      <div ref={setNodeRef} style={style} {...attributes}>
         <Card key={action.type} fullWidth>
           <CardBody>
-            <div className="flex flex-cols items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
-                <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                  <Icon icon={action.icon} width={26} />
-                </div>
-                <div>
-                  <div className="flex flex-cols gap-2">
-                    <p className="text-md font-bold">{action.name}</p>
-                    <Chip
-                      className="max-lg:hidden"
-                      color="default"
-                      radius="sm"
-                      size="sm"
-                      variant="flat"
-                    >
-                      {action.id}
-                    </Chip>
-                    <Chip
-                      color={action.active ? "success" : "danger"}
-                      radius="sm"
-                      size="sm"
-                      variant="flat"
-                    >
-                      {action.active ? "Active" : "Inactive"}
-                    </Chip>
+            <div className="flex items-center justify-between gap-4">
+              <div className="w-full">
+                <div className="flex flex-cols items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                      <Icon icon={action.icon} width={26} />
+                    </div>
+                    <div>
+                      <div className="flex flex-cols gap-2">
+                        <p className="text-md font-bold">{action.name}</p>
+                        <Chip
+                          className="max-lg:hidden"
+                          color="default"
+                          radius="sm"
+                          size="sm"
+                          variant="flat"
+                        >
+                          {action.id}
+                        </Chip>
+                        <Chip
+                          color={action.active ? "success" : "danger"}
+                          radius="sm"
+                          size="sm"
+                          variant="flat"
+                        >
+                          {action.active ? "Active" : "Inactive"}
+                        </Chip>
+                      </div>
+                      <p className="text-sm text-default-500">
+                        {action.description}
+                      </p>
+                    </div>
                   </div>
-                  <p className="text-sm text-default-500">
-                    {action.description}
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-cols items-center gap-2">
-                <Button
-                  isIconOnly
-                  color="warning"
-                  variant="light"
-                  onPress={() => {
-                    setTargetAction(action);
-                    editActionModal.onOpen();
-                  }}
-                >
-                  <Icon icon="solar:pen-new-square-broken" width={20} />
-                </Button>
-                <Button
-                  isIconOnly
-                  color="danger"
-                  variant="light"
-                  onPress={() => {
-                    setTargetAction(action.id);
-                    deleteActionModal.onOpen();
-                  }}
-                >
-                  <Icon icon="solar:trash-bin-2-broken" width={20} />
-                </Button>
-              </div>
-            </div>
-            <Spacer y={2} />
-            <Chip
-              className="lg:hidden"
-              color="default"
-              radius="sm"
-              size="sm"
-              variant="flat"
-            >
-              {action.id}
-            </Chip>
-            {action.params.length > 0 && (
-              <>
-                <Accordion
-                  isCompact
-                  selectedKeys={expandedParams}
-                  selectionMode="multiple"
-                  variant="light"
-                  onSelectionChange={setExpandedParams}
-                >
-                  <AccordionItem
-                    key={action.id}
-                    aria-label="Parameters"
-                    subtitle="View action parameters (click to expand)"
-                    title="Parameters"
-                  >
-                    <Table
-                      removeWrapper
-                      aria-label="Parameters"
-                      className="w-full"
+                  <div className="flex flex-cols items-center gap-2">
+                    <Button
+                      isIconOnly
+                      color="warning"
+                      variant="light"
+                      onPress={() => {
+                        setTargetAction(action);
+                        editActionModal.onOpen();
+                      }}
                     >
-                      <TableHeader>
-                        <TableColumn align="center">Key</TableColumn>
-                        <TableColumn align="center">Value</TableColumn>
-                      </TableHeader>
-                      <TableBody emptyContent={"No patterns defined."}>
-                        {action.params.map((param: any, index: number) => (
-                          <TableRow key={index}>
-                            <TableCell>{param.key}</TableCell>
-                            <TableCell>{param.value}</TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </AccordionItem>
-                </Accordion>
-              </>
-            )}
+                      <Icon icon="solar:pen-new-square-broken" width={20} />
+                    </Button>
+                    <Button
+                      isIconOnly
+                      color="danger"
+                      variant="light"
+                      onPress={() => {
+                        setTargetAction(action.id);
+                        deleteActionModal.onOpen();
+                      }}
+                    >
+                      <Icon icon="solar:trash-bin-2-broken" width={20} />
+                    </Button>
+                  </div>
+                </div>
+                <Spacer y={2} />
+                <Chip
+                  className="lg:hidden"
+                  color="default"
+                  radius="sm"
+                  size="sm"
+                  variant="flat"
+                >
+                  {action.id}
+                </Chip>
+                {action.params.length > 0 && (
+                  <>
+                    <Accordion
+                      isCompact
+                      selectedKeys={expandedParams}
+                      selectionMode="multiple"
+                      variant="light"
+                      onSelectionChange={setExpandedParams}
+                    >
+                      <AccordionItem
+                        key={action.id}
+                        aria-label="Parameters"
+                        subtitle="View action parameters (click to expand)"
+                        title="Parameters"
+                      >
+                        <Table
+                          removeWrapper
+                          aria-label="Parameters"
+                          className="w-full"
+                        >
+                          <TableHeader>
+                            <TableColumn align="center">Key</TableColumn>
+                            <TableColumn align="center">Value</TableColumn>
+                          </TableHeader>
+                          <TableBody emptyContent={"No patterns defined."}>
+                            {action.params.map((param: any, index: number) => (
+                              <TableRow key={index}>
+                                <TableCell>{param.key}</TableCell>
+                                <TableCell>{param.value}</TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </AccordionItem>
+                    </Accordion>
+                  </>
+                )}
+              </div>
+              {isDragEnabled && (
+                <div {...listeners} style={{ cursor: "grab", touchAction: "none" }}>
+                  <Icon icon="mi:drag" width={20} />
+                </div>
+              )}
+            </div>
           </CardBody>
         </Card>
       </div>
@@ -176,6 +187,8 @@ export default function Actions({
   };
 
   const handleDragEnd = (event: any) => {
+    if (!isDragEnabled) return;
+
     const { active, over } = event;
 
     if (active.id !== over.id) {
@@ -187,12 +200,6 @@ export default function Actions({
 
       updateFlowActions(newArray);
       setActions(newArray);
-
-      // setActions((items: any) => {
-      //   updateFlowActions(newArray);
-
-      //   return newArray;
-      // });
     }
   };
 
@@ -266,6 +273,13 @@ export default function Actions({
         </Card>
       </div>
       <div className="flex flex-col gap-2 col-span-2">
+        <Switch
+          isSelected={isDragEnabled}
+          onValueChange={setIsDragEnabled}
+          size="sm"
+        >
+          Reorder actions
+        </Switch>
         <DndContext
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
@@ -275,16 +289,6 @@ export default function Actions({
             strategy={verticalListSortingStrategy}
           >
             <div className="flex flex-col gap-2">
-              <div className="flex flex-cols items-center gap-2">
-                <Icon
-                  className="text-default-500"
-                  icon="solar:info-circle-linear"
-                  width={18}
-                />
-                <p className="text-sm text-default-500">
-                  You can reorder actions by dragging them
-                </p>
-              </div>
               {actions.map((action: any) => (
                 <SortableItem key={action.id} action={action} />
               ))}
