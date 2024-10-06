@@ -75,7 +75,7 @@ export function DashboardHome({
         <div className="col-span-1">
           <Dropdown placement="bottom" backdrop="opaque">
             <DropdownTrigger>
-              <Card fullWidth isPressable>
+              <Card fullWidth isPressable isHoverable>
                 <CardBody>
                   <div className="flex items-center gap-2">
                     <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
@@ -126,7 +126,7 @@ export function DashboardHome({
         <div className="col-span-1">
           <Dropdown placement="bottom" backdrop="opaque">
             <DropdownTrigger>
-              <Card fullWidth isPressable>
+              <Card fullWidth isPressable isHoverable>
                 <CardBody>
                   <div className="flex items-center gap-2">
                     <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
@@ -202,7 +202,7 @@ export function DashboardHome({
         <div className="col-span-1">
           <Dropdown placement="bottom" backdrop="opaque">
             <DropdownTrigger>
-              <Card fullWidth isPressable>
+              <Card fullWidth isPressable isHoverable>
                 <CardBody>
                   <div className="flex items-center gap-2">
                     <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
