@@ -96,40 +96,80 @@ export function DashboardHome({
         </div>
 
         <div className="col-span-1">
-          <Card fullWidth>
-            <CardBody>
-              <div className="flex items-center gap-2">
-                <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
-                  <Icon icon="solar:reorder-line-duotone" width={20} />
-                </div>
-                <div>
-                  {executions.filter(
-                    (e: any) =>
-                      e.error &&
-                      new Date(e.created_at).getTime() >
-                      Date.now() - 24 * 60 * 60 * 1000,
-                  ).length > 0 ? (
-                    <p className="text-md font-bold text-danger">
-                      {
-                        executions.filter(
-                          (e: any) =>
-                            e.error &&
-                            new Date(e.created_at).getTime() >
-                            Date.now() - 24 * 60 * 60 * 1000,
-                        ).length
-                      }{" "}
-                      Failed
-                    </p>
-                  ) : (
-                    <p className="text-md font-bold text-success">OK</p>
-                  )}
-                  <p className="text-sm text-default-500">
-                    Executions (last 24hours)
-                  </p>
-                </div>
-              </div>
-            </CardBody>
-          </Card>
+          <Dropdown placement="bottom" backdrop="opaque">
+            <DropdownTrigger>
+              <Card fullWidth isPressable>
+                <CardBody>
+                  <div className="flex items-center gap-2">
+                    <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
+                      <Icon icon="solar:reorder-line-duotone" width={20} />
+                    </div>
+                    <div>
+                      {executions.filter(
+                        (e: any) =>
+                          e.error &&
+                          new Date(e.created_at).getTime() >
+                          Date.now() - 24 * 60 * 60 * 1000,
+                      ).length > 0 ? (
+                        <p className="text-md font-bold text-danger">
+                          {
+                            executions.filter(
+                              (e: any) =>
+                                e.error &&
+                                new Date(e.created_at).getTime() >
+                                Date.now() - 24 * 60 * 60 * 1000,
+                            ).length
+                          }{" "}
+                          Failed
+                        </p>
+                      ) : (
+                        <p className="text-md font-bold text-success">OK</p>
+                      )}
+                      <p className="text-sm text-default-500">
+                        Executions (last 24hours)
+                      </p>
+                    </div>
+                  </div>
+                </CardBody>
+              </Card>
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Execution Problems">
+              {executions
+                .filter(
+                  (e: any) =>
+                    e.error &&
+                    new Date(e.created_at).getTime() >
+                    Date.now() - 24 * 60 * 60 * 1000,
+                )
+                .sort((a: any, b: any) =>
+                  new Date(a.created_at) < new Date(b.created_at) ? 1 : -1,
+                )
+                .map((execution: any) => (
+                  <DropdownItem key={execution.id} onPress={() => {
+                    router.push(`/dashboard/flows/${execution.flow_id}/execution/${execution.id}`);
+                  }} showDivider>
+                    <div className="flex items-center gap-2">
+                      <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
+                        <Icon icon="solar:danger-triangle-broken" width={20} className="text-danger" />
+                      </div>
+                      <div>
+                        <p className="text-md font-bold">{execution.id}</p>
+                        <p className="text-sm text-default-500">
+                          Flow: {flows.find((f: any) => f.id === execution.flow_id).name}
+                        </p>
+                        <p className="text-sm text-default-500">
+                          Executed at: <ReactTimeago date={execution.executed_at} />
+                        </p>
+                      </div>
+                      <div className="flex justify-end h-full">
+                        <Spacer x={4} />
+                        <Icon icon="akar-icons:arrow-right" />
+                      </div>
+                    </div>
+                  </DropdownItem>
+                ))}
+            </DropdownMenu>
+          </Dropdown>
         </div>
 
         <div className="col-span-1">
