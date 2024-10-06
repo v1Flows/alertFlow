@@ -98,19 +98,24 @@ export function Flow({
           <Divider className="my-4" />
           {flow.disabled && (
             <div className="mb-4">
-              <Card className="bg-danger/10">
-                <CardHeader className="justify-start gap-2 items-center">
-                  <IconWrapper className="bg-danger/10 text-danger">
-                    <InfoIcon className="text-lg" />
-                  </IconWrapper>
-                  <p className="text-md font-bold text-danger">
-                    Flow is currently disabled
-                  </p>
-                </CardHeader>
+              <Card fullWidth className="bg-danger/10">
                 <CardBody>
-                  <p className="text-default-500 font-bold">
-                    Reason: {flow.disabled_reason}
-                  </p>
+                  <div className="flex items-center gap-2">
+                    <div
+                      className={`flex bg-danger/10 text-danger items-center rounded-small justify-center w-10 h-10`}
+                    >
+                      <Icon
+                        icon="solar:siren-broken"
+                        width={26}
+                      />
+                    </div>
+                    <div>
+                      <p className="text-md font-bold text-danger">
+                        Flow is currently disabled
+                      </p>
+                      <p className="text-sm text-default-500">Reason: {flow.disabled_reason}</p>
+                    </div>
+                  </div>
                 </CardBody>
               </Card>
             </div>
