@@ -100,7 +100,7 @@ export function DashboardHome({
                               Date.now() - 24 * 60 * 60 * 1000,
                         ).length
                       }{" "}
-                      failed
+                      Failed
                     </p>
                   ) : (
                     <p className="text-md font-bold text-success">OK</p>
