@@ -90,7 +90,7 @@ export default function Payloads({ flow, executions, payloads, runners }: any) {
       {items.length === 0 && (
         <p className="text-center text-default-500">No payloads found</p>
       )}
-      <div className="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-4">
+      <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
         {items.map((payload: any) => (
           <Card key={payload.id} fullWidth>
             <CardHeader className="justify-between items-center">
