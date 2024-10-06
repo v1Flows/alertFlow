@@ -61,8 +61,8 @@ export default function PayloadChartCard({ stats }: { stats: any }) {
             </div>
           </div>
           <div className="col-span-1">
-            {stats.payloads.filter((p: any) => p.count > 0).length > 0 ? (
-              <div style={{ height: "60px" }}>
+            {stats.payloads.filter((p: any) => p.value > 0).length > 0 ? (
+              <div style={{ height: "50px" }}>
                 <ResponsiveContainer height="100%" width="100%">
                   <BarChart
                     data={stats.payloads}
@@ -75,7 +75,7 @@ export default function PayloadChartCard({ stats }: { stats: any }) {
                       cursor={{ fill: "rgba(136, 132, 216, 0.2)" }}
                     />
                     <Bar
-                      dataKey="count"
+                      dataKey="value"
                       fill={barsColor()}
                       radius={[5, 5, 0, 0]}
                     />
