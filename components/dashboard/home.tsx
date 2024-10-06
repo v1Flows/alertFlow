@@ -1,11 +1,14 @@
 "use client";
 
-import { Card, CardBody, Spacer } from "@nextui-org/react";
+import { Card, CardBody, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Spacer } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 
 import Executions from "./flows/flow/executions";
 import ExecutionChartCard from "./executionChartCard";
 import PayloadChartCard from "./payloadChartCard";
+import ReactTimeago from "react-timeago";
+import { Divide } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export function DashboardHome({
   stats,
@@ -16,6 +19,8 @@ export function DashboardHome({
   payloads,
   user,
 }: any) {
+  const router = useRouter();
+
   function runnerHeartbeatStatus(runner: any) {
     var timeAgo =
       (new Date(runner.last_heartbeat).getTime() - Date.now()) / 1000;
@@ -24,6 +29,19 @@ export function DashboardHome({
       return true;
     } else if (timeAgo <= -30) {
       return false;
+    }
+  }
+
+  function heartbeatColor(runner: any) {
+    var timeAgo =
+      (new Date(runner.last_heartbeat).getTime() - Date.now()) / 1000;
+
+    if (timeAgo < 0 && timeAgo > -30) {
+      return "success";
+    } else if (timeAgo <= -30 && timeAgo > -60) {
+      return "warning";
+    } else if (timeAgo <= -60) {
+      return "danger";
     }
   }
 
@@ -63,7 +81,7 @@ export function DashboardHome({
                 </div>
                 <div>
                   {flows.filter((f: any) => f.maintenance_required).length >
-                  0 ? (
+                    0 ? (
                     <p className="text-md font-bold text-warning">
                       Need attention
                     </p>
@@ -89,7 +107,7 @@ export function DashboardHome({
                     (e: any) =>
                       e.error &&
                       new Date(e.created_at).getTime() >
-                        Date.now() - 24 * 60 * 60 * 1000,
+                      Date.now() - 24 * 60 * 60 * 1000,
                   ).length > 0 ? (
                     <p className="text-md font-bold text-danger">
                       {
@@ -97,7 +115,7 @@ export function DashboardHome({
                           (e: any) =>
                             e.error &&
                             new Date(e.created_at).getTime() >
-                              Date.now() - 24 * 60 * 60 * 1000,
+                            Date.now() - 24 * 60 * 60 * 1000,
                         ).length
                       }{" "}
                       Failed
@@ -115,34 +133,70 @@ export function DashboardHome({
         </div>
 
         <div className="col-span-1">
-          <Card fullWidth>
-            <CardBody>
-              <div className="flex items-center gap-2">
-                <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
-                  <Icon icon="solar:rocket-2-broken" width={20} />
-                </div>
-                <div>
-                  {runners.filter(
-                    (r: any) =>
-                      !r.alertflow_runner && !runnerHeartbeatStatus(r),
-                  ).length > 0 ? (
-                    <p className="text-md font-bold text-danger">
-                      {
-                        runners.filter(
-                          (r: any) =>
-                            !r.alertflow_runner && !runnerHeartbeatStatus(r),
-                        ).length
-                      }{" "}
-                      with issues
-                    </p>
-                  ) : (
-                    <p className="text-md font-bold text-success">OK</p>
-                  )}
-                  <p className="text-sm text-default-500">Runners</p>
-                </div>
-              </div>
-            </CardBody>
-          </Card>
+          <Dropdown placement="bottom" backdrop="opaque">
+            <DropdownTrigger>
+              <Card fullWidth isPressable>
+                <CardBody>
+                  <div className="flex items-center gap-2">
+                    <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
+                      <Icon icon="solar:rocket-2-broken" width={20} />
+                    </div>
+                    <div>
+                      {runners.filter(
+                        (r: any) =>
+                          !r.alertflow_runner && !runnerHeartbeatStatus(r),
+                      ).length > 0 ? (
+                        <p className="text-md font-bold text-danger">
+                          {
+                            runners.filter(
+                              (r: any) =>
+                                !r.alertflow_runner && !runnerHeartbeatStatus(r),
+                            ).length
+                          }{" "}
+                          with issues
+                        </p>
+                      ) : (
+                        <p className="text-md font-bold text-success">OK</p>
+                      )}
+                      <p className="text-sm text-default-500">Runners</p>
+                    </div>
+                  </div>
+                </CardBody>
+              </Card>
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Runner Problems">
+              {runners
+                .filter(
+                  (r: any) =>
+                    !r.alertflow_runner && !runnerHeartbeatStatus(r),
+                )
+                .map((runner: any) => (
+                  <DropdownItem key={runner.id} onPress={() => {
+                    router.push(`/dashboard/projects/${runner.project_id}?tab=runners`);
+                  }}>
+                    <div className="flex items-center gap-2">
+                      <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
+                        <Icon icon="solar:danger-triangle-broken" width={20} className={`text-${heartbeatColor(runner)}`} />
+                      </div>
+                      <div>
+                        <p className="text-md font-bold">{runner.name}</p>
+                        <p className="text-sm text-default-500">
+                          {runner.last_heartbeat
+                            ? (
+                              <p>Last Heartbeat: <span className={`font-bold text-${heartbeatColor(runner)}`}><ReactTimeago date={runner.last_heartbeat} /></span></p>
+                            )
+                            : "No heartbeat"}
+                        </p>
+                      </div>
+                      <div className="flex justify-end h-full">
+                        <Spacer x={4} />
+                        <Icon icon="akar-icons:arrow-right" />
+                      </div>
+                    </div>
+                  </DropdownItem>
+                ))}
+            </DropdownMenu>
+          </Dropdown>
         </div>
       </div>
 
