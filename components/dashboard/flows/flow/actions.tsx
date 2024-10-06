@@ -49,7 +49,7 @@ export default function Actions({
   const deleteActionModal = useDisclosure();
 
   const [expandedParams, setExpandedParams] = React.useState([] as any);
-  const [isDragEnabled, setIsDragEnabled] = React.useState(true);
+  const [isDragEnabled, setIsDragEnabled] = React.useState(false);
 
   useEffect(() => {
     setActions(flow.actions);
