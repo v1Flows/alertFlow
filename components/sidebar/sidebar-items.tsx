@@ -13,7 +13,7 @@ export const sectionItems: SidebarItem[] = [
         key: "dashboard",
         href: "/dashboard",
         icon: "solar:clipboard-text-broken",
-        title: "Dashboard",
+        title: "Home",
       },
       {
         key: "dashboard_projects",
@@ -29,6 +29,36 @@ export const sectionItems: SidebarItem[] = [
       },
     ],
   },
+  {
+    key: "help_center",
+    title: "Informations & Help",
+    items: [
+      {
+        key: "dashboard_docs",
+        href: "/dashboard/docs",
+        icon: "solar:notes-broken",
+        title: "Docs",
+      },
+      {
+        key: "dashboard_docs_api",
+        href: "/dashboard/docs/api",
+        icon: "solar:notebook-broken",
+        title: "API",
+      },
+      {
+        key: "dashboard_roadmap",
+        href: "/dashboard/roadmap",
+        icon: "solar:routing-2-outline",
+        title: "Roadmap",
+      },
+      {
+        key: "help",
+        href: "/help",
+        icon: "solar:incoming-call-rounded-broken",
+        title: "Support",
+      },
+    ],
+  }
 ];
 
 export const sectionAdminItems: SidebarItem[] = [
