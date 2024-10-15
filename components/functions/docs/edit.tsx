@@ -16,13 +16,9 @@ import {
   SelectItem,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import dynamic from "next/dynamic";
-import "react-quill/dist/quill.snow.css";
 import { Icon } from "@iconify/react";
 import { toast } from "sonner";
-
-// Dynamically import ReactQuill to avoid SSR issues
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+import MarkdownEditor from "@uiw/react-markdown-editor";
 
 import UpdateDoc from "@/lib/fetch/docs/update";
 
@@ -96,10 +92,9 @@ export default function EditDocumentModal({
                 />
                 <div className="flex flex-col gap-2">
                   <p className="text-sm">Content</p>
-                  <ReactQuill
-                    theme="snow"
+                  <MarkdownEditor
                     value={content}
-                    onChange={setContent}
+                    onChange={(value: any) => setContent(value)}
                   />
                 </div>
                 <Select
