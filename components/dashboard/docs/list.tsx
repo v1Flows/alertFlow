@@ -112,7 +112,7 @@ export default function DocsList({ docs }: any) {
           color={selectedCategory === "All" ? "primary" : "default"}
           endContent={<p className="text-default-500">({docs.docs.length})</p>}
           radius="sm"
-          variant={selectedCategory === "All" ? "solid" : "faded"}
+          variant={selectedCategory === "All" ? "solid" : "flat"}
           onClick={() => setSelectedCategory("All")}
         >
           <p className="text-sm font-bold">All</p>
@@ -127,7 +127,7 @@ export default function DocsList({ docs }: any) {
               </p>
             }
             radius="sm"
-            variant={category === selectedCategory ? "solid" : "faded"}
+            variant={category === selectedCategory ? "solid" : "flat"}
             onClick={() => setSelectedCategory(category)}
           >
             <p className="text-sm font-bold">{category}</p>
