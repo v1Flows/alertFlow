@@ -10,11 +10,13 @@ import {
   Pagination,
   Spacer,
 } from "@nextui-org/react";
-import React from "react";
+import React, { useMemo } from "react";
 
 export default function DocsList({ docs }: any) {
   const [searchQuery, setSearchQuery] = React.useState("");
   const [selectedCategory, setSelectedCategory] = React.useState("All");
+  const [page, setPage] = React.useState(1);
+  const rowsPerPage = 15;
 
   function getUniqueCategories(docs: any) {
     const categories = docs.map((doc: any) => doc.category);
@@ -55,6 +57,15 @@ export default function DocsList({ docs }: any) {
 
     return filteredDocs;
   }
+
+  const filteredDocs = searchDocs(searchQuery, selectedCategory);
+  const pages = Math.ceil(filteredDocs.length / rowsPerPage);
+  const paginatedDocs = useMemo(() => {
+    const start = (page - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    return filteredDocs.slice(start, end);
+  }, [page, filteredDocs]);
 
   function getCategoryIcon(category: string) {
     switch (category) {
@@ -128,43 +139,47 @@ export default function DocsList({ docs }: any) {
         </div>
       )}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
-        {searchDocs(searchQuery, selectedCategory).map(
-          (doc: any, index: any) => (
-            <Card
-              key={index}
-              isHoverable
-              isPressable
-              className="shadow shadow-primary-200"
-            >
-              <CardBody className="flex items-center gap-2">
-                <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-14 h-14">
-                  <Icon icon={getCategoryIcon(doc.category)} width={30} />
-                </div>
-                <p className="text-md font-bold">{doc.title}</p>
-              </CardBody>
-              <CardFooter>
-                <div className="flex flex-wrap gap-2 items-center">
-                  <Chip color="primary" radius="sm" variant="flat">
-                    Category: {doc.category}
+        {paginatedDocs.map((doc: any) => (
+          <Card
+            key={doc.id}
+            isHoverable
+            isPressable
+            className="shadow shadow-primary-200"
+          >
+            <CardBody className="flex items-center gap-2">
+              <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-14 h-14">
+                <Icon icon={getCategoryIcon(doc.category)} width={30} />
+              </div>
+              <p className="text-md font-bold">{doc.title}</p>
+            </CardBody>
+            <CardFooter>
+              <div className="flex flex-wrap gap-2 items-center">
+                <Chip color="primary" radius="sm" variant="flat">
+                  Category: {doc.category}
+                </Chip>
+                {doc.hidden ? (
+                  <Chip color="danger" radius="sm" variant="flat">
+                    Hidden
                   </Chip>
-                  {doc.hidden ? (
-                    <Chip color="danger" radius="sm" variant="flat">
-                      Hidden
-                    </Chip>
-                  ) : (
-                    <Chip color="success" radius="sm" variant="flat">
-                      Published
-                    </Chip>
-                  )}
-                </div>
-              </CardFooter>
-            </Card>
-          ),
-        )}
+                ) : (
+                  <Chip color="success" radius="sm" variant="flat">
+                    Published
+                  </Chip>
+                )}
+              </div>
+            </CardFooter>
+          </Card>
+        ))}
       </div>
       <Spacer y={4} />
       <div className="flex justify-center">
-        <Pagination showControls initialPage={1} total={10} />
+        <Pagination
+          showControls
+          showShadow
+          page={page}
+          total={pages}
+          onChange={(page) => setPage(page)}
+        />
       </div>
     </div>
   );
