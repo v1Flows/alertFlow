@@ -24,21 +24,23 @@ import { toast } from "sonner";
 // Dynamically import ReactQuill to avoid SSR issues
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
-import CreateDoc from "@/lib/fetch/docs/create";
+import UpdateDoc from "@/lib/fetch/docs/update";
 
-export default function CreateDocumentModal({
+export default function EditDocumentModal({
+  doc,
   disclosure,
 }: {
+  doc: any;
   disclosure: UseDisclosureReturn;
 }) {
   const router = useRouter();
 
   const { isOpen, onOpenChange } = disclosure;
 
-  const [title, setTitle] = React.useState("");
-  const [content, setContent] = React.useState("");
-  const [category, setCategory] = React.useState("Common");
-  const [hidden, setHidden] = React.useState(false);
+  const [title, setTitle] = React.useState(doc.title);
+  const [content, setContent] = React.useState(doc.content);
+  const [category, setCategory] = React.useState(doc.category);
+  const [hidden, setHidden] = React.useState(doc.hidden);
 
   // loading
   const [isLoading, setIsLoading] = React.useState(false);
@@ -47,31 +49,23 @@ export default function CreateDocumentModal({
     setCategory(e.target.value);
   };
 
-  async function createDoc() {
+  async function updateDoc() {
     setIsLoading(true);
 
-    const response = await CreateDoc(title, content, category, hidden);
+    const response = await UpdateDoc(doc.id, title, content, category, hidden);
 
     if (response.result === "success") {
       router.refresh();
       onOpenChange();
-      setTitle("");
-      setContent("");
-      setCategory("");
-      setHidden(false);
       setIsLoading(false);
-      toast.success("Document created successfully");
+      toast.success("Documentation updated successfully");
     } else {
       setIsLoading(false);
-      toast.error("Failed to create document: " + response.error);
+      toast.error("Failed to update documentation: " + response.error);
     }
   }
 
   function cancel() {
-    setTitle("");
-    setContent("");
-    setCategory("");
-    setHidden(false);
     onOpenChange();
   }
 
@@ -86,7 +80,7 @@ export default function CreateDocumentModal({
         {() => (
           <>
             <ModalHeader className="flex flex-wrap items-center">
-              <p className="text-lg font-bold">Create new Document</p>
+              <p className="text-lg font-bold">Update Documentation</p>
             </ModalHeader>
             <ModalBody className="max-h-[70vh] overflow-y-auto">
               <div className="flex flex-col gap-4">
@@ -161,8 +155,8 @@ export default function CreateDocumentModal({
               <Button variant="ghost" onPress={cancel}>
                 Cancel
               </Button>
-              <Button color="primary" isLoading={isLoading} onPress={createDoc}>
-                Create Document
+              <Button color="warning" isLoading={isLoading} onPress={updateDoc}>
+                Update
               </Button>
             </ModalFooter>
           </>
