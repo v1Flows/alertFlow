@@ -10,9 +10,12 @@ import {
   Pagination,
   Spacer,
 } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 import React, { useMemo } from "react";
 
 export default function DocsList({ docs }: any) {
+  const router = useRouter();
+
   const [searchQuery, setSearchQuery] = React.useState("");
   const [selectedCategory, setSelectedCategory] = React.useState("All");
   const [page, setPage] = React.useState(1);
@@ -145,6 +148,9 @@ export default function DocsList({ docs }: any) {
             isHoverable
             isPressable
             className="shadow shadow-primary-200"
+            onPress={() => {
+              router.push(`/dashboard/docs/${doc.id}`);
+            }}
           >
             <CardBody className="flex items-center gap-2">
               <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-14 h-14">

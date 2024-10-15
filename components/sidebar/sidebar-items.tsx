@@ -37,7 +37,7 @@ export const sectionItems: SidebarItem[] = [
         key: "dashboard_docs",
         href: "/dashboard/docs",
         icon: "solar:notes-broken",
-        title: "Docs",
+        title: "Documentation",
       },
       {
         key: "dashboard_docs_api",
@@ -58,7 +58,7 @@ export const sectionItems: SidebarItem[] = [
         title: "Support",
       },
     ],
-  }
+  },
 ];
 
 export const sectionAdminItems: SidebarItem[] = [
