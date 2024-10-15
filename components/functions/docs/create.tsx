@@ -16,14 +16,13 @@ import {
   SelectItem,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
 import { Icon } from "@iconify/react";
 import { toast } from "sonner";
 
 // Dynamically import ReactQuill to avoid SSR issues
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
-
-import dynamic from "next/dynamic";
 
 import CreateDoc from "@/lib/fetch/docs/create";
 
@@ -87,13 +86,7 @@ export default function CreateDocumentModal({
         {() => (
           <>
             <ModalHeader className="flex flex-wrap items-center">
-              <div className="flex flex-col gap-2">
-                <p className="text-lg font-bold">Create new Document</p>
-                <p className="text-sm text-default-500">
-                  Flows are the entrypoint for incoming payloads. You define
-                  actions and can view ongoing and completed executions.
-                </p>
-              </div>
+              <p className="text-lg font-bold">Create new Document</p>
             </ModalHeader>
             <ModalBody className="max-h-[70vh] overflow-y-auto">
               <div className="flex flex-col gap-4">
