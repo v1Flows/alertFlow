@@ -1,16 +1,84 @@
+"use client";
+
 import { Icon } from "@iconify/react";
 import {
   Card,
   CardBody,
   CardFooter,
-  CardHeader,
   Chip,
   Input,
   Pagination,
   Spacer,
 } from "@nextui-org/react";
+import React from "react";
 
 export default function DocsList({ docs }: any) {
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const [selectedCategory, setSelectedCategory] = React.useState("All");
+
+  function getUniqueCategories(docs: any) {
+    const categories = docs.map((doc: any) => doc.category);
+
+    return [
+      ...Array.from(
+        new Set(categories.filter((category: any) => category !== null)),
+      ),
+    ];
+  }
+
+  function getDocsCountByCategory(category: string) {
+    if (category === "All") {
+      return docs.docs.length;
+    }
+
+    return docs.docs.filter((doc: any) => doc.category === category).length;
+  }
+
+  function handleSearchChange(e: any) {
+    setSearchQuery(e);
+  }
+
+  function searchDocs(query: string, category: string) {
+    let filteredDocs = docs.docs;
+
+    if (category !== "All") {
+      filteredDocs = filteredDocs.filter(
+        (doc: any) => doc.category === category,
+      );
+    }
+
+    if (query !== "") {
+      filteredDocs = filteredDocs.filter((doc: any) =>
+        doc.title.toLowerCase().includes(query.toLowerCase()),
+      );
+    }
+
+    return filteredDocs;
+  }
+
+  function getCategoryIcon(category: string) {
+    switch (category) {
+      case "Getting Started":
+        return "solar:map-broken";
+      case "Flows":
+        return "solar:book-bookmark-broken";
+      case "Projects":
+        return "solar:box-broken";
+      case "Runners":
+        return "solar:rocket-2-broken";
+      case "Payloads":
+        return "solar:letter-opened-broken";
+      case "Executions":
+        return "solar:reorder-line-duotone";
+      case "Actions":
+        return "solar:bolt-broken";
+      case "Common":
+        return "solar:notebook-bookmark-bold-duotone";
+      default:
+        return "solar:notebook-bookmark-bold-duotone";
+    }
+  }
+
   return (
     <div>
       <Spacer y={4} />
@@ -20,16 +88,37 @@ export default function DocsList({ docs }: any) {
         radius="sm"
         startContent={<Icon icon="eva:search-outline" />}
         type="text"
+        value={searchQuery}
         variant="bordered"
+        onValueChange={(v) => handleSearchChange(v)}
       />
       <Spacer y={2} />
       <div className="flex flex-wrap items-center gap-2">
-        <Chip radius="sm" variant="faded">
-          <p className="text-sm font-bold">All Documents</p>
+        <Chip
+          color={selectedCategory === "All" ? "primary" : "default"}
+          endContent={<p className="text-default-500">({docs.docs.length})</p>}
+          radius="sm"
+          variant={selectedCategory === "All" ? "solid" : "faded"}
+          onClick={() => setSelectedCategory("All")}
+        >
+          <p className="text-sm font-bold">All</p>
         </Chip>
-        <Chip radius="sm" variant="faded">
-          <p className="text-sm font-bold">Get-Started</p>
-        </Chip>
+        {getUniqueCategories(docs.docs).map((category: any, index: number) => (
+          <Chip
+            key={index}
+            color={category === selectedCategory ? "primary" : "default"}
+            endContent={
+              <p className="text-default-500">
+                ({getDocsCountByCategory(category)})
+              </p>
+            }
+            radius="sm"
+            variant={category === selectedCategory ? "solid" : "faded"}
+            onClick={() => setSelectedCategory(category)}
+          >
+            <p className="text-sm font-bold">{category}</p>
+          </Chip>
+        ))}
       </div>
       <Spacer y={4} />
       {/* List of documents */}
@@ -39,41 +128,39 @@ export default function DocsList({ docs }: any) {
         </div>
       )}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
-        {docs.docs.map((doc: any, index: number) => (
-          <Card
-            key={index}
-            isHoverable
-            isPressable
-            className="shadow shadow-primary-200"
-          >
-            <CardHeader>
-              <div className="flex items-center space-x-2 text-start">
-                <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
-                  <Icon icon="solar:bell-broken" width={20} />
+        {searchDocs(searchQuery, selectedCategory).map(
+          (doc: any, index: any) => (
+            <Card
+              key={index}
+              isHoverable
+              isPressable
+              className="shadow shadow-primary-200"
+            >
+              <CardBody className="flex items-center gap-2">
+                <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-14 h-14">
+                  <Icon icon={getCategoryIcon(doc.category)} width={30} />
                 </div>
-                <p className="text-md font-bold">
-                  Get started with using AlertFlow
-                </p>
-              </div>
-            </CardHeader>
-            <CardBody>
-              <p className="text-sm text-default-500">
-                Learn how to use AlertFlow to manage your alerts and
-                notifications.
-              </p>
-            </CardBody>
-            <CardFooter>
-              <div className="flex flex-wrap gap-2 items-center">
-                <Chip color="primary" radius="sm" variant="flat">
-                  Category: Get-Started
-                </Chip>
-                <Chip color="success" radius="sm" variant="flat">
-                  Published
-                </Chip>
-              </div>
-            </CardFooter>
-          </Card>
-        ))}
+                <p className="text-md font-bold">{doc.title}</p>
+              </CardBody>
+              <CardFooter>
+                <div className="flex flex-wrap gap-2 items-center">
+                  <Chip color="primary" radius="sm" variant="flat">
+                    Category: {doc.category}
+                  </Chip>
+                  {doc.hidden ? (
+                    <Chip color="danger" radius="sm" variant="flat">
+                      Hidden
+                    </Chip>
+                  ) : (
+                    <Chip color="success" radius="sm" variant="flat">
+                      Published
+                    </Chip>
+                  )}
+                </div>
+              </CardFooter>
+            </Card>
+          ),
+        )}
       </div>
       <Spacer y={4} />
       <div className="flex justify-center">

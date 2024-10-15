@@ -10,10 +10,22 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  useDisclosure,
   Input,
+  ButtonGroup,
+  Select,
+  SelectItem,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import "react-quill/dist/quill.snow.css";
+import { Icon } from "@iconify/react";
+import { toast } from "sonner";
+
+// Dynamically import ReactQuill to avoid SSR issues
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+
+import dynamic from "next/dynamic";
+
+import CreateDoc from "@/lib/fetch/docs/create";
 
 export default function CreateDocumentModal({
   disclosure,
@@ -26,36 +38,35 @@ export default function CreateDocumentModal({
 
   const [title, setTitle] = React.useState("");
   const [content, setContent] = React.useState("");
-  const [category, setCategory] = React.useState("");
+  const [category, setCategory] = React.useState("Common");
   const [hidden, setHidden] = React.useState(false);
 
   // loading
   const [isLoading, setIsLoading] = React.useState(false);
 
-  // async function createDoc() {
-  //   setIsLoading(true);
+  const handleSelectionChange = (e: any) => {
+    setCategory(e.target.value);
+  };
 
-  //   const response = await CreateDoc(
-  //     title,
-  //     content,
-  //     category,
-  //     hidden,
-  //   );
+  async function createDoc() {
+    setIsLoading(true);
 
-  //   if (response.result === "success") {
-  //     router.refresh();
-  //     onOpenChange();
-  //     setTitle("");
-  //     setContent("");
-  //     setCategory("");
-  //     setHidden(false);
-  //     setIsLoading(false);
-  //     onOpenChangeInstructions();
-  //   } else {
-  //     setIsLoading(false);
-  //     toast.error("Failed to create document");
-  //   }
-  // }
+    const response = await CreateDoc(title, content, category, hidden);
+
+    if (response.result === "success") {
+      router.refresh();
+      onOpenChange();
+      setTitle("");
+      setContent("");
+      setCategory("");
+      setHidden(false);
+      setIsLoading(false);
+      toast.success("Document created successfully");
+    } else {
+      setIsLoading(false);
+      toast.error("Failed to create document: " + response.error);
+    }
+  }
 
   function cancel() {
     setTitle("");
@@ -66,7 +77,12 @@ export default function CreateDocumentModal({
   }
 
   return (
-    <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
+    <Modal
+      isOpen={isOpen}
+      placement="center"
+      size="3xl"
+      onOpenChange={onOpenChange}
+    >
       <ModalContent className="w-full">
         {() => (
           <>
@@ -79,7 +95,7 @@ export default function CreateDocumentModal({
                 </p>
               </div>
             </ModalHeader>
-            <ModalBody>
+            <ModalBody className="max-h-[70vh] overflow-y-auto">
               <div className="flex flex-col gap-4">
                 <Input
                   isRequired
@@ -91,23 +107,68 @@ export default function CreateDocumentModal({
                   variant="flat"
                   onValueChange={setTitle}
                 />
-                <Input
+                <div className="flex flex-col gap-2">
+                  <p className="text-sm">Content</p>
+                  <ReactQuill
+                    theme="snow"
+                    value={content}
+                    onChange={setContent}
+                  />
+                </div>
+                <Select
+                  disallowEmptySelection
                   isRequired
-                  label="Description"
+                  label="Category"
                   labelPlacement="outside"
-                  placeholder="Enter description"
-                  type="description"
-                  value={content}
+                  selectedKeys={[category]}
                   variant="flat"
-                  onValueChange={setContent}
-                />
+                  onChange={handleSelectionChange}
+                >
+                  <SelectItem key="Common">Common</SelectItem>
+                  <SelectItem key="Getting Started">Getting Started</SelectItem>
+                  <SelectItem key="Flows">Flows</SelectItem>
+                  <SelectItem key="Projects">Projects</SelectItem>
+                  <SelectItem key="Runners">Runners</SelectItem>
+                  <SelectItem key="Payloads">Payloads</SelectItem>
+                  <SelectItem key="Executions">Executions</SelectItem>
+                  <SelectItem key="Actions">Actions</SelectItem>
+                </Select>
+                <div className="flex flex-col gap-2">
+                  <p className="text-sm">Hidden</p>
+                  <div>
+                    <ButtonGroup radius="sm" variant="flat">
+                      <Button
+                        className={`${hidden ? "bg-primary" : ""}`}
+                        onPress={() => setHidden(true)}
+                      >
+                        <Icon
+                          className="text-warning"
+                          icon="solar:eye-closed-bold-duotone"
+                          width={18}
+                        />
+                        Hidden
+                      </Button>
+                      <Button
+                        className={`${!hidden ? "bg-primary" : ""}`}
+                        onPress={() => setHidden(false)}
+                      >
+                        <Icon
+                          className="text-success"
+                          icon="solar:eye-broken"
+                          width={18}
+                        />
+                        Visible
+                      </Button>
+                    </ButtonGroup>
+                  </div>
+                </div>
               </div>
             </ModalBody>
             <ModalFooter>
               <Button variant="ghost" onPress={cancel}>
                 Cancel
               </Button>
-              <Button color="primary" isLoading={isLoading}>
+              <Button color="primary" isLoading={isLoading} onPress={createDoc}>
                 Create Document
               </Button>
             </ModalFooter>
