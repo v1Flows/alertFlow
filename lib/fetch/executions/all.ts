@@ -14,7 +14,7 @@ export default async function GetExecutions() {
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/executions/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/executions/`, {
       method: "GET",
       headers: headers,
     });

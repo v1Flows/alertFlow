@@ -21,7 +21,7 @@ export default async function UpdateUser(
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/admin/users/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/admin/users/${id}`,
       {
         method: "PUT",
         headers: headers,

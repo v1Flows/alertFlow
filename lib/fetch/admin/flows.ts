@@ -14,7 +14,7 @@ export default async function AdminGetFlows() {
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/flows`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/admin/flows`, {
       method: "GET",
       headers: headers,
     });

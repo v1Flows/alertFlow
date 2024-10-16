@@ -15,7 +15,7 @@ export default async function GetRunnerFlowLinks({ runnerId }: any) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/runners/${runnerId}/flows/links`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/runners/${runnerId}/flows/links`,
       {
         method: "GET",
         headers: headers,

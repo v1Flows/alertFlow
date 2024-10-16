@@ -15,7 +15,7 @@ export default async function RemoveProjectMember(id: any, memberID: any) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/projects/${id}/member/${memberID}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/projects/${id}/member/${memberID}`,
       {
         method: "DELETE",
         headers: headers,

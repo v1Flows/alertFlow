@@ -14,7 +14,7 @@ export default async function DeleteDoc(id: any) {
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/docs/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/docs/${id}`, {
       method: "DELETE",
       headers: headers,
     });

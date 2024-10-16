@@ -18,7 +18,7 @@ export default async function AdminSendUserNotification(
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/admin/users/${userID}/notification`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/admin/users/${userID}/notification`,
       {
         method: "POST",
         headers: headers,

@@ -19,7 +19,7 @@ export default async function ChangeFlowMaintenance(
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/flows/${id}/maintenance`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/flows/${id}/maintenance`,
       {
         method: "PUT",
         headers: headers,

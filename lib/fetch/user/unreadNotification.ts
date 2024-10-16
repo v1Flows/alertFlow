@@ -15,7 +15,7 @@ export default async function UnreadUserNotification(id: string) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/notifications/${id}/unread`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/user/notifications/${id}/unread`,
       {
         method: "PUT",
         headers: headers,

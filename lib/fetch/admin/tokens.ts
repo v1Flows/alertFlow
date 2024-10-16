@@ -14,10 +14,13 @@ export default async function AdminGetApiKeys() {
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/tokens`, {
-      method: "GET",
-      headers: headers,
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/admin/tokens`,
+      {
+        method: "GET",
+        headers: headers,
+      },
+    );
     const data = await res.json();
 
     return data.tokens;
