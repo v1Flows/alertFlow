@@ -175,7 +175,7 @@ export function Flow({
                   <CardBody>
                     <div className="flex items-center gap-2">
                       <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                        <Icon icon="solar:box-outline" width={20} />
+                        <Icon icon="solar:inbox-archive-outline" width={20} />
                       </div>
                       <div>
                         <p className="text-md font-bold">

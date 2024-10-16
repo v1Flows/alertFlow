@@ -79,7 +79,7 @@ export default function DocsList({ docs }: any) {
       case "Flows":
         return "solar:book-2-outline";
       case "Projects":
-        return "solar:box-outline";
+        return "solar:inbox-archive-outline";
       case "Runners":
         return "solar:rocket-2-outline";
       case "Payloads":
@@ -99,10 +99,9 @@ export default function DocsList({ docs }: any) {
     <div>
       <Spacer y={4} />
       <Input
-        label="Search"
         placeholder="Search..."
         radius="sm"
-        startContent={<Icon icon="eva:search-outline" />}
+        startContent={<Icon icon="solar:minimalistic-magnifer-outline" />}
         type="text"
         value={searchQuery}
         variant="bordered"
