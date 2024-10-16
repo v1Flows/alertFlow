@@ -14,10 +14,13 @@ export default async function GetExecutions() {
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/executions/`, {
-      method: "GET",
-      headers: headers,
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/executions/`,
+      {
+        method: "GET",
+        headers: headers,
+      },
+    );
     const data = await res.json();
 
     return data.executions;

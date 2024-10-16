@@ -49,7 +49,7 @@ export default function Project({
             icon={
               <Icon
                 icon={
-                  project.icon ? project.icon : "solar:question-square-broken"
+                  project.icon ? project.icon : "solar:question-square-outline"
                 }
                 width={24}
               />
@@ -77,7 +77,7 @@ export default function Project({
               members.filter((m: any) => m.user_id === user.id)[0].role ===
                 "Viewer")
           }
-          startContent={<Icon icon="solar:pen-new-square-broken" width={20} />}
+          startContent={<Icon icon="solar:pen-new-square-outline" width={20} />}
           variant="flat"
           onPress={() => editProjectModal.onOpen()}
         >
@@ -111,7 +111,7 @@ export default function Project({
               <CardBody>
                 <div className="flex items-center gap-2">
                   <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                    <Icon icon="solar:smile-square-broken" width={20} />
+                    <Icon icon="solar:smile-square-outline" width={20} />
                   </div>
                   <div>
                     <p className="text-md font-bold">{members.length}</p>
@@ -126,7 +126,7 @@ export default function Project({
               <CardBody>
                 <div className="flex items-center gap-2">
                   <div className="flex bg-warning/10 text-warning items-center rounded-small justify-center w-10 h-10">
-                    <Icon icon="solar:rocket-2-broken" width={20} />
+                    <Icon icon="solar:rocket-2-outline" width={20} />
                   </div>
                   <div>
                     <p className="text-md font-bold">
@@ -153,7 +153,7 @@ export default function Project({
               <CardBody>
                 <div className="flex items-center gap-2">
                   <div className="flex bg-default/50 text-foreground items-center rounded-small justify-center w-10 h-10">
-                    <Icon icon="solar:key-square-2-broken" width={20} />
+                    <Icon icon="solar:key-square-2-outline" width={20} />
                   </div>
                   <div>
                     <p className="text-md font-bold">{tokens.length}</p>
@@ -168,7 +168,7 @@ export default function Project({
               <CardBody>
                 <div className="flex items-center gap-2">
                   <div className="flex bg-secondary/10 text-secondary items-center rounded-small justify-center w-10 h-10">
-                    <Icon icon="solar:calendar-broken" width={20} />
+                    <Icon icon="solar:calendar-outline" width={20} />
                   </div>
                   <div>
                     <p className="text-md font-bold">

@@ -15,7 +15,7 @@ export default async function RemoveCard(cardID: string) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/payment/card/${cardID}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/user/payment/card/${cardID}`,
       {
         method: "DELETE",
         headers: headers,

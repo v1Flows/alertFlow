@@ -6,14 +6,17 @@ export default async function LoginAPI(email: string, password: string) {
     const headers = new Headers();
 
     headers.append("Content-Type", "application/json");
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
-      method: "POST",
-      headers: headers,
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/auth/login`,
+      {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      },
+    );
     const data = await res.json();
 
     return data;

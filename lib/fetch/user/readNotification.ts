@@ -15,7 +15,7 @@ export default async function ReadUserNotification(id: string) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/notifications/${id}/read`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/user/notifications/${id}/read`,
       {
         method: "PUT",
         headers: headers,

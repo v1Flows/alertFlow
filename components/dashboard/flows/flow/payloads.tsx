@@ -22,11 +22,7 @@ import { toast } from "sonner";
 
 import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
 import FunctionDeletePayloadModal from "@/components/functions/flows/deletePayload";
-import {
-  CopyDocumentIcon,
-  DeleteDocumentIcon,
-  VerticalDotsIcon,
-} from "@/components/icons";
+import { VerticalDotsIcon } from "@/components/icons";
 
 export default function Payloads({ flow, executions, payloads, runners }: any) {
   const router = useRouter();
@@ -70,7 +66,7 @@ export default function Payloads({ flow, executions, payloads, runners }: any) {
       case "alertmanager":
         return "vscode-icons:file-type-prometheus";
       default:
-        return "solar:forbidden-circle-broken";
+        return "solar:forbidden-circle-outline";
     }
   }
 
@@ -109,7 +105,9 @@ export default function Payloads({ flow, executions, payloads, runners }: any) {
                   <DropdownMenu>
                     <DropdownSection title="Actions">
                       <DropdownItem
-                        startContent={<CopyDocumentIcon />}
+                        startContent={
+                          <Icon icon="solar:copy-outline" width={18} />
+                        }
                         onClick={() => copyPayloadIDtoClipboard(payload.id)}
                       >
                         Copy ID
@@ -119,7 +117,12 @@ export default function Payloads({ flow, executions, payloads, runners }: any) {
                       <DropdownItem
                         className="text-danger"
                         color="danger"
-                        startContent={<DeleteDocumentIcon />}
+                        startContent={
+                          <Icon
+                            icon="solar:trash-bin-trash-outline"
+                            width={18}
+                          />
+                        }
                         onClick={() => handleDelete(payload)}
                       >
                         Delete
@@ -149,7 +152,7 @@ export default function Payloads({ flow, executions, payloads, runners }: any) {
 
                 <div className="flex items-center gap-2">
                   <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                    <Icon icon="solar:rocket-2-broken" width={20} />
+                    <Icon icon="solar:rocket-2-outline" width={20} />
                   </div>
                   <div>
                     <p className="text-md font-bold">
@@ -165,7 +168,7 @@ export default function Payloads({ flow, executions, payloads, runners }: any) {
 
                 <div className="flex items-center gap-2">
                   <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                    <Icon icon="solar:calendar-broken" width={20} />
+                    <Icon icon="solar:calendar-outline" width={20} />
                   </div>
                   <div>
                     <p className="text-md font-bold">
@@ -183,7 +186,7 @@ export default function Payloads({ flow, executions, payloads, runners }: any) {
                   fullWidth
                   color="primary"
                   size="md"
-                  startContent={<Icon icon="solar:eye-broken" width={20} />}
+                  startContent={<Icon icon="solar:eye-outline" width={20} />}
                   onPress={() => handleShow(payload)}
                 >
                   Show Payload
@@ -197,9 +200,7 @@ export default function Payloads({ flow, executions, payloads, runners }: any) {
                     )
                   }
                   size="md"
-                  startContent={
-                    <Icon icon="solar:reorder-line-duotone" width={20} />
-                  }
+                  startContent={<Icon icon="solar:reorder-linear" width={20} />}
                   variant="solid"
                   onPress={() => {
                     router.push(

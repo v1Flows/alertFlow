@@ -15,7 +15,7 @@ export default async function UpdateFlowActions(flowID: string, actions: any) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/flows/${flowID}/actions`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/flows/${flowID}/actions`,
       {
         method: "PUT",
         headers: headers,

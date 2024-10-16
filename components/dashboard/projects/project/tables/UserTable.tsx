@@ -115,7 +115,7 @@ export default function ProjectMembers({
               >
                 <Icon
                   className="text-default-400"
-                  icon="solar:pen-2-broken"
+                  icon="solar:pen-new-square-outline"
                   width={20}
                 />
               </Button>
@@ -130,7 +130,7 @@ export default function ProjectMembers({
                   deleteProjectMemberModal.onOpen();
                 }}
               >
-                <Icon icon="solar:trash-bin-2-broken" width={20} />
+                <Icon icon="solar:trash-bin-trash-outline" width={20} />
               </Button>
             </Tooltip>
           </ButtonGroup>
@@ -146,7 +146,9 @@ export default function ProjectMembers({
         <Button
           color="secondary"
           isDisabled={checkLeaveProjectDisabled()}
-          startContent={<Icon icon="solar:undo-left-round-broken" width={20} />}
+          startContent={
+            <Icon icon="solar:undo-left-round-outline" width={20} />
+          }
           variant="ghost"
           onPress={() => leaveProjectModal.onOpen()}
         >

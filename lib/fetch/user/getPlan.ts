@@ -14,7 +14,7 @@ export default async function GetUserPlan() {
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/plan`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/user/plan`, {
       method: "GET",
       headers: headers,
     });

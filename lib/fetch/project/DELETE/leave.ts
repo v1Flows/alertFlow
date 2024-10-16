@@ -15,7 +15,7 @@ export default async function LeaveProject(id: any) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/projects/${id}/leave`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/projects/${id}/leave`,
       {
         method: "DELETE",
         headers: headers,

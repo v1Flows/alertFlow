@@ -217,7 +217,7 @@ export function Settings({ settings }: any) {
                 <div
                   className={`flex ${createFlows ? "bg-primary/10 text-primary" : "bg-danger/10 text-danger"} items-center rounded-small justify-center w-10 h-10`}
                 >
-                  <Icon icon="solar:book-bookmark-broken" width={20} />
+                  <Icon icon="solar:book-2-outline" width={20} />
                 </div>
                 <div>
                   <div className="flex items-center gap-1">

@@ -64,7 +64,7 @@ export default function Quota({
               <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-12 h-12">
                 <Icon
                   className="text-primary"
-                  icon="solar:book-bookmark-broken"
+                  icon="solar:book-2-outline"
                   width={28}
                 />
               </div>

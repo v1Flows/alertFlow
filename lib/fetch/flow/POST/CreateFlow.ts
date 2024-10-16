@@ -19,7 +19,7 @@ export default async function CreateFlow(
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/flows/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/flows/`, {
       method: "POST",
       headers: headers,
       body: JSON.stringify({

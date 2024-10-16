@@ -55,11 +55,7 @@ export default function FlowTabs({ flow, executions, payloads, runners }: any) {
             key="executions"
             title={
               <div className="flex items-center space-x-2">
-                <Icon
-                  height={20}
-                  icon="solar:reorder-line-duotone"
-                  width="20"
-                />
+                <Icon height={20} icon="solar:reorder-linear" width="20" />
                 <span>Executions</span>
               </div>
             }
@@ -72,7 +68,7 @@ export default function FlowTabs({ flow, executions, payloads, runners }: any) {
               <div className="flex items-center space-x-2">
                 <Icon
                   height="20"
-                  icon="solar:letter-opened-broken"
+                  icon="solar:letter-opened-outline"
                   width="20"
                 />
                 <span>Payloads</span>
@@ -90,7 +86,7 @@ export default function FlowTabs({ flow, executions, payloads, runners }: any) {
             key="stats"
             title={
               <div className="flex items-center space-x-2">
-                <Icon height="20" icon="solar:chart-2-broken" width="20" />
+                <Icon height="20" icon="solar:chart-2-outline" width="20" />
                 <span>Stats</span>
               </div>
             }

@@ -15,7 +15,7 @@ export default async function AddRunner({
     return { error: "No token found" };
   }
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/runners/`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/runners/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

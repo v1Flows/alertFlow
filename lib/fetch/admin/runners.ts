@@ -16,7 +16,7 @@ export default async function AdminGetRunners() {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/admin/runners`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/admin/runners`,
       {
         method: "GET",
         headers: headers,

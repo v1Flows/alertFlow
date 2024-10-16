@@ -15,7 +15,7 @@ export default async function UpdateExecutionStep(execution: any, step: any) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/executions/${execution.id}/steps/${step.id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/executions/${execution.id}/steps/${step.id}`,
       {
         method: "PUT",
         headers: headers,

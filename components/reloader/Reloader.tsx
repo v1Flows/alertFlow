@@ -10,7 +10,7 @@ export default function Reloader() {
 
   React.useEffect(() => {
     const interval = setInterval(() => {
-      setValue((v) => (v >= 100 ? 0 : v + 10));
+      setValue((v) => (v >= 100 ? 0 : v + 20));
       if (value === 100) {
         clearInterval(interval);
         router.refresh();

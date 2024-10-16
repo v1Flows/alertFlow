@@ -15,7 +15,7 @@ export async function updateSession() {
     }
 
     const response = await fetch(
-      process.env.NEXT_PUBLIC_API_URL + "/token/refresh",
+      process.env.NEXT_PUBLIC_API_URL + "/v1/token/refresh",
       {
         method: "POST",
         headers: headers,

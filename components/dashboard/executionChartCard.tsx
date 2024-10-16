@@ -53,7 +53,7 @@ export default function ExecutionChartCard({ stats }: { stats: any }) {
           <div className="col-span-1">
             <div className="flex items-center gap-2">
               <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
-                <Icon icon="solar:reorder-line-duotone" width={20} />
+                <Icon icon="solar:reorder-linear" width={20} />
               </div>
               <div>
                 <h4 className="text-large font-bold">{lastExecution.value}</h4>

@@ -15,7 +15,7 @@ export default async function GetProjectAuditLogs(projectId: any) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/projects/${projectId}/audit`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/projects/${projectId}/audit`,
       {
         method: "GET",
         headers: headers,

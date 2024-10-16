@@ -15,7 +15,7 @@ export default async function GetUserSubscription() {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/subscription`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/user/subscription`,
       {
         method: "GET",
         headers: headers,

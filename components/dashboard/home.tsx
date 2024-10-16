@@ -1,14 +1,21 @@
 "use client";
 
-import { Card, CardBody, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Spacer } from "@nextui-org/react";
+import {
+  Card,
+  CardBody,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  Spacer,
+} from "@nextui-org/react";
 import { Icon } from "@iconify/react";
+import ReactTimeago from "react-timeago";
+import { useRouter } from "next/navigation";
 
 import Executions from "./flows/flow/executions";
 import ExecutionChartCard from "./executionChartCard";
 import PayloadChartCard from "./payloadChartCard";
-import ReactTimeago from "react-timeago";
-import { Divide } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 export function DashboardHome({
   stats,
@@ -59,7 +66,7 @@ export function DashboardHome({
             <CardBody>
               <div className="flex items-center gap-2">
                 <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
-                  <Icon icon="solar:bell-broken" width={20} />
+                  <Icon icon="solar:bell-outline" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">
@@ -73,19 +80,23 @@ export function DashboardHome({
         </div>
 
         <div className="col-span-1">
-          <Dropdown placement="bottom" backdrop="opaque">
+          <Dropdown backdrop="opaque" placement="bottom">
             <DropdownTrigger>
-              <Card fullWidth isPressable isHoverable>
+              <Card fullWidth isHoverable isPressable>
                 <CardBody>
                   <div className="flex items-center gap-2">
                     <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
-                      <Icon icon="solar:book-bookmark-broken" width={20} />
+                      <Icon icon="solar:book-2-outline" width={20} />
                     </div>
                     <div>
                       {flows.filter((f: any) => f.maintenance_required).length >
-                        0 ? (
+                      0 ? (
                         <p className="text-md font-bold text-warning">
-                          {flows.filter((f: any) => f.maintenance_required).length} need attention
+                          {
+                            flows.filter((f: any) => f.maintenance_required)
+                              .length
+                          }{" "}
+                          need attention
                         </p>
                       ) : (
                         <p className="text-md font-bold text-success">OK</p>
@@ -100,13 +111,20 @@ export function DashboardHome({
               {flows
                 .filter((f: any) => f.maintenance_required)
                 .map((flow: any) => (
-                  <DropdownItem key={flow.id} onPress={() => {
-                    router.push(`/dashboard/flows/${flow.id}`);
-                  }}>
+                  <DropdownItem
+                    key={flow.id}
+                    onPress={() => {
+                      router.push(`/dashboard/flows/${flow.id}`);
+                    }}
+                  >
                     <div className="flex justify-between items-center gap-4">
                       <div className="flex items-center justify-start gap-2">
                         <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
-                          <Icon icon="solar:danger-triangle-broken" width={20} className="text-warning" />
+                          <Icon
+                            className="text-warning"
+                            icon="solar:danger-triangle-outline"
+                            width={20}
+                          />
                         </div>
                         <div className="items-start">
                           <p className="text-md font-bold">{flow.name}</p>
@@ -124,20 +142,20 @@ export function DashboardHome({
         </div>
 
         <div className="col-span-1">
-          <Dropdown placement="bottom" backdrop="opaque">
+          <Dropdown backdrop="opaque" placement="bottom">
             <DropdownTrigger>
-              <Card fullWidth isPressable isHoverable>
+              <Card fullWidth isHoverable isPressable>
                 <CardBody>
                   <div className="flex items-center gap-2">
                     <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
-                      <Icon icon="solar:reorder-line-duotone" width={20} />
+                      <Icon icon="solar:reorder-linear" width={20} />
                     </div>
                     <div>
                       {executions.filter(
                         (e: any) =>
                           e.error &&
                           new Date(e.created_at).getTime() >
-                          Date.now() - 24 * 60 * 60 * 1000,
+                            Date.now() - 24 * 60 * 60 * 1000,
                       ).length > 0 ? (
                         <p className="text-md font-bold text-danger">
                           {
@@ -145,7 +163,7 @@ export function DashboardHome({
                               (e: any) =>
                                 e.error &&
                                 new Date(e.created_at).getTime() >
-                                Date.now() - 24 * 60 * 60 * 1000,
+                                  Date.now() - 24 * 60 * 60 * 1000,
                             ).length
                           }{" "}
                           Failed
@@ -154,7 +172,7 @@ export function DashboardHome({
                         <p className="text-md font-bold text-success">OK</p>
                       )}
                       <p className="text-sm text-default-500">
-                        Executions (last 24hours)
+                        Executions (last 24 hours)
                       </p>
                     </div>
                   </div>
@@ -167,27 +185,41 @@ export function DashboardHome({
                   (e: any) =>
                     e.error &&
                     new Date(e.created_at).getTime() >
-                    Date.now() - 24 * 60 * 60 * 1000,
+                      Date.now() - 24 * 60 * 60 * 1000,
                 )
                 .sort((a: any, b: any) =>
                   new Date(a.created_at) < new Date(b.created_at) ? 1 : -1,
                 )
                 .map((execution: any) => (
-                  <DropdownItem key={execution.id} onPress={() => {
-                    router.push(`/dashboard/flows/${execution.flow_id}/execution/${execution.id}`);
-                  }}>
+                  <DropdownItem
+                    key={execution.id}
+                    onPress={() => {
+                      router.push(
+                        `/dashboard/flows/${execution.flow_id}/execution/${execution.id}`,
+                      );
+                    }}
+                  >
                     <div className="flex justify-between items-center gap-4">
                       <div className="flex items-center justify-start gap-2">
                         <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
-                          <Icon icon="solar:danger-triangle-broken" width={20} className="text-danger" />
+                          <Icon
+                            className="text-danger"
+                            icon="solar:danger-triangle-outline"
+                            width={20}
+                          />
                         </div>
                         <div>
                           <p className="text-md font-bold">{execution.id}</p>
                           <p className="text-sm text-default-500">
-                            Flow: {flows.find((f: any) => f.id === execution.flow_id).name}
+                            Flow:{" "}
+                            {
+                              flows.find((f: any) => f.id === execution.flow_id)
+                                .name
+                            }
                           </p>
                           <p className="text-sm text-default-500">
-                            Executed at: <ReactTimeago date={execution.executed_at} />
+                            Executed at:{" "}
+                            <ReactTimeago date={execution.executed_at} />
                           </p>
                         </div>
                       </div>
@@ -200,13 +232,13 @@ export function DashboardHome({
         </div>
 
         <div className="col-span-1">
-          <Dropdown placement="bottom" backdrop="opaque">
+          <Dropdown backdrop="opaque" placement="bottom">
             <DropdownTrigger>
-              <Card fullWidth isPressable isHoverable>
+              <Card fullWidth isHoverable isPressable>
                 <CardBody>
                   <div className="flex items-center gap-2">
                     <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
-                      <Icon icon="solar:rocket-2-broken" width={20} />
+                      <Icon icon="solar:rocket-2-outline" width={20} />
                     </div>
                     <div>
                       {runners.filter(
@@ -217,7 +249,8 @@ export function DashboardHome({
                           {
                             runners.filter(
                               (r: any) =>
-                                !r.alertflow_runner && !runnerHeartbeatStatus(r),
+                                !r.alertflow_runner &&
+                                !runnerHeartbeatStatus(r),
                             ).length
                           }{" "}
                           with issues
@@ -234,26 +267,41 @@ export function DashboardHome({
             <DropdownMenu aria-label="Runner Problems">
               {runners
                 .filter(
-                  (r: any) =>
-                    !r.alertflow_runner && !runnerHeartbeatStatus(r),
+                  (r: any) => !r.alertflow_runner && !runnerHeartbeatStatus(r),
                 )
                 .map((runner: any) => (
-                  <DropdownItem key={runner.id} onPress={() => {
-                    router.push(`/dashboard/projects/${runner.project_id}?tab=runners`);
-                  }}>
+                  <DropdownItem
+                    key={runner.id}
+                    onPress={() => {
+                      router.push(
+                        `/dashboard/projects/${runner.project_id}?tab=runners`,
+                      );
+                    }}
+                  >
                     <div className="flex justify-between items-center gap-4">
                       <div className="flex items-center justify-start gap-2">
                         <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
-                          <Icon icon="solar:danger-triangle-broken" width={20} className={`text-${heartbeatColor(runner)}`} />
+                          <Icon
+                            className={`text-${heartbeatColor(runner)}`}
+                            icon="solar:danger-triangle-outline"
+                            width={20}
+                          />
                         </div>
                         <div>
                           <p className="text-md font-bold">{runner.name}</p>
                           <p className="text-sm text-default-500">
-                            {runner.last_heartbeat
-                              ? (
-                                <p>Last Heartbeat: <span className={`font-bold text-${heartbeatColor(runner)}`}><ReactTimeago date={runner.last_heartbeat} /></span></p>
-                              )
-                              : "No heartbeat"}
+                            {runner.last_heartbeat ? (
+                              <p>
+                                Last Heartbeat:{" "}
+                                <span
+                                  className={`font-bold text-${heartbeatColor(runner)}`}
+                                >
+                                  <ReactTimeago date={runner.last_heartbeat} />
+                                </span>
+                              </p>
+                            ) : (
+                              "No heartbeat"
+                            )}
                           </p>
                         </div>
                       </div>

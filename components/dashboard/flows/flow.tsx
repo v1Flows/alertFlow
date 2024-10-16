@@ -84,7 +84,7 @@ export function Flow({
                 color="warning"
                 isDisabled={flow.disabled}
                 startContent={
-                  <Icon icon="solar:pen-new-square-broken" width={20} />
+                  <Icon icon="solar:pen-new-square-outline" width={20} />
                 }
                 variant="flat"
                 onPress={() => {
@@ -104,16 +104,15 @@ export function Flow({
                     <div
                       className={`flex bg-danger/10 text-danger items-center rounded-small justify-center w-10 h-10`}
                     >
-                      <Icon
-                        icon="solar:siren-broken"
-                        width={26}
-                      />
+                      <Icon icon="solar:siren-outline" width={26} />
                     </div>
                     <div>
                       <p className="text-md font-bold text-danger">
                         Flow is currently disabled
                       </p>
-                      <p className="text-sm text-default-500">Reason: {flow.disabled_reason}</p>
+                      <p className="text-sm text-default-500">
+                        Reason: {flow.disabled_reason}
+                      </p>
                     </div>
                   </div>
                 </CardBody>
@@ -128,16 +127,15 @@ export function Flow({
                     <div
                       className={`flex bg-warning/10 text-warning items-center rounded-small justify-center w-10 h-10`}
                     >
-                      <Icon
-                        icon="solar:siren-broken"
-                        width={26}
-                      />
+                      <Icon icon="solar:siren-outline" width={26} />
                     </div>
                     <div>
                       <p className="text-md font-bold text-warning">
                         Flow is currently in maintenance mode
                       </p>
-                      <p className="text-sm text-default-500">Reason: {flow.maintenance_message}</p>
+                      <p className="text-sm text-default-500">
+                        Reason: {flow.maintenance_message}
+                      </p>
                     </div>
                   </div>
                 </CardBody>
@@ -156,8 +154,8 @@ export function Flow({
                         <Icon
                           icon={
                             flow.disabled
-                              ? "solar:danger-triangle-broken"
-                              : "solar:check-read-broken"
+                              ? "solar:danger-triangle-outline"
+                              : "solar:check-read-outline"
                           }
                           width={26}
                         />
@@ -177,7 +175,7 @@ export function Flow({
                   <CardBody>
                     <div className="flex items-center gap-2">
                       <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                        <Icon icon="solar:box-broken" width={20} />
+                        <Icon icon="solar:inbox-archive-outline" width={20} />
                       </div>
                       <div>
                         <p className="text-md font-bold">
@@ -198,15 +196,15 @@ export function Flow({
                   <CardBody>
                     <div className="flex items-center gap-2">
                       <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                        <Icon icon="solar:rocket-2-broken" width={20} />
+                        <Icon icon="solar:rocket-2-outline" width={20} />
                       </div>
                       <div>
                         <p className="text-md font-bold">
                           {flow.runner_id === "any"
                             ? "Any"
                             : runners.find(
-                              (runner: any) => runner.id === flow.runner_id,
-                            )?.name}
+                                (runner: any) => runner.id === flow.runner_id,
+                              )?.name}
                         </p>
                         <p className="text-sm text-default-500">Runner</p>
                       </div>
@@ -219,7 +217,7 @@ export function Flow({
                   <CardBody>
                     <div className="flex items-center gap-2">
                       <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                        <Icon icon="solar:reorder-line-duotone" width={20} />
+                        <Icon icon="solar:reorder-linear" width={20} />
                       </div>
                       <div>
                         <p className="text-md font-bold">
