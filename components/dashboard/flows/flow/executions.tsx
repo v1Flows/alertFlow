@@ -133,7 +133,7 @@ export default function Executions({
             valueLabel={
               <Icon
                 className="text-warning"
-                icon="solar:clock-circle-broken"
+                icon="solar:clock-circle-outline"
                 width={16}
               />
             }
@@ -152,7 +152,7 @@ export default function Executions({
             valueLabel={
               <Icon
                 className="text-warning"
-                icon="solar:pause-broken"
+                icon="solar:pause-outline"
                 width={16}
               />
             }
@@ -171,7 +171,7 @@ export default function Executions({
             valueLabel={
               <Icon
                 className="text-danger"
-                icon="solar:danger-triangle-broken"
+                icon="solar:danger-triangle-outline"
                 width={20}
               />
             }
@@ -189,7 +189,7 @@ export default function Executions({
             valueLabel={
               <Icon
                 className="text-secondary"
-                icon="solar:bill-cross-broken"
+                icon="solar:bill-cross-outline"
                 width={20}
               />
             }
@@ -207,7 +207,7 @@ export default function Executions({
             valueLabel={
               <Icon
                 className="text-default-500"
-                icon="solar:ghost-broken"
+                icon="solar:ghost-outline"
                 width={20}
               />
             }
@@ -227,7 +227,7 @@ export default function Executions({
             valueLabel={
               <Icon
                 className="text-success"
-                icon="solar:check-read-broken"
+                icon="solar:check-read-outline"
                 width={22}
               />
             }
@@ -333,7 +333,7 @@ export default function Executions({
             <Button
               color="primary"
               size="md"
-              startContent={<Icon icon="solar:eye-broken" width={18} />}
+              startContent={<Icon icon="solar:eye-outline" width={18} />}
               variant="solid"
               onPress={() =>
                 router.push(
@@ -355,7 +355,7 @@ export default function Executions({
             >
               <Icon
                 height="20"
-                icon="solar:trash-bin-minimalistic-broken"
+                icon="solar:trash-bin-trash-outline"
                 width="20"
               />
             </Button>
@@ -398,7 +398,7 @@ export default function Executions({
                   <div className="flex flex-cols gap-2">
                     <Icon
                       className="text-success"
-                      icon="solar:check-read-broken"
+                      icon="solar:check-read-outline"
                       width={18}
                     />
                     Finished
@@ -418,7 +418,7 @@ export default function Executions({
                   <div className="flex flex-cols gap-2">
                     <Icon
                       className="text-warning"
-                      icon="solar:clock-circle-broken"
+                      icon="solar:clock-circle-outline"
                       width={18}
                     />
                     Waiting
@@ -428,7 +428,7 @@ export default function Executions({
                   <div className="flex flex-cols gap-2">
                     <Icon
                       className="text-warning"
-                      icon="solar:pause-broken"
+                      icon="solar:pause-outline"
                       width={18}
                     />
                     Paused
@@ -438,7 +438,7 @@ export default function Executions({
                   <div className="flex flex-cols gap-2">
                     <Icon
                       className="text-secondary"
-                      icon="solar:bill-cross-broken"
+                      icon="solar:bill-cross-outline"
                       width={18}
                     />
                     No Match
@@ -451,7 +451,7 @@ export default function Executions({
                   <div className="flex flex-cols gap-2">
                     <Icon
                       className="text-default-500"
-                      icon="solar:ghost-broken"
+                      icon="solar:ghost-outline"
                       width={18}
                     />
                     Ghost
@@ -461,7 +461,7 @@ export default function Executions({
                   <div className="flex flex-cols gap-2">
                     <Icon
                       className="text-danger"
-                      icon="solar:danger-triangle-broken"
+                      icon="solar:danger-triangle-outline"
                       width={18}
                     />
                     Error
@@ -515,7 +515,7 @@ export default function Executions({
             <CardBody>
               <div className="flex items-center gap-2">
                 <div className="flex bg-success/10 text-success items-center rounded-small justify-center w-10 h-10">
-                  <Icon icon="solar:check-read-broken" width={20} />
+                  <Icon icon="solar:check-read-outline" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">
@@ -575,7 +575,7 @@ export default function Executions({
             <CardBody>
               <div className="flex items-center gap-2">
                 <div className="flex bg-warning/10 text-warning items-center rounded-small justify-center w-10 h-10">
-                  <Icon icon="solar:clock-circle-broken" width={20} />
+                  <Icon icon="solar:clock-circle-outline" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">
@@ -605,7 +605,7 @@ export default function Executions({
             <CardBody>
               <div className="flex items-center gap-2">
                 <div className="flex bg-warning/10 text-warning items-center rounded-small justify-center w-10 h-10">
-                  <Icon icon="solar:pause-broken" width={20} />
+                  <Icon icon="solar:pause-outline" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">
@@ -637,7 +637,7 @@ export default function Executions({
             <CardBody>
               <div className="flex items-center gap-2">
                 <div className="flex bg-secondary/10 text-secondary items-center rounded-small justify-center w-10 h-10">
-                  <Icon icon="solar:bill-cross-broken" width={20} />
+                  <Icon icon="solar:bill-cross-outline" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">
@@ -670,7 +670,7 @@ export default function Executions({
             <CardBody>
               <div className="flex items-center gap-2">
                 <div className="flex bg-default/20 text-default-500 items-center rounded-small justify-center w-10 h-10">
-                  <Icon icon="solar:ghost-broken" width={20} />
+                  <Icon icon="solar:ghost-outline" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">
@@ -701,7 +701,7 @@ export default function Executions({
             <CardBody>
               <div className="flex items-center gap-2">
                 <div className="flex bg-danger/10 text-danger items-center rounded-small justify-center w-10 h-10">
-                  <Icon icon="solar:danger-triangle-broken" width={20} />
+                  <Icon icon="solar:danger-triangle-outline" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">

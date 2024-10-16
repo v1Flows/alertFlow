@@ -23,7 +23,7 @@ export default async function DeleteRunnerToken(tokenId: any) {
   );
 
   if (!res.ok) {
-    return { error: "Failed to fetch data" };
+    return { error: "Failed to delete token" };
   }
 
   const data = await res.json();

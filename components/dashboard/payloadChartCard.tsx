@@ -52,7 +52,7 @@ export default function PayloadChartCard({ stats }: { stats: any }) {
           <div className="col-span-1">
             <div className="flex items-center gap-2">
               <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
-                <Icon icon="solar:letter-opened-broken" width={20} />
+                <Icon icon="solar:letter-opened-outline" width={20} />
               </div>
               <div>
                 <h4 className="text-large font-bold">{lastPayload.value}</h4>

@@ -111,7 +111,7 @@ export default function Actions({
                         editActionModal.onOpen();
                       }}
                     >
-                      <Icon icon="solar:pen-new-square-broken" width={20} />
+                      <Icon icon="solar:pen-new-square-outline" width={20} />
                     </Button>
                     <Button
                       isIconOnly
@@ -122,7 +122,7 @@ export default function Actions({
                         deleteActionModal.onOpen();
                       }}
                     >
-                      <Icon icon="solar:trash-bin-2-broken" width={20} />
+                      <Icon icon="solar:trash-bin-trash-outline" width={20} />
                     </Button>
                   </div>
                 </div>
@@ -234,7 +234,7 @@ export default function Actions({
                 variant="light"
                 onPress={editFlowActionsDetails.onOpen}
               >
-                <Icon icon="solar:pen-new-square-broken" width={18} />
+                <Icon icon="solar:pen-new-square-outline" width={18} />
               </Button>
             </div>
             <Divider className="my-4" />
@@ -310,7 +310,7 @@ export default function Actions({
             <div className="flex flex-cols items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                  <Icon icon="solar:add-square-broken" width={26} />
+                  <Icon icon="solar:add-square-outline" width={26} />
                 </div>
                 <div>
                   <p className="text-md font-bold">Add Action</p>

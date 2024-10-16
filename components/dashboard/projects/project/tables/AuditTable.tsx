@@ -68,7 +68,7 @@ export default function ProjectAuditLogs({ audit, members, user }: any) {
                   ) &&
                     entry?.role !== "Admin" && (
                       <Tooltip content="User left the project">
-                        <Icon icon="solar:ghost-broken" />
+                        <Icon icon="solar:ghost-outline" />
                       </Tooltip>
                     )}
                   {entry.user_id === user.id && (

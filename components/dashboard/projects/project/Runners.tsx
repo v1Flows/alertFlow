@@ -17,12 +17,7 @@ import React from "react";
 import TimeAgo from "react-timeago";
 import { Icon } from "@iconify/react";
 
-import {
-  VerticalDotsIcon,
-  DeleteDocumentIcon,
-  CopyDocumentIcon,
-  PlusIcon,
-} from "@/components/icons";
+import { VerticalDotsIcon, PlusIcon } from "@/components/icons";
 import CreateRunnerModal from "@/components/functions/runner/create";
 import DeleteRunnerModal from "@/components/functions/runner/delete";
 
@@ -153,7 +148,9 @@ export default function Runners({
                       <DropdownMenu>
                         <DropdownSection title="Actions">
                           <DropdownItem
-                            startContent={<CopyDocumentIcon />}
+                            startContent={
+                              <Icon icon="solar:copy-outline" width={18} />
+                            }
                             onClick={() => copyRunnerIDtoClipboard(runner.id)}
                           >
                             Copy ID
@@ -169,7 +166,12 @@ export default function Runners({
                                 (m: any) => m.user_id === user.id,
                               )[0].role === "Viewer"
                             }
-                            startContent={<DeleteDocumentIcon />}
+                            startContent={
+                              <Icon
+                                icon="solar:trash-bin-trash-outline"
+                                width={18}
+                              />
+                            }
                             onClick={() => {
                               setTargetRunner(runner);
                               deleteRunnerModal.onOpen();
@@ -192,7 +194,10 @@ export default function Runners({
                   <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-center">
                     <div className="flex flex-col items-center justify-center gap-1">
                       <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                        <Icon icon="solar:diploma-verified-broken" width={20} />
+                        <Icon
+                          icon="solar:diploma-verified-outline"
+                          width={20}
+                        />
                       </div>
                       <div>
                         <p
@@ -208,7 +213,7 @@ export default function Runners({
 
                     <div className="flex flex-col items-center justify-center gap-1">
                       <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                        <Icon icon="solar:heart-pulse-broken" width={20} />
+                        <Icon icon="solar:heart-pulse-outline" width={20} />
                       </div>
                       <div>
                         <p
@@ -229,7 +234,7 @@ export default function Runners({
                     <div className="flex flex-col items-center justify-center gap-1">
                       <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
                         <Icon
-                          icon="solar:gamepad-minimalistic-broken"
+                          icon="solar:gamepad-minimalistic-outline"
                           width={20}
                         />
                       </div>
@@ -245,7 +250,7 @@ export default function Runners({
 
                     <div className="flex flex-col items-center justify-center gap-1">
                       <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                        <Icon icon="solar:sd-card-broken" width={20} />
+                        <Icon icon="solar:sd-card-outline" width={20} />
                       </div>
                       <div>
                         <p className="text-md font-bold">
@@ -259,28 +264,26 @@ export default function Runners({
 
                     <div className="flex flex-col items-center justify-center gap-1">
                       <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                        <Icon icon="solar:bolt-broken" width={20} />
+                        <Icon icon="solar:bolt-outline" width={20} />
                       </div>
                       <div>
                         <p className="text-md font-bold">
                           {runner.available_actions.length}
                         </p>
-                        <p className="text-sm text-default-500">
-                          Available Actions
-                        </p>
+                        <p className="text-sm text-default-500">Avl. Actions</p>
                       </div>
                     </div>
 
                     <div className="flex flex-col items-center justify-center gap-1">
                       <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                        <Icon icon="solar:letter-opened-broken" width={20} />
+                        <Icon icon="solar:letter-opened-outline" width={20} />
                       </div>
                       <div>
                         <p className="text-md font-bold">
                           {runner.available_payload_injectors.length}
                         </p>
                         <p className="text-sm text-default-500">
-                          Available Payload Injectors
+                          Avl. Payload Injectors
                         </p>
                       </div>
                     </div>
@@ -341,7 +344,9 @@ export default function Runners({
                           <DropdownMenu>
                             <DropdownSection title="Actions">
                               <DropdownItem
-                                startContent={<CopyDocumentIcon />}
+                                startContent={
+                                  <Icon icon="solar:copy-outline" width={18} />
+                                }
                                 onClick={() =>
                                   copyRunnerIDtoClipboard(runner.id)
                                 }
@@ -361,7 +366,12 @@ export default function Runners({
                                     (m: any) => m.user_id === user.id,
                                   )[0].role === "Viewer"
                                 }
-                                startContent={<DeleteDocumentIcon />}
+                                startContent={
+                                  <Icon
+                                    icon="solar:trash-bin-trash-outline"
+                                    width={18}
+                                  />
+                                }
                                 onClick={() => {
                                   setTargetRunner(runner);
                                   deleteRunnerModal.onOpen();
@@ -384,7 +394,7 @@ export default function Runners({
                       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-center">
                         <div className="flex flex-col items-center justify-center gap-1">
                           <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                            <Icon icon="solar:heart-pulse-broken" width={20} />
+                            <Icon icon="solar:heart-pulse-outline" width={20} />
                           </div>
                           <div>
                             <p
@@ -406,7 +416,7 @@ export default function Runners({
                         <div className="flex flex-col items-center justify-center gap-1">
                           <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
                             <Icon
-                              icon="solar:gamepad-minimalistic-broken"
+                              icon="solar:gamepad-minimalistic-outline"
                               width={20}
                             />
                           </div>
@@ -422,7 +432,7 @@ export default function Runners({
 
                         <div className="flex flex-col items-center justify-center gap-1">
                           <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                            <Icon icon="solar:sd-card-broken" width={20} />
+                            <Icon icon="solar:sd-card-outline" width={20} />
                           </div>
                           <div>
                             <p className="text-md font-bold">

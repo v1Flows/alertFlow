@@ -124,7 +124,7 @@ export default function FlowList({
             placeholder="Search"
             radius="sm"
             size="md"
-            startContent={<Icon icon="solar:minimalistic-magnifer-broken" />}
+            startContent={<Icon icon="solar:minimalistic-magnifer-outline" />}
             value={search}
             variant="flat"
             onValueChange={setSearch}
@@ -188,7 +188,7 @@ export default function FlowList({
                     <Dropdown backdrop="opaque">
                       <DropdownTrigger>
                         <Button isIconOnly size="sm" variant="light">
-                          <Icon icon="solar:menu-dots-broken" width={24} />
+                          <Icon icon="solar:menu-dots-outline" width={24} />
                         </Button>
                       </DropdownTrigger>
                       <DropdownMenu variant="flat">
@@ -196,7 +196,7 @@ export default function FlowList({
                           <DropdownItem
                             color="primary"
                             startContent={
-                              <Icon icon="solar:copy-broken" width={20} />
+                              <Icon icon="solar:copy-outline" width={20} />
                             }
                             onClick={() => copyFlowIDtoClipboard(flow.id)}
                           >
@@ -207,7 +207,7 @@ export default function FlowList({
                             color="warning"
                             startContent={
                               <Icon
-                                icon="solar:pen-new-square-broken"
+                                icon="solar:pen-new-square-outline"
                                 width={20}
                               />
                             }
@@ -224,7 +224,7 @@ export default function FlowList({
                               color="warning"
                               startContent={
                                 <Icon
-                                  icon="solar:bomb-emoji-broken"
+                                  icon="solar:bomb-emoji-outline"
                                   width={20}
                                 />
                               }
@@ -242,7 +242,7 @@ export default function FlowList({
                               color="warning"
                               startContent={
                                 <Icon
-                                  icon="solar:bomb-emoji-broken"
+                                  icon="solar:bomb-emoji-outline"
                                   width={20}
                                 />
                               }
@@ -264,7 +264,7 @@ export default function FlowList({
                               color="success"
                               startContent={
                                 <Icon
-                                  icon="solar:lock-keyhole-unlocked-broken"
+                                  icon="solar:lock-keyhole-unlocked-outline"
                                   width={20}
                                 />
                               }
@@ -283,7 +283,7 @@ export default function FlowList({
                               color="danger"
                               startContent={
                                 <Icon
-                                  icon="solar:lock-keyhole-broken"
+                                  icon="solar:lock-keyhole-outline"
                                   width={20}
                                 />
                               }
@@ -301,7 +301,7 @@ export default function FlowList({
                             color="danger"
                             startContent={
                               <Icon
-                                icon="solar:trash-bin-2-broken"
+                                icon="solar:trash-bin-trash-outline"
                                 width={20}
                               />
                             }
@@ -397,7 +397,7 @@ export default function FlowList({
               <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-25 w-12 h-12">
                 <Icon
                   className="text-primary"
-                  icon="solar:add-square-broken"
+                  icon="solar:add-square-outline"
                   width={38}
                 />
               </div>

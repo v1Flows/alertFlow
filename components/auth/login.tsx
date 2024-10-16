@@ -14,9 +14,9 @@ import {
 import { LogInIcon, UserPlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { Icon } from "@iconify/react";
 
 import { Logout } from "@/lib/logout";
-import { CopyDocumentIcon } from "@/components/icons";
 
 export default function Login({ user, session, showSignUp, settings }: any) {
   const router = useRouter();
@@ -74,7 +74,7 @@ export default function Login({ user, session, showSignUp, settings }: any) {
             <DropdownItem
               key="api_key"
               showDivider
-              startContent={<CopyDocumentIcon />}
+              startContent={<Icon icon="solar:copy-outline" width={18} />}
               onPress={() => {
                 navigator.clipboard.writeText(session);
                 toast.success("Copied to clipboard!");

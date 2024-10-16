@@ -176,7 +176,7 @@ export function TokensList({ tokens, projects }: any) {
                     className="text-danger"
                     color="danger"
                     startContent={
-                      <Icon icon="solar:trash-bin-2-broken" width={20} />
+                      <Icon icon="solar:trash-bin-trash-outline" width={20} />
                     }
                     onPress={() => {
                       setTargetToken(token);

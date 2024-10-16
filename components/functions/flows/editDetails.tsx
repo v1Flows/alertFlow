@@ -223,7 +223,7 @@ export default function EditFlowActionsDetails({
                                     }}
                                   >
                                     <Icon
-                                      icon="solar:trash-bin-trash-broken"
+                                      icon="solar:trash-bin-trash-outline"
                                       width={20}
                                     />
                                   </Button>
@@ -268,6 +268,7 @@ export default function EditFlowActionsDetails({
                 <Button
                   color="warning"
                   isLoading={isLoading}
+                  variant="flat"
                   onPress={updateDetails}
                 >
                   Update Details

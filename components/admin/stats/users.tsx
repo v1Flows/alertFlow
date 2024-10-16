@@ -27,7 +27,7 @@ export default function UsersStats({
           <CardBody>
             <div className="flex items-center gap-2">
               <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                <Icon icon="solar:book-bookmark-broken" width={26} />
+                <Icon icon="solar:book-2-outline" width={26} />
               </div>
               <div>
                 <p className="text-md font-bold">{users.length}</p>
@@ -40,7 +40,7 @@ export default function UsersStats({
           <CardBody>
             <div className="flex items-center gap-2">
               <div className="flex bg-danger/10 text-danger items-center rounded-small justify-center w-10 h-10">
-                <Icon icon="solar:book-bookmark-broken" width={26} />
+                <Icon icon="solar:book-2-outline" width={26} />
               </div>
               <div>
                 <p className="text-md font-bold">
