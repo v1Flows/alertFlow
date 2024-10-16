@@ -19,7 +19,7 @@ export default async function AddFlowActions(
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/flows/${flowID}/actions`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/flows/${flowID}/actions`,
       {
         method: "POST",
         headers: headers,

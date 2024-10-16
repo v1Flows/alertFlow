@@ -14,7 +14,7 @@ export default async function DeleteUser() {
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/user/`, {
       method: "DELETE",
       headers: headers,
     });

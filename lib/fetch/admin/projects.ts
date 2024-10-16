@@ -15,7 +15,7 @@ export default async function AdminGetProjects() {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/admin/projects`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/admin/projects`,
       {
         method: "GET",
         headers: headers,

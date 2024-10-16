@@ -15,7 +15,7 @@ export default async function PageGetSettings() {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/page/settings`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/page/settings`,
       {
         method: "GET",
         headers: headers,

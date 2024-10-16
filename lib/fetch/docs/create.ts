@@ -19,7 +19,7 @@ export default async function CreateDoc(
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/docs/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/docs/`, {
       method: "POST",
       headers: headers,
       body: JSON.stringify({

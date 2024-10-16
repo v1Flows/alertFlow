@@ -18,7 +18,7 @@ export default async function CreateSubscription(
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/subscription`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/user/subscription`,
       {
         method: "POST",
         headers: headers,

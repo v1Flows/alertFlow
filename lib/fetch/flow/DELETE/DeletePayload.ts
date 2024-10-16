@@ -15,7 +15,7 @@ export default async function DeletePayload(flowID: any, payloadID: any) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/flows/${flowID}/payloads/${payloadID}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/flows/${flowID}/payloads/${payloadID}`,
       {
         method: "DELETE",
         headers: headers,

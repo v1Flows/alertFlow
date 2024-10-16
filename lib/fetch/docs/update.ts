@@ -20,16 +20,19 @@ export default async function UpdateDoc(
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/docs/${id}`, {
-      method: "PUT",
-      headers: headers,
-      body: JSON.stringify({
-        title: title,
-        content: content,
-        category: category,
-        hidden: hidden,
-      }),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/docs/${id}`,
+      {
+        method: "PUT",
+        headers: headers,
+        body: JSON.stringify({
+          title: title,
+          content: content,
+          category: category,
+          hidden: hidden,
+        }),
+      },
+    );
     const data = await res.json();
 
     return data;

@@ -19,7 +19,7 @@ export default async function EditProjectMember(
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/projects/${id}/member`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/projects/${id}/member`,
       {
         method: "PUT",
         headers: headers,

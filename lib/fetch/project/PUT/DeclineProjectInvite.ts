@@ -15,7 +15,7 @@ export default async function DeclineProjectInvite(id: string) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/projects/${id}/invite`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/projects/${id}/invite`,
       {
         method: "DELETE",
         headers: headers,

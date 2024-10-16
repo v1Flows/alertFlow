@@ -15,7 +15,7 @@ export default async function GetDoc(docID: any) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/docs/${docID}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/docs/${docID}`,
       {
         method: "GET",
         headers: headers,

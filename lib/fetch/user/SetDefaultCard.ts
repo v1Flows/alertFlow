@@ -15,7 +15,7 @@ export default async function SetDefaultCard(cardID: string) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/payment/card/default`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/user/payment/card/default`,
       {
         method: "POST",
         headers: headers,

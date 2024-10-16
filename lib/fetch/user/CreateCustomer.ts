@@ -15,7 +15,7 @@ export default async function CreateCustomer() {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/customer`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/user/customer`,
       {
         method: "POST",
         headers: headers,
