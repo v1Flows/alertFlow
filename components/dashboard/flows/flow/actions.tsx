@@ -175,7 +175,10 @@ export default function Actions({
                 )}
               </div>
               {isDragEnabled && (
-                <div {...listeners} style={{ cursor: "grab", touchAction: "none" }}>
+                <div
+                  {...listeners}
+                  style={{ cursor: "grab", touchAction: "none" }}
+                >
                   <Icon icon="mi:drag" width={20} />
                 </div>
               )}
@@ -275,8 +278,8 @@ export default function Actions({
       <div className="flex flex-col gap-2 col-span-2">
         <Switch
           isSelected={isDragEnabled}
-          onValueChange={setIsDragEnabled}
           size="sm"
+          onValueChange={setIsDragEnabled}
         >
           Reorder actions
         </Switch>
