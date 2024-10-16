@@ -74,6 +74,8 @@ export default function DocsList({ docs }: any) {
     switch (category) {
       case "Getting Started":
         return "solar:map-broken";
+      case "Help":
+        return "solar:help-broken";
       case "Flows":
         return "solar:book-bookmark-broken";
       case "Projects":
@@ -127,6 +129,7 @@ export default function DocsList({ docs }: any) {
               </p>
             }
             radius="sm"
+            startContent={<Icon icon={getCategoryIcon(category)} width={15} />}
             variant={category === selectedCategory ? "solid" : "flat"}
             onClick={() => setSelectedCategory(category)}
           >

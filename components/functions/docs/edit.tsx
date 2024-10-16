@@ -108,6 +108,7 @@ export default function EditDocumentModal({
                 >
                   <SelectItem key="Common">Common</SelectItem>
                   <SelectItem key="Getting Started">Getting Started</SelectItem>
+                  <SelectItem key="Help">Help</SelectItem>
                   <SelectItem key="Flows">Flows</SelectItem>
                   <SelectItem key="Projects">Projects</SelectItem>
                   <SelectItem key="Runners">Runners</SelectItem>
