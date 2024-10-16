@@ -14,10 +14,13 @@ export default async function DeleteFlow(id: any) {
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/flows/${id}`, {
-      method: "DELETE",
-      headers: headers,
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/flows/${id}`,
+      {
+        method: "DELETE",
+        headers: headers,
+      },
+    );
     const data = await res.json();
 
     return data;

@@ -14,13 +14,16 @@ export default async function UpdateToken(id: string, description: string) {
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/token/${id}`, {
-      method: "PUT",
-      headers: headers,
-      body: JSON.stringify({
-        description: description,
-      }),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/token/${id}`,
+      {
+        method: "PUT",
+        headers: headers,
+        body: JSON.stringify({
+          description: description,
+        }),
+      },
+    );
     const data = await res.json();
 
     return data;

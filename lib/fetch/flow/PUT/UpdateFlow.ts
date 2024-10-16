@@ -20,16 +20,19 @@ export default async function UpdateFlow(
     if (token) {
       headers.append("Authorization", token);
     }
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/flows/${id}`, {
-      method: "PUT",
-      headers: headers,
-      body: JSON.stringify({
-        name: name,
-        description: description,
-        project_id: projectID,
-        runner_id: runnerID,
-      }),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/flows/${id}`,
+      {
+        method: "PUT",
+        headers: headers,
+        body: JSON.stringify({
+          name: name,
+          description: description,
+          project_id: projectID,
+          runner_id: runnerID,
+        }),
+      },
+    );
     const data = await res.json();
 
     return data;
