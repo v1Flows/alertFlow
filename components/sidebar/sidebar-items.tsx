@@ -46,12 +46,6 @@ export const sectionItems: SidebarItem[] = [
         title: "API",
       },
       {
-        key: "dashboard_roadmap",
-        href: "/dashboard/roadmap",
-        icon: "solar:routing-2-outline",
-        title: "Roadmap",
-      },
-      {
         key: "help",
         href: "/help",
         icon: "solar:incoming-call-rounded-broken",
