@@ -66,7 +66,7 @@ export function DashboardHome({
             <CardBody>
               <div className="flex items-center gap-2">
                 <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
-                  <Icon icon="solar:bell-broken" width={20} />
+                  <Icon icon="solar:bell-outline" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">
@@ -86,7 +86,7 @@ export function DashboardHome({
                 <CardBody>
                   <div className="flex items-center gap-2">
                     <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
-                      <Icon icon="solar:book-bookmark-broken" width={20} />
+                      <Icon icon="solar:book-2-outline" width={20} />
                     </div>
                     <div>
                       {flows.filter((f: any) => f.maintenance_required).length >
@@ -122,7 +122,7 @@ export function DashboardHome({
                         <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
                           <Icon
                             className="text-warning"
-                            icon="solar:danger-triangle-broken"
+                            icon="solar:danger-triangle-outline"
                             width={20}
                           />
                         </div>
@@ -148,7 +148,7 @@ export function DashboardHome({
                 <CardBody>
                   <div className="flex items-center gap-2">
                     <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
-                      <Icon icon="solar:reorder-line-duotone" width={20} />
+                      <Icon icon="solar:reorder-linear" width={20} />
                     </div>
                     <div>
                       {executions.filter(
@@ -172,7 +172,7 @@ export function DashboardHome({
                         <p className="text-md font-bold text-success">OK</p>
                       )}
                       <p className="text-sm text-default-500">
-                        Executions (last 24hours)
+                        Executions (last 24 hours)
                       </p>
                     </div>
                   </div>
@@ -204,7 +204,7 @@ export function DashboardHome({
                         <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
                           <Icon
                             className="text-danger"
-                            icon="solar:danger-triangle-broken"
+                            icon="solar:danger-triangle-outline"
                             width={20}
                           />
                         </div>
@@ -238,7 +238,7 @@ export function DashboardHome({
                 <CardBody>
                   <div className="flex items-center gap-2">
                     <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
-                      <Icon icon="solar:rocket-2-broken" width={20} />
+                      <Icon icon="solar:rocket-2-outline" width={20} />
                     </div>
                     <div>
                       {runners.filter(
@@ -283,7 +283,7 @@ export function DashboardHome({
                         <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
                           <Icon
                             className={`text-${heartbeatColor(runner)}`}
-                            icon="solar:danger-triangle-broken"
+                            icon="solar:danger-triangle-outline"
                             width={20}
                           />
                         </div>

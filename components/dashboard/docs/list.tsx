@@ -73,21 +73,21 @@ export default function DocsList({ docs }: any) {
   function getCategoryIcon(category: string) {
     switch (category) {
       case "Getting Started":
-        return "solar:map-broken";
+        return "solar:map-outline";
       case "Help":
-        return "solar:help-broken";
+        return "solar:help-outline";
       case "Flows":
-        return "solar:book-bookmark-broken";
+        return "solar:book-2-outline";
       case "Projects":
-        return "solar:box-broken";
+        return "solar:box-outline";
       case "Runners":
-        return "solar:rocket-2-broken";
+        return "solar:rocket-2-outline";
       case "Payloads":
-        return "solar:letter-opened-broken";
+        return "solar:letter-opened-outline";
       case "Executions":
         return "solar:reorder-line-duotone";
       case "Actions":
-        return "solar:bolt-broken";
+        return "solar:bolt-outline";
       case "Common":
         return "solar:notebook-bookmark-bold-duotone";
       default:

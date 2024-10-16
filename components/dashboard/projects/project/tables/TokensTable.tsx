@@ -14,8 +14,9 @@ import {
   Pagination,
 } from "@nextui-org/react";
 import { toast } from "sonner";
+import { Icon } from "@iconify/react";
 
-import { CopyDocumentIcon, DeleteIcon, PlusIcon } from "@/components/icons";
+import { PlusIcon } from "@/components/icons";
 import CreateTokenModal from "@/components/functions/tokens/create";
 import DeleteTokenModal from "@/components/functions/tokens/delete";
 
@@ -56,7 +57,9 @@ export default function ProjectTokens({
           <div className="relative flex items-center justify-center gap-2">
             <Tooltip content="Copy Token">
               <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <CopyDocumentIcon
+                <Icon
+                  icon="solar:copy-outline"
+                  width={20}
                   onClick={() => {
                     copyTokentoClipboard(key.key);
                   }}
@@ -65,7 +68,9 @@ export default function ProjectTokens({
             </Tooltip>
             <Tooltip color="danger" content="Delete Token">
               <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                <DeleteIcon
+                <Icon
+                  icon="solar:trash-bin-trash-outline"
+                  width={20}
                   onClick={() => {
                     if (
                       members.find((m: any) => m.user_id === user.id) &&

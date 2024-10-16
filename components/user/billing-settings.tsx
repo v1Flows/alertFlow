@@ -483,7 +483,10 @@ export default function BillingSettings({
                       <Button
                         color="danger"
                         startContent={
-                          <Icon icon="solar:trash-bin-2-broken" width={18} />
+                          <Icon
+                            icon="solar:trash-bin-trash-outline"
+                            width={18}
+                          />
                         }
                         variant="flat"
                         onPress={() => {

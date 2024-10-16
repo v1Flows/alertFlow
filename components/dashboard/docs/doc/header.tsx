@@ -22,7 +22,7 @@ export default function DocHeader({ doc, user }: any) {
     <>
       <Breadcrumbs>
         <BreadcrumbItem href="/dashboard/docs">
-          <Icon icon="solar:notes-broken" width={20} /> Documentation
+          <Icon icon="solar:notes-outline" width={20} /> Documentation
         </BreadcrumbItem>
         <BreadcrumbItem href={`/dashboard/docs/${doc.id}`}>
           {doc.title}
@@ -56,7 +56,7 @@ export default function DocHeader({ doc, user }: any) {
               color="warning"
               isDisabled={user.role !== "Admin"}
               startContent={
-                <Icon icon="solar:pen-new-square-broken" width={20} />
+                <Icon icon="solar:pen-new-square-outline" width={20} />
               }
               variant="flat"
               onPress={editDocumentModal.onOpenChange}
@@ -66,7 +66,9 @@ export default function DocHeader({ doc, user }: any) {
             <Button
               color="danger"
               isDisabled={user.role !== "Admin"}
-              startContent={<Icon icon="solar:trash-bin-2-broken" width={20} />}
+              startContent={
+                <Icon icon="solar:trash-bin-trash-outline" width={20} />
+              }
               variant="flat"
               onPress={deleteDocumentModal.onOpenChange}
             >

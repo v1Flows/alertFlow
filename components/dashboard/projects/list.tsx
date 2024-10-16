@@ -22,8 +22,7 @@ import { toast } from "sonner";
 import { Icon } from "@iconify/react";
 
 import { IconWrapper } from "@/lib/IconWrapper";
-import { EditDocumentIcon, InfoIcon } from "@/components/icons";
-import { CopyDocumentIcon } from "@/components/icons";
+import { InfoIcon } from "@/components/icons";
 import DeleteProjectModal from "@/components/functions/projects/delete";
 import CreateProjectModal from "@/components/functions/projects/create";
 import SparklesText from "@/components/magicui/sparkles-text";
@@ -118,7 +117,7 @@ export function ProjectsList({
                               icon={
                                 project.icon
                                   ? project.icon
-                                  : "solar:question-square-broken"
+                                  : "solar:question-square-outline"
                               }
                               width={24}
                             />
@@ -149,13 +148,15 @@ export function ProjectsList({
                       <Dropdown backdrop="opaque">
                         <DropdownTrigger>
                           <Button isIconOnly size="sm" variant="light">
-                            <Icon icon="solar:menu-dots-broken" width={24} />
+                            <Icon icon="solar:menu-dots-outline" width={24} />
                           </Button>
                         </DropdownTrigger>
                         <DropdownMenu variant="flat">
                           <DropdownSection title="Actions">
                             <DropdownItem
-                              startContent={<CopyDocumentIcon />}
+                              startContent={
+                                <Icon icon="solar:copy-outline" width={18} />
+                              }
                               onClick={() =>
                                 copyProjectIDtoClipboard(project.id)
                               }
@@ -165,7 +166,12 @@ export function ProjectsList({
                             <DropdownItem
                               showDivider
                               color="warning"
-                              startContent={<EditDocumentIcon />}
+                              startContent={
+                                <Icon
+                                  icon="solar:pen-new-square-outline"
+                                  width={18}
+                                />
+                              }
                               onClick={() => {
                                 setTargetProject(project);
                                 editProjectModal.onOpen();
@@ -180,8 +186,8 @@ export function ProjectsList({
                               color="danger"
                               startContent={
                                 <Icon
-                                  icon="solar:trash-bin-trash-broken"
-                                  width={16}
+                                  icon="solar:trash-bin-trash-outline"
+                                  width={18}
                                 />
                               }
                               onClick={() => {
@@ -241,7 +247,7 @@ export function ProjectsList({
                           router.push(`/dashboard/projects/${project.id}`);
                         }}
                       >
-                        <Icon icon="solar:eye-broken" width={18} />
+                        <Icon icon="solar:eye-outline" width={18} />
                         View Project
                       </Button>
                     </div>
@@ -260,7 +266,7 @@ export function ProjectsList({
                 <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-25 w-12 h-12">
                   <Icon
                     className="text-primary"
-                    icon="solar:add-square-broken"
+                    icon="solar:add-square-outline"
                     width={38}
                   />
                 </div>
@@ -294,7 +300,7 @@ export function ProjectsList({
                                   icon={
                                     project.icon
                                       ? project.icon
-                                      : "solar:question-square-broken"
+                                      : "solar:question-square-outline"
                                   }
                                   width={24}
                                 />
@@ -365,7 +371,7 @@ export function ProjectsList({
                               }}
                             >
                               <Icon
-                                icon="solar:danger-triangle-broken"
+                                icon="solar:danger-triangle-outline"
                                 width={24}
                               />
                               Decline
@@ -380,7 +386,10 @@ export function ProjectsList({
                                 router.refresh();
                               }}
                             >
-                              <Icon icon="solar:check-read-broken" width={24} />
+                              <Icon
+                                icon="solar:check-read-outline"
+                                width={24}
+                              />
                               Accept
                             </Button>
                           </div>

@@ -19,6 +19,7 @@
 		"@nextui-org/system": "^2.2.6",
 		"@nextui-org/theme": "^2.2.11",
 		"@nextui-org/use-disclosure": "^2.0.10",
+		"@number-flow/react": "^0.2.0",
 		"@react-aria/ssr": "3.9.4",
 		"@react-aria/visually-hidden": "3.8.12",
 		"@react-stately/data": "^3.11.7",

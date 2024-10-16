@@ -59,7 +59,7 @@ export default function ProjectTabs({
             key="members"
             title={
               <div className="flex items-center space-x-2">
-                <Icon icon="solar:smile-square-broken" width={20} />
+                <Icon icon="solar:smile-square-outline" width={20} />
                 <span>Members</span>
               </div>
             }
@@ -76,7 +76,7 @@ export default function ProjectTabs({
             key="runners"
             title={
               <div className="flex items-center space-x-2">
-                <Icon icon="solar:rocket-2-broken" width={20} />
+                <Icon icon="solar:rocket-2-outline" width={20} />
                 <span>Runners</span>
               </div>
             }
@@ -94,7 +94,7 @@ export default function ProjectTabs({
             key="tokens"
             title={
               <div className="flex items-center space-x-2">
-                <Icon icon="solar:key-square-2-broken" width={20} />
+                <Icon icon="solar:key-square-2-outline" width={20} />
                 <span>Tokens</span>
               </div>
             }
@@ -114,13 +114,13 @@ export default function ProjectTabs({
               plan.id !== "enterprise" ? (
                 <Tooltip color="secondary" content="Enterprise Feature">
                   <div className="flex items-center space-x-2">
-                    <Icon icon="solar:notes-broken" width={20} />
+                    <Icon icon="solar:notes-outline" width={20} />
                     <span>Audit</span>
                   </div>
                 </Tooltip>
               ) : (
                 <div className="flex items-center space-x-2">
-                  <Icon icon="solar:notes-broken" width={20} />
+                  <Icon icon="solar:notes-outline" width={20} />
                   <span>Audit</span>
                 </div>
               )

@@ -232,6 +232,7 @@ export default function EditActionModal({
                 <Button
                   color="warning"
                   isLoading={isLoading}
+                  variant="flat"
                   onPress={updateAction}
                 >
                   Update Action

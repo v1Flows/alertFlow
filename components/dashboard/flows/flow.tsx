@@ -84,7 +84,7 @@ export function Flow({
                 color="warning"
                 isDisabled={flow.disabled}
                 startContent={
-                  <Icon icon="solar:pen-new-square-broken" width={20} />
+                  <Icon icon="solar:pen-new-square-outline" width={20} />
                 }
                 variant="flat"
                 onPress={() => {
@@ -104,7 +104,7 @@ export function Flow({
                     <div
                       className={`flex bg-danger/10 text-danger items-center rounded-small justify-center w-10 h-10`}
                     >
-                      <Icon icon="solar:siren-broken" width={26} />
+                      <Icon icon="solar:siren-outline" width={26} />
                     </div>
                     <div>
                       <p className="text-md font-bold text-danger">
@@ -127,7 +127,7 @@ export function Flow({
                     <div
                       className={`flex bg-warning/10 text-warning items-center rounded-small justify-center w-10 h-10`}
                     >
-                      <Icon icon="solar:siren-broken" width={26} />
+                      <Icon icon="solar:siren-outline" width={26} />
                     </div>
                     <div>
                       <p className="text-md font-bold text-warning">
@@ -154,8 +154,8 @@ export function Flow({
                         <Icon
                           icon={
                             flow.disabled
-                              ? "solar:danger-triangle-broken"
-                              : "solar:check-read-broken"
+                              ? "solar:danger-triangle-outline"
+                              : "solar:check-read-outline"
                           }
                           width={26}
                         />
@@ -175,7 +175,7 @@ export function Flow({
                   <CardBody>
                     <div className="flex items-center gap-2">
                       <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                        <Icon icon="solar:box-broken" width={20} />
+                        <Icon icon="solar:box-outline" width={20} />
                       </div>
                       <div>
                         <p className="text-md font-bold">
@@ -196,7 +196,7 @@ export function Flow({
                   <CardBody>
                     <div className="flex items-center gap-2">
                       <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                        <Icon icon="solar:rocket-2-broken" width={20} />
+                        <Icon icon="solar:rocket-2-outline" width={20} />
                       </div>
                       <div>
                         <p className="text-md font-bold">
@@ -217,7 +217,7 @@ export function Flow({
                   <CardBody>
                     <div className="flex items-center gap-2">
                       <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                        <Icon icon="solar:reorder-line-duotone" width={20} />
+                        <Icon icon="solar:reorder-linear" width={20} />
                       </div>
                       <div>
                         <p className="text-md font-bold">

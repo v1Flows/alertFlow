@@ -1,6 +1,7 @@
 import { Icon } from "@iconify/react";
 import { Card, CardBody, CircularProgress, Tooltip } from "@nextui-org/react";
 import ReactTimeago from "react-timeago";
+import NumberFlow from "@number-flow/react";
 
 export default function ExecutionDetails({ runners, execution, steps }: any) {
   function status(execution: any) {
@@ -205,8 +206,8 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
         <Card>
           <CardBody>
             <div className="flex gap-4 items-center justify-start">
-              <div className="flex items-center rounded-large justify-center bg-secondary bg-opacity-40 w-10 h-10">
-                <Icon icon="solar:rocket-2-broken" width={24} />
+              <div className="flex items-center rounded-large justify-center bg-default bg-opacity-40 w-12 h-12">
+                <Icon icon="solar:rocket-2-broken" width={28} />
               </div>
               <div>
                 <p className="text-md font-bold">
@@ -221,11 +222,20 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
         <Card>
           <CardBody>
             <div className="flex gap-4 items-center justify-start">
-              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-40 w-10 h-10">
-                <Icon icon="solar:bill-list-broken" width={24} />
+              <div className="flex items-center rounded-large justify-center bg-default bg-opacity-40 w-12 h-12">
+                <Icon
+                  icon="solar:posts-carousel-vertical-line-duotone"
+                  width={28}
+                />
               </div>
               <div>
-                <p className="text-md font-bold">{steps.length - 1}</p>
+                <p className="text-md font-bold">
+                  <NumberFlow
+                    locales="en-US" // Intl.NumberFormat locales
+                    trend="increasing"
+                    value={steps.length - 1}
+                  />
+                </p>
                 <p className="text-sm text-default-500">Total Steps</p>
               </div>
             </div>
@@ -268,7 +278,7 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
         <Card>
           <CardBody>
             <div className="flex gap-4 items-center justify-start">
-              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-40 w-12 h-12">
+              <div className="flex items-center rounded-large justify-center bg-default bg-opacity-40 w-12 h-12">
                 <Icon icon="solar:clock-circle-broken" width={28} />
               </div>
               <div>
