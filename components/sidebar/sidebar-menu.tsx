@@ -5,7 +5,6 @@ import {
   Avatar,
   Button,
   Spacer,
-  useDisclosure,
   Image,
   Popover,
   PopoverTrigger,
@@ -29,6 +28,7 @@ import { useMediaQuery } from "usehooks-ts";
 
 import NotificationsCard from "@/components/notifications/notifications";
 import { Logout } from "@/lib/logout";
+import { useSidebarStore } from "@/store/useSidebarStore";
 
 import { ThemeSwitch } from "../theme-switch";
 
@@ -61,7 +61,6 @@ export default function SidebarMenu({
 }) {
   const router = useRouter();
 
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { theme } = useTheme();
   const isSSR = useIsSSR();
   const pathname = usePathname();
@@ -71,17 +70,21 @@ export default function SidebarMenu({
     ? `${currentPath1}_${currentPath2}`
     : currentPath1;
 
-  const [isCollapsed, setIsCollapsed] = React.useState(false);
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  const { isCollapsed, isLoading, toggleCollapsed } = useSidebarStore();
 
+  const isMobile = useMediaQuery("(max-width: 768px)");
   const isCompact = isCollapsed || isMobile;
 
   const onToggle = React.useCallback(() => {
-    setIsCollapsed((prev) => !prev);
-  }, []);
+    toggleCollapsed();
+  }, [toggleCollapsed]);
 
   async function LogoutHandler() {
     await Logout();
+  }
+
+  if (isLoading) {
+    return null;
   }
 
   return (
