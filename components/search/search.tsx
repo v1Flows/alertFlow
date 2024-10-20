@@ -12,7 +12,6 @@ import { matchSorter } from "match-sorter";
 import {
   Button,
   Kbd,
-  Link,
   Listbox,
   ListboxItem,
   Modal,

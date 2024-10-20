@@ -20,11 +20,11 @@ export default async function DashboardHomeLayout({
 
   return (
     <SidebarMenu
+      flows={flows}
       notifications={notifications}
+      projects={projects}
       settings={settings}
       user={userDetails}
-      projects={projects}
-      flows={flows}
     >
       {children}
     </SidebarMenu>
