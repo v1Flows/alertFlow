@@ -16,11 +16,11 @@ import { toast } from "sonner";
 import React from "react";
 import TimeAgo from "react-timeago";
 import { Icon } from "@iconify/react";
+import { useMediaQuery } from "usehooks-ts";
 
 import { VerticalDotsIcon, PlusIcon } from "@/components/icons";
 import CreateRunnerModal from "@/components/functions/runner/create";
 import DeleteRunnerModal from "@/components/functions/runner/delete";
-import { useMediaQuery } from "usehooks-ts";
 
 export default function Runners({
   runners,
@@ -98,9 +98,9 @@ export default function Runners({
       <div className="flex items-center justify-between mb-4">
         <p className="text-lg font-bold">Selfhosted Runners</p>
         <Button
-          isIconOnly={isMobile}
           color="primary"
           isDisabled={checkQuotaDisabled()}
+          isIconOnly={isMobile}
           startContent={<PlusIcon height={undefined} width={undefined} />}
           onPress={() => addRunnerModal.onOpen()}
         >

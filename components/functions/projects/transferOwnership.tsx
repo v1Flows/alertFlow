@@ -177,9 +177,9 @@ export default function ProjectTransferOwnership({
                 <Button
                   color="danger"
                   isDisabled={selectedUser === ""}
+                  isLoading={isLoading}
                   variant="flat"
                   onPress={transferOwnership}
-                  isLoading={isLoading}
                 >
                   Transfer Ownership
                 </Button>
