@@ -15,8 +15,7 @@ import {
   ListboxSection,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
-
-import { cn } from "@/components/functions/cn/cn";
+import { cn } from "@nextui-org/react";
 
 export enum SidebarItemType {
   Nest = "nest",
@@ -228,7 +227,7 @@ const Sidebar = React.forwardRef<HTMLElement, SidebarProps>(
               isCompact ? null : item.icon ? (
                 <Icon
                   className={cn(
-                    "text-default-500 group-data-[selected=true]:text-white",
+                    "text-default-500 group-data-[selected=true]:text-foreground",
                     iconClassName,
                   )}
                   icon={item.icon}
@@ -276,15 +275,15 @@ const Sidebar = React.forwardRef<HTMLElement, SidebarProps>(
           ...classNames,
           list: cn("items-center", classNames?.list),
         }}
-        color="primary"
+        color="default"
         itemClasses={{
           ...itemClasses,
           base: cn(
-            "px-3 min-h-11 rounded-medium h-[44px] data-[selected=true]:bg-primary",
+            "px-3 min-h-11 rounded-large h-[44px] data-[selected=true]:bg-primary",
             itemClasses?.base,
           ),
           title: cn(
-            "text-small font-medium text-default-500 group-data-[selected=true]:text-white",
+            "text-small font-medium text-default-500 group-data-[selected=true]:text-foreground",
             itemClasses?.title,
           ),
         }}
