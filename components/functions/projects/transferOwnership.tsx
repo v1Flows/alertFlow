@@ -23,6 +23,7 @@ import {
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+
 import ProjectTransferOwnershipAPI from "@/lib/fetch/project/PUT/transferOwnership";
 
 export default function ProjectTransferOwnership({
@@ -40,7 +41,6 @@ export default function ProjectTransferOwnership({
   const { isOpen, onOpenChange } = disclosure;
 
   const [isLoading, setIsLoading] = useState(false);
-  const [isSelected, setIsSelected] = useState(false);
   const [selectedUser, setSelectedUser] = useState<any>("");
 
   const statusColorMap: any = {
@@ -179,6 +179,7 @@ export default function ProjectTransferOwnership({
                   isDisabled={selectedUser === ""}
                   variant="flat"
                   onPress={transferOwnership}
+                  isLoading={isLoading}
                 >
                   Transfer Ownership
                 </Button>
