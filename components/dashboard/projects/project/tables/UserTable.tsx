@@ -21,6 +21,7 @@ import AddProjectMemberModal from "@/components/functions/projects/members";
 import { PlusIcon } from "@/components/icons";
 import EditProjectMemberModal from "@/components/functions/projects/editMember";
 import LeaveProjectModal from "@/components/functions/projects/leave";
+import ProjectTransferOwnership from "@/components/functions/projects/transferOwnership";
 
 import DeleteProjectMemberModal from "../../../../functions/projects/removeMember";
 
@@ -41,6 +42,7 @@ export default function ProjectMembers({
   const editProjectMemberModal = useDisclosure();
   const leaveProjectModal = useDisclosure();
   const deleteProjectMemberModal = useDisclosure();
+  const transferOwnershipModal = useDisclosure();
 
   const [targetUser, setTargetUser] = React.useState({});
 
@@ -146,18 +148,31 @@ export default function ProjectMembers({
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-wrap items-center justify-end gap-4">
-        <Button
-          color="secondary"
-          isDisabled={checkLeaveProjectDisabled()}
-          isIconOnly={isMobile}
-          startContent={
-            <Icon icon="solar:undo-left-round-outline" width={20} />
-          }
-          variant="ghost"
-          onPress={() => leaveProjectModal.onOpen()}
-        >
-          {isMobile ? "" : "Leave Project"}
-        </Button>
+        {checkLeaveProjectDisabled() ? (
+          <Button
+            color="danger"
+            isIconOnly={isMobile}
+            startContent={
+              <Icon icon="solar:transfer-horizontal-line-duotone" width={20} />
+            }
+            variant="flat"
+            onPress={() => transferOwnershipModal.onOpen()}
+          >
+            {isMobile ? "" : "Transfer Ownership"}
+          </Button>
+        ) : (
+          <Button
+            color="secondary"
+            isIconOnly={isMobile}
+            startContent={
+              <Icon icon="solar:undo-left-round-outline" width={20} />
+            }
+            variant="ghost"
+            onPress={() => leaveProjectModal.onOpen()}
+          >
+            {isMobile ? "" : "Leave Project"}
+          </Button>
+        )}
         <Button
           color="primary"
           isDisabled={checkAddMemberDisabled()}
@@ -278,6 +293,12 @@ export default function ProjectMembers({
         disclosure={deleteProjectMemberModal}
         projectID={project.id}
         user={targetUser}
+      />
+      <ProjectTransferOwnership
+        disclosure={transferOwnershipModal}
+        members={members}
+        project={project}
+        user={user}
       />
     </>
   );
