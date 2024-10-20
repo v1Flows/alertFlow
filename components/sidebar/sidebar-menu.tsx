@@ -18,7 +18,6 @@ import {
   Badge,
   ScrollShadow,
   cn,
-  Kbd,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import { useTheme } from "next-themes";
@@ -31,6 +30,7 @@ import { Logout } from "@/lib/logout";
 import { useSidebarStore } from "@/store/useSidebarStore";
 
 import { ThemeSwitch } from "../theme-switch";
+import Search from "../search/search";
 
 import { sectionAdminItems, sectionItems } from "./sidebar-items";
 import Sidebar from "./sidebar";
@@ -177,27 +177,9 @@ export default function SidebarMenu({
 
         <ScrollShadow className="-mr-6 h-full max-h-full py-6 pr-6">
           <div className="flex items-center justify-center">
-            {!isCompact ? (
-              <Button
-                fullWidth
-                radius="sm"
-                startContent={<Icon icon="solar:magnifer-linear" width={16} />}
-                variant="flat"
-              >
-                <div className="flex flex-cols items-center justify-between gap-4">
-                  <p className="text-default-500">Search</p>
-                  <Kbd keys={["command"]}>K</Kbd>
-                </div>
-              </Button>
-            ) : (
-              <Button
-                isIconOnly
-                radius="sm"
-                startContent={<Icon icon="solar:magnifer-linear" width={16} />}
-                variant="flat"
-              />
-            )}
+            <Search isCollapsed={isCollapsed} />
           </div>
+          <Spacer y={2} />
 
           <Sidebar
             defaultSelectedKey="home"
