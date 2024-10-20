@@ -5,7 +5,6 @@ import {
   Avatar,
   Button,
   Spacer,
-  useDisclosure,
   Image,
   Popover,
   PopoverTrigger,
@@ -17,20 +16,23 @@ import {
   DropdownMenu,
   DropdownItem,
   Badge,
+  ScrollShadow,
+  cn,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import { useTheme } from "next-themes";
 import { useIsSSR } from "@react-aria/ssr";
 import { usePathname, useRouter } from "next/navigation";
+import { useMediaQuery } from "usehooks-ts";
 
 import NotificationsCard from "@/components/notifications/notifications";
-import { siteConfig } from "@/config/site";
 import { Logout } from "@/lib/logout";
+import { useSidebarStore } from "@/store/useSidebarStore";
 
 import { ThemeSwitch } from "../theme-switch";
+import Search from "../search/search";
 
 import { sectionAdminItems, sectionItems } from "./sidebar-items";
-import SidebarDrawer from "./sidebar-drawer";
 import Sidebar from "./sidebar";
 
 /**
@@ -51,15 +53,18 @@ export default function SidebarMenu({
   user,
   settings,
   notifications,
+  projects,
+  flows,
 }: {
   children: React.ReactNode;
   user: any;
   settings: any;
   notifications: any;
+  projects: any;
+  flows: any;
 }) {
   const router = useRouter();
 
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { theme } = useTheme();
   const isSSR = useIsSSR();
   const pathname = usePathname();
@@ -69,25 +74,154 @@ export default function SidebarMenu({
     ? `${currentPath1}_${currentPath2}`
     : currentPath1;
 
+  const { isCollapsed, isLoading, toggleCollapsed } = useSidebarStore();
+
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isCompact = isCollapsed || isMobile;
+
+  const onToggle = React.useCallback(() => {
+    toggleCollapsed();
+  }, [toggleCollapsed]);
+
   async function LogoutHandler() {
     await Logout();
   }
 
-  const content = (
-    <div className="relative flex h-full w-72 flex-1 flex-col p-6">
-      <div className="flex items-center gap-2 px-2">
-        <div className="flex h-8 w-8 items-center justify-center rounded-full">
-          <Image
-            alt="Logo"
-            height={32}
-            radius="none"
-            shadow="none"
-            src={`/images/af_logo_${theme === "light" || isSSR ? "black" : "white"}.png`}
-            width={32}
-          />
+  if (isLoading) {
+    return null;
+  }
+
+  return (
+    <div className="flex h-dvh w-full">
+      <div
+        className={cn(
+          "relative flex h-full w-72 flex-col !border-r-small border-divider p-6 transition-width",
+          {
+            "w-16 items-center px-2 py-6": isCompact,
+          },
+        )}
+      >
+        <div
+          className={cn(
+            "flex items-center gap-3 px-3",
+
+            {
+              "justify-center gap-0": isCompact,
+            },
+          )}
+        >
+          <div className="flex h-8 w-8 items-center justify-center rounded-full">
+            <Image
+              alt="Logo"
+              height={32}
+              radius="none"
+              shadow="none"
+              src={`/images/af_logo_${theme === "light" || isSSR ? "black" : "white"}.png`}
+              width={32}
+            />
+          </div>
+          <span
+            className={cn("text-small font-bold opacity-100", {
+              "w-0 opacity-0": isCompact,
+            })}
+          >
+            AlertFlow
+          </span>
         </div>
-        <span className="text-small font-bold text-foreground">AlertFlow</span>
-        <div className="flex ml-auto gap-2 items-center justify-center">
+        <Spacer y={8} />
+        <Dropdown>
+          <DropdownTrigger>
+            <div className="flex items-center gap-3 px-3 hover:cursor-pointer">
+              <Avatar
+                isBordered
+                color={
+                  user.role === "Admin"
+                    ? "danger"
+                    : user.role === "VIP"
+                      ? "warning"
+                      : "primary"
+                }
+                name={user.username}
+                radius="sm"
+                size="sm"
+              />
+              {!isCompact && (
+                <div className="flex flex-col">
+                  <p className="text-small font-medium text-default-600">
+                    {user.username}{" "}
+                    {user.role === "Admin" && (
+                      <span className="text-danger">(Admin)</span>
+                    )}
+                    {user.role === "VIP" && (
+                      <span className="text-warning">(VIP)</span>
+                    )}
+                  </p>
+                  <p className="text-tiny text-default-400">{user.email}</p>
+                </div>
+              )}
+            </div>
+          </DropdownTrigger>
+          <DropdownMenu
+            aria-label="Profile Actions"
+            className="w-[210px] bg-content1 px-[8px] py-[8px]"
+            variant="flat"
+          >
+            <DropdownItem
+              key="profile"
+              showDivider
+              onPress={() => router.push(`/profile`)}
+            >
+              Settings
+            </DropdownItem>
+            <DropdownItem key="logout" color="danger" onPress={LogoutHandler}>
+              Log Out
+            </DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+
+        <ScrollShadow className="-mr-6 h-full max-h-full py-6 pr-6">
+          <div className="flex items-center justify-center">
+            <Search
+              flows={flows}
+              isCollapsed={isCollapsed}
+              projects={projects}
+            />
+          </div>
+          <Spacer y={2} />
+
+          <Sidebar
+            defaultSelectedKey="home"
+            isCompact={isCompact}
+            items={user.role === "Admin" ? sectionAdminItems : sectionItems}
+            selectedKeys={[currentPath]}
+          />
+        </ScrollShadow>
+
+        <Spacer y={2} />
+
+        {user.role === "Admin" && settings.maintenance && (
+          <Card
+            isBlurred
+            className="border-3 border-danger h-[80px]"
+            shadow="sm"
+          >
+            <CardBody className="items-center text-center">
+              <div className="flex items-center justify-center text-danger font-bold space-x-2">
+                <Icon icon="solar:danger-triangle-broken" width={20} />
+                {!isCompact && <p className="text-md">Maintenance Active</p>}
+              </div>
+            </CardBody>
+          </Card>
+        )}
+
+        <Spacer y={8} />
+        <div
+          className={cn("flex flex-cols items-center justify-center gap-4", {
+            "flex-col gap-2": isCompact,
+          })}
+        >
+          <ThemeSwitch />
+
           <Popover offset={12} placement="bottom">
             <PopoverTrigger>
               <Button
@@ -129,160 +263,32 @@ export default function SidebarMenu({
               />
             </PopoverContent>
           </Popover>
-          <ThemeSwitch />
-        </div>
-      </div>
-      <Spacer y={8} />
-      <Dropdown>
-        <DropdownTrigger>
-          <div className="flex items-center gap-3 px-3 hover:cursor-pointer">
-            <Avatar
-              isBordered
-              color={
-                user.role === "Admin"
-                  ? "danger"
-                  : user.role === "VIP"
-                    ? "warning"
-                    : "primary"
-              }
-              name={user.username}
-              radius="sm"
-              size="sm"
-            />
-            <div className="flex flex-col">
-              <p className="text-small font-medium text-default-600">
-                {user.username}{" "}
-                {user.role === "Admin" && (
-                  <span className="text-danger">(Admin)</span>
-                )}
-                {user.role === "VIP" && (
-                  <span className="text-warning">(VIP)</span>
-                )}
-              </p>
-              <p className="text-tiny text-default-400">{user.email}</p>
-            </div>
-          </div>
-        </DropdownTrigger>
-        <DropdownMenu aria-label="Profile Actions" variant="flat">
-          <DropdownItem
-            key="profile"
-            showDivider
-            startContent={<Icon icon="solar:settings-broken" width={18} />}
-            onPress={() => router.push(`/profile`)}
-          >
-            Settings
-          </DropdownItem>
-          <DropdownItem
-            key="logout"
-            color="danger"
-            startContent={<Icon icon="solar:logout-3-broken" width={18} />}
-            onPress={LogoutHandler}
-          >
-            Log Out
-          </DropdownItem>
-        </DropdownMenu>
-      </Dropdown>
 
-      <Spacer y={8} />
-
-      <Sidebar
-        defaultSelectedKey="home"
-        items={user.role === "Admin" ? sectionAdminItems : sectionItems}
-        selectedKeys={[currentPath]}
-      />
-
-      <Spacer y={8} />
-
-      {user.role === "Admin" && settings.maintenance && (
-        <Card isBlurred className="mx-2 border-3 border-danger" shadow="sm">
-          <CardBody className="items-center py-5 text-center">
-            <div className="flex items-center justify-center text-danger font-bold space-x-2">
-              <Icon icon="solar:danger-triangle-broken" width={20} />
-              <h3 className="text-lg">Maintenance</h3>
-            </div>
-            <p className="p-4 text-small">
-              Maintenance mode is currently active.
-            </p>
-          </CardBody>
-        </Card>
-      )}
-
-      <Spacer y={8} />
-      <div className="mt-auto flex flex-col">
-        <Popover placement="top">
-          <PopoverTrigger>
-            <Button
-              fullWidth
-              className="justify-start text-default-500 data-[hover=true]:text-foreground"
-              startContent={
-                <Icon
-                  className="text-default-500"
-                  icon="solar:info-circle-line-duotone"
-                  width={24}
-                />
-              }
-              variant="light"
-            >
-              Help & Information
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent>
-            <div className="flex flex-wrap items-center gap-1 px-1 py-2">
-              <p className="text-small font-bold">Version:</p>
-              <p className="text-small">v{siteConfig.version}</p>
-            </div>
-          </PopoverContent>
-        </Popover>
-        <div className="flex items-center justify-center gap-1 pt-4">
-          <span className="text-xs text-default-600">Powered by</span>
-          <p className="text-sm text-primary font-bold">JustLab</p>
-          <p className="text-sm text-default-600">
-            &copy; {new Date().getFullYear()}
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-
-  return (
-    <div className="flex h-screen w-full">
-      <div className="overflow-y-auto border-r border-divider h-full">
-        <SidebarDrawer
-          className="!border-r-small border-divider"
-          isOpen={isOpen}
-          onOpenChange={onOpenChange}
-        >
-          {content}
-        </SidebarDrawer>
-      </div>
-      <div className="w-full flex-1 flex-col p-4 overflow-y-auto">
-        <header className="flex sm:hidden items-center gap-2">
-          <Button
-            isIconOnly
-            className="flex sm:hidden"
-            size="sm"
-            variant="light"
-            onPress={onOpen}
-          >
+          <Button isIconOnly size="sm" variant="light" onPress={onToggle}>
             <Icon
               className="text-default-500"
               height={24}
-              icon="solar:hamburger-menu-outline"
+              icon="solar:sidebar-minimalistic-outline"
               width={24}
             />
           </Button>
-          <Image
-            alt="Logo"
-            height={32}
-            radius="none"
-            shadow="none"
-            src={`/images/af_logo_${theme === "light" || isSSR ? "black" : "white"}.png`}
-            width={32}
-            onClick={onOpen}
-          />
-          <h2 className="text-medium font-bold text-default-700">AlertFlow</h2>
-        </header>
-        <main className="mt-4 h-full w-full overflow-visible">{children}</main>
+        </div>
+
+        <Spacer y={2} />
+
+        {!isCompact && (
+          <div className="flex items-center justify-center gap-1">
+            <span className="text-xs text-default-600">Powered by</span>
+            <p className="text-sm text-primary font-bold">JustLab</p>
+            <p className="text-sm text-default-600">
+              &copy; {new Date().getFullYear()}
+            </p>
+          </div>
+        )}
+      </div>
+
+      <div className="w-full flex-1 flex-col p-4 overflow-y-auto">
+        <main className="h-full w-full overflow-visible">{children}</main>
       </div>
     </div>
   );
