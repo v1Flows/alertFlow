@@ -53,11 +53,15 @@ export default function SidebarMenu({
   user,
   settings,
   notifications,
+  projects,
+  flows,
 }: {
   children: React.ReactNode;
   user: any;
   settings: any;
   notifications: any;
+  projects: any;
+  flows: any;
 }) {
   const router = useRouter();
 
@@ -177,7 +181,11 @@ export default function SidebarMenu({
 
         <ScrollShadow className="-mr-6 h-full max-h-full py-6 pr-6">
           <div className="flex items-center justify-center">
-            <Search isCollapsed={isCollapsed} />
+            <Search
+              flows={flows}
+              isCollapsed={isCollapsed}
+              projects={projects}
+            />
           </div>
           <Spacer y={2} />
 

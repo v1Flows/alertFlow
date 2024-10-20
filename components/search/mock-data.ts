@@ -157,6 +157,8 @@ const searchData = {
       content: "Quota",
     },
   ],
+  projects: [],
+  flows: [],
   help: [
     {
       slug: "help-documentation",

@@ -5,6 +5,8 @@ import { IconifyIcon } from "@iconify/react";
 export enum CategoryEnum {
   COMMON = "common",
   USER = "user",
+  PROJECTS = "projects",
+  FLOWS = "flows",
   HELP = "help",
 }
 
@@ -126,7 +128,6 @@ export type ComponentInfo = {
   icon: string | IconifyIcon;
   slug: string;
   name: string;
-  image: string;
   code?: ComponentCodeFile[];
   files?: {
     javascript?: Record<string, string>;
@@ -159,7 +160,6 @@ export interface SearchResultItem {
   url: string;
   group: GroupInfo;
   content: string;
-  image?: string;
   category: string;
   component: ComponentInfo;
 }

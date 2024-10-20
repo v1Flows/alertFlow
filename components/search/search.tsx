@@ -154,6 +154,8 @@ const MAX_RESULTS = 20;
 const CATEGORY_ICON_MAP = {
   [CategoryEnum.COMMON]: "solar:widget-4-linear",
   [CategoryEnum.USER]: "solar:smile-square-linear",
+  [CategoryEnum.PROJECTS]: "solar:inbox-archive-outline",
+  [CategoryEnum.FLOWS]: "solar:book-2-outline",
   [CategoryEnum.HELP]: "solar:info-square-linear",
 };
 const CATEGORIES = [
@@ -168,13 +170,23 @@ const CATEGORIES = [
     label: "User",
   },
   {
+    key: CategoryEnum.PROJECTS,
+    icon: CATEGORY_ICON_MAP[CategoryEnum.PROJECTS],
+    label: "Projects",
+  },
+  {
+    key: CategoryEnum.FLOWS,
+    icon: CATEGORY_ICON_MAP[CategoryEnum.FLOWS],
+    label: "Flows",
+  },
+  {
     key: CategoryEnum.HELP,
     icon: CATEGORY_ICON_MAP[CategoryEnum.HELP],
     label: "Help",
   },
 ] as const;
 
-function flattenSearchData() {
+function flattenSearchData(projects: any, flows: any) {
   let flattened: SearchResultItem[] = [];
 
   Object.keys(searchData).forEach((key) => {
@@ -190,6 +202,64 @@ function flattenSearchData() {
     flattened = flattened.concat(items);
   });
 
+  // Include projects data
+  if (projects) {
+    projects.forEach((project: any) => {
+      flattened.push({
+        category: CategoryEnum.PROJECTS,
+        slug: project.name,
+        component: {
+          name: project.name,
+          slug: project.id,
+          icon: project.icon,
+          attributes: {
+            group: "projects",
+            groupOrder: 2,
+            iframe: {
+              initialHeight: 220,
+              initialMobileHeight: 220,
+            },
+          },
+        },
+        url: `/dashboard/projects/${project.id}`,
+        group: {
+          key: "projects",
+          name: "Projects",
+        },
+        content: project.name,
+      });
+    });
+  }
+
+  // Include flows data
+  if (flows) {
+    flows.forEach((flow: any) => {
+      flattened.push({
+        category: CategoryEnum.FLOWS,
+        slug: flow.name,
+        component: {
+          name: flow.name,
+          slug: flow.id,
+          icon: "solar:book-2-outline",
+          attributes: {
+            group: flow.project_id,
+            groupOrder: 1,
+            iframe: {
+              initialHeight: 220,
+              initialMobileHeight: 220,
+            },
+          },
+        },
+        url: `/dashboard/flows/${flow.id}`,
+        group: {
+          key: flow.project_id,
+          name: projects.find((p: any) => p.id === flow.project_id)?.name,
+        },
+        content: flow.name,
+      });
+    });
+  }
+
   return flattened;
 }
 
@@ -197,6 +267,8 @@ function groupedSearchData(data: SearchResultItem[]) {
   let categoryGroupMap = {
     [CategoryEnum.COMMON]: [] as SearchResultItem[],
     [CategoryEnum.USER]: [] as SearchResultItem[],
+    [CategoryEnum.PROJECTS]: [] as SearchResultItem[],
+    [CategoryEnum.FLOWS]: [] as SearchResultItem[],
     [CategoryEnum.HELP]: [] as SearchResultItem[],
   };
 
@@ -217,7 +289,15 @@ function groupedSearchData(data: SearchResultItem[]) {
  *  scroll-into-view-if-needed react-multi-ref match-sorter`
  *
  */
-export default function Search({ isCollapsed }: { isCollapsed: boolean }) {
+export default function Search({
+  isCollapsed,
+  projects,
+  flows,
+}: {
+  isCollapsed: boolean;
+  projects: any;
+  flows: any;
+}) {
   const router = useRouter();
 
   const [query, setQuery] = useState("");
@@ -228,7 +308,10 @@ export default function Search({ isCollapsed }: { isCollapsed: boolean }) {
     CategoryEnum.COMMON,
   );
   const slots = useMemo(() => cmdk(), []);
-  const flattenedData = useMemo(() => flattenSearchData(), []);
+  const flattenedData = useMemo(
+    () => flattenSearchData(projects, flows),
+    [projects, flows],
+  );
   const groupedData = useMemo(
     () => groupedSearchData(flattenedData),
     [flattenedData],
@@ -266,8 +349,8 @@ export default function Search({ isCollapsed }: { isCollapsed: boolean }) {
 
     return savedRecentSearches?.map((item) => {
       const found = searchData[item.category as CategoryEnum]?.find(
-        (i) => i.slug === item.slug,
-      ) as SearchResultItem;
+        (i: any) => i.slug === item.slug,
+      );
 
       return {
         ...item,
@@ -546,12 +629,6 @@ export default function Search({ isCollapsed }: { isCollapsed: boolean }) {
                   <p className="text-xs font-semibold leading-4 text-default-900">
                     {groupName}
                   </p>
-                  <Link
-                    className={"text-sm font-medium leading-5 text-default-300"}
-                    href={`/components/${selectedCategory}/${key}`}
-                  >
-                    View More
-                  </Link>
                 </div>
               }
             >
