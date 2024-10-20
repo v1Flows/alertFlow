@@ -22,7 +22,7 @@ export default async function DashboardHomeLayout({
     <SidebarMenu
       flows={flows}
       notifications={notifications}
-      projects={projects}
+      projects={projects.projects}
       settings={settings}
       user={userDetails}
     >
