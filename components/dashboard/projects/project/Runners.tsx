@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import React from "react";
 import TimeAgo from "react-timeago";
 import { Icon } from "@iconify/react";
+import { useMediaQuery } from "usehooks-ts";
 
 import { VerticalDotsIcon, PlusIcon } from "@/components/icons";
 import CreateRunnerModal from "@/components/functions/runner/create";
@@ -32,6 +33,8 @@ export default function Runners({
   const [targetRunner, setTargetRunner] = React.useState({} as any);
   const addRunnerModal = useDisclosure();
   const deleteRunnerModal = useDisclosure();
+
+  const isMobile = useMediaQuery("(max-width: 650px)");
 
   const copyRunnerIDtoClipboard = (id: string) => {
     // eslint-disable-next-line no-undef
@@ -97,10 +100,11 @@ export default function Runners({
         <Button
           color="primary"
           isDisabled={checkQuotaDisabled()}
+          isIconOnly={isMobile}
           startContent={<PlusIcon height={undefined} width={undefined} />}
           onPress={() => addRunnerModal.onOpen()}
         >
-          Add Runner
+          {!isMobile && "Add Runner"}
         </Button>
       </div>
       <Divider className="mb-4" />

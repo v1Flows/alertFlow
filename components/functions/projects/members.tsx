@@ -157,8 +157,20 @@ export default function AddProjectMemberModal({
                           selectionMode="single"
                           onSelectionChange={setSelectedKeys}
                         >
-                          <DropdownItem key="Viewer">Can View</DropdownItem>
-                          <DropdownItem key="Editor">Can Edit</DropdownItem>
+                          <DropdownItem
+                            key="Viewer"
+                            startContent={<Icon icon="solar:eye-linear" />}
+                          >
+                            Can View
+                          </DropdownItem>
+                          <DropdownItem
+                            key="Editor"
+                            startContent={
+                              <Icon icon="solar:pen-new-square-linear" />
+                            }
+                          >
+                            Can Edit
+                          </DropdownItem>
                         </DropdownMenu>
                       </Dropdown>
                     }
