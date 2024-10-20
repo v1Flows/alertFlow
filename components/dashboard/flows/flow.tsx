@@ -59,7 +59,7 @@ export function Flow({
             </div>
           </div>
           <Spacer y={2} />
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap gap-2 items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold mb-0 text-primary">
                 {flow.name}
