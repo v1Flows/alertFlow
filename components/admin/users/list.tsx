@@ -32,10 +32,10 @@ import { Icon } from "@iconify/react";
 
 import { LockIcon, PlusIcon } from "@/components/icons";
 import UpdateUserStatus from "@/lib/fetch/admin/PUT/UpdateUserState";
-import DeleteUserModal from "@/components/functions/users/delete";
 import SignUpModal from "@/components/functions/auth/signUp";
 import EditUserModal from "@/components/functions/users/edit";
 import AdminSendUserNotificationModal from "@/components/functions/admin/sendNotification";
+import AdminDeleteUserModal from "@/components/functions/admin/delete";
 
 export function UsersList({ users, plans }: any) {
   const router = useRouter();
@@ -446,7 +446,7 @@ export function UsersList({ users, plans }: any) {
         user={targetUser}
       />
       <SignUpModal skipSuccessModal disclosure={signUpModal} />
-      <DeleteUserModal disclosure={deleteUserModal} user={targetUser} />
+      <AdminDeleteUserModal disclosure={deleteUserModal} user={targetUser} />
     </main>
   );
 }
