@@ -28,7 +28,7 @@ export default function LoginPageComponent() {
   const router = useRouter();
 
   const [isLoginLoading, setIsLoginLoading] = useState(false);
-  const [email, setEmail] = useState("");
+  const [usernameEmail, setUsernameEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
@@ -44,7 +44,7 @@ export default function LoginPageComponent() {
     setError(false);
     setErrorText("");
 
-    const res = await LoginAPI(email, password);
+    const res = await LoginAPI(usernameEmail, password);
 
     if (!res.error) {
       await setSession(res.token, res.user, res.expires_at);
@@ -102,13 +102,13 @@ export default function LoginPageComponent() {
             endContent={
               <MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
             }
-            label="Email"
+            label="Username / Email"
             name="email"
-            placeholder="Enter your email"
-            type="email"
-            value={email}
+            placeholder="Enter your username or email"
+            type="text"
+            value={usernameEmail}
             variant="bordered"
-            onValueChange={setEmail}
+            onValueChange={setUsernameEmail}
           />
           <Input
             isRequired
