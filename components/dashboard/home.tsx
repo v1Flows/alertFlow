@@ -1,8 +1,10 @@
 "use client";
 
 import {
+  Button,
   Card,
   CardBody,
+  CardHeader,
   Dropdown,
   DropdownItem,
   DropdownMenu,
@@ -64,6 +66,62 @@ export function DashboardHome({
       <p className="text-default-500">
         Here&apos;s the current status for today.
       </p>
+
+      <Spacer y={2} />
+
+      <Card className="border-2 border-success/60">
+        <CardHeader className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-success">
+            <p className="text-lg font-bold">New here, huh?</p>
+            <Icon icon="solar:tea-cup-linear" width={24} />
+          </div>
+          <Icon
+            className="text-default-500"
+            icon="solar:close-square-linear"
+            width={20}
+          />
+        </CardHeader>
+        <CardBody className="text-default-600">
+          <p>First of all, thanks for beeing here 🙏</p>
+          <p>
+            We want to make the start for you as easy as possible and to do so,
+            we offer you two options: Take a Tour or Read our Documentation
+          </p>
+
+          <Spacer y={2} />
+
+          <div className="grid grid-cols-5 items-center gap-2">
+            <div className="col-span-2">
+              <Button
+                fullWidth
+                color="primary"
+                startContent={<Icon icon="solar:planet-4-linear" width={20} />}
+                variant="flat"
+              >
+                Take a Tour
+              </Button>
+            </div>
+            <div className="col-span-2">
+              <Button
+                fullWidth
+                color="primary"
+                startContent={<Icon icon="solar:notes-outline" width={20} />}
+                variant="flat"
+                onClick={() => {
+                  router.push("/docs");
+                }}
+              >
+                Read our Documentation
+              </Button>
+            </div>
+            <div className="col-span-1">
+              <Button fullWidth variant="ghost">
+                Skip
+              </Button>
+            </div>
+          </div>
+        </CardBody>
+      </Card>
 
       <Spacer y={2} />
       <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 items-stretch gap-4">
