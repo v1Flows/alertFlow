@@ -171,6 +171,7 @@ export default function EditActionModal({
                             param.type === "number" ? (
                             <Input
                               key={param.key}
+                              description={param.description}
                               isRequired={param.required}
                               label={param.key}
                               type={param.type}
@@ -195,6 +196,7 @@ export default function EditActionModal({
                           ) : param.type === "textarea" ? (
                             <Textarea
                               key={param.key}
+                              description={param.description}
                               isRequired={param.required}
                               label={param.key}
                               type={param.type}

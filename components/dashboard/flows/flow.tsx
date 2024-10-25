@@ -11,6 +11,7 @@ import {
 } from "@nextui-org/react";
 import React from "react";
 import { Icon } from "@iconify/react";
+import NumberFlow from "@number-flow/react";
 
 import Reloader from "@/components/reloader/Reloader";
 import FlowBreadcrumbs from "@/components/dashboard/flows/flow/breadcrumbs";
@@ -221,11 +222,15 @@ export function Flow({
                       </div>
                       <div>
                         <p className="text-md font-bold">
-                          {
-                            executions.filter(
-                              (execution: any) => execution.flow_id === flow.id,
-                            ).length
-                          }
+                          <NumberFlow
+                            locales="en-US" // Intl.NumberFormat locales
+                            value={
+                              executions.filter(
+                                (execution: any) =>
+                                  execution.flow_id === flow.id,
+                              ).length
+                            }
+                          />
                         </p>
                         <p className="text-sm text-default-500">Executions</p>
                       </div>

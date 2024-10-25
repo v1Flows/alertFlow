@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-export default async function GetFlowExecution(flowID: any, executionID: any) {
+export default async function AdminDeleteUser(userID: string) {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;
@@ -15,16 +15,16 @@ export default async function GetFlowExecution(flowID: any, executionID: any) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/flows/${flowID}/executions/${executionID}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/admin/users/${userID}`,
       {
-        method: "GET",
+        method: "DELETE",
         headers: headers,
       },
     );
     const data = await res.json();
 
-    return data.execution;
+    return data;
   } catch (error) {
-    return { error: "Failed to fetch data" };
+    return { error: "Failed to delete user" };
   }
 }
