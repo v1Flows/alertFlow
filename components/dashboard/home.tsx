@@ -12,6 +12,7 @@ import {
 import { Icon } from "@iconify/react";
 import ReactTimeago from "react-timeago";
 import { useRouter } from "next/navigation";
+import NumberFlow from "@number-flow/react";
 
 import Executions from "./flows/flow/executions";
 import ExecutionChartCard from "./executionChartCard";
@@ -52,6 +53,11 @@ export function DashboardHome({
     }
   }
 
+  console.log(
+    executions.filter((e: any) => e.error).length > 0 &&
+      executions.filter((e: any) => e.interaction_required).length > 0,
+  );
+
   return (
     <main>
       <p className="text-xl font-bold">Hello, {user.username} 👋</p>
@@ -70,7 +76,12 @@ export function DashboardHome({
                 </div>
                 <div>
                   <p className="text-md font-bold">
-                    {notifications.filter((n: any) => !n.is_read).length}
+                    <NumberFlow
+                      locales="en-US" // Intl.NumberFormat locales
+                      value={
+                        notifications.filter((n: any) => !n.is_read).length
+                      }
+                    />
                   </p>
                   <p className="text-sm text-default-500">Notifications</p>
                 </div>
@@ -153,21 +164,46 @@ export function DashboardHome({
                     <div>
                       {executions.filter(
                         (e: any) =>
-                          e.error &&
+                          (e.error || e.interaction_required) &&
                           new Date(e.created_at).getTime() >
                             Date.now() - 24 * 60 * 60 * 1000,
                       ).length > 0 ? (
-                        <p className="text-md font-bold text-danger">
-                          {
+                        <div className="flex flex-cols items-center gap-1">
+                          {executions.filter((e: any) => e.interaction_required)
+                            .length > 0 && (
+                            <p className="text-md font-bold text-primary">
+                              {
+                                executions.filter(
+                                  (e: any) =>
+                                    e.interaction_required &&
+                                    new Date(e.created_at).getTime() >
+                                      Date.now() - 24 * 60 * 60 * 1000,
+                                ).length
+                              }{" "}
+                              Interaction Required
+                            </p>
+                          )}
+                          {executions.filter((e: any) => e.error).length > 0 &&
                             executions.filter(
-                              (e: any) =>
-                                e.error &&
-                                new Date(e.created_at).getTime() >
-                                  Date.now() - 24 * 60 * 60 * 1000,
-                            ).length
-                          }{" "}
-                          Failed
-                        </p>
+                              (e: any) => e.interaction_required,
+                            ).length > 0 && (
+                              <p className="text-md font-bold">&</p>
+                            )}
+                          {executions.filter((e: any) => e.error).length >
+                            0 && (
+                            <p className="text-md font-bold text-danger">
+                              {
+                                executions.filter(
+                                  (e: any) =>
+                                    e.error &&
+                                    new Date(e.created_at).getTime() >
+                                      Date.now() - 24 * 60 * 60 * 1000,
+                                ).length
+                              }{" "}
+                              Failed
+                            </p>
+                          )}
+                        </div>
                       ) : (
                         <p className="text-md font-bold text-success">OK</p>
                       )}
@@ -180,6 +216,54 @@ export function DashboardHome({
               </Card>
             </DropdownTrigger>
             <DropdownMenu aria-label="Execution Problems">
+              {executions
+                .filter(
+                  (e: any) =>
+                    e.interaction_required &&
+                    new Date(e.created_at).getTime() >
+                      Date.now() - 24 * 60 * 60 * 1000,
+                )
+                .sort((a: any, b: any) =>
+                  new Date(a.created_at) < new Date(b.created_at) ? 1 : -1,
+                )
+                .map((execution: any, index: any) => (
+                  <DropdownItem
+                    key={execution.id}
+                    showDivider={index !== executions.length - 1}
+                    onPress={() => {
+                      router.push(
+                        `/dashboard/flows/${execution.flow_id}/execution/${execution.id}`,
+                      );
+                    }}
+                  >
+                    <div className="flex justify-between items-center gap-4">
+                      <div className="flex items-center justify-start gap-2">
+                        <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
+                          <Icon
+                            className="text-primary"
+                            icon="solar:hand-shake-linear"
+                            width={20}
+                          />
+                        </div>
+                        <div>
+                          <p className="text-md font-bold">{execution.id}</p>
+                          <p className="text-sm text-default-500">
+                            Flow:{" "}
+                            {
+                              flows.find((f: any) => f.id === execution.flow_id)
+                                .name
+                            }
+                          </p>
+                          <p className="text-sm text-default-500">
+                            Executed at:{" "}
+                            <ReactTimeago date={execution.executed_at} />
+                          </p>
+                        </div>
+                      </div>
+                      <Icon icon="akar-icons:arrow-right" />
+                    </div>
+                  </DropdownItem>
+                ))}
               {executions
                 .filter(
                   (e: any) =>

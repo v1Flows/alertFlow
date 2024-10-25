@@ -10,6 +10,7 @@ import {
   Avatar,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
+import NumberFlow from "@number-flow/react";
 
 import { InfoIcon } from "@/components/icons";
 import { IconWrapper } from "@/lib/IconWrapper";
@@ -114,7 +115,12 @@ export default function Project({
                     <Icon icon="solar:smile-square-outline" width={20} />
                   </div>
                   <div>
-                    <p className="text-md font-bold">{members.length}</p>
+                    <p className="text-md font-bold">
+                      <NumberFlow
+                        locales="en-US" // Intl.NumberFormat locales
+                        value={members.length}
+                      />
+                    </p>
                     <p className="text-sm text-default-500">Members</p>
                   </div>
                 </div>
@@ -131,15 +137,19 @@ export default function Project({
                   <div>
                     <p className="text-md font-bold">
                       {project.alertflow_runners ? (
-                        <p>{runners.length}</p>
+                        <NumberFlow
+                          locales="en-US" // Intl.NumberFormat locales
+                          value={runners.length}
+                        />
                       ) : (
-                        <p>
-                          {
+                        <NumberFlow
+                          locales="en-US" // Intl.NumberFormat locales
+                          value={
                             runners.filter(
                               (r: any) => r.alertflow_runner === false,
                             ).length
                           }
-                        </p>
+                        />
                       )}
                     </p>
                     <p className="text-sm text-default-500">Runners</p>
@@ -156,7 +166,12 @@ export default function Project({
                     <Icon icon="solar:key-square-2-outline" width={20} />
                   </div>
                   <div>
-                    <p className="text-md font-bold">{tokens.length}</p>
+                    <p className="text-md font-bold">
+                      <NumberFlow
+                        locales="en-US" // Intl.NumberFormat locales
+                        value={tokens.length}
+                      />
+                    </p>
                     <p className="text-sm text-default-500">Tokens</p>
                   </div>
                 </div>
