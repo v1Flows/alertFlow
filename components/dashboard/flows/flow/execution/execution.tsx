@@ -19,11 +19,14 @@ import {
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import React, { useMemo, useState } from "react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 import Reloader from "@/components/reloader/Reloader";
 import GetPayload from "@/lib/fetch/payload/payload";
 import GetExecutionSteps from "@/lib/fetch/executions/steps";
 import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
+import InteractExecutionStep from "@/lib/fetch/executions/step_interact";
 
 import ExecutionBreadcrumbs from "./breadcrumbs";
 import ExecutionDetails from "./details";
@@ -31,6 +34,8 @@ import AdminExecutionActions from "./adminExecutionActions";
 import AdminStepActions from "./adminStepActions";
 
 export function Execution({ flow, execution, runners, userDetails }: any) {
+  const router = useRouter();
+
   const [payload, setPayload] = useState({} as any);
   const [steps, setSteps] = useState([] as any);
 
@@ -81,6 +86,8 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
       return "No Pattern Match";
     } else if (step.finished) {
       return "Finished";
+    } else if (step.interactive) {
+      return "Interactive";
     } else {
       return "Running";
     }
@@ -181,6 +188,25 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
           />
         </Tooltip>
       );
+    } else if (step.interactive) {
+      return (
+        <Tooltip content={`${status(step)}`}>
+          <CircularProgress
+            aria-label="Step"
+            color="primary"
+            showValueLabel={true}
+            size="md"
+            value={100}
+            valueLabel={
+              <Icon
+                className="text-primary"
+                icon="solar:hand-shake-linear"
+                width={22}
+              />
+            }
+          />
+        </Tooltip>
+      );
     } else {
       return (
         <Tooltip content={`${status(step)}`}>
@@ -191,11 +217,13 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
   }
 
   function getTotalDurationSeconds() {
-    if (execution.finished_at === "0001-01-01T00:00:00Z") {
-      execution.finished_at = new Date().toISOString();
+    var calFinished = new Date().toISOString();
+
+    if (execution.finished_at !== "0001-01-01T00:00:00Z") {
+      calFinished = execution.finished_at;
     }
     const ms =
-      new Date(execution.finished_at).getTime() -
+      new Date(calFinished).getTime() -
       new Date(execution.created_at).getTime();
     const sec = Math.floor(ms / 1000);
 
@@ -234,6 +262,31 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
       return `${min}m ${sec % 60}s`;
     } else {
       return `${sec}s`;
+    }
+  }
+
+  async function interactStep(step: any, status: boolean) {
+    if (status) {
+      step.interaction_approved = true;
+      step.interaction_rejected = false;
+    } else {
+      step.interaction_approved = false;
+      step.interaction_rejected = true;
+    }
+
+    step.interacted = true;
+    step.action_messages = [
+      `Step interacted by ${userDetails.username} (${userDetails.id})`,
+    ];
+    step.interaced_by = userDetails.id;
+    step.interacted_at = new Date().toISOString();
+    const res = await InteractExecutionStep(execution.id, step.id, step);
+
+    if (res.error) {
+      toast.error(res.error);
+    } else {
+      toast.success("Step interaction successful");
+      router.refresh();
     }
   }
 
@@ -316,6 +369,36 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
                   </p>
                 ))}
               </Snippet>
+              {step.interactive && !step.interacted && (
+                <div className="flex flex-cols items-center gap-4">
+                  <Button
+                    fullWidth
+                    color="success"
+                    startContent={
+                      <Icon icon="solar:verified-check-linear" width={18} />
+                    }
+                    variant="flat"
+                    onPress={() => {
+                      interactStep(step, true);
+                    }}
+                  >
+                    Approve & Continue
+                  </Button>
+                  <Button
+                    fullWidth
+                    color="danger"
+                    startContent={
+                      <Icon icon="solar:forbidden-outline" width={18} />
+                    }
+                    variant="flat"
+                    onPress={() => {
+                      interactStep(step, false);
+                    }}
+                  >
+                    Reject & Stop
+                  </Button>
+                </div>
+              )}
             </div>
           );
         case "duration":
@@ -401,7 +484,10 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
             <AdminExecutionActions execution={execution} />
           )}
 
-          {execution.running || execution.waiting || execution.paused ? (
+          {execution.running ||
+          execution.waiting ||
+          execution.paused ||
+          execution.interaction_required ? (
             <div>
               <Reloader />
             </div>
@@ -446,7 +532,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
               key={item.id}
               className={item.parent_id !== "" ? "bg-default-100" : ""}
             >
-              {(columnKey) => (
+              {(columnKey: any) => (
                 <TableCell>{renderCell(item, columnKey)}</TableCell>
               )}
             </TableRow>

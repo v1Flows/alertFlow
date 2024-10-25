@@ -17,6 +17,10 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
       return "No Pattern Match";
     } else if (execution.ghost) {
       return "No Flow Actions found";
+    } else if (execution.interaction_required) {
+      return "Interaction Required";
+    } else if (execution.cancelled) {
+      return "Cancelled";
     } else {
       return "Finished";
     }
@@ -35,6 +39,10 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
       return "secondary";
     } else if (execution.ghost) {
       return "default-500";
+    } else if (execution.interaction_required) {
+      return "primary";
+    } else if (execution.cancelled) {
+      return "danger";
     } else {
       return "success";
     }
@@ -141,6 +149,42 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
           />
         </Tooltip>
       );
+    } else if (execution.interaction_required) {
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress
+            color="primary"
+            showValueLabel={true}
+            size="md"
+            value={100}
+            valueLabel={
+              <Icon
+                className="text-primary-500"
+                icon="solar:hand-shake-linear"
+                width={20}
+              />
+            }
+          />
+        </Tooltip>
+      );
+    } else if (execution.cancelled) {
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress
+            color="danger"
+            showValueLabel={true}
+            size="md"
+            value={100}
+            valueLabel={
+              <Icon
+                className="text-danger-500"
+                icon="solar:sad-square-linear"
+                width={20}
+              />
+            }
+          />
+        </Tooltip>
+      );
     } else {
       return (
         <Tooltip content={`${status(execution)}. Steps 5 / 5`}>
@@ -165,9 +209,14 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
   }
 
   function getDuration() {
-    if (execution.finished_at === "0001-01-01T00:00:00Z") return "-";
+    var calFinished = new Date().toISOString();
+
+    if (execution.finished_at !== "0001-01-01T00:00:00Z") {
+      calFinished = execution.finished_at;
+    }
+
     const ms =
-      new Date(execution.finished_at).getTime() -
+      new Date(calFinished).getTime() -
       new Date(execution.created_at).getTime();
     const sec = Math.floor(ms / 1000);
     const min = Math.floor(sec / 60);
@@ -232,7 +281,6 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
                 <p className="text-md font-bold">
                   <NumberFlow
                     locales="en-US" // Intl.NumberFormat locales
-                    trend="increasing"
                     value={steps.length - 1}
                   />
                 </p>

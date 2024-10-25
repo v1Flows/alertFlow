@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-export default async function GetFlowExecution(flowID: any, executionID: any) {
+export default async function GetExecution(executionID: any) {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;
@@ -15,7 +15,7 @@ export default async function GetFlowExecution(flowID: any, executionID: any) {
       headers.append("Authorization", token);
     }
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/flows/${flowID}/executions/${executionID}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/executions/${executionID}`,
       {
         method: "GET",
         headers: headers,

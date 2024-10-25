@@ -12,6 +12,7 @@ import {
 } from "recharts";
 import { Icon } from "@iconify/react";
 import { useTheme } from "next-themes";
+import NumberFlow from "@number-flow/react";
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
@@ -55,7 +56,12 @@ export default function PayloadChartCard({ stats }: { stats: any }) {
                 <Icon icon="solar:letter-opened-outline" width={20} />
               </div>
               <div>
-                <h4 className="text-large font-bold">{lastPayload.value}</h4>
+                <h4 className="text-large font-bold">
+                  <NumberFlow
+                    locales="en-US" // Intl.NumberFormat locales
+                    value={lastPayload.value}
+                  />
+                </h4>
                 <p className="text-sm text-default-500">Payloads today</p>
               </div>
             </div>
