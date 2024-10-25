@@ -73,6 +73,8 @@ export default function AddActionModal({
     type: "",
     active: true,
     params: [],
+    custom_name: "",
+    custom_description: "",
   });
   const [params, setParams] = useState([] as any);
 
@@ -150,6 +152,8 @@ export default function AddActionModal({
       type: "",
       active: true,
       params: [],
+      custom_name: "",
+      custom_description: "",
     });
     setCurrentStep(0);
     onOpenChange();
@@ -166,6 +170,8 @@ export default function AddActionModal({
       type: action.type,
       active: true,
       params: params,
+      custom_name: action.custom_name,
+      custom_description: action.custom_description,
     };
 
     const updatedActions = [...flow.actions, sendAction];
@@ -183,6 +189,8 @@ export default function AddActionModal({
         type: "",
         active: true,
         params: [],
+        custom_name: "",
+        custom_description: "",
       });
       setCurrentStep(0);
       onOpenChange();
@@ -288,7 +296,31 @@ export default function AddActionModal({
                     {currentStep === 1 && (
                       <div>
                         <p className="text-lg text-default-500 font-bold">
-                          Required Parameters
+                          Details
+                        </p>
+                        <Spacer y={2} />
+                        <div className="grid grid-cols-2 gap-2">
+                          <Input
+                            description="Custom name for this action (optional)"
+                            label="Custom Name"
+                            type="text"
+                            value={action.custom_name}
+                            onValueChange={(e) =>
+                              setAction({ ...action, custom_name: e })
+                            }
+                          />
+                          <Input
+                            description="Custom description for this action (optional)"
+                            label="Custom Description"
+                            type="text"
+                            value={action.custom_description}
+                            onValueChange={(e) =>
+                              setAction({ ...action, custom_description: e })
+                            }
+                          />
+                        </div>
+                        <p className="text-lg text-default-500 font-bold">
+                          Parameters
                         </p>
                         <Spacer y={2} />
                         {(action.params && action.params.length > 0) ||

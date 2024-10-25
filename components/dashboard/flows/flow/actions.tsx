@@ -15,6 +15,7 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
+  Tooltip,
   useDisclosure,
 } from "@nextui-org/react";
 import React, { useEffect } from "react";
@@ -71,36 +72,55 @@ export default function Actions({
             <div className="flex items-center justify-between gap-4">
               <div className="w-full">
                 <div className="flex flex-cols items-center justify-between gap-2">
-                  <div className="flex items-center gap-2">
-                    <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                      <Icon icon={action.icon} width={26} />
-                    </div>
-                    <div>
-                      <div className="flex flex-cols gap-2">
+                  <Tooltip
+                    content={
+                      <div>
                         <p className="text-md font-bold">{action.name}</p>
-                        <Chip
-                          className="max-lg:hidden"
-                          color="default"
-                          radius="sm"
-                          size="sm"
-                          variant="flat"
-                        >
-                          {action.id}
-                        </Chip>
-                        <Chip
-                          color={action.active ? "success" : "danger"}
-                          radius="sm"
-                          size="sm"
-                          variant="flat"
-                        >
-                          {action.active ? "Active" : "Inactive"}
-                        </Chip>
+                        <p className="text-sm text-default-500">
+                          {action.description}
+                        </p>
                       </div>
-                      <p className="text-sm text-default-500">
-                        {action.description}
-                      </p>
+                    }
+                    placement="top"
+                    size="lg"
+                  >
+                    <div className="flex items-center gap-2">
+                      <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                        <Icon icon={action.icon} width={26} />
+                      </div>
+                      <div>
+                        <div className="flex flex-cols gap-2">
+                          <p className="text-md font-bold">
+                            {action.custom_name
+                              ? action.custom_name
+                              : action.name}
+                          </p>
+                          <Chip
+                            className="max-lg:hidden"
+                            color="default"
+                            radius="sm"
+                            size="sm"
+                            variant="flat"
+                          >
+                            {action.id}
+                          </Chip>
+                          <Chip
+                            color={action.active ? "success" : "danger"}
+                            radius="sm"
+                            size="sm"
+                            variant="flat"
+                          >
+                            {action.active ? "Active" : "Inactive"}
+                          </Chip>
+                        </div>
+                        <p className="text-sm text-default-500">
+                          {action.custom_description
+                            ? action.custom_description
+                            : action.description}
+                        </p>
+                      </div>
                     </div>
-                  </div>
+                  </Tooltip>
                   <div className="flex flex-cols items-center gap-2">
                     <Button
                       isIconOnly

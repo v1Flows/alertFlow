@@ -82,6 +82,8 @@ export default function EditActionModal({
       if (flowAction.id === action.id) {
         flowAction.active = action.active;
         flowAction.params = action.params;
+        flowAction.custom_name = action.custom_name;
+        flowAction.custom_description = action.custom_description;
       }
     });
 
@@ -120,7 +122,9 @@ export default function EditActionModal({
                   {/* Status */}
                   <div className="flex flex-col">
                     <div className="flex flex-cols items-center gap-2">
-                      <p className="font-bold">Status</p>
+                      <p className="text-lg text-default-500 font-bold">
+                        Status
+                      </p>
                       <Tooltip content="Defined Actions will either be executed one after the other or all in parallel. If in Sequential type one action fails, the others won't be processed anymore.">
                         <Icon
                           className="text-default-500"
@@ -162,7 +166,33 @@ export default function EditActionModal({
                     </div>
                   </div>
                   <div>
-                    <p className="font-bold">Parameters</p>
+                    <p className="text-lg text-default-500 font-bold">
+                      Details
+                    </p>
+                    <Spacer y={2} />
+                    <div className="grid grid-cols-2 gap-2">
+                      <Input
+                        description="Custom name for this action (optional)"
+                        label="Custom Name"
+                        type="text"
+                        value={action.custom_name}
+                        onValueChange={(e) =>
+                          setAction({ ...action, custom_name: e })
+                        }
+                      />
+                      <Input
+                        description="Custom description for this action (optional)"
+                        label="Custom Description"
+                        type="text"
+                        value={action.custom_description}
+                        onValueChange={(e) =>
+                          setAction({ ...action, custom_description: e })
+                        }
+                      />
+                    </div>
+                    <p className="text-lg text-default-500 font-bold">
+                      Parameters
+                    </p>
                     <Spacer y={2} />
                     {params?.length > 0 ? (
                       <div className="grid grid-cols-2 gap-2">
