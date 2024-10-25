@@ -297,31 +297,45 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
       switch (columnKey) {
         case "name":
           return (
-            <div className={`flex flex-col items-center gap-2`}>
-              {step.parent_id !== "" ? (
-                <Badge
-                  color="secondary"
-                  content=""
-                  placement="bottom-right"
-                  shape="circle"
-                >
-                  <Tooltip
-                    content={`Child Step of ${steps.find((s: any) => s.id == step.parent_id).action_name}`}
+            <Tooltip
+              content={
+                <div>
+                  <div className="text-small font-bold text-default-500">ID</div>
+                  <div className="text-small">{step.id}</div>
+                  <Divider className="mt-2 mb-2" />
+                  <div className="text-small font-bold text-default-500">Action name</div>
+                  <div className="text-small">{step.action_name}</div>
+                </div>
+              }
+            >
+              <div className={`flex flex-col items-center gap-2`}>
+                {step.parent_id !== "" ? (
+                  <Badge
+                    color="secondary"
+                    content=""
+                    placement="bottom-right"
+                    shape="circle"
                   >
                     <Icon
                       icon={`${step.icon || "solar:question-square-line-duotone"}`}
                       width={24}
                     />
-                  </Tooltip>
-                </Badge>
-              ) : (
-                <Icon
-                  icon={`${step.icon || "solar:question-square-line-duotone"}`}
-                  width={24}
-                />
-              )}
-              <p className="text-md font-medium">{step.action_name}</p>
-            </div>
+                  </Badge>
+                ) : (
+                  <Icon
+                    icon={`${step.icon || "solar:question-square-line-duotone"}`}
+                    width={24}
+                  />
+                )}
+                <p className="text-md font-medium">
+                  {flow.actions.find((a: any) => a.id === step.action_id)
+                    ?.custom_name
+                    ? flow.actions.find((a: any) => a.id === step.action_id)
+                        .custom_name
+                    : step.action_name}
+                </p>
+              </div>
+            </Tooltip>
           );
         case "child_steps":
           return (
