@@ -29,6 +29,7 @@ export function Flow({
   executions,
   payloads,
   runners,
+  user,
 }: any) {
   const editFlowModal = useDisclosure();
   const simulatePayloadModal = useDisclosure();
@@ -246,6 +247,7 @@ export function Flow({
               flow={flow}
               payloads={payloads}
               runners={runners}
+              user={user}
             />
           </div>
         </>

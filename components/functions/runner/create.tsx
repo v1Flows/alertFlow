@@ -69,7 +69,7 @@ export default function CreateRunnerModal({
       onOpenChangeInstructions();
       router.refresh();
     } else {
-      toast.error("Failed to create runner");
+      toast.error("Failed to create runner: " + response.error.error);
     }
 
     setIsLoading(false);

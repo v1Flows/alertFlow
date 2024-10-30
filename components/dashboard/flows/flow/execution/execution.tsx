@@ -41,34 +41,9 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
 
   const showPayloadModal = useDisclosure();
 
-  const defaultSteps = [
-    {
-      id: 2,
-      action_name: "Execution Registered",
-      action_messages: ["Execution got registered at API Backend"],
-      finished: true,
-      started_at: execution.created_at,
-      finished_at: execution.created_at,
-      parent_id: "",
-      is_hidden: false,
-      icon: "solar:cpu-bolt-broken",
-    },
-    execution.runner_id === "" && {
-      id: 3,
-      action_name: "Runner Pick Up",
-      action_messages: ["Waiting for Runner to pick up Execution"],
-      finished: false,
-      started_at: execution.created_at,
-      finished_at: "0001-01-01T00:00:00Z",
-      parent_id: "",
-      is_hidden: false,
-      icon: "solar:rocket-2-bold-duotone",
-    },
-  ];
-
   React.useEffect(() => {
-    GetExecutionSteps(execution.id).then((incSteps) => {
-      setSteps([...defaultSteps, ...incSteps]);
+    GetExecutionSteps(execution.id).then((steps) => {
+      setSteps(steps);
     });
     GetPayload(execution.payload_id).then((payload) => {
       setPayload(payload);
@@ -76,41 +51,53 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
   }, [execution]);
 
   function status(step: any) {
-    if (step.error) {
-      return "Error";
+    if (step.pending) {
+      return "Pending";
+    } else if (step.running) {
+      return "Running";
     } else if (step.paused) {
       return "Paused";
-    } else if (step.no_result) {
-      return "No Result";
+    } else if (step.canceled) {
+      return "Canceled";
     } else if (step.no_pattern_match) {
       return "No Pattern Match";
-    } else if (step.finished) {
-      return "Finished";
+    } else if (step.no_result) {
+      return "No Result";
     } else if (step.interactive) {
       return "Interactive";
+    } else if (step.error) {
+      return "Error";
+    } else if (step.finished) {
+      return "Finished";
     } else {
-      return "Running";
+      return "N/A";
     }
   }
 
   function statusIcon(step: any) {
-    if (step.error) {
+    if (step.pending) {
       return (
         <Tooltip content={`${status(step)}`}>
           <CircularProgress
             aria-label="Step"
-            color="danger"
+            color="default"
             showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
               <Icon
-                className="text-danger"
-                icon="solar:danger-triangle-broken"
+                className="text-default-500"
+                icon="solar:sleeping-square-linear"
                 width={20}
               />
             }
           />
+        </Tooltip>
+      );
+    } else if (step.running) {
+      return (
+        <Tooltip content={`${status(step)}`}>
+          <CircularProgress aria-label="Step" color="primary" size="md" />
         </Tooltip>
       );
     } else if (step.paused) {
@@ -127,6 +114,43 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
                 className="text-warning"
                 icon="solar:pause-broken"
                 width={16}
+              />
+            }
+          />
+        </Tooltip>
+      );
+    } else if (step.canceled) {
+      return (
+        <Tooltip content={`${status(step)}`}>
+          <CircularProgress
+            aria-label="Step"
+            color="danger"
+            showValueLabel={true}
+            size="md"
+            value={100}
+            valueLabel={
+              <Icon
+                className="text-danger"
+                icon="solar:close-line-duotone"
+                width={20}
+              />
+            }
+          />
+        </Tooltip>
+      );
+    } else if (step.no_pattern_match) {
+      return (
+        <Tooltip content={`${status(step)}`}>
+          <CircularProgress
+            color="secondary"
+            showValueLabel={true}
+            size="md"
+            value={100}
+            valueLabel={
+              <Icon
+                className="text-secondary"
+                icon="solar:bill-cross-broken"
+                width={20}
               />
             }
           />
@@ -151,18 +175,38 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
           />
         </Tooltip>
       );
-    } else if (step.no_pattern_match) {
+    } else if (step.interactive) {
       return (
         <Tooltip content={`${status(step)}`}>
           <CircularProgress
-            color="secondary"
+            aria-label="Step"
+            color="primary"
             showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
               <Icon
-                className="text-secondary"
-                icon="solar:bill-cross-broken"
+                className="text-primary"
+                icon="solar:hand-shake-linear"
+                width={22}
+              />
+            }
+          />
+        </Tooltip>
+      );
+    } else if (step.error) {
+      return (
+        <Tooltip content={`${status(step)}`}>
+          <CircularProgress
+            aria-label="Step"
+            color="danger"
+            showValueLabel={true}
+            size="md"
+            value={100}
+            valueLabel={
+              <Icon
+                className="text-danger"
+                icon="solar:danger-triangle-broken"
                 width={20}
               />
             }
@@ -188,29 +232,23 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
           />
         </Tooltip>
       );
-    } else if (step.interactive) {
+    } else {
       return (
         <Tooltip content={`${status(step)}`}>
           <CircularProgress
             aria-label="Step"
-            color="primary"
+            color="success"
             showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
               <Icon
-                className="text-primary"
-                icon="solar:hand-shake-linear"
+                className="text-success"
+                icon="solar:question-square-linear"
                 width={22}
               />
             }
           />
-        </Tooltip>
-      );
-    } else {
-      return (
-        <Tooltip content={`${status(step)}`}>
-          <CircularProgress aria-label="Step" color="primary" size="md" />
         </Tooltip>
       );
     }
@@ -231,6 +269,9 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
   }
 
   function getDurationSeconds(step: any) {
+    if (step.pending) {
+      return 0;
+    }
     if (step.finished_at === "0001-01-01T00:00:00Z") {
       step.finished_at = new Date().toISOString();
     }
@@ -243,6 +284,9 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
   }
 
   function getDuration(step: any) {
+    if (step.pending) {
+      return "-";
+    }
     if (step.finished_at === "0001-01-01T00:00:00Z") {
       step.finished_at = new Date().toISOString();
     }
@@ -297,60 +341,27 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
       switch (columnKey) {
         case "name":
           return (
-            <Tooltip
-              content={
-                <div>
-                  <div className="text-small font-bold text-default-500">ID</div>
-                  <div className="text-small">{step.id}</div>
-                  <Divider className="mt-2 mb-2" />
-                  <div className="text-small font-bold text-default-500">Action name</div>
-                  <div className="text-small">{step.action_name}</div>
-                </div>
-              }
-            >
-              <div className={`flex flex-col items-center gap-2`}>
-                {step.parent_id !== "" ? (
-                  <Badge
-                    color="secondary"
-                    content=""
-                    placement="bottom-right"
-                    shape="circle"
-                  >
+            <div className={`flex flex-col items-center gap-2`}>
+              {steps.find((s: any) => s.parent_id === step.action_name) ? (
+                <Badge
+                  color="primary"
+                  content={
                     <Icon
-                      icon={`${step.icon || "solar:question-square-line-duotone"}`}
-                      width={24}
+                      icon="solar:double-alt-arrow-down-linear"
+                      width={18}
                     />
-                  </Badge>
-                ) : (
-                  <Icon
-                    icon={`${step.icon || "solar:question-square-line-duotone"}`}
-                    width={24}
-                  />
-                )}
-                <p className="text-md font-medium">
-                  {flow.actions.find((a: any) => a.id === step.action_id)
-                    ?.custom_name
-                    ? flow.actions.find((a: any) => a.id === step.action_id)
-                        .custom_name
-                    : step.action_name}
-                </p>
-              </div>
-            </Tooltip>
-          );
-        case "child_steps":
-          return (
-            <>
-              {steps.find((s: any) => s.parent_id === step.id) && (
-                <Tooltip content="Show Child Steps">
+                  }
+                  placement="bottom-right"
+                  shape="circle"
+                  size="md"
+                >
                   <Button
                     isIconOnly
-                    color="secondary"
-                    size="sm"
                     variant="light"
                     onPress={() => {
                       // set is_hidden to false for all child steps
                       const newSteps = steps.map((s: any) => {
-                        if (s.parent_id === step.id) {
+                        if (s.parent_id === step.action_name) {
                           s.is_hidden = !s.is_hidden;
                         }
 
@@ -361,59 +372,92 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
                     }}
                   >
                     <Icon
-                      icon="solar:branching-paths-down-line-duotone"
-                      width={28}
+                      icon={`${step.icon || "solar:question-square-line-duotone"}`}
+                      width={24}
                     />
                   </Button>
-                </Tooltip>
+                </Badge>
+              ) : step.parent_id !== "" ? (
+                <Badge
+                  color="primary"
+                  content=""
+                  placement="bottom-right"
+                  shape="circle"
+                >
+                  <Icon
+                    icon={`${step.icon || "solar:question-square-line-duotone"}`}
+                    width={24}
+                  />
+                </Badge>
+              ) : (
+                <Icon
+                  icon={`${step.icon || "solar:question-square-line-duotone"}`}
+                  width={24}
+                />
               )}
-            </>
+              <p className="text-md font-medium">
+                {flow.actions.find((a: any) => a.id === step.action_id)
+                  ?.custom_name
+                  ? flow.actions.find((a: any) => a.id === step.action_id)
+                      .custom_name
+                  : step.action_name}
+              </p>
+            </div>
           );
         case "data":
           return (
-            <div className="flex flex-col gap-2">
-              <Snippet fullWidth hideCopyButton hideSymbol radius="sm">
-                {step.action_messages.map((data: any, index: any) => (
-                  <p key={index} className="flex flex-cols items-center gap-1">
-                    <Icon
-                      icon="solar:double-alt-arrow-right-bold-duotone"
-                      width={16}
-                    />
-                    {data}
-                  </p>
-                ))}
-              </Snippet>
-              {step.interactive && !step.interacted && (
-                <div className="flex flex-cols items-center gap-4">
-                  <Button
-                    fullWidth
-                    color="success"
-                    startContent={
-                      <Icon icon="solar:verified-check-linear" width={18} />
-                    }
-                    variant="flat"
-                    onPress={() => {
-                      interactStep(step, true);
-                    }}
-                  >
-                    Approve & Continue
-                  </Button>
-                  <Button
-                    fullWidth
-                    color="danger"
-                    startContent={
-                      <Icon icon="solar:forbidden-outline" width={18} />
-                    }
-                    variant="flat"
-                    onPress={() => {
-                      interactStep(step, false);
-                    }}
-                  >
-                    Reject & Stop
-                  </Button>
+            <>
+              {step.pending ? (
+                <p>Step not started yet</p>
+              ) : (
+                <div className="flex flex-col gap-2">
+                  <Snippet fullWidth hideCopyButton hideSymbol radius="sm">
+                    {step.action_messages.map((data: any, index: any) => (
+                      <p
+                        key={index}
+                        className="flex flex-cols items-center gap-1"
+                      >
+                        <Icon
+                          icon="solar:double-alt-arrow-right-bold-duotone"
+                          width={16}
+                        />
+                        {data}
+                      </p>
+                    ))}
+                  </Snippet>
+                  {step.interactive && !step.interacted && (
+                    <div className="flex flex-cols items-center gap-4">
+                      <Button
+                        fullWidth
+                        color="success"
+                        startContent={
+                          <Icon icon="solar:verified-check-linear" width={18} />
+                        }
+                        variant="flat"
+                        onPress={() => {
+                          interactStep(step, true);
+                        }}
+                      >
+                        Approve & Continue
+                      </Button>
+                      <Button
+                        fullWidth
+                        color="danger"
+                        startContent={
+                          <Icon icon="solar:forbidden-outline" width={18} />
+                        }
+                        variant="flat"
+                        onPress={() => {
+                          interactStep(step, false);
+                        }}
+                      >
+                        Reject & Stop
+                      </Button>
+                    </div>
+                  )}
                 </div>
               )}
-            </div>
+            </>
           );
         case "duration":
           return (
@@ -425,11 +469,15 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
                     <div className="text-small">
                       {new Date(step.started_at).toLocaleString()}
                     </div>
-                    <Divider className="mt-2 mb-2" />
-                    <div className="text-small font-bold">Finished at</div>
-                    <div className="text-small">
-                      {new Date(step.finished_at).toLocaleString()}
-                    </div>
+                    {step.finished_at !== "0001-01-01T00:00:00Z" && (
+                      <>
+                        <Divider className="mt-2 mb-2" />
+                        <div className="text-small font-bold">Finished at</div>
+                        <div className="text-small">
+                          {new Date(step.finished_at).toLocaleString()}
+                        </div>
+                      </>
+                    )}
                   </div>
                 }
               >
@@ -443,6 +491,42 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
                   />
                   <p className="text-xs">{getDuration(step)}</p>
                 </div>
+              </Tooltip>
+            </div>
+          );
+        case "info":
+          return (
+            <div className="flex flex-col items-center justify-center">
+              <Tooltip
+                content={
+                  <div className="px-1 py-2">
+                    <div className="text-small font-bold">ID</div>
+                    <div className="text-small">{step.id}</div>
+                    <Divider className="mt-2 mb-2" />
+                    <div className="text-small font-bold">Status</div>
+                    <div className="text-small">{status(step)}</div>
+                    <Divider className="mt-2 mb-2" />
+                    <div className="text-small font-bold">Started at</div>
+                    <div className="text-small">
+                      {new Date(step.started_at).toLocaleString()}
+                    </div>
+                    {step.finised && (
+                      <>
+                        <Divider className="mt-2 mb-2" />
+                        <div className="text-small font-bold">Finished at</div>
+                        <div className="text-small">
+                          {new Date(step.finished_at).toLocaleString()}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                }
+              >
+                <Icon
+                  className="text-default-500"
+                  icon="solar:info-circle-linear"
+                  width={20}
+                />
               </Tooltip>
             </div>
           );
@@ -466,7 +550,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
   const bottomContent = useMemo(() => {
     return (
       <div className="mt flex justify-center items-center w-full">
-        {(execution.running || execution.waiting || execution.paused) && (
+        {(execution.running || execution.pending || execution.paused) && (
           <>
             <Progress
               isIndeterminate
@@ -499,7 +583,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
           )}
 
           {execution.running ||
-          execution.waiting ||
+          execution.pending ||
           execution.paused ||
           execution.interaction_required ? (
             <div>
@@ -523,14 +607,14 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
           <TableColumn key="name" align="center">
             Step
           </TableColumn>
-          <TableColumn key="child_steps" align="center">
-            Child Steps
-          </TableColumn>
           <TableColumn key="data" align="center">
             Data
           </TableColumn>
           <TableColumn key="duration" align="center">
             Duration
+          </TableColumn>
+          <TableColumn key="info" align="center">
+            Info
           </TableColumn>
           <TableColumn
             key="admin_actions"
@@ -541,16 +625,24 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
           </TableColumn>
         </TableHeader>
         <TableBody items={steps.filter((s: any) => s.is_hidden == false)}>
-          {(item: any) => (
-            <TableRow
-              key={item.id}
-              className={item.parent_id !== "" ? "bg-default-100" : ""}
-            >
-              {(columnKey: any) => (
-                <TableCell>{renderCell(item, columnKey)}</TableCell>
-              )}
-            </TableRow>
-          )}
+          {(item: any) =>
+            !item.pending ? (
+              <TableRow
+                key={item.id}
+                className={item.parent_id !== "" ? "bg-default-100" : ""}
+              >
+                {(columnKey: any) => (
+                  <TableCell>{renderCell(item, columnKey)}</TableCell>
+                )}
+              </TableRow>
+            ) : (
+              <TableRow key={item.id} className="text-default-400">
+                {(columnKey: any) => (
+                  <TableCell>{renderCell(item, columnKey)}</TableCell>
+                )}
+              </TableRow>
+            )
+          }
         </TableBody>
       </Table>
       <Spacer y={4} />

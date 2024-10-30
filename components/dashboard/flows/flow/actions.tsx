@@ -38,9 +38,11 @@ import EditFlowActionsDetails from "@/components/functions/flows/editDetails";
 export default function Actions({
   flow,
   runners,
+  user,
 }: {
   flow: any;
   runners: any;
+  user: any;
 }) {
   const [actions, setActions] = React.useState([] as any);
   const [targetAction, setTargetAction] = React.useState({} as any);
@@ -348,6 +350,7 @@ export default function Actions({
         disclosure={addFlowActionModal}
         flow={flow}
         runners={runners}
+        user={user}
       />
       <EditActionModal
         disclosure={editActionModal}

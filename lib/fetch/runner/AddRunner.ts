@@ -24,11 +24,11 @@ export default async function AddRunner({
     body: JSON.stringify({ name, project_id: projectId, alertflow_runner }),
   });
 
-  if (!res.ok) {
-    return { error: "Failed to create runner" };
-  }
-
   const data = await res.json();
+
+  if (!res.ok) {
+    return { error: data };
+  }
 
   return data;
 }

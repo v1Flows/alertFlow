@@ -5,6 +5,7 @@ import GetFlowPayloads from "@/lib/fetch/flow/payloads";
 import PageGetSettings from "@/lib/fetch/page/settings";
 import GetProjects from "@/lib/fetch/project/all";
 import GetProjectRunners from "@/lib/fetch/project/runners";
+import GetUserDetails from "@/lib/fetch/user/getDetails";
 
 export default async function DashboardFlowPage({
   params,
@@ -17,6 +18,7 @@ export default async function DashboardFlowPage({
   const payloads = await GetFlowPayloads(params.id);
   const runners = await GetProjectRunners(flow.project_id);
   const settings = await PageGetSettings();
+  const userDetails = await GetUserDetails();
 
   return (
     <>
@@ -28,6 +30,7 @@ export default async function DashboardFlowPage({
         projects={projects.projects}
         runners={runners}
         settings={settings}
+        user={userDetails}
       />
     </>
   );
