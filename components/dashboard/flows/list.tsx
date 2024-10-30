@@ -93,7 +93,7 @@ export default function FlowList({
   function createButtonDisabled() {
     if (!settings.create_flows) {
       return true;
-    } else if (user.role === "VIP") {
+    } else if (user.role === "vip") {
       return false;
     } else if (flows.length >= plan.flows) {
       return true;
@@ -105,7 +105,7 @@ export default function FlowList({
   function createButtonPressable() {
     if (!settings.create_flows) {
       return false;
-    } else if (user.role === "VIP") {
+    } else if (user.role === "vip") {
       return true;
     } else if (flows.length >= plan.flows) {
       return false;

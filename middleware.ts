@@ -23,7 +23,7 @@ export async function middleware(request: NextRequest) {
     const settings = await PageGetSettings();
 
     // check for maintenance mode
-    if (settings.maintenance && user.role !== "Admin") {
+    if (settings.maintenance && user.role !== "admin") {
       return NextResponse.redirect(new URL("/maintenance", request.url));
     }
 

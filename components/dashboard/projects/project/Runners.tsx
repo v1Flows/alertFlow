@@ -76,7 +76,7 @@ export default function Runners({
       return true;
     } else if (project.disabled) {
       return true;
-    } else if (user.role === "VIP") {
+    } else if (user.role === "vip") {
       return false;
     } else if (
       runners.filter((runner: any) => runner.alertflow_runner === false)
