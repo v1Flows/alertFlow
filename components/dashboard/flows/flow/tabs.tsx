@@ -11,7 +11,13 @@ import Payloads from "./payloads";
 import Actions from "./actions";
 import FlowStats from "./stats";
 
-export default function FlowTabs({ flow, executions, payloads, runners }: any) {
+export default function FlowTabs({
+  flow,
+  executions,
+  payloads,
+  runners,
+  user,
+}: any) {
   const [selected, setSelected] = React.useState("actions");
 
   const router = useRouter();
@@ -49,7 +55,7 @@ export default function FlowTabs({ flow, executions, payloads, runners }: any) {
               </div>
             }
           >
-            <Actions flow={flow} runners={runners} />
+            <Actions flow={flow} runners={runners} user={user} />
           </Tab>
           <Tab
             key="executions"

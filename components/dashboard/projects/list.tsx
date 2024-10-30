@@ -58,7 +58,7 @@ export function ProjectsList({
   function createButtonDisabled() {
     if (!settings.create_projects) {
       return true;
-    } else if (user.role === "VIP") {
+    } else if (user.role === "vip") {
       return false;
     } else if (projects.length >= plan.projects) {
       return true;
@@ -70,7 +70,7 @@ export function ProjectsList({
   function createButtonPressable() {
     if (!settings.create_projects) {
       return false;
-    } else if (user.role === "VIP") {
+    } else if (user.role === "vip") {
       return true;
     } else if (projects.length >= plan.projects) {
       return false;

@@ -73,9 +73,9 @@ export function UsersList({ users, plans }: any) {
 
   function roleColor(role: string) {
     switch (role) {
-      case "Admin":
+      case "admin":
         return "danger";
-      case "VIP":
+      case "vip":
         return "warning";
       default:
         return "primary";
@@ -156,9 +156,9 @@ export function UsersList({ users, plans }: any) {
               isBordered: true,
               name: user.username,
               color:
-                user.role === "Admin"
+                user.role === "admin"
                   ? "danger"
-                  : user.role === "VIP"
+                  : user.role === "vip"
                     ? "warning"
                     : "primary",
             }}

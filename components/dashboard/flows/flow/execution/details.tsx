@@ -5,74 +5,73 @@ import NumberFlow from "@number-flow/react";
 
 export default function ExecutionDetails({ runners, execution, steps }: any) {
   function status(execution: any) {
-    if (execution.running) {
+    if (execution.pending) {
+      return "Pending";
+    } else if (execution.running) {
       return "Running";
-    } else if (execution.waiting) {
-      return "Waiting";
     } else if (execution.paused) {
       return "Paused";
-    } else if (execution.error) {
-      return "Error";
-    } else if (execution.no_match) {
+    } else if (execution.canceled) {
+      return "Canceled";
+    } else if (execution.no_pattern_match) {
       return "No Pattern Match";
-    } else if (execution.ghost) {
-      return "No Flow Actions found";
     } else if (execution.interaction_required) {
       return "Interaction Required";
-    } else if (execution.cancelled) {
-      return "Cancelled";
-    } else {
+    } else if (execution.error) {
+      return "Error";
+    } else if (execution.finished) {
       return "Finished";
+    } else {
+      return "Unknown";
     }
   }
 
   function statusColor(execution: any) {
-    if (execution.running) {
+    if (execution.pending) {
+      return "default-500";
+    } else if (execution.running) {
       return "primary";
-    } else if (execution.waiting) {
-      return "warning";
     } else if (execution.paused) {
       return "warning";
-    } else if (execution.error) {
+    } else if (execution.canceled) {
       return "danger";
-    } else if (execution.no_match) {
-      return "secondary";
-    } else if (execution.ghost) {
-      return "default-500";
+    } else if (execution.no_pattern_match) {
+      return "default";
     } else if (execution.interaction_required) {
       return "primary";
-    } else if (execution.cancelled) {
+    } else if (execution.error) {
       return "danger";
-    } else {
+    } else if (execution.finished) {
       return "success";
+    } else {
+      return "default";
     }
   }
 
   function statusIcon(execution: any) {
-    if (execution.running) {
-      return (
-        <Tooltip content={`${status(execution)}`}>
-          <CircularProgress aria-label="Step" color="primary" size="md" />
-        </Tooltip>
-      );
-    } else if (execution.waiting) {
+    if (execution.pending) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
             aria-label="Step"
-            color="warning"
-            maxValue={5}
+            color="default"
             showValueLabel={true}
             size="md"
-            value={5}
+            value={100}
             valueLabel={
               <Icon
-                className="text-warning"
-                icon="solar:clock-circle-broken"
-                width={16}
+                className="text-default-500"
+                icon="solar:sleeping-square-linear"
+                width={20}
               />
             }
           />
+        </Tooltip>
+      );
+    } else if (execution.running) {
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress aria-label="Step" color="primary" size="md" />
         </Tooltip>
       );
     } else if (execution.paused) {
@@ -89,6 +88,62 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
                 className="text-warning"
                 icon="solar:pause-broken"
                 width={16}
+              />
+            }
+          />
+        </Tooltip>
+      );
+    } else if (execution.canceled) {
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress
+            aria-label="Step"
+            color="danger"
+            showValueLabel={true}
+            size="md"
+            value={100}
+            valueLabel={
+              <Icon
+                className="text-danger"
+                icon="solar:close-line-duotone"
+                width={20}
+              />
+            }
+          />
+        </Tooltip>
+      );
+    } else if (execution.no_pattern_match) {
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress
+            color="secondary"
+            showValueLabel={true}
+            size="md"
+            value={100}
+            valueLabel={
+              <Icon
+                className="text-secondary"
+                icon="solar:bill-cross-broken"
+                width={20}
+              />
+            }
+          />
+        </Tooltip>
+      );
+    } else if (execution.interaction_required) {
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress
+            aria-label="Step"
+            color="primary"
+            showValueLabel={true}
+            size="md"
+            value={100}
+            valueLabel={
+              <Icon
+                className="text-primary"
+                icon="solar:hand-shake-linear"
+                width={22}
               />
             }
           />
@@ -113,73 +168,20 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
           />
         </Tooltip>
       );
-    } else if (execution.no_match) {
+    } else if (execution.finished) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
-            color="secondary"
+            aria-label="Step"
+            color="success"
             showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
               <Icon
-                className="text-secondary"
-                icon="solar:bill-cross-broken"
-                width={20}
-              />
-            }
-          />
-        </Tooltip>
-      );
-    } else if (execution.ghost) {
-      return (
-        <Tooltip content={`${status(execution)}`}>
-          <CircularProgress
-            color="default"
-            showValueLabel={true}
-            size="md"
-            value={100}
-            valueLabel={
-              <Icon
-                className="text-default-500"
-                icon="solar:ghost-broken"
-                width={20}
-              />
-            }
-          />
-        </Tooltip>
-      );
-    } else if (execution.interaction_required) {
-      return (
-        <Tooltip content={`${status(execution)}`}>
-          <CircularProgress
-            color="primary"
-            showValueLabel={true}
-            size="md"
-            value={100}
-            valueLabel={
-              <Icon
-                className="text-primary-500"
-                icon="solar:hand-shake-linear"
-                width={20}
-              />
-            }
-          />
-        </Tooltip>
-      );
-    } else if (execution.cancelled) {
-      return (
-        <Tooltip content={`${status(execution)}`}>
-          <CircularProgress
-            color="danger"
-            showValueLabel={true}
-            size="md"
-            value={100}
-            valueLabel={
-              <Icon
-                className="text-danger-500"
-                icon="solar:sad-square-linear"
-                width={20}
+                className="text-success"
+                icon="solar:check-read-broken"
+                width={22}
               />
             }
           />
@@ -187,18 +189,17 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
       );
     } else {
       return (
-        <Tooltip content={`${status(execution)}. Steps 5 / 5`}>
+        <Tooltip content={`${status(execution)}`}>
           <CircularProgress
             aria-label="Step"
             color="success"
-            maxValue={5}
             showValueLabel={true}
             size="md"
-            value={5}
+            value={100}
             valueLabel={
               <Icon
                 className="text-success"
-                icon="solar:check-read-broken"
+                icon="solar:question-square-linear"
                 width={22}
               />
             }
@@ -217,7 +218,7 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
 
     const ms =
       new Date(calFinished).getTime() -
-      new Date(execution.created_at).getTime();
+      new Date(execution.executed_at).getTime();
     const sec = Math.floor(ms / 1000);
     const min = Math.floor(sec / 60);
     const hr = Math.floor(min / 60);
@@ -281,7 +282,7 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
                 <p className="text-md font-bold">
                   <NumberFlow
                     locales="en-US" // Intl.NumberFormat locales
-                    value={steps.length - 1}
+                    value={steps.length}
                   />
                 </p>
                 <p className="text-sm text-default-500">Total Steps</p>

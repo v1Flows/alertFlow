@@ -12,11 +12,11 @@ export default function DashboardDocsHeader({ userDetails }: any) {
     <>
       <div className="grid lg:grid-cols-2 grid-cols-1 gap-2 items-center justify-between">
         <p className="text-2xl font-bold">Documentation</p>
-        {userDetails && userDetails.role === "Admin" && (
+        {userDetails && userDetails.role === "admin" && (
           <div className="flex flex-cols justify-end items-center gap-4">
             <Button
               color="danger"
-              isDisabled={userDetails.role !== "Admin"}
+              isDisabled={userDetails.role !== "admin"}
               startContent={
                 <Icon icon="solar:crown-line-line-duotone" width={20} />
               }

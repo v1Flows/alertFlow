@@ -119,9 +119,9 @@ export default function EditUserModal({
                   variant="flat"
                   onSelectionChange={setRole}
                 >
-                  <SelectItem key="User">User</SelectItem>
-                  <SelectItem key="VIP">VIP</SelectItem>
-                  <SelectItem key="Admin">Admin</SelectItem>
+                  <SelectItem key="user">User</SelectItem>
+                  <SelectItem key="vip">VIP</SelectItem>
+                  <SelectItem key="admin">Admin</SelectItem>
                 </Select>
                 <Select
                   isRequired

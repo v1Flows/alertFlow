@@ -66,7 +66,7 @@ export default function ProjectAuditLogs({ audit, members, user }: any) {
                   {!members.find(
                     (member: any) => member.user_id === entry.user_id,
                   ) &&
-                    entry?.role !== "Admin" && (
+                    entry?.role !== "admin" && (
                       <Tooltip content="User left the project">
                         <Icon icon="solar:ghost-outline" />
                       </Tooltip>
@@ -76,7 +76,7 @@ export default function ProjectAuditLogs({ audit, members, user }: any) {
                       You
                     </Chip>
                   )}
-                  {entry?.role === "Admin" && (
+                  {entry?.role === "admin" && (
                     <Chip color="danger" radius="sm" size="sm" variant="flat">
                       Admin
                     </Chip>

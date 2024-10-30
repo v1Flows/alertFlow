@@ -37,7 +37,7 @@ export default function Quota({
                 />
               </div>
               <p className="text-default-600">Projects</p>
-              {plan.projects !== 999 && user.role !== "VIP" ? (
+              {plan.projects !== 999 && user.role !== "vip" ? (
                 <>
                   <p className="text-lg font-bold">
                     {stats.projects} / {plan.projects}
@@ -52,7 +52,7 @@ export default function Quota({
                 </>
               ) : (
                 <p
-                  className={`text-lg font-bold text-${user.role === "VIP" ? "warning" : "secondary"}`}
+                  className={`text-lg font-bold text-${user.role === "vip" ? "warning" : "secondary"}`}
                 >
                   Unlimited
                 </p>
@@ -69,7 +69,7 @@ export default function Quota({
                 />
               </div>
               <p className="text-default-600">Flows</p>
-              {plan.flows !== 999 && user.role !== "VIP" ? (
+              {plan.flows !== 999 && user.role !== "vip" ? (
                 <>
                   <p className="text-lg font-bold">
                     {stats.flows} / {plan.flows}
@@ -82,7 +82,7 @@ export default function Quota({
                 </>
               ) : (
                 <p
-                  className={`text-lg font-bold text-${user.role === "VIP" ? "warning" : "secondary"}`}
+                  className={`text-lg font-bold text-${user.role === "vip" ? "warning" : "secondary"}`}
                 >
                   Unlimited
                 </p>
@@ -99,7 +99,7 @@ export default function Quota({
                 />
               </div>
               <p className="text-default-600">Self-Hosted Runners</p>
-              {plan.self_hosted_runners !== 999 && user.role !== "VIP" ? (
+              {plan.self_hosted_runners !== 999 && user.role !== "vip" ? (
                 <>
                   <p className="text-lg font-bold">
                     {stats.runners ? stats.runners : 0} /{" "}
@@ -117,7 +117,7 @@ export default function Quota({
                 </>
               ) : (
                 <p
-                  className={`text-lg font-bold text-${user.role === "VIP" ? "warning" : "secondary"}`}
+                  className={`text-lg font-bold text-${user.role === "vip" ? "warning" : "secondary"}`}
                 >
                   Unlimited
                 </p>
@@ -134,7 +134,7 @@ export default function Quota({
                 />
               </div>
               <p className="text-default-600">Executions</p>
-              {plan.executions_per_month !== 999 && user.role !== "VIP" ? (
+              {plan.executions_per_month !== 999 && user.role !== "vip" ? (
                 <>
                   <p className="text-lg font-bold">
                     {stats.total_executions ? stats.total_executions : 0} /{" "}
@@ -152,7 +152,7 @@ export default function Quota({
                 </>
               ) : (
                 <p
-                  className={`text-lg font-bold text-${user.role === "VIP" ? "warning" : "secondary"}`}
+                  className={`text-lg font-bold text-${user.role === "vip" ? "warning" : "secondary"}`}
                 >
                   Unlimited
                 </p>
@@ -172,12 +172,12 @@ export default function Quota({
             </Button>
             <CardBody className="relative bg-gradient-to-br from-content1 to-default-100/50 p-8 before:inset-0 before:h-full before:w-full before:content-['']">
               <h1 className="mb-4 text-default-400">Your Plan</h1>
-              {user.role === "Admin" && (
+              {user.role === "admin" && (
                 <h2 className="inline bg-clip-text text-6xl font-semibold tracking-tight text-danger">
                   Admin
                 </h2>
               )}
-              {user.role === "VIP" && (
+              {user.role === "vip" && (
                 <h2 className="flex gap-1 items-center inline bg-clip-text text-6xl font-semibold tracking-tight text-warning">
                   <Icon icon="solar:crown-broken" /> VIP
                 </h2>
@@ -197,9 +197,9 @@ export default function Quota({
                     width={24}
                   />
                   <p className="text-small text-default-500">
-                    {plan.projects === 999 || user.role === "VIP" ? (
+                    {plan.projects === 999 || user.role === "vip" ? (
                       <span
-                        className={`text-${user.role === "VIP" ? "warning" : "secondary"}`}
+                        className={`text-${user.role === "vip" ? "warning" : "secondary"}`}
                       >
                         Unlimited
                       </span>
@@ -216,9 +216,9 @@ export default function Quota({
                     width={24}
                   />
                   <p className="text-small text-default-500">
-                    {plan.project_members === 999 || user.role === "VIP" ? (
+                    {plan.project_members === 999 || user.role === "vip" ? (
                       <span
-                        className={`text-${user.role === "VIP" ? "warning" : "secondary"}`}
+                        className={`text-${user.role === "vip" ? "warning" : "secondary"}`}
                       >
                         Unlimited
                       </span>
@@ -235,9 +235,9 @@ export default function Quota({
                     width={24}
                   />
                   <p className="text-small text-default-500">
-                    {plan.flows === 999 || user.role === "VIP" ? (
+                    {plan.flows === 999 || user.role === "vip" ? (
                       <span
-                        className={`text-${user.role === "VIP" ? "warning" : "secondary"}`}
+                        className={`text-${user.role === "vip" ? "warning" : "secondary"}`}
                       >
                         Unlimited
                       </span>
@@ -254,9 +254,9 @@ export default function Quota({
                     width={24}
                   />
                   <p className="text-small text-default-500">
-                    {plan.self_hosted_runners === 999 || user.role === "VIP" ? (
+                    {plan.self_hosted_runners === 999 || user.role === "vip" ? (
                       <span
-                        className={`text-${user.role === "VIP" ? "warning" : "secondary"}`}
+                        className={`text-${user.role === "vip" ? "warning" : "secondary"}`}
                       >
                         Unlimited
                       </span>
@@ -273,9 +273,9 @@ export default function Quota({
                     width={24}
                   />
                   <p className="text-small text-default-500">
-                    {plan.alertflow_runners === 16 || user.role === "VIP" ? (
+                    {plan.alertflow_runners === 16 || user.role === "vip" ? (
                       <span
-                        className={`text-${user.role === "VIP" ? "warning" : "secondary"}`}
+                        className={`text-${user.role === "vip" ? "warning" : "secondary"}`}
                       >
                         Unlimited
                       </span>
@@ -293,9 +293,9 @@ export default function Quota({
                   />
                   <p className="text-small text-default-500">
                     {plan.executions_per_month === 999 ||
-                    user.role === "VIP" ? (
+                    user.role === "vip" ? (
                       <span
-                        className={`text-${user.role === "VIP" ? "warning" : "secondary"}`}
+                        className={`text-${user.role === "vip" ? "warning" : "secondary"}`}
                       >
                         Unlimited
                       </span>

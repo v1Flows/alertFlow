@@ -135,9 +135,9 @@ export default function SidebarMenu({
               <Avatar
                 isBordered
                 color={
-                  user.role === "Admin"
+                  user.role === "admin"
                     ? "danger"
-                    : user.role === "VIP"
+                    : user.role === "vip"
                       ? "warning"
                       : "primary"
                 }
@@ -149,10 +149,10 @@ export default function SidebarMenu({
                 <div className="flex flex-col">
                   <p className="text-small font-medium text-default-600">
                     {user.username}{" "}
-                    {user.role === "Admin" && (
+                    {user.role === "admin" && (
                       <span className="text-danger">(Admin)</span>
                     )}
-                    {user.role === "VIP" && (
+                    {user.role === "vip" && (
                       <span className="text-warning">(VIP)</span>
                     )}
                   </p>
@@ -192,14 +192,14 @@ export default function SidebarMenu({
           <Sidebar
             defaultSelectedKey="home"
             isCompact={isCompact}
-            items={user.role === "Admin" ? sectionAdminItems : sectionItems}
+            items={user.role === "admin" ? sectionAdminItems : sectionItems}
             selectedKeys={[currentPath]}
           />
         </ScrollShadow>
 
         <Spacer y={2} />
 
-        {user.role === "Admin" && settings.maintenance && (
+        {user.role === "admin" && settings.maintenance && (
           <Card
             isBlurred
             className="border-3 border-danger h-[80px]"

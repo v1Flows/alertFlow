@@ -76,7 +76,7 @@ export default function Runners({
       return true;
     } else if (project.disabled) {
       return true;
-    } else if (user.role === "VIP") {
+    } else if (user.role === "vip") {
       return false;
     } else if (
       runners.filter((runner: any) => runner.alertflow_runner === false)
@@ -258,11 +258,21 @@ export default function Runners({
                       </div>
                       <div>
                         <p className="text-md font-bold">
-                          {runner.runner_version
-                            ? runner.runner_version
-                            : "N/A"}
+                          {runner.version ? runner.version : "N/A"}
                         </p>
                         <p className="text-sm text-default-500">Version</p>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col items-center justify-center gap-1">
+                      <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                        <Icon icon="solar:settings-linear" width={20} />
+                      </div>
+                      <div>
+                        <p className="text-md font-bold capitalize">
+                          {runner.mode ? runner.mode : "N/A"}
+                        </p>
+                        <p className="text-sm text-default-500">Mode</p>
                       </div>
                     </div>
 

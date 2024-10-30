@@ -1,33 +1,25 @@
 "use client";
 
 import React from "react";
-import {
-  Button,
-  Input,
-  Link,
-  Image,
-  useDisclosure,
-  Tooltip,
-} from "@nextui-org/react";
+import { Button, Input, Link, Image, Tooltip } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import { useTheme } from "next-themes";
 import { useIsSSR } from "@react-aria/ssr";
 import { AnimatePresence, domAnimation, LazyMotion, m } from "framer-motion";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 import SignUpAPI from "@/lib/auth/signup";
 import CheckUserTaken from "@/lib/auth/checkTaken";
 import { IconWrapper } from "@/lib/IconWrapper";
+import LoginAPI from "@/lib/auth/login";
+import { setSession } from "@/lib/setSession";
 
 import { InfoIcon } from "../icons";
-import SuccessSignUpModal from "../functions/auth/successSignUp";
 import Particles from "../magicui/particles";
 
-export default function SignUpPage({
-  skipSuccessModal,
-}: {
-  skipSuccessModal?: boolean;
-}) {
+export default function SignUpPage() {
+  const router = useRouter();
   const { theme } = useTheme();
   const isSSR = useIsSSR();
 
@@ -48,7 +40,6 @@ export default function SignUpPage({
 
   const [error, setError] = React.useState(false);
   const [errorText, setErrorText] = React.useState("");
-  const successSignUpModal = useDisclosure();
 
   const togglePasswordVisibility = () =>
     setIsPasswordVisible(!isPasswordVisible);
@@ -148,8 +139,18 @@ export default function SignUpPage({
     const res = await SignUpAPI(email, username, password);
 
     if (res.result === "success") {
-      setIsLoading(false);
-      skipSuccessModal ? null : successSignUpModal.onOpen();
+      // login
+      const loginRes = await LoginAPI(email, password);
+
+      if (!loginRes.error) {
+        await setSession(loginRes.token, loginRes.user, loginRes.expires_at);
+
+        setIsLoading(false);
+        router.push("/dashboard");
+        toast.success("Successfully signed up and logged in!");
+      } else {
+        toast.error(loginRes.error);
+      }
     } else {
       setIsLoading(false);
       setError(true);
@@ -372,7 +373,6 @@ export default function SignUpPage({
           </Link>
         </p>
       </div>
-      <SuccessSignUpModal disclosure={successSignUpModal} />
     </div>
   );
 }
