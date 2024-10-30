@@ -4,17 +4,19 @@ import {
   Button,
   Card,
   CardBody,
+  Chip,
   Input,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
+  Pagination,
   Radio,
   Spacer,
   Textarea,
 } from "@nextui-org/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
@@ -48,10 +50,12 @@ export default function AddActionModal({
   disclosure,
   runners,
   flow,
+  user,
 }: {
   disclosure: UseDisclosureReturn;
   runners: any;
   flow: any;
+  user: any;
 }) {
   const router = useRouter();
 
@@ -63,6 +67,28 @@ export default function AddActionModal({
 
   const [disableNext, setDisableNext] = useState(false);
 
+  const [availableActions, setAvailableActions] = useState([] as any);
+  const [availableCategories, setAvailableCategories] = useState([
+    "All",
+  ] as any);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+
+  // pagination
+  const [actionPage, setActionPage] = useState(1);
+  const rowsPerPage = 6;
+  const actionItems = React.useMemo(() => {
+    const start = (actionPage - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    if (selectedCategory !== "All") {
+      return availableActions
+        .filter((action: any) => action.category === selectedCategory)
+        .slice(start, end);
+    }
+
+    return availableActions.slice(start, end);
+  }, [actionPage, availableActions, selectedCategory, runners]);
+
   // inputs
   const [status, setStatus] = useState(true);
   const [action, setAction] = useState({
@@ -71,12 +97,28 @@ export default function AddActionModal({
     description: "",
     icon: "",
     type: "",
+    category: "",
     active: true,
     params: [],
     custom_name: "",
     custom_description: "",
   });
   const [params, setParams] = useState([] as any);
+
+  function actionPages() {
+    var length = 0;
+
+    if (selectedCategory !== "All") {
+      length =
+        availableActions.filter(
+          (action: any) => action.category === selectedCategory,
+        ).length / rowsPerPage;
+    } else {
+      length = availableActions.length / rowsPerPage;
+    }
+
+    return Math.ceil(length);
+  }
 
   function countTotalAvailableActions() {
     var actions = 0;
@@ -104,27 +146,47 @@ export default function AddActionModal({
   }
 
   function getUniqueActions() {
-    var actions = [] as any;
-
     for (let i = 0; i < runners.length; i++) {
       for (let j = 0; j < runners[i].available_actions.length; j++) {
         const action = runners[i].available_actions[j];
 
-        if (actions.find((x: any) => x.type === action.type)) {
+        if (action.is_hidden && user.role !== "Admin") {
           continue;
-        } else {
-          actions.push(action);
         }
+
+        setAvailableActions((prev: any) => {
+          const actionSet = new Set(prev.map((a: any) => a.type));
+
+          if (!actionSet.has(action.type)) {
+            return [...prev, action];
+          }
+
+          return prev;
+        });
       }
     }
+  }
 
-    return actions;
+  function getUniqueActionCategorys() {
+    for (let i = 0; i < runners.length; i++) {
+      for (let j = 0; j < runners[i].available_actions.length; j++) {
+        const action = runners[i].available_actions[j];
+
+        setAvailableCategories((prev: any) => {
+          const categorySet = new Set(prev);
+
+          if (!categorySet.has(action.category)) {
+            return [...prev, action.category];
+          }
+
+          return prev;
+        });
+      }
+    }
   }
 
   function handleActionSelect(action: any) {
-    const selectedAction = getUniqueActions().find(
-      (x: any) => x.type === action,
-    );
+    const selectedAction = availableActions.find((x: any) => x.type === action);
 
     setAction(selectedAction);
 
@@ -150,6 +212,7 @@ export default function AddActionModal({
       description: "",
       icon: "",
       type: "",
+      category: "",
       active: true,
       params: [],
       custom_name: "",
@@ -187,6 +250,7 @@ export default function AddActionModal({
         description: "",
         icon: "",
         type: "",
+        category: "",
         active: true,
         params: [],
         custom_name: "",
@@ -205,13 +269,21 @@ export default function AddActionModal({
     setLoading(false);
   }
 
+  useEffect(() => {
+    if (runners.length > 0) {
+      getUniqueActions();
+      getUniqueActionCategorys();
+    }
+  }),
+    [runners];
+
   return (
     <main>
       <Modal
         isDismissable={false}
         isOpen={isOpen}
         placement="center"
-        size="3xl"
+        size="5xl"
         onOpenChange={onOpenChange}
       >
         <ModalContent>
@@ -261,33 +333,111 @@ export default function AddActionModal({
                               Available Actions
                             </p>
                             <Spacer y={2} />
-                            <div className="grid grid-cols-2 gap-4">
-                              {getUniqueActions().map((act: any) => (
-                                <Card
-                                  key={act.type}
-                                  isHoverable
-                                  isPressable
-                                  className={`border-2 border-default-200 ${act.type === action.type ? "border-primary" : ""}`}
+                            <p className="text-sm text-default-500">
+                              Categories
+                            </p>
+                            <Spacer y={1} />
+                            <div className="flex gap-2">
+                              {availableCategories.map((category: any) => (
+                                <Chip
+                                  key={category}
+                                  color={
+                                    selectedCategory === category
+                                      ? "primary"
+                                      : "default"
+                                  }
                                   radius="sm"
-                                  onPress={() => handleActionSelect(act.type)}
+                                  size="lg"
+                                  variant={
+                                    selectedCategory === category
+                                      ? "solid"
+                                      : "flat"
+                                  }
+                                  onClick={() => {
+                                    setSelectedCategory(category);
+                                    setActionPage(1);
+                                  }}
                                 >
-                                  <CardBody>
-                                    <div className="flex items-center gap-2">
-                                      <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                                        <Icon icon={act.icon} width={26} />
-                                      </div>
-                                      <div className="flex flex-col gap-2">
-                                        <p className="text-lg font-bold">
-                                          {act.name}
-                                        </p>
-                                        <p className="text-sm text-default-500">
-                                          {act.description}
-                                        </p>
-                                      </div>
-                                    </div>
-                                  </CardBody>
-                                </Card>
+                                  {category}
+                                </Chip>
                               ))}
+                            </div>
+                            <Spacer y={4} />
+                            <div className="grid grid-cols-2 items-stretch gap-4">
+                              {actionItems.map((act: any) =>
+                                act.is_hidden ? (
+                                  <Card
+                                    key={act.type}
+                                    isHoverable
+                                    isPressable
+                                    className={`border-2 ${act.type === action.type ? "border-danger" : "border-danger-200"}`}
+                                    radius="sm"
+                                    onPress={() => handleActionSelect(act.type)}
+                                  >
+                                    <CardBody>
+                                      <div className="flex items-center gap-2">
+                                        <div className="flex bg-danger/10 text-danger items-center rounded-small justify-center w-10 h-10">
+                                          <Icon icon={act.icon} width={26} />
+                                        </div>
+                                        <div className="flex flex-col gap-1">
+                                          <p className="text-lg font-bold">
+                                            {act.name}
+                                          </p>
+                                          <p className="text-sm text-default-500">
+                                            {act.description}
+                                          </p>
+                                        </div>
+                                      </div>
+                                      <Spacer y={2} />
+                                      <Chip
+                                        color="danger"
+                                        radius="sm"
+                                        size="sm"
+                                        variant="flat"
+                                      >
+                                        Admin Only
+                                      </Chip>
+                                    </CardBody>
+                                  </Card>
+                                ) : (
+                                  <Card
+                                    key={act.type}
+                                    isHoverable
+                                    isPressable
+                                    className={`border-2 border-default-200 ${act.type === action.type ? "border-primary" : ""}`}
+                                    radius="sm"
+                                    onPress={() => handleActionSelect(act.type)}
+                                  >
+                                    <CardBody>
+                                      <div className="flex items-center gap-2">
+                                        <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                                          <Icon icon={act.icon} width={26} />
+                                        </div>
+                                        <div className="flex flex-col gap-1">
+                                          <p className="text-lg font-bold">
+                                            {act.name}
+                                          </p>
+                                          <p className="text-sm text-default-500">
+                                            {act.description}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </CardBody>
+                                  </Card>
+                                ),
+                              )}
+                            </div>
+                            <Spacer y={4} />
+                            <div className="flex items-center justify-center">
+                              <Pagination
+                                showControls
+                                initialPage={1}
+                                page={actionPage}
+                                total={actionPages()}
+                                onChange={(actionPage) =>
+                                  setActionPage(actionPage)
+                                }
+                              />
                             </div>
                           </>
                         )}

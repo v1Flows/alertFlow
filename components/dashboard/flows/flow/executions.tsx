@@ -79,74 +79,73 @@ export default function Executions({
   }
 
   function status(execution: any) {
-    if (execution.running) {
+    if (execution.pending) {
+      return "Pending";
+    } else if (execution.running) {
       return "Running";
-    } else if (execution.waiting) {
-      return "Waiting";
     } else if (execution.paused) {
       return "Paused";
-    } else if (execution.error) {
-      return "Error";
-    } else if (execution.no_match) {
+    } else if (execution.canceled) {
+      return "Canceled";
+    } else if (execution.no_pattern_match) {
       return "No Pattern Match";
-    } else if (execution.ghost) {
-      return "No Flow Actions found";
     } else if (execution.interaction_required) {
       return "Interaction Required";
-    } else if (execution.cancelled) {
-      return "Cancelled";
-    } else {
+    } else if (execution.error) {
+      return "Error";
+    } else if (execution.finished) {
       return "Finished";
+    } else {
+      return "Unknown";
     }
   }
 
   function statusFilterReturn(execution: any) {
-    if (execution.running) {
+    if (execution.pending) {
+      return "pending";
+    } else if (execution.running) {
       return "running";
-    } else if (execution.waiting) {
-      return "waiting";
     } else if (execution.paused) {
       return "paused";
-    } else if (execution.error) {
-      return "error";
-    } else if (execution.no_match) {
+    } else if (execution.canceled) {
+      return "canceled";
+    } else if (execution.no_pattern_match) {
       return "no_pattern_match";
-    } else if (execution.ghost) {
-      return "no_flow_actions_found";
     } else if (execution.interaction_required) {
       return "interaction_required";
-    } else if (execution.cancelled) {
-      return "cancelled";
-    } else {
+    } else if (execution.error) {
+      return "error";
+    } else if (execution.finished) {
       return "finished";
+    } else {
+      return "unknown";
     }
   }
 
   function statusIcon(execution: any) {
-    if (execution.running) {
-      return (
-        <Tooltip content={`${status(execution)}`}>
-          <CircularProgress aria-label="Step" color="primary" size="md" />
-        </Tooltip>
-      );
-    } else if (execution.waiting) {
+    if (execution.pending) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
             aria-label="Step"
-            color="warning"
-            maxValue={5}
+            color="default"
             showValueLabel={true}
             size="md"
-            value={5}
+            value={100}
             valueLabel={
               <Icon
-                className="text-warning"
-                icon="solar:clock-circle-outline"
-                width={16}
+                className="text-default-500"
+                icon="solar:sleeping-square-linear"
+                width={20}
               />
             }
           />
+        </Tooltip>
+      );
+    } else if (execution.running) {
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress aria-label="Step" color="primary" size="md" />
         </Tooltip>
       );
     } else if (execution.paused) {
@@ -161,8 +160,64 @@ export default function Executions({
             valueLabel={
               <Icon
                 className="text-warning"
-                icon="solar:pause-outline"
+                icon="solar:pause-broken"
                 width={16}
+              />
+            }
+          />
+        </Tooltip>
+      );
+    } else if (execution.canceled) {
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress
+            aria-label="Step"
+            color="danger"
+            showValueLabel={true}
+            size="md"
+            value={100}
+            valueLabel={
+              <Icon
+                className="text-danger"
+                icon="solar:close-line-duotone"
+                width={20}
+              />
+            }
+          />
+        </Tooltip>
+      );
+    } else if (execution.no_pattern_match) {
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress
+            color="secondary"
+            showValueLabel={true}
+            size="md"
+            value={100}
+            valueLabel={
+              <Icon
+                className="text-secondary"
+                icon="solar:bill-cross-broken"
+                width={20}
+              />
+            }
+          />
+        </Tooltip>
+      );
+    } else if (execution.interaction_required) {
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress
+            aria-label="Step"
+            color="primary"
+            showValueLabel={true}
+            size="md"
+            value={100}
+            valueLabel={
+              <Icon
+                className="text-primary"
+                icon="solar:hand-shake-linear"
+                width={22}
               />
             }
           />
@@ -180,80 +235,27 @@ export default function Executions({
             valueLabel={
               <Icon
                 className="text-danger"
-                icon="solar:danger-triangle-outline"
+                icon="solar:danger-triangle-broken"
                 width={20}
               />
             }
           />
         </Tooltip>
       );
-    } else if (execution.no_match) {
+    } else if (execution.finished) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
-            color="secondary"
+            aria-label="Step"
+            color="success"
             showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
               <Icon
-                className="text-secondary"
-                icon="solar:bill-cross-outline"
-                width={20}
-              />
-            }
-          />
-        </Tooltip>
-      );
-    } else if (execution.ghost) {
-      return (
-        <Tooltip content={`${status(execution)}`}>
-          <CircularProgress
-            color="default"
-            showValueLabel={true}
-            size="md"
-            value={100}
-            valueLabel={
-              <Icon
-                className="text-default-500"
-                icon="solar:ghost-outline"
-                width={20}
-              />
-            }
-          />
-        </Tooltip>
-      );
-    } else if (execution.interaction_required) {
-      return (
-        <Tooltip content={`${status(execution)}`}>
-          <CircularProgress
-            color="primary"
-            showValueLabel={true}
-            size="md"
-            value={100}
-            valueLabel={
-              <Icon
-                className="text-primary-500"
-                icon="solar:hand-shake-linear"
-                width={20}
-              />
-            }
-          />
-        </Tooltip>
-      );
-    } else if (execution.cancelled) {
-      return (
-        <Tooltip content={`${status(execution)}`}>
-          <CircularProgress
-            color="danger"
-            showValueLabel={true}
-            size="md"
-            value={100}
-            valueLabel={
-              <Icon
-                className="text-danger-500"
-                icon="solar:sad-square-linear"
-                width={20}
+                className="text-success"
+                icon="solar:check-read-broken"
+                width={22}
               />
             }
           />
@@ -265,14 +267,13 @@ export default function Executions({
           <CircularProgress
             aria-label="Step"
             color="success"
-            maxValue={5}
             showValueLabel={true}
             size="md"
-            value={5}
+            value={100}
             valueLabel={
               <Icon
                 className="text-success"
-                icon="solar:check-read-outline"
+                icon="solar:question-square-linear"
                 width={22}
               />
             }
@@ -439,14 +440,14 @@ export default function Executions({
                   setPage(1);
                 }}
               >
-                <DropdownItem key="finished" className="capitalize">
+                <DropdownItem key="pending" className="capitalize">
                   <div className="flex flex-cols gap-2">
                     <Icon
-                      className="text-success"
-                      icon="solar:check-read-outline"
+                      className="text-default-500"
+                      icon="solar:sleeping-square-linear"
                       width={18}
                     />
-                    Finished
+                    Pending
                   </div>
                 </DropdownItem>
                 <DropdownItem key="running" className="capitalize">
@@ -459,16 +460,6 @@ export default function Executions({
                     Running
                   </div>
                 </DropdownItem>
-                <DropdownItem key="waiting" className="capitalize">
-                  <div className="flex flex-cols gap-2">
-                    <Icon
-                      className="text-warning"
-                      icon="solar:clock-circle-outline"
-                      width={18}
-                    />
-                    Waiting
-                  </div>
-                </DropdownItem>
                 <DropdownItem key="paused" className="capitalize">
                   <div className="flex flex-cols gap-2">
                     <Icon
@@ -477,6 +468,26 @@ export default function Executions({
                       width={18}
                     />
                     Paused
+                  </div>
+                </DropdownItem>
+                <DropdownItem key="canceled" className="capitalize">
+                  <div className="flex flex-cols gap-2">
+                    <Icon
+                      className="text-danger"
+                      icon="solar:sad-square-linear"
+                      width={18}
+                    />
+                    Canceled
+                  </div>
+                </DropdownItem>
+                <DropdownItem key="no_pattern_match" className="capitalize">
+                  <div className="flex flex-cols gap-2">
+                    <Icon
+                      className="text-secondary"
+                      icon="solar:bill-cross-outline"
+                      width={18}
+                    />
+                    No Pattern Match
                   </div>
                 </DropdownItem>
                 <DropdownItem key="interaction_required" className="capitalize">
@@ -489,39 +500,6 @@ export default function Executions({
                     Interaction Required
                   </div>
                 </DropdownItem>
-                <DropdownItem key="no_pattern_match" className="capitalize">
-                  <div className="flex flex-cols gap-2">
-                    <Icon
-                      className="text-secondary"
-                      icon="solar:bill-cross-outline"
-                      width={18}
-                    />
-                    No Match
-                  </div>
-                </DropdownItem>
-                <DropdownItem
-                  key="no_flow_actions_found"
-                  className="capitalize"
-                >
-                  <div className="flex flex-cols gap-2">
-                    <Icon
-                      className="text-default-500"
-                      icon="solar:ghost-outline"
-                      width={18}
-                    />
-                    Ghost
-                  </div>
-                </DropdownItem>
-                <DropdownItem key="cancelled" className="capitalize">
-                  <div className="flex flex-cols gap-2">
-                    <Icon
-                      className="text-danger"
-                      icon="solar:sad-square-linear"
-                      width={18}
-                    />
-                    Cancelled
-                  </div>
-                </DropdownItem>
                 <DropdownItem key="error" className="capitalize">
                   <div className="flex flex-cols gap-2">
                     <Icon
@@ -530,6 +508,16 @@ export default function Executions({
                       width={18}
                     />
                     Error
+                  </div>
+                </DropdownItem>
+                <DropdownItem key="finished" className="capitalize">
+                  <div className="flex flex-cols gap-2">
+                    <Icon
+                      className="text-success"
+                      icon="solar:check-read-outline"
+                      width={18}
+                    />
+                    Finished
                   </div>
                 </DropdownItem>
               </DropdownMenu>
@@ -566,6 +554,42 @@ export default function Executions({
   return (
     <>
       <div className="flex flex-wrap items-stretch gap-4">
+        {executions.filter((e: any) => status(e) == "Pending").length > 0 && (
+          <Card
+            isHoverable
+            isPressable
+            className={
+              statusFilter.has("pending")
+                ? "bg-default/50 w-[240px] grow"
+                : "w-[240px] grow"
+            }
+            onPress={() => {
+              setStatusFilter(new Set(["pending"]));
+              setPage(1);
+            }}
+          >
+            <CardBody>
+              <div className="flex items-center gap-2">
+                <div className="flex bg-default/30 text-default-500 items-center rounded-small justify-center w-10 h-10">
+                  <Icon icon="solar:sleeping-square-linear" width={20} />
+                </div>
+                <div>
+                  <p className="text-md font-bold">
+                    <NumberFlow
+                      locales="en-US" // Intl.NumberFormat locales
+                      value={
+                        executions.filter((e: any) => status(e) == "Pending")
+                          .length
+                      }
+                    />
+                  </p>
+                  <p className="text-sm text-default-500">Pending</p>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        )}
+
         {executions.filter((e: any) => status(e) == "Finished").length > 0 && (
           <Card
             isHoverable
@@ -632,42 +656,6 @@ export default function Executions({
                     />
                   </p>
                   <p className="text-sm text-default-500">Running</p>
-                </div>
-              </div>
-            </CardBody>
-          </Card>
-        )}
-
-        {executions.filter((e: any) => status(e) == "Waiting").length > 0 && (
-          <Card
-            isHoverable
-            isPressable
-            className={
-              statusFilter.has("waiting")
-                ? "bg-warning/30 w-[240px] grow"
-                : "w-[240px] grow"
-            }
-            onPress={() => {
-              setStatusFilter(new Set(["waiting"]));
-              setPage(1);
-            }}
-          >
-            <CardBody>
-              <div className="flex items-center gap-2">
-                <div className="flex bg-warning/10 text-warning items-center rounded-small justify-center w-10 h-10">
-                  <Icon icon="solar:clock-circle-outline" width={20} />
-                </div>
-                <div>
-                  <p className="text-md font-bold">
-                    <NumberFlow
-                      locales="en-US" // Intl.NumberFormat locales
-                      value={
-                        executions.filter((e: any) => status(e) == "Waiting")
-                          .length
-                      }
-                    />
-                  </p>
-                  <p className="text-sm text-default-500">Waiting</p>
                 </div>
               </div>
             </CardBody>
@@ -781,52 +769,14 @@ export default function Executions({
                       }
                     />
                   </p>
-                  <p className="text-sm text-default-500">No Match</p>
+                  <p className="text-sm text-default-500">No Pattern Match</p>
                 </div>
               </div>
             </CardBody>
           </Card>
         )}
 
-        {executions.filter((e: any) => status(e) == "No Flow Actions found")
-          .length > 0 && (
-          <Card
-            isHoverable
-            isPressable
-            className={
-              statusFilter.has("no_flow_actions_found")
-                ? "bg-default/60 w-[240px] grow"
-                : "w-[240px] grow"
-            }
-            onPress={() => {
-              setStatusFilter(new Set(["no_flow_actions_found"]));
-              setPage(1);
-            }}
-          >
-            <CardBody>
-              <div className="flex items-center gap-2">
-                <div className="flex bg-default/20 text-default-500 items-center rounded-small justify-center w-10 h-10">
-                  <Icon icon="solar:ghost-outline" width={20} />
-                </div>
-                <div>
-                  <p className="text-md font-bold">
-                    <NumberFlow
-                      locales="en-US" // Intl.NumberFormat locales
-                      value={
-                        executions.filter(
-                          (e: any) => status(e) == "No Flow Actions found",
-                        ).length
-                      }
-                    />
-                  </p>
-                  <p className="text-sm text-default-500">Ghost</p>
-                </div>
-              </div>
-            </CardBody>
-          </Card>
-        )}
-
-        {executions.filter((e: any) => status(e) == "Cancelled").length > 0 && (
+        {executions.filter((e: any) => status(e) == "Canceled").length > 0 && (
           <Card
             isHoverable
             isPressable
@@ -836,7 +786,7 @@ export default function Executions({
                 : "w-[240px] grow"
             }
             onPress={() => {
-              setStatusFilter(new Set(["cancelled"]));
+              setStatusFilter(new Set(["canceled"]));
               setPage(1);
             }}
           >
@@ -850,12 +800,12 @@ export default function Executions({
                     <NumberFlow
                       locales="en-US" // Intl.NumberFormat locales
                       value={
-                        executions.filter((e: any) => status(e) == "Cancelled")
+                        executions.filter((e: any) => status(e) == "Canceled")
                           .length
                       }
                     />
                   </p>
-                  <p className="text-sm text-default-500">Cancelled</p>
+                  <p className="text-sm text-default-500">Canceled</p>
                 </div>
               </div>
             </CardBody>
