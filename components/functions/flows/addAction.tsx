@@ -150,7 +150,7 @@ export default function AddActionModal({
       for (let j = 0; j < runners[i].available_actions.length; j++) {
         const action = runners[i].available_actions[j];
 
-        if (action.is_hidden && user.role !== "Admin") {
+        if (action.is_hidden && user.role !== "admin") {
           continue;
         }
 

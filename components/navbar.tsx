@@ -69,7 +69,7 @@ export default function Navbar({ user, session, settings }: any) {
         )}
       </NavbarContent>
 
-      {user.role === "Admin" && settings.maintenance && (
+      {user.role === "admin" && settings.maintenance && (
         <NavbarContent justify="center">
           <NavbarItem>
             <Chip color="danger" radius="sm" variant="flat">

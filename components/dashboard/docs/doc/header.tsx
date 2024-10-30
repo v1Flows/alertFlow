@@ -50,11 +50,11 @@ export default function DocHeader({ doc, user }: any) {
             )}
           </div>
         </div>
-        {user.role === "Admin" && (
+        {user.role === "admin" && (
           <div className="flex flex-cols gap-2">
             <Button
               color="warning"
-              isDisabled={user.role !== "Admin"}
+              isDisabled={user.role !== "admin"}
               startContent={
                 <Icon icon="solar:pen-new-square-outline" width={20} />
               }
@@ -65,7 +65,7 @@ export default function DocHeader({ doc, user }: any) {
             </Button>
             <Button
               color="danger"
-              isDisabled={user.role !== "Admin"}
+              isDisabled={user.role !== "admin"}
               startContent={
                 <Icon icon="solar:trash-bin-trash-outline" width={20} />
               }

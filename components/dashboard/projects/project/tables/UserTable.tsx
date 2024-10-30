@@ -191,7 +191,7 @@ export default function ProjectMembers({
       return true;
     } else if (project.disabled) {
       return true;
-    } else if (user.role === "VIP") {
+    } else if (user.role === "vip") {
       return false;
     } else if (members.length >= plan.project_members) {
       return true;

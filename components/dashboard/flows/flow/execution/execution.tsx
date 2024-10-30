@@ -535,7 +535,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
         case "admin_actions":
           return (
             <div className="flex flex-col justify-center items-center">
-              {userDetails.role === "Admin" && (
+              {userDetails.role === "admin" && (
                 <AdminStepActions execution={execution} step={step} />
               )}
             </div>
@@ -578,7 +578,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
             <Icon icon="solar:letter-opened-broken" width={20} />
             Show Payload
           </Button>
-          {userDetails.role === "Admin" && (
+          {userDetails.role === "admin" && (
             <AdminExecutionActions execution={execution} />
           )}
 
@@ -619,7 +619,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
           <TableColumn
             key="admin_actions"
             align="center"
-            hideHeader={userDetails.role !== "Admin"}
+            hideHeader={userDetails.role !== "admin"}
           >
             Admin Actions
           </TableColumn>

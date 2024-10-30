@@ -55,11 +55,11 @@ export default function Login({ user, session, showSignUp, settings }: any) {
                 }}
                 classNames={{
                   name:
-                    userData?.role === "Admin" ? "text-danger font-bold" : "",
+                    userData?.role === "admin" ? "text-danger font-bold" : "",
                 }}
                 description={userData?.email}
                 name={
-                  userData?.role === "Admin"
+                  userData?.role === "admin"
                     ? userData?.username + " | " + userData?.role
                     : userData?.username
                 }

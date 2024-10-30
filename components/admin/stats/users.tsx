@@ -126,9 +126,9 @@ export default function UsersStats({
                     <CircularProgress
                       aria-label="Loading..."
                       color={
-                        p.role === "Admin"
+                        p.role === "admin"
                           ? "danger"
-                          : p.role === "VIP"
+                          : p.role === "vip"
                             ? "warning"
                             : "primary"
                       }
