@@ -218,7 +218,7 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
 
     const ms =
       new Date(calFinished).getTime() -
-      new Date(execution.created_at).getTime();
+      new Date(execution.executed_at).getTime();
     const sec = Math.floor(ms / 1000);
     const min = Math.floor(sec / 60);
     const hr = Math.floor(min / 60);

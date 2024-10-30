@@ -262,7 +262,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
     }
     const ms =
       new Date(calFinished).getTime() -
-      new Date(execution.created_at).getTime();
+      new Date(execution.executed_at).getTime();
     const sec = Math.floor(ms / 1000);
 
     return sec;
