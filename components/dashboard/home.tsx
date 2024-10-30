@@ -10,6 +10,7 @@ import {
   DropdownMenu,
   DropdownTrigger,
   Spacer,
+  useDisclosure,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import ReactTimeago from "react-timeago";
@@ -19,6 +20,8 @@ import NumberFlow from "@number-flow/react";
 import Executions from "./flows/flow/executions";
 import ExecutionChartCard from "./executionChartCard";
 import PayloadChartCard from "./payloadChartCard";
+import WelcomeModal from "../functions/users/welcome";
+import { useEffect, useState } from "react";
 
 export function DashboardHome({
   stats,
@@ -30,6 +33,9 @@ export function DashboardHome({
   user,
 }: any) {
   const router = useRouter();
+
+  const [welcomeModalWasOpened, setWelcomeModalWasOpened] = useState(false);
+  const welcomeModal = useDisclosure();
 
   function runnerHeartbeatStatus(runner: any) {
     var timeAgo =
@@ -55,10 +61,12 @@ export function DashboardHome({
     }
   }
 
-  console.log(
-    executions.filter((e: any) => e.error).length > 0 &&
-      executions.filter((e: any) => e.interaction_required).length > 0,
-  );
+  useEffect(() => {
+    if (user && !user.welcomed && !welcomeModalWasOpened) {
+      welcomeModal.onOpen();
+      setWelcomeModalWasOpened(true);
+    }
+  });
 
   return (
     <main>
@@ -68,60 +76,6 @@ export function DashboardHome({
       </p>
 
       <Spacer y={2} />
-
-      <Card className="border-2 border-success/60">
-        <CardHeader className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-success">
-            <p className="text-lg font-bold">New here, huh?</p>
-            <Icon icon="solar:tea-cup-linear" width={24} />
-          </div>
-          <Icon
-            className="text-default-500"
-            icon="solar:close-square-linear"
-            width={20}
-          />
-        </CardHeader>
-        <CardBody className="text-default-600">
-          <p>First of all, thanks for beeing here 🙏</p>
-          <p>
-            We want to make the start for you as easy as possible and to do so,
-            we offer you two options: Take a Tour or Read our Documentation
-          </p>
-
-          <Spacer y={2} />
-
-          <div className="grid grid-cols-5 items-center gap-2">
-            <div className="col-span-2">
-              <Button
-                fullWidth
-                color="primary"
-                startContent={<Icon icon="solar:planet-4-linear" width={20} />}
-                variant="flat"
-              >
-                Take a Tour
-              </Button>
-            </div>
-            <div className="col-span-2">
-              <Button
-                fullWidth
-                color="primary"
-                startContent={<Icon icon="solar:notes-outline" width={20} />}
-                variant="flat"
-                onClick={() => {
-                  router.push("/docs");
-                }}
-              >
-                Read our Documentation
-              </Button>
-            </div>
-            <div className="col-span-1">
-              <Button fullWidth variant="ghost">
-                Skip
-              </Button>
-            </div>
-          </div>
-        </CardBody>
-      </Card>
 
       <Spacer y={2} />
       <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 items-stretch gap-4">
@@ -473,6 +427,8 @@ export function DashboardHome({
         </div>
       </div>
       <Executions displayToFlow executions={executions} payloads={payloads} />
+
+      <WelcomeModal disclosure={welcomeModal} />
     </main>
   );
 }
