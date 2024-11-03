@@ -3,6 +3,7 @@
 import {
   Badge,
   Button,
+  Chip,
   CircularProgress,
   Divider,
   Progress,
@@ -71,6 +72,30 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
       return "Finished";
     } else {
       return "N/A";
+    }
+  }
+
+  function statusColor(step: any) {
+    if (step.pending) {
+      return "default";
+    } else if (step.running) {
+      return "primary";
+    } else if (step.paused) {
+      return "warning";
+    } else if (step.canceled) {
+      return "danger";
+    } else if (step.no_pattern_match) {
+      return "secondary";
+    } else if (step.no_result) {
+      return "default";
+    } else if (step.interactive) {
+      return "primary";
+    } else if (execution.error) {
+      return "danger";
+    } else if (execution.finished) {
+      return "success";
+    } else {
+      return "default";
     }
   }
 
@@ -464,15 +489,30 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
             <div className="flex flex-col items-center justify-center">
               <Tooltip
                 content={
-                  <div className="px-1 py-2">
-                    <div className="text-small font-bold">Started at</div>
-                    <div className="text-small">
-                      {new Date(step.started_at).toLocaleString()}
+                  <div className="grid grid-cols-2 p-1">
+                    <div className="text-small text-default-500">
+                      Created at
                     </div>
+                    <div className="text-small">
+                      {new Date(step.created_at).toLocaleString()}
+                    </div>
+                    {step.started_at !== "0001-01-01T00:00:00Z" && (
+                      <>
+                        <Divider className="col-span-2 mt-2 mb-2" />
+                        <div className="text-small text-default-500">
+                          Started at
+                        </div>
+                        <div className="text-small">
+                          {new Date(step.started_at).toLocaleString()}
+                        </div>
+                      </>
+                    )}
                     {step.finished_at !== "0001-01-01T00:00:00Z" && (
                       <>
-                        <Divider className="mt-2 mb-2" />
-                        <div className="text-small font-bold">Finished at</div>
+                        <Divider className="col-span-2 mt-2 mb-2" />
+                        <div className="text-small text-default-500">
+                          Finished at
+                        </div>
                         <div className="text-small">
                           {new Date(step.finished_at).toLocaleString()}
                         </div>
@@ -496,39 +536,52 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
           );
         case "info":
           return (
-            <div className="flex flex-col items-center justify-center">
-              <Tooltip
-                content={
-                  <div className="px-1 py-2">
-                    <div className="text-small font-bold">ID</div>
-                    <div className="text-small">{step.id}</div>
-                    <Divider className="mt-2 mb-2" />
-                    <div className="text-small font-bold">Status</div>
-                    <div className="text-small">{status(step)}</div>
-                    <Divider className="mt-2 mb-2" />
-                    <div className="text-small font-bold">Started at</div>
-                    <div className="text-small">
-                      {new Date(step.started_at).toLocaleString()}
+            <Tooltip
+              content={
+                <div className="flex flex-col items-start justify-between p-1">
+                  <div className="flex flex-cols gap-4">
+                    <div className="flex items-center gap-2">
+                      <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
+                        <Icon icon={step.icon} width={20} />
+                      </div>
+                      <div>
+                        <p className="font-bold">{step.action_name}</p>
+                        <p className="text-sm text-default-500">
+                          {step.action_id || "N/A"}
+                        </p>
+                      </div>
                     </div>
-                    {step.finised && (
-                      <>
-                        <Divider className="mt-2 mb-2" />
-                        <div className="text-small font-bold">Finished at</div>
-                        <div className="text-small">
-                          {new Date(step.finished_at).toLocaleString()}
-                        </div>
-                      </>
-                    )}
+                    <div className="flex items-start justify-self-end">
+                      <Chip
+                        color={statusColor(step)}
+                        radius="sm"
+                        size="sm"
+                        variant="flat"
+                      >
+                        {status(step)}
+                      </Chip>
+                    </div>
                   </div>
-                }
-              >
-                <Icon
-                  className="text-default-500"
-                  icon="solar:info-circle-linear"
-                  width={20}
-                />
-              </Tooltip>
-            </div>
+                  <Divider className="m-2" />
+                  <div className="flex flex-wrap gap-2">
+                    <Chip color="primary" radius="sm" size="sm" variant="flat">
+                      Runner:{" "}
+                      {runners.find((r: any) => r.id === step.runner_id)
+                        ?.name || "N/A"}
+                    </Chip>
+                    <Chip radius="sm" size="sm" variant="flat">
+                      Step ID: {step.id}
+                    </Chip>
+                  </div>
+                </div>
+              }
+            >
+              <Icon
+                className="text-default-500"
+                icon="solar:info-circle-linear"
+                width={20}
+              />
+            </Tooltip>
           );
         case "status":
           return <div>{statusIcon(step)}</div>;
