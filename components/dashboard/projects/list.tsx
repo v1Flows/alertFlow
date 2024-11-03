@@ -60,6 +60,8 @@ export function ProjectsList({
       return true;
     } else if (user.role === "vip") {
       return false;
+    } else if (user.role === "admin") {
+      return false;
     } else if (projects.length >= plan.projects) {
       return true;
     }
@@ -71,6 +73,8 @@ export function ProjectsList({
     if (!settings.create_projects) {
       return false;
     } else if (user.role === "vip") {
+      return true;
+    } else if (user.role === "admin") {
       return true;
     } else if (projects.length >= plan.projects) {
       return false;
