@@ -78,6 +78,8 @@ export default function Runners({
       return true;
     } else if (user.role === "vip") {
       return false;
+    } else if (user.role === "admin") {
+      return false;
     } else if (
       runners.filter((runner: any) => runner.alertflow_runner === false)
         .length >= plan.self_hosted_runners
