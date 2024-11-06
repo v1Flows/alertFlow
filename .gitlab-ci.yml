@@ -4,12 +4,14 @@ stages:
 
 docker-build-job:
   stage: build
-  image: docker:24.0.5
+  image: docker:stable
   services:
-    - docker:24.0.5-dind
+    - name: docker:dind
+      alias: thedockerhost
   variables:
     DOCKER_TLS_CERTDIR: ""
-    DOCKER_HOST: tcp://docker:2375
+    DOCKER_HOST: tcp://thedockerhost:2375/
+    DOCKER_DRIVER: overlay2
   script:
     - docker build . -f Dockerfile -t registry.justlab.xyz/alertflow/frontend:test
 
