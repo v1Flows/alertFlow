@@ -6,10 +6,9 @@ docker-build-job:
   stage: build
   image: docker:stable
   services:
-    - name: docker:dind
-      alias: thedockerhost
+    - docker:dind
   variables:
-    DOCKER_HOST: tcp://thedockerhost:2376
+    DOCKER_HOST: tcp://docker:2376
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: "/certs"
     DOCKER_TLS_VERIFY: "1"
