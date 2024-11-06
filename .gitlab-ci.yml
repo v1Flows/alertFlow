@@ -2,7 +2,7 @@ stages:
   - build
   - test
 
-docker-build-job:
+docker-test-build-job:
   stage: build
   image: docker:stable
   services:
@@ -15,6 +15,10 @@ docker-build-job:
     DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
   script:
     - docker build . -f Dockerfile -t registry.justlab.xyz/alertflow/frontend:test
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
+      when: always
+    - when: never
 
 lint-test-job:
   stage: test
@@ -25,7 +29,11 @@ lint-test-job:
     - pnpm config set store-dir .pnpm-store
   script:
     - pnpm install
-    - pnpm run lint    
+    - pnpm run lint   
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
+      when: always
+    - when: never 
 
 # deploy-job:      # This job runs in the deploy stage.
 #   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
