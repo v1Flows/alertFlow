@@ -1,0 +1,37 @@
+stages:
+  - build
+  - test
+
+docker-build-job:
+  stage: build
+  image: docker:stable
+  services:
+    - docker:dind
+  variables:
+    DOCKER_HOST: tcp://docker:2376
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: "/certs"
+    DOCKER_TLS_VERIFY: "1"
+    DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
+  script:
+    - docker build . -f Dockerfile -t registry.justlab.xyz/alertflow/frontend:test
+
+lint-test-job:
+  stage: test
+  image: node:18-alpine
+  before_script:
+    - corepack enable
+    - corepack prepare pnpm@latest --activate
+    - pnpm config set store-dir .pnpm-store
+  script:
+    - pnpm install
+    - pnpm run lint    
+
+# deploy-job:      # This job runs in the deploy stage.
+#   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+#   environment: production
+#   script:
+#     - echo "Deploying application..."
+#     - echo "Application successfully deployed."
+#   only:
+#     - main
