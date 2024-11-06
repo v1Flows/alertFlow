@@ -1,20 +1,16 @@
-default:
-  image: docker:24.0.5
-  services:
-    - docker:24.0.5-dind
-  before_script:
-    - docker info
+stages:
+  - build
+  - test
 
 variables:
   DOCKER_TLS_CERTDIR: ""
   DOCKER_HOST: tcp://docker:2375
 
-stages:
-  - build
-  - test
-
 docker-build-job:
   stage: build
+  image: docker:24.0.5
+  services:
+    - docker:24.0.5-dind
   script:
     - docker build . -f Dockerfile -t registry.justlab.xyz/alertflow/frontend:test
 
