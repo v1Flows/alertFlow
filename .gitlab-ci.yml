@@ -13,20 +13,6 @@ stages:
   - build
   - test
 
-project-build-job:
-  stage: build
-  image: node:18-alpine
-  before_script:
-    - corepack enable
-    - corepack prepare pnpm@latest --activate
-    - pnpm config set store-dir .pnpm-store
-  script:
-    - pnpm install
-    - pnpm run build
-  cache:
-    paths:
-      - .pnpm-store
-
 docker-build-job:
   stage: build
   script:
