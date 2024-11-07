@@ -44,7 +44,7 @@ export default function LoginPageComponent() {
     setError(false);
     setErrorText("");
 
-    const res = await LoginAPI(usernameEmail, password);
+    const res = await LoginAPI(usernameEmail, password, rememberMe);
 
     if (!res.error) {
       await setSession(res.token, res.user, res.expires_at);
