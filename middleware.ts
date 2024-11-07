@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { updateSession } from "@/lib/auth/updateSession";
+import "./updateSessionInterval";
 
 import PageGetSettings from "./lib/fetch/page/settings";
 
@@ -45,17 +45,5 @@ export async function middleware(request: NextRequest) {
     !request.cookies.get("session")
   ) {
     return NextResponse.redirect(new URL("/", request.url));
-  }
-
-  if (
-    (request.url.includes("/dashboard") || request.url.includes("/admin")) &&
-    !request.url.includes("_next") &&
-    request.cookies.get("session")
-  ) {
-    const updatedSession = await updateSession();
-
-    if (!updatedSession) {
-      return NextResponse.redirect(new URL("/error", request.url));
-    }
   }
 }

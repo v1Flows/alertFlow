@@ -1,6 +1,10 @@
 "use server";
 
-export default async function LoginAPI(email: string, password: string) {
+export default async function LoginAPI(
+  email: string,
+  password: string,
+  remember_me: boolean,
+) {
   "use client";
   try {
     const headers = new Headers();
@@ -14,6 +18,7 @@ export default async function LoginAPI(email: string, password: string) {
         body: JSON.stringify({
           email,
           password,
+          remember_me,
         }),
       },
     );
