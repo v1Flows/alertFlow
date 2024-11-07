@@ -140,7 +140,7 @@ export default function SignUpPage() {
 
     if (res.result === "success") {
       // login
-      const loginRes = await LoginAPI(email, password);
+      const loginRes = await LoginAPI(email, password, false);
 
       if (!loginRes.error) {
         await setSession(loginRes.token, loginRes.user, loginRes.expires_at);
