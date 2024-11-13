@@ -2,17 +2,17 @@ import { Button } from "@nextui-org/react";
 
 import { title, subtitle } from "@/components/primitives";
 
-export default function HomeTerraform() {
+export default function HomeFlows() {
   return (
     <main>
       <div className="flex flex-col items-center text-center">
         <h1 className={title({ size: "lg" })}>
-          Versioned within{" "}
-          <h1 className={title({ color: "blue", size: "lg" })}>Terraform.</h1>
+          Designed by{" "}
+          <h1 className={title({ color: "yellow", size: "lg" })}>Flows.</h1>{" "}
         </h1>
         <h2 className={subtitle({ class: "mt-4 text-default-500" })}>
-          Infrastructure as code to build, change, and version your AlertFlow
-          experience. Now with our Terraform provider.
+          Flow your data, your way, with Flows. Define actions, patterns,
+          execution order and more.
         </h2>
         <div className="mt-4">
           <Button
