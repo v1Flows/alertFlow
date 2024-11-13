@@ -131,7 +131,7 @@ export default function AddActionModal({
         continue;
       }
 
-      if (runners[i].available_actions.length > 0) {
+      if (runners[i].actions.length > 0) {
         actions++;
       }
     }
@@ -147,8 +147,8 @@ export default function AddActionModal({
 
   function getUniqueActions() {
     for (let i = 0; i < runners.length; i++) {
-      for (let j = 0; j < runners[i].available_actions.length; j++) {
-        const action = runners[i].available_actions[j];
+      for (let j = 0; j < runners[i].actions.length; j++) {
+        const action = runners[i].actions[j];
 
         if (action.is_hidden && user.role !== "admin") {
           continue;
@@ -169,8 +169,8 @@ export default function AddActionModal({
 
   function getUniqueActionCategorys() {
     for (let i = 0; i < runners.length; i++) {
-      for (let j = 0; j < runners[i].available_actions.length; j++) {
-        const action = runners[i].available_actions[j];
+      for (let j = 0; j < runners[i].actions.length; j++) {
+        const action = runners[i].actions[j];
 
         setAvailableCategories((prev: any) => {
           const categorySet = new Set(prev);

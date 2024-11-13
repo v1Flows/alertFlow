@@ -120,10 +120,10 @@ export function SelfHostedRunnerList({ runners, projects }: any) {
         return (
           <div>
             <p className="text-sm text-default-500">
-              Actions: {runner.available_actions.length}
+              Actions: {runner.actions.length}
             </p>
             <p className="text-sm text-default-500">
-              Payload Injectors: {runner.available_payload_injectors.length}
+              Payload Injectors: {runner.payload_endpoints.length}
             </p>
           </div>
         );
