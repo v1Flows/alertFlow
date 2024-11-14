@@ -40,7 +40,7 @@ export default function HomeFlows() {
       </div>
       <div className="grid lg:grid-cols-3 grid-cols-1 items-center justify-center gap-4">
         <div className="flex flex-col items-center text-center">
-          <div className="flex bg-primary/20 text-primary items-center rounded-medium justify-center w-16 h-16">
+          <div className="flex bg-warning/20 text-warning items-center rounded-medium justify-center w-16 h-16">
             <Icon icon="solar:reorder-linear" width={48} />
           </div>
           <Spacer y={2} />
@@ -53,7 +53,7 @@ export default function HomeFlows() {
         </div>
 
         <div className="flex flex-col items-center text-center">
-          <div className="flex bg-primary/20 text-primary items-center rounded-medium justify-center w-16 h-16">
+          <div className="flex bg-warning/20 text-warning items-center rounded-medium justify-center w-16 h-16">
             <Icon icon="solar:list-check-minimalistic-outline" width={48} />
           </div>
           <Spacer y={2} />
@@ -66,7 +66,7 @@ export default function HomeFlows() {
         </div>
 
         <div className="flex flex-col items-center text-center">
-          <div className="flex bg-primary/20 text-primary items-center rounded-medium justify-center w-16 h-16">
+          <div className="flex bg-warning/20 text-warning items-center rounded-medium justify-center w-16 h-16">
             <Icon icon="solar:branching-paths-up-line-duotone" width={48} />
           </div>
           <Spacer y={2} />
