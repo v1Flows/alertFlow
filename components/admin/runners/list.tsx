@@ -123,7 +123,7 @@ export function SelfHostedRunnerList({ runners, projects }: any) {
               Actions: {runner.actions.length}
             </p>
             <p className="text-sm text-default-500">
-              Payload Injectors: {runner.payload_endpoints.length}
+              Payload Endpoints: {runner.payload_endpoints.length}
             </p>
           </div>
         );
