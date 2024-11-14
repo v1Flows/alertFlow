@@ -8,7 +8,9 @@ export default function HomeTerraform() {
       <div className="flex flex-col items-center text-center">
         <h1 className={title({ size: "lg" })}>
           Versioned within{" "}
-          <h1 className={title({ color: "blue", size: "lg" })}>Terraform.</h1>
+          <span className={title({ color: "blue", size: "lg" })}>
+            Terraform.
+          </span>
         </h1>
         <h2 className={subtitle({ class: "mt-4 text-default-500" })}>
           Infrastructure as code to build, change, and version your AlertFlow

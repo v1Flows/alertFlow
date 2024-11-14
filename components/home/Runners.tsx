@@ -8,7 +8,9 @@ export default function HomeRunners() {
       <div className="flex flex-col items-center text-center">
         <h1 className={title({ size: "lg" })}>
           Executed with{" "}
-          <h1 className={title({ color: "violet", size: "lg" })}>Runners.</h1>{" "}
+          <span className={title({ color: "violet", size: "lg" })}>
+            Runners.
+          </span>{" "}
         </h1>
         <h2 className={subtitle({ class: "mt-4 text-default-500" })}>
           Run your actions in any network, any platform, simply.

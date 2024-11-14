@@ -53,9 +53,9 @@ export function FeaturesSectionDemo() {
         <div className="text-center">
           <h1 className={title({ size: "lg" })}>
             Packed with{" "}
-            <h1 className={title({ color: "green", size: "lg" })}>
+            <span className={title({ color: "green", size: "lg" })}>
               fundamental features.
-            </h1>{" "}
+            </span>{" "}
           </h1>
         </div>
 
