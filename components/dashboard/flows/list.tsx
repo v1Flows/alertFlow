@@ -95,6 +95,8 @@ export default function FlowList({
       return true;
     } else if (user.role === "vip") {
       return false;
+    } else if (user.role === "admin") {
+      return false;
     } else if (flows.length >= plan.flows) {
       return true;
     }
@@ -106,6 +108,8 @@ export default function FlowList({
     if (!settings.create_flows) {
       return false;
     } else if (user.role === "vip") {
+      return true;
+    } else if (user.role === "admin") {
       return true;
     } else if (flows.length >= plan.flows) {
       return false;

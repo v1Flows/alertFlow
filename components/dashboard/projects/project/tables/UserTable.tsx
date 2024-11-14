@@ -193,6 +193,8 @@ export default function ProjectMembers({
       return true;
     } else if (user.role === "vip") {
       return false;
+    } else if (user.role === "admin") {
+      return false;
     } else if (members.length >= plan.project_members) {
       return true;
     } else if (

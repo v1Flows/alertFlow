@@ -11,6 +11,11 @@ import {
   DropdownMenu,
   DropdownItem,
   useDisclosure,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  ScrollShadow,
+  Badge,
 } from "@nextui-org/react";
 import { toast } from "sonner";
 import React from "react";
@@ -78,6 +83,8 @@ export default function Runners({
       return true;
     } else if (user.role === "vip") {
       return false;
+    } else if (user.role === "admin") {
+      return false;
     } else if (
       runners.filter((runner: any) => runner.alertflow_runner === false)
         .length >= plan.self_hosted_runners
@@ -108,7 +115,7 @@ export default function Runners({
         </Button>
       </div>
       <Divider className="mb-4" />
-      <div className="grid lg:grid-cols-2 gap-4">
+      <div className="flex flex-col gap-4">
         {runners.map(
           (runner: any) =>
             runner.alertflow_runner === false && (
@@ -195,7 +202,7 @@ export default function Runners({
                       {runner.disabled_reason}
                     </p>
                   )}
-                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-center">
+                  <div className="flex flex-wrap gap-4 text-center items-center justify-between">
                     <div className="flex flex-col items-center justify-center gap-1">
                       <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
                         <Icon
@@ -276,28 +283,108 @@ export default function Runners({
                       </div>
                     </div>
 
-                    <div className="flex flex-col items-center justify-center gap-1">
+                    <Popover>
+                      <PopoverTrigger>
+                        <div className="flex flex-col hover:text-primary hover:cursor-pointer	items-center justify-center gap-1">
+                          <Badge
+                            isOneChar
+                            color="default"
+                            content={<Icon icon={"solar:info-circle-linear"} />}
+                            placement="bottom-right"
+                            shape="circle"
+                            variant="faded"
+                          >
+                            <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                              <Icon
+                                icon="solar:plug-circle-outline"
+                                width={20}
+                              />
+                            </div>
+                          </Badge>
+                          <div>
+                            <p className="text-md font-bold">
+                              {runner.plugins.length}
+                            </p>
+                            <p className="text-sm text-default-500">Plugins</p>
+                          </div>
+                        </div>
+                      </PopoverTrigger>
+                      <PopoverContent className="max-h-[300px]">
+                        <ScrollShadow>
+                          {runner.plugins.map((plugin: any) => (
+                            <div
+                              key={plugin.name}
+                              className="flex flex-col items-start w-full gap-2"
+                            >
+                              <div className="flex flex-col items-start justify-between p-1 w-full">
+                                <div className="flex flex-cols gap-4">
+                                  <div className="flex items-center gap-2">
+                                    <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
+                                      <Icon
+                                        icon={
+                                          plugin.type === "action"
+                                            ? "solar:bolt-linear"
+                                            : "solar:letter-opened-linear"
+                                        }
+                                        width={20}
+                                      />
+                                    </div>
+                                    <div>
+                                      <p className="font-bold">{plugin.name}</p>
+                                      <p className="text-sm text-default-500">
+                                        Creator: {plugin.creator || "N/A"}
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <div className="flex items-start justify-self-end gap-2">
+                                    <Chip
+                                      color="primary"
+                                      radius="sm"
+                                      size="sm"
+                                      variant="flat"
+                                    >
+                                      Version: {plugin.version || "N/A"}
+                                    </Chip>
+                                    <Chip
+                                      color="secondary"
+                                      radius="sm"
+                                      size="sm"
+                                      variant="flat"
+                                    >
+                                      Type: {plugin.type || "N/A"}
+                                    </Chip>
+                                  </div>
+                                </div>
+                                <Divider className="m-2 w-full" />
+                              </div>
+                            </div>
+                          ))}
+                        </ScrollShadow>
+                      </PopoverContent>
+                    </Popover>
+
+                    <div className="flex flex-col hover:text-primary hover:cursor-pointer items-center justify-center gap-1">
                       <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
                         <Icon icon="solar:bolt-outline" width={20} />
                       </div>
                       <div>
                         <p className="text-md font-bold">
-                          {runner.available_actions.length}
+                          {runner.actions.length}
                         </p>
-                        <p className="text-sm text-default-500">Avl. Actions</p>
+                        <p className="text-sm text-default-500">Actions</p>
                       </div>
                     </div>
 
-                    <div className="flex flex-col items-center justify-center gap-1">
+                    <div className="flex flex-col hover:text-primary hover:cursor-pointer items-center justify-center gap-1">
                       <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
                         <Icon icon="solar:letter-opened-outline" width={20} />
                       </div>
                       <div>
                         <p className="text-md font-bold">
-                          {runner.available_payload_injectors.length}
+                          {runner.payload_endpoints.length}
                         </p>
                         <p className="text-sm text-default-500">
-                          Avl. Payload Injectors
+                          Payload Endpoints
                         </p>
                       </div>
                     </div>

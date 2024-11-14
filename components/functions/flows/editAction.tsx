@@ -64,7 +64,7 @@ export default function EditActionModal({
 
   function searchActionOnRunners() {
     runners.map((runner: any) => {
-      runner.available_actions.map((availableAction: any) => {
+      runner.actions.map((availableAction: any) => {
         if (availableAction.type === targetAction.type) {
           setParams(availableAction.params);
         }

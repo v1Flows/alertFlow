@@ -30,7 +30,7 @@ export default function ProjectTabs({
   React.useEffect(() => {
     var tab = params.get("tab") || "members";
 
-    if (tab === "audit" && plan.id !== "enterprise") {
+    if (tab === "audit" && plan.id !== "enterprise" && user.role !== "admin") {
       tab = "members";
     }
 
@@ -38,9 +38,10 @@ export default function ProjectTabs({
   }, [params]);
 
   const handleTabChange = (key: any) => {
-    if (key === "audit" && plan.id !== "enterprise") {
+    if (key === "audit" && plan.id !== "enterprise" && user.role !== "admin") {
       return;
     }
+
     params.set("tab", key);
     router.push(`${pathname}?${params.toString()}`);
   };
@@ -109,9 +110,9 @@ export default function ProjectTabs({
           </Tab>
           <Tab
             key="audit"
-            isDisabled={plan.id !== "enterprise"}
+            isDisabled={plan.id !== "enterprise" && user.role !== "admin"}
             title={
-              plan.id !== "enterprise" ? (
+              plan.id !== "enterprise" && user.role !== "admin" ? (
                 <Tooltip color="secondary" content="Enterprise Feature">
                   <div className="flex items-center space-x-2">
                     <Icon icon="solar:notes-outline" width={20} />
