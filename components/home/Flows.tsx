@@ -28,10 +28,8 @@ export default function HomeFlows() {
               isBlurred
               alt="..."
               className="w-full h-full object-cover rounded-md"
-              height={600}
               loading="lazy"
               src={`/images/flow_actions_${theme === "light" || isSSR ? "white" : "dark"}.png`}
-              width={1200}
             />
           </div>
 
@@ -40,8 +38,8 @@ export default function HomeFlows() {
       </div>
       <div className="grid lg:grid-cols-3 grid-cols-1 items-center justify-center gap-4">
         <div className="flex flex-col items-center text-center">
-          <div className="flex bg-warning/20 text-warning items-center rounded-medium justify-center w-16 h-16">
-            <Icon icon="solar:reorder-linear" width={48} />
+          <div className="flex bg-warning/20 text-warning items-center rounded-medium justify-center w-14 h-14">
+            <Icon icon="solar:reorder-linear" width={38} />
           </div>
           <Spacer y={2} />
           <p className="font-bold text-xl">Reorder Actions</p>
@@ -53,8 +51,8 @@ export default function HomeFlows() {
         </div>
 
         <div className="flex flex-col items-center text-center">
-          <div className="flex bg-warning/20 text-warning items-center rounded-medium justify-center w-16 h-16">
-            <Icon icon="solar:list-check-minimalistic-outline" width={48} />
+          <div className="flex bg-warning/20 text-warning items-center rounded-medium justify-center w-14 h-14">
+            <Icon icon="solar:list-check-minimalistic-outline" width={38} />
           </div>
           <Spacer y={2} />
           <p className="font-bold text-xl">Pattern Checks</p>
@@ -66,8 +64,8 @@ export default function HomeFlows() {
         </div>
 
         <div className="flex flex-col items-center text-center">
-          <div className="flex bg-warning/20 text-warning items-center rounded-medium justify-center w-16 h-16">
-            <Icon icon="solar:branching-paths-up-line-duotone" width={48} />
+          <div className="flex bg-warning/20 text-warning items-center rounded-medium justify-center w-14 h-14">
+            <Icon icon="solar:branching-paths-up-line-duotone" width={38} />
           </div>
           <Spacer y={2} />
           <p className="font-bold text-xl">Follow the Path</p>
