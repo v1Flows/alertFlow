@@ -1,4 +1,4 @@
-import { Button } from "@nextui-org/react";
+import { Button, Spacer } from "@nextui-org/react";
 
 import { title, subtitle } from "@/components/primitives";
 
@@ -24,9 +24,10 @@ export default function HomeTerraform() {
             size="sm"
             variant="flat"
           >
-            Learn more
+            Coming soon
           </Button>
         </div>
+        <Spacer y={8} />
       </div>
     </main>
   );
