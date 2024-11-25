@@ -91,7 +91,7 @@ export default function WelcomeModal({
                   variant="bordered"
                   onPress={() => {
                     handleSetWelcomed();
-                    router.push("/docs");
+                    router.push("/dashboard/docs");
                     onClose();
                   }}
                 >
