@@ -1,10 +1,8 @@
 "use client";
 
 import {
-  Button,
   Card,
   CardBody,
-  CardHeader,
   Dropdown,
   DropdownItem,
   DropdownMenu,
@@ -16,12 +14,13 @@ import { Icon } from "@iconify/react";
 import ReactTimeago from "react-timeago";
 import { useRouter } from "next/navigation";
 import NumberFlow from "@number-flow/react";
+import { useEffect, useState } from "react";
+
+import WelcomeModal from "../functions/users/welcome";
 
 import Executions from "./flows/flow/executions";
 import ExecutionChartCard from "./executionChartCard";
 import PayloadChartCard from "./payloadChartCard";
-import WelcomeModal from "../functions/users/welcome";
-import { useEffect, useState } from "react";
 
 export function DashboardHome({
   stats,
