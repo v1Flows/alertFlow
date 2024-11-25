@@ -158,17 +158,17 @@ export default function Stats({ stats }: { stats: any }) {
                 <div className="flex h-full w-full flex-col justify-between gap-y-3">
                   <dt className="flex items-center gap-x-2 text-base font-medium text-default-500">
                     {title}
-                    <div className="md:hidden">
-                      {trendChipContent({
-                        changeType,
-                        change,
-                        trendChipPosition,
-                      })}
-                    </div>
                   </dt>
                   <div className="flex gap-x-2">
                     <dd className="text-3xl font-semibold text-default-700">
                       {value}
+                      <div className="md:hidden">
+                        {trendChipContent({
+                          changeType,
+                          change,
+                          trendChipPosition,
+                        })}
+                      </div>
                     </dd>
                     <div
                       className={cn("hidden md:block", {
