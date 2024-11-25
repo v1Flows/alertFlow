@@ -12,6 +12,7 @@ import HomeShowcase from "@/components/home/Showcase";
 import HomeTerraform from "@/components/home/Terraform";
 import HomeRunners from "@/components/home/Runners";
 import HomeFlows from "@/components/home/Flows";
+import Footer from "@/components/footer/Footer";
 
 export default async function Home() {
   const user = JSON.parse(cookies().get("user")?.value || "{}");
@@ -79,6 +80,7 @@ export default async function Home() {
           <HomeTerraform />
         </section>
       </main>
+      <Footer />
     </>
   );
 }

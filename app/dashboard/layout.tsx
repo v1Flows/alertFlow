@@ -6,6 +6,7 @@ import SidebarMenu from "@/components/sidebar/sidebar-menu";
 import GetUserDetails from "@/lib/fetch/user/getDetails";
 import GetProjects from "@/lib/fetch/project/all";
 import GetFlows from "@/lib/fetch/flow/all";
+import Footer from "@/components/footer/Footer";
 
 export default async function DashboardHomeLayout({
   children,
@@ -27,6 +28,7 @@ export default async function DashboardHomeLayout({
       user={userDetails}
     >
       {children}
+      <Footer />
     </SidebarMenu>
   );
 }
