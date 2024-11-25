@@ -6,6 +6,7 @@ setInterval(async () => {
   const success = await updateSession();
 
   if (!success) {
+    // eslint-disable-next-line no-console
     console.error("Failed to update session");
   }
 }, TEN_MINUTES);
