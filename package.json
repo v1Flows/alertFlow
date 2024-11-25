@@ -13,7 +13,6 @@
 		"@dnd-kit/modifiers": "^7.0.0",
 		"@dnd-kit/sortable": "^8.0.0",
 		"@dnd-kit/utilities": "^3.2.2",
-		"@emotion/react": "^11.13.5",
 		"@iconify/react": "^5.0.2",
 		"@nextui-org/framer-utils": "^2.0.25",
 		"@nextui-org/react": "^2.4.8",
@@ -79,7 +78,7 @@
 		"tailwindcss": "3.4.13",
 		"three": "^0.170.0",
 		"three-globe": "^2.35.2",
-		"typescript": "5.6.3",
+		"typescript": "4.9.5",
 		"usehooks-ts": "^3.1.0",
 		"uuid": "^10.0.0",
 		"zustand": "^5.0.0"
