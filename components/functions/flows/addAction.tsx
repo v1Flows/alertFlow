@@ -90,6 +90,7 @@ export default function AddActionModal({
   }, [actionPage, availableActions, selectedCategory, runners]);
 
   // inputs
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [status, setStatus] = useState(true);
   const [action, setAction] = useState({
     id: uuidv4(),
