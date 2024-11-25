@@ -22,20 +22,20 @@ export default async function Home() {
     <>
       <Navbar session={session} settings={settings} user={user} />
       <HomeShowcase />
-      <Spacer y={14} />
+      <Spacer y={28} />
       <main className="container mx-auto w-full pt-2 px-6 flex-grow">
         <section>
           <FeaturesSectionDemo />
         </section>
-        <Spacer y={14} />
+        <Spacer y={28} />
         <section>
           <HomeFlows />
         </section>
-        <Spacer y={14} />
+        <Spacer y={28} />
         <section>
           <HomeRunners />
         </section>
-        <Spacer y={14} />
+        <Spacer y={28} />
         <section>
           <HomeTerraform />
         </section>

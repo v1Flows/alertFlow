@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 
-const AppScreenshotSkewed = ({ ...props }: ComponentProps<"svg">) => (
+const AppScreenshotDark = ({ ...props }: ComponentProps<"svg">) => (
   <svg
     fill="none"
     height="737"
@@ -476,13 +476,13 @@ const AppScreenshotSkewed = ({ ...props }: ComponentProps<"svg">) => (
         />
       </clipPath>
       <image
-        height="2500"
+        height="2200"
         id="image0_3051_12573"
         width="3978"
-        xlinkHref="https://nextuipro.nyc3.cdn.digitaloceanspaces.com/components-images/marketing/hero-section-with-bottom-app-screenshot.png"
+        xlinkHref="https://s3-console.justlab.xyz/api/v1/buckets/alertflow/objects/download?preview=true&prefix=full_dashboard_dark.png"
       />
     </defs>
   </svg>
 );
 
-export default AppScreenshotSkewed;
+export default AppScreenshotDark;

@@ -7,7 +7,8 @@ import { AnimatePresence, LazyMotion, domAnimation, m } from "framer-motion";
 import { useTheme } from "next-themes";
 
 import FadeInImage from "./fade-in-image";
-import AppScreenshotSkewed from "./app-screenshot-skewed";
+import AppScreenshotDark from "./app-screenshot-dark";
+import AppScreenshotWhite from "./app-screenshot-white";
 
 export default function HomeShowcase() {
   const { theme } = useTheme();
@@ -116,7 +117,11 @@ export default function HomeShowcase() {
               type: "spring",
             }}
           >
-            <AppScreenshotSkewed className="w-full" />
+            {theme === "dark" ? (
+              <AppScreenshotDark className="w-full" />
+            ) : (
+              <AppScreenshotWhite className="w-full" />
+            )}
           </m.div>
         </AnimatePresence>
       </LazyMotion>
