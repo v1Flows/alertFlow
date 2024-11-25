@@ -1,4 +1,4 @@
-import { Snippet, Code } from "@nextui-org/react";
+import { Snippet, Code, Spacer } from "@nextui-org/react";
 import { cookies } from "next/headers";
 import { Icon } from "@iconify/react";
 
@@ -9,6 +9,9 @@ import { FeaturesSectionDemo } from "@/components/home/bento";
 import AnimatedGradientText from "@/components/magicui/animated-gradient-text";
 import { cn } from "@/lib/utils";
 import HomeShowcase from "@/components/home/Showcase";
+import HomeTerraform from "@/components/home/Terraform";
+import HomeRunners from "@/components/home/Runners";
+import HomeFlows from "@/components/home/Flows";
 
 export default async function Home() {
   const user = JSON.parse(cookies().get("user")?.value || "{}");
@@ -60,8 +63,20 @@ export default async function Home() {
             <HomeShowcase />
           </div>
         </section>
-        <section className="mb-8">
+        <section>
           <FeaturesSectionDemo />
+        </section>
+        <Spacer y={28} />
+        <section>
+          <HomeFlows />
+        </section>
+        <Spacer y={28} />
+        <section>
+          <HomeRunners />
+        </section>
+        <Spacer y={28} />
+        <section>
+          <HomeTerraform />
         </section>
       </main>
     </>

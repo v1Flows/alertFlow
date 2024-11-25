@@ -11,19 +11,22 @@ import { useIsSSR } from "@react-aria/ssr";
 import { AnimatedBeam } from "@/components/magicui/animated-beam";
 import { cn } from "@/lib/utils";
 
+import { title } from "../primitives";
+
 export function FeaturesSectionDemo() {
   const features = [
     {
       title: "Combine everything in Projects",
-      description: "Users, Runners, Flows. You can pack it all in one place.",
+      description:
+        "Projects are the key part of AlertFlow. Here you manage User Access, assign Flows and more.",
       skeleton: <SkeletonOne />,
       className:
         "col-span-1 lg:col-span-4 border-b lg:border-r dark:border-neutral-800",
     },
     {
-      title: "Monitoring is a Global Operation",
+      title: "Easy Access & Navigation",
       description:
-        "Monitoring takes place all over the world. Your Server is located in America and you're located in Europe? We take care of the Alarms while you continue to take your well deserved sleep.",
+        "With our easy to use interface and shortcut based search, you can navigate through your projects, flows, etc. with ease.",
       skeleton: <SkeletonFour />,
       className: "border-b col-span-1 lg:col-span-2 dark:border-neutral-800",
     },
@@ -47,14 +50,19 @@ export function FeaturesSectionDemo() {
   return (
     <div className="relative z-20 max-w-7xl mx-auto">
       <div className="px-8">
-        <h4 className="text-3xl lg:text-5xl lg:leading-tight max-w-5xl mx-auto text-center tracking-tight font-medium text-black dark:text-white">
-          Packed with <span className="text-primary">fundamental features</span>
-        </h4>
+        <div className="text-center">
+          <h1 className={title({ size: "lg" })}>
+            Packed with{" "}
+            <span className={title({ color: "green", size: "lg" })}>
+              fundamental features.
+            </span>{" "}
+          </h1>
+        </div>
 
         <p className="text-sm lg:text-base  max-w-2xl  my-4 mx-auto text-neutral-500 text-center font-normal dark:text-neutral-300">
-          From Sending emails to triggering ansible playbooks. AlertFlow offers
-          you many ways to react on your Infrastructure Alarms. You say what you
-          want, we do the rest.
+          From sending emails to trigger ansible playbooks. AlertFlow offers you
+          many ways to react on your Infrastructure Alarms. You say what you
+          need, we do the rest.
         </p>
       </div>
 
@@ -89,7 +97,7 @@ const FeatureCard = ({
 
 const FeatureTitle = ({ children }: { children?: React.ReactNode }) => {
   return (
-    <p className=" max-w-5xl mx-auto text-left tracking-tight text-black dark:text-white text-xl md:text-2xl md:leading-snug">
+    <p className="font-bold max-w-5xl mx-auto text-left tracking-tight text-black dark:text-white text-xl md:text-2xl md:leading-snug">
       {children}
     </p>
   );
@@ -115,7 +123,7 @@ export const SkeletonOne = () => {
 
   return (
     <div className="relative flex py-8 px-2 gap-10 h-full">
-      <div className="w-full  p-5  mx-auto bg-white dark:bg-neutral-900 shadow-2xl group h-full">
+      <div className="w-full p-5 mx-auto bg-transparent group h-full">
         <div className="flex flex-1 w-full h-full flex-col space-y-2  ">
           <Image
             alt="header"
@@ -125,10 +133,10 @@ export const SkeletonOne = () => {
             width={800}
           />
         </div>
-      </div>
 
-      <div className="absolute bottom-0 z-40 inset-x-0 h-60 bg-gradient-to-t from-white dark:from-black via-white dark:via-black to-transparent w-full pointer-events-none" />
-      <div className="absolute top-0 z-40 inset-x-0 h-60 bg-gradient-to-b from-white dark:from-black via-transparent to-transparent w-full pointer-events-none" />
+        <div className="absolute bottom-0 z-40 inset-x-0 h-60 bg-gradient-to-t from-white dark:from-black via-white dark:via-black to-transparent w-full pointer-events-none" />
+        <div className="absolute top-0 z-40 inset-x-0 h-60 bg-gradient-to-b from-white dark:from-black via-transparent to-transparent w-full pointer-events-none" />
+      </div>
     </div>
   );
 };
@@ -263,9 +271,23 @@ export const SkeletonThree = () => {
 };
 
 export const SkeletonFour = () => {
+  const { theme } = useTheme();
+  const isSSR = useIsSSR();
+
   return (
-    <div className="h-60 md:h-60  flex flex-col items-center relative bg-transparent dark:bg-transparent mt-10">
-      <Globe className="absolute -right-10 md:-right-10 -bottom-80 md:-bottom-72" />
+    <div className="relative flex flex-col items-start p-8 gap-10 h-full overflow-hidden">
+      <div className="flex flex-1 w-full h-full flex-col space-y-2  ">
+        <Image
+          alt="header"
+          className="h-full w-full aspect-square object-cover object-left-top rounded-sm"
+          height={250}
+          src={`/images/command_${theme === "light" || isSSR ? "white" : "dark"}.png`}
+          width={800}
+        />
+      </div>
+
+      <div className="absolute bottom-0 z-40 inset-x-0 h-60 bg-gradient-to-t from-white dark:from-black via-white dark:via-black to-transparent w-full pointer-events-none" />
+      <div className="absolute top-0 z-40 inset-x-0 h-60 bg-gradient-to-b from-white dark:from-black via-transparent to-transparent w-full pointer-events-none" />
     </div>
   );
 };
