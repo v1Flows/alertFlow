@@ -13,6 +13,7 @@
 		"@dnd-kit/modifiers": "^7.0.0",
 		"@dnd-kit/sortable": "^8.0.0",
 		"@dnd-kit/utilities": "^3.2.2",
+		"@emotion/react": "^11.13.5",
 		"@iconify/react": "^5.0.2",
 		"@nextui-org/framer-utils": "^2.0.25",
 		"@nextui-org/react": "^2.4.8",
