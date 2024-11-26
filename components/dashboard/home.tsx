@@ -19,8 +19,7 @@ import { useEffect, useState } from "react";
 import WelcomeModal from "../functions/users/welcome";
 
 import Executions from "./flows/flow/executions";
-import ExecutionChartCard from "./executionChartCard";
-import PayloadChartCard from "./payloadChartCard";
+import Stats from "./stats";
 
 export function DashboardHome({
   stats,
@@ -412,10 +411,7 @@ export function DashboardHome({
       <Spacer y={2} />
 
       {/* Stats */}
-      <div className="grid lg:grid-cols-2 grid-cols-1 items-stretch items-center justify-between gap-4">
-        <ExecutionChartCard stats={stats} />
-        <PayloadChartCard stats={stats} />
-      </div>
+      <Stats stats={stats} />
 
       {/* Latest executions */}
       <div className="flex items-end justify-between my-4">

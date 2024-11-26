@@ -6,6 +6,7 @@ import GetProject from "@/lib/fetch/project/data";
 import GetProjectRunners from "@/lib/fetch/project/runners";
 import GetUserPlan from "@/lib/fetch/user/getPlan";
 import GetUserDetails from "@/lib/fetch/user/getDetails";
+import GetFlows from "@/lib/fetch/flow/all";
 
 export default async function DashboardProjectPage({
   params,
@@ -19,6 +20,7 @@ export default async function DashboardProjectPage({
   const plan = await GetUserPlan();
   const audit = await GetProjectAuditLogs(params.id);
   const userDetails = await GetUserDetails();
+  const flows = await GetFlows();
 
   return (
     <>
@@ -31,6 +33,7 @@ export default async function DashboardProjectPage({
         settings={settings}
         tokens={tokens}
         user={userDetails}
+        flows={flows}
       />
     </>
   );
