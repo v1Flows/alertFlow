@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-export default async function GetFlowStats(flowID: any, interval: number) {
+export default async function GetFlowStats(flowID: any, interval: string) {
   "use client";
   const cookieStore = cookies();
   const token = cookieStore.get("session")?.value;

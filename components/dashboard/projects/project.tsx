@@ -30,6 +30,7 @@ export default function Project({
   tokens,
   plan,
   audit,
+  flows,
 }: any) {
   const editProjectModal = useDisclosure();
 
@@ -61,10 +62,7 @@ export default function Project({
             }}
           />
           <div className="flex flex-col items-start">
-            <h1
-              className={subtitle({ className: "mb-0 font-bold" })}
-              style={{ color: "#0072f5" }}
-            >
+            <h1 className={subtitle({ className: "mb-0 font-bold" })}>
               {project.name}
             </h1>
             <p className="text-sm text-default-500">{project.description}</p>
@@ -128,10 +126,25 @@ export default function Project({
             </Card>
           </div>
           <div className="col-span-1">
+            <Card fullWidth>
+              <CardBody>
+                <div className="flex items-center gap-2">
+                  <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                    <Icon icon="solar:book-2-outline" width={20} />
+                  </div>
+                  <div>
+                    <p className="text-md font-bold">{flows.length}</p>
+                    <p className="text-sm text-default-500">Flows</p>
+                  </div>
+                </div>
+              </CardBody>
+            </Card>
+          </div>
+          <div className="col-span-1">
             <Card fullWidth className="h-full">
               <CardBody>
                 <div className="flex items-center gap-2">
-                  <div className="flex bg-warning/10 text-warning items-center rounded-small justify-center w-10 h-10">
+                  <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
                     <Icon icon="solar:rocket-2-outline" width={20} />
                   </div>
                   <div>
@@ -162,7 +175,7 @@ export default function Project({
             <Card fullWidth className="h-full">
               <CardBody>
                 <div className="flex items-center gap-2">
-                  <div className="flex bg-default/50 text-foreground items-center rounded-small justify-center w-10 h-10">
+                  <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
                     <Icon icon="solar:key-square-2-outline" width={20} />
                   </div>
                   <div>
@@ -173,23 +186,6 @@ export default function Project({
                       />
                     </p>
                     <p className="text-sm text-default-500">Tokens</p>
-                  </div>
-                </div>
-              </CardBody>
-            </Card>
-          </div>
-          <div className="col-span-1">
-            <Card fullWidth>
-              <CardBody>
-                <div className="flex items-center gap-2">
-                  <div className="flex bg-secondary/10 text-secondary items-center rounded-small justify-center w-10 h-10">
-                    <Icon icon="solar:calendar-outline" width={20} />
-                  </div>
-                  <div>
-                    <p className="text-md font-bold">
-                      {new Date(project.created_at).toLocaleString("de-DE")}
-                    </p>
-                    <p className="text-sm text-default-500">Created At</p>
                   </div>
                 </div>
               </CardBody>
