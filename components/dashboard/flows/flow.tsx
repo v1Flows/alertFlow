@@ -145,7 +145,7 @@ export function Flow({
             </div>
           )}
           <div>
-            <div className="grid lg:grid-cols-4 grid-cols-2 gap-4">
+            <div className="grid lg:grid-cols-5 grid-cols-2 gap-4">
               <div className="col-span-1">
                 <Card fullWidth>
                   <CardBody>
@@ -209,6 +209,30 @@ export function Flow({
                               )?.name}
                         </p>
                         <p className="text-sm text-default-500">Runner</p>
+                      </div>
+                    </div>
+                  </CardBody>
+                </Card>
+              </div>
+              <div className="col-span-1">
+                <Card fullWidth>
+                  <CardBody>
+                    <div className="flex items-center gap-2">
+                      <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                        <Icon icon="solar:letter-opened-outline" width={20} />
+                      </div>
+                      <div>
+                        <p className="text-md font-bold">
+                          <NumberFlow
+                            locales="en-US" // Intl.NumberFormat locales
+                            value={
+                              payloads.filter(
+                                (payload: any) => payload.flow_id === flow.id,
+                              ).length
+                            }
+                          />
+                        </p>
+                        <p className="text-sm text-default-500">Payloads</p>
                       </div>
                     </div>
                   </CardBody>

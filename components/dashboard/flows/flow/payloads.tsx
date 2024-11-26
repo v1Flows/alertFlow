@@ -117,7 +117,10 @@ export default function Payloads({ flow, executions, payloads, runners }: any) {
                     <Spacer y={2} />
                     <Button
                       color="primary"
-                      variant="light"
+                      startContent={
+                        <Icon icon="solar:map-arrow-square-linear" width={20} />
+                      }
+                      variant="bordered"
                       onPress={() =>
                         router.push(
                           `/dashboard/flows/${flow.id}/execution/${executions.find((execution: any) => execution.payload_id === payload.id).id}`,
