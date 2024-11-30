@@ -25,76 +25,134 @@ export default function AdminStepActions({
     const newStep = { ...step };
 
     switch (status) {
-      case "finished":
-        newStep.error = false;
-        newStep.finished = true;
+      case "pending":
+        newStep.pending = true;
+        newStep.running = false;
+        newStep.paused = false;
+        newStep.canceled = false;
         newStep.no_pattern_match = false;
         newStep.no_result = false;
-        newStep.paused = false;
-        newStep.action_messages = [
-          "Action Status changed by Admin to Finished",
-        ];
+        newStep.error = false;
+        newStep.finished = false;
+        newStep.action_messages = ["Action Status changed by Admin to Pending"];
         newStep.finished_at =
-          newStep.finished_at !== "0001-01-01T00:00:00Z"
-            ? newStep.finished_at
-            : new Date().toISOString();
+          step.finished_at !== "0001-01-01T00:00:00Z"
+            ? step.finished_at
+            : "0001-01-01T00:00:00Z";
         break;
       case "running":
-        newStep.error = false;
-        newStep.finished = false;
+        newStep.pending = false;
+        newStep.running = true;
+        newStep.paused = false;
+        newStep.canceled = false;
         newStep.no_pattern_match = false;
         newStep.no_result = false;
-        newStep.paused = false;
+        newStep.error = false;
+        newStep.finished = false;
         newStep.action_messages = ["Action Status changed by Admin to Running"];
-        newStep.finished_at = "0001-01-01T00:00:00Z";
+        newStep.finished_at =
+          step.finished_at !== "0001-01-01T00:00:00Z"
+            ? step.finished_at
+            : "0001-01-01T00:00:00Z";
         break;
       case "paused":
-        newStep.error = false;
-        newStep.finished = false;
+        newStep.pending = false;
+        newStep.running = false;
+        newStep.paused = true;
+        newStep.canceled = false;
         newStep.no_pattern_match = false;
         newStep.no_result = false;
-        newStep.paused = true;
-        newStep.action_messages = ["Action Status changed by Admin to Paused"];
-        newStep.finished_at = "0001-01-01T00:00:00Z";
-        break;
-      case "no_pattern_match":
         newStep.error = false;
         newStep.finished = false;
+        newStep.action_messages = ["Action Status changed by Admin to Paused"];
+        newStep.finished_at =
+          step.finished_at !== "0001-01-01T00:00:00Z"
+            ? step.finished_at
+            : "0001-01-01T00:00:00Z";
+        break;
+      case "canceled":
+        newStep.pending = false;
+        newStep.running = false;
+        newStep.paused = false;
+        newStep.canceled = true;
+        newStep.no_pattern_match = false;
+        newStep.no_result = false;
+        newStep.error = false;
+        newStep.finished = false;
+        newStep.action_messages = [
+          "Action Status changed by Admin to Canceled",
+        ];
+        newStep.canceled_by = "admin";
+        newStep.canceled_at = new Date().toISOString();
+        newStep.finished_at =
+          step.finished_at !== "0001-01-01T00:00:00Z"
+            ? step.finished_at
+            : new Date().toISOString();
+        break;
+      case "no_pattern_match":
+        newStep.pending = false;
+        newStep.running = false;
+        newStep.paused = false;
+        newStep.canceled = false;
         newStep.no_pattern_match = true;
         newStep.no_result = false;
-        newStep.paused = false;
+        newStep.error = false;
+        newStep.finished = false;
         newStep.action_messages = [
           "Action Status changed by Admin to No Pattern Match",
         ];
         newStep.finished_at =
-          newStep.finished_at !== "0001-01-01T00:00:00Z"
-            ? newStep.finished_at
-            : new Date().toISOString();
+          step.finished_at !== "0001-01-01T00:00:00Z"
+            ? step.finished_at
+            : "0001-01-01T00:00:00Z";
         break;
       case "no_result":
-        newStep.error = false;
-        newStep.finished = true;
+        newStep.pending = false;
+        newStep.running = false;
+        newStep.paused = false;
+        newStep.canceled = false;
         newStep.no_pattern_match = false;
         newStep.no_result = true;
-        newStep.paused = false;
+        newStep.error = false;
+        newStep.finished = false;
         newStep.action_messages = [
           "Action Status changed by Admin to No Result",
         ];
         newStep.finished_at =
-          newStep.finished_at !== "0001-01-01T00:00:00Z"
-            ? newStep.finished_at
-            : new Date().toISOString();
+          step.finished_at !== "0001-01-01T00:00:00Z"
+            ? step.finished_at
+            : "0001-01-01T00:00:00Z";
         break;
       case "error":
-        newStep.error = true;
-        newStep.finished = false;
+        newStep.pending = false;
+        newStep.running = false;
+        newStep.paused = false;
+        newStep.canceled = false;
         newStep.no_pattern_match = false;
         newStep.no_result = false;
-        newStep.paused = false;
+        newStep.error = true;
+        newStep.finished = false;
         newStep.action_messages = ["Action Status changed by Admin to Error"];
         newStep.finished_at =
-          newStep.finished_at !== "0001-01-01T00:00:00Z"
-            ? newStep.finished_at
+          step.finished_at !== "0001-01-01T00:00:00Z"
+            ? step.finished_at
+            : new Date().toISOString();
+        break;
+      case "finished":
+        newStep.pending = false;
+        newStep.running = false;
+        newStep.paused = false;
+        newStep.canceled = false;
+        newStep.no_pattern_match = false;
+        newStep.no_result = false;
+        newStep.error = false;
+        newStep.finished = true;
+        newStep.action_messages = [
+          "Action Status changed by Admin to Finished",
+        ];
+        newStep.finished_at =
+          step.finished_at !== "0001-01-01T00:00:00Z"
+            ? step.finished_at
             : new Date().toISOString();
         break;
       default:
@@ -121,17 +179,17 @@ export default function AdminStepActions({
       <DropdownMenu aria-label="Table Columns" variant="flat">
         <DropdownSection title="Change Execution Status">
           <DropdownItem
-            key="finished"
+            key="pending"
             className="capitalize"
-            onPress={() => changeStepStatus("finished")}
+            onPress={() => changeStepStatus("pending")}
           >
             <div className="flex flex-cols gap-2">
               <Icon
-                className="text-success"
-                icon="solar:check-read-broken"
+                className="text-default-500"
+                icon="solar:sleeping-square-linear"
                 width={18}
               />
-              Finished
+              Pending
             </div>
           </DropdownItem>
           <DropdownItem
@@ -160,6 +218,20 @@ export default function AdminStepActions({
                 width={18}
               />
               Paused
+            </div>
+          </DropdownItem>
+          <DropdownItem
+            key="canceled"
+            className="capitalize"
+            onPress={() => changeStepStatus("canceled")}
+          >
+            <div className="flex flex-cols gap-2">
+              <Icon
+                className="text-danger"
+                icon="solar:forbidden-linear"
+                width={18}
+              />
+              Canceled
             </div>
           </DropdownItem>
           <DropdownItem
@@ -202,6 +274,20 @@ export default function AdminStepActions({
                 width={18}
               />
               Error
+            </div>
+          </DropdownItem>
+          <DropdownItem
+            key="finished"
+            className="capitalize"
+            onPress={() => changeStepStatus("finished")}
+          >
+            <div className="flex flex-cols gap-2">
+              <Icon
+                className="text-success"
+                icon="solar:check-read-broken"
+                width={18}
+              />
+              Finished
             </div>
           </DropdownItem>
         </DropdownSection>
