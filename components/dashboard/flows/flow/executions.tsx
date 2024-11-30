@@ -179,7 +179,7 @@ export default function Executions({
             valueLabel={
               <Icon
                 className="text-danger"
-                icon="solar:close-line-duotone"
+                icon="solar:forbidden-linear"
                 width={20}
               />
             }
@@ -474,7 +474,7 @@ export default function Executions({
                   <div className="flex flex-cols gap-2">
                     <Icon
                       className="text-danger"
-                      icon="solar:sad-square-linear"
+                      icon="solar:forbidden-linear"
                       width={18}
                     />
                     Canceled
@@ -793,7 +793,7 @@ export default function Executions({
             <CardBody>
               <div className="flex items-center gap-2">
                 <div className="flex bg-danger/10 text-danger items-center rounded-small justify-center w-10 h-10">
-                  <Icon icon="solar:sad-square-linear" width={20} />
+                  <Icon icon="solar:forbidden-linear" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">

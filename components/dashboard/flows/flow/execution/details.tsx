@@ -105,7 +105,7 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
             valueLabel={
               <Icon
                 className="text-danger"
-                icon="solar:close-line-duotone"
+                icon="solar:forbidden-linear"
                 width={20}
               />
             }

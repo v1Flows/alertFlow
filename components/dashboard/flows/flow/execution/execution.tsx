@@ -156,7 +156,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
             valueLabel={
               <Icon
                 className="text-danger"
-                icon="solar:close-line-duotone"
+                icon="solar:forbidden-linear"
                 width={20}
               />
             }
