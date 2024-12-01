@@ -36,7 +36,7 @@ const formatValue = (value: number) => {
 export default function Stats({ stats }: { stats: any }) {
   const data = [
     {
-      title: "Total Payloads",
+      title: "Total Payloads this week",
       value: stats.total_payloads,
       change: stats.payload_trend_percentage + "% today",
       changeType: stats.payload_trend,
@@ -44,7 +44,7 @@ export default function Stats({ stats }: { stats: any }) {
       chartData: stats.payloads,
     },
     {
-      title: "Total Executions",
+      title: "Total Executions this week",
       value: stats.total_executions,
       change: stats.execution_trend_percentage + "% today",
       changeType: stats.execution_trend,
