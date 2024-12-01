@@ -13,6 +13,6 @@ export default async function SimulatePayload(target: any, payload: any) {
 
     return;
   } catch (error) {
-    return { error: "Failed to send payload" };
+    return { error: error.message, message: "Failed to send payload" };
   }
 }

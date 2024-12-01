@@ -71,8 +71,8 @@ export default function SimulatePayloadModal({
     setIsLoading(true);
     const res = await SimulatePayload(target, payload);
 
-    if (res && !res.error) {
-      toast.error(res.error);
+    if (res && res.error) {
+      toast.error(res.message + ": " + res.error);
     } else {
       onOpenChange();
       toast.success("Payload sent successfully!");
