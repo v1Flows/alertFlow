@@ -7,7 +7,7 @@ export default async function CreateSubscription(
   planStripeID: string,
 ) {
   "use client";
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const token = cookieStore.get("session")?.value;
 
   try {

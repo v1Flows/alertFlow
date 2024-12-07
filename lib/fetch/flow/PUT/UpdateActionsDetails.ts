@@ -8,7 +8,7 @@ export default async function UpdateFlowActionsDetails(
   patterns: any,
 ) {
   "use client";
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const token = cookieStore.get("session")?.value;
 
   try {

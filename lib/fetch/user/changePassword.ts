@@ -9,7 +9,7 @@ export default async function ChangeUserPassword(
   confirmPassword: string,
 ) {
   "use client";
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const token = cookieStore.get("session")?.value;
 
   try {

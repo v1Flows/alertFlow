@@ -14,8 +14,9 @@ import HomeFlows from "@/components/home/Flows";
 import Footer from "@/components/footer/Footer";
 
 export default async function Home() {
-  const user = JSON.parse(cookies().get("user")?.value || "{}");
-  const session = cookies().get("session")?.value;
+  const cookieStore = await cookies();
+  const user = JSON.parse(cookieStore.get("user")?.value || "{}");
+  const session = cookieStore.get("session")?.value;
   const settings = await AdminGetSettings();
 
   return (

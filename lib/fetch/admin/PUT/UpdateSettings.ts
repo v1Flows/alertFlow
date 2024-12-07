@@ -15,7 +15,7 @@ export default async function UpdateSettings(
   inject_payloads: boolean,
 ) {
   "use client";
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const token = cookieStore.get("session")?.value;
 
   try {
