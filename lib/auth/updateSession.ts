@@ -4,7 +4,8 @@ import { NextResponse } from "next/server";
 
 export async function updateSession() {
   "use client";
-  const session = cookies().get("session")?.value;
+  const cookieStore = await cookies();
+  const session = cookieStore.get("session")?.value;
 
   try {
     const headers = new Headers();
