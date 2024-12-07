@@ -1,15 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  Button,
-  Input,
-  Checkbox,
-  Link,
-  Image,
-  Card,
-  CardHeader,
-} from "@nextui-org/react";
+import { Button, Input, Checkbox, Link, Image } from "@nextui-org/react";
+import { Alert } from "@nextui-org/alert";
 import { Icon } from "@iconify/react";
 import { useTheme } from "next-themes";
 import { useIsSSR } from "@react-aria/ssr";
@@ -17,9 +10,8 @@ import { useRouter } from "next/navigation";
 
 import LoginAPI from "@/lib/auth/login";
 import { setSession } from "@/lib/setSession";
-import { IconWrapper } from "@/lib/IconWrapper";
 
-import { InfoIcon, MailIcon } from "../icons";
+import { MailIcon } from "../icons";
 import Particles from "../magicui/particles";
 
 export default function LoginPageComponent() {
@@ -82,16 +74,7 @@ export default function LoginPageComponent() {
       </div>
       <div className="mt-2 flex w-full max-w-sm flex-col gap-4 rounded-large bg-content1 px-8 py-6 shadow-small">
         {error && (
-          <Card className="border border-danger-300 border-2">
-            <CardHeader className="justify-start gap-2 items-center">
-              <IconWrapper className="bg-danger/10 text-danger">
-                <InfoIcon className="text-lg" />
-              </IconWrapper>
-              <p className="text-md font-bold text-danger capitalize">
-                {errorText}
-              </p>
-            </CardHeader>
-          </Card>
+          <Alert color="danger" description={errorText} title="Error" />
         )}
         <form
           className="flex flex-col gap-3"
