@@ -12,11 +12,9 @@ import { useRouter } from "next/navigation";
 
 import SignUpAPI from "@/lib/auth/signup";
 import CheckUserTaken from "@/lib/auth/checkTaken";
-import { IconWrapper } from "@/lib/IconWrapper";
 import LoginAPI from "@/lib/auth/login";
 import { setSession } from "@/lib/setSession";
 
-import { InfoIcon } from "../icons";
 import Particles from "../magicui/particles";
 
 export default function SignUpPage() {

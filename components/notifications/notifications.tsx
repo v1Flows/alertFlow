@@ -36,7 +36,7 @@ export default function Notifications({
     NotificationTabs.Unread,
   );
 
-  const { isOpen, onOpen, onOpenChange } = disclosure;
+  const { isOpen, onOpenChange } = disclosure;
 
   async function ReadAll() {
     for (const n of incNotifications) {
