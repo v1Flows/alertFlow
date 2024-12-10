@@ -198,6 +198,7 @@ export default function FlowList({
                       <DropdownMenu variant="flat">
                         <DropdownSection title="Actions">
                           <DropdownItem
+                            key="copy"
                             color="primary"
                             startContent={
                               <Icon icon="solar:copy-outline" width={20} />
@@ -301,6 +302,7 @@ export default function FlowList({
                             </DropdownItem>
                           )}
                           <DropdownItem
+                            key="delete"
                             className="text-danger"
                             color="danger"
                             startContent={

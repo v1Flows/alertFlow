@@ -26,7 +26,6 @@ type Chart = {
   key: string;
   title: string;
   value: number;
-  suffix: string;
   type: string;
   change: string;
   changeType: "positive" | "negative" | "neutral";
@@ -80,7 +79,6 @@ export default function FlowStats({ flowID }: { flowID: string }) {
     {
       key: "payloads-executions",
       title: "Payloads / Executions",
-      suffix: "payloads",
       value: stats?.payloads_executions_trends?.total_payloads || 0,
       type: "number",
       change: stats?.payloads_executions_trends?.payload_trend.percentage || 0,
@@ -92,7 +90,6 @@ export default function FlowStats({ flowID }: { flowID: string }) {
     // {
     //   key: "executions",
     //   title: "Executions",
-    //   suffix: "executions",
     //   value: 623000,
     //   type: "number",
     //   change: "-2.1%",
@@ -129,12 +126,11 @@ export default function FlowStats({ flowID }: { flowID: string }) {
           : chart?.changeType === "negative"
             ? "danger"
             : "default",
-      suffix: chart?.suffix,
       type: chart?.type,
     };
   }, [activeChart, stats]);
 
-  const { chartData, color, suffix, type } = activeChartData;
+  const { chartData, color, type } = activeChartData;
 
   return (
     <Card as="dl" className="border border-transparent dark:border-default-100">
