@@ -159,6 +159,7 @@ export default function Runners({
                       <DropdownMenu>
                         <DropdownSection title="Actions">
                           <DropdownItem
+                            key="copy"
                             startContent={
                               <Icon icon="solar:copy-outline" width={18} />
                             }
@@ -169,6 +170,7 @@ export default function Runners({
                         </DropdownSection>
                         <DropdownSection title="Danger zone">
                           <DropdownItem
+                            key="delete"
                             className="text-danger"
                             color="danger"
                             isDisabled={
@@ -445,6 +447,7 @@ export default function Runners({
                           <DropdownMenu>
                             <DropdownSection title="Actions">
                               <DropdownItem
+                                key="copy"
                                 startContent={
                                   <Icon icon="solar:copy-outline" width={18} />
                                 }
@@ -457,6 +460,7 @@ export default function Runners({
                             </DropdownSection>
                             <DropdownSection title="Danger zone">
                               <DropdownItem
+                                key="delete"
                                 className="text-danger"
                                 color="danger"
                                 isDisabled={
