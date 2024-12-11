@@ -11,10 +11,6 @@ import {
   DropdownMenu,
   DropdownItem,
   useDisclosure,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  ScrollShadow,
   Badge,
 } from "@nextui-org/react";
 import { toast } from "sonner";
@@ -26,6 +22,7 @@ import { useMediaQuery } from "usehooks-ts";
 import { VerticalDotsIcon, PlusIcon } from "@/components/icons";
 import CreateRunnerModal from "@/components/functions/runner/create";
 import DeleteRunnerModal from "@/components/functions/runner/delete";
+import RunnerPluginDrawer from "@/components/functions/runner/plugins";
 
 export default function Runners({
   runners,
@@ -36,6 +33,7 @@ export default function Runners({
   members,
 }: any) {
   const [targetRunner, setTargetRunner] = React.useState({} as any);
+  const showRunnerPluginsDrawer = useDisclosure();
   const addRunnerModal = useDisclosure();
   const deleteRunnerModal = useDisclosure();
 
@@ -159,16 +157,18 @@ export default function Runners({
                       <DropdownMenu>
                         <DropdownSection title="Actions">
                           <DropdownItem
+                            key="copy"
                             startContent={
                               <Icon icon="solar:copy-outline" width={18} />
                             }
-                            onClick={() => copyRunnerIDtoClipboard(runner.id)}
+                            onPress={() => copyRunnerIDtoClipboard(runner.id)}
                           >
                             Copy ID
                           </DropdownItem>
                         </DropdownSection>
                         <DropdownSection title="Danger zone">
                           <DropdownItem
+                            key="delete"
                             className="text-danger"
                             color="danger"
                             isDisabled={
@@ -183,7 +183,7 @@ export default function Runners({
                                 width={18}
                               />
                             }
-                            onClick={() => {
+                            onPress={() => {
                               setTargetRunner(runner);
                               deleteRunnerModal.onOpen();
                             }}
@@ -283,85 +283,35 @@ export default function Runners({
                       </div>
                     </div>
 
-                    <Popover>
-                      <PopoverTrigger>
-                        <div className="flex flex-col hover:text-primary hover:cursor-pointer	items-center justify-center gap-1">
-                          <Badge
-                            isOneChar
-                            color="default"
-                            content={<Icon icon={"solar:info-circle-linear"} />}
-                            placement="bottom-right"
-                            shape="circle"
-                            variant="faded"
-                          >
-                            <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                              <Icon
-                                icon="solar:plug-circle-outline"
-                                width={20}
-                              />
-                            </div>
-                          </Badge>
-                          <div>
-                            <p className="text-md font-bold">
-                              {runner.plugins.length}
-                            </p>
-                            <p className="text-sm text-default-500">Plugins</p>
+                    <Button
+                      className="h-full"
+                      variant="light"
+                      onPress={() => {
+                        setTargetRunner(runner);
+                        showRunnerPluginsDrawer.onOpen();
+                      }}
+                    >
+                      <div className="flex flex-col hover:text-primary hover:cursor-pointer	items-center justify-center gap-1">
+                        <Badge
+                          isOneChar
+                          color="default"
+                          content={<Icon icon={"solar:info-circle-linear"} />}
+                          placement="bottom-right"
+                          shape="circle"
+                          variant="faded"
+                        >
+                          <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                            <Icon icon="solar:plug-circle-outline" width={20} />
                           </div>
+                        </Badge>
+                        <div>
+                          <p className="text-md font-bold">
+                            {runner.plugins.length}
+                          </p>
+                          <p className="text-sm text-default-500">Plugins</p>
                         </div>
-                      </PopoverTrigger>
-                      <PopoverContent className="max-h-[300px]">
-                        <ScrollShadow>
-                          {runner.plugins.map((plugin: any) => (
-                            <div
-                              key={plugin.name}
-                              className="flex flex-col items-start w-full gap-2"
-                            >
-                              <div className="flex flex-col items-start justify-between p-1 w-full">
-                                <div className="flex flex-cols gap-4">
-                                  <div className="flex items-center gap-2">
-                                    <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
-                                      <Icon
-                                        icon={
-                                          plugin.type === "action"
-                                            ? "solar:bolt-linear"
-                                            : "solar:letter-opened-linear"
-                                        }
-                                        width={20}
-                                      />
-                                    </div>
-                                    <div>
-                                      <p className="font-bold">{plugin.name}</p>
-                                      <p className="text-sm text-default-500">
-                                        Creator: {plugin.creator || "N/A"}
-                                      </p>
-                                    </div>
-                                  </div>
-                                  <div className="flex items-start justify-self-end gap-2">
-                                    <Chip
-                                      color="primary"
-                                      radius="sm"
-                                      size="sm"
-                                      variant="flat"
-                                    >
-                                      Version: {plugin.version || "N/A"}
-                                    </Chip>
-                                    <Chip
-                                      color="secondary"
-                                      radius="sm"
-                                      size="sm"
-                                      variant="flat"
-                                    >
-                                      Type: {plugin.type || "N/A"}
-                                    </Chip>
-                                  </div>
-                                </div>
-                                <Divider className="m-2 w-full" />
-                              </div>
-                            </div>
-                          ))}
-                        </ScrollShadow>
-                      </PopoverContent>
-                    </Popover>
+                      </div>
+                    </Button>
 
                     <div className="flex flex-col hover:text-primary hover:cursor-pointer items-center justify-center gap-1">
                       <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
@@ -445,10 +395,11 @@ export default function Runners({
                           <DropdownMenu>
                             <DropdownSection title="Actions">
                               <DropdownItem
+                                key="copy"
                                 startContent={
                                   <Icon icon="solar:copy-outline" width={18} />
                                 }
-                                onClick={() =>
+                                onPress={() =>
                                   copyRunnerIDtoClipboard(runner.id)
                                 }
                               >
@@ -457,6 +408,7 @@ export default function Runners({
                             </DropdownSection>
                             <DropdownSection title="Danger zone">
                               <DropdownItem
+                                key="delete"
                                 className="text-danger"
                                 color="danger"
                                 isDisabled={
@@ -473,7 +425,7 @@ export default function Runners({
                                     width={18}
                                   />
                                 }
-                                onClick={() => {
+                                onPress={() => {
                                   setTargetRunner(runner);
                                   deleteRunnerModal.onOpen();
                                 }}
@@ -559,6 +511,10 @@ export default function Runners({
           </p>
         </div>
       )}
+      <RunnerPluginDrawer
+        disclosure={showRunnerPluginsDrawer}
+        runner={targetRunner}
+      />
       <CreateRunnerModal
         alertflow_runner={false}
         disclosure={addRunnerModal}

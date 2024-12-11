@@ -10,7 +10,7 @@ export default async function UpdateDoc(
   hidden: boolean,
 ) {
   "use client";
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const token = cookieStore.get("session")?.value;
 
   try {

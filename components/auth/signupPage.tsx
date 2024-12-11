@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Button, Input, Link, Image, Tooltip } from "@nextui-org/react";
+import { Alert } from "@nextui-org/alert";
 import { Icon } from "@iconify/react";
 import { useTheme } from "next-themes";
 import { useIsSSR } from "@react-aria/ssr";
@@ -11,11 +12,9 @@ import { useRouter } from "next/navigation";
 
 import SignUpAPI from "@/lib/auth/signup";
 import CheckUserTaken from "@/lib/auth/checkTaken";
-import { IconWrapper } from "@/lib/IconWrapper";
 import LoginAPI from "@/lib/auth/login";
 import { setSession } from "@/lib/setSession";
 
-import { InfoIcon } from "../icons";
 import Particles from "../magicui/particles";
 
 export default function SignUpPage() {
@@ -233,14 +232,7 @@ export default function SignUpPage() {
               </AnimatePresence>
               {error && (
                 <AnimatePresence custom={direction} initial={false} mode="wait">
-                  <div className="flex items-center gap-2">
-                    <IconWrapper className="bg-danger/10 text-danger">
-                      <InfoIcon className="text-lg" />
-                    </IconWrapper>
-                    <p className="text-md font-bold text-danger capitalize">
-                      {errorText}
-                    </p>
-                  </div>
+                  <Alert color="danger" description={errorText} title="Error" />
                 </AnimatePresence>
               )}
             </m.div>

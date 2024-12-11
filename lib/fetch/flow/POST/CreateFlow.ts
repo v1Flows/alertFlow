@@ -9,7 +9,7 @@ export default async function CreateFlow(
   runnerId: string,
 ) {
   "use client";
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const token = cookieStore.get("session")?.value;
 
   try {

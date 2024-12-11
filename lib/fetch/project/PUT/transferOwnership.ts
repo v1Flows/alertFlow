@@ -7,7 +7,7 @@ export default async function ProjectTransferOwnershipAPI(
   project_id: string,
 ) {
   "use client";
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const token = cookieStore.get("session")?.value;
 
   try {

@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 
 export default async function GetExecutionSteps(executionID: any) {
   "use client";
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const token = cookieStore.get("session")?.value;
 
   try {

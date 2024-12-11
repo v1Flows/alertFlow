@@ -158,16 +158,18 @@ export function ProjectsList({
                         <DropdownMenu variant="flat">
                           <DropdownSection title="Actions">
                             <DropdownItem
+                              key="copy"
                               startContent={
                                 <Icon icon="solar:copy-outline" width={18} />
                               }
-                              onClick={() =>
+                              onPress={() =>
                                 copyProjectIDtoClipboard(project.id)
                               }
                             >
                               Copy ID
                             </DropdownItem>
                             <DropdownItem
+                              key="edit"
                               showDivider
                               color="warning"
                               startContent={
@@ -176,7 +178,7 @@ export function ProjectsList({
                                   width={18}
                                 />
                               }
-                              onClick={() => {
+                              onPress={() => {
                                 setTargetProject(project);
                                 editProjectModal.onOpen();
                               }}
@@ -186,6 +188,7 @@ export function ProjectsList({
                           </DropdownSection>
                           <DropdownSection title="Danger Zone">
                             <DropdownItem
+                              key="delete"
                               className="text-danger"
                               color="danger"
                               startContent={
@@ -194,7 +197,7 @@ export function ProjectsList({
                                   width={18}
                                 />
                               }
-                              onClick={() => {
+                              onPress={() => {
                                 setTargetProject(project);
                                 deleteProjectModal.onOpen();
                               }}

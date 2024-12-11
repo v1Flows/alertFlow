@@ -26,6 +26,7 @@ export default async function DashboardProjectPage({
     <>
       <Project
         audit={audit}
+        flows={flows}
         members={project.members}
         plan={plan}
         project={project.project}
@@ -33,7 +34,6 @@ export default async function DashboardProjectPage({
         settings={settings}
         tokens={tokens}
         user={userDetails}
-        flows={flows}
       />
     </>
   );

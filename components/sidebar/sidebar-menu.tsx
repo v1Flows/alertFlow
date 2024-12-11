@@ -6,9 +6,6 @@ import {
   Button,
   Spacer,
   Image,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
   Card,
   CardBody,
   Dropdown,
@@ -18,6 +15,7 @@ import {
   Badge,
   ScrollShadow,
   cn,
+  useDisclosure,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import { useTheme } from "next-themes";
@@ -25,9 +23,9 @@ import { useIsSSR } from "@react-aria/ssr";
 import { usePathname, useRouter } from "next/navigation";
 import { useMediaQuery } from "usehooks-ts";
 
-import NotificationsCard from "@/components/notifications/notifications";
 import { Logout } from "@/lib/logout";
 import { useSidebarStore } from "@/store/useSidebarStore";
+import Notifications from "@/components/notifications/notifications";
 
 import { ThemeSwitch } from "../theme-switch";
 import Search from "../search/search";
@@ -78,6 +76,8 @@ export default function SidebarMenu({
 
   const isMobile = useMediaQuery("(max-width: 768px)");
   const isCompact = isCollapsed || isMobile;
+
+  const notificationsDrawer = useDisclosure();
 
   const onToggle = React.useCallback(() => {
     toggleCollapsed();
@@ -222,47 +222,40 @@ export default function SidebarMenu({
         >
           <ThemeSwitch />
 
-          <Popover offset={12} placement="bottom">
-            <PopoverTrigger>
-              <Button
-                disableRipple
-                isIconOnly
-                className="overflow-visible"
-                radius="full"
-                variant="light"
+          <Button
+            disableRipple
+            isIconOnly
+            className="overflow-visible"
+            radius="full"
+            variant="light"
+            onPress={notificationsDrawer.onOpen}
+          >
+            {notifications.filter((n: any) => !n.is_read).length > 0 ? (
+              <Badge
+                color="danger"
+                content={notifications.filter((n: any) => !n.is_read).length}
+                showOutline={false}
+                size="md"
               >
-                {notifications.filter((n: any) => !n.is_read).length > 0 ? (
-                  <Badge
-                    color="danger"
-                    content={
-                      notifications.filter((n: any) => !n.is_read).length
-                    }
-                    showOutline={false}
-                    size="md"
-                  >
-                    <Icon
-                      className="text-default-500"
-                      icon="solar:bell-bold-duotone"
-                      width={22}
-                    />
-                  </Badge>
-                ) : (
-                  <Icon
-                    className="text-default-500"
-                    icon="solar:bell-off-bold-duotone"
-                    width={22}
-                  />
-                )}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="max-w-[90vw] p-0 sm:max-w-[380px]">
-              <NotificationsCard
-                // @ts-ignore
-                className="w-full shadow-none"
-                incNotifications={notifications}
+                <Icon
+                  className="text-default-500"
+                  icon="solar:bell-bold-duotone"
+                  width={22}
+                />
+              </Badge>
+            ) : (
+              <Icon
+                className="text-default-500"
+                icon="solar:bell-off-bold-duotone"
+                width={22}
               />
-            </PopoverContent>
-          </Popover>
+            )}
+          </Button>
+
+          <Notifications
+            disclosure={notificationsDrawer}
+            incNotifications={notifications}
+          />
 
           <Button isIconOnly size="sm" variant="light" onPress={onToggle}>
             <Icon

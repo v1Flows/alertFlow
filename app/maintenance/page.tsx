@@ -4,9 +4,10 @@ import { subtitle } from "@/components/primitives";
 import Login from "@/components/auth/login";
 import SparklesText from "@/components/magicui/sparkles-text";
 
-export default function MaintenancePage() {
-  const user = JSON.parse(cookies().get("user")?.value || "{}");
-  const session = cookies().get("session")?.value;
+export default async function MaintenancePage() {
+  const cookieStore = await cookies();
+  const user = JSON.parse(cookieStore.get("user")?.value || "{}");
+  const session = cookieStore.get("session")?.value;
 
   return (
     <section className="flex h-screen items-center justify-center">

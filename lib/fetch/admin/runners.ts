@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 export default async function AdminGetRunners() {
   // TOOD: return two objects: one with alertflow_runners and one with self_hosted_runners
   "use client";
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const token = cookieStore.get("session")?.value;
 
   try {

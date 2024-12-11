@@ -66,7 +66,7 @@ export default function SecuritySettings({ user }: { user: any }) {
             <Button
               radius="full"
               variant="bordered"
-              onClick={updatePasswordModal.onOpen}
+              onPress={() => updatePasswordModal.onOpen}
             >
               Change
             </Button>
@@ -89,7 +89,7 @@ export default function SecuritySettings({ user }: { user: any }) {
             <Button
               radius="full"
               variant="bordered"
-              onClick={disableUserModal.onOpen}
+              onPress={() => disableUserModal.onOpen}
             >
               Deactivate
             </Button>
@@ -106,7 +106,7 @@ export default function SecuritySettings({ user }: { user: any }) {
               color="danger"
               radius="full"
               variant="flat"
-              onClick={deleteUserModal.onOpen}
+              onPress={() => deleteUserModal.onOpen}
             >
               Delete
             </Button>
