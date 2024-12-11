@@ -75,7 +75,7 @@ export default function RunnerPluginDrawer({
                         </Chip>
                       </div>
                     </div>
-                    <Divider className="m-2 w-full" />
+                    <Divider className="mt-3 w-full" />
                   </div>
                 </div>
               ))}
