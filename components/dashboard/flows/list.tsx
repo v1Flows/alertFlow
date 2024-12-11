@@ -203,7 +203,7 @@ export default function FlowList({
                             startContent={
                               <Icon icon="solar:copy-outline" width={20} />
                             }
-                            onClick={() => copyFlowIDtoClipboard(flow.id)}
+                            onPress={() => copyFlowIDtoClipboard(flow.id)}
                           >
                             Copy ID
                           </DropdownItem>
@@ -216,7 +216,7 @@ export default function FlowList({
                                 width={20}
                               />
                             }
-                            onClick={() => {
+                            onPress={() => {
                               setTargetFlow(flow);
                               editModal.onOpen();
                             }}
@@ -233,7 +233,7 @@ export default function FlowList({
                                   width={20}
                                 />
                               }
-                              onClick={() => {
+                              onPress={() => {
                                 setTargetFlow(flow);
                                 setMaintenance(false);
                                 changeMaintenanceModal.onOpen();
@@ -251,7 +251,7 @@ export default function FlowList({
                                   width={20}
                                 />
                               }
-                              onClick={() => {
+                              onPress={() => {
                                 setTargetFlow(flow);
                                 setMaintenance(true);
                                 changeMaintenanceModal.onOpen();
@@ -273,7 +273,7 @@ export default function FlowList({
                                   width={20}
                                 />
                               }
-                              onClick={() => {
+                              onPress={() => {
                                 setTargetFlow(flow);
                                 setStatus(false);
                                 changeStatusModal.onOpen();
@@ -292,7 +292,7 @@ export default function FlowList({
                                   width={20}
                                 />
                               }
-                              onClick={() => {
+                              onPress={() => {
                                 setTargetFlow(flow);
                                 setStatus(true);
                                 changeStatusModal.onOpen();
@@ -311,7 +311,7 @@ export default function FlowList({
                                 width={20}
                               />
                             }
-                            onClick={() => {
+                            onPress={() => {
                               setTargetFlow(flow);
                               deleteModal.onOpen();
                             }}

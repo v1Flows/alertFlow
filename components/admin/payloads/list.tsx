@@ -111,7 +111,7 @@ export function PayloadsList({ flows, payloads, executions, runners }: any) {
                     startContent={
                       <Icon icon="solar:letter-opened-broken" width={20} />
                     }
-                    onClick={() => handleShow(payload)}
+                    onPress={() => handleShow(payload)}
                   >
                     Payload
                   </DropdownItem>
@@ -124,7 +124,7 @@ export function PayloadsList({ flows, payloads, executions, runners }: any) {
                     startContent={
                       <Icon icon="solar:reorder-line-duotone" width={20} />
                     }
-                    onClick={() =>
+                    onPress={() =>
                       router.push(
                         `/dashboard/flows/${payload.flow_id}/execution/${executions.find((e: any) => e.payload_id === payload.id)?.id}`,
                       )
@@ -141,7 +141,7 @@ export function PayloadsList({ flows, payloads, executions, runners }: any) {
                     startContent={
                       <Icon icon="solar:trash-bin-trash-outline" width={20} />
                     }
-                    onClick={() => handleDelete(payload, payload.flow_id)}
+                    onPress={() => handleDelete(payload, payload.flow_id)}
                   >
                     Delete
                   </DropdownItem>

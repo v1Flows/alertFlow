@@ -171,7 +171,7 @@ export default function ProjectTransferOwnership({
                 </div>
               </CardBody>
               <CardFooter className="justify-end gap-2">
-                <Button variant="ghost" onClick={onOpenChange}>
+                <Button variant="ghost" onPress={() => onOpenChange}>
                   Cancel
                 </Button>
                 <Button

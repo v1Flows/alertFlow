@@ -49,14 +49,14 @@ export default function MaintenancePage({ reason }: any) {
           <Button
             color="danger"
             variant="bordered"
-            onClick={() => deleteSession()}
+            onPress={() => deleteSession()}
           >
             Log Out
           </Button>
-          <Button color="primary" onClick={() => pingBackend()}>
+          <Button color="primary" onPress={() => pingBackend()}>
             Reload
           </Button>
-          <Button color="primary" onClick={() => router.push("/")}>
+          <Button color="primary" onPress={() => router.push("/")}>
             To Home
           </Button>
         </div>
