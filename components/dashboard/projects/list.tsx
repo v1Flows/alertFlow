@@ -162,7 +162,7 @@ export function ProjectsList({
                               startContent={
                                 <Icon icon="solar:copy-outline" width={18} />
                               }
-                              onClick={() =>
+                              onPress={() =>
                                 copyProjectIDtoClipboard(project.id)
                               }
                             >
@@ -178,7 +178,7 @@ export function ProjectsList({
                                   width={18}
                                 />
                               }
-                              onClick={() => {
+                              onPress={() => {
                                 setTargetProject(project);
                                 editProjectModal.onOpen();
                               }}
@@ -197,7 +197,7 @@ export function ProjectsList({
                                   width={18}
                                 />
                               }
-                              onClick={() => {
+                              onPress={() => {
                                 setTargetProject(project);
                                 deleteProjectModal.onOpen();
                               }}

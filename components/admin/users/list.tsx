@@ -278,7 +278,7 @@ export function UsersList({ users, plans }: any) {
                           width={20}
                         />
                       }
-                      onClick={() => changeUserStatusModal(user.id, true)}
+                      onPress={() => changeUserStatusModal(user.id, true)}
                     >
                       Disable
                     </DropdownItem>

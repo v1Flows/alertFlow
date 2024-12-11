@@ -161,7 +161,7 @@ export default function Runners({
                             startContent={
                               <Icon icon="solar:copy-outline" width={18} />
                             }
-                            onClick={() => copyRunnerIDtoClipboard(runner.id)}
+                            onPress={() => copyRunnerIDtoClipboard(runner.id)}
                           >
                             Copy ID
                           </DropdownItem>
@@ -183,7 +183,7 @@ export default function Runners({
                                 width={18}
                               />
                             }
-                            onClick={() => {
+                            onPress={() => {
                               setTargetRunner(runner);
                               deleteRunnerModal.onOpen();
                             }}
@@ -399,7 +399,7 @@ export default function Runners({
                                 startContent={
                                   <Icon icon="solar:copy-outline" width={18} />
                                 }
-                                onClick={() =>
+                                onPress={() =>
                                   copyRunnerIDtoClipboard(runner.id)
                                 }
                               >
@@ -425,7 +425,7 @@ export default function Runners({
                                     width={18}
                                   />
                                 }
-                                onClick={() => {
+                                onPress={() => {
                                   setTargetRunner(runner);
                                   deleteRunnerModal.onOpen();
                                 }}
