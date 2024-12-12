@@ -7,24 +7,39 @@ import GetRunners from "@/lib/fetch/runner/get";
 import GetExecutions from "@/lib/fetch/executions/all";
 import GetPayloads from "@/lib/fetch/payload/payloads";
 
+import Loader from "./loading";
+
 export default async function DashboardHomePage() {
-  const stats = await GetUserStats();
-  const notifications = await GetUserNotifications();
-  const flows = await GetFlows();
-  const runners = await GetRunners();
-  const executions = await GetExecutions();
-  const payloads = await GetPayloads();
-  const user = await GetUserDetails();
+  const statsData = GetUserStats();
+  const notificationsData = GetUserNotifications();
+  const flowsData = GetFlows();
+  const runnersData = GetRunners();
+  const executionsData = GetExecutions();
+  const payloadsData = GetPayloads();
+  const userData = GetUserDetails();
+
+  const [stats, notifications, flows, runners, executions, payloads, user] =
+    await Promise.all([
+      statsData,
+      notificationsData,
+      flowsData,
+      runnersData,
+      executionsData,
+      payloadsData,
+      userData,
+    ]);
 
   return (
-    <DashboardHome
-      executions={executions}
-      flows={flows}
-      notifications={notifications}
-      payloads={payloads}
-      runners={runners}
-      stats={stats}
-      user={user}
-    />
+    <>
+      <DashboardHome
+        executions={executions}
+        flows={flows}
+        notifications={notifications}
+        payloads={payloads}
+        runners={runners}
+        stats={stats}
+        user={user}
+      />
+    </>
   );
 }

@@ -12,26 +12,36 @@ export default async function DashboardFlowPage({
 }: {
   params: { id: string };
 }) {
-  const projects = await GetProjects();
-  const flow = await GetFlow(params.id);
-  const executions = await GetFlowExecutions(params.id);
-  const payloads = await GetFlowPayloads(params.id);
-  const runners = await GetProjectRunners(flow.project_id);
-  const settings = await PageGetSettings();
-  const userDetails = await GetUserDetails();
+  const projectsData = GetProjects();
+  const flowData = GetFlow(params.id);
+  const executionsData = GetFlowExecutions(params.id);
+  const payloadsData = GetFlowPayloads(params.id);
+  const settingsData = PageGetSettings();
+  const userDetailsData = GetUserDetails();
+
+  const [projects, flow, executions, payloads, settings, userDetails] =
+    await Promise.all([
+      projectsData,
+      flowData,
+      executionsData,
+      payloadsData,
+      settingsData,
+      userDetailsData,
+    ]);
+
+  const runnersData = GetProjectRunners(flow.project_id);
+  const runners = await runnersData;
 
   return (
-    <>
-      <Flow
-        executions={executions}
-        flow={flow}
-        id={params.id}
-        payloads={payloads}
-        projects={projects.projects}
-        runners={runners}
-        settings={settings}
-        user={userDetails}
-      />
-    </>
+    <Flow
+      executions={executions}
+      flow={flow}
+      id={params.id}
+      payloads={payloads}
+      projects={projects.projects}
+      runners={runners}
+      settings={settings}
+      user={userDetails}
+    />
   );
 }

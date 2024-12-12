@@ -85,8 +85,6 @@ export function ProjectsList({
 
   return (
     <main>
-      <p className="text-2xl font-bold">Projects</p>
-      <Spacer y={4} />
       {projects.error && (
         <Card className="shadow shadow-danger">
           <CardHeader className="justify-start gap-2 items-center">
