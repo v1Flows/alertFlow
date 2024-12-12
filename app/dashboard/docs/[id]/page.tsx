@@ -6,8 +6,10 @@ import GetDoc from "@/lib/fetch/docs/doc";
 import GetUserDetails from "@/lib/fetch/user/getDetails";
 
 export default async function DocPage({ params }: { params: { id: string } }) {
-  const doc = await GetDoc(params.id);
-  const userDetails = await GetUserDetails();
+  const docData = GetDoc(params.id);
+  const userDetailsData = GetUserDetails();
+
+  const [doc, userDetails] = await Promise.all([docData, userDetailsData]);
 
   return (
     <main>

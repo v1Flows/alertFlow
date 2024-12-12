@@ -10,21 +10,28 @@ export default async function DashboardExecutionPage({
 }: {
   params: { id: string; executionID: string };
 }) {
-  const flow = await GetFlow(params.id);
-  const execution = await GetExecution(params.executionID);
-  const runners = await GetProjectRunners(flow.project_id);
-  const settings = await PageGetSettings();
-  const userDetails = await GetUserDetails();
+  const flowData = GetFlow(params.id);
+  const executionData = GetExecution(params.executionID);
+  const settingsData = PageGetSettings();
+  const userDetailsData = GetUserDetails();
+
+  const [flow, execution, settings, userDetails] = await Promise.all([
+    flowData,
+    executionData,
+    settingsData,
+    userDetailsData,
+  ]);
+
+  const runnersData = GetProjectRunners(flow.project_id);
+  const runners = await runnersData;
 
   return (
-    <>
-      <Execution
-        execution={execution}
-        flow={flow}
-        runners={runners}
-        settings={settings}
-        userDetails={userDetails}
-      />
-    </>
+    <Execution
+      execution={execution}
+      flow={flow}
+      runners={runners}
+      settings={settings}
+      userDetails={userDetails}
+    />
   );
 }

@@ -6,21 +6,27 @@ import GetUserDetails from "@/lib/fetch/user/getDetails";
 import GetUserPlan from "@/lib/fetch/user/getPlan";
 
 export default async function DashboardFlowsPage() {
-  const flows = await GetFlows();
-  const projects = await GetProjects();
-  const settings = await PageGetSettings();
-  const plan = await GetUserPlan();
-  const userDetails = await GetUserDetails();
+  const flowsData = GetFlows();
+  const projectsData = GetProjects();
+  const settingsData = PageGetSettings();
+  const planData = GetUserPlan();
+  const userDetailsData = GetUserDetails();
+
+  const [flows, projects, settings, plan, userDetails] = await Promise.all([
+    flowsData,
+    projectsData,
+    settingsData,
+    planData,
+    userDetailsData,
+  ]);
 
   return (
-    <main>
-      <FlowList
-        flows={flows}
-        plan={plan}
-        projects={projects.projects}
-        settings={settings}
-        user={userDetails}
-      />
-    </main>
+    <FlowList
+      flows={flows}
+      plan={plan}
+      projects={projects.projects}
+      settings={settings}
+      user={userDetails}
+    />
   );
 }

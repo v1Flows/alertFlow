@@ -4,8 +4,10 @@ import GetDocs from "@/lib/fetch/docs/docs";
 import GetUserDetails from "@/lib/fetch/user/getDetails";
 
 export default async function DashboardDocsPage() {
-  const userDetails = await GetUserDetails();
-  const docs = await GetDocs();
+  const userDetailsData = GetUserDetails();
+  const docsData = GetDocs();
+
+  const [userDetails, docs] = await Promise.all([userDetailsData, docsData]);
 
   return (
     <>
