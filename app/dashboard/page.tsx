@@ -7,8 +7,6 @@ import GetRunners from "@/lib/fetch/runner/get";
 import GetExecutions from "@/lib/fetch/executions/all";
 import GetPayloads from "@/lib/fetch/payload/payloads";
 
-import Loader from "./loading";
-
 export default async function DashboardHomePage() {
   const statsData = GetUserStats();
   const notificationsData = GetUserNotifications();
@@ -30,16 +28,14 @@ export default async function DashboardHomePage() {
     ]);
 
   return (
-    <>
-      <DashboardHome
-        executions={executions}
-        flows={flows}
-        notifications={notifications}
-        payloads={payloads}
-        runners={runners}
-        stats={stats}
-        user={user}
-      />
-    </>
+    <DashboardHome
+      executions={executions}
+      flows={flows}
+      notifications={notifications}
+      payloads={payloads}
+      runners={runners}
+      stats={stats}
+      user={user}
+    />
   );
 }
