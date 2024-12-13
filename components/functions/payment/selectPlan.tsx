@@ -55,9 +55,9 @@ export default function SelectPlanModal({
 
   async function pay(planID: string, planStripeID: string) {
     setIsLoading(true);
-    const res = await CreateSubscription(planID, planStripeID);
+    const res = await CreateSubscription(planID, planStripeID) as any;
 
-    if (res.error) {
+    if (!res.success) {
       toast.error(res.message);
       setIsLoading(false);
 
