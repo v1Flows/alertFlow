@@ -44,7 +44,7 @@ export default function Footer() {
   const isSSR = useIsSSR();
 
   return (
-    <footer className="flex w-full flex-col">
+    <footer className="flex w-full flex-col sticky top-[100vh]">
       <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-center px-6 py-12 lg:px-8">
         <div className="flex items-center justify-center">
           <Image
