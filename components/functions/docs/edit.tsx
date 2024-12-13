@@ -21,6 +21,7 @@ import { toast } from "sonner";
 import MarkdownEditor from "@uiw/react-markdown-editor";
 
 import UpdateDoc from "@/lib/fetch/docs/PUT/update";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function EditDocumentModal({
   doc,
@@ -40,6 +41,9 @@ export default function EditDocumentModal({
 
   // loading
   const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   const handleSelectionChange = (e: any) => {
     setCategory(e.target.value);
@@ -48,17 +52,32 @@ export default function EditDocumentModal({
   async function updateDoc() {
     setIsLoading(true);
 
-    const response = await UpdateDoc(doc.id, title, content, category, hidden);
+    const response = await UpdateDoc(doc.id, title, content, category, hidden) as any;
 
-    if (response.result === "success") {
+    if (!response) {
+      setError(true);
+      setErrorMessage("Failed to update documentation");
+      setErrorText("Failed to update documentation");
+      setIsLoading(false);
+      return;
+    }
+
+    if (response.success) {
+      setErrorMessage("");
+      setErrorText("");
+      setError(false);
       router.refresh();
       onOpenChange();
       setIsLoading(false);
       toast.success("Documentation updated successfully");
     } else {
-      setIsLoading(false);
+      setError(true);
+      setErrorMessage(response.error);
+      setErrorText(response.message);
       toast.error("Failed to update documentation: " + response.error);
     }
+
+    setIsLoading(false);
   }
 
   function cancel() {
@@ -79,6 +98,9 @@ export default function EditDocumentModal({
               <p className="text-lg font-bold">Update Documentation</p>
             </ModalHeader>
             <ModalBody className="max-h-[70vh] overflow-y-auto">
+              {error && (
+                <ErrorCard error={errorText} message={errorMessage} />
+              )}
               <div className="flex flex-col gap-4">
                 <Input
                   isRequired

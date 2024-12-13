@@ -57,9 +57,9 @@ export function Settings({ settings }: any) {
       addFlowActions,
       startExecutions,
       injectPayloads,
-    );
+    ) as any;
 
-    if (!response.error) {
+    if (response.success) {
       setIsLoading(false);
       toast.success("Settings updated successfully");
       router.refresh();

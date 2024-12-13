@@ -14,6 +14,7 @@ import React from "react";
 import { toast } from "sonner";
 
 import DeleteDoc from "@/lib/fetch/docs/DELETE/delete";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function DeleteDocModal({
   disclosure,
@@ -27,23 +28,38 @@ export default function DeleteDocModal({
   const { isOpen, onOpenChange } = disclosure;
 
   const [isDeleteLoading, setIsDeleteLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   async function deleteDoc() {
     setIsDeleteLoading(true);
-    const res = await DeleteDoc(doc.id);
+    const res = await DeleteDoc(doc.id) as any;
 
-    if (res.error) {
+    if (!res) {
+      setError(true);
+      setErrorMessage("Failed to delete documentation");
+      setErrorText("Failed to delete documentation");
       setIsDeleteLoading(false);
-      toast.error("Failed to delete document");
-
       return;
     }
 
+    if (res.success) {
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
+      onOpenChange();
+      toast.success("Document deleted successfully");
+      router.push("/dashboard/docs");
+      router.refresh();
+    } else {
+      setError(true);
+      setErrorMessage("Failed to delete documentation");
+      setErrorText("Failed to delete documentation");
+      toast.error("Failed to delete document");
+    }
+
     setIsDeleteLoading(false);
-    onOpenChange();
-    toast.success("Document deleted successfully");
-    router.push("/dashboard/docs");
-    router.refresh();
   }
 
   return (
@@ -67,6 +83,9 @@ export default function DeleteDocModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <Snippet hideCopyButton hideSymbol>
                   <span>Title: {doc.title}</span>
                   <span>Category: {doc.category}</span>
