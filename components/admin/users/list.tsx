@@ -105,7 +105,7 @@ export function UsersList({ users, plans }: any) {
     if (!disableUser) {
       const res = await UpdateUserStatus(userID, disableUser, "");
 
-      if (!res.error) {
+      if (res.success) {
         setUserID("");
         router.refresh();
         toast.success("User status updated successfully");
@@ -117,7 +117,7 @@ export function UsersList({ users, plans }: any) {
       setIsDisableLoading(true);
       const res = await UpdateUserStatus(userID, disableUser, disableReason);
 
-      if (!res.error) {
+      if (res.success) {
         setIsDisableLoading(false);
         setDisableReason("");
         setUserID("");

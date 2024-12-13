@@ -15,7 +15,8 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
-import CancelSubscription from "@/lib/fetch/user/cancelSubscription";
+import CancelSubscription from "@/lib/fetch/user/PUT/cancelSubscription";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function CancelSubscriptionModal({
   disclosure,
@@ -26,18 +27,37 @@ export default function CancelSubscriptionModal({
   const { isOpen, onOpenChange } = disclosure;
 
   const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   async function cancelSubscription() {
     setIsLoading(true);
-    const response = await CancelSubscription();
+    const response = (await CancelSubscription()) as any;
 
-    if (!response.error) {
+    if (!response) {
+      setIsLoading(false);
+      setError(true);
+      setErrorText("Failed to cancel subscription");
+      setErrorMessage("Failed to cancel subscription");
+      toast.error("Failed to cancel subscription");
+
+      return;
+    }
+
+    if (response.success) {
+      setIsLoading(false);
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       router.refresh();
       onOpenChange();
-      setIsLoading(false);
       toast.success("Your subscription has been cancelled");
     } else {
       setIsLoading(false);
+      setError(true);
+      setErrorText(response.error);
+      setErrorMessage(response.message);
       toast.error("Failed to cancel subscription");
     }
   }
@@ -65,6 +85,9 @@ export default function CancelSubscriptionModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 Your current subscription will be cancelled and you will remain
                 till the end of your current billing period. After that, you
                 will be downgraded to the free Hobby plan.

@@ -15,6 +15,7 @@ import React from "react";
 import { toast } from "sonner";
 
 import ChangeProjectStatus from "@/lib/fetch/admin/PUT/ChangeProjectStatus";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function ChangeProjectStatusModal({
   disclosure,
@@ -31,23 +32,42 @@ export default function ChangeProjectStatusModal({
 
   const [disableReason, setDisableReason] = React.useState("");
   const [isLoading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   async function changeProjectStatus() {
     setLoading(true);
 
-    const res = await ChangeProjectStatus(
+    const res = (await ChangeProjectStatus(
       project.id,
       status,
       disableReason ? disableReason : "no info provided",
-    );
+    )) as any;
 
-    if (!res.error) {
+    if (!res) {
       setLoading(false);
+      setError(true);
+      setErrorText("Failed to update project status");
+      setErrorMessage("An error occurred while updating the project status");
+      toast.error("Failed to update project status");
+
+      return;
+    }
+
+    if (res.success) {
+      setLoading(false);
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       onOpenChange();
       router.refresh();
       toast.success("Project status updated successfully");
     } else {
       setLoading(false);
+      setError(true);
+      setErrorText(res.error);
+      setErrorMessage(res.message);
       router.refresh();
       toast.error("Failed to update project status");
     }
@@ -69,6 +89,9 @@ export default function ChangeProjectStatusModal({
                   </div>
                 </ModalHeader>
                 <ModalBody>
+                  {error && (
+                    <ErrorCard error={errorText} message={errorMessage} />
+                  )}
                   <Snippet hideCopyButton hideSymbol>
                     <span>ID: {project.id}</span>
                   </Snippet>

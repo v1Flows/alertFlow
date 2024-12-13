@@ -17,9 +17,11 @@ import {
 import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 import { cn } from "@/components/functions/cn/cn";
 import UpdateFlowActions from "@/lib/fetch/flow/PUT/UpdateActions";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export const CustomRadio = (props: any) => {
   const { children, ...otherProps } = props;
@@ -51,11 +53,15 @@ export default function EditActionModal({
   flow: any;
   targetAction: any;
 }) {
+  const router = useRouter();
   const { isOpen, onOpenChange } = disclosure;
 
   const [isLoading, setLoading] = useState(false);
   const [action, setAction] = useState({} as any);
   const [params, setParams] = useState([] as any);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   useEffect(() => {
     setAction(targetAction);
@@ -76,7 +82,7 @@ export default function EditActionModal({
     onOpenChange();
   }
 
-  function updateAction() {
+  async function updateAction() {
     setLoading(true);
     flow.actions.map((flowAction: any) => {
       if (flowAction.id === action.id) {
@@ -87,14 +93,30 @@ export default function EditActionModal({
       }
     });
 
-    UpdateFlowActions(flow.id, flow.actions)
-      .then(() => {
-        toast.success("Flow action updated successfully.");
-        onOpenChange();
-      })
-      .catch(() => {
-        toast.error("Failed to update flow action.");
-      });
+    const res = (await UpdateFlowActions(flow.id, flow.actions)) as any;
+
+    if (!res) {
+      setError(true);
+      setErrorText("Error");
+      setErrorMessage("An error occurred while updating the action.");
+      setLoading(false);
+
+      return;
+    }
+
+    if (res.success) {
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
+      toast.success("Action updated successfully.");
+      onOpenChange();
+      router.refresh();
+    } else {
+      setError(true);
+      setErrorText(res.error);
+      setErrorMessage(res.message);
+      toast.error("An error occurred while updating the action.");
+    }
 
     setLoading(false);
   }
@@ -118,6 +140,9 @@ export default function EditActionModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <div className="w-full flex flex-col gap-4">
                   {/* Status */}
                   <div className="flex flex-col">

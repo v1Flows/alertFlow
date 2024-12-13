@@ -33,10 +33,13 @@ export function PageStats({
   async function getStats() {
     const stats = await AdminGetStats(interval);
 
-    if (stats.error) {
-      toast.error(stats.error);
+    if (!stats.success) {
+      if ("error" in stats) {
+        toast.error(stats.error);
+      }
+    } else {
+      setStats(stats.data);
     }
-    setStats(stats);
   }
 
   React.useEffect(() => {

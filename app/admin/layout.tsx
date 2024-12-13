@@ -12,21 +12,34 @@ export default async function DashboardHomeLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const settings = await AdminGetSettings();
-  const notifications = await GetUserNotifications();
-  const userDetails = await GetUserDetails();
-  const projects = await GetProjects();
-  const flows = await GetFlows();
+  const settingsData = AdminGetSettings();
+  const notificationsData = GetUserNotifications();
+  const userDetailsData = GetUserDetails();
+  const projectsData = GetProjects();
+  const flowsData = GetFlows();
+
+  const [settings, notifications, userDetails, projects, flows] =
+    (await Promise.all([
+      settingsData,
+      notificationsData,
+      userDetailsData,
+      projectsData,
+      flowsData,
+    ])) as any;
 
   return (
-    <SidebarMenu
-      flows={flows}
-      notifications={notifications}
-      projects={projects.projects}
-      settings={settings}
-      user={userDetails}
-    >
-      {children}
-    </SidebarMenu>
+    <>
+      <SidebarMenu
+        flows={flows.success ? flows.data.flows : []}
+        notifications={
+          notifications.success ? notifications.data.notifications : []
+        }
+        projects={projects.success ? projects.data.projects : []}
+        settings={settings.success ? settings.data.settings : {}}
+        user={userDetails.success ? userDetails.data.user : {}}
+      >
+        {children}
+      </SidebarMenu>
+    </>
   );
 }

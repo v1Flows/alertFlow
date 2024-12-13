@@ -17,8 +17,8 @@ import { useRouter } from "next/navigation";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
-import CreateCustomer from "@/lib/fetch/user/CreateCustomer";
-import SetupNewCard from "@/lib/fetch/user/SetupNewCard";
+import CreateCustomer from "@/lib/fetch/user/POST/CreateCustomer";
+import SetupNewCard from "@/lib/fetch/user/POST/SetupNewCard";
 
 import AddPaymentCardModal from "../functions/payment/addCard";
 import SelectPlanModal from "../functions/payment/selectPlan";
@@ -121,9 +121,9 @@ export default function SubscriptionOnboarding({
 
   async function handleCreateCustomer() {
     setIsLoading(true);
-    const res = await CreateCustomer();
+    const res = await CreateCustomer() as any;
 
-    if (res.error) {
+    if (!res.success) {
       toast.error(res.error);
       setIsLoading(false);
 
@@ -138,13 +138,13 @@ export default function SubscriptionOnboarding({
     setIsLoading(true);
     const res = await SetupNewCard();
 
-    if (res.client_secret === "" || res.error) {
+    if (!res.success || res.data.client_secret === "") {
       toast.error("Failed to create payment intent");
       setIsLoading(false);
 
       return;
     }
-    setClientSecret(res.client_secret);
+    setClientSecret(res.data.client_secret);
     setIsLoading(false);
 
     addPaymentCardModal.onOpenChange();

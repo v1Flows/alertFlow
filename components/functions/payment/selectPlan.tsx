@@ -18,7 +18,7 @@ import { AnimatePresence, domAnimation, LazyMotion, m } from "framer-motion";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-import CreateSubscription from "@/lib/fetch/user/CreateSubscription";
+import CreateSubscription from "@/lib/fetch/user/POST/CreateSubscription";
 
 import PlanRadio from "./plan-radio";
 
@@ -55,9 +55,9 @@ export default function SelectPlanModal({
 
   async function pay(planID: string, planStripeID: string) {
     setIsLoading(true);
-    const res = await CreateSubscription(planID, planStripeID);
+    const res = await CreateSubscription(planID, planStripeID) as any;
 
-    if (res.error) {
+    if (!res.success) {
       toast.error(res.message);
       setIsLoading(false);
 

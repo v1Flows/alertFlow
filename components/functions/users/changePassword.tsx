@@ -14,8 +14,9 @@ import {
 } from "@nextui-org/react";
 import { toast } from "sonner";
 
-import ChangeUserPassword from "@/lib/fetch/user/changePassword";
+import ChangeUserPassword from "@/lib/fetch/user/PUT/changePassword";
 import { deleteSession } from "@/lib/auth/deleteSession";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function ChangeUserPasswordModal({
   userId,
@@ -32,6 +33,10 @@ export default function ChangeUserPasswordModal({
 
   // loading
   const [isLoading, setIsLoading] = React.useState(false);
+
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   const [isCurrentPasswordValid, setIsCurrentPasswordValid] =
     React.useState(true);
@@ -63,24 +68,43 @@ export default function ChangeUserPasswordModal({
 
     setIsLoading(true);
 
-    const response = await ChangeUserPassword(
+    const response = (await ChangeUserPassword(
       userId,
       currentPassword,
       newPassword,
       confirmPassword,
-    );
+    )) as any;
 
-    if (response.result === "success") {
+    if (!response) {
       setIsLoading(false);
+      setError(true);
+      setErrorText("Failed to update user password");
+      setErrorMessage("Failed to update user password");
+      toast.error("Failed to update user password");
+
+      return;
+    }
+
+    if (response.success) {
+      setIsLoading(false);
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       onOpenChange();
       toast.success("User password updated successfully");
       deleteSession();
     } else if (response.error === "Current password is incorrect") {
       setIsLoading(false);
+      setError(true);
+      setErrorText(response.error);
+      setErrorMessage(response.message);
       setIsCurrentPasswordValid(false);
       toast.error("Current password is incorrect");
     } else {
       setIsLoading(false);
+      setError(true);
+      setErrorText(response.error);
+      setErrorMessage(response.message);
       toast.error(response.error);
     }
   }
@@ -105,6 +129,9 @@ export default function ChangeUserPasswordModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <Input
                   isRequired
                   label="Current Password"

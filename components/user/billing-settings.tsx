@@ -17,9 +17,9 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
 
-import SetupNewCard from "@/lib/fetch/user/SetupNewCard";
-import SetDefaultCard from "@/lib/fetch/user/SetDefaultCard";
-import RemoveCard from "@/lib/fetch/user/RemoveCard";
+import SetupNewCard from "@/lib/fetch/user/POST/SetupNewCard";
+import SetDefaultCard from "@/lib/fetch/user/POST/SetDefaultCard";
+import RemoveCard from "@/lib/fetch/user/DELETE/RemoveCard";
 
 import AddPaymentCardModal from "../functions/payment/addCard";
 import SelectPlanModal from "../functions/payment/selectPlan";
@@ -60,13 +60,13 @@ export default function BillingSettings({
     setIsLoading(true);
     const res = await SetupNewCard();
 
-    if (res.client_secret === "" || res.error) {
+    if (!res.success || res.data.client_secret === "") {
       toast.error("Failed to create payment intent");
       setIsLoading(false);
 
       return;
     }
-    setClientSecret(res.client_secret);
+    setClientSecret(res.data.client_secret);
     setIsLoading(false);
 
     addPaymentCardModal.onOpenChange();
@@ -94,9 +94,9 @@ export default function BillingSettings({
   };
 
   async function handleSetDefaultPaymentMethod(cardID: string) {
-    const res = await SetDefaultCard(cardID);
+    const res = await SetDefaultCard(cardID) as any;
 
-    if (res.error) {
+    if (!res.success) {
       toast.error(res.error);
 
       return;
@@ -106,9 +106,9 @@ export default function BillingSettings({
   }
 
   async function handleDeletePaymentMethod(cardID: string) {
-    const res = await RemoveCard(cardID);
+    const res = await RemoveCard(cardID) as any;
 
-    if (res.error) {
+    if (!res.success) {
       toast.error(res.message);
 
       return;

@@ -24,7 +24,7 @@ export default function ProjectsStats({
                 <Icon icon="solar:box-broken" width={26} />
               </div>
               <div>
-                <p className="text-md font-bold">{projects.projects.length}</p>
+                <p className="text-md font-bold">{projects.length}</p>
                 <p className="text-sm text-default-500">Total Projects</p>
               </div>
             </div>
@@ -38,7 +38,7 @@ export default function ProjectsStats({
               </div>
               <div>
                 <p className="text-md font-bold">
-                  {projects.projects.filter((p: any) => p.disabled).length}
+                  {projects.filter((p: any) => p.disabled).length}
                 </p>
                 <p className="text-sm text-default-500">Disabled Projects</p>
               </div>
@@ -53,10 +53,7 @@ export default function ProjectsStats({
               </div>
               <div>
                 <p className="text-md font-bold">
-                  {
-                    projects.projects.filter((p: any) => !p.alertflow_runners)
-                      .length
-                  }
+                  {projects.filter((p: any) => !p.alertflow_runners).length}
                 </p>
                 <p className="text-sm text-default-500">
                   Projects without AlertFlow Runners

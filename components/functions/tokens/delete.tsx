@@ -16,6 +16,7 @@ import React from "react";
 import { toast } from "sonner";
 
 import DeleteRunnerToken from "@/lib/fetch/project/DELETE/DeleteRunnerToken";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function DeleteTokenModal({
   disclosure,
@@ -28,18 +29,37 @@ export default function DeleteTokenModal({
   const { isOpen, onOpenChange } = disclosure;
 
   const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   async function handleDeleteToken() {
     setIsLoading(true);
 
-    const response = await DeleteRunnerToken(token.id);
+    const response = (await DeleteRunnerToken(token.id)) as any;
 
-    if (response.result === "success") {
+    if (!response) {
+      setIsLoading(false);
+      setError(true);
+      setErrorText("Failed to delete token");
+      setErrorMessage("Failed to delete token");
+      toast.error("Failed to delete token");
+
+      return;
+    }
+
+    if (response.success) {
+      setIsLoading(false);
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       router.refresh();
       onOpenChange();
       toast.success("Token deleted successfully");
-      setIsLoading(false);
     } else {
+      setError(true);
+      setErrorText(response.error);
+      setErrorMessage(response.message);
       setIsLoading(false);
       toast.error("Failed to delete token");
     }
@@ -62,6 +82,9 @@ export default function DeleteTokenModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <Snippet hideCopyButton hideSymbol>
                   <span>ID: {token.id}</span>
                 </Snippet>

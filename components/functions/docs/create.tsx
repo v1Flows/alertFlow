@@ -20,7 +20,8 @@ import { Icon } from "@iconify/react";
 import { toast } from "sonner";
 import MarkdownEditor from "@uiw/react-markdown-editor";
 
-import CreateDoc from "@/lib/fetch/docs/create";
+import CreateDoc from "@/lib/fetch/docs/POST/create";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function CreateDocumentModal({
   disclosure,
@@ -38,6 +39,9 @@ export default function CreateDocumentModal({
 
   // loading
   const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   const handleSelectionChange = (e: any) => {
     setCategory(e.target.value);
@@ -46,21 +50,38 @@ export default function CreateDocumentModal({
   async function createDoc() {
     setIsLoading(true);
 
-    const response = await CreateDoc(title, content, category, hidden);
+    const response = (await CreateDoc(title, content, category, hidden)) as any;
 
-    if (response.result === "success") {
+    if (!response) {
+      setError(true);
+      setErrorMessage("Failed to create documentation");
+      setErrorText("Failed to create documentation");
+      setIsLoading(false);
+      toast.error("Failed to create document");
+
+      return;
+    }
+
+    if (response.success) {
       router.refresh();
       onOpenChange();
       setTitle("");
       setContent("");
       setCategory("");
       setHidden(false);
-      setIsLoading(false);
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       toast.success("Document created successfully");
     } else {
+      setError(true);
+      setErrorMessage(response.message);
+      setErrorText(response.error);
       setIsLoading(false);
-      toast.error("Failed to create document: " + response.error);
+      toast.error("Failed to create document");
     }
+
+    setIsLoading(false);
   }
 
   function cancel() {
@@ -85,6 +106,7 @@ export default function CreateDocumentModal({
               <p className="text-lg font-bold">Create new Document</p>
             </ModalHeader>
             <ModalBody className="max-h-[70vh] overflow-y-auto">
+              {error && <ErrorCard error={errorText} message={errorMessage} />}
               <div className="flex flex-col gap-4">
                 <Input
                   isRequired

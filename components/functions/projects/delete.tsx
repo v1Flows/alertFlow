@@ -16,6 +16,7 @@ import React from "react";
 import { toast } from "sonner";
 
 import DeleteProject from "@/lib/fetch/project/DELETE/DeleteProject";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function DeleteProjectModal({
   disclosure,
@@ -28,18 +29,37 @@ export default function DeleteProjectModal({
   const { isOpen, onOpenChange } = disclosure;
 
   const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   async function deleteProject() {
     setIsLoading(true);
-    const response = await DeleteProject(project.id);
+    const res = (await DeleteProject(project.id)) as any;
 
-    if (!response.error) {
+    if (!res) {
+      setIsLoading(false);
+      setError(true);
+      setErrorText("Failed to delete project");
+      setErrorMessage("Failed to delete project");
+      toast.error("Failed to delete project");
+
+      return;
+    }
+
+    if (res.success) {
       router.refresh();
       onOpenChange();
       setIsLoading(false);
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       toast.success("Project deleted successfully");
     } else {
       setIsLoading(false);
+      setError(true);
+      setErrorText(res.error);
+      setErrorMessage(res.message);
       toast.error("Failed to delete project");
     }
   }
@@ -66,6 +86,9 @@ export default function DeleteProjectModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <Snippet hideCopyButton hideSymbol>
                   <span>Name: {project.name}</span>
                   <span>ID: {project.id}</span>

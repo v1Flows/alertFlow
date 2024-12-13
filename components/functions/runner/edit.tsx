@@ -15,7 +15,8 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
-import EditRunner from "@/lib/fetch/runner/Edit";
+import EditRunner from "@/lib/fetch/runner/PUT/Edit";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function EditRunnerModal({
   disclosure,
@@ -29,6 +30,9 @@ export default function EditRunnerModal({
 
   const [name, setName] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   React.useEffect(() => {
     setName(runner.name);
@@ -37,14 +41,30 @@ export default function EditRunnerModal({
   async function editRunner() {
     setIsLoading(true);
 
-    const response = await EditRunner(runner.id, name);
+    const response = (await EditRunner(runner.id, name)) as any;
 
-    if (response.result === "success") {
+    if (!response) {
+      setIsLoading(false);
+      setError(true);
+      setErrorText("Failed to update runner");
+      setErrorMessage("An error occurred while updating the runner");
+      toast.error("Failed to update runner");
+
+      return;
+    }
+
+    if (response.success) {
       setName("");
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       onOpenChange();
       toast.success("Runner updated successfully");
       router.refresh();
     } else {
+      setError(true);
+      setErrorText(response.error);
+      setErrorMessage(response.message);
       toast.error("Failed to update runner");
     }
 
@@ -67,6 +87,9 @@ export default function EditRunnerModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <Input
                   label="Name"
                   labelPlacement="outside"

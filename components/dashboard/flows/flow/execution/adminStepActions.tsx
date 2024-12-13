@@ -10,7 +10,7 @@ import {
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import UpdateExecutionStep from "@/lib/fetch/executions/updateStep";
+import UpdateExecutionStep from "@/lib/fetch/executions/PUT/updateStep";
 
 export default function AdminStepActions({
   execution,
@@ -161,7 +161,7 @@ export default function AdminStepActions({
 
     const response = await UpdateExecutionStep(execution, newStep);
 
-    if (response.result === "success") {
+    if (response.success) {
       toast.success("Step Status Changed");
       router.refresh();
     } else {

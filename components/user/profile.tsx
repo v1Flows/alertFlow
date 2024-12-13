@@ -13,7 +13,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { Icon } from "@iconify/react";
 
-import ChangeUserDetails from "@/lib/fetch/user/changeDetails";
+import ChangeUserDetails from "@/lib/fetch/user/PUT/changeDetails";
 import CheckUserTaken from "@/lib/auth/checkTaken";
 
 import SecuritySettings from "./security-settings";
