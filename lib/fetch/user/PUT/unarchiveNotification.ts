@@ -42,7 +42,7 @@ export default async function UnarchiveUserNotification(
         },
       },
     );
-    
+
     if (!res.ok) {
       const errorData = await res.json();
 
@@ -67,4 +67,3 @@ export default async function UnarchiveUserNotification(
     };
   }
 }
-

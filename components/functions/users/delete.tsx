@@ -17,6 +17,7 @@ import React from "react";
 import { toast } from "sonner";
 
 import DeleteUser from "@/lib/fetch/user/DELETE/delete";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function DeleteUserModal({
   disclosure,
@@ -29,17 +30,36 @@ export default function DeleteUserModal({
   const { isOpen, onOpenChange } = disclosure;
 
   const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   async function deleteUser() {
     setIsLoading(true);
-    const response = await DeleteUser();
+    const response = (await DeleteUser()) as any;
 
-    if (!response.error) {
+    if (!response) {
+      setIsLoading(false);
+      setError(true);
+      setErrorText("Failed to delete user");
+      setErrorMessage("Failed to delete user");
+      toast.error("Failed to delete user");
+
+      return;
+    }
+
+    if (response.success) {
+      setIsLoading(false);
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       router.refresh();
       onOpenChange();
-      setIsLoading(false);
       toast.success("User deleted successfully");
     } else {
+      setError(true);
+      setErrorText(response.error);
+      setErrorMessage(response.message);
       setIsLoading(false);
       toast.error("Failed to delete user");
     }
@@ -68,6 +88,9 @@ export default function DeleteUserModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <Snippet hideCopyButton hideSymbol>
                   <span>Name: {user.username}</span>
                   <span>Email: {user.email}</span>

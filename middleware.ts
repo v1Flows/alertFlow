@@ -33,6 +33,13 @@ export async function middleware(request: NextRequest) {
     }
 
     if (
+      request.url.includes("/maintenance") &&
+      !settings.data.settings.maintenance
+    ) {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+
+    if (
       request.url.includes("/auth/signup") &&
       !settings.data.settings.signup
     ) {

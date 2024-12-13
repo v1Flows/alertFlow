@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 
 interface Result {
   result: string;
+  key: string;
 }
 
 interface ErrorResponse {

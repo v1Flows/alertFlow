@@ -27,6 +27,7 @@ import { Icon } from "@iconify/react";
 import { CheckIcon } from "@/components/icons";
 import GetProjectRunners from "@/lib/fetch/project/runners";
 import CreateFlow from "@/lib/fetch/flow/POST/CreateFlow";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function FunctionCreateFlow({
   projects,
@@ -50,6 +51,9 @@ export default function FunctionCreateFlow({
 
   // loading
   const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
   // limit on runner?
   const [runnerLimit, setRunnerLimit] = React.useState(false);
   // runner select list
@@ -70,14 +74,23 @@ export default function FunctionCreateFlow({
   async function createFlow() {
     setIsLoading(true);
 
-    const response = await CreateFlow(
+    const response = (await CreateFlow(
       name,
       description,
       projectId,
       runnerLimit ? runnerId : "any",
-    );
+    )) as any;
 
-    if (response.result === "success") {
+    if (!response) {
+      setError(true);
+      setErrorText("Failed to create flow");
+      setErrorMessage("Failed to create flow");
+      setIsLoading(false);
+
+      return;
+    }
+
+    if (response.success) {
       router.refresh();
       onOpenChange();
       setName("");
@@ -85,12 +98,18 @@ export default function FunctionCreateFlow({
       setProjectId("");
       setRunnerId("");
       setRunnerLimit(false);
-      setIsLoading(false);
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       onOpenChangeInstructions();
     } else {
-      setIsLoading(false);
+      setError(true);
+      setErrorText(response.error);
+      setErrorMessage(response.message);
       toast.error("Failed to create flow");
     }
+
+    setIsLoading(false);
   }
 
   function cancel() {
@@ -119,6 +138,9 @@ export default function FunctionCreateFlow({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <div className="flex flex-col gap-4">
                   <Input
                     isRequired

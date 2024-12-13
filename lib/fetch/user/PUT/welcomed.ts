@@ -17,7 +17,9 @@ interface SuccessResponse {
   data: Result;
 }
 
-export default async function Welcomed(): Promise<SuccessResponse | ErrorResponse> {
+export default async function Welcomed(): Promise<
+  SuccessResponse | ErrorResponse
+> {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get("session");
@@ -41,7 +43,7 @@ export default async function Welcomed(): Promise<SuccessResponse | ErrorRespons
         body: JSON.stringify({}),
       },
     );
-    
+
     if (!res.ok) {
       const errorData = await res.json();
 
@@ -66,4 +68,3 @@ export default async function Welcomed(): Promise<SuccessResponse | ErrorRespons
     };
   }
 }
-

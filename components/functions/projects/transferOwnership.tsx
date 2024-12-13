@@ -25,6 +25,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import ProjectTransferOwnershipAPI from "@/lib/fetch/project/PUT/transferOwnership";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function ProjectTransferOwnership({
   disclosure,
@@ -43,6 +44,10 @@ export default function ProjectTransferOwnership({
   const [isLoading, setIsLoading] = useState(false);
   const [selectedUser, setSelectedUser] = useState<any>("");
 
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
+
   const statusColorMap: any = {
     Owner: "danger",
     Editor: "primary",
@@ -57,17 +62,36 @@ export default function ProjectTransferOwnership({
 
   async function transferOwnership() {
     setIsLoading(true);
-    const res = await ProjectTransferOwnershipAPI(selectedUser, project.id);
+    const res = (await ProjectTransferOwnershipAPI(
+      selectedUser,
+      project.id,
+    )) as any;
 
-    if (res.error) {
+    if (!res) {
       setIsLoading(false);
-      toast.error(res.error);
-    } else {
+      setError(true);
+      setErrorText("An error occurred while transferring the ownership");
+      setErrorMessage("An error occurred while transferring the ownership");
+      toast.error("An error occurred while transferring the ownership");
+
+      return;
+    }
+
+    if (res.success) {
       setIsLoading(false);
       setSelectedUser("");
       onOpenChange();
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       router.refresh();
       toast.success("Owner transferred successfully");
+    } else {
+      setIsLoading(false);
+      setError(true);
+      setErrorText(res.error);
+      setErrorMessage(res.message);
+      toast.error("An error occurred while transferring the ownership");
     }
   }
 
@@ -81,6 +105,7 @@ export default function ProjectTransferOwnership({
       <ModalContent>
         {() => (
           <ModalBody>
+            {error && <ErrorCard error={errorText} message={errorMessage} />}
             <Card className="w-full bg-transparent shadow-none">
               <CardHeader className="justify-center px-6 pb-0 pt-6">
                 <div className="flex flex-col items-center">

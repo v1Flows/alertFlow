@@ -17,7 +17,9 @@ interface SuccessResponse {
   data: Result;
 }
 
-export default async function UnreadUserNotification(id: string): Promise<SuccessResponse | ErrorResponse> {
+export default async function UnreadUserNotification(
+  id: string,
+): Promise<SuccessResponse | ErrorResponse> {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get("session");
@@ -40,7 +42,7 @@ export default async function UnreadUserNotification(id: string): Promise<Succes
         },
       },
     );
-    
+
     if (!res.ok) {
       const errorData = await res.json();
 
@@ -65,4 +67,3 @@ export default async function UnreadUserNotification(id: string): Promise<Succes
     };
   }
 }
-

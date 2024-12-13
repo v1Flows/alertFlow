@@ -206,7 +206,7 @@ export function Flow({
                             ? "Any"
                             : runners.find(
                                 (runner: any) => runner.id === flow.runner_id,
-                              )?.name}
+                              )?.name || "Unknown"}
                         </p>
                         <p className="text-sm text-default-500">Runner</p>
                       </div>

@@ -33,7 +33,7 @@ export default async function DashboardFlowPage({
   let runnersData;
 
   if (flow.success) {
-    runnersData = GetProjectRunners(flow.data.project_id);
+    runnersData = GetProjectRunners(flow.data.flow.project_id);
   }
   const runners = await runnersData;
 
