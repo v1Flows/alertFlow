@@ -27,7 +27,7 @@ import Reloader from "@/components/reloader/Reloader";
 import GetPayload from "@/lib/fetch/payload/payload";
 import GetExecutionSteps from "@/lib/fetch/executions/steps";
 import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
-import InteractExecutionStep from "@/lib/fetch/executions/step_interact";
+import InteractExecutionStep from "@/lib/fetch/executions/PUT/step_interact";
 
 import ExecutionBreadcrumbs from "./breadcrumbs";
 import ExecutionDetails from "./details";

@@ -14,7 +14,7 @@ import {
 import { Icon } from "@iconify/react";
 import { toast } from "sonner";
 
-import SimulatePayload from "@/lib/fetch/payload/send";
+import SimulatePayload from "@/lib/fetch/payload/POST/send";
 
 export default function SimulatePayloadModal({
   disclosure,
@@ -69,10 +69,10 @@ export default function SimulatePayloadModal({
 
   async function sendPayload() {
     setIsLoading(true);
-    const res = await SimulatePayload(target, payload);
+    const send = (await SimulatePayload(target, payload)) as any;
 
-    if (res && res.error) {
-      toast.error(res.message + ": " + res.error);
+    if (!send.success) {
+      toast.error(send.error + ": " + send.message);
     } else {
       onOpenChange();
       toast.success("Payload sent successfully!");

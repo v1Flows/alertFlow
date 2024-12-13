@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
-import AdminDeleteUser from "@/lib/fetch/admin/delete_user";
+import AdminDeleteUser from "@/lib/fetch/admin/DELETE/delete_user";
 
 export default function AdminDeleteUserModal({
   disclosure,

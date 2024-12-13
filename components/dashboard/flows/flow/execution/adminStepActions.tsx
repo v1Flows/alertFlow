@@ -10,7 +10,7 @@ import {
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import UpdateExecutionStep from "@/lib/fetch/executions/updateStep";
+import UpdateExecutionStep from "@/lib/fetch/executions/PUT/updateStep";
 
 export default function AdminStepActions({
   execution,

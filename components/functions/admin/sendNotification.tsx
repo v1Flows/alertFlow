@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
 import { toast } from "sonner";
 
-import AdminSendUserNotification from "@/lib/fetch/admin/sendUserNotification";
+import AdminSendUserNotification from "@/lib/fetch/admin/POST/sendUserNotification";
 
 export default function AdminSendUserNotificationModal({
   user,

@@ -20,7 +20,7 @@ import { toast } from "sonner";
 import { LibraryIcon } from "lucide-react";
 
 import { CheckIcon } from "@/components/icons";
-import AddRunner from "@/lib/fetch/runner/AddRunner";
+import AddRunner from "@/lib/fetch/runner/POST/AddRunner";
 import CreateRunnerToken from "@/lib/fetch/project/POST/CreateRunnerToken";
 
 export default function CreateRunnerModal({

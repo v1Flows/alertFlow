@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
-import EditRunner from "@/lib/fetch/runner/Edit";
+import EditRunner from "@/lib/fetch/runner/PUT/Edit";
 
 export default function EditRunnerModal({
   disclosure,

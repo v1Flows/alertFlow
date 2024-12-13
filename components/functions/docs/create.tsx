@@ -20,7 +20,7 @@ import { Icon } from "@iconify/react";
 import { toast } from "sonner";
 import MarkdownEditor from "@uiw/react-markdown-editor";
 
-import CreateDoc from "@/lib/fetch/docs/create";
+import CreateDoc from "@/lib/fetch/docs/POST/create";
 
 export default function CreateDocumentModal({
   disclosure,

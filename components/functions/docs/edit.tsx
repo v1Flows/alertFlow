@@ -20,7 +20,7 @@ import { Icon } from "@iconify/react";
 import { toast } from "sonner";
 import MarkdownEditor from "@uiw/react-markdown-editor";
 
-import UpdateDoc from "@/lib/fetch/docs/update";
+import UpdateDoc from "@/lib/fetch/docs/PUT/update";
 
 export default function EditDocumentModal({
   doc,

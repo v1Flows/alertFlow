@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
-import DeleteDoc from "@/lib/fetch/docs/delete";
+import DeleteDoc from "@/lib/fetch/docs/DELETE/delete";
 
 export default function DeleteDocModal({
   disclosure,
