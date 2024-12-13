@@ -40,7 +40,7 @@ export default function AdminSendUserNotificationModal({
 
   async function sendNotification() {
     setIsLoading(true);
-    const response = await AdminSendUserNotification(user.id, text) as any;
+    const response = (await AdminSendUserNotification(user.id, text)) as any;
 
     if (!response) {
       setError(true);
@@ -48,6 +48,7 @@ export default function AdminSendUserNotificationModal({
       setErrorText("Failed to send notification");
       setIsLoading(false);
       toast.error("Failed to send notification");
+
       return;
     }
 

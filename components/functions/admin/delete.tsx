@@ -36,7 +36,7 @@ export default function AdminDeleteUserModal({
 
   async function deleteUser() {
     setIsLoading(true);
-    const response = await AdminDeleteUser(user.id) as any;
+    const response = (await AdminDeleteUser(user.id)) as any;
 
     if (response.success) {
       router.refresh();

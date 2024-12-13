@@ -34,13 +34,14 @@ export default function DeleteDocModal({
 
   async function deleteDoc() {
     setIsDeleteLoading(true);
-    const res = await DeleteDoc(doc.id) as any;
+    const res = (await DeleteDoc(doc.id)) as any;
 
     if (!res) {
       setError(true);
       setErrorMessage("Failed to delete documentation");
       setErrorText("Failed to delete documentation");
       setIsDeleteLoading(false);
+
       return;
     }
 

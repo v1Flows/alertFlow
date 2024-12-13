@@ -52,13 +52,20 @@ export default function EditDocumentModal({
   async function updateDoc() {
     setIsLoading(true);
 
-    const response = await UpdateDoc(doc.id, title, content, category, hidden) as any;
+    const response = (await UpdateDoc(
+      doc.id,
+      title,
+      content,
+      category,
+      hidden,
+    )) as any;
 
     if (!response) {
       setError(true);
       setErrorMessage("Failed to update documentation");
       setErrorText("Failed to update documentation");
       setIsLoading(false);
+
       return;
     }
 
@@ -98,9 +105,7 @@ export default function EditDocumentModal({
               <p className="text-lg font-bold">Update Documentation</p>
             </ModalHeader>
             <ModalBody className="max-h-[70vh] overflow-y-auto">
-              {error && (
-                <ErrorCard error={errorText} message={errorMessage} />
-              )}
+              {error && <ErrorCard error={errorText} message={errorMessage} />}
               <div className="flex flex-col gap-4">
                 <Input
                   isRequired

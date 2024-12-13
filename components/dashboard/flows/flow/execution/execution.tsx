@@ -361,9 +361,13 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
     ];
     step.interaced_by = userDetails.id;
     step.interacted_at = new Date().toISOString();
-    const res = await InteractExecutionStep(execution.id, step.id, step);
+    const res = (await InteractExecutionStep(
+      execution.id,
+      step.id,
+      step,
+    )) as any;
 
-    if (res.error) {
+    if (!res.success) {
       toast.error(res.error);
     } else {
       toast.success("Step interaction successful");

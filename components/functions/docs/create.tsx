@@ -50,7 +50,7 @@ export default function CreateDocumentModal({
   async function createDoc() {
     setIsLoading(true);
 
-    const response = await CreateDoc(title, content, category, hidden) as any;
+    const response = (await CreateDoc(title, content, category, hidden)) as any;
 
     if (!response) {
       setError(true);
@@ -58,6 +58,7 @@ export default function CreateDocumentModal({
       setErrorText("Failed to create documentation");
       setIsLoading(false);
       toast.error("Failed to create document");
+
       return;
     }
 
@@ -105,9 +106,7 @@ export default function CreateDocumentModal({
               <p className="text-lg font-bold">Create new Document</p>
             </ModalHeader>
             <ModalBody className="max-h-[70vh] overflow-y-auto">
-              {error && (
-                <ErrorCard error={errorText} message={errorMessage} />
-              )}
+              {error && <ErrorCard error={errorText} message={errorMessage} />}
               <div className="flex flex-col gap-4">
                 <Input
                   isRequired

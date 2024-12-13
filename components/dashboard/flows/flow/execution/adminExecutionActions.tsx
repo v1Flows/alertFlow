@@ -141,7 +141,7 @@ export default function AdminExecutionActions({
 
     const response = await UpdateExecution(newExecution);
 
-    if (response.result === "success") {
+    if (response.success) {
       toast.success("Execution Status Changed");
       router.refresh();
     } else {
