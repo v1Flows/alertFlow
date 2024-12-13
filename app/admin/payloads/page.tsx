@@ -18,11 +18,6 @@ export default async function AdminPayloadsPage() {
     executionsData,
   ])) as any;
 
-  const combined_runners = [
-    ...runners.data.self_hosted_runners,
-    ...runners.data.alertflow_runners,
-  ];
-
   return (
     <>
       {flows.success &&
@@ -33,7 +28,10 @@ export default async function AdminPayloadsPage() {
           executions={executions.data.executions}
           flows={flows.data.flows}
           payloads={payloads.data.payloads}
-          runners={combined_runners}
+          runners={[
+            ...runners.data.self_hosted_runners,
+            ...runners.data.alertflow_runners,
+          ]}
         />
       ) : (
         <ErrorCard

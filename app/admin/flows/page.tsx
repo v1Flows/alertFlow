@@ -15,18 +15,16 @@ export default async function AdminFlowsPage() {
     runnersData,
   ])) as any;
 
-  const combined_runners = [
-    ...runners.data.self_hosted_runners,
-    ...runners.data.alertflow_runners,
-  ];
-
   return (
     <>
       {flows.success && projects.success && runners.success ? (
         <FlowsList
           flows={flows.data.flows}
           projects={projects.data.projects}
-          runners={combined_runners}
+          runners={[
+            ...runners.data.self_hosted_runners,
+            ...runners.data.alertflow_runners,
+          ]}
         />
       ) : (
         <ErrorCard
