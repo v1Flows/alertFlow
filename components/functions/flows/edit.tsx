@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation";
 
 import GetProjectRunners from "@/lib/fetch/project/runners";
 import UpdateFlow from "@/lib/fetch/flow/PUT/UpdateFlow";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function EditFlowModal({
   flow,
@@ -44,6 +45,9 @@ export default function EditFlowModal({
 
   // loading
   const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
   // limit on runner?
   const [runnerLimit, setRunnerLimit] = React.useState(
     flow.runner_id !== "any" ? true : false,
@@ -61,13 +65,17 @@ export default function EditFlowModal({
   }, [flow]);
 
   async function getCurrentProjectRunners() {
-    setRunners(await GetProjectRunners(flow.project_id));
+    const runners = await GetProjectRunners(flow.project_id);
+
+    setRunners(runners.success ? runners.data.runners : []);
   }
 
   const projectSelected = async (e: any) => {
     setProjectId(e.currentKey);
     setRunnerId("");
-    setRunners(await GetProjectRunners(e.currentKey));
+    const runners = await GetProjectRunners(e.currentKey);
+
+    setRunners(runners.success ? runners.data.runners : []);
   };
 
   const handleSelectRunner = (e: any) => {
@@ -77,19 +85,32 @@ export default function EditFlowModal({
   async function editFlow() {
     setIsLoading(true);
 
-    const response = await UpdateFlow(
+    const response = (await UpdateFlow(
       flow.id,
       name,
       description,
       projectId,
       runnerLimit ? runnerId : "any",
-    );
+    )) as any;
 
-    if (response.result === "success") {
+    if (!response) {
+      setError(true);
+      setErrorText("Failed to update flow");
+      setErrorMessage("An error occurred while updating the flow");
+      setIsLoading(false);
+
+      return;
+    }
+
+    if (response.success) {
       router.refresh();
       onOpenChange();
       setIsLoading(false);
+      toast.success("Flow updated successfully");
     } else {
+      setError(true);
+      setErrorText(response.error);
+      setErrorMessage(response.message);
       setIsLoading(false);
       toast.error("Failed to update flow");
     }
@@ -115,6 +136,9 @@ export default function EditFlowModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <Input
                   isRequired
                   label="Name"

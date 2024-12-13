@@ -16,7 +16,8 @@ import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
 import { toast } from "sonner";
 
-import Welcomed from "@/lib/fetch/user/welcomed";
+import Welcomed from "@/lib/fetch/user/PUT/welcomed";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function WelcomeModal({
   disclosure,
@@ -26,12 +27,31 @@ export default function WelcomeModal({
   const router = useRouter();
   const { isOpen, onOpenChange } = disclosure;
 
-  async function handleSetWelcomed() {
-    const response = await Welcomed();
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
-    if (!response.error) {
+  async function handleSetWelcomed() {
+    const response = (await Welcomed()) as any;
+
+    if (!response) {
+      setError(true);
+      setErrorText("Failed to set welcomed status");
+      setErrorMessage("Failed to set welcomed status");
+      toast.error("Failed to set welcomed status");
+
+      return;
+    }
+
+    if (response.success) {
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       onOpenChange();
     } else {
+      setError(true);
+      setErrorText(response.error);
+      setErrorMessage(response.message);
       toast.error("Failed to set welcomed status");
     }
   }
@@ -56,6 +76,9 @@ export default function WelcomeModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <div className="flex flex-col items-center justify-center gap-2">
                   <p className="text-center text-lg">
                     Welcome to{" "}

@@ -13,7 +13,8 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
-import DeleteExecution from "@/lib/fetch/executions/delete";
+import DeleteExecution from "@/lib/fetch/executions/DELETE/delete";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function DeleteExecutionModal({
   disclosure,
@@ -27,22 +28,39 @@ export default function DeleteExecutionModal({
   const { isOpen, onOpenChange } = disclosure;
 
   const [isDeleteLoading, setIsDeleteLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   async function deleteExecution() {
     setIsDeleteLoading(true);
-    const res = await DeleteExecution(execution.id);
+    const res = (await DeleteExecution(execution.id)) as any;
 
-    if (res.error) {
+    if (!res) {
+      setError(true);
+      setErrorText("Failed to delete execution");
+      setErrorMessage("Failed to delete execution");
       setIsDeleteLoading(false);
-      toast.error("Failed to delete execution");
 
       return;
     }
 
+    if (res.success) {
+      onOpenChange();
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
+      toast.success("Execution deleted successfully");
+      router.refresh();
+    } else {
+      setError(true);
+      setErrorText(res.error);
+      setErrorMessage(res.message);
+      setIsDeleteLoading(false);
+      toast.error("Failed to delete execution");
+    }
+
     setIsDeleteLoading(false);
-    onOpenChange();
-    toast.success("Execution deleted successfully");
-    router.refresh();
   }
 
   return (
@@ -66,6 +84,9 @@ export default function DeleteExecutionModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <Snippet hideCopyButton hideSymbol>
                   <span>ID: {execution.id}</span>
                 </Snippet>

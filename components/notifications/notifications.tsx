@@ -13,8 +13,8 @@ import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
 import { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
-import ReadUserNotification from "@/lib/fetch/user/readNotification";
-import ArchiveUserNotification from "@/lib/fetch/user/archiveNotification";
+import ReadUserNotification from "@/lib/fetch/user/PUT/readNotification";
+import ArchiveUserNotification from "@/lib/fetch/user/PUT/archiveNotification";
 
 import NotificationItem from "./notification-item";
 

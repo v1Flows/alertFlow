@@ -6,8 +6,6 @@ import {
   Avatar,
   Button,
   ButtonGroup,
-  Card,
-  CardHeader,
   Divider,
   Input,
   Modal,
@@ -29,8 +27,7 @@ import { ColorPicker, useColor } from "react-color-palette";
 import "react-color-palette/css";
 
 import CreateProject from "@/lib/fetch/project/POST/CreateProject";
-import { InfoIcon } from "@/components/icons";
-import { IconWrapper } from "@/lib/IconWrapper";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function CreateProjectModal({
   disclosure,
@@ -52,6 +49,7 @@ export default function CreateProjectModal({
   const [alertflowRunners, setAlertflowRunners] = React.useState(true);
   const [error, setError] = React.useState(false);
   const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -71,15 +69,25 @@ export default function CreateProjectModal({
   async function createProject() {
     setIsLoading(true);
 
-    const response = await CreateProject(
+    const res = (await CreateProject(
       name,
       description,
       alertflowRunners,
       projectIcon,
       color.hex,
-    );
+    )) as any;
 
-    if (response.result === "success") {
+    if (!res) {
+      setIsLoading(false);
+      setError(true);
+      setErrorText("Failed to create project");
+      setErrorMessage("Failed to create project");
+      toast.error("Failed to create project");
+
+      return;
+    }
+
+    if (res.success) {
       router.refresh();
       onOpenChange();
       onOpenChangeSuccess();
@@ -89,10 +97,12 @@ export default function CreateProjectModal({
       setIsLoading(false);
       setError(false);
       setErrorText("");
+      setErrorMessage("");
     } else {
       setIsLoading(false);
       setError(true);
-      setErrorText(response.error);
+      setErrorText(res.error);
+      setErrorMessage(res.message);
       toast.error("Failed to create project");
     }
   }
@@ -127,16 +137,7 @@ export default function CreateProjectModal({
               </ModalHeader>
               <ModalBody>
                 {error && (
-                  <Card className="border border-danger-300 border-2">
-                    <CardHeader className="justify-start gap-2 items-center">
-                      <IconWrapper className="bg-danger/10 text-danger">
-                        <InfoIcon className="text-lg" />
-                      </IconWrapper>
-                      <p className="text-md font-bold text-danger">
-                        {errorText}
-                      </p>
-                    </CardHeader>
-                  </Card>
+                  <ErrorCard error={errorText} message={errorMessage} />
                 )}
                 <div className="flex flex-col gap-4">
                   <Input

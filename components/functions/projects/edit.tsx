@@ -25,6 +25,7 @@ import { ColorPicker, useColor } from "react-color-palette";
 import "react-color-palette/css";
 
 import UpdateProject from "@/lib/fetch/project/PUT/UpdateProject";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function EditProjectModal({
   disclosure,
@@ -45,6 +46,9 @@ export default function EditProjectModal({
     project.alertflow_runners,
   );
   const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   useEffect(() => {
     setProjectIcon(project.icon);
@@ -65,22 +69,38 @@ export default function EditProjectModal({
 
   async function updateProject() {
     setIsLoading(true);
-    const response = await UpdateProject(
+    const response = (await UpdateProject(
       project.id,
       name,
       description,
       alertflowRunners,
       projectIcon,
       color.hex,
-    );
+    )) as any;
 
-    if (!response.error) {
+    if (!response) {
+      setIsLoading(false);
+      setError(true);
+      setErrorText(response.error);
+      setErrorMessage(response.message);
+      toast.error("Failed to update project");
+
+      return;
+    }
+
+    if (response.success) {
       router.refresh();
       onOpenChange();
       setIsLoading(false);
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       toast.success("Project updated successfully");
     } else {
       setIsLoading(false);
+      setError(true);
+      setErrorText(response.error);
+      setErrorMessage(response.message);
       toast.error("Failed to update project");
     }
   }
@@ -106,6 +126,9 @@ export default function EditProjectModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <div className="grid lg:grid-cols-2 gap-2">
                   <Input
                     label="Name"

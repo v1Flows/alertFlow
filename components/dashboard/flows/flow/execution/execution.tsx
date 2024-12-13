@@ -27,7 +27,7 @@ import Reloader from "@/components/reloader/Reloader";
 import GetPayload from "@/lib/fetch/payload/payload";
 import GetExecutionSteps from "@/lib/fetch/executions/steps";
 import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
-import InteractExecutionStep from "@/lib/fetch/executions/step_interact";
+import InteractExecutionStep from "@/lib/fetch/executions/PUT/step_interact";
 
 import ExecutionBreadcrumbs from "./breadcrumbs";
 import ExecutionDetails from "./details";
@@ -44,10 +44,22 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
 
   React.useEffect(() => {
     GetExecutionSteps(execution.id).then((steps) => {
-      setSteps(steps);
+      if (steps.success) {
+        setSteps(steps.data.steps);
+      } else {
+        if ("error" in steps) {
+          toast.error(steps.error);
+        }
+      }
     });
     GetPayload(execution.payload_id).then((payload) => {
-      setPayload(payload);
+      if (payload.success) {
+        setPayload(payload.data.payload);
+      } else {
+        if ("error" in payload) {
+          toast.error(payload.error);
+        }
+      }
     });
   }, [execution]);
 
@@ -349,9 +361,13 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
     ];
     step.interaced_by = userDetails.id;
     step.interacted_at = new Date().toISOString();
-    const res = await InteractExecutionStep(execution.id, step.id, step);
+    const res = (await InteractExecutionStep(
+      execution.id,
+      step.id,
+      step,
+    )) as any;
 
-    if (res.error) {
+    if (!res.success) {
       toast.error(res.error);
     } else {
       toast.success("Step interaction successful");

@@ -7,34 +7,79 @@ import GetProjectRunners from "@/lib/fetch/project/runners";
 import GetUserPlan from "@/lib/fetch/user/getPlan";
 import GetUserDetails from "@/lib/fetch/user/getDetails";
 import GetFlows from "@/lib/fetch/flow/all";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default async function DashboardProjectPage({
   params,
 }: {
   params: { id: string };
 }) {
-  const settings = await PageGetSettings();
-  const project = await GetProject(params.id);
-  const runners = await GetProjectRunners(params.id);
-  const tokens = await GetProjectApiKeys(params.id);
-  const plan = await GetUserPlan();
-  const audit = await GetProjectAuditLogs(params.id);
-  const userDetails = await GetUserDetails();
-  const flows = await GetFlows();
+  const settingsData = PageGetSettings();
+  const projectData = GetProject(params.id);
+  const runnersData = GetProjectRunners(params.id);
+  const tokensData = GetProjectApiKeys(params.id);
+  const planData = GetUserPlan();
+  const auditData = GetProjectAuditLogs(params.id);
+  const userDetailsData = GetUserDetails();
+  const flowsData = GetFlows();
+
+  const [settings, project, runners, tokens, plan, audit, userDetails, flows] =
+    (await Promise.all([
+      settingsData,
+      projectData,
+      runnersData,
+      tokensData,
+      planData,
+      auditData,
+      userDetailsData,
+      flowsData,
+    ])) as any;
 
   return (
     <>
-      <Project
-        audit={audit}
-        flows={flows}
-        members={project.members}
-        plan={plan}
-        project={project.project}
-        runners={runners}
-        settings={settings}
-        tokens={tokens}
-        user={userDetails}
-      />
+      {audit.success &&
+      flows.success &&
+      project.success &&
+      plan.success &&
+      runners.success &&
+      settings.success &&
+      tokens.success &&
+      userDetails.success ? (
+        <Project
+          audit={audit.data.audit}
+          flows={flows.data.flows}
+          members={project.data.members}
+          plan={plan.data.plan}
+          project={project.data.project}
+          runners={runners.data.runners}
+          settings={settings.data.settings}
+          tokens={tokens.data.tokens}
+          user={userDetails.data.user}
+        />
+      ) : (
+        <ErrorCard
+          error={
+            audit.error ||
+            flows.error ||
+            project.error ||
+            plan.error ||
+            runners.error ||
+            settings.error ||
+            tokens.error ||
+            userDetails.error
+          }
+          message={
+            audit.message ||
+            flows.message ||
+            project.message ||
+            plan.message ||
+            runners.message ||
+            settings.message ||
+            tokens.message ||
+            userDetails.message
+          }
+        />
+      )}
     </>
   );
 }

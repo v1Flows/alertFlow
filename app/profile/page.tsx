@@ -7,27 +7,64 @@ import GetPaymentMethods from "@/lib/fetch/user/GetPaymentMethods";
 import GetUserDetails from "@/lib/fetch/user/getDetails";
 import GetUserStats from "@/lib/fetch/user/getStats";
 import GetUserSubscription from "@/lib/fetch/user/getSubscription";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default async function UserProfilePage() {
-  const settings = await PageGetSettings();
-  const userDetails = await GetUserDetails();
-  const paymentMethods = await GetPaymentMethods();
-  const plans = await PageGetPlans();
-  const subscription = await GetUserSubscription();
-  const stats = await GetUserStats();
+  const settingsData = PageGetSettings();
+  const userDetailsData = GetUserDetails();
+  const paymentMethodsData = GetPaymentMethods();
+  const plansData = PageGetPlans();
+  const subscriptionData = GetUserSubscription();
+  const statsData = GetUserStats();
   const session = cookies().get("session")?.value;
+
+  const [settings, userDetails, paymentMethods, plans, subscription, stats] =
+    (await Promise.all([
+      settingsData,
+      userDetailsData,
+      paymentMethodsData,
+      plansData,
+      subscriptionData,
+      statsData,
+    ])) as any;
 
   return (
     <>
-      <UserProfile
-        paymentMethods={paymentMethods}
-        plans={plans}
-        session={session}
-        settings={settings}
-        stats={stats}
-        subscription={subscription}
-        user={userDetails}
-      />
+      {settings.success &&
+      userDetails.success &&
+      paymentMethods.success &&
+      plans.success &&
+      subscription.success &&
+      stats.success ? (
+        <UserProfile
+          paymentMethods={paymentMethods.data.payment_methods}
+          plans={plans.data.plans}
+          session={session}
+          settings={settings.data.settings}
+          stats={stats.data.stats}
+          subscription={subscription.data.subscriptions}
+          user={userDetails.data.user}
+        />
+      ) : (
+        <ErrorCard
+          error={
+            settings.error ||
+            userDetails.error ||
+            paymentMethods.error ||
+            plans.error ||
+            subscription.error ||
+            stats.error
+          }
+          message={
+            settings.message ||
+            userDetails.message ||
+            paymentMethods.message ||
+            plans.message ||
+            subscription.message ||
+            stats.message
+          }
+        />
+      )}
     </>
   );
 }

@@ -15,6 +15,7 @@ import React from "react";
 import { toast } from "sonner";
 
 import ChangeFlowMaintenance from "@/lib/fetch/flow/PUT/ChangeFlowMaintenance";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function ChangeFlowMaintenanceModal({
   disclosure,
@@ -31,26 +32,44 @@ export default function ChangeFlowMaintenanceModal({
 
   const [maintenanceReason, setMaintenanceReason] = React.useState("");
   const [isLoading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   async function changeFlowMaintenance() {
     setLoading(true);
 
-    const res = await ChangeFlowMaintenance(
+    const res = (await ChangeFlowMaintenance(
       flow.id,
       maintenance,
       maintenanceReason ? maintenanceReason : "no info provided",
-    );
+    )) as any;
 
-    if (!res.error) {
+    if (!res) {
+      setError(true);
+      setErrorText("Failed to update flow maintenance");
+      setErrorMessage("An error occurred while updating flow maintenance");
       setLoading(false);
+
+      return;
+    }
+
+    if (res.success) {
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       onOpenChange();
       router.refresh();
       toast.success("Flow maintenance updated successfully");
     } else {
-      setLoading(false);
+      setError(true);
+      setErrorText(res.error);
+      setErrorMessage(res.message);
       router.refresh();
       toast.error("Failed to update flow maintenance");
     }
+
+    setLoading(false);
   }
 
   return (
@@ -69,6 +88,9 @@ export default function ChangeFlowMaintenanceModal({
                   </div>
                 </ModalHeader>
                 <ModalBody>
+                  {error && (
+                    <ErrorCard error={errorText} message={errorMessage} />
+                  )}
                   <Snippet hideCopyButton hideSymbol>
                     <span>ID: {flow.id}</span>
                   </Snippet>

@@ -33,10 +33,10 @@ export default function DocsList({ docs }: any) {
 
   function getDocsCountByCategory(category: string) {
     if (category === "All") {
-      return docs.docs.length;
+      return docs.length;
     }
 
-    return docs.docs.filter((doc: any) => doc.category === category).length;
+    return docs.filter((doc: any) => doc.category === category).length;
   }
 
   function handleSearchChange(e: any) {
@@ -44,7 +44,7 @@ export default function DocsList({ docs }: any) {
   }
 
   function searchDocs(query: string, category: string) {
-    let filteredDocs = docs.docs;
+    let filteredDocs = docs;
 
     if (category !== "All") {
       filteredDocs = filteredDocs.filter(
@@ -111,14 +111,14 @@ export default function DocsList({ docs }: any) {
       <div className="flex flex-wrap items-center gap-2">
         <Chip
           color={selectedCategory === "All" ? "primary" : "default"}
-          endContent={<p className="text-default-500">({docs.docs.length})</p>}
+          endContent={<p className="text-default-500">({docs.length})</p>}
           radius="sm"
           variant={selectedCategory === "All" ? "solid" : "flat"}
           onClick={() => setSelectedCategory("All")}
         >
           <p className="text-sm font-bold">All</p>
         </Chip>
-        {getUniqueCategories(docs.docs).map((category: any, index: number) => (
+        {getUniqueCategories(docs).map((category: any, index: number) => (
           <Chip
             key={index}
             color={category === selectedCategory ? "primary" : "default"}

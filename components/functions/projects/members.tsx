@@ -28,6 +28,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 import AddProjectMember from "@/lib/fetch/project/POST/AddProjectMember";
+import ErrorCard from "@/components/error/ErrorCard";
 
 import UserCell from "./user-cell";
 
@@ -48,6 +49,10 @@ export default function AddProjectMemberModal({
     new Set(["Viewer"]),
   );
   const [isLoading, setIsLoading] = React.useState(false);
+
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   const statusColorMap: any = {
     Owner: "danger",
@@ -87,17 +92,38 @@ export default function AddProjectMemberModal({
 
     setIsLoading(true);
 
-    const res = await AddProjectMember(project.id, email, role.toString());
+    const res = (await AddProjectMember(
+      project.id,
+      email,
+      role.toString(),
+    )) as any;
 
-    if (res.error) {
+    if (!res) {
       setIsLoading(false);
-      toast.error(res.error);
-    } else {
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
+      onOpenChange();
+      toast.success("Member invited successfully");
+
+      return;
+    }
+
+    if (res.success) {
       setIsLoading(false);
       setEmail("");
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       onOpenChange();
       router.refresh();
       toast.success("Member invited successfully");
+    } else {
+      setIsLoading(false);
+      setError(true);
+      setErrorText(res.error);
+      setErrorMessage(res.message);
+      toast.error(res.error);
     }
   }
 
@@ -131,6 +157,9 @@ export default function AddProjectMemberModal({
                 </div>
               </CardHeader>
               <CardBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <div className="flex items-center gap-2">
                   <Input
                     description="User must have an account"

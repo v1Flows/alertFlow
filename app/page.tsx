@@ -2,7 +2,7 @@ import { Spacer } from "@nextui-org/react";
 import { cookies } from "next/headers";
 
 import Navbar from "@/components/navbar";
-import AdminGetSettings from "@/lib/fetch/page/settings";
+import PageGetSettings from "@/lib/fetch/page/settings";
 import { FeaturesSectionDemo } from "@/components/home/bento";
 import HomeShowcase from "@/components/home/Showcase";
 import HomeTerraform from "@/components/home/Terraform";
@@ -14,11 +14,19 @@ export default async function Home() {
   const cookieStore = await cookies();
   const user = JSON.parse(cookieStore.get("user")?.value || "{}");
   const session = cookieStore.get("session")?.value;
-  const settings = await AdminGetSettings();
+  const settingsData = PageGetSettings();
+
+  const [settings] = await Promise.all([settingsData]);
 
   return (
     <>
-      <Navbar session={session} settings={settings} user={user} />
+      {settings.success ? (
+        <Navbar
+          session={session}
+          settings={settings.data.settings}
+          user={user}
+        />
+      ) : null}
       <HomeShowcase />
       <Spacer y={28} />
       <main className="container mx-auto w-full pt-2 px-6 flex-grow">

@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import UpdatePlan from "@/lib/fetch/admin/PUT/UpdatePlan";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function EditPlanModal({
   plan,
@@ -38,6 +39,9 @@ export default function EditPlanModal({
   const [alertflowRunners, setAlertflowRunners] = React.useState(0);
   const [executionsPerMonth, setExecutionsPerMonth] = React.useState(0);
   const [stripeID, setStripeID] = React.useState("");
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   // loading
   const [isLoading, setIsLoading] = React.useState(false);
@@ -60,7 +64,7 @@ export default function EditPlanModal({
   async function editPlan() {
     setIsLoading(true);
 
-    const response = await UpdatePlan(
+    const response = (await UpdatePlan(
       plan.id,
       name,
       description,
@@ -72,14 +76,30 @@ export default function EditPlanModal({
       alertflowRunners,
       executionsPerMonth,
       stripeID,
-    );
+    )) as any;
 
-    if (response.result === "success") {
+    if (!response) {
+      setError(true);
+      setErrorText("Network error");
+      setErrorMessage("Failed to update plan");
+      setIsLoading(false);
+      toast.error("Failed to update plan");
+
+      return;
+    }
+
+    if (response.success) {
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       router.refresh();
       onOpenChange();
       setIsLoading(false);
       toast.success("Plan updated successfully");
     } else {
+      setError(true);
+      setErrorText(response.error);
+      setErrorMessage(response.message);
       setIsLoading(false);
       toast.error("Failed to update user");
     }
@@ -105,6 +125,9 @@ export default function EditPlanModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <Input
                   isRequired
                   label="Name"

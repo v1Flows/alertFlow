@@ -10,7 +10,7 @@ import {
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import UpdateExecution from "@/lib/fetch/executions/update";
+import UpdateExecution from "@/lib/fetch/executions/PUT/update";
 
 export default function AdminExecutionActions({
   execution,
@@ -141,7 +141,7 @@ export default function AdminExecutionActions({
 
     const response = await UpdateExecution(newExecution);
 
-    if (response.result === "success") {
+    if (response.success) {
       toast.success("Execution Status Changed");
       router.refresh();
     } else {

@@ -23,6 +23,7 @@ import { toast } from "sonner";
 import { cn } from "@/components/functions/cn/cn";
 import { PlusIcon } from "@/components/icons";
 import UpdateFlowActionsDetails from "@/lib/fetch/flow/PUT/UpdateActionsDetails";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export const CustomRadio = (props: any) => {
   const { children, ...otherProps } = props;
@@ -56,6 +57,9 @@ export default function EditFlowActionsDetails({
   const [isLoading, setLoading] = useState(false);
   const [execParallel, setExecParallel] = useState(true);
   const [patterns, setPatterns] = useState([] as any);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   useEffect(() => {
     setExecParallel(flow.exec_parallel);
@@ -66,17 +70,37 @@ export default function EditFlowActionsDetails({
     onOpenChange();
   }
 
-  function updateDetails() {
+  async function updateDetails() {
     setLoading(true);
-    UpdateFlowActionsDetails(flow.id, execParallel, patterns)
-      .then(() => {
-        toast.success("Flow actions details updated successfully.");
-        router.refresh();
-        onOpenChange();
-      })
-      .catch(() => {
-        toast.error("Failed to update flow actions details.");
-      });
+    const res = (await UpdateFlowActionsDetails(
+      flow.id,
+      execParallel,
+      patterns,
+    )) as any;
+
+    if (res.error) {
+      setError(true);
+      setErrorText(res.error);
+      setErrorMessage(res.message);
+      setLoading(false);
+
+      return;
+    }
+
+    if (res.success) {
+      onOpenChange();
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
+      router.refresh();
+      toast.success("Flow Actions Details updated successfully!");
+    } else {
+      setError(true);
+      setErrorText(res.error);
+      setErrorMessage(res.message);
+      toast.error("Failed to update Flow Actions Details!");
+    }
+
     setLoading(false);
   }
 
@@ -102,6 +126,9 @@ export default function EditFlowActionsDetails({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <div className="w-full flex flex-col gap-4">
                   {/* Status */}
                   <div className="flex flex-col gap-1">

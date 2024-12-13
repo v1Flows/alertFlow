@@ -1,4 +1,5 @@
 import { Execution } from "@/components/dashboard/flows/flow/execution/execution";
+import ErrorCard from "@/components/error/ErrorCard";
 import GetExecution from "@/lib/fetch/executions/execution";
 import GetFlow from "@/lib/fetch/flow/flow";
 import PageGetSettings from "@/lib/fetch/page/settings";
@@ -10,21 +11,57 @@ export default async function DashboardExecutionPage({
 }: {
   params: { id: string; executionID: string };
 }) {
-  const flow = await GetFlow(params.id);
-  const execution = await GetExecution(params.executionID);
-  const runners = await GetProjectRunners(flow.project_id);
-  const settings = await PageGetSettings();
-  const userDetails = await GetUserDetails();
+  const flowData = GetFlow(params.id);
+  const executionData = GetExecution(params.executionID);
+  const settingsData = PageGetSettings();
+  const userDetailsData = GetUserDetails();
+
+  const [flow, execution, settings, userDetails] = (await Promise.all([
+    flowData,
+    executionData,
+    settingsData,
+    userDetailsData,
+  ])) as any;
+
+  let runnersData;
+
+  if (flow.success) {
+    runnersData = GetProjectRunners(flow.data.project_id);
+  }
+  const runners = await runnersData;
 
   return (
     <>
-      <Execution
-        execution={execution}
-        flow={flow}
-        runners={runners}
-        settings={settings}
-        userDetails={userDetails}
-      />
+      {execution.success &&
+      flow.success &&
+      runners.success &&
+      settings.success &&
+      userDetails.success ? (
+        <Execution
+          execution={execution.data.execution}
+          flow={flow.data.flow}
+          runners={runners.data.runners}
+          settings={settings.data.settings}
+          userDetails={userDetails.data.user}
+        />
+      ) : (
+        <ErrorCard
+          error={
+            execution.error ||
+            flow.error ||
+            runners.error ||
+            settings.error ||
+            userDetails.error
+          }
+          message={
+            execution.message ||
+            flow.message ||
+            runners.message ||
+            settings.message ||
+            userDetails.message
+          }
+        />
+      )}
     </>
   );
 }

@@ -24,6 +24,7 @@ import { Icon } from "@iconify/react";
 
 import { cn } from "@/components/functions/cn/cn";
 import AddFlowActions from "@/lib/fetch/flow/POST/AddFlowActions";
+import ErrorCard from "@/components/error/ErrorCard";
 
 import MinimalRowSteps from "../steps/minimal-row-steps";
 
@@ -64,6 +65,9 @@ export default function AddActionModal({
   const [steps] = useState(2);
   const [currentStep, setCurrentStep] = useState(0);
   const [isLoading, setLoading] = useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   const [disableNext, setDisableNext] = useState(false);
 
@@ -240,11 +244,26 @@ export default function AddActionModal({
 
     const updatedActions = [...flow.actions, sendAction];
 
-    const res = await AddFlowActions(flow.id, flow.project_id, updatedActions);
+    const res = (await AddFlowActions(
+      flow.id,
+      flow.project_id,
+      updatedActions,
+    )) as any;
 
-    if (!res.error) {
+    if (!res) {
+      setError(true);
+      setErrorText("Failed to add action");
+      setErrorMessage("An error occurred while adding action");
       setLoading(false);
+
+      return;
+    }
+
+    if (res.success) {
       setStatus(true);
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       setAction({
         id: uuidv4(),
         name: "",
@@ -262,9 +281,10 @@ export default function AddActionModal({
       router.refresh();
       toast.success("Action added successfully");
     } else {
-      setLoading(false);
-      router.refresh();
-      toast.error(res.error);
+      setError(true);
+      setErrorText(res.error);
+      setErrorMessage(res.message);
+      toast.error("Failed to add action");
     }
 
     setLoading(false);
@@ -300,6 +320,9 @@ export default function AddActionModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <div className="flex items-center justify-center">
                   <MinimalRowSteps
                     className="w-fit overflow-hidden"

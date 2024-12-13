@@ -2,31 +2,68 @@
 
 import { cookies } from "next/headers";
 
-export default async function DeleteRunnerToken(tokenId: any) {
-  "use client";
-  const cookieStore = await cookies();
-  const token = cookieStore.get("session")?.value;
+interface Result {
+  result: string;
+}
 
-  if (!token) {
-    return { error: "No token found" };
-  }
+interface ErrorResponse {
+  success: false;
+  error: string;
+  message: string;
+}
 
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/v1/token/runner/${tokenId}`,
-    {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token,
+interface SuccessResponse {
+  success: true;
+  data: Result;
+}
+
+export default async function DeleteRunnerToken(
+  tokenId: any,
+): Promise<SuccessResponse | ErrorResponse> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("session");
+
+    if (!token) {
+      return {
+        success: false,
+        error: "Authentication token not found",
+        message: "User is not authenticated",
+      };
+    }
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/token/runner/${tokenId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token.value,
+        },
       },
-    },
-  );
+    );
 
-  if (!res.ok) {
-    return { error: "Failed to delete token" };
+    if (!res.ok) {
+      const errorData = await res.json();
+
+      return {
+        success: false,
+        error: `API error: ${res.status} ${res.statusText}`,
+        message: errorData.message || "An error occurred",
+      };
+    }
+
+    const data = await res.json();
+
+    return {
+      success: true,
+      data: data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error occurred",
+      message: "Failed to delete runner token",
+    };
   }
-
-  const data = await res.json();
-
-  return data;
 }
