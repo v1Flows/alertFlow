@@ -161,19 +161,35 @@ export default function SidebarMenu({
               )}
             </div>
           </DropdownTrigger>
-          <DropdownMenu
-            aria-label="Profile Actions"
-            className="w-[210px] bg-content1 px-[8px] py-[8px]"
-            variant="flat"
-          >
+          <DropdownMenu aria-label="Profile Actions" variant="flat">
             <DropdownItem
               key="profile"
               showDivider
+              description="View and edit your profile"
+              startContent={
+                <Icon
+                  className="text-default-500"
+                  icon="solar:face-scan-square-linear"
+                  width={24}
+                />
+              }
               onPress={() => router.push(`/profile`)}
             >
-              Settings
+              Profile
             </DropdownItem>
-            <DropdownItem key="logout" color="danger" onPress={LogoutHandler}>
+            <DropdownItem
+              key="logout"
+              color="danger"
+              description="Logout from your account"
+              startContent={
+                <Icon
+                  className="text-danger"
+                  icon="solar:logout-3-linear"
+                  width={24}
+                />
+              }
+              onPress={LogoutHandler}
+            >
               Log Out
             </DropdownItem>
           </DropdownMenu>
