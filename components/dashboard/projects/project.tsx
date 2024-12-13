@@ -8,12 +8,11 @@ import {
   useDisclosure,
   Button,
   Avatar,
+  Alert,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import NumberFlow from "@number-flow/react";
 
-import { InfoIcon } from "@/components/icons";
-import { IconWrapper } from "@/lib/IconWrapper";
 import { subtitle } from "@/components/primitives";
 import Reloader from "@/components/reloader/Reloader";
 import EditProjectModal from "@/components/functions/projects/edit";
@@ -86,21 +85,12 @@ export default function Project({
       <Divider className="mb-4" />
       {project.disabled && (
         <div className="mb-4">
-          <Card className="bg-danger/20">
-            <CardBody>
-              <div className="flex items-center gap-2">
-                <IconWrapper className="bg-danger/10 text-danger">
-                  <InfoIcon className="text-lg" />
-                </IconWrapper>
-                <p className="text-md font-bold text-danger">
-                  Project is currently disabled
-                </p>
-              </div>
-              <p className="text-default-500 font-bold">
-                Reason: {project.disabled_reason}
-              </p>
-            </CardBody>
-          </Card>
+          <Alert
+            color="danger"
+            description={project.disabled_reason}
+            title="Project is currently disabled"
+            variant="flat"
+          />
         </div>
       )}
       <div>

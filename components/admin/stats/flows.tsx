@@ -53,7 +53,7 @@ export default function FlowsStats({
               </div>
               <div>
                 <p className="text-md font-bold">
-                  {flows.filter((p: any) => p.maintenance_required).length}
+                  {flows.filter((p: any) => p.maintenance).length}
                 </p>
                 <p className="text-sm text-default-500">Flows in Maintenance</p>
               </div>
