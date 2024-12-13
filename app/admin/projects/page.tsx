@@ -1,12 +1,22 @@
 import { ProjectList } from "@/components/admin/projects/list";
+import ErrorCard from "@/components/error/ErrorCard";
 import AdminGetProjects from "@/lib/fetch/admin/projects";
 
 export default async function AdminProjectsPage() {
-  const projects = await AdminGetProjects();
+  const projectsData = AdminGetProjects();
+
+  const [projects] = (await Promise.all([projectsData])) as any;
 
   return (
     <>
-      <ProjectList members={projects.members} projects={projects.projects} />
+      {projects.success ? (
+        <ProjectList
+          members={projects.data.members}
+          projects={projects.data.projects}
+        />
+      ) : (
+        <ErrorCard error={projects.error} message={projects.message} />
+      )}
     </>
   );
 }

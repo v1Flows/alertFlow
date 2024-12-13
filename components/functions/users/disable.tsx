@@ -15,7 +15,7 @@ import {
 import React from "react";
 import { toast } from "sonner";
 
-import DisableUser from "@/lib/fetch/user/disable";
+import DisableUser from "@/lib/fetch/user/PUT/disable";
 import { deleteSession } from "@/lib/auth/deleteSession";
 
 export default function DisableUserModal({

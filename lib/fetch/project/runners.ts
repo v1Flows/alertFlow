@@ -2,31 +2,70 @@
 
 import { cookies } from "next/headers";
 
-export default async function GetProjectRunners(projectId: any) {
-  "use client";
-  const cookieStore = await cookies();
-  const token = cookieStore.get("session")?.value;
-
-  if (!token) {
-    return { error: "No token found" };
-  }
-
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/v1/projects/${projectId}/runners`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token,
-      },
-    },
-  );
-
-  if (!res.ok) {
-    return { error: "Failed to fetch data" };
-  }
-
-  const data = await res.json();
-
-  return data.runners;
+interface Runners {
+  runners: [];
 }
+
+interface ErrorResponse {
+  success: false;
+  error: string;
+  message: string;
+}
+
+interface SuccessResponse {
+  success: true;
+  data: Runners;
+}
+
+export async function GetProjectRunners(
+  projectId: any,
+): Promise<SuccessResponse | ErrorResponse> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("session");
+
+    if (!token) {
+      return {
+        success: false,
+        error: "Authentication token not found",
+        message: "User is not authenticated",
+      };
+    }
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/projects/${projectId}/runners`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token.value,
+        },
+      },
+    );
+
+    if (!res.ok) {
+      const errorData = await res.json();
+
+      return {
+        success: false,
+        error: `API error: ${res.status} ${res.statusText}`,
+        message: errorData.message || "An error occurred",
+      };
+    }
+
+    const data = await res.json();
+
+    return {
+      success: true,
+      data: data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error occurred",
+      message: "Failed to fetch runners",
+    };
+  }
+}
+
+export default GetProjectRunners;

@@ -2,29 +2,66 @@
 
 import { cookies } from "next/headers";
 
-export default async function GetDocs() {
-  "use client";
-  const cookieStore = await cookies();
-  const token = cookieStore.get("session")?.value;
+interface Docs {
+  docs: [];
+  count: 0;
+}
 
+interface ErrorResponse {
+  success: false;
+  error: string;
+  message: string;
+}
+
+interface SuccessResponse {
+  success: true;
+  data: Docs;
+}
+
+export async function GetDocs(): Promise<SuccessResponse | ErrorResponse> {
   try {
-    const headers = new Headers();
+    const cookieStore = await cookies();
+    const token = cookieStore.get("session");
 
-    headers.append("Content-Type", "application/json");
-    if (token) {
-      headers.append("Authorization", token);
+    if (!token) {
+      return {
+        success: false,
+        error: "Authentication token not found",
+        message: "User is not authenticated",
+      };
     }
+
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/docs/`, {
       method: "GET",
-      headers: headers,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token.value,
+      },
     });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+
+      return {
+        success: false,
+        error: `API error: ${res.status} ${res.statusText}`,
+        message: errorData.message || "An error occurred",
+      };
+    }
+
     const data = await res.json();
 
     return {
-      docs: data.docs,
-      count: data.count,
+      success: true,
+      data: data,
     };
   } catch (error) {
-    return { error: "Failed to fetch data" };
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error occurred",
+      message: "Failed to fetch documents",
+    };
   }
 }
+
+export default GetDocs;

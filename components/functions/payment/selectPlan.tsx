@@ -18,7 +18,7 @@ import { AnimatePresence, domAnimation, LazyMotion, m } from "framer-motion";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-import CreateSubscription from "@/lib/fetch/user/CreateSubscription";
+import CreateSubscription from "@/lib/fetch/user/POST/CreateSubscription";
 
 import PlanRadio from "./plan-radio";
 

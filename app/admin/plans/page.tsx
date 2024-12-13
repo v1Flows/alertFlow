@@ -1,12 +1,19 @@
 import AdminPlans from "@/components/admin/plans/plans";
+import ErrorCard from "@/components/error/ErrorCard";
 import PageGetPlans from "@/lib/fetch/page/plans";
 
 export default async function AdminPlansPage() {
-  const plans = await PageGetPlans();
+  const plansData = PageGetPlans();
+
+  const [plans] = (await Promise.all([plansData])) as any;
 
   return (
     <>
-      <AdminPlans plans={plans} />
+      {plans.success ? (
+        <AdminPlans plans={plans.data.plans} />
+      ) : (
+        <ErrorCard error={plans.error} message={plans.message} />
+      )}
     </>
   );
 }

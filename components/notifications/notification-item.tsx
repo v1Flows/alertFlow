@@ -13,10 +13,10 @@ import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
 import ReactTimeago from "react-timeago";
 
-import ReadUserNotification from "@/lib/fetch/user/readNotification";
-import UnreadUserNotification from "@/lib/fetch/user/unreadNotification";
-import ArchiveUserNotification from "@/lib/fetch/user/archiveNotification";
-import UnarchiveUserNotification from "@/lib/fetch/user/unarchiveNotification";
+import ReadUserNotification from "@/lib/fetch/user/PUT/readNotification";
+import UnreadUserNotification from "@/lib/fetch/user/PUT/unreadNotification";
+import ArchiveUserNotification from "@/lib/fetch/user/PUT/archiveNotification";
+import UnarchiveUserNotification from "@/lib/fetch/user/PUT/unarchiveNotification";
 
 export default function NotificationItem({ notification }: any) {
   const router = useRouter();

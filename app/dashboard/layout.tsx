@@ -30,11 +30,13 @@ export default async function DashboardHomeLayout({
 
   return (
     <SidebarMenu
-      flows={flows}
-      notifications={notifications}
-      projects={projects.projects}
-      settings={settings}
-      user={userDetails}
+      flows={flows.success ? flows.data.flows : []}
+      notifications={
+        notifications.success ? notifications.data.notifications : []
+      }
+      projects={projects.success ? projects.data.projects : []}
+      settings={settings.success ? settings.data.settings : {}}
+      user={userDetails.success ? userDetails.data.user : {}}
     >
       {children}
       <Footer />

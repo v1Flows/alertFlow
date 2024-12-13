@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
-import CancelSubscription from "@/lib/fetch/user/cancelSubscription";
+import CancelSubscription from "@/lib/fetch/user/PUT/cancelSubscription";
 
 export default function CancelSubscriptionModal({
   disclosure,

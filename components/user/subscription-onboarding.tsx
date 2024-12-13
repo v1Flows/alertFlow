@@ -17,8 +17,8 @@ import { useRouter } from "next/navigation";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
-import CreateCustomer from "@/lib/fetch/user/CreateCustomer";
-import SetupNewCard from "@/lib/fetch/user/SetupNewCard";
+import CreateCustomer from "@/lib/fetch/user/POST/CreateCustomer";
+import SetupNewCard from "@/lib/fetch/user/POST/SetupNewCard";
 
 import AddPaymentCardModal from "../functions/payment/addCard";
 import SelectPlanModal from "../functions/payment/selectPlan";

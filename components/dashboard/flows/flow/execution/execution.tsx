@@ -44,10 +44,22 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
 
   React.useEffect(() => {
     GetExecutionSteps(execution.id).then((steps) => {
-      setSteps(steps);
+      if (steps.success) {
+        setSteps(steps.data.steps);
+      } else {
+        if ("error" in steps) {
+          toast.error(steps.error);
+        }
+      }
     });
     GetPayload(execution.payload_id).then((payload) => {
-      setPayload(payload);
+      if (payload.success) {
+        setPayload(payload.data.payload);
+      } else {
+        if ("error" in payload) {
+          toast.error(payload.error);
+        }
+      }
     });
   }, [execution]);
 

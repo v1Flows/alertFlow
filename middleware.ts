@@ -22,12 +22,20 @@ export async function middleware(request: NextRequest) {
   ) {
     const settings = await PageGetSettings();
 
-    // check for maintenance mode
-    if (settings.maintenance && user.role !== "admin") {
+    // data fetching error
+    if (!settings.success) {
       return NextResponse.redirect(new URL("/maintenance", request.url));
     }
 
-    if (request.url.includes("/auth/signup") && !settings.signup) {
+    // check for maintenance mode
+    if (settings.data.settings.maintenance && user.role !== "admin") {
+      return NextResponse.redirect(new URL("/maintenance", request.url));
+    }
+
+    if (
+      request.url.includes("/auth/signup") &&
+      !settings.data.settings.signup
+    ) {
       return NextResponse.redirect(new URL("/", request.url));
     }
   }

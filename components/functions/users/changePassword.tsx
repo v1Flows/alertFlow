@@ -14,7 +14,7 @@ import {
 } from "@nextui-org/react";
 import { toast } from "sonner";
 
-import ChangeUserPassword from "@/lib/fetch/user/changePassword";
+import ChangeUserPassword from "@/lib/fetch/user/PUT/changePassword";
 import { deleteSession } from "@/lib/auth/deleteSession";
 
 export default function ChangeUserPasswordModal({

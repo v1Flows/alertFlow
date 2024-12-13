@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
 import { toast } from "sonner";
 
-import Welcomed from "@/lib/fetch/user/welcomed";
+import Welcomed from "@/lib/fetch/user/PUT/welcomed";
 
 export default function WelcomeModal({
   disclosure,

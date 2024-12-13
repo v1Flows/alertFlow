@@ -65,10 +65,13 @@ export default function FlowStats({ flowID }: { flowID: string }) {
   async function getStats() {
     const stats = await GetFlowStats(flowID, interval);
 
-    if (stats.error) {
-      toast.error(stats.error);
+    if (stats.success) {
+      setStats(stats.data);
+    } else {
+      if ("message" in stats) {
+        toast.error(stats.message);
+      }
     }
-    setStats(stats);
   }
 
   useEffect(() => {

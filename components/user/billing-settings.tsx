@@ -17,9 +17,9 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
 
-import SetupNewCard from "@/lib/fetch/user/SetupNewCard";
-import SetDefaultCard from "@/lib/fetch/user/SetDefaultCard";
-import RemoveCard from "@/lib/fetch/user/RemoveCard";
+import SetupNewCard from "@/lib/fetch/user/POST/SetupNewCard";
+import SetDefaultCard from "@/lib/fetch/user/POST/SetDefaultCard";
+import RemoveCard from "@/lib/fetch/user/DELETE/RemoveCard";
 
 import AddPaymentCardModal from "../functions/payment/addCard";
 import SelectPlanModal from "../functions/payment/selectPlan";

@@ -1,5 +1,6 @@
 import DashboardDocsHeader from "@/components/dashboard/docs/header";
 import DocsList from "@/components/dashboard/docs/list";
+import ErrorCard from "@/components/error/ErrorCard";
 import GetDocs from "@/lib/fetch/docs/docs";
 import GetUserDetails from "@/lib/fetch/user/getDetails";
 
@@ -11,8 +12,17 @@ export default async function DashboardDocsPage() {
 
   return (
     <>
-      <DashboardDocsHeader userDetails={userDetails} />
-      <DocsList docs={docs} />
+      {userDetails.success && docs.success ? (
+        <>
+          <DashboardDocsHeader userDetails={userDetails.data.user} />
+          <DocsList docs={docs.data.docs} />
+        </>
+      ) : (
+        <ErrorCard
+          error={('error' in userDetails ? userDetails.error : '') || ('error' in docs ? docs.error : '')}
+          message={('message' in userDetails ? userDetails.message : '') || ('message' in docs ? docs.message : '')}
+        />
+      )}
     </>
   );
 }
