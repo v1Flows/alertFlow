@@ -60,13 +60,13 @@ export default function BillingSettings({
     setIsLoading(true);
     const res = await SetupNewCard();
 
-    if (res.client_secret === "" || res.error) {
+    if (!res.success || res.data.client_secret === "") {
       toast.error("Failed to create payment intent");
       setIsLoading(false);
 
       return;
     }
-    setClientSecret(res.client_secret);
+    setClientSecret(res.data.client_secret);
     setIsLoading(false);
 
     addPaymentCardModal.onOpenChange();
@@ -94,9 +94,9 @@ export default function BillingSettings({
   };
 
   async function handleSetDefaultPaymentMethod(cardID: string) {
-    const res = await SetDefaultCard(cardID);
+    const res = await SetDefaultCard(cardID) as any;
 
-    if (res.error) {
+    if (!res.success) {
       toast.error(res.error);
 
       return;
@@ -106,9 +106,9 @@ export default function BillingSettings({
   }
 
   async function handleDeletePaymentMethod(cardID: string) {
-    const res = await RemoveCard(cardID);
+    const res = await RemoveCard(cardID) as any;
 
-    if (res.error) {
+    if (!res.success) {
       toast.error(res.message);
 
       return;

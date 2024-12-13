@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 
 interface Result {
-  result: string;
+  client_secret: string;
 }
 
 interface ErrorResponse {
