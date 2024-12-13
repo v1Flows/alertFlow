@@ -58,7 +58,9 @@ export default function FunctionCreateFlow({
   const projectSelected = async (e: any) => {
     setProjectId(e.currentKey);
     setRunnerId("");
-    setRunners(await GetProjectRunners(e.currentKey));
+    const runners = await GetProjectRunners(e.currentKey);
+
+    setRunners(runners.success ? runners.data.runners : []);
   };
 
   const handleSelectRunner = (e: any) => {

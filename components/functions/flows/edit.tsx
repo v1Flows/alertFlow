@@ -61,13 +61,17 @@ export default function EditFlowModal({
   }, [flow]);
 
   async function getCurrentProjectRunners() {
-    setRunners(await GetProjectRunners(flow.project_id));
+    const runners = await GetProjectRunners(flow.project_id);
+
+    setRunners(runners.success ? runners.data.runners : []);
   }
 
   const projectSelected = async (e: any) => {
     setProjectId(e.currentKey);
     setRunnerId("");
-    setRunners(await GetProjectRunners(e.currentKey));
+    const runners = await GetProjectRunners(e.currentKey);
+
+    setRunners(runners.success ? runners.data.runners : []);
   };
 
   const handleSelectRunner = (e: any) => {

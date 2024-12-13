@@ -10,7 +10,10 @@ export default async function DocPage({ params }: { params: { id: string } }) {
   const docData = GetDoc(params.id);
   const userDetailsData = GetUserDetails();
 
-  const [doc, userDetails] = await Promise.all([docData, userDetailsData]);
+  const [doc, userDetails] = (await Promise.all([
+    docData,
+    userDetailsData,
+  ])) as any;
 
   return (
     <main>
@@ -23,14 +26,8 @@ export default async function DocPage({ params }: { params: { id: string } }) {
         </>
       ) : (
         <ErrorCard
-          error={
-            ("error" in doc ? doc.error : "") ||
-            ("error" in userDetails ? userDetails.error : "")
-          }
-          message={
-            ("message" in doc ? doc.message : "") ||
-            ("message" in userDetails ? userDetails.message : "")
-          }
+          error={doc.error || userDetails.error}
+          message={doc.message || userDetails.message}
         />
       )}
     </main>

@@ -38,10 +38,10 @@ export default function DeleteRunnerModal({
   }, [runner]);
 
   async function getFlowLinks() {
-    const data = await GetRunnerFlowLinks({ runnerId: runner.id });
+    const flows = await GetRunnerFlowLinks({ runnerId: runner.id });
 
-    if (!data.error) {
-      setFlowLinks(data);
+    if (flows.success) {
+      setFlowLinks(flows.data.flows);
     }
   }
 

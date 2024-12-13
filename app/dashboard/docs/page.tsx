@@ -8,7 +8,10 @@ export default async function DashboardDocsPage() {
   const userDetailsData = GetUserDetails();
   const docsData = GetDocs();
 
-  const [userDetails, docs] = await Promise.all([userDetailsData, docsData]);
+  const [userDetails, docs] = (await Promise.all([
+    userDetailsData,
+    docsData,
+  ])) as any;
 
   return (
     <>
@@ -19,8 +22,8 @@ export default async function DashboardDocsPage() {
         </>
       ) : (
         <ErrorCard
-          error={('error' in userDetails ? userDetails.error : '') || ('error' in docs ? docs.error : '')}
-          message={('message' in userDetails ? userDetails.message : '') || ('message' in docs ? docs.message : '')}
+          error={userDetails.error || docs.error}
+          message={userDetails.message || docs.message}
         />
       )}
     </>
