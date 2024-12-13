@@ -8,6 +8,7 @@ import {
   Button,
   useDisclosure,
   Spacer,
+  Alert,
 } from "@nextui-org/react";
 import React from "react";
 import { Icon } from "@iconify/react";
@@ -100,48 +101,22 @@ export function Flow({
           <Divider className="my-4" />
           {flow.disabled && (
             <div className="mb-4">
-              <Card fullWidth className="bg-danger/10">
-                <CardBody>
-                  <div className="flex items-center gap-2">
-                    <div
-                      className={`flex bg-danger/10 text-danger items-center rounded-small justify-center w-10 h-10`}
-                    >
-                      <Icon icon="solar:siren-outline" width={26} />
-                    </div>
-                    <div>
-                      <p className="text-md font-bold text-danger">
-                        Flow is currently disabled
-                      </p>
-                      <p className="text-sm text-default-500">
-                        Reason: {flow.disabled_reason}
-                      </p>
-                    </div>
-                  </div>
-                </CardBody>
-              </Card>
+              <Alert
+                color="danger"
+                description={flow.disabled_reason}
+                title="Flow is currently disabled"
+                variant="flat"
+              />
             </div>
           )}
-          {flow.maintenance_required && (
+          {flow.maintenance && (
             <div className="mb-4">
-              <Card fullWidth className="bg-warning/10">
-                <CardBody>
-                  <div className="flex items-center gap-2">
-                    <div
-                      className={`flex bg-warning/10 text-warning items-center rounded-small justify-center w-10 h-10`}
-                    >
-                      <Icon icon="solar:siren-outline" width={26} />
-                    </div>
-                    <div>
-                      <p className="text-md font-bold text-warning">
-                        Flow is currently in maintenance mode
-                      </p>
-                      <p className="text-sm text-default-500">
-                        Reason: {flow.maintenance_message}
-                      </p>
-                    </div>
-                  </div>
-                </CardBody>
-              </Card>
+              <Alert
+                color="danger"
+                description={flow.maintenance_message}
+                title="Flow is currently in maintenance mode"
+                variant="flat"
+              />
             </div>
           )}
           <div>

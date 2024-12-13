@@ -13,8 +13,10 @@ import {
   useDisclosure,
   Chip,
   Spacer,
-  Avatar,
   Tooltip,
+  CardHeader,
+  CardFooter,
+  Alert,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -26,6 +28,7 @@ import SparklesText from "@/components/magicui/sparkles-text";
 import AcceptProjectInvite from "@/lib/fetch/project/PUT/AcceptProjectInvite";
 import DeclineProjectInvite from "@/lib/fetch/project/PUT/DeclineProjectInvite";
 import EditProjectModal from "@/components/functions/projects/edit";
+import { PlusIcon } from "@/components/icons";
 
 export function ProjectsList({
   projects,
@@ -82,183 +85,166 @@ export function ProjectsList({
 
   return (
     <main>
-      <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
+      <Card>
+        <CardBody>
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <p className="text-md font-bold text-primary">
+              {projects.length}{" "}
+              <span className="text-default-500 font-normal">
+                Projects found
+              </span>
+            </p>
+            <div className="flex items-center gap-4">
+              <Button
+                color="primary"
+                isDisabled={createButtonDisabled()}
+                variant="bordered"
+                onPress={() => newProjectModal.onOpen()}
+              >
+                <PlusIcon />
+                Add New
+              </Button>
+            </div>
+          </div>
+        </CardBody>
+      </Card>
+      <Spacer y={4} />
+      <div className="grid lg:grid-cols-4 grid-cols-2 gap-4">
         {projects.map((project: any) => (
           <div key={project.id} className="col-span-1">
             <Card
               fullWidth
-              className={`shadow ${project.disabled ? "shadow-danger-200" : "shadow-primary-200"}`}
+              isDisabled={project.disabled}
+              isPressable={!project.disabled}
+              onPress={() => {
+                router.push(`/dashboard/projects/${project.id}`);
+              }}
             >
+              <CardHeader className="justify-between items-center p-3 pb-0">
+                <Chip
+                  color={project.disabled ? "danger" : "success"}
+                  radius="sm"
+                  size="sm"
+                  variant="flat"
+                >
+                  <p className="font-bold">
+                    {project.disabled ? "Disabled" : "Active"}
+                  </p>
+                </Chip>
+                <Dropdown backdrop="opaque">
+                  <DropdownTrigger>
+                    <Button isIconOnly size="sm" variant="light">
+                      <Icon icon="solar:menu-dots-bold" width={24} />
+                    </Button>
+                  </DropdownTrigger>
+                  <DropdownMenu variant="flat">
+                    <DropdownSection title="Actions">
+                      <DropdownItem
+                        key="copy"
+                        startContent={
+                          <Icon icon="solar:copy-outline" width={18} />
+                        }
+                        onPress={() => copyProjectIDtoClipboard(project.id)}
+                      >
+                        Copy ID
+                      </DropdownItem>
+                      <DropdownItem
+                        key="edit"
+                        showDivider
+                        color="warning"
+                        startContent={
+                          <Icon
+                            icon="solar:pen-new-square-outline"
+                            width={18}
+                          />
+                        }
+                        onPress={() => {
+                          setTargetProject(project);
+                          editProjectModal.onOpen();
+                        }}
+                      >
+                        Edit
+                      </DropdownItem>
+                    </DropdownSection>
+                    <DropdownSection title="Danger Zone">
+                      <DropdownItem
+                        key="delete"
+                        className="text-danger"
+                        color="danger"
+                        startContent={
+                          <Icon
+                            icon="solar:trash-bin-trash-outline"
+                            width={18}
+                          />
+                        }
+                        onPress={() => {
+                          setTargetProject(project);
+                          deleteProjectModal.onOpen();
+                        }}
+                      >
+                        Delete
+                      </DropdownItem>
+                    </DropdownSection>
+                  </DropdownMenu>
+                </Dropdown>
+              </CardHeader>
               <CardBody>
-                <div className="bg-default-100 rounded-large w-full flex items-center justify-between p-3">
-                  <div className="flex items-center space-x-2">
-                    <Avatar
-                      classNames={{
-                        base: `text-white`,
-                      }}
-                      icon={
-                        <Icon
-                          icon={
-                            project.icon
-                              ? project.icon
-                              : "solar:question-square-outline"
-                          }
-                          width={24}
-                        />
-                      }
-                      radius="md"
-                      style={{
-                        backgroundColor: project.color,
-                      }}
+                {project.disabled && (
+                  <>
+                    <Alert
+                      color="danger"
+                      description={project.disabled_reason}
+                      title="Disabled"
+                      variant="flat"
                     />
-                    <div className="flex flex-col items-start">
-                      <p className="text-md font-bold">{project.name}</p>
-                      <p className="text-sm text-default-500">
-                        {project.description.length > 50 ? (
-                          <Tooltip
-                            content={project.description}
-                            style={{ maxWidth: "450px" }}
-                          >
-                            <span>{project.description.slice(0, 50)}...</span>
-                          </Tooltip>
-                        ) : (
-                          project.description
-                        )}
-                      </p>
-                    </div>
-                  </div>
-                  <Dropdown backdrop="opaque">
-                    <DropdownTrigger>
-                      <Button isIconOnly size="sm" variant="light">
-                        <Icon icon="solar:menu-dots-outline" width={24} />
-                      </Button>
-                    </DropdownTrigger>
-                    <DropdownMenu variant="flat">
-                      <DropdownSection title="Actions">
-                        <DropdownItem
-                          key="copy"
-                          startContent={
-                            <Icon icon="solar:copy-outline" width={18} />
-                          }
-                          onPress={() => copyProjectIDtoClipboard(project.id)}
-                        >
-                          Copy ID
-                        </DropdownItem>
-                        <DropdownItem
-                          key="edit"
-                          showDivider
-                          color="warning"
-                          startContent={
-                            <Icon
-                              icon="solar:pen-new-square-outline"
-                              width={18}
-                            />
-                          }
-                          onPress={() => {
-                            setTargetProject(project);
-                            editProjectModal.onOpen();
-                          }}
-                        >
-                          Edit
-                        </DropdownItem>
-                      </DropdownSection>
-                      <DropdownSection title="Danger Zone">
-                        <DropdownItem
-                          key="delete"
-                          className="text-danger"
-                          color="danger"
-                          startContent={
-                            <Icon
-                              icon="solar:trash-bin-trash-outline"
-                              width={18}
-                            />
-                          }
-                          onPress={() => {
-                            setTargetProject(project);
-                            deleteProjectModal.onOpen();
-                          }}
-                        >
-                          Delete
-                        </DropdownItem>
-                      </DropdownSection>
-                    </DropdownMenu>
-                  </Dropdown>
-                </div>
-                <Spacer y={4} />
-                <div className="flex items-center justify-start gap-2 flex-wrap">
-                  <Chip
-                    color={project.disabled ? "danger" : "success"}
-                    radius="sm"
-                    size="sm"
-                    variant="flat"
-                  >
-                    <p className="font-bold">
-                      Status: {project.disabled ? "Disabled" : "Active"}
-                    </p>
-                  </Chip>
-                  {project.disabled && (
-                    <Chip color="danger" radius="sm" size="sm" variant="flat">
-                      <p className="font-bold">
-                        Disable Reason: {project.disabled_reason}
-                      </p>
-                    </Chip>
-                  )}
+                    <Spacer y={2} />
+                  </>
+                )}
+                <div className="flex items-center gap-2">
+                  <Icon
+                    icon={
+                      project.icon
+                        ? project.icon
+                        : "solar:question-square-outline"
+                    }
+                    style={{ color: project.color }}
+                    width={32}
+                  />
+                  <p className="text-lg font-bold">{project.name}</p>
                 </div>
                 <Spacer y={2} />
-                <div className="flex flex-wrap items-center justify-start gap-2">
-                  <p className="text-sm font-bold text-default-500">
-                    Created At:
-                  </p>
-                  <p className="text-default-500 text-sm">
+                <p className="text-sm text-default-500">
+                  {project.description.length > 50 ? (
+                    <Tooltip
+                      content={project.description}
+                      style={{ maxWidth: "450px" }}
+                    >
+                      <span>{project.description.slice(0, 50)}...</span>
+                    </Tooltip>
+                  ) : (
+                    project.description
+                  )}
+                </p>
+                <Spacer y={3} />
+                <Divider />
+              </CardBody>
+              <CardFooter className="flex items-center gap-2 justify-end text-default-500">
+                <div className="flex items-center gap-1">
+                  <Icon icon="solar:calendar-date-linear" width={26} />
+                  <p className="text-sm">
                     {new Date(project.created_at).toLocaleString("de-DE")}
                   </p>
                 </div>
-                <Spacer y={4} />
-                <div className="flex flex-col gap-2 w-full">
-                  <Divider />
-                  <Button
-                    className="w-full font-bold items-center"
-                    color={project.disabled ? "danger" : "primary"}
-                    radius="sm"
-                    variant="light"
-                    onPress={() => {
-                      router.push(`/dashboard/projects/${project.id}`);
-                    }}
-                  >
-                    <Icon icon="solar:eye-outline" width={18} />
-                    View Project
-                  </Button>
-                </div>
-              </CardBody>
+              </CardFooter>
             </Card>
           </div>
         ))}
-        <Card
-          isHoverable
-          className="border border-primary border-3 border-dashed"
-          isDisabled={createButtonDisabled()}
-          isPressable={createButtonPressable()}
-          onPress={() => newProjectModal.onOpen()}
-        >
-          <CardBody className="flex flex-col items-center justify-center gap-2">
-            <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-25 w-12 h-12">
-              <Icon
-                className="text-primary"
-                icon="solar:add-square-outline"
-                width={38}
-              />
-            </div>
-            <p className="text-lg font-bold text-default-500">
-              Create new project
-            </p>
-          </CardBody>
-        </Card>
       </div>
       {pending_projects.length > 0 && (
         <>
           <Spacer y={4} />
           <SparklesText
-            className="text-lg text-default-500"
+            className="text-lg"
             text="Pending Project Invitations"
           />
           <Spacer y={4} />
@@ -267,105 +253,60 @@ export function ProjectsList({
               <div key={project.id} className="col-span-1">
                 <Card fullWidth>
                   <CardBody>
-                    <div className="bg-default-100 rounded-large w-full flex items-center justify-between p-3">
-                      <div className="flex items-center space-x-2">
-                        <Avatar
-                          classNames={{
-                            base: `text-white`,
-                          }}
-                          icon={
-                            <Icon
-                              icon={
-                                project.icon
-                                  ? project.icon
-                                  : "solar:question-square-outline"
-                              }
-                              width={24}
-                            />
-                          }
-                          radius="md"
-                          style={{
-                            backgroundColor: project.color,
-                          }}
-                        />
-                        <div className="flex flex-col items-start">
-                          <p className="text-md font-bold">{project.name}</p>
-                          <p className="text-sm text-default-500">
-                            {project.description}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <Spacer y={4} />
-                    <div className="flex items-center justify-start gap-2 flex-wrap">
-                      <Chip
-                        color={project.disabled ? "danger" : "success"}
-                        radius="sm"
-                        size="sm"
-                        variant="flat"
-                      >
-                        <p className="font-bold">
-                          Status: {project.disabled ? "Disabled" : "Active"}
-                        </p>
-                      </Chip>
-                      {project.disabled && (
-                        <Chip
-                          color="danger"
-                          radius="sm"
-                          size="sm"
-                          variant="flat"
-                        >
-                          <p className="font-bold">
-                            Disable Reason: {project.disabled_reason}
-                          </p>
-                        </Chip>
-                      )}
+                    <div className="flex items-center gap-2">
+                      <Icon
+                        icon={
+                          project.icon
+                            ? project.icon
+                            : "solar:question-square-outline"
+                        }
+                        style={{ color: project.color }}
+                        width={32}
+                      />
+                      <p className="text-lg font-bold">{project.name}</p>
                     </div>
                     <Spacer y={2} />
-                    <div className="flex flex-wrap items-center justify-start gap-2">
-                      <p className="text-sm font-bold text-default-500">
-                        Created At:
-                      </p>
-                      <p className="text-default-500 text-sm">
-                        {new Date(project.created_at).toLocaleString("de-DE")}
-                      </p>
-                    </div>
-                    <Spacer y={4} />
-                    <div className="flex flex-col gap-2 w-full">
-                      <Divider />
-                      <div className="grid grid-cols-2 items-center justify-between gap-2 w-full">
-                        <Button
-                          className="font-bold"
-                          color="danger"
-                          radius="sm"
-                          variant="flat"
-                          onPress={() => {
-                            DeclineProjectInvite(project.id);
-                            router.refresh();
-                          }}
+                    <p className="text-sm text-default-500">
+                      {project.description.length > 50 ? (
+                        <Tooltip
+                          content={project.description}
+                          style={{ maxWidth: "450px" }}
                         >
-                          <Icon
-                            icon="solar:danger-triangle-outline"
-                            width={24}
-                          />
-                          Decline
-                        </Button>
-                        <Button
-                          className="font-bold"
-                          color="success"
-                          radius="sm"
-                          variant="flat"
-                          onPress={() => {
-                            AcceptProjectInvite(project.id);
-                            router.refresh();
-                          }}
-                        >
-                          <Icon icon="solar:check-read-outline" width={24} />
-                          Accept
-                        </Button>
-                      </div>
-                    </div>
+                          <span>{project.description.slice(0, 50)}...</span>
+                        </Tooltip>
+                      ) : (
+                        project.description
+                      )}
+                    </p>
+                    <Spacer y={3} />
+                    <Divider />
                   </CardBody>
+                  <CardFooter className="flex items-center gap-2">
+                    <Button
+                      fullWidth
+                      color="danger"
+                      variant="flat"
+                      onPress={() => {
+                        DeclineProjectInvite(project.id);
+                        router.refresh();
+                      }}
+                    >
+                      <Icon icon="solar:danger-triangle-outline" width={24} />
+                      Decline
+                    </Button>
+                    <Button
+                      fullWidth
+                      color="success"
+                      variant="flat"
+                      onPress={() => {
+                        AcceptProjectInvite(project.id);
+                        router.refresh();
+                      }}
+                    >
+                      <Icon icon="solar:check-read-outline" width={24} />
+                      Accept
+                    </Button>
+                  </CardFooter>
                 </Card>
               </div>
             ))}

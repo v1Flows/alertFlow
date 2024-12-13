@@ -43,7 +43,7 @@ export default async function ChangeFlowMaintenance(
           Authorization: token.value,
         },
         body: JSON.stringify({
-          maintenance_required: maintenance,
+          maintenance: maintenance,
           maintenance_message: reason,
         }),
       },
