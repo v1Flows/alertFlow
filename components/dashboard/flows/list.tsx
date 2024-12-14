@@ -109,18 +109,20 @@ export default function FlowList({
     return false;
   }
 
-  function createButtonPressable() {
-    if (!settings.create_flows) {
+  function checkUserCanEdit(flow: any) {
+    if (
+      projects
+        .filter((project: any) => project.id === flow.project_id)
+        .map(
+          (project: any) =>
+            project.members.find((member: any) => member.user_id === user.id)
+              .role,
+        )[0] === "Viewer"
+    ) {
       return false;
-    } else if (user.role === "vip") {
+    } else {
       return true;
-    } else if (user.role === "admin") {
-      return true;
-    } else if (flows.length >= plan.flows) {
-      return false;
     }
-
-    return true;
   }
 
   return (
@@ -269,6 +271,9 @@ export default function FlowList({
                           <DropdownItem
                             key="edit"
                             color="warning"
+                            isDisabled={
+                              flow.disabled || !checkUserCanEdit(flow)
+                            }
                             startContent={
                               <Icon
                                 icon="solar:pen-new-square-outline"
@@ -286,6 +291,9 @@ export default function FlowList({
                             <DropdownItem
                               key="disable"
                               color="warning"
+                              isDisabled={
+                                flow.disabled || !checkUserCanEdit(flow)
+                              }
                               startContent={
                                 <Icon
                                   icon="solar:bomb-emoji-outline"
@@ -304,6 +312,9 @@ export default function FlowList({
                             <DropdownItem
                               key="disable"
                               color="warning"
+                              isDisabled={
+                                flow.disabled || !checkUserCanEdit(flow)
+                              }
                               startContent={
                                 <Icon
                                   icon="solar:bomb-emoji-outline"
@@ -325,6 +336,9 @@ export default function FlowList({
                             key="delete"
                             className="text-danger"
                             color="danger"
+                            isDisabled={
+                              flow.disabled || !checkUserCanEdit(flow)
+                            }
                             startContent={
                               <Icon
                                 icon="solar:trash-bin-trash-outline"

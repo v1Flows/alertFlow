@@ -39,10 +39,12 @@ export default function Actions({
   flow,
   runners,
   user,
+  canEdit,
 }: {
   flow: any;
   runners: any;
   user: any;
+  canEdit: boolean;
 }) {
   const [actions, setActions] = React.useState([] as any);
   const [targetAction, setTargetAction] = React.useState({} as any);
@@ -127,6 +129,7 @@ export default function Actions({
                     <Button
                       isIconOnly
                       color="warning"
+                      isDisabled={!canEdit}
                       variant="light"
                       onPress={() => {
                         setTargetAction(action);
@@ -138,6 +141,7 @@ export default function Actions({
                     <Button
                       isIconOnly
                       color="danger"
+                      isDisabled={!canEdit}
                       variant="light"
                       onPress={() => {
                         setTargetAction(action.id);
@@ -253,6 +257,7 @@ export default function Actions({
               <Button
                 isIconOnly
                 color="warning"
+                isDisabled={!canEdit}
                 variant="light"
                 onPress={editFlowActionsDetails.onOpen}
               >
@@ -299,6 +304,7 @@ export default function Actions({
       </div>
       <div className="flex flex-col gap-2 col-span-2">
         <Switch
+          isDisabled={!canEdit}
           isSelected={isDragEnabled}
           size="sm"
           onValueChange={setIsDragEnabled}
@@ -322,10 +328,9 @@ export default function Actions({
         </DndContext>
         <Card
           fullWidth
-          isHoverable
-          isPressable
           className="border border-dashed border-default-200 hover:border-primary bg-opacity-60"
-          isDisabled={flow.disabled}
+          isDisabled={!canEdit}
+          isPressable={canEdit}
           onPress={addFlowActionModal.onOpen}
         >
           <CardBody>

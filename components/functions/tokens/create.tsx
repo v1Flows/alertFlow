@@ -45,21 +45,21 @@ export default function CreateTokenModal({
     if (!response) {
       setIsLoading(false);
       setError(true);
-      setErrorText("Failed to create project");
-      setErrorMessage("Failed to create project");
-      toast.error("Failed to create project");
+      setErrorText("Failed to create token");
+      setErrorMessage("Failed to create token");
+      toast.error("Failed to create token");
 
       return;
     }
 
-    if (response.result === "success") {
+    if (response.success) {
       router.refresh();
       onOpenChange();
       setDescription("");
       setIsLoading(false);
     } else {
       setIsLoading(false);
-      toast.error("Failed to create project");
+      toast.error("Failed to create token");
     }
   }
 

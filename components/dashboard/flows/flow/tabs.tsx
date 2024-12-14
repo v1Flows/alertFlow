@@ -17,6 +17,7 @@ export default function FlowTabs({
   payloads,
   runners,
   user,
+  canEdit,
 }: any) {
   const [selected, setSelected] = React.useState("actions");
 
@@ -55,7 +56,12 @@ export default function FlowTabs({
               </div>
             }
           >
-            <Actions flow={flow} runners={runners} user={user} />
+            <Actions
+              canEdit={canEdit}
+              flow={flow}
+              runners={runners}
+              user={user}
+            />
           </Tab>
           <Tab
             key="executions"
@@ -66,7 +72,11 @@ export default function FlowTabs({
               </div>
             }
           >
-            <Executions executions={executions} payloads={payloads} />
+            <Executions
+              canEdit={canEdit}
+              executions={executions}
+              payloads={payloads}
+            />
           </Tab>
           <Tab
             key="payloads"
@@ -82,6 +92,7 @@ export default function FlowTabs({
             }
           >
             <Payloads
+              canEdit={canEdit}
               executions={executions}
               flow={flow}
               payloads={payloads}
