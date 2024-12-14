@@ -115,9 +115,6 @@ export function ProjectsList({
               fullWidth
               isDisabled={project.disabled}
               isPressable={!project.disabled}
-              style={{
-                boxShadow: `1px 1px 0 0 ${project.color}`,
-              }}
               onPress={() => {
                 router.push(`/dashboard/projects/${project.id}`);
               }}
@@ -234,7 +231,11 @@ export function ProjectsList({
                   )}
                 </p>
                 <Spacer y={3} />
-                <Divider />
+                <Card
+                  className="h-1"
+                  radius="lg"
+                  style={{ backgroundColor: project.color }}
+                />
               </CardBody>
               <CardFooter className="flex items-center gap-2 justify-between text-default-500">
                 <AvatarGroup isBordered className="pl-2" size="sm">
