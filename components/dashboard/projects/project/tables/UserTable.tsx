@@ -129,7 +129,9 @@ export default function ProjectMembers({
               <Button
                 isIconOnly
                 color="danger"
-                isDisabled={checkViewerButtonDisabled()}
+                isDisabled={
+                  checkViewerButtonDisabled() || tableUser.user_id === user.id
+                }
                 onPress={() => {
                   setTargetUser(tableUser);
                   deleteProjectMemberModal.onOpen();
@@ -151,6 +153,7 @@ export default function ProjectMembers({
         {checkLeaveProjectDisabled() ? (
           <Button
             color="danger"
+            isDisabled={project.disabled}
             isIconOnly={isMobile}
             startContent={
               <Icon icon="solar:transfer-horizontal-line-duotone" width={20} />
@@ -163,6 +166,7 @@ export default function ProjectMembers({
         ) : (
           <Button
             color="secondary"
+            isDisabled={checkLeaveProjectDisabled()}
             isIconOnly={isMobile}
             startContent={
               <Icon icon="solar:undo-left-round-outline" width={20} />

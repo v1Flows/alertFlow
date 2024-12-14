@@ -8,12 +8,11 @@ import {
   useDisclosure,
   Button,
   Avatar,
+  Alert,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import NumberFlow from "@number-flow/react";
 
-import { InfoIcon } from "@/components/icons";
-import { IconWrapper } from "@/lib/IconWrapper";
 import { subtitle } from "@/components/primitives";
 import Reloader from "@/components/reloader/Reloader";
 import EditProjectModal from "@/components/functions/projects/edit";
@@ -33,6 +32,21 @@ export default function Project({
   flows,
 }: any) {
   const editProjectModal = useDisclosure();
+
+  function checkEditDisabled() {
+    if (project.disabled) {
+      return true;
+    } else if (user.role === "admin") {
+      return false;
+    } else if (
+      members.find((m: any) => m.user_id === user.id) &&
+      members.filter((m: any) => m.user_id === user.id)[0].role === "Viewer"
+    ) {
+      return true;
+    }
+
+    return false;
+  }
 
   return (
     <main>
@@ -70,12 +84,7 @@ export default function Project({
         </div>
         <Button
           color="warning"
-          isDisabled={
-            project.disabled ||
-            (members.find((m: any) => m.user_id === user.id) &&
-              members.filter((m: any) => m.user_id === user.id)[0].role ===
-                "Viewer")
-          }
+          isDisabled={checkEditDisabled()}
           startContent={<Icon icon="solar:pen-new-square-outline" width={20} />}
           variant="flat"
           onPress={() => editProjectModal.onOpen()}
@@ -86,21 +95,12 @@ export default function Project({
       <Divider className="mb-4" />
       {project.disabled && (
         <div className="mb-4">
-          <Card className="bg-danger/20">
-            <CardBody>
-              <div className="flex items-center gap-2">
-                <IconWrapper className="bg-danger/10 text-danger">
-                  <InfoIcon className="text-lg" />
-                </IconWrapper>
-                <p className="text-md font-bold text-danger">
-                  Project is currently disabled
-                </p>
-              </div>
-              <p className="text-default-500 font-bold">
-                Reason: {project.disabled_reason}
-              </p>
-            </CardBody>
-          </Card>
+          <Alert
+            color="danger"
+            description={project.disabled_reason}
+            title="Project is currently disabled"
+            variant="flat"
+          />
         </div>
       )}
       <div>

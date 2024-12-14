@@ -65,7 +65,7 @@ export function FlowsList({ flows, projects, runners }: any) {
       case "name":
         return (
           <div>
-            <p>{flow.name}</p>
+            <p className="font-bold">{flow.name}</p>
             <p className="text-sm text-default-500">{flow.description}</p>
           </div>
         );
@@ -97,7 +97,7 @@ export function FlowsList({ flows, projects, runners }: any) {
               color={
                 flow.disabled
                   ? "danger"
-                  : flow.maintenance_required
+                  : flow.maintenance
                     ? "warning"
                     : "success"
               }
@@ -107,14 +107,14 @@ export function FlowsList({ flows, projects, runners }: any) {
             >
               {flow.disabled
                 ? "Disabled"
-                : flow.maintenance_required
+                : flow.maintenance
                   ? "Maintenance"
                   : "Enabled"}
             </Chip>
             {flow.disabled && (
               <p className="text-sm text-default-400">{flow.disabled_reason}</p>
             )}
-            {flow.maintenance_required && (
+            {flow.maintenance && (
               <p className="text-sm text-default-400">
                 {flow.maintenance_message}
               </p>
@@ -164,7 +164,7 @@ export function FlowsList({ flows, projects, runners }: any) {
                   >
                     Edit
                   </DropdownItem>
-                  {flow.maintenance_required ? (
+                  {flow.maintenance ? (
                     <DropdownItem
                       key="disable"
                       className="text-warning"

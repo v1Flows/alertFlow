@@ -107,14 +107,10 @@ export function DashboardHome({
                       <Icon icon="solar:book-2-outline" width={20} />
                     </div>
                     <div>
-                      {flows.filter((f: any) => f.maintenance_required).length >
-                      0 ? (
+                      {flows.filter((f: any) => f.maintenance).length > 0 ? (
                         <p className="text-md font-bold text-warning">
-                          {
-                            flows.filter((f: any) => f.maintenance_required)
-                              .length
-                          }{" "}
-                          need attention
+                          {flows.filter((f: any) => f.maintenance).length} need
+                          attention
                         </p>
                       ) : (
                         <p className="text-md font-bold text-success">OK</p>
@@ -127,7 +123,7 @@ export function DashboardHome({
             </DropdownTrigger>
             <DropdownMenu aria-label="Flow Problems">
               {flows
-                .filter((f: any) => f.maintenance_required)
+                .filter((f: any) => f.maintenance)
                 .map((flow: any) => (
                   <DropdownItem
                     key={flow.id}
@@ -405,7 +401,7 @@ export function DashboardHome({
         </div>
       </div>
 
-      <Spacer y={2} />
+      <Spacer y={4} />
 
       {/* Stats */}
       <Stats stats={stats} />

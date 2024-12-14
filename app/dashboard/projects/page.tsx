@@ -3,6 +3,7 @@ import { ProjectsList } from "@/components/dashboard/projects/list";
 import ErrorCard from "@/components/error/ErrorCard";
 import PageGetSettings from "@/lib/fetch/page/settings";
 import GetProjects from "@/lib/fetch/project/all";
+import GetProject from "@/lib/fetch/project/data";
 import GetUserDetails from "@/lib/fetch/user/getDetails";
 import GetUserPlan from "@/lib/fetch/user/getPlan";
 
@@ -18,6 +19,19 @@ export default async function DashboardProjectsPage() {
     planData,
     userDetailsData,
   ])) as any;
+
+  // get members for each project
+  if (projects.success) {
+    for (let i = 0; i < projects.data.projects.length; i++) {
+      const project = projects.data.projects[i];
+      const membersData = GetProject(project.id);
+      const members = await membersData;
+
+      if (members.success) {
+        projects.data.projects[i].members = members.data.members;
+      }
+    }
+  }
 
   return (
     <main>

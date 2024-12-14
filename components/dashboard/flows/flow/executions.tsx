@@ -34,6 +34,7 @@ export default function Executions({
   executions,
   payloads,
   displayToFlow,
+  canEdit,
 }: any) {
   const router = useRouter();
 
@@ -392,6 +393,7 @@ export default function Executions({
             <Button
               isIconOnly
               color="danger"
+              isDisabled={!canEdit}
               size="md"
               variant="flat"
               onPress={() => {

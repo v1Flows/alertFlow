@@ -59,7 +59,7 @@ export function ProjectList({ projects, members }: any) {
       case "name":
         return (
           <div>
-            <p>{project.name}</p>
+            <p className="font-bold">{project.name}</p>
             <p className="text-sm text-default-500">{project.description}</p>
           </div>
         );

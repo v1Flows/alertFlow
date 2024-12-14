@@ -19,11 +19,16 @@ import {
   Spacer,
   Input,
   Tooltip,
+  CardFooter,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  Alert,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
 
-import { EyeIcon, InfoIcon } from "@/components/icons";
+import { InfoIcon, PlusIcon } from "@/components/icons";
 import { IconWrapper } from "@/lib/IconWrapper";
 import FunctionDeleteFlow from "@/components/functions/flows/deleteFlow";
 import FunctionCreateFlow from "@/components/functions/flows/create";
@@ -104,51 +109,26 @@ export default function FlowList({
     return false;
   }
 
-  function createButtonPressable() {
-    if (!settings.create_flows) {
+  function checkUserCanEdit(flow: any) {
+    if (
+      projects
+        .filter((project: any) => project.id === flow.project_id)
+        .map(
+          (project: any) =>
+            project.members.find((member: any) => member.user_id === user.id)
+              .role,
+        )[0] === "Viewer"
+    ) {
       return false;
-    } else if (user.role === "vip") {
+    } else {
       return true;
-    } else if (user.role === "admin") {
-      return true;
-    } else if (flows.length >= plan.flows) {
-      return false;
     }
-
-    return true;
   }
 
   return (
     <main>
       <div className="grid lg:grid-cols-2 grid-cols-1 gap-2 items-center justify-between">
         <p className="text-2xl font-bold">Flows</p>
-        <div className="flex flex-cols justify-end items-center gap-4">
-          <Input
-            className="max-w-xs"
-            placeholder="Search"
-            radius="sm"
-            size="md"
-            startContent={<Icon icon="solar:minimalistic-magnifer-outline" />}
-            value={search}
-            variant="flat"
-            onValueChange={setSearch}
-          />
-          <Select
-            className="max-w-xs"
-            placeholder="Project Filter"
-            radius="sm"
-            selectedKeys={projectFilter}
-            selectionMode="multiple"
-            variant="faded"
-            onSelectionChange={(keys) => setProjectFilter(keys as any)}
-          >
-            {projects
-              .map((project: any) => (
-                <SelectItem key={project.id}>{project.name}</SelectItem>
-              ))
-              .sort()}
-          </Select>
-        </div>
       </div>
       <Spacer y={4} />
       {flows.error && (
@@ -165,34 +145,115 @@ export default function FlowList({
         </Card>
       )}
       {!flows.error && (
-        <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
-          {filteredFlows.map((flow: any) => (
-            <div key={flow.id} className="col-span-1">
-              <Card
-                fullWidth
-                className={`shadow ${flow.disabled ? "shadow-danger-200" : "shadow-primary-200"}`}
-              >
-                <CardBody>
-                  <div className="bg-default-100 rounded-large w-full flex items-center justify-between p-3">
-                    <div className="flex flex-col items-start">
-                      <p className="text-md font-bold">{flow.name}</p>
-                      <p className="text-sm text-default-500">
-                        {flow.description.length > 50 ? (
-                          <Tooltip
-                            content={flow.description}
-                            style={{ maxWidth: "450px" }}
-                          >
-                            <span>{flow.description.slice(0, 50)}...</span>
-                          </Tooltip>
-                        ) : (
-                          flow.description
-                        )}
+        <>
+          <Card>
+            <CardBody>
+              <div className="flex flex-wrap items-center justify-between gap-4">
+                <p className="text-md font-bold text-primary">
+                  {filteredFlows.length}{" "}
+                  <span className="text-default-500 font-normal">
+                    Flows found
+                  </span>
+                </p>
+                <div className="flex items-center gap-4">
+                  <Popover placement="bottom">
+                    <PopoverTrigger>
+                      <Button
+                        startContent={
+                          <Icon
+                            icon="solar:sort-horizontal-linear"
+                            width={22}
+                          />
+                        }
+                        variant="bordered"
+                      >
+                        Filter & Sort
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="flex gap-4 p-3 items-center">
+                      <Input
+                        className="max-w-xs"
+                        placeholder="Search"
+                        radius="sm"
+                        size="sm"
+                        startContent={
+                          <Icon icon="solar:minimalistic-magnifer-outline" />
+                        }
+                        value={search}
+                        variant="flat"
+                        onValueChange={setSearch}
+                      />
+                      <Divider />
+                      <Select
+                        className="max-w-xs"
+                        placeholder="Project Filter"
+                        radius="sm"
+                        selectedKeys={projectFilter}
+                        selectionMode="multiple"
+                        size="sm"
+                        variant="flat"
+                        onSelectionChange={(keys) =>
+                          setProjectFilter(keys as any)
+                        }
+                      >
+                        {projects
+                          .map((project: any) => (
+                            <SelectItem key={project.id}>
+                              {project.name}
+                            </SelectItem>
+                          ))
+                          .sort()}
+                      </Select>
+                    </PopoverContent>
+                  </Popover>
+                  <Button
+                    color="primary"
+                    isDisabled={createButtonDisabled()}
+                    variant="bordered"
+                    onPress={() => newModal.onOpen()}
+                  >
+                    <PlusIcon />
+                    Add New
+                  </Button>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+          <Spacer y={4} />
+          <div className="grid lg:grid-cols-4 grid-cols-2 gap-4">
+            {filteredFlows.map((flow: any) => (
+              <div key={flow.id} className="col-span-1">
+                <Card
+                  fullWidth
+                  isDisabled={flow.disabled}
+                  isPressable={!flow.disabled}
+                  onPress={() => router.push(`/dashboard/flows/${flow.id}`)}
+                >
+                  <CardHeader className="justify-between items-center p-3 pb-0">
+                    <Chip
+                      color={
+                        flow.disabled
+                          ? "danger"
+                          : flow.maintenance
+                            ? "warning"
+                            : "success"
+                      }
+                      radius="sm"
+                      size="sm"
+                      variant="flat"
+                    >
+                      <p className="font-bold">
+                        {flow.disabled
+                          ? "Disabled"
+                          : flow.maintenance
+                            ? "Maintenance"
+                            : "Active"}
                       </p>
-                    </div>
+                    </Chip>
                     <Dropdown backdrop="opaque">
                       <DropdownTrigger>
                         <Button isIconOnly size="sm" variant="light">
-                          <Icon icon="solar:menu-dots-outline" width={24} />
+                          <Icon icon="solar:menu-dots-bold" width={24} />
                         </Button>
                       </DropdownTrigger>
                       <DropdownMenu variant="flat">
@@ -210,6 +271,9 @@ export default function FlowList({
                           <DropdownItem
                             key="edit"
                             color="warning"
+                            isDisabled={
+                              flow.disabled || !checkUserCanEdit(flow)
+                            }
                             startContent={
                               <Icon
                                 icon="solar:pen-new-square-outline"
@@ -223,10 +287,13 @@ export default function FlowList({
                           >
                             Edit
                           </DropdownItem>
-                          {flow.maintenance_required ? (
+                          {flow.maintenance ? (
                             <DropdownItem
                               key="disable"
                               color="warning"
+                              isDisabled={
+                                flow.disabled || !checkUserCanEdit(flow)
+                              }
                               startContent={
                                 <Icon
                                   icon="solar:bomb-emoji-outline"
@@ -245,6 +312,9 @@ export default function FlowList({
                             <DropdownItem
                               key="disable"
                               color="warning"
+                              isDisabled={
+                                flow.disabled || !checkUserCanEdit(flow)
+                              }
                               startContent={
                                 <Icon
                                   icon="solar:bomb-emoji-outline"
@@ -262,49 +332,13 @@ export default function FlowList({
                           )}
                         </DropdownSection>
                         <DropdownSection title="Danger zone">
-                          {flow.disabled ? (
-                            <DropdownItem
-                              key="disable"
-                              className="text-success"
-                              color="success"
-                              startContent={
-                                <Icon
-                                  icon="solar:lock-keyhole-unlocked-outline"
-                                  width={20}
-                                />
-                              }
-                              onPress={() => {
-                                setTargetFlow(flow);
-                                setStatus(false);
-                                changeStatusModal.onOpen();
-                              }}
-                            >
-                              Enable
-                            </DropdownItem>
-                          ) : (
-                            <DropdownItem
-                              key="disable"
-                              className="text-danger"
-                              color="danger"
-                              startContent={
-                                <Icon
-                                  icon="solar:lock-keyhole-outline"
-                                  width={20}
-                                />
-                              }
-                              onPress={() => {
-                                setTargetFlow(flow);
-                                setStatus(true);
-                                changeStatusModal.onOpen();
-                              }}
-                            >
-                              Disable
-                            </DropdownItem>
-                          )}
                           <DropdownItem
                             key="delete"
                             className="text-danger"
                             color="danger"
+                            isDisabled={
+                              flow.disabled || !checkUserCanEdit(flow)
+                            }
                             startContent={
                               <Icon
                                 icon="solar:trash-bin-trash-outline"
@@ -321,98 +355,68 @@ export default function FlowList({
                         </DropdownSection>
                       </DropdownMenu>
                     </Dropdown>
-                  </div>
-                  <Spacer y={4} />
-                  <div className="flex items-center justify-start gap-2 flex-wrap">
-                    <Chip color="primary" radius="sm" size="sm" variant="flat">
-                      <p className="font-bold">
-                        Project:{" "}
+                  </CardHeader>
+                  <CardBody>
+                    {flow.maintenance && (
+                      <>
+                        <Alert
+                          color="warning"
+                          description={flow.maintenance_message}
+                          title="Maintenance"
+                          variant="flat"
+                        />
+                        <Spacer y={2} />
+                      </>
+                    )}
+                    {flow.disabled && (
+                      <>
+                        <Alert
+                          color="danger"
+                          description={flow.disabled_reason}
+                          title="Disabled"
+                          variant="flat"
+                        />
+                        <Spacer y={2} />
+                      </>
+                    )}
+                    <p className="text-lg font-bold">{flow.name}</p>
+                    <p className="text-sm text-default-500">
+                      {flow.description.length > 50 ? (
+                        <Tooltip
+                          content={flow.description}
+                          style={{ maxWidth: "450px" }}
+                        >
+                          <span>{flow.description.slice(0, 50)}...</span>
+                        </Tooltip>
+                      ) : (
+                        flow.description
+                      )}
+                    </p>
+                    <Spacer y={3} />
+                    <Divider />
+                  </CardBody>
+                  <CardFooter className="flex flex-wrap items-center gap-2 justify-between text-default-500">
+                    <div className="flex items-center text-start gap-2">
+                      <Icon icon="solar:inbox-archive-outline" width={20} />
+                      <p className="text-sm">
                         {projects.map(
                           (project: any) =>
                             project.id === flow.project_id && project.name,
                         )}
                       </p>
-                    </Chip>
-                    <Chip
-                      color={flow.disabled ? "danger" : "success"}
-                      radius="sm"
-                      size="sm"
-                      variant="flat"
-                    >
-                      <p className="font-bold">
-                        Status: {flow.disabled ? "Disabled" : "Active"}
+                    </div>
+                    <div className="flex items-center text-start gap-2">
+                      <Icon icon="solar:calendar-date-linear" width={26} />
+                      <p className="text-sm">
+                        {new Date(flow.created_at).toLocaleString("de-DE")}
                       </p>
-                    </Chip>
-                    {flow.disabled && (
-                      <Chip color="danger" radius="sm" size="sm" variant="flat">
-                        <p className="font-bold">
-                          Disable Reason: {flow.disabled_reason}
-                        </p>
-                      </Chip>
-                    )}
-                    {flow.maintenance_required && (
-                      <Chip
-                        color="warning"
-                        radius="sm"
-                        size="sm"
-                        variant="flat"
-                      >
-                        <p className="font-bold">
-                          Maintenance Required:{" "}
-                          <span className="capitalize">
-                            {flow.maintenance_message}
-                          </span>
-                        </p>
-                      </Chip>
-                    )}
-                  </div>
-                  <Spacer y={2} />
-                  <div className="flex flex-wrap items-center justify-start gap-2">
-                    <p className="text-sm font-bold text-default-500">
-                      Created At:
-                    </p>
-                    <p className="text-default-500 text-sm">
-                      {new Date(flow.created_at).toLocaleString("de-DE")}
-                    </p>
-                  </div>
-                  <Spacer y={4} />
-                  <Divider />
-                  <Spacer y={2} />
-                  <Button
-                    className="w-full font-bold"
-                    color={flow.disabled ? "danger" : "primary"}
-                    radius="sm"
-                    variant="light"
-                    onPress={() => router.push(`/dashboard/flows/${flow.id}`)}
-                  >
-                    <EyeIcon />
-                    Go to Flow
-                  </Button>
-                </CardBody>
-              </Card>
-            </div>
-          ))}
-          <Card
-            isHoverable
-            className="border border-primary border-3 border-dashed"
-            isDisabled={createButtonDisabled()}
-            isPressable={createButtonPressable()}
-            onPress={() => newModal.onOpen()}
-          >
-            <CardBody className="flex flex-col items-center justify-center gap-2">
-              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-25 w-12 h-12">
-                <Icon
-                  className="text-primary"
-                  icon="solar:add-square-outline"
-                  width={38}
-                />
+                    </div>
+                  </CardFooter>
+                </Card>
               </div>
-              <p className="text-lg font-bold text-default-500">
-                Create new flow
-              </p>
-            </CardBody>
-          </Card>
-        </div>
+            ))}
+          </div>
+        </>
       )}
       <FunctionCreateFlow disclosure={newModal} projects={projects} />
       <EditFlowModal
