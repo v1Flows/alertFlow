@@ -401,7 +401,7 @@ export function DashboardHome({
         </div>
       </div>
 
-      <Spacer y={2} />
+      <Spacer y={4} />
 
       {/* Stats */}
       <Stats stats={stats} />
