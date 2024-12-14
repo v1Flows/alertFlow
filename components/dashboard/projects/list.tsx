@@ -17,6 +17,8 @@ import {
   CardHeader,
   CardFooter,
   Alert,
+  AvatarGroup,
+  Avatar,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -69,18 +71,15 @@ export function ProjectsList({
     return false;
   }
 
-  function createButtonPressable() {
-    if (!settings.create_projects) {
-      return false;
-    } else if (user.role === "vip") {
+  function checkUserEditPermissions(project: any) {
+    if (
+      project.members.find((member: any) => member.user_id === user.id).role ===
+      "Viewer"
+    ) {
       return true;
-    } else if (user.role === "admin") {
-      return true;
-    } else if (projects.length >= plan.projects) {
+    } else {
       return false;
     }
-
-    return true;
   }
 
   return (
@@ -116,6 +115,9 @@ export function ProjectsList({
               fullWidth
               isDisabled={project.disabled}
               isPressable={!project.disabled}
+              style={{
+                boxShadow: `1px 1px 0 0 ${project.color}`,
+              }}
               onPress={() => {
                 router.push(`/dashboard/projects/${project.id}`);
               }}
@@ -152,6 +154,9 @@ export function ProjectsList({
                         key="edit"
                         showDivider
                         color="warning"
+                        isDisabled={
+                          checkUserEditPermissions(project) || project.disabled
+                        }
                         startContent={
                           <Icon
                             icon="solar:pen-new-square-outline"
@@ -171,6 +176,9 @@ export function ProjectsList({
                         key="delete"
                         className="text-danger"
                         color="danger"
+                        isDisabled={
+                          checkUserEditPermissions(project) || project.disabled
+                        }
                         startContent={
                           <Icon
                             icon="solar:trash-bin-trash-outline"
@@ -200,6 +208,7 @@ export function ProjectsList({
                     <Spacer y={2} />
                   </>
                 )}
+                <Spacer y={2} />
                 <div className="flex items-center gap-2">
                   <Icon
                     icon={
@@ -207,7 +216,6 @@ export function ProjectsList({
                         ? project.icon
                         : "solar:question-square-outline"
                     }
-                    style={{ color: project.color }}
                     width={32}
                   />
                   <p className="text-lg font-bold">{project.name}</p>
@@ -228,7 +236,29 @@ export function ProjectsList({
                 <Spacer y={3} />
                 <Divider />
               </CardBody>
-              <CardFooter className="flex items-center gap-2 justify-end text-default-500">
+              <CardFooter className="flex items-center gap-2 justify-between text-default-500">
+                <AvatarGroup isBordered className="pl-2" size="sm">
+                  {project.members
+                    .map((member: any) => (
+                      <>
+                        <Tooltip content={member.username}>
+                          <Avatar
+                            key={member.user_id}
+                            showFallback
+                            color={
+                              member.role === "Owner"
+                                ? "danger"
+                                : member.role === "Editor"
+                                  ? "primary"
+                                  : "default"
+                            }
+                            name={member.username}
+                          />
+                        </Tooltip>
+                      </>
+                    ))
+                    .slice(0, 5)}
+                </AvatarGroup>
                 <div className="flex items-center gap-1">
                   <Icon icon="solar:calendar-date-linear" width={26} />
                   <p className="text-sm">

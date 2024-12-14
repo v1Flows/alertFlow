@@ -33,6 +33,21 @@ export default function Project({
 }: any) {
   const editProjectModal = useDisclosure();
 
+  function checkEditDisabled() {
+    if (project.disabled) {
+      return true;
+    } else if (user.role === "admin") {
+      return false;
+    } else if (
+      members.find((m: any) => m.user_id === user.id) &&
+      members.filter((m: any) => m.user_id === user.id)[0].role === "Viewer"
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
   return (
     <main>
       <div className="grid lg:grid-cols-2 items-center justify-between">
@@ -69,12 +84,7 @@ export default function Project({
         </div>
         <Button
           color="warning"
-          isDisabled={
-            project.disabled ||
-            (members.find((m: any) => m.user_id === user.id) &&
-              members.filter((m: any) => m.user_id === user.id)[0].role ===
-                "Viewer")
-          }
+          isDisabled={checkEditDisabled()}
           startContent={<Icon icon="solar:pen-new-square-outline" width={20} />}
           variant="flat"
           onPress={() => editProjectModal.onOpen()}

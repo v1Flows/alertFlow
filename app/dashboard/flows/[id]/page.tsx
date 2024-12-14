@@ -5,6 +5,7 @@ import GetFlow from "@/lib/fetch/flow/flow";
 import GetFlowPayloads from "@/lib/fetch/flow/payloads";
 import PageGetSettings from "@/lib/fetch/page/settings";
 import GetProjects from "@/lib/fetch/project/all";
+import GetProject from "@/lib/fetch/project/data";
 import GetProjectRunners from "@/lib/fetch/project/runners";
 import GetUserDetails from "@/lib/fetch/user/getDetails";
 
@@ -31,11 +32,17 @@ export default async function DashboardFlowPage({
     ])) as any;
 
   let runnersData;
+  let projectdata;
 
   if (flow.success) {
     runnersData = GetProjectRunners(flow.data.flow.project_id);
+    projectdata = GetProject(flow.data.flow.project_id);
   }
-  const runners = await runnersData;
+
+  const [runners, project] = (await Promise.all([
+    runnersData,
+    projectdata,
+  ])) as any;
 
   return (
     <>
@@ -43,6 +50,7 @@ export default async function DashboardFlowPage({
       flow.success &&
       payloads.success &&
       projects.success &&
+      project.success &&
       runners.success &&
       settings.success &&
       userDetails.success ? (
@@ -50,7 +58,9 @@ export default async function DashboardFlowPage({
           executions={executions.data.executions}
           flow={flow.data.flow}
           id={params.id}
+          members={project.data.members}
           payloads={payloads.data.payloads}
+          project={project.data.project}
           projects={projects.data.projects}
           runners={runners.data.runners}
           settings={settings.data.settings}
@@ -64,6 +74,7 @@ export default async function DashboardFlowPage({
             payloads.error ||
             projects.error ||
             runners.error ||
+            project.error ||
             settings.error ||
             userDetails.error
           }
@@ -73,6 +84,7 @@ export default async function DashboardFlowPage({
             payloads.message ||
             projects.message ||
             runners.message ||
+            project.message ||
             settings.message ||
             userDetails.message
           }

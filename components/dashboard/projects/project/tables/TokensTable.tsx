@@ -48,6 +48,25 @@ export default function ProjectTokens({
     toast.success("Copied to clipboard!");
   };
 
+  function checkAddTokenDisabled() {
+    if (!settings.create_api_keys) {
+      return true;
+    } else if (project.disabled) {
+      return true;
+    } else if (user.role === "vip") {
+      return false;
+    } else if (user.role === "admin") {
+      return false;
+    } else if (
+      members.find((m: any) => m.user_id === user.id) &&
+      members.filter((m: any) => m.user_id === user.id)[0].role === "Viewer"
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
   const renderCell = React.useCallback((key: any, columnKey: any) => {
     const cellValue = key[columnKey];
 
@@ -117,13 +136,7 @@ export default function ProjectTokens({
       <div className="flex flex-col items-end justify-center gap-4">
         <Button
           color="primary"
-          isDisabled={
-            !settings.create_api_keys ||
-            project.disabled ||
-            (members.find((m: any) => m.user_id === user.id) &&
-              members.filter((m: any) => m.user_id === user.id)[0].role ===
-                "Viewer")
-          }
+          isDisabled={checkAddTokenDisabled()}
           startContent={<PlusIcon height={undefined} width={undefined} />}
           onPress={() => addTokenModal.onOpen()}
         >

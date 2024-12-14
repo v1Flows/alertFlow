@@ -22,7 +22,13 @@ import { toast } from "sonner";
 import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
 import FunctionDeletePayloadModal from "@/components/functions/flows/deletePayload";
 
-export default function Payloads({ flow, executions, payloads, runners }: any) {
+export default function Payloads({
+  flow,
+  executions,
+  payloads,
+  runners,
+  canEdit,
+}: any) {
   const router = useRouter();
 
   const showPayloadModal = useDisclosure();
@@ -186,6 +192,7 @@ export default function Payloads({ flow, executions, payloads, runners }: any) {
             <Button
               isIconOnly
               color="danger"
+              isDisabled={!canEdit}
               variant="flat"
               onPress={() => handleDelete(payload)}
             >
