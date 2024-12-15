@@ -108,7 +108,7 @@ export function ProjectsList({
         </CardBody>
       </Card>
       <Spacer y={4} />
-      <div className="grid lg:grid-cols-4 grid-cols-2 gap-4">
+      <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4">
         {projects.map((project: any) => (
           <div key={project.id} className="col-span-1">
             <Card
