@@ -783,7 +783,7 @@ export default function Search({
         }
         placement="bottom"
       >
-        {!isCollapsed ? (
+        {!isCollapsed && !isMobile ? (
           <Button
             fullWidth
             radius="sm"
