@@ -232,7 +232,7 @@ export function ProjectsList({
                 </p>
                 <Spacer y={3} />
                 <Card
-                  className="h-1"
+                  className="h-[3px]"
                   radius="lg"
                   style={{ backgroundColor: project.color }}
                 />

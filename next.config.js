@@ -13,7 +13,7 @@ const nextConfig = {
   },
   reactStrictMode: true,
   images: {
-    domains: ['localhost', 'alertflow.org', 'nextuipro.nyc3.cdn.digitaloceanspaces.com'],
+    domains: ['localhost', 'alertflow.org', 'justlab.xyz'],
   }
 }
 
