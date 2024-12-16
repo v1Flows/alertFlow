@@ -241,7 +241,7 @@ export function ProjectsList({
                 <AvatarGroup isBordered className="pl-2" size="sm">
                   {project.members
                     .map((member: any) => (
-                      <>
+                      <div key={member.user_id}>
                         <Tooltip content={member.username}>
                           <Avatar
                             key={member.user_id}
@@ -256,7 +256,7 @@ export function ProjectsList({
                             name={member.username}
                           />
                         </Tooltip>
-                      </>
+                      </div>
                     ))
                     .slice(0, 5)}
                 </AvatarGroup>

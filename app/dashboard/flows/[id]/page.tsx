@@ -14,10 +14,12 @@ export default async function DashboardFlowPage({
 }: {
   params: { id: string };
 }) {
+  const { id } = await params;
+
   const projectsData = GetProjects();
-  const flowData = GetFlow(params.id);
-  const executionsData = GetFlowExecutions(params.id);
-  const payloadsData = GetFlowPayloads(params.id);
+  const flowData = GetFlow(id);
+  const executionsData = GetFlowExecutions(id);
+  const payloadsData = GetFlowPayloads(id);
   const settingsData = PageGetSettings();
   const userDetailsData = GetUserDetails();
 
@@ -57,7 +59,7 @@ export default async function DashboardFlowPage({
         <Flow
           executions={executions.data.executions}
           flow={flow.data.flow}
-          id={params.id}
+          id={id}
           members={project.data.members}
           payloads={payloads.data.payloads}
           project={project.data.project}

@@ -10,13 +10,15 @@ import GetUserSubscription from "@/lib/fetch/user/getSubscription";
 import ErrorCard from "@/components/error/ErrorCard";
 
 export default async function UserProfilePage() {
+  const c = await cookies();
+
   const settingsData = PageGetSettings();
   const userDetailsData = GetUserDetails();
   const paymentMethodsData = GetPaymentMethods();
   const plansData = PageGetPlans();
   const subscriptionData = GetUserSubscription();
   const statsData = GetUserStats();
-  const session = cookies().get("session")?.value;
+  const session = c.get("session")?.value;
 
   const [settings, userDetails, paymentMethods, plans, subscription, stats] =
     (await Promise.all([

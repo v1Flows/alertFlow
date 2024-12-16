@@ -7,7 +7,9 @@ import GetUserDetails from "@/lib/fetch/user/getDetails";
 import ErrorCard from "@/components/error/ErrorCard";
 
 export default async function DocPage({ params }: { params: { id: string } }) {
-  const docData = GetDoc(params.id);
+  const { id } = await params;
+
+  const docData = GetDoc(id);
   const userDetailsData = GetUserDetails();
 
   const [doc, userDetails] = (await Promise.all([

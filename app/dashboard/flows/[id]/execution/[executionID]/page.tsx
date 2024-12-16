@@ -11,8 +11,10 @@ export default async function DashboardExecutionPage({
 }: {
   params: { id: string; executionID: string };
 }) {
-  const flowData = GetFlow(params.id);
-  const executionData = GetExecution(params.executionID);
+  const { id, executionID } = await params;
+
+  const flowData = GetFlow(id);
+  const executionData = GetExecution(executionID);
   const settingsData = PageGetSettings();
   const userDetailsData = GetUserDetails();
 

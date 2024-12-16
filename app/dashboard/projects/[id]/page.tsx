@@ -14,12 +14,14 @@ export default async function DashboardProjectPage({
 }: {
   params: { id: string };
 }) {
+  const { id } = await params;
+
   const settingsData = PageGetSettings();
-  const projectData = GetProject(params.id);
-  const runnersData = GetProjectRunners(params.id);
-  const tokensData = GetProjectApiKeys(params.id);
+  const projectData = GetProject(id);
+  const runnersData = GetProjectRunners(id);
+  const tokensData = GetProjectApiKeys(id);
   const planData = GetUserPlan();
-  const auditData = GetProjectAuditLogs(params.id);
+  const auditData = GetProjectAuditLogs(id);
   const userDetailsData = GetUserDetails();
   const flowsData = GetFlows();
 

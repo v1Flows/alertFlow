@@ -71,7 +71,7 @@ export default function AddProjectMemberModal({
     () => (
       <div className="mt-2 flex flex-col gap-2">
         {members.map((member: any) => (
-          <>
+          <div key={member.user_id}>
             <UserCell
               key={member.user_id}
               avatar={member.username}
@@ -79,8 +79,8 @@ export default function AddProjectMemberModal({
               name={member.username}
               permission={permissionLabels[member.role]}
             />
-            <Divider />
-          </>
+            <Divider className="m-1" />
+          </div>
         ))}
       </div>
     ),
