@@ -2,20 +2,20 @@
 
 import { cookies } from "next/headers";
 
-interface Result {
+type Result = {
   result: string;
-}
+};
 
-interface ErrorResponse {
+type ErrorResponse = {
   success: false;
   error: string;
   message: string;
-}
+};
 
-interface SuccessResponse {
+type SuccessResponse = {
   success: true;
   data: Result;
-}
+};
 
 export default async function UpdateFlowActionsDetails(
   flowID: string,
@@ -44,7 +44,7 @@ export default async function UpdateFlowActionsDetails(
         },
         body: JSON.stringify({
           exec_parallel: execParallel,
-          patterns: patterns,
+          patterns,
         }),
       },
     );
@@ -63,7 +63,7 @@ export default async function UpdateFlowActionsDetails(
 
     return {
       success: true,
-      data: data,
+      data,
     };
   } catch (error) {
     return {

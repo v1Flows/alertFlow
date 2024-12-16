@@ -1,8 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-import "./updateSessionInterval";
+import { NextResponse } from "next/server";
 
 import PageGetSettings from "./lib/fetch/page/settings";
+
+import "./updateSessionInterval";
 
 export async function middleware(request: NextRequest) {
   const user = JSON.parse(request.cookies.get("user")?.value || "{}");

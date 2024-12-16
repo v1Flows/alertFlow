@@ -2,20 +2,20 @@
 
 import { cookies } from "next/headers";
 
-interface AuditLogs {
+type AuditLogs = {
   audit: [];
-}
+};
 
-interface ErrorResponse {
+type ErrorResponse = {
   success: false;
   error: string;
   message: string;
-}
+};
 
-interface SuccessResponse {
+type SuccessResponse = {
   success: true;
   data: AuditLogs;
-}
+};
 
 export async function GetProjectAuditLogs(
   projectId: any,
@@ -57,7 +57,7 @@ export async function GetProjectAuditLogs(
 
     return {
       success: true,
-      data: data,
+      data,
     };
   } catch (error) {
     return {

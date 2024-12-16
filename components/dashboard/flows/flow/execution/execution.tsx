@@ -1,5 +1,6 @@
 "use client";
 
+import { Icon } from "@iconify/react";
 import {
   Badge,
   Button,
@@ -18,21 +19,20 @@ import {
   Tooltip,
   useDisclosure,
 } from "@nextui-org/react";
-import { Icon } from "@iconify/react";
+import { useRouter } from "next/navigation";
 import React, { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
-import Reloader from "@/components/reloader/Reloader";
-import GetPayload from "@/lib/fetch/payload/payload";
-import GetExecutionSteps from "@/lib/fetch/executions/steps";
 import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
+import Reloader from "@/components/reloader/Reloader";
 import InteractExecutionStep from "@/lib/fetch/executions/PUT/step_interact";
+import GetExecutionSteps from "@/lib/fetch/executions/steps";
+import GetPayload from "@/lib/fetch/payload/payload";
 
-import ExecutionBreadcrumbs from "./breadcrumbs";
-import ExecutionDetails from "./details";
 import AdminExecutionActions from "./adminExecutionActions";
 import AdminStepActions from "./adminStepActions";
+import ExecutionBreadcrumbs from "./breadcrumbs";
+import ExecutionDetails from "./details";
 
 export function Execution({ flow, execution, runners, userDetails }: any) {
   const router = useRouter();
@@ -116,9 +116,9 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
       return (
         <Tooltip content={`${status(step)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="default"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -141,9 +141,9 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
       return (
         <Tooltip content={`${status(step)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="warning"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -160,9 +160,9 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
       return (
         <Tooltip content={`${status(step)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="danger"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -179,8 +179,8 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
       return (
         <Tooltip content={`${status(step)}`}>
           <CircularProgress
+            showValueLabel
             color="secondary"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -197,9 +197,9 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
       return (
         <Tooltip content={`${status(step)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="default"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -216,9 +216,9 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
       return (
         <Tooltip content={`${status(step)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="primary"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -235,9 +235,9 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
       return (
         <Tooltip content={`${status(step)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="danger"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -254,9 +254,9 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
       return (
         <Tooltip content={`${status(step)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="success"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -273,9 +273,9 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
       return (
         <Tooltip content={`${status(step)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="success"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -292,7 +292,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
   }
 
   function getTotalDurationSeconds() {
-    var calFinished = new Date().toISOString();
+    let calFinished = new Date().toISOString();
 
     if (execution.finished_at !== "0001-01-01T00:00:00Z") {
       calFinished = execution.finished_at;
@@ -382,7 +382,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
       switch (columnKey) {
         case "name":
           return (
-            <div className={`flex flex-col items-center gap-2`}>
+            <div className="flex flex-col items-center gap-2">
               {steps.find((s: any) => s.parent_id === step.action_name) ? (
                 <Badge
                   color="primary"
@@ -456,7 +456,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
                     {step.action_messages.map((data: any, index: any) => (
                       <p
                         key={index}
-                        className="flex flex-cols items-center gap-1"
+                        className="flex-cols flex items-center gap-1"
                       >
                         <Icon
                           icon="solar:double-alt-arrow-right-bold-duotone"
@@ -467,7 +467,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
                     ))}
                   </Snippet>
                   {step.interactive && !step.interacted && (
-                    <div className="flex flex-cols items-center gap-4">
+                    <div className="flex-cols flex items-center gap-4">
                       <Button
                         fullWidth
                         color="success"
@@ -514,7 +514,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
                     </div>
                     {step.started_at !== "0001-01-01T00:00:00Z" && (
                       <>
-                        <Divider className="col-span-2 mt-2 mb-2" />
+                        <Divider className="col-span-2 my-2" />
                         <div className="text-small text-default-500">
                           Started at
                         </div>
@@ -525,7 +525,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
                     )}
                     {step.finished_at !== "0001-01-01T00:00:00Z" && (
                       <>
-                        <Divider className="col-span-2 mt-2 mb-2" />
+                        <Divider className="col-span-2 my-2" />
                         <div className="text-small text-default-500">
                           Finished at
                         </div>
@@ -539,9 +539,9 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
               >
                 <div className="flex flex-col items-center gap-1">
                   <CircularProgress
+                    showValueLabel
                     aria-label="StepDuration"
                     maxValue={getTotalDurationSeconds()}
-                    showValueLabel={true}
                     size="lg"
                     value={getDurationSeconds(step)}
                   />
@@ -555,9 +555,9 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
             <Tooltip
               content={
                 <div className="flex flex-col items-start justify-between p-1">
-                  <div className="flex flex-cols gap-4">
+                  <div className="flex-cols flex gap-4">
                     <div className="flex items-center gap-2">
-                      <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
+                      <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
                         <Icon icon={step.icon} width={20} />
                       </div>
                       <div>
@@ -603,7 +603,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
           return <div>{statusIcon(step)}</div>;
         case "admin_actions":
           return (
-            <div className="flex flex-col justify-center items-center">
+            <div className="flex flex-col items-center justify-center">
               {userDetails.role === "admin" && (
                 <AdminStepActions execution={execution} step={step} />
               )}
@@ -618,7 +618,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
 
   const bottomContent = useMemo(() => {
     return (
-      <div className="mt flex justify-center items-center w-full">
+      <div className="mt flex w-full items-center justify-center">
         {(execution.running || execution.pending || execution.paused) && (
           <>
             <Progress
@@ -636,9 +636,9 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
 
   return (
     <>
-      <div className="grid lg:grid-cols-2 items-center justify-between">
+      <div className="grid items-center justify-between lg:grid-cols-2">
         <ExecutionBreadcrumbs executionID={execution.id} flowID={flow.id} />
-        <div className="flex flex-cols items-center lg:justify-end justify-center mt-2 lg:mt-0 gap-4">
+        <div className="flex-cols mt-2 flex items-center justify-center gap-4 lg:mt-0 lg:justify-end">
           <Button
             color="secondary"
             variant="flat"
@@ -661,7 +661,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
           ) : null}
         </div>
       </div>
-      <Divider className="mt-4 mb-4" />
+      <Divider className="my-4" />
       <ExecutionDetails execution={execution} runners={runners} steps={steps} />
       <Spacer y={4} />
       {/* Tabelle */}

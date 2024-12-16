@@ -42,7 +42,7 @@ export default function ChangeFlowMaintenanceModal({
     const res = (await ChangeFlowMaintenance(
       flow.id,
       maintenance,
-      maintenanceReason ? maintenanceReason : "no info provided",
+      maintenanceReason || "no info provided",
     )) as any;
 
     if (!res) {
@@ -92,7 +92,10 @@ export default function ChangeFlowMaintenanceModal({
                     <ErrorCard error={errorText} message={errorMessage} />
                   )}
                   <Snippet hideCopyButton hideSymbol>
-                    <span>ID: {flow.id}</span>
+                    <span>
+                      ID:
+                      {flow.id}
+                    </span>
                   </Snippet>
                   <Input
                     label="Maintenance Message"
@@ -135,7 +138,10 @@ export default function ChangeFlowMaintenanceModal({
                 </ModalHeader>
                 <ModalBody>
                   <Snippet hideCopyButton hideSymbol>
-                    <span>ID: {flow.id}</span>
+                    <span>
+                      ID:
+                      {flow.id}
+                    </span>
                   </Snippet>
                 </ModalBody>
                 <ModalFooter className="grid grid-cols-2">

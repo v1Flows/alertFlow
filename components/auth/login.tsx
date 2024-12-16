@@ -1,20 +1,19 @@
-/* eslint-disable no-undef */
 "use client";
-import React from "react";
+import { Icon } from "@iconify/react";
 import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-  Button,
   Avatar,
-  User,
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
   Tooltip,
+  User,
 } from "@nextui-org/react";
 import { LogInIcon, UserPlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import React from "react";
 import { toast } from "sonner";
-import { Icon } from "@iconify/react";
 
 import { Logout } from "@/lib/logout";
 
@@ -60,7 +59,7 @@ export default function Login({ user, session, showSignUp, settings }: any) {
                 description={userData?.email}
                 name={
                   userData?.role === "admin"
-                    ? userData?.username + " | " + userData?.role
+                    ? `${userData?.username} | ${userData?.role}`
                     : userData?.username
                 }
               />

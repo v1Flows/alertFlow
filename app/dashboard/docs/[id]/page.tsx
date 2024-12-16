@@ -2,9 +2,9 @@ import { Divider, Spacer } from "@nextui-org/react";
 
 import DocContent from "@/components/dashboard/docs/doc/content";
 import DocHeader from "@/components/dashboard/docs/doc/header";
+import ErrorCard from "@/components/error/ErrorCard";
 import GetDoc from "@/lib/fetch/docs/doc";
 import GetUserDetails from "@/lib/fetch/user/getDetails";
-import ErrorCard from "@/components/error/ErrorCard";
 
 export default async function DocPage({ params }: { params: { id: string } }) {
   const { id } = await params;

@@ -1,27 +1,27 @@
-import React from "react";
+import { Icon } from "@iconify/react";
 import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  User,
-  Tooltip,
-  Chip,
-  Pagination,
-  useDisclosure,
   Button,
   ButtonGroup,
+  Chip,
+  Pagination,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+  Tooltip,
+  useDisclosure,
+  User,
 } from "@nextui-org/react";
-import { Icon } from "@iconify/react";
+import React from "react";
 import { useMediaQuery } from "usehooks-ts";
 
-import AddProjectMemberModal from "@/components/functions/projects/members";
-import { PlusIcon } from "@/components/icons";
 import EditProjectMemberModal from "@/components/functions/projects/editMember";
 import LeaveProjectModal from "@/components/functions/projects/leave";
+import AddProjectMemberModal from "@/components/functions/projects/members";
 import ProjectTransferOwnership from "@/components/functions/projects/transferOwnership";
+import { PlusIcon } from "@/components/icons";
 
 import DeleteProjectMemberModal from "../../../../functions/projects/removeMember";
 
@@ -271,7 +271,7 @@ export default function ProjectMembers({
             ACTIONS
           </TableColumn>
         </TableHeader>
-        <TableBody emptyContent={"No rows to display."} items={items}>
+        <TableBody emptyContent="No rows to display." items={items}>
           {(item: any) => (
             <TableRow key={item.user_id}>
               {(columnKey) => (

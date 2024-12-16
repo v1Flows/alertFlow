@@ -25,11 +25,11 @@ export default function Quota({
 
   return (
     <>
-      <div className="grid lg:grid-cols-3 grid-cols-1 items-stretch gap-4">
+      <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-3">
         <div className="col-span-1 grid grid-cols-2 items-start gap-4">
           <Card className="h-full">
-            <CardBody className="flex gap-1 items-center justify-center">
-              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-12 h-12">
+            <CardBody className="flex items-center justify-center gap-1">
+              <div className="flex size-12 items-center justify-center rounded-large bg-primary bg-opacity-10">
                 <Icon
                   className="text-primary"
                   icon="solar:box-broken"
@@ -40,7 +40,7 @@ export default function Quota({
               {plan.projects !== 999 && user.role !== "vip" ? (
                 <>
                   <p className="text-lg font-bold">
-                    {stats.projects} / {plan.projects}
+                    {stats.projects} /{plan.projects}
                   </p>
                   <Progress
                     color={
@@ -52,7 +52,7 @@ export default function Quota({
                 </>
               ) : (
                 <p
-                  className={`text-lg font-bold text-${user.role === "vip" ? "warning" : "secondary"}`}
+                  className={`text- text-lg font-bold${user.role === "vip" ? "warning" : "secondary"}`}
                 >
                   Unlimited
                 </p>
@@ -60,8 +60,8 @@ export default function Quota({
             </CardBody>
           </Card>
           <Card className="h-full">
-            <CardBody className="flex gap-1 items-center justify-center">
-              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-12 h-12">
+            <CardBody className="flex items-center justify-center gap-1">
+              <div className="flex size-12 items-center justify-center rounded-large bg-primary bg-opacity-10">
                 <Icon
                   className="text-primary"
                   icon="solar:book-2-outline"
@@ -72,7 +72,7 @@ export default function Quota({
               {plan.flows !== 999 && user.role !== "vip" ? (
                 <>
                   <p className="text-lg font-bold">
-                    {stats.flows} / {plan.flows}
+                    {stats.flows} /{plan.flows}
                   </p>
                   <Progress
                     color={stats.flows >= plan.flows ? "danger" : "primary"}
@@ -82,7 +82,7 @@ export default function Quota({
                 </>
               ) : (
                 <p
-                  className={`text-lg font-bold text-${user.role === "vip" ? "warning" : "secondary"}`}
+                  className={`text- text-lg font-bold${user.role === "vip" ? "warning" : "secondary"}`}
                 >
                   Unlimited
                 </p>
@@ -90,8 +90,8 @@ export default function Quota({
             </CardBody>
           </Card>
           <Card className="h-full">
-            <CardBody className="flex gap-1 items-center justify-center">
-              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-12 h-12">
+            <CardBody className="flex items-center justify-center gap-1">
+              <div className="flex size-12 items-center justify-center rounded-large bg-primary bg-opacity-10">
                 <Icon
                   className="text-primary"
                   icon="solar:rocket-2-broken"
@@ -117,7 +117,7 @@ export default function Quota({
                 </>
               ) : (
                 <p
-                  className={`text-lg font-bold text-${user.role === "vip" ? "warning" : "secondary"}`}
+                  className={`text- text-lg font-bold${user.role === "vip" ? "warning" : "secondary"}`}
                 >
                   Unlimited
                 </p>
@@ -125,8 +125,8 @@ export default function Quota({
             </CardBody>
           </Card>
           <Card className="h-full">
-            <CardBody className="flex gap-1 items-center justify-center">
-              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-12 h-12">
+            <CardBody className="flex items-center justify-center gap-1">
+              <div className="flex size-12 items-center justify-center rounded-large bg-primary bg-opacity-10">
                 <Icon
                   className="text-primary"
                   icon="solar:reorder-line-duotone"
@@ -152,7 +152,7 @@ export default function Quota({
                 </>
               ) : (
                 <p
-                  className={`text-lg font-bold text-${user.role === "vip" ? "warning" : "secondary"}`}
+                  className={`text- text-lg font-bold${user.role === "vip" ? "warning" : "secondary"}`}
                 >
                   Unlimited
                 </p>
@@ -170,7 +170,7 @@ export default function Quota({
             >
               Change Plan
             </Button>
-            <CardBody className="relative bg-gradient-to-br from-content1 to-default-100/50 p-8 before:inset-0 before:h-full before:w-full before:content-['']">
+            <CardBody className="relative bg-gradient-to-br from-content1 to-default-100/50 p-8 before:inset-0 before:size-full before:content-['']">
               <h1 className="mb-4 text-default-400">Your Plan</h1>
               {user.role === "admin" && (
                 <h2 className="inline bg-clip-text text-6xl font-semibold tracking-tight text-danger">
@@ -178,7 +178,7 @@ export default function Quota({
                 </h2>
               )}
               {user.role === "vip" && (
-                <h2 className="flex gap-1 items-center inline bg-clip-text text-6xl font-semibold tracking-tight text-warning">
+                <h2 className="inline flex items-center gap-1 bg-clip-text text-6xl font-semibold tracking-tight text-warning">
                   <Icon icon="solar:crown-broken" /> VIP
                 </h2>
               )}

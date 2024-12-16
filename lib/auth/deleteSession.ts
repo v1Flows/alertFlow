@@ -9,6 +9,4 @@ export async function deleteSession() {
   cookieStore.delete("user");
 
   redirect("/");
-
-  return;
 }

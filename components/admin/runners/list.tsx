@@ -1,28 +1,28 @@
 "use client";
-import React from "react";
+import { Icon } from "@iconify/react";
 import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
+  Button,
   Chip,
   Dropdown,
-  DropdownTrigger,
-  Button,
-  DropdownMenu,
   DropdownItem,
+  DropdownMenu,
   DropdownSection,
-  useDisclosure,
+  DropdownTrigger,
   Pagination,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+  useDisclosure,
 } from "@nextui-org/react";
+import React from "react";
 import TimeAgo from "react-timeago";
-import { Icon } from "@iconify/react";
 
+import EditRunnerModal from "@/components/functions/runner/edit";
 import DeleteRunnerModal from "@/components/functions/runner/delete";
 import ChangeRunnerStatusModal from "@/components/functions/runner/changeStatus";
-import EditRunnerModal from "@/components/functions/runner/edit";
 
 export function SelfHostedRunnerList({ runners, projects }: any) {
   const [status, setStatus] = React.useState(false);
@@ -43,7 +43,7 @@ export function SelfHostedRunnerList({ runners, projects }: any) {
   }, [page, runners]);
 
   function heartbeatColor(runner: any) {
-    var timeAgo =
+    const timeAgo =
       (new Date(runner.last_heartbeat).getTime() - Date.now()) / 1000;
 
     if (timeAgo < 0 && timeAgo > -30) {
@@ -109,7 +109,7 @@ export function SelfHostedRunnerList({ runners, projects }: any) {
         );
       case "last_heartbeat":
         return (
-          <p className={"text-" + heartbeatColor(runner)}>
+          <p className={`text-${heartbeatColor(runner)}`}>
             {runner.last_heartbeat !== "0001-01-01T00:00:00Z" && (
               <TimeAgo date={runner.last_heartbeat} />
             )}
@@ -131,7 +131,7 @@ export function SelfHostedRunnerList({ runners, projects }: any) {
         return <p>{runner.runner_version ? runner.runner_version : "N/A"}</p>;
       case "actions":
         return (
-          <div className="relative flex justify-center items-center gap-2">
+          <div className="relative flex items-center justify-center gap-2">
             <Dropdown>
               <DropdownTrigger>
                 <Button isIconOnly size="sm" variant="light">
@@ -225,7 +225,7 @@ export function SelfHostedRunnerList({ runners, projects }: any) {
 
   return (
     <main>
-      <p className="text-2xl font-bold mb-0 text-secondary mb-2">
+      <p className="mb-0 mb-2 text-2xl font-bold text-secondary">
         Self-Hosted Runners
       </p>
       <div>
@@ -275,7 +275,7 @@ export function SelfHostedRunnerList({ runners, projects }: any) {
               ACTIONS
             </TableColumn>
           </TableHeader>
-          <TableBody emptyContent={"No rows to display."} items={items}>
+          <TableBody emptyContent="No rows to display." items={items}>
             {(item: any) => (
               <TableRow key={item.id}>
                 {(columnKey) => (

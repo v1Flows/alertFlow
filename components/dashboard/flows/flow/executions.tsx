@@ -1,5 +1,6 @@
 "use client";
 
+import { Icon } from "@iconify/react";
 import {
   Button,
   Card,
@@ -21,14 +22,13 @@ import {
   Tooltip,
   useDisclosure,
 } from "@nextui-org/react";
-import { Icon } from "@iconify/react";
-import TimeAgo from "react-timeago";
+import NumberFlow from "@number-flow/react";
 import { useRouter } from "next/navigation";
 import React, { useMemo, useState } from "react";
-import NumberFlow from "@number-flow/react";
+import TimeAgo from "react-timeago";
 
-import DeleteExecutionModal from "@/components/functions/flows/deleteExecution";
 import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
+import DeleteExecutionModal from "@/components/functions/flows/deleteExecution";
 
 export default function Executions({
   executions,
@@ -65,7 +65,7 @@ export default function Executions({
   }, [page, executions, statusFilter]);
 
   function pages() {
-    var length = 0;
+    let length = 0;
 
     if (statusFilter.size > 0) {
       length =
@@ -128,9 +128,9 @@ export default function Executions({
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="default"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -153,9 +153,9 @@ export default function Executions({
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="warning"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -172,9 +172,9 @@ export default function Executions({
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="danger"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -191,8 +191,8 @@ export default function Executions({
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             color="secondary"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -209,9 +209,9 @@ export default function Executions({
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="primary"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -228,9 +228,9 @@ export default function Executions({
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="danger"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -247,9 +247,9 @@ export default function Executions({
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="success"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -266,9 +266,9 @@ export default function Executions({
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="success"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -285,7 +285,9 @@ export default function Executions({
   }
 
   function getDuration(execution: any) {
-    if (execution.finished_at === "0001-01-01T00:00:00Z") return "0s";
+    if (execution.finished_at === "0001-01-01T00:00:00Z") {
+      return "0s";
+    }
     const ms =
       new Date(execution.finished_at).getTime() -
       new Date(execution.executed_at).getTime();
@@ -417,7 +419,7 @@ export default function Executions({
   const topContent = useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
-        <div className="flex justify-between gap-3 items-end">
+        <div className="flex items-end justify-between gap-3">
           <div className="flex gap-3">
             <Dropdown>
               <DropdownTrigger>
@@ -443,7 +445,7 @@ export default function Executions({
                 }}
               >
                 <DropdownItem key="pending" className="capitalize">
-                  <div className="flex flex-cols gap-2">
+                  <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-default-500"
                       icon="solar:sleeping-square-linear"
@@ -453,7 +455,7 @@ export default function Executions({
                   </div>
                 </DropdownItem>
                 <DropdownItem key="running" className="capitalize">
-                  <div className="flex flex-cols gap-2">
+                  <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-primary"
                       icon="solar:play-bold-duotone"
@@ -463,7 +465,7 @@ export default function Executions({
                   </div>
                 </DropdownItem>
                 <DropdownItem key="paused" className="capitalize">
-                  <div className="flex flex-cols gap-2">
+                  <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-warning"
                       icon="solar:pause-outline"
@@ -473,7 +475,7 @@ export default function Executions({
                   </div>
                 </DropdownItem>
                 <DropdownItem key="canceled" className="capitalize">
-                  <div className="flex flex-cols gap-2">
+                  <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-danger"
                       icon="solar:forbidden-linear"
@@ -483,7 +485,7 @@ export default function Executions({
                   </div>
                 </DropdownItem>
                 <DropdownItem key="no_pattern_match" className="capitalize">
-                  <div className="flex flex-cols gap-2">
+                  <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-secondary"
                       icon="solar:bill-cross-outline"
@@ -493,7 +495,7 @@ export default function Executions({
                   </div>
                 </DropdownItem>
                 <DropdownItem key="interaction_required" className="capitalize">
-                  <div className="flex flex-cols gap-2">
+                  <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-primary"
                       icon="solar:hand-shake-linear"
@@ -503,7 +505,7 @@ export default function Executions({
                   </div>
                 </DropdownItem>
                 <DropdownItem key="error" className="capitalize">
-                  <div className="flex flex-cols gap-2">
+                  <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-danger"
                       icon="solar:danger-triangle-outline"
@@ -513,7 +515,7 @@ export default function Executions({
                   </div>
                 </DropdownItem>
                 <DropdownItem key="finished" className="capitalize">
-                  <div className="flex flex-cols gap-2">
+                  <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-success"
                       icon="solar:check-read-outline"
@@ -562,7 +564,7 @@ export default function Executions({
             isPressable
             className={
               statusFilter.has("pending")
-                ? "bg-default/50 w-[240px] grow"
+                ? "w-[240px] grow bg-default/50"
                 : "w-[240px] grow"
             }
             onPress={() => {
@@ -572,7 +574,7 @@ export default function Executions({
           >
             <CardBody>
               <div className="flex items-center gap-2">
-                <div className="flex bg-default/30 text-default-500 items-center rounded-small justify-center w-10 h-10">
+                <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-default-500">
                   <Icon icon="solar:sleeping-square-linear" width={20} />
                 </div>
                 <div>
@@ -598,7 +600,7 @@ export default function Executions({
             isPressable
             className={
               statusFilter.has("finished")
-                ? "bg-success/30 w-[240px] grow"
+                ? "w-[240px] grow bg-success/30"
                 : "w-[240px] grow"
             }
             onPress={() => {
@@ -608,7 +610,7 @@ export default function Executions({
           >
             <CardBody>
               <div className="flex items-center gap-2">
-                <div className="flex bg-success/10 text-success items-center rounded-small justify-center w-10 h-10">
+                <div className="flex size-10 items-center justify-center rounded-small bg-success/10 text-success">
                   <Icon icon="solar:check-read-outline" width={20} />
                 </div>
                 <div>
@@ -634,7 +636,7 @@ export default function Executions({
             isPressable
             className={
               statusFilter.has("running")
-                ? "bg-primary/30 w-[240px] grow"
+                ? "w-[240px] grow bg-primary/30"
                 : "w-[240px] grow"
             }
             onPress={() => {
@@ -644,7 +646,7 @@ export default function Executions({
           >
             <CardBody>
               <div className="flex items-center gap-2">
-                <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
                   <Icon icon="solar:play-bold-duotone" width={20} />
                 </div>
                 <div>
@@ -670,7 +672,7 @@ export default function Executions({
             isPressable
             className={
               statusFilter.has("paused")
-                ? "bg-warning/30 w-[240px] grow"
+                ? "w-[240px] grow bg-warning/30"
                 : "w-[240px] grow"
             }
             onPress={() => {
@@ -680,7 +682,7 @@ export default function Executions({
           >
             <CardBody>
               <div className="flex items-center gap-2">
-                <div className="flex bg-warning/10 text-warning items-center rounded-small justify-center w-10 h-10">
+                <div className="flex size-10 items-center justify-center rounded-small bg-warning/10 text-warning">
                   <Icon icon="solar:pause-outline" width={20} />
                 </div>
                 <div>
@@ -707,7 +709,7 @@ export default function Executions({
             isPressable
             className={
               statusFilter.has("interaction_required")
-                ? "bg-primary/30 w-[240px] grow"
+                ? "w-[240px] grow bg-primary/30"
                 : "w-[240px] grow"
             }
             onPress={() => {
@@ -717,7 +719,7 @@ export default function Executions({
           >
             <CardBody>
               <div className="flex items-center gap-2">
-                <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
                   <Icon icon="solar:hand-shake-linear" width={20} />
                 </div>
                 <div>
@@ -747,7 +749,7 @@ export default function Executions({
             isPressable
             className={
               statusFilter.has("no_pattern_match")
-                ? "bg-secondary/30 w-[240px] grow"
+                ? "w-[240px] grow bg-secondary/30"
                 : "w-[240px] grow"
             }
             onPress={() => {
@@ -757,7 +759,7 @@ export default function Executions({
           >
             <CardBody>
               <div className="flex items-center gap-2">
-                <div className="flex bg-secondary/10 text-secondary items-center rounded-small justify-center w-10 h-10">
+                <div className="flex size-10 items-center justify-center rounded-small bg-secondary/10 text-secondary">
                   <Icon icon="solar:bill-cross-outline" width={20} />
                 </div>
                 <div>
@@ -784,7 +786,7 @@ export default function Executions({
             isPressable
             className={
               statusFilter.has("cancelled")
-                ? "bg-danger/30 w-[240px] grow"
+                ? "w-[240px] grow bg-danger/30"
                 : "w-[240px] grow"
             }
             onPress={() => {
@@ -794,7 +796,7 @@ export default function Executions({
           >
             <CardBody>
               <div className="flex items-center gap-2">
-                <div className="flex bg-danger/10 text-danger items-center rounded-small justify-center w-10 h-10">
+                <div className="flex size-10 items-center justify-center rounded-small bg-danger/10 text-danger">
                   <Icon icon="solar:forbidden-linear" width={20} />
                 </div>
                 <div>
@@ -820,7 +822,7 @@ export default function Executions({
             isPressable
             className={
               statusFilter.has("error")
-                ? "bg-danger/30 w-[240px] grow"
+                ? "w-[240px] grow bg-danger/30"
                 : "w-[240px] grow"
             }
             onPress={() => {
@@ -830,7 +832,7 @@ export default function Executions({
           >
             <CardBody>
               <div className="flex items-center gap-2">
-                <div className="flex bg-danger/10 text-danger items-center rounded-small justify-center w-10 h-10">
+                <div className="flex size-10 items-center justify-center rounded-small bg-danger/10 text-danger">
                   <Icon icon="solar:danger-triangle-outline" width={20} />
                 </div>
                 <div>

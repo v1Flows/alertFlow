@@ -164,7 +164,7 @@ export default function AdminExecutionActions({
             className="capitalize"
             onPress={() => changeExecutionStatus("pending")}
           >
-            <div className="flex flex-cols gap-2">
+            <div className="flex-cols flex gap-2">
               <Icon
                 className="text-default-500"
                 icon="solar:sleeping-square-linear"
@@ -178,7 +178,7 @@ export default function AdminExecutionActions({
             className="capitalize"
             onPress={() => changeExecutionStatus("running")}
           >
-            <div className="flex flex-cols gap-2">
+            <div className="flex-cols flex gap-2">
               <Icon
                 className="text-primary"
                 icon="solar:play-bold-duotone"
@@ -192,7 +192,7 @@ export default function AdminExecutionActions({
             className="capitalize"
             onPress={() => changeExecutionStatus("paused")}
           >
-            <div className="flex flex-cols gap-2">
+            <div className="flex-cols flex gap-2">
               <Icon
                 className="text-warning"
                 icon="solar:pause-broken"
@@ -206,7 +206,7 @@ export default function AdminExecutionActions({
             className="capitalize"
             onPress={() => changeExecutionStatus("canceled")}
           >
-            <div className="flex flex-cols gap-2">
+            <div className="flex-cols flex gap-2">
               <Icon
                 className="text-danger"
                 icon="solar:forbidden-linear"
@@ -220,7 +220,7 @@ export default function AdminExecutionActions({
             className="capitalize"
             onPress={() => changeExecutionStatus("no_pattern_match")}
           >
-            <div className="flex flex-cols gap-2">
+            <div className="flex-cols flex gap-2">
               <Icon
                 className="text-secondary"
                 icon="solar:bill-cross-broken"
@@ -234,7 +234,7 @@ export default function AdminExecutionActions({
             className="capitalize"
             onPress={() => changeExecutionStatus("interaction_required")}
           >
-            <div className="flex flex-cols gap-2">
+            <div className="flex-cols flex gap-2">
               <Icon
                 className="text-primary"
                 icon="solar:hand-shake-linear"
@@ -248,7 +248,7 @@ export default function AdminExecutionActions({
             className="capitalize"
             onPress={() => changeExecutionStatus("error")}
           >
-            <div className="flex flex-cols gap-2">
+            <div className="flex-cols flex gap-2">
               <Icon
                 className="text-danger"
                 icon="solar:danger-triangle-broken"
@@ -262,7 +262,7 @@ export default function AdminExecutionActions({
             className="capitalize"
             onPress={() => changeExecutionStatus("finished")}
           >
-            <div className="flex flex-cols gap-2">
+            <div className="flex-cols flex gap-2">
               <Icon
                 className="text-success"
                 icon="solar:check-read-broken"

@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { Chip, Card, cn, Tab, Tabs, Spacer } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
+import { Card, Chip, cn, Spacer, Tab, Tabs } from "@nextui-org/react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import {
   Area,
   AreaChart,
@@ -12,7 +13,6 @@ import {
   XAxis,
 } from "recharts";
 import { toast } from "sonner";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import GetFlowStats from "@/lib/fetch/flow/stats";
 
@@ -35,14 +35,16 @@ type Chart = {
 const formatValue = (value: number, type: string | undefined) => {
   if (type === "number") {
     if (value >= 1000000) {
-      return (value / 1000000).toFixed(1) + "M";
+      return `${(value / 1000000).toFixed(1)}M`;
     } else if (value >= 1000) {
-      return (value / 1000).toFixed(0) + "k";
+      return `${(value / 1000).toFixed(0)}k`;
     }
 
     return value.toLocaleString();
   }
-  if (type === "percentage") return `${value}%`;
+  if (type === "percentage") {
+    return `${value}%`;
+  }
 
   return value;
 };
@@ -202,19 +204,19 @@ export default function FlowStats({ flowID }: { flowID: string }) {
                             changeType === "positive" ? (
                               <Icon
                                 height={16}
-                                icon={"solar:arrow-right-up-linear"}
+                                icon="solar:arrow-right-up-linear"
                                 width={16}
                               />
                             ) : changeType === "negative" ? (
                               <Icon
                                 height={16}
-                                icon={"solar:arrow-right-down-linear"}
+                                icon="solar:arrow-right-down-linear"
                                 width={16}
                               />
                             ) : (
                               <Icon
                                 height={16}
-                                icon={"solar:arrow-right-linear"}
+                                icon="solar:arrow-right-linear"
                                 width={16}
                               />
                             )
@@ -249,20 +251,20 @@ export default function FlowStats({ flowID }: { flowID: string }) {
                               ?.direction === "positive" ? (
                               <Icon
                                 height={16}
-                                icon={"solar:arrow-right-up-linear"}
+                                icon="solar:arrow-right-up-linear"
                                 width={16}
                               />
                             ) : stats?.payloads_executions_trends
                                 ?.execution_trend?.direction === "negative" ? (
                               <Icon
                                 height={16}
-                                icon={"solar:arrow-right-down-linear"}
+                                icon="solar:arrow-right-down-linear"
                                 width={16}
                               />
                             ) : (
                               <Icon
                                 height={16}
-                                icon={"solar:arrow-right-linear"}
+                                icon="solar:arrow-right-linear"
                                 width={16}
                               />
                             )

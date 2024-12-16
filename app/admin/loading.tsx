@@ -12,7 +12,7 @@ export default function loader() {
       <Card fullWidth>
         <CardBody>
           <Skeleton className="w-5/5 rounded-lg">
-            <div className="h-8 w-5/5 rounded-lg bg-default-200" />
+            <div className="w-5/5 h-8 rounded-lg bg-default-200" />
           </Skeleton>
         </CardBody>
       </Card>

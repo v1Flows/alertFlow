@@ -1,43 +1,43 @@
 "use client";
 
+import { Icon } from "@iconify/react";
 import {
+  Badge,
   type ButtonProps,
   type Selection,
-  Badge,
   Tooltip,
 } from "@nextui-org/react";
-import { Command } from "cmdk";
-import { useEffect, useState, useMemo, useCallback, useRef } from "react";
-import { matchSorter } from "match-sorter";
 import {
   Button,
+  cn,
   Kbd,
   Listbox,
   ListboxItem,
   Modal,
   ModalContent,
   ScrollShadow,
-  cn,
 } from "@nextui-org/react";
-import { tv } from "tailwind-variants";
+import { isAppleDevice, isWebKit } from "@react-aria/utils";
+import { Command } from "cmdk";
+import { capitalize, intersectionBy, isEmpty } from "lodash";
+import { matchSorter } from "match-sorter";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import MultiRef from "react-multi-ref";
 import scrollIntoView from "scroll-into-view-if-needed";
-import { isAppleDevice, isWebKit } from "@react-aria/utils";
-import { capitalize, intersectionBy, isEmpty } from "lodash";
+import { tv } from "tailwind-variants";
 import { useLocalStorage, useMediaQuery } from "usehooks-ts";
-import { Icon } from "@iconify/react";
-import { useRouter } from "next/navigation";
 
-import { useUpdateEffect } from "./use-update-effect";
 import { CategoryEnum, type SearchResultItem } from "./data";
+import { searchData } from "./mock-data";
+import { NewChip } from "./new-chip";
 import { Popover, PopoverTrigger } from "./popover";
 import { sortSearchCategoryItems } from "./sort";
-import { NewChip } from "./new-chip";
-import { searchData } from "./mock-data";
+import { useUpdateEffect } from "./use-update-effect";
 
 const cmdk = tv({
   slots: {
-    base: "max-h-full h-auto",
+    base: "h-auto max-h-full",
     header: [
       "flex",
       "items-center",
@@ -47,7 +47,7 @@ const cmdk = tv({
       "border-default-400/50",
       "dark:border-default-100",
     ],
-    searchIcon: "text-default-400 text-lg [&>g]:stroke-[2px]",
+    searchIcon: "text-lg text-default-400 [&>g]:stroke-[2px]",
     input: [
       "w-full",
       "px-2",
@@ -263,7 +263,7 @@ function flattenSearchData(projects: any, flows: any) {
 }
 
 function groupedSearchData(data: SearchResultItem[]) {
-  let categoryGroupMap = {
+  const categoryGroupMap = {
     [CategoryEnum.COMMON]: [] as SearchResultItem[],
     [CategoryEnum.USER]: [] as SearchResultItem[],
     [CategoryEnum.PROJECTS]: [] as SearchResultItem[],
@@ -301,6 +301,7 @@ export default function Search({
 
   const [query, setQuery] = useState("");
   const [activeItem, setActiveItem] = useState(0);
+
   // eslint-disable-next-line no-undef
   const [menuNodes] = useState(() => new MultiRef<number, HTMLElement>());
   const [selectedCategory, setSelectedCategory] = useState<CategoryEnum>(
@@ -316,6 +317,7 @@ export default function Search({
     [flattenedData],
   );
   const eventRef = useRef<"mouse" | "keyboard">();
+
   // eslint-disable-next-line no-undef
   const listRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -344,7 +346,9 @@ export default function Search({
   >(RECENT_SEARCHES_KEY, []);
 
   const recentSearches = useMemo(() => {
-    if (isEmpty(savedRecentSearches)) return [];
+    if (isEmpty(savedRecentSearches)) {
+      return [];
+    }
 
     return savedRecentSearches?.map((item) => {
       const found = searchData[item.category as CategoryEnum]?.find(
@@ -374,38 +378,37 @@ export default function Search({
     [recentSearches, setRecentSearches],
   );
 
-  const results = useMemo<SearchResultItem[]>(
-    function getResults() {
-      if (query.length < 2) return [];
+  const results = useMemo<SearchResultItem[]>(() => {
+    if (query.length < 2) {
+      return [];
+    }
 
-      const data = flattenedData as SearchResultItem[];
+    const data = flattenedData as SearchResultItem[];
 
-      const words = query.split(" ");
+    const words = query.split(" ");
 
-      if (words.length === 1) {
-        return matchSorter(data, query, {
-          keys: MATCH_KEYS,
-        }).slice(0, MAX_RESULTS);
-      }
+    if (words.length === 1) {
+      return matchSorter(data, query, {
+        keys: MATCH_KEYS,
+      }).slice(0, MAX_RESULTS);
+    }
 
-      const matchesForEachWord = words.map((word) =>
-        matchSorter(data, word, {
-          keys: MATCH_KEYS,
-        }),
-      );
+    const matchesForEachWord = words.map((word) =>
+      matchSorter(data, word, {
+        keys: MATCH_KEYS,
+      }),
+    );
 
-      const matches = intersectionBy(...matchesForEachWord, "slug").slice(
-        0,
-        MAX_RESULTS,
-      );
+    const matches = intersectionBy(...matchesForEachWord, "slug").slice(
+      0,
+      MAX_RESULTS,
+    );
 
-      return matches;
-    },
-    [query, flattenedData],
-  );
+    return matches;
+  }, [query, flattenedData]);
 
   const categoryGroups = useMemo(() => {
-    let categoryGroups: {
+    const categoryGroups: {
       [key: string]: SearchResultItem[];
     } = {};
 
@@ -529,10 +532,14 @@ export default function Search({
   }, [query]);
 
   useUpdateEffect(() => {
-    if (!listRef.current || eventRef.current === "mouse") return;
+    if (!listRef.current || eventRef.current === "mouse") {
+      return;
+    }
     const node = menuNodes.map.get(activeItem);
 
-    if (!node) return;
+    if (!node) {
+      return;
+    }
     scrollIntoView(node, {
       scrollMode: "if-needed",
       behavior: "smooth",
@@ -601,7 +608,7 @@ export default function Search({
             )}
           >
             <Icon icon={item.component.icon} width={35} />
-            <p className="text-sm text-default-500 text-center">
+            <p className="text-center text-sm text-default-500">
               {item.component.name}
             </p>
           </div>
@@ -889,7 +896,11 @@ export default function Search({
                     <Command.Empty>
                       <div className={slots.emptyWrapper()}>
                         <div>
-                          <p>No results for &quot;{query}&quot;</p>
+                          <p>
+                            No results for &quot;
+                            {query}
+                            &quot;
+                          </p>
                           {query.length === 1 ? (
                             <p className="text-default-400">
                               Try adding more characters to your search term.

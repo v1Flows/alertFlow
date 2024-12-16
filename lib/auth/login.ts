@@ -14,7 +14,7 @@ export default async function LoginAPI(
       `${process.env.NEXT_PUBLIC_API_URL}/v1/auth/login`,
       {
         method: "POST",
-        headers: headers,
+        headers,
         body: JSON.stringify({
           email,
           password,
@@ -25,7 +25,7 @@ export default async function LoginAPI(
     const data = await res.json();
 
     return data;
-  } catch (error) {
+  } catch {
     return { error: "Failed to login" };
   }
 }

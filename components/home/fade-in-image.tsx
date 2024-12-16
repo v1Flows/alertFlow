@@ -1,9 +1,8 @@
 "use client";
 
-/* eslint-disable jsx-a11y/alt-text */
 import type { ImageProps } from "next/image";
 
-import { LazyMotion, domAnimation, m, useAnimation } from "framer-motion";
+import { domAnimation, LazyMotion, m, useAnimation } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -20,7 +19,6 @@ export const FadeInImage = (props: ImageProps) => {
     if (isLoaded) {
       animationControls.start("visible");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded]);
 
   return (
@@ -31,7 +29,7 @@ export const FadeInImage = (props: ImageProps) => {
         transition={{ duration: 0.5, ease: "easeOut" }}
         variants={animationVariants}
       >
-        <Image {...props} onLoad={() => setIsLoaded(true)} />
+        <Image {...props} alt="fade" onLoad={() => setIsLoaded(true)} />
       </m.div>
     </LazyMotion>
   );

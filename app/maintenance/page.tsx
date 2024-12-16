@@ -1,8 +1,8 @@
 import { cookies } from "next/headers";
 
-import { subtitle } from "@/components/primitives";
 import Login from "@/components/auth/login";
 import SparklesText from "@/components/magicui/sparkles-text";
+import { subtitle } from "@/components/primitives";
 
 export default async function MaintenancePage() {
   const cookieStore = await cookies();
@@ -11,7 +11,7 @@ export default async function MaintenancePage() {
 
   return (
     <section className="flex h-screen items-center justify-center">
-      <div className="inline-block text-center justify-center">
+      <div className="inline-block justify-center text-center">
         <SparklesText text="Maintenance Mode" />
         <h2 className={subtitle({ class: "mt-4" })}>
           We are currently in maintenance mode. Please come back later.

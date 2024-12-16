@@ -42,7 +42,7 @@ export default function ChangeTokenStatusModal({
     const res = (await ChangeTokenStatus(
       token.id,
       status,
-      disableReason ? disableReason : "no info provided",
+      disableReason || "no info provided",
     )) as any;
 
     if (!res) {
@@ -93,7 +93,10 @@ export default function ChangeTokenStatusModal({
                     <ErrorCard error={errorText} message={errorMessage} />
                   )}
                   <Snippet hideCopyButton hideSymbol>
-                    <span>ID: {token.id}</span>
+                    <span>
+                      ID:
+                      {token.id}
+                    </span>
                   </Snippet>
                   <Input
                     label="Disable Reason"
@@ -134,7 +137,10 @@ export default function ChangeTokenStatusModal({
                 </ModalHeader>
                 <ModalBody>
                   <Snippet hideCopyButton hideSymbol>
-                    <span>ID: {token.id}</span>
+                    <span>
+                      ID:
+                      {token.id}
+                    </span>
                   </Snippet>
                 </ModalBody>
                 <ModalFooter className="grid grid-cols-2">

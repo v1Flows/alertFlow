@@ -28,18 +28,18 @@ export default function AdminPlans({ plans }: any) {
     <main>
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-1">
-          <p className="text-2xl font-bold mb-0 text-danger">Admin</p>
-          <p className="text-2xl mb-0">|</p>
-          <p className="text-2xl mb-0">Plans</p>
+          <p className="mb-0 text-2xl font-bold text-danger">Admin</p>
+          <p className="mb-0 text-2xl">|</p>
+          <p className="mb-0 text-2xl">Plans</p>
         </div>
       </div>
       <Divider className="my-4" />
-      <div className="grid lg:grid-cols-4 gap-4">
+      <div className="grid gap-4 lg:grid-cols-4">
         {plans.map((plan: any) => (
           <Card key={plan.id}>
             <CardHeader className="justify-between">
               <div className="flex flex-col">
-                <p className="mb-0 text-primary text-lg font-bold">
+                <p className="mb-0 text-lg font-bold text-primary">
                   {plan.name}
                 </p>
                 <p className="text-sm text-default-500">{plan.description}</p>
@@ -57,14 +57,14 @@ export default function AdminPlans({ plans }: any) {
               )}
             </CardHeader>
             <CardBody>
-              <div className="grid grid-cols-2 gap-2 justify-between items-center">
+              <div className="grid grid-cols-2 items-center justify-between gap-2">
                 <p className="text-sm text-default-600">Price</p>
                 <p className="text-lg font-bold">
                   {plan.price === 0
                     ? "Free"
                     : plan.price === 999
                       ? "On Demand"
-                      : plan.price + "€" + " / " + plan.period}
+                      : `${plan.price}€` + ` / ${plan.period}`}
                 </p>
                 {/* */}
                 <p className="text-sm text-default-600">Projects</p>

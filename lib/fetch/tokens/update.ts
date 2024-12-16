@@ -2,20 +2,20 @@
 
 import { cookies } from "next/headers";
 
-interface Result {
+type Result = {
   result: string;
-}
+};
 
-interface ErrorResponse {
+type ErrorResponse = {
   success: false;
   error: string;
   message: string;
-}
+};
 
-interface SuccessResponse {
+type SuccessResponse = {
   success: true;
   data: Result;
-}
+};
 
 export default async function UpdateToken(
   id: string,
@@ -42,7 +42,7 @@ export default async function UpdateToken(
           Authorization: token.value,
         },
         body: JSON.stringify({
-          description: description,
+          description,
         }),
       },
     );
@@ -61,7 +61,7 @@ export default async function UpdateToken(
 
     return {
       success: true,
-      data: data,
+      data,
     };
   } catch (error) {
     return {

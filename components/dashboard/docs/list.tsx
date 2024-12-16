@@ -155,13 +155,13 @@ export default function DocsList({ docs }: any) {
             }}
           >
             <CardBody className="flex items-center gap-2">
-              <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-14 h-14">
+              <div className="flex size-14 items-center justify-center rounded-small bg-default/30 text-foreground">
                 <Icon icon={getCategoryIcon(doc.category)} width={30} />
               </div>
               <p className="text-md font-bold">{doc.title}</p>
             </CardBody>
             <CardFooter>
-              <div className="flex flex-wrap gap-2 items-center">
+              <div className="flex flex-wrap items-center gap-2">
                 <Chip color="primary" radius="sm" variant="flat">
                   Category: {doc.category}
                 </Chip>

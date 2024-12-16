@@ -1,19 +1,19 @@
 import { cookies } from "next/headers";
 
-interface Flows {
+type Flows = {
   flows: [];
-}
+};
 
-interface ErrorResponse {
+type ErrorResponse = {
   success: false;
   error: string;
   message: string;
-}
+};
 
-interface SuccessResponse {
+type SuccessResponse = {
   success: true;
   data: Flows;
-}
+};
 
 export async function AdminGetFlows(): Promise<
   SuccessResponse | ErrorResponse
@@ -55,7 +55,7 @@ export async function AdminGetFlows(): Promise<
 
     return {
       success: true,
-      data: data,
+      data,
     };
   } catch (error) {
     return {

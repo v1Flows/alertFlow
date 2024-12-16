@@ -1,30 +1,30 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import { Icon } from "@iconify/react";
 import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  Divider,
-  Pagination,
-  CircularProgress,
   Button,
-  useDisclosure,
-  Tooltip,
-  DropdownSection,
-  DropdownItem,
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  Spacer,
   Card,
   CardBody,
+  CircularProgress,
+  Divider,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownSection,
+  DropdownTrigger,
+  Pagination,
+  Spacer,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+  Tooltip,
+  useDisclosure,
 } from "@nextui-org/react";
-import { Icon } from "@iconify/react";
-import { useRouter } from "next/navigation";
 import NumberFlow from "@number-flow/react";
+import { useRouter } from "next/navigation";
+import React, { useMemo, useState } from "react";
 
 import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
 import DeleteExecutionModal from "@/components/functions/flows/deleteExecution";
@@ -64,7 +64,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
   }, [page, executions, statusFilter]);
 
   function pages() {
-    var length = 0;
+    let length = 0;
 
     if (statusFilter.size > 0) {
       length =
@@ -127,9 +127,9 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="default"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -152,9 +152,9 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="warning"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -171,9 +171,9 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="danger"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -190,8 +190,8 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             color="secondary"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -208,9 +208,9 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="primary"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -227,9 +227,9 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="danger"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -246,9 +246,9 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="success"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -265,9 +265,9 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="success"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -284,7 +284,9 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
   }
 
   function getDuration(execution: any) {
-    if (execution.finished_at === "0001-01-01T00:00:00Z") return "0s";
+    if (execution.finished_at === "0001-01-01T00:00:00Z") {
+      return "0s";
+    }
     const ms =
       new Date(execution.finished_at).getTime() -
       new Date(execution.executed_at).getTime();
@@ -346,7 +348,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
         return new Date(execution.finished_at).toLocaleString("de-DE");
       case "actions":
         return (
-          <div className="relative flex justify-center items-center gap-2">
+          <div className="relative flex items-center justify-center gap-2">
             <Dropdown>
               <DropdownTrigger>
                 <Button isIconOnly size="sm" variant="light">
@@ -418,7 +420,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
   const topContent = useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
-        <div className="flex justify-between gap-3 items-end">
+        <div className="flex items-end justify-between gap-3">
           <div className="flex gap-3">
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
@@ -444,7 +446,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
                 }}
               >
                 <DropdownItem key="pending" className="capitalize">
-                  <div className="flex flex-cols gap-2">
+                  <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-default-500"
                       icon="solar:sleeping-square-linear"
@@ -454,7 +456,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
                   </div>
                 </DropdownItem>
                 <DropdownItem key="running" className="capitalize">
-                  <div className="flex flex-cols gap-2">
+                  <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-primary"
                       icon="solar:play-bold-duotone"
@@ -464,7 +466,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
                   </div>
                 </DropdownItem>
                 <DropdownItem key="paused" className="capitalize">
-                  <div className="flex flex-cols gap-2">
+                  <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-warning"
                       icon="solar:pause-broken"
@@ -474,7 +476,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
                   </div>
                 </DropdownItem>
                 <DropdownItem key="canceled" className="capitalize">
-                  <div className="flex flex-cols gap-2">
+                  <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-danger"
                       icon="solar:forbidden-linear"
@@ -484,7 +486,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
                   </div>
                 </DropdownItem>
                 <DropdownItem key="no_pattern_match" className="capitalize">
-                  <div className="flex flex-cols gap-2">
+                  <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-secondary"
                       icon="solar:bill-cross-broken"
@@ -494,7 +496,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
                   </div>
                 </DropdownItem>
                 <DropdownItem key="interaction_required" className="capitalize">
-                  <div className="flex flex-cols gap-2">
+                  <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-primary"
                       icon="solar:hand-shake-linear"
@@ -504,7 +506,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
                   </div>
                 </DropdownItem>
                 <DropdownItem key="error" className="capitalize">
-                  <div className="flex flex-cols gap-2">
+                  <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-danger"
                       icon="solar:danger-triangle-broken"
@@ -514,7 +516,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
                   </div>
                 </DropdownItem>
                 <DropdownItem key="finished" className="capitalize">
-                  <div className="flex flex-cols gap-2">
+                  <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-success"
                       icon="solar:check-read-broken"
@@ -544,13 +546,13 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
     <main>
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-1">
-          <p className="text-2xl font-bold mb-0 text-danger">Admin</p>
-          <p className="text-2xl mb-0">|</p>
-          <p className="text-2xl mb-0">Executions</p>
+          <p className="mb-0 text-2xl font-bold text-danger">Admin</p>
+          <p className="mb-0 text-2xl">|</p>
+          <p className="mb-0 text-2xl">Executions</p>
         </div>
       </div>
       <Divider className="my-4" />
-      <div className="grid lg:grid-cols-7 grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-7">
         <div className="col-span-1">
           <Card
             fullWidth
@@ -564,7 +566,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
           >
             <CardBody>
               <div className="flex items-center gap-2">
-                <div className="flex bg-default/30 text-default-500 items-center rounded-small justify-center w-10 h-10">
+                <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-default-500">
                   <Icon icon="solar:sleeping-square-linear" width={20} />
                 </div>
                 <div>
@@ -597,7 +599,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
           >
             <CardBody>
               <div className="flex items-center gap-2">
-                <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
                   <Icon icon="solar:play-bold-duotone" width={20} />
                 </div>
                 <div>
@@ -627,7 +629,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
           >
             <CardBody>
               <div className="flex items-center gap-2">
-                <div className="flex bg-warning/10 text-warning items-center rounded-small justify-center w-10 h-10">
+                <div className="flex size-10 items-center justify-center rounded-small bg-warning/10 text-warning">
                   <Icon icon="solar:pause-broken" width={20} />
                 </div>
                 <div>
@@ -659,7 +661,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
           >
             <CardBody>
               <div className="flex items-center gap-2">
-                <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
                   <Icon icon="solar:hand-shake-linear" width={20} />
                 </div>
                 <div>
@@ -694,7 +696,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
           >
             <CardBody>
               <div className="flex items-center gap-2">
-                <div className="flex bg-secondary/10 text-secondary items-center rounded-small justify-center w-10 h-10">
+                <div className="flex size-10 items-center justify-center rounded-small bg-secondary/10 text-secondary">
                   <Icon icon="solar:bill-cross-broken" width={20} />
                 </div>
                 <div>
@@ -725,7 +727,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
           >
             <CardBody>
               <div className="flex items-center gap-2">
-                <div className="flex bg-danger/10 text-danger items-center rounded-small justify-center w-10 h-10">
+                <div className="flex size-10 items-center justify-center rounded-small bg-danger/10 text-danger">
                   <Icon icon="solar:danger-triangle-broken" width={20} />
                 </div>
                 <div>
@@ -752,7 +754,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
           >
             <CardBody>
               <div className="flex items-center gap-2">
-                <div className="flex bg-success/10 text-success items-center rounded-small justify-center w-10 h-10">
+                <div className="flex size-10 items-center justify-center rounded-small bg-success/10 text-success">
                   <Icon icon="solar:check-read-broken" width={20} />
                 </div>
                 <div>
@@ -817,7 +819,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
             Actions
           </TableColumn>
         </TableHeader>
-        <TableBody emptyContent={"No rows to display."} items={items}>
+        <TableBody emptyContent="No rows to display." items={items}>
           {(item: any) => (
             <TableRow key={item.id}>
               {(columnKey) => (

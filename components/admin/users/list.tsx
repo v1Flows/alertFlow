@@ -1,41 +1,41 @@
 "use client";
-import React from "react";
+import { Icon } from "@iconify/react";
 import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  User,
+  Button,
   Chip,
   Divider,
   Dropdown,
-  DropdownTrigger,
-  Button,
+  DropdownItem,
   DropdownMenu,
   DropdownSection,
-  DropdownItem,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
+  DropdownTrigger,
   Input,
+  Modal,
+  ModalBody,
+  ModalContent,
   ModalFooter,
-  useDisclosure,
+  ModalHeader,
   Pagination,
   Snippet,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+  useDisclosure,
+  User,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import React from "react";
 import { toast } from "sonner";
-import { Icon } from "@iconify/react";
 
-import { LockIcon, PlusIcon } from "@/components/icons";
-import UpdateUserStatus from "@/lib/fetch/admin/PUT/UpdateUserState";
+import AdminDeleteUserModal from "@/components/functions/admin/delete";
+import AdminSendUserNotificationModal from "@/components/functions/admin/sendNotification";
 import SignUpModal from "@/components/functions/auth/signUp";
 import EditUserModal from "@/components/functions/users/edit";
-import AdminSendUserNotificationModal from "@/components/functions/admin/sendNotification";
-import AdminDeleteUserModal from "@/components/functions/admin/delete";
+import { LockIcon, PlusIcon } from "@/components/icons";
+import UpdateUserStatus from "@/lib/fetch/admin/PUT/UpdateUserState";
 
 export function UsersList({ users, plans }: any) {
   const router = useRouter();
@@ -177,7 +177,7 @@ export function UsersList({ users, plans }: any) {
       case "plan":
         return (
           <p
-            className={`font-bold text-sm capitalize text-${planColor(cellValue)}`}
+            className={`text- text-sm font-bold capitalize${planColor(cellValue)}`}
           >
             {cellValue}
           </p>
@@ -187,7 +187,7 @@ export function UsersList({ users, plans }: any) {
       case "role":
         return (
           <p
-            className={`font-bold text-sm capitalize text-${roleColor(cellValue)}`}
+            className={`text- text-sm font-bold capitalize${roleColor(cellValue)}`}
           >
             {cellValue}
           </p>
@@ -221,7 +221,7 @@ export function UsersList({ users, plans }: any) {
         );
       case "actions":
         return (
-          <div className="relative flex justify-center items-center gap-2">
+          <div className="relative flex items-center justify-center gap-2">
             <Dropdown>
               <DropdownTrigger>
                 <Button isIconOnly size="sm" variant="light">
@@ -326,9 +326,9 @@ export function UsersList({ users, plans }: any) {
     <main>
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-1">
-          <p className="text-2xl font-bold mb-0 text-danger">Admin</p>
-          <p className="text-2xl mb-0">|</p>
-          <p className="text-2xl mb-0">Users</p>
+          <p className="mb-0 text-2xl font-bold text-danger">Admin</p>
+          <p className="mb-0 text-2xl">|</p>
+          <p className="mb-0 text-2xl">Users</p>
         </div>
         <Button
           color="primary"

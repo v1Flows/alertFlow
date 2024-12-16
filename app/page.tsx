@@ -1,14 +1,14 @@
 import { Spacer } from "@nextui-org/react";
 import { cookies } from "next/headers";
 
-import Navbar from "@/components/navbar";
-import PageGetSettings from "@/lib/fetch/page/settings";
+import Footer from "@/components/footer/Footer";
 import { FeaturesSectionDemo } from "@/components/home/bento";
+import HomeFlows from "@/components/home/Flows";
+import HomeRunners from "@/components/home/Runners";
 import HomeShowcase from "@/components/home/Showcase";
 import HomeTerraform from "@/components/home/Terraform";
-import HomeRunners from "@/components/home/Runners";
-import HomeFlows from "@/components/home/Flows";
-import Footer from "@/components/footer/Footer";
+import Navbar from "@/components/navbar";
+import PageGetSettings from "@/lib/fetch/page/settings";
 
 export default async function Home() {
   const cookieStore = await cookies();
@@ -29,7 +29,7 @@ export default async function Home() {
       ) : null}
       <HomeShowcase />
       <Spacer y={28} />
-      <main className="container mx-auto w-full pt-2 px-6 flex-grow">
+      <main className="container mx-auto w-full grow px-6 pt-2">
         <section>
           <FeaturesSectionDemo />
         </section>

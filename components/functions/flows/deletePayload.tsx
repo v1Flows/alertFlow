@@ -89,7 +89,10 @@ export default function FunctionDeletePayloadModal({
                   <ErrorCard error={errorText} message={errorMessage} />
                 )}
                 <Snippet hideCopyButton hideSymbol>
-                  <span>ID: {payload.id}</span>
+                  <span>
+                    ID:
+                    {payload.id}
+                  </span>
                 </Snippet>
               </ModalBody>
               <ModalFooter className="grid grid-cols-2">

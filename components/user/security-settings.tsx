@@ -1,21 +1,21 @@
 "use client";
 
-import React from "react";
+import { Icon } from "@iconify/react";
 import {
-  Card,
-  CardHeader,
-  CardBody,
   Button,
+  Card,
+  CardBody,
+  CardHeader,
   useDisclosure,
 } from "@nextui-org/react";
-import { Icon } from "@iconify/react";
+import React from "react";
 
 import ChangeUserPasswordModal from "../functions/users/changePassword";
-import DisableUserModal from "../functions/users/disable";
 import DeleteUserModal from "../functions/users/delete";
+import DisableUserModal from "../functions/users/disable";
 
-import SwitchCell from "./switch-cell";
 import CellWrapper from "./cell-wrapper";
+import SwitchCell from "./switch-cell";
 
 export default function SecuritySettings({ user }: { user: any }) {
   const updatePasswordModal = useDisclosure();

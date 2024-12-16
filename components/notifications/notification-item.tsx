@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import { Icon } from "@iconify/react";
 import {
   Avatar,
   Badge,
@@ -9,14 +9,14 @@ import {
   CardBody,
   Spacer,
 } from "@nextui-org/react";
-import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
+import React from "react";
 import ReactTimeago from "react-timeago";
 
-import ReadUserNotification from "@/lib/fetch/user/PUT/readNotification";
 import UnreadUserNotification from "@/lib/fetch/user/PUT/unreadNotification";
-import ArchiveUserNotification from "@/lib/fetch/user/PUT/archiveNotification";
 import UnarchiveUserNotification from "@/lib/fetch/user/PUT/unarchiveNotification";
+import ReadUserNotification from "@/lib/fetch/user/PUT/readNotification";
+import ArchiveUserNotification from "@/lib/fetch/user/PUT/archiveNotification";
 
 export default function NotificationItem({ notification }: any) {
   const router = useRouter();
@@ -52,7 +52,7 @@ export default function NotificationItem({ notification }: any) {
               </Badge>
             </div>
             <div>
-              <p className="text-default-500 text-sm font-bold">
+              <p className="text-sm font-bold text-default-500">
                 {notification.title}
               </p>
               <p>{notification.body}</p>

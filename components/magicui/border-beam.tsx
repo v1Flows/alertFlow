@@ -1,7 +1,7 @@
-/* eslint-disable no-undef */
 import { cn } from "@nextui-org/react";
+import React from "react";
 
-interface BorderBeamProps {
+type BorderBeamProps = {
   className?: string;
   size?: number;
   duration?: number;
@@ -10,7 +10,7 @@ interface BorderBeamProps {
   colorFrom?: string;
   colorTo?: string;
   delay?: number;
-}
+};
 
 export const BorderBeam = ({
   className,

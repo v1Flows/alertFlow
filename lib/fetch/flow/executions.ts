@@ -2,20 +2,20 @@
 
 import { cookies } from "next/headers";
 
-interface Executions {
+type Executions = {
   executions: [];
-}
+};
 
-interface ErrorResponse {
+type ErrorResponse = {
   success: false;
   error: string;
   message: string;
-}
+};
 
-interface SuccessResponse {
+type SuccessResponse = {
   success: true;
   data: Executions;
-}
+};
 
 export async function GetFlowExecutions(
   flowID: any,
@@ -57,7 +57,7 @@ export async function GetFlowExecutions(
 
     return {
       success: true,
-      data: data,
+      data,
     };
   } catch (error) {
     return {

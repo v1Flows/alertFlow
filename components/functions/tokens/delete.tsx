@@ -76,8 +76,9 @@ export default function DeleteTokenModal({
                   <p className="text-lg font-bold">Are you sure?</p>
                   <p className="text-sm text-default-500">
                     You are about to delete the following token which{" "}
-                    <span className="font-bold">cannot be undone</span>. <br />{" "}
-                    Any runners using this token will become unusable.
+                    <span className="font-bold">cannot be undone</span>
+                    .
+                    <br /> Any runners using this token will become unusable.
                   </p>
                 </div>
               </ModalHeader>
@@ -86,7 +87,10 @@ export default function DeleteTokenModal({
                   <ErrorCard error={errorText} message={errorMessage} />
                 )}
                 <Snippet hideCopyButton hideSymbol>
-                  <span>ID: {token.id}</span>
+                  <span>
+                    ID:
+                    {token.id}
+                  </span>
                 </Snippet>
               </ModalBody>
               <ModalFooter className="grid grid-cols-2">

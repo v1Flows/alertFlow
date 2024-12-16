@@ -1,4 +1,7 @@
 "use client";
+import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
+import type { StripeCardElement } from "@stripe/stripe-js";
+
 import {
   Button,
   Modal,
@@ -7,9 +10,7 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@nextui-org/react";
-import { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import { StripeCardElement } from "@stripe/stripe-js";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

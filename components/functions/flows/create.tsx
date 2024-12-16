@@ -2,31 +2,31 @@
 
 import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
-import React from "react";
+import { Icon } from "@iconify/react";
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
-  useDisclosure,
+  ButtonGroup,
+  Divider,
   Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
   Select,
   SelectItem,
-  Divider,
   Snippet,
   Tooltip,
-  ButtonGroup,
+  useDisclosure,
 } from "@nextui-org/react";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { LibraryIcon } from "lucide-react";
-import { Icon } from "@iconify/react";
+import { useRouter } from "next/navigation";
+import React from "react";
+import { toast } from "sonner";
 
-import { CheckIcon } from "@/components/icons";
 import GetProjectRunners from "@/lib/fetch/project/runners";
 import CreateFlow from "@/lib/fetch/flow/POST/CreateFlow";
+import { CheckIcon } from "@/components/icons";
 import ErrorCard from "@/components/error/ErrorCard";
 
 export default function FunctionCreateFlow({
@@ -176,7 +176,7 @@ export default function FunctionCreateFlow({
                     ))}
                   </Select>
                   <div className="flex flex-col gap-2">
-                    <div className="flex flex-cols items-center gap-2">
+                    <div className="flex-cols flex items-center gap-2">
                       <p className="text-sm">Limit Runner</p>
                       <Tooltip content="You can specify a specific runner which should take care of executing your flow.">
                         <Icon

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import { Icon } from "@iconify/react";
 import {
   Card,
   CardBody,
@@ -11,14 +11,14 @@ import {
   Progress,
   useDisclosure,
 } from "@nextui-org/react";
-import { Icon } from "@iconify/react";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
+import { toast } from "sonner";
 
-import CreateCustomer from "@/lib/fetch/user/POST/CreateCustomer";
 import SetupNewCard from "@/lib/fetch/user/POST/SetupNewCard";
+import CreateCustomer from "@/lib/fetch/user/POST/CreateCustomer";
 
 import AddPaymentCardModal from "../functions/payment/addCard";
 import SelectPlanModal from "../functions/payment/selectPlan";
@@ -117,11 +117,11 @@ export default function SubscriptionOnboarding({
         ),
       );
     }
-  }, [user, subscription]);
+  }, [user, subscription, paymentMethods.payment_methods]);
 
   async function handleCreateCustomer() {
     setIsLoading(true);
-    const res = await CreateCustomer() as any;
+    const res = (await CreateCustomer()) as any;
 
     if (!res.success) {
       toast.error(res.error);
@@ -158,7 +158,7 @@ export default function SubscriptionOnboarding({
     <>
       <Card className="py-1 md:py-4">
         <CardHeader className="flex items-center gap-3 px-4 pb-0 pt-3 md:px-10 md:pt-5">
-          <div className="flex h-14 w-14 flex-none items-center justify-center rounded-full bg-gradient-to-br from-secondary-300 to-primary-500">
+          <div className="flex size-14 flex-none items-center justify-center rounded-full bg-gradient-to-br from-secondary-300 to-primary-500">
             <Icon
               className="text-white"
               icon="solar:skateboarding-line-duotone"

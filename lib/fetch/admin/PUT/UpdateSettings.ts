@@ -2,20 +2,20 @@
 
 import { cookies } from "next/headers";
 
-interface Result {
+type Result = {
   result: string;
-}
+};
 
-interface ErrorResponse {
+type ErrorResponse = {
   success: false;
   error: string;
   message: string;
-}
+};
 
-interface SuccessResponse {
+type SuccessResponse = {
   success: true;
   data: Result;
-}
+};
 
 export default async function UpdateSettings(
   maintenance: boolean,
@@ -50,16 +50,16 @@ export default async function UpdateSettings(
           Authorization: token.value,
         },
         body: JSON.stringify({
-          maintenance: maintenance,
-          signup: signup,
-          create_projects: create_projects,
-          create_flows: create_flows,
-          create_runners: create_runners,
-          create_api_keys: create_api_keys,
-          add_project_members: add_project_members,
-          add_flow_actions: add_flow_actions,
-          start_executions: start_executions,
-          inject_payloads: inject_payloads,
+          maintenance,
+          signup,
+          create_projects,
+          create_flows,
+          create_runners,
+          create_api_keys,
+          add_project_members,
+          add_flow_actions,
+          start_executions,
+          inject_payloads,
         }),
       },
     );
@@ -78,7 +78,7 @@ export default async function UpdateSettings(
 
     return {
       success: true,
-      data: data,
+      data,
     };
   } catch (error) {
     return {

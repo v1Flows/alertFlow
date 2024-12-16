@@ -1,14 +1,14 @@
 "use server";
 
-interface ErrorResponse {
+type ErrorResponse = {
   success: false;
   error: string;
   message: string;
-}
+};
 
-interface SuccessResponse {
+type SuccessResponse = {
   success: true;
-}
+};
 
 export default async function SimulatePayload(
   target: any,

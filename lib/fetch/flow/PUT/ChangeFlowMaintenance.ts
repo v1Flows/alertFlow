@@ -2,20 +2,20 @@
 
 import { cookies } from "next/headers";
 
-interface Result {
+type Result = {
   result: string;
-}
+};
 
-interface ErrorResponse {
+type ErrorResponse = {
   success: false;
   error: string;
   message: string;
-}
+};
 
-interface SuccessResponse {
+type SuccessResponse = {
   success: true;
   data: Result;
-}
+};
 
 export default async function ChangeFlowMaintenance(
   id: string,
@@ -43,7 +43,7 @@ export default async function ChangeFlowMaintenance(
           Authorization: token.value,
         },
         body: JSON.stringify({
-          maintenance: maintenance,
+          maintenance,
           maintenance_message: reason,
         }),
       },
@@ -63,7 +63,7 @@ export default async function ChangeFlowMaintenance(
 
     return {
       success: true,
-      data: data,
+      data,
     };
   } catch (error) {
     return {

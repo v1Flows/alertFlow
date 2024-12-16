@@ -90,8 +90,14 @@ export default function DeleteProjectModal({
                   <ErrorCard error={errorText} message={errorMessage} />
                 )}
                 <Snippet hideCopyButton hideSymbol>
-                  <span>Name: {project.name}</span>
-                  <span>ID: {project.id}</span>
+                  <span>
+                    Name:
+                    {project.name}
+                  </span>
+                  <span>
+                    ID:
+                    {project.id}
+                  </span>
                 </Snippet>
               </ModalBody>
               <ModalFooter className="grid grid-cols-2">

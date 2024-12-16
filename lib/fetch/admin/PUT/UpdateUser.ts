@@ -2,20 +2,20 @@
 
 import { cookies } from "next/headers";
 
-interface Result {
+type Result = {
   result: string;
-}
+};
 
-interface ErrorResponse {
+type ErrorResponse = {
   success: false;
   error: string;
   message: string;
-}
+};
 
-interface SuccessResponse {
+type SuccessResponse = {
   success: true;
   data: Result;
-}
+};
 
 export default async function UpdateUser(
   id: string,
@@ -45,10 +45,10 @@ export default async function UpdateUser(
           Authorization: token.value,
         },
         body: JSON.stringify({
-          username: username,
-          email: email,
-          role: role,
-          plan: plan,
+          username,
+          email,
+          role,
+          plan,
         }),
       },
     );
@@ -67,7 +67,7 @@ export default async function UpdateUser(
 
     return {
       success: true,
-      data: data,
+      data,
     };
   } catch (error) {
     return {

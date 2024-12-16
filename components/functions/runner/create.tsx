@@ -14,14 +14,14 @@ import {
   Snippet,
   useDisclosure,
 } from "@nextui-org/react";
+import { LibraryIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
-import { LibraryIcon } from "lucide-react";
 
-import { CheckIcon } from "@/components/icons";
 import AddRunner from "@/lib/fetch/runner/POST/AddRunner";
 import CreateRunnerToken from "@/lib/fetch/project/POST/CreateRunnerToken";
+import { CheckIcon } from "@/components/icons";
 import ErrorCard from "@/components/error/ErrorCard";
 
 export default function CreateRunnerModal({
@@ -70,7 +70,7 @@ export default function CreateRunnerModal({
 
     const tokenResponse = (await CreateRunnerToken({
       projectId: project.id ? project.id : "none",
-      description: name + " Runner Token",
+      description: `${name} Runner Token`,
     })) as any;
 
     if (!tokenResponse) {
@@ -99,7 +99,7 @@ export default function CreateRunnerModal({
       setError(true);
       setErrorText(response.error.error);
       setErrorMessage(response.error.message);
-      toast.error("Failed to create runner: " + response.error.error);
+      toast.error(`Failed to create runner: ${response.error.error}`);
     }
 
     setIsLoading(false);
@@ -174,13 +174,13 @@ export default function CreateRunnerModal({
                 <div>
                   <p className="text-sm font-bold text-default-400">Token</p>
                   <Snippet hideSymbol className="w-full" codeString={inApikey}>
-                    <span>{inApikey.slice(0, 30) + "..."}</span>
+                    <span>{`${inApikey.slice(0, 30)}...`}</span>
                   </Snippet>
                   <p className="text-sm text-default-400">
                     The Token can always be found on the &quot;Tokens&quot; tab.
                   </p>
                 </div>
-                <p className="text-sm text-default-500 mt-2">
+                <p className="mt-2 text-sm text-default-500">
                   If you need help with the configuration, please click the
                   documentation button below.
                 </p>

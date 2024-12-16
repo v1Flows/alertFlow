@@ -1,28 +1,28 @@
+import { Icon } from "@iconify/react";
 import {
-  Card,
-  CardHeader,
-  CardBody,
-  Divider,
-  Chip,
+  Badge,
   Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Chip,
+  Divider,
   Dropdown,
+  DropdownItem,
+  DropdownMenu,
   DropdownSection,
   DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
   useDisclosure,
-  Badge,
 } from "@nextui-org/react";
-import { toast } from "sonner";
 import React from "react";
 import TimeAgo from "react-timeago";
-import { Icon } from "@iconify/react";
+import { toast } from "sonner";
 import { useMediaQuery } from "usehooks-ts";
 
-import { VerticalDotsIcon, PlusIcon } from "@/components/icons";
-import CreateRunnerModal from "@/components/functions/runner/create";
-import DeleteRunnerModal from "@/components/functions/runner/delete";
+import { PlusIcon, VerticalDotsIcon } from "@/components/icons";
 import RunnerPluginDrawer from "@/components/functions/runner/plugins";
+import DeleteRunnerModal from "@/components/functions/runner/delete";
+import CreateRunnerModal from "@/components/functions/runner/create";
 
 export default function Runners({
   runners,
@@ -40,9 +40,7 @@ export default function Runners({
   const isMobile = useMediaQuery("(max-width: 650px)");
 
   const copyRunnerIDtoClipboard = (id: string) => {
-    // eslint-disable-next-line no-undef
     if (typeof navigator !== "undefined" && navigator.clipboard) {
-      // eslint-disable-next-line no-undef
       navigator.clipboard.writeText(id);
       toast.success("Runner ID copied to clipboard!");
     } else {
@@ -51,7 +49,7 @@ export default function Runners({
   };
 
   function heartbeatColor(runner: any) {
-    var timeAgo =
+    const timeAgo =
       (new Date(runner.last_heartbeat).getTime() - Date.now()) / 1000;
 
     if (timeAgo < 0 && timeAgo > -30) {
@@ -64,7 +62,7 @@ export default function Runners({
   }
 
   function heartbeatStatus(runner: any) {
-    var timeAgo =
+    const timeAgo =
       (new Date(runner.last_heartbeat).getTime() - Date.now()) / 1000;
 
     if (timeAgo < 0 && timeAgo > -30) {
@@ -100,7 +98,7 @@ export default function Runners({
 
   return (
     <main>
-      <div className="flex items-center justify-between mb-4">
+      <div className="mb-4 flex items-center justify-between">
         <p className="text-lg font-bold">Selfhosted Runners</p>
         <Button
           color="primary"
@@ -118,7 +116,7 @@ export default function Runners({
           (runner: any) =>
             runner.alertflow_runner === false && (
               <Card key={runner.id}>
-                <CardHeader className="justify-between items-center">
+                <CardHeader className="items-center justify-between">
                   <div className="flex flex-col gap-1">
                     <div className="flex gap-2">
                       <p className="text-md">{runner.name}</p>
@@ -143,7 +141,7 @@ export default function Runners({
                     </div>
                     <p className="text-sm text-default-500">{runner.id}</p>
                   </div>
-                  <div className="relative flex justify-end items-center gap-2">
+                  <div className="relative flex items-center justify-end gap-2">
                     <Dropdown backdrop="opaque">
                       <DropdownTrigger>
                         <Button isIconOnly size="sm" variant="light">
@@ -198,13 +196,13 @@ export default function Runners({
                 <Divider />
                 <CardBody className="flex flex-col">
                   {runner.disabled && (
-                    <p className="text-lg mb-4 font-bold text-danger text-center">
+                    <p className="mb-4 text-center text-lg font-bold text-danger">
                       {runner.disabled_reason}
                     </p>
                   )}
-                  <div className="flex flex-wrap gap-4 text-center items-center justify-between">
+                  <div className="flex flex-wrap items-center justify-between gap-4 text-center">
                     <div className="flex flex-col items-center justify-center gap-1">
-                      <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                      <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
                         <Icon
                           icon="solar:diploma-verified-outline"
                           width={20}
@@ -223,7 +221,7 @@ export default function Runners({
                     </div>
 
                     <div className="flex flex-col items-center justify-center gap-1">
-                      <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                      <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
                         <Icon icon="solar:heart-pulse-outline" width={20} />
                       </div>
                       <div>
@@ -243,7 +241,7 @@ export default function Runners({
                     </div>
 
                     <div className="flex flex-col items-center justify-center gap-1">
-                      <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                      <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
                         <Icon
                           icon="solar:gamepad-minimalistic-outline"
                           width={20}
@@ -260,7 +258,7 @@ export default function Runners({
                     </div>
 
                     <div className="flex flex-col items-center justify-center gap-1">
-                      <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                      <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
                         <Icon icon="solar:sd-card-outline" width={20} />
                       </div>
                       <div>
@@ -272,7 +270,7 @@ export default function Runners({
                     </div>
 
                     <div className="flex flex-col items-center justify-center gap-1">
-                      <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                      <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
                         <Icon icon="solar:settings-linear" width={20} />
                       </div>
                       <div>
@@ -291,16 +289,16 @@ export default function Runners({
                         showRunnerPluginsDrawer.onOpen();
                       }}
                     >
-                      <div className="flex flex-col hover:text-primary hover:cursor-pointer	items-center justify-center gap-1">
+                      <div className="flex flex-col items-center justify-center	gap-1 hover:cursor-pointer hover:text-primary">
                         <Badge
                           isOneChar
                           color="default"
-                          content={<Icon icon={"solar:info-circle-linear"} />}
+                          content={<Icon icon="solar:info-circle-linear" />}
                           placement="bottom-right"
                           shape="circle"
                           variant="faded"
                         >
-                          <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                          <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
                             <Icon icon="solar:plug-circle-outline" width={20} />
                           </div>
                         </Badge>
@@ -313,8 +311,8 @@ export default function Runners({
                       </div>
                     </Button>
 
-                    <div className="flex flex-col hover:text-primary hover:cursor-pointer items-center justify-center gap-1">
-                      <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                    <div className="flex flex-col items-center justify-center gap-1 hover:cursor-pointer hover:text-primary">
+                      <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
                         <Icon icon="solar:bolt-outline" width={20} />
                       </div>
                       <div>
@@ -325,8 +323,8 @@ export default function Runners({
                       </div>
                     </div>
 
-                    <div className="flex flex-col hover:text-primary hover:cursor-pointer items-center justify-center gap-1">
-                      <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                    <div className="flex flex-col items-center justify-center gap-1 hover:cursor-pointer hover:text-primary">
+                      <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
                         <Icon icon="solar:letter-opened-outline" width={20} />
                       </div>
                       <div>
@@ -345,16 +343,16 @@ export default function Runners({
         )}
       </div>
 
-      <p className="text-lg font-bold mt-4 mb-4">AlertFlow Runners</p>
+      <p className="my-4 text-lg font-bold">AlertFlow Runners</p>
       <Divider className="mb-4" />
       {project.alertflow_runners === true && (
         <div>
-          <div className="grid lg:grid-cols-2 gap-4">
+          <div className="grid gap-4 lg:grid-cols-2">
             {runners.map(
               (runner: any) =>
                 runner.alertflow_runner === true && (
                   <Card key={runner.id}>
-                    <CardHeader className="justify-between items-center">
+                    <CardHeader className="items-center justify-between">
                       <div className="flex flex-col gap-1">
                         <div className="flex gap-2">
                           <p className="text-md">{runner.name}</p>
@@ -381,7 +379,7 @@ export default function Runners({
                         </div>
                         <p className="text-sm text-default-500">{runner.id}</p>
                       </div>
-                      <div className="relative flex justify-end items-center gap-2">
+                      <div className="relative flex items-center justify-end gap-2">
                         <Dropdown backdrop="opaque">
                           <DropdownTrigger>
                             <Button isIconOnly size="sm" variant="light">
@@ -440,13 +438,13 @@ export default function Runners({
                     <Divider />
                     <CardBody className="flex flex-col">
                       {runner.disabled && (
-                        <p className="text-lg mb-4 font-bold text-danger text-center">
+                        <p className="mb-4 text-center text-lg font-bold text-danger">
                           {runner.disabled_reason}
                         </p>
                       )}
-                      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-center">
+                      <div className="grid gap-4 text-center sm:grid-cols-2 lg:grid-cols-3">
                         <div className="flex flex-col items-center justify-center gap-1">
-                          <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                          <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
                             <Icon icon="solar:heart-pulse-outline" width={20} />
                           </div>
                           <div>
@@ -467,7 +465,7 @@ export default function Runners({
                         </div>
 
                         <div className="flex flex-col items-center justify-center gap-1">
-                          <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                          <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
                             <Icon
                               icon="solar:gamepad-minimalistic-outline"
                               width={20}
@@ -484,7 +482,7 @@ export default function Runners({
                         </div>
 
                         <div className="flex flex-col items-center justify-center gap-1">
-                          <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                          <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
                             <Icon icon="solar:sd-card-outline" width={20} />
                           </div>
                           <div>
@@ -506,7 +504,7 @@ export default function Runners({
       )}
       {project.alertflow_runners === false && (
         <div>
-          <p className="text-sm text-default-500 font-bold mt-4 mb-4">
+          <p className="my-4 text-sm font-bold text-default-500">
             AlertFlow runners are disabled
           </p>
         </div>

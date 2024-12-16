@@ -1,36 +1,36 @@
 "use client";
-import React from "react";
+import { Icon } from "@iconify/react";
 import {
+  Alert,
+  Avatar,
+  AvatarGroup,
+  Button,
   Card,
   CardBody,
+  CardFooter,
+  CardHeader,
+  Chip,
   Divider,
   Dropdown,
-  DropdownTrigger,
+  DropdownItem,
   DropdownMenu,
   DropdownSection,
-  DropdownItem,
-  Button,
-  useDisclosure,
-  Chip,
+  DropdownTrigger,
   Spacer,
   Tooltip,
-  CardHeader,
-  CardFooter,
-  Alert,
-  AvatarGroup,
-  Avatar,
+  useDisclosure,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import React from "react";
 import { toast } from "sonner";
-import { Icon } from "@iconify/react";
 
-import DeleteProjectModal from "@/components/functions/projects/delete";
 import CreateProjectModal from "@/components/functions/projects/create";
+import DeleteProjectModal from "@/components/functions/projects/delete";
+import EditProjectModal from "@/components/functions/projects/edit";
+import { PlusIcon } from "@/components/icons";
 import SparklesText from "@/components/magicui/sparkles-text";
 import AcceptProjectInvite from "@/lib/fetch/project/PUT/AcceptProjectInvite";
 import DeclineProjectInvite from "@/lib/fetch/project/PUT/DeclineProjectInvite";
-import EditProjectModal from "@/components/functions/projects/edit";
-import { PlusIcon } from "@/components/icons";
 
 export function ProjectsList({
   projects,
@@ -47,9 +47,7 @@ export function ProjectsList({
   const deleteProjectModal = useDisclosure();
 
   const copyProjectIDtoClipboard = (key: string) => {
-    // eslint-disable-next-line no-undef
     if (typeof navigator !== "undefined" && navigator.clipboard) {
-      // eslint-disable-next-line no-undef
       navigator.clipboard.writeText(key);
       toast.success("Copied to clipboard!");
     } else {
@@ -89,7 +87,7 @@ export function ProjectsList({
           <div className="flex flex-wrap items-center justify-between gap-4">
             <p className="text-md font-bold text-primary">
               {projects.length}{" "}
-              <span className="text-default-500 font-normal">
+              <span className="font-normal text-default-500">
                 Projects found
               </span>
             </p>
@@ -108,7 +106,7 @@ export function ProjectsList({
         </CardBody>
       </Card>
       <Spacer y={4} />
-      <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         {projects.map((project: any) => (
           <div key={project.id} className="col-span-1">
             <Card
@@ -119,7 +117,7 @@ export function ProjectsList({
                 router.push(`/dashboard/projects/${project.id}`);
               }}
             >
-              <CardHeader className="justify-between items-center p-3 pb-0">
+              <CardHeader className="items-center justify-between p-3 pb-0">
                 <Chip
                   color={project.disabled ? "danger" : "success"}
                   radius="sm"
@@ -224,7 +222,10 @@ export function ProjectsList({
                       content={project.description}
                       style={{ maxWidth: "450px" }}
                     >
-                      <span>{project.description.slice(0, 50)}...</span>
+                      <span>
+                        {project.description.slice(0, 50)}
+                        ...
+                      </span>
                     </Tooltip>
                   ) : (
                     project.description
@@ -237,7 +238,7 @@ export function ProjectsList({
                   style={{ backgroundColor: project.color }}
                 />
               </CardBody>
-              <CardFooter className="flex items-center gap-2 justify-between text-default-500">
+              <CardFooter className="flex items-center justify-between gap-2 text-default-500">
                 <AvatarGroup isBordered className="pl-2" size="sm">
                   {project.members
                     .map((member: any) => (
@@ -279,7 +280,7 @@ export function ProjectsList({
             text="Pending Project Invitations"
           />
           <Spacer y={4} />
-          <div className="grid lg:grid-cols-2 grid-cols-1 gap-4">
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             {pending_projects.map((project: any) => (
               <div key={project.id} className="col-span-1">
                 <Card fullWidth>
@@ -303,7 +304,10 @@ export function ProjectsList({
                           content={project.description}
                           style={{ maxWidth: "450px" }}
                         >
-                          <span>{project.description.slice(0, 50)}...</span>
+                          <span>
+                            {project.description.slice(0, 50)}
+                            ...
+                          </span>
                         </Tooltip>
                       ) : (
                         project.description

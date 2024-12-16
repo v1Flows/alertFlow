@@ -1,22 +1,23 @@
 "use client";
 
-import React from "react";
+import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
+
 import { Icon } from "@iconify/react";
 import {
-  Card,
-  CardHeader,
-  CardBody,
-  RadioGroup,
-  Modal,
-  ModalContent,
-  ModalBody,
-  ModalFooter,
   Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  RadioGroup,
 } from "@nextui-org/react";
-import { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 import { AnimatePresence, domAnimation, LazyMotion, m } from "framer-motion";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import React from "react";
+import { toast } from "sonner";
 
 import CreateSubscription from "@/lib/fetch/user/POST/CreateSubscription";
 
@@ -55,7 +56,7 @@ export default function SelectPlanModal({
 
   async function pay(planID: string, planStripeID: string) {
     setIsLoading(true);
-    const res = await CreateSubscription(planID, planStripeID) as any;
+    const res = (await CreateSubscription(planID, planStripeID)) as any;
 
     if (!res.success) {
       toast.error(res.message);

@@ -2,21 +2,21 @@
 
 import { cookies } from "next/headers";
 
-interface Projects {
-  projects: {};
-  pending_projects: {};
-}
+type Projects = {
+  projects: object;
+  pending_projects: object;
+};
 
-interface ErrorResponse {
+type ErrorResponse = {
   success: false;
   error: string;
   message: string;
-}
+};
 
-interface SuccessResponse {
+type SuccessResponse = {
   success: true;
   data: Projects;
-}
+};
 
 export async function GetProjects(): Promise<SuccessResponse | ErrorResponse> {
   try {
@@ -53,7 +53,7 @@ export async function GetProjects(): Promise<SuccessResponse | ErrorResponse> {
 
     return {
       success: true,
-      data: data,
+      data,
     };
   } catch (error) {
     return {

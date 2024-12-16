@@ -2,18 +2,18 @@
 
 import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
-import React from "react";
+import { Icon } from "@iconify/react";
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
   Textarea,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { Icon } from "@iconify/react";
+import React from "react";
 import { toast } from "sonner";
 
 import AdminSendUserNotification from "@/lib/fetch/admin/POST/sendUserNotification";

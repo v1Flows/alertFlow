@@ -2,21 +2,21 @@
 
 import { cookies } from "next/headers";
 
-interface Project {
-  project: {};
+type Project = {
+  project: object;
   members: [];
-}
+};
 
-interface ErrorResponse {
+type ErrorResponse = {
   success: false;
   error: string;
   message: string;
-}
+};
 
-interface SuccessResponse {
+type SuccessResponse = {
   success: true;
   data: Project;
-}
+};
 
 export async function GetProject(
   projectId: any,
@@ -58,7 +58,7 @@ export async function GetProject(
 
     return {
       success: true,
-      data: data,
+      data,
     };
   } catch (error) {
     return {

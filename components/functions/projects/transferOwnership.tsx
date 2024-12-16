@@ -3,25 +3,25 @@
 import type { Selection } from "@nextui-org/react";
 import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
-import React, { useState } from "react";
 import {
-  Card,
-  CardHeader,
-  CardBody,
-  Button,
-  CardFooter,
-  Spacer,
-  AvatarGroup,
   Avatar,
-  Modal,
-  ModalContent,
-  ModalBody,
+  AvatarGroup,
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
   Checkbox,
   Chip,
-  User,
   cn,
+  Modal,
+  ModalBody,
+  ModalContent,
+  Spacer,
+  User,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 import { toast } from "sonner";
 
 import ProjectTransferOwnershipAPI from "@/lib/fetch/project/PUT/transferOwnership";
@@ -138,7 +138,7 @@ export default function ProjectTransferOwnership({
                     member.user_id !== user.id &&
                     member.invite_pending === false,
                 ).length === 0 && (
-                  <p className="text-center text-danger font-bold">
+                  <p className="text-center font-bold text-danger">
                     No members available to transfer the ownership to
                   </p>
                 )}
@@ -168,7 +168,7 @@ export default function ProjectTransferOwnership({
                           handleSelectionChange(member.user_id)
                         }
                       >
-                        <div className="w-full flex justify-between gap-2">
+                        <div className="flex w-full justify-between gap-2">
                           <User
                             avatarProps={{
                               size: "md",

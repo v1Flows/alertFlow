@@ -87,8 +87,14 @@ export default function FunctionDeleteFlow({
                   <ErrorCard error={errorText} message={errorMessage} />
                 )}
                 <Snippet hideCopyButton hideSymbol>
-                  <span>Name: {flow.name}</span>
-                  <span>ID: {flow.id}</span>
+                  <span>
+                    Name:
+                    {flow.name}
+                  </span>
+                  <span>
+                    ID:
+                    {flow.id}
+                  </span>
                 </Snippet>
               </ModalBody>
               <ModalFooter className="grid grid-cols-2">

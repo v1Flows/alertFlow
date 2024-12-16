@@ -7,7 +7,7 @@ export default function DashboardHomeLayout({
 }) {
   return (
     <>
-      <main className="container mx-auto max-w-7xl pt-2 px-6 flex-grow">
+      <main className="container mx-auto max-w-7xl grow px-6 pt-2">
         {children}
       </main>
     </>

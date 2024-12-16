@@ -1,24 +1,23 @@
-/* eslint-disable no-undef */
-import React from "react";
-import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  Tooltip,
-  Chip,
-  Button,
-  useDisclosure,
-  Pagination,
-} from "@nextui-org/react";
-import { toast } from "sonner";
 import { Icon } from "@iconify/react";
+import {
+  Button,
+  Chip,
+  Pagination,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+  Tooltip,
+  useDisclosure,
+} from "@nextui-org/react";
+import React from "react";
+import { toast } from "sonner";
 
 import { PlusIcon } from "@/components/icons";
-import CreateTokenModal from "@/components/functions/tokens/create";
 import DeleteTokenModal from "@/components/functions/tokens/delete";
+import CreateTokenModal from "@/components/functions/tokens/create";
 
 export default function ProjectTokens({
   tokens,
@@ -75,7 +74,7 @@ export default function ProjectTokens({
         return (
           <div className="relative flex items-center justify-center gap-2">
             <Tooltip content="Copy Token">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+              <span className="cursor-pointer text-lg text-default-400 active:opacity-50">
                 <Icon
                   icon="solar:copy-outline"
                   width={20}
@@ -86,7 +85,7 @@ export default function ProjectTokens({
               </span>
             </Tooltip>
             <Tooltip color="danger" content="Delete Token">
-              <span className="text-lg text-danger cursor-pointer active:opacity-50">
+              <span className="cursor-pointer text-lg text-danger active:opacity-50">
                 <Icon
                   icon="solar:trash-bin-trash-outline"
                   width={20}
@@ -188,7 +187,7 @@ export default function ProjectTokens({
             ACTIONS
           </TableColumn>
         </TableHeader>
-        <TableBody emptyContent={"No rows to display."} items={items}>
+        <TableBody emptyContent="No rows to display." items={items}>
           {(item: any) => (
             <TableRow key={item.id}>
               {(columnKey) => (

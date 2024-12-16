@@ -17,8 +17,8 @@ import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { toast } from "sonner";
 
-import DeleteProjectRunner from "@/lib/fetch/project/DELETE/DeleteRunner";
 import GetRunnerFlowLinks from "@/lib/fetch/runner/GetRunnerFlowLinks";
+import DeleteProjectRunner from "@/lib/fetch/project/DELETE/DeleteRunner";
 import ErrorCard from "@/components/error/ErrorCard";
 
 export default function DeleteRunnerModal({
@@ -121,8 +121,14 @@ export default function DeleteRunnerModal({
                   <ErrorCard error={errorText} message={errorMessage} />
                 )}
                 <Snippet hideCopyButton hideSymbol>
-                  <span>Name: {runner.name}</span>
-                  <span>ID: {runner.id}</span>
+                  <span>
+                    Name:
+                    {runner.name}
+                  </span>
+                  <span>
+                    ID:
+                    {runner.id}
+                  </span>
                 </Snippet>
                 {flowLinks.length > 0 && (
                   <>
@@ -130,7 +136,7 @@ export default function DeleteRunnerModal({
                     <p>
                       The runner is assigned to the following flows which will
                       need{" "}
-                      <span className="text-warning font-bold">
+                      <span className="font-bold text-warning">
                         Maintenance
                       </span>{" "}
                       after the runner got deleted:

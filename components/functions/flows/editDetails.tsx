@@ -1,5 +1,6 @@
 import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
+import { Icon } from "@iconify/react";
 import {
   Button,
   ButtonGroup,
@@ -15,14 +16,13 @@ import {
   Spacer,
   Tooltip,
 } from "@nextui-org/react";
-import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Icon } from "@iconify/react";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-import { cn } from "@/components/functions/cn/cn";
-import { PlusIcon } from "@/components/icons";
 import UpdateFlowActionsDetails from "@/lib/fetch/flow/PUT/UpdateActionsDetails";
+import { PlusIcon } from "@/components/icons";
+import { cn } from "@/components/functions/cn/cn";
 import ErrorCard from "@/components/error/ErrorCard";
 
 export const CustomRadio = (props: any) => {
@@ -129,10 +129,10 @@ export default function EditFlowActionsDetails({
                 {error && (
                   <ErrorCard error={errorText} message={errorMessage} />
                 )}
-                <div className="w-full flex flex-col gap-4">
+                <div className="flex w-full flex-col gap-4">
                   {/* Status */}
                   <div className="flex flex-col gap-1">
-                    <div className="flex flex-cols items-center gap-2">
+                    <div className="flex-cols flex items-center gap-2">
                       <p className="font-bold">Execution Order</p>
                       <Tooltip content="Defined Actions will either be executed one after the other or all in parallel. If in Sequential type one action fails, the others won't be processed anymore.">
                         <Icon
@@ -180,7 +180,7 @@ export default function EditFlowActionsDetails({
                           <>
                             {patterns.map((pattern: any, index: number) => (
                               <div key={index}>
-                                <div className="flex flex-cols items-center gap-4">
+                                <div className="flex-cols flex items-center gap-4">
                                   <Input
                                     label="Key"
                                     radius="sm"
@@ -231,7 +231,7 @@ export default function EditFlowActionsDetails({
                                         ...patterns.slice(0, index),
                                         {
                                           ...pattern,
-                                          value: value,
+                                          value,
                                         },
                                         ...patterns.slice(index + 1),
                                       ]);

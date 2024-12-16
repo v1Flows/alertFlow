@@ -2,23 +2,23 @@
 
 import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
-import React, { useEffect } from "react";
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
+  cn,
+  Divider,
   Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
   Select,
   SelectItem,
-  Divider,
   Switch,
-  cn,
 } from "@nextui-org/react";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
+import { toast } from "sonner";
 
 import GetProjectRunners from "@/lib/fetch/project/runners";
 import UpdateFlow from "@/lib/fetch/flow/PUT/UpdateFlow";
@@ -50,7 +50,7 @@ export default function EditFlowModal({
   const [errorMessage, setErrorMessage] = React.useState("");
   // limit on runner?
   const [runnerLimit, setRunnerLimit] = React.useState(
-    flow.runner_id !== "any" ? true : false,
+    flow.runner_id !== "any",
   );
   // runner select list
   const [runners, setRunners] = React.useState([]);
@@ -60,7 +60,7 @@ export default function EditFlowModal({
     setDescription(flow.description);
     setProjectId(flow.project_id);
     setRunnerId(flow.runner_id);
-    setRunnerLimit(flow.runner_id !== "any" ? true : false);
+    setRunnerLimit(flow.runner_id !== "any");
     getCurrentProjectRunners();
   }, [flow]);
 
@@ -181,7 +181,7 @@ export default function EditFlowModal({
                     thumb: cn(
                       "w-6 h-6 border-2 shadow-lg",
                       "group-data-[hover=true]:border-primary",
-                      //selected
+                      // selected
                       "group-data-[selected=true]:ml-6",
                       // pressed
                       "group-data-[pressed=true]:w-7",

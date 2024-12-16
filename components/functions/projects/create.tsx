@@ -2,6 +2,7 @@
 
 import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
+import { Icon, listIcons, loadIcons } from "@iconify/react";
 import {
   Avatar,
   Button,
@@ -18,16 +19,15 @@ import {
   Tooltip,
   useDisclosure,
 } from "@nextui-org/react";
+import { LibraryIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
-import { toast } from "sonner";
-import { LibraryIcon } from "lucide-react";
-import { Icon, listIcons, loadIcons } from "@iconify/react";
 import { ColorPicker, useColor } from "react-color-palette";
-import "react-color-palette/css";
+import { toast } from "sonner";
 
 import CreateProject from "@/lib/fetch/project/POST/CreateProject";
 import ErrorCard from "@/components/error/ErrorCard";
+import "react-color-palette/css";
 
 export default function CreateProjectModal({
   disclosure,
@@ -163,7 +163,7 @@ export default function CreateProjectModal({
                     onValueChange={setDescription}
                   />
                   <div className="flex flex-col gap-2">
-                    <div className="flex flex-cols items-center gap-2">
+                    <div className="flex-cols flex items-center gap-2">
                       <p className="text-sm">AlertFlow Runners</p>
                       <Tooltip
                         content="We are hosting our own Runners to make the usage of
@@ -218,9 +218,9 @@ export default function CreateProjectModal({
                 >
                   {(item) => (
                     <SelectItem key={item.textValue} textValue={item.textValue}>
-                      <div className="flex gap-2 items-center">
+                      <div className="flex items-center gap-2">
                         <Avatar
-                          className="flex-shrink-0"
+                          className="shrink-0"
                           color="primary"
                           icon={<Icon icon={item.textValue} width={22} />}
                           size="sm"
@@ -269,7 +269,7 @@ export default function CreateProjectModal({
         <ModalContent className="w-full">
           {(onInstructionsClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1 items-center text-success">
+              <ModalHeader className="flex flex-col items-center gap-1 text-success">
                 <Icon icon="solar:verified-check-broken" width={58} />
                 <p className="text-xl font-bold">
                   Project successfully created

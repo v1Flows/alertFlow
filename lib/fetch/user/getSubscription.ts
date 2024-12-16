@@ -2,20 +2,20 @@
 
 import { cookies } from "next/headers";
 
-interface Subscription {
+type Subscription = {
   subscriptions: [];
-}
+};
 
-interface ErrorResponse {
+type ErrorResponse = {
   success: false;
   error: string;
   message: string;
-}
+};
 
-interface SuccessResponse {
+type SuccessResponse = {
   success: true;
   data: Subscription;
-}
+};
 
 export async function GetUserSubscription(): Promise<
   SuccessResponse | ErrorResponse
@@ -57,7 +57,7 @@ export async function GetUserSubscription(): Promise<
 
     return {
       success: true,
-      data: data,
+      data,
     };
   } catch (error) {
     return {

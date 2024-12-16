@@ -1,7 +1,7 @@
 "use client";
 
+import { Chip, cn } from "@nextui-org/react";
 import { startsWith } from "lodash";
-import { cn, Chip } from "@nextui-org/react";
 
 // eslint-disable-next-line no-undef
 type NewChipProps = React.HTMLAttributes<HTMLDivElement>;

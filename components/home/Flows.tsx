@@ -1,11 +1,11 @@
 "use client";
 
-import { Image, Spacer } from "@nextui-org/react";
-import { useTheme } from "next-themes";
-import { useIsSSR } from "@react-aria/ssr";
 import { Icon } from "@iconify/react";
+import { Image, Spacer } from "@nextui-org/react";
+import { useIsSSR } from "@react-aria/ssr";
+import { useTheme } from "next-themes";
 
-import { title, subtitle } from "@/components/primitives";
+import { subtitle, title } from "@/components/primitives";
 
 export default function HomeFlows() {
   const { theme } = useTheme();
@@ -22,27 +22,27 @@ export default function HomeFlows() {
           Flow your data, your way, with Flows. Define actions, patterns,
           execution order and more.
         </h2>
-        <div className="relative flex flex-col items-start p-8 gap-10 h-full overflow-hidden">
-          <div className="flex flex-1 w-full h-full flex-col space-y-2 rounded-md">
+        <div className="relative flex h-full flex-col items-start gap-10 overflow-hidden p-8">
+          <div className="flex size-full flex-1 flex-col space-y-2 rounded-md">
             <Image
               isBlurred
               alt="..."
-              className="w-full h-full object-cover rounded-md"
+              className="size-full rounded-md object-cover"
               loading="lazy"
               src={`/images/flow_actions_${theme === "light" || isSSR ? "white" : "dark"}.png`}
             />
           </div>
 
-          <div className="absolute bottom-0 z-40 inset-x-0 h-60 bg-gradient-to-t from-white dark:from-black via-white dark:via-black to-transparent w-full pointer-events-none" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-40 h-60 w-full bg-gradient-to-t from-white via-white to-transparent dark:from-black dark:via-black" />
         </div>
       </div>
-      <div className="grid lg:grid-cols-3 grid-cols-1 items-center justify-center gap-4">
+      <div className="grid grid-cols-1 items-center justify-center gap-4 lg:grid-cols-3">
         <div className="flex flex-col items-center text-center">
-          <div className="flex bg-warning/20 text-warning items-center rounded-medium justify-center w-14 h-14">
+          <div className="flex size-14 items-center justify-center rounded-medium bg-warning/20 text-warning">
             <Icon icon="solar:reorder-linear" width={38} />
           </div>
           <Spacer y={2} />
-          <p className="font-bold text-xl">Reorder Actions</p>
+          <p className="text-xl font-bold">Reorder Actions</p>
           <p className="text-default-500">
             Drag and drop actions to change the way your flow is executed.
             Besides that you can also switch between two orders. Sequential and
@@ -51,11 +51,11 @@ export default function HomeFlows() {
         </div>
 
         <div className="flex flex-col items-center text-center">
-          <div className="flex bg-warning/20 text-warning items-center rounded-medium justify-center w-14 h-14">
+          <div className="flex size-14 items-center justify-center rounded-medium bg-warning/20 text-warning">
             <Icon icon="solar:list-check-minimalistic-outline" width={38} />
           </div>
           <Spacer y={2} />
-          <p className="font-bold text-xl">Pattern Checks</p>
+          <p className="text-xl font-bold">Pattern Checks</p>
           <p className="text-default-500">
             Define patterns to check the content of your payload before
             executing any action. This way you can ensure that your flow is only
@@ -64,11 +64,11 @@ export default function HomeFlows() {
         </div>
 
         <div className="flex flex-col items-center text-center">
-          <div className="flex bg-warning/20 text-warning items-center rounded-medium justify-center w-14 h-14">
+          <div className="flex size-14 items-center justify-center rounded-medium bg-warning/20 text-warning">
             <Icon icon="solar:branching-paths-up-line-duotone" width={38} />
           </div>
           <Spacer y={2} />
-          <p className="font-bold text-xl">Follow the Path</p>
+          <p className="text-xl font-bold">Follow the Path</p>
           <p className="text-default-500">
             All incoming payloads are listed in the flow. You can see which
             runner processed it and if there is any related execution to this

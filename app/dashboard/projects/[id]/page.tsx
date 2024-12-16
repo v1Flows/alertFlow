@@ -1,13 +1,13 @@
 import Project from "@/components/dashboard/projects/project";
+import ErrorCard from "@/components/error/ErrorCard";
+import GetFlows from "@/lib/fetch/flow/all";
 import PageGetSettings from "@/lib/fetch/page/settings";
-import GetProjectApiKeys from "@/lib/fetch/project/tokens";
 import GetProjectAuditLogs from "@/lib/fetch/project/audit";
 import GetProject from "@/lib/fetch/project/data";
 import GetProjectRunners from "@/lib/fetch/project/runners";
-import GetUserPlan from "@/lib/fetch/user/getPlan";
+import GetProjectApiKeys from "@/lib/fetch/project/tokens";
 import GetUserDetails from "@/lib/fetch/user/getDetails";
-import GetFlows from "@/lib/fetch/flow/all";
-import ErrorCard from "@/components/error/ErrorCard";
+import GetUserPlan from "@/lib/fetch/user/getPlan";
 
 export default async function DashboardProjectPage({
   params,

@@ -1,19 +1,19 @@
 "use client";
 
-import React from "react";
-import { Button, Input, Link, Image, Tooltip } from "@nextui-org/react";
-import { Alert } from "@nextui-org/alert";
 import { Icon } from "@iconify/react";
-import { useTheme } from "next-themes";
+import { Alert } from "@nextui-org/alert";
+import { Button, Image, Input, Link, Tooltip } from "@nextui-org/react";
 import { useIsSSR } from "@react-aria/ssr";
 import { AnimatePresence, domAnimation, LazyMotion, m } from "framer-motion";
-import { toast } from "sonner";
+import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
+import React from "react";
+import { toast } from "sonner";
 
-import SignUpAPI from "@/lib/auth/signup";
-import CheckUserTaken from "@/lib/auth/checkTaken";
-import LoginAPI from "@/lib/auth/login";
 import { setSession } from "@/lib/setSession";
+import SignUpAPI from "@/lib/auth/signup";
+import LoginAPI from "@/lib/auth/login";
+import CheckUserTaken from "@/lib/auth/checkTaken";
 
 import Particles from "../magicui/particles";
 
@@ -111,8 +111,8 @@ export default function SignUpPage() {
     } else {
       setError(true);
       setErrorText(res.error);
-      setIsUsernameValid(res.error === "Username already taken" ? false : true);
-      setIsEmailValid(res.error === "Email already taken" ? false : true);
+      setIsUsernameValid(res.error !== "Username already taken");
+      setIsEmailValid(res.error !== "Email already taken");
     }
   };
 
@@ -177,7 +177,7 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center">
+    <div className="flex size-full flex-col items-center justify-center">
       <Particles
         refresh
         className="absolute inset-0"

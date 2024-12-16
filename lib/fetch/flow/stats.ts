@@ -2,21 +2,21 @@
 
 import { cookies } from "next/headers";
 
-interface Stats {
+type Stats = {
   payloads_executions_stats: [];
   payloads_executions_trends: [];
-}
+};
 
-interface ErrorResponse {
+type ErrorResponse = {
   success: false;
   error: string;
   message: string;
-}
+};
 
-interface SuccessResponse {
+type SuccessResponse = {
   success: true;
   data: Stats;
-}
+};
 
 export async function GetFlowStats(
   flowID: any,
@@ -59,7 +59,7 @@ export async function GetFlowStats(
 
     return {
       success: true,
-      data: data,
+      data,
     };
   } catch (error) {
     return {

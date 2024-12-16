@@ -1,5 +1,6 @@
 import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
+import { Icon } from "@iconify/react";
 import {
   Button,
   Card,
@@ -16,14 +17,13 @@ import {
   Spacer,
   Textarea,
 } from "@nextui-org/react";
-import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
-import { Icon } from "@iconify/react";
 
-import { cn } from "@/components/functions/cn/cn";
 import AddFlowActions from "@/lib/fetch/flow/POST/AddFlowActions";
+import { cn } from "@/components/functions/cn/cn";
 import ErrorCard from "@/components/error/ErrorCard";
 
 import MinimalRowSteps from "../steps/minimal-row-steps";
@@ -111,7 +111,7 @@ export default function AddActionModal({
   const [params, setParams] = useState([] as any);
 
   function actionPages() {
-    var length = 0;
+    let length = 0;
 
     if (selectedCategory !== "All") {
       length =
@@ -126,10 +126,10 @@ export default function AddActionModal({
   }
 
   function countTotalAvailableActions() {
-    var actions = 0;
+    let actions = 0;
 
     for (let i = 0; i < runners.length; i++) {
-      var timeAgo =
+      const timeAgo =
         (new Date(runners[i].last_heartbeat).getTime() - Date.now()) / 1000;
 
       if (runners[i].disabled || !runners[i].registered || timeAgo <= -30) {
@@ -237,7 +237,7 @@ export default function AddActionModal({
       icon: action.icon,
       type: action.type,
       active: true,
-      params: params,
+      params,
       custom_name: action.custom_name,
       custom_description: action.custom_description,
     };
@@ -332,15 +332,15 @@ export default function AddActionModal({
                     onStepChange={setCurrentStep}
                   />
                 </div>
-                <div className="w-full flex flex-cols gap-4">
-                  <div className="w-full col-span-1">
+                <div className="flex-cols flex w-full gap-4">
+                  <div className="col-span-1 w-full">
                     {currentStep === 0 && (
                       <div>
                         {countTotalAvailableActions() === 0 ? (
                           <div>
                             <Card className="border border-danger">
                               <CardBody>
-                                <p className="text-danger font-bold">
+                                <p className="font-bold text-danger">
                                   😕 Seems like there are no Actions available.
                                 </p>
                                 <p className="text-default-500">
@@ -353,7 +353,7 @@ export default function AddActionModal({
                           </div>
                         ) : (
                           <>
-                            <p className="text-lg text-default-500 font-bold">
+                            <p className="text-lg font-bold text-default-500">
                               Available Actions
                             </p>
                             <Spacer y={2} />
@@ -400,7 +400,7 @@ export default function AddActionModal({
                                   >
                                     <CardBody>
                                       <div className="flex items-center gap-2">
-                                        <div className="flex bg-danger/10 text-danger items-center rounded-small justify-center w-10 h-10">
+                                        <div className="flex size-10 items-center justify-center rounded-small bg-danger/10 text-danger">
                                           <Icon icon={act.icon} width={26} />
                                         </div>
                                         <div className="flex flex-col gap-1">
@@ -434,7 +434,7 @@ export default function AddActionModal({
                                   >
                                     <CardBody>
                                       <div className="flex items-center gap-2">
-                                        <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                                        <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
                                           <Icon icon={act.icon} width={26} />
                                         </div>
                                         <div className="flex flex-col gap-1">
@@ -469,7 +469,7 @@ export default function AddActionModal({
                     )}
                     {currentStep === 1 && (
                       <div>
-                        <p className="text-lg text-default-500 font-bold">
+                        <p className="text-lg font-bold text-default-500">
                           Details
                         </p>
                         <Spacer y={2} />
@@ -493,7 +493,7 @@ export default function AddActionModal({
                             }
                           />
                         </div>
-                        <p className="text-lg text-default-500 font-bold">
+                        <p className="text-lg font-bold text-default-500">
                           Parameters
                         </p>
                         <Spacer y={2} />

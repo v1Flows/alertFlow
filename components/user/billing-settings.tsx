@@ -1,21 +1,21 @@
 "use client";
 
-import React, { useEffect } from "react";
+import { Icon } from "@iconify/react";
 import {
-  Card,
-  CardHeader,
-  CardBody,
   Button,
-  useDisclosure,
-  Spacer,
-  Chip,
   ButtonGroup,
+  Card,
+  CardBody,
+  CardHeader,
+  Chip,
+  Spacer,
+  useDisclosure,
 } from "@nextui-org/react";
-import { toast } from "sonner";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
+import { toast } from "sonner";
 
 import SetupNewCard from "@/lib/fetch/user/POST/SetupNewCard";
 import SetDefaultCard from "@/lib/fetch/user/POST/SetDefaultCard";
@@ -94,7 +94,7 @@ export default function BillingSettings({
   };
 
   async function handleSetDefaultPaymentMethod(cardID: string) {
-    const res = await SetDefaultCard(cardID) as any;
+    const res = (await SetDefaultCard(cardID)) as any;
 
     if (!res.success) {
       toast.error(res.error);
@@ -106,7 +106,7 @@ export default function BillingSettings({
   }
 
   async function handleDeletePaymentMethod(cardID: string) {
-    const res = await RemoveCard(cardID) as any;
+    const res = (await RemoveCard(cardID)) as any;
 
     if (!res.success) {
       toast.error(res.message);
@@ -134,11 +134,11 @@ export default function BillingSettings({
         </>
       ) : null}
 
-      <div className="grid xl:grid-cols-6 lg:grid-cols-3 grid-cols-2 items-stretch items-start gap-4">
+      <div className="grid grid-cols-2 items-start items-stretch gap-4 lg:grid-cols-3 xl:grid-cols-6">
         <Card>
           <CardBody>
-            <div className="flex gap-4 items-center justify-start">
-              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-12 h-12">
+            <div className="flex items-center justify-start gap-4">
+              <div className="flex size-12 items-center justify-center rounded-large bg-primary bg-opacity-10">
                 <Icon
                   className="text-primary"
                   icon="solar:cart-large-minimalistic-broken"
@@ -147,7 +147,7 @@ export default function BillingSettings({
               </div>
               <div>
                 <p
-                  className={`text-md font-bold text-${user.customer_id ? "success" : "danger"}`}
+                  className={`text-md text- font-bold${user.customer_id ? "success" : "danger"}`}
                 >
                   {user.customer_id ? "Yes" : "No"}
                 </p>
@@ -158,8 +158,8 @@ export default function BillingSettings({
         </Card>
         <Card>
           <CardBody>
-            <div className="flex gap-4 items-center justify-start">
-              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-12 h-12">
+            <div className="flex items-center justify-start gap-4">
+              <div className="flex size-12 items-center justify-center rounded-large bg-primary bg-opacity-10">
                 <Icon
                   className="text-primary"
                   icon="solar:planet-broken"
@@ -181,8 +181,8 @@ export default function BillingSettings({
         </Card>
         <Card>
           <CardBody>
-            <div className="flex gap-4 items-center justify-start">
-              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-12 h-12">
+            <div className="flex items-center justify-start gap-4">
+              <div className="flex size-12 items-center justify-center rounded-large bg-primary bg-opacity-10">
                 <Icon
                   className="text-primary"
                   icon="solar:euro-broken"
@@ -208,8 +208,8 @@ export default function BillingSettings({
         </Card>
         <Card>
           <CardBody>
-            <div className="flex gap-4 items-center justify-start">
-              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-12 h-12">
+            <div className="flex items-center justify-start gap-4">
+              <div className="flex size-12 items-center justify-center rounded-large bg-primary bg-opacity-10">
                 <Icon
                   className="text-primary"
                   icon="solar:heart-pulse-broken"
@@ -217,9 +217,9 @@ export default function BillingSettings({
                 />
               </div>
               <div>
-                <div className="flex flex-cols gap-1">
+                <div className="flex-cols flex gap-1">
                   <p
-                    className={`text-md font-bold text-${currentSubscription.plan && currentSubscription.plan.active ? "success" : "danger"}`}
+                    className={`text-md text- font-bold${currentSubscription.plan && currentSubscription.plan.active ? "success" : "danger"}`}
                   >
                     {currentSubscription.plan && currentSubscription.plan.active
                       ? "Active"
@@ -239,8 +239,8 @@ export default function BillingSettings({
         </Card>
         <Card>
           <CardBody>
-            <div className="flex gap-4 items-center justify-start">
-              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-12 h-12">
+            <div className="flex items-center justify-start gap-4">
+              <div className="flex size-12 items-center justify-center rounded-large bg-primary bg-opacity-10">
                 <Icon
                   className="text-primary"
                   icon="solar:diploma-broken"
@@ -262,8 +262,8 @@ export default function BillingSettings({
         </Card>
         <Card>
           <CardBody>
-            <div className="flex gap-4 items-center justify-start">
-              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-12 h-12">
+            <div className="flex items-center justify-start gap-4">
+              <div className="flex size-12 items-center justify-center rounded-large bg-primary bg-opacity-10">
                 <Icon
                   className="text-primary"
                   icon="solar:calendar-date-broken"
@@ -339,7 +339,7 @@ export default function BillingSettings({
                                       .id,
                                 ).card.last4}
                             </p>
-                            <p className="text-small text-success capitalize">
+                            <p className="text-small capitalize text-success">
                               {currentSubscription.plan &&
                                 paymentMethods.payment_methods.find(
                                   (pm: any) =>
@@ -411,7 +411,7 @@ export default function BillingSettings({
           )}
 
           <Card className="w-full p-2">
-            <CardHeader className="flex flex-cols items-center justify-between px-4 pb-0 pt-4">
+            <CardHeader className="flex-cols flex items-center justify-between px-4 pb-0 pt-4">
               <div>
                 <p className="text-large">Payment Methods</p>
                 <p className="text-small text-default-500">
@@ -434,12 +434,12 @@ export default function BillingSettings({
                 <CellWrapper key={method.id}>
                   <div className="flex items-center gap-2">
                     <div
-                      className={`flex items-center rounded-large justify-center ${cardBrandBackground(method.card.brand)} w-10 h-10`}
+                      className={`flex items-center justify-center rounded-large ${cardBrandBackground(method.card.brand)} size-10`}
                     >
                       <Icon icon="solar:card-2-broken" width={24} />
                     </div>
                     <div>
-                      <div className="flex flex-cols items-center gap-2">
+                      <div className="flex-cols flex items-center gap-2">
                         <p className="capitalize">{method.card.brand}</p>
                         {user.default_card === method.id && (
                           <Chip
@@ -459,7 +459,7 @@ export default function BillingSettings({
                       </p>
                     </div>
                   </div>
-                  <div className="flex flex-cols items-center gap-4">
+                  <div className="flex-cols flex items-center gap-4">
                     <div className="flex w-full flex-wrap items-center justify-end gap-6 sm:w-auto sm:flex-nowrap">
                       <div className="flex flex-col items-end">
                         <p>

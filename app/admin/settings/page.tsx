@@ -3,7 +3,7 @@ import ErrorCard from "@/components/error/ErrorCard";
 import PageGetSettings from "@/lib/fetch/page/settings";
 
 export default async function AdminSettingsPage() {
-  var settingsData = PageGetSettings();
+  const settingsData = PageGetSettings();
 
   const [settings] = (await Promise.all([settingsData])) as any;
 

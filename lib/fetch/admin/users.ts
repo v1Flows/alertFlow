@@ -2,20 +2,20 @@
 
 import { cookies } from "next/headers";
 
-interface Users {
+type Users = {
   users: [];
-}
+};
 
-interface ErrorResponse {
+type ErrorResponse = {
   success: false;
   error: string;
   message: string;
-}
+};
 
-interface SuccessResponse {
+type SuccessResponse = {
   success: true;
   data: Users;
-}
+};
 
 export async function AdminGetUsers(): Promise<
   SuccessResponse | ErrorResponse
@@ -57,7 +57,7 @@ export async function AdminGetUsers(): Promise<
 
     return {
       success: true,
-      data: data,
+      data,
     };
   } catch (error) {
     return {

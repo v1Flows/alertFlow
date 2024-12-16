@@ -1,3 +1,5 @@
+import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
+
 import { Icon } from "@iconify/react";
 import {
   Drawer,
@@ -6,7 +8,6 @@ import {
   DrawerHeader,
 } from "@nextui-org/drawer";
 import { Chip, Divider } from "@nextui-org/react";
-import { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
 export default function RunnerPluginDrawer({
   disclosure,
@@ -20,7 +21,7 @@ export default function RunnerPluginDrawer({
   return (
     <Drawer isOpen={isOpen} size="xl" onOpenChange={onOpenChange}>
       <DrawerContent>
-        {(onClose) => (
+        {() => (
           <>
             <DrawerHeader className="flex items-center gap-2">
               <h3 className="text-2xl font-semibold">
@@ -34,12 +35,12 @@ export default function RunnerPluginDrawer({
               {runner.plugins.map((plugin: any) => (
                 <div
                   key={plugin.name}
-                  className="flex flex-col items-start w-full"
+                  className="flex w-full flex-col items-start"
                 >
-                  <div className="flex flex-col items-start justify-between w-full">
-                    <div className="flex flex-cols gap-4">
+                  <div className="flex w-full flex-col items-start justify-between">
+                    <div className="flex-cols flex gap-4">
                       <div className="flex items-center gap-2">
-                        <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
+                        <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
                           <Icon
                             icon={
                               plugin.type === "action"
@@ -56,7 +57,7 @@ export default function RunnerPluginDrawer({
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-start justify-self-end gap-2">
+                      <div className="flex items-start gap-2 justify-self-end">
                         <Chip
                           color="primary"
                           radius="sm"

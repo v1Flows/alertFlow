@@ -10,7 +10,7 @@ export default function loader() {
         Here&apos;s the current status for today.
       </p>
       <Spacer y={4} />
-      <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 items-stretch gap-4">
+      <div className="grid grid-cols-1 items-stretch gap-4 md:grid-cols-2 lg:grid-cols-4">
         {[1, 2, 3, 4].map((_, i) => (
           <Card key={i} fullWidth>
             <CardBody>
@@ -18,7 +18,7 @@ export default function loader() {
                 <Skeleton className="w-2/12 rounded-lg">
                   <div className="h-12 w-2/12 rounded-lg bg-default-200" />
                 </Skeleton>
-                <div className="flex flex-col gap-2 w-full">
+                <div className="flex w-full flex-col gap-2">
                   <Skeleton className="w-1/12 rounded-lg">
                     <div className="h-3 w-1/12 rounded-lg bg-default-200" />
                   </Skeleton>
@@ -40,7 +40,7 @@ export default function loader() {
                 <Skeleton className="w-2/12 rounded-lg">
                   <div className="h-12 w-2/12 rounded-lg bg-default-200" />
                 </Skeleton>
-                <div className="flex flex-col gap-2 w-full">
+                <div className="flex w-full flex-col gap-2">
                   <Skeleton className="w-1/12 rounded-lg">
                     <div className="h-3 w-1/12 rounded-lg bg-default-200" />
                   </Skeleton>
@@ -54,9 +54,9 @@ export default function loader() {
         ))}
       </div>
 
-      <div className="flex items-end justify-between my-4">
+      <div className="my-4 flex items-end justify-between">
         <div>
-          <p className="text-2xl font-bold mb-0">
+          <p className="mb-0 text-2xl font-bold">
             Latest <span className="text-primary">Executions</span>
           </p>
         </div>
@@ -67,7 +67,7 @@ export default function loader() {
             <Skeleton className="w-2/12 rounded-lg">
               <div className="h-12 w-2/12 rounded-lg bg-default-200" />
             </Skeleton>
-            <div className="flex flex-col gap-2 w-full">
+            <div className="flex w-full flex-col gap-2">
               <Skeleton className="w-1/12 rounded-lg">
                 <div className="h-3 w-1/12 rounded-lg bg-default-200" />
               </Skeleton>
@@ -82,7 +82,7 @@ export default function loader() {
       <Card fullWidth>
         <CardBody>
           <Skeleton className="w-5/5 rounded-lg">
-            <div className="h-8 w-5/5 rounded-lg bg-default-200" />
+            <div className="w-5/5 h-8 rounded-lg bg-default-200" />
           </Skeleton>
         </CardBody>
       </Card>

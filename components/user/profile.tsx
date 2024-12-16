@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import { Icon } from "@iconify/react";
 import {
   Button,
   Card,
@@ -10,15 +10,15 @@ import {
   Tabs,
 } from "@nextui-org/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import React, { useEffect } from "react";
 import { toast } from "sonner";
-import { Icon } from "@iconify/react";
 
 import ChangeUserDetails from "@/lib/fetch/user/PUT/changeDetails";
 import CheckUserTaken from "@/lib/auth/checkTaken";
 
-import SecuritySettings from "./security-settings";
 import BillingSettings from "./billing-settings";
 import Quota from "./quota";
+import SecuritySettings from "./security-settings";
 
 export function UserProfile({
   user,
@@ -78,15 +78,15 @@ export function UserProfile({
     <main>
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-1">
-          <p className="text-2xl font-bold mb-0 text-default-500">
+          <p className="mb-0 text-2xl font-bold text-default-500">
             👋 Welcome on your profile
           </p>
-          <p className="text-2xl font-bold mb-0 text-primary">
+          <p className="mb-0 text-2xl font-bold text-primary">
             {user.username}
           </p>
         </div>
       </div>
-      <Divider className="mb-4 mt-4" />
+      <Divider className="my-4" />
       <div className="flex w-full flex-col">
         <Tabs
           aria-label="Options"
@@ -139,7 +139,6 @@ export function UserProfile({
                   radius="sm"
                   variant="flat"
                   onPress={() => {
-                    // eslint-disable-next-line no-undef
                     navigator.clipboard.writeText(user.id);
                     toast.success("UserID copied to clipboard!");
                   }}
@@ -151,7 +150,6 @@ export function UserProfile({
                   radius="sm"
                   variant="flat"
                   onPress={() => {
-                    // eslint-disable-next-line no-undef
                     navigator.clipboard.writeText(session);
                     toast.success("Session Token copied to clipboard!");
                   }}

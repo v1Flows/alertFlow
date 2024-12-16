@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
-import { Breadcrumbs, BreadcrumbItem, Snippet } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
+import { BreadcrumbItem, Breadcrumbs, Snippet } from "@nextui-org/react";
+import React from "react";
 
 export default function ProjectBreadcrumbs({ id }: any) {
   return (
