@@ -74,6 +74,7 @@ export default function AddProjectMemberModal({
           <div key={member.user_id}>
             <UserCell
               key={member.user_id}
+              ref={null}
               avatar={member.username}
               color={statusColorMap[member.role]}
               name={member.username}

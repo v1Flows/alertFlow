@@ -12,7 +12,7 @@ import GetUserDetails from "@/lib/fetch/user/getDetails";
 export default async function DashboardFlowPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
 

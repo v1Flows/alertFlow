@@ -206,6 +206,7 @@ export default function SidebarMenu({
           <Spacer y={2} />
 
           <Sidebar
+            ref={null}
             defaultSelectedKey="home"
             isCompact={isCompact}
             items={user.role === "admin" ? sectionAdminItems : sectionItems}

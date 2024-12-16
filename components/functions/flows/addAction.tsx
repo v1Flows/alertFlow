@@ -325,6 +325,7 @@ export default function AddActionModal({
                 )}
                 <div className="flex items-center justify-center">
                   <MinimalRowSteps
+                    ref={null}
                     className="w-fit overflow-hidden"
                     currentStep={currentStep}
                     label={`Step ${currentStep + 1} of ${steps}`}

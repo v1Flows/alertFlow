@@ -33,7 +33,7 @@ export default function SecuritySettings({ user }: { user: any }) {
         </CardHeader>
         <CardBody className="space-y-2">
           {/* Email */}
-          <CellWrapper>
+          <CellWrapper ref={null}>
             <div>
               <p>Email Address</p>
               <p className="text-small text-default-500">
@@ -56,7 +56,7 @@ export default function SecuritySettings({ user }: { user: any }) {
             </div>
           </CellWrapper>
           {/* Password */}
-          <CellWrapper>
+          <CellWrapper ref={null}>
             <div>
               <p>Password</p>
               <p className="text-small text-default-500">
@@ -73,13 +73,14 @@ export default function SecuritySettings({ user }: { user: any }) {
           </CellWrapper>
           {/* Two-Factor Authentication */}
           <SwitchCell
+            ref={null}
             isDisabled
             defaultSelected={false}
             description="Add an extra layer of security to your account."
             label="Two-Factor Authentication"
           />
           {/* Deactivate Account */}
-          <CellWrapper>
+          <CellWrapper ref={null}>
             <div>
               <p>Deactivate Account</p>
               <p className="text-small text-default-500">
@@ -95,7 +96,7 @@ export default function SecuritySettings({ user }: { user: any }) {
             </Button>
           </CellWrapper>
           {/* Delete Account */}
-          <CellWrapper>
+          <CellWrapper ref={null}>
             <div>
               <p>Delete Account</p>
               <p className="text-small text-default-500">

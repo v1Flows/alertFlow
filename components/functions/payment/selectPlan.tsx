@@ -108,6 +108,7 @@ export default function SelectPlanModal({
                               .filter((plan: any) => plan.id !== "enterprise")
                               .map((plan: any) => (
                                 <PlanRadio
+                                  ref={null}
                                   key={plan.id}
                                   description={plan.description}
                                   icon={

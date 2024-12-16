@@ -4,15 +4,16 @@ import { cookies } from "next/headers";
 
 export async function setSession(token: string, user: any, expires_at: number) {
   const expires = new Date(expires_at * 1000);
+  const c = await cookies();
 
-  cookies().set({
+  c.set({
     name: "session",
     value: token,
     expires,
     httpOnly: true,
   });
 
-  cookies().set({
+  c.set({
     name: "user",
     value: JSON.stringify(user),
     expires,

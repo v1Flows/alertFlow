@@ -307,7 +307,7 @@ export default function BillingSettings({
                 <CardBody className="space-y-2">
                   {currentSubscription.plan ? (
                     <>
-                      <CellWrapper>
+                      <CellWrapper ref={null}>
                         <div>
                           <p>Plan</p>
                           <p className="text-small text-default-500">
@@ -318,7 +318,7 @@ export default function BillingSettings({
                           New Plan
                         </Button>
                       </CellWrapper>
-                      <CellWrapper>
+                      <CellWrapper ref={null}>
                         <div>
                           <p>Payment Method</p>
                           <p className="text-small text-default-500">
@@ -361,7 +361,7 @@ export default function BillingSettings({
                           </Button>
                         </div>
                       </CellWrapper>
-                      <CellWrapper>
+                      <CellWrapper ref={null}>
                         <div>
                           <p>Cancel</p>
                           <p className="text-small text-default-500">
@@ -387,7 +387,7 @@ export default function BillingSettings({
                       </CellWrapper>
                     </>
                   ) : (
-                    <CellWrapper>
+                    <CellWrapper ref={null}>
                       <div>
                         <p>Subscripte to an Plan</p>
                         <p className="text-small text-default-500">
@@ -431,7 +431,7 @@ export default function BillingSettings({
             </CardHeader>
             <CardBody className="space-y-2">
               {paymentMethods.payment_methods.map((method: any) => (
-                <CellWrapper key={method.id}>
+                <CellWrapper key={method.id} ref={null}>
                   <div className="flex items-center gap-2">
                     <div
                       className={`flex items-center justify-center rounded-large ${cardBrandBackground(method.card.brand)} size-10`}

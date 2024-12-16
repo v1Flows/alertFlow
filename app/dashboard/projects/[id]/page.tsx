@@ -12,7 +12,7 @@ import GetUserPlan from "@/lib/fetch/user/getPlan";
 export default async function DashboardProjectPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
 
