@@ -2,21 +2,21 @@
 
 import { cookies } from "next/headers";
 
-interface Docs {
+type Docs = {
   docs: [];
   count: 0;
-}
+};
 
-interface ErrorResponse {
+type ErrorResponse = {
   success: false;
   error: string;
   message: string;
-}
+};
 
-interface SuccessResponse {
+type SuccessResponse = {
   success: true;
   data: Docs;
-}
+};
 
 export async function GetDocs(): Promise<SuccessResponse | ErrorResponse> {
   try {
@@ -53,7 +53,7 @@ export async function GetDocs(): Promise<SuccessResponse | ErrorResponse> {
 
     return {
       success: true,
-      data: data,
+      data,
     };
   } catch (error) {
     return {

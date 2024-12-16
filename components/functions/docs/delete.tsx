@@ -88,8 +88,14 @@ export default function DeleteDocModal({
                   <ErrorCard error={errorText} message={errorMessage} />
                 )}
                 <Snippet hideCopyButton hideSymbol>
-                  <span>Title: {doc.title}</span>
-                  <span>Category: {doc.category}</span>
+                  <span>
+                    Title:
+                    {doc.title}
+                  </span>
+                  <span>
+                    Category:
+                    {doc.category}
+                  </span>
                 </Snippet>
               </ModalBody>
               <ModalFooter className="grid grid-cols-2">

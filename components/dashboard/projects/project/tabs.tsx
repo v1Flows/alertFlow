@@ -1,8 +1,8 @@
 "use client";
-import React from "react";
-import { Tabs, Tab, Tooltip } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
+import { Tab, Tabs, Tooltip } from "@nextui-org/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import React from "react";
 
 import ProjectMembers from "@/components/dashboard/projects/project/tables/UserTable";
 import ProjectTokens from "@/components/dashboard/projects/project/tables/TokensTable";
@@ -28,7 +28,7 @@ export default function ProjectTabs({
   const params = new URLSearchParams(searchParams.toString());
 
   React.useEffect(() => {
-    var tab = params.get("tab") || "members";
+    let tab = params.get("tab") || "members";
 
     if (tab === "audit" && plan.id !== "enterprise" && user.role !== "admin") {
       tab = "members";

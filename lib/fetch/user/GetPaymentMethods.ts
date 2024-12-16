@@ -2,20 +2,20 @@
 
 import { cookies } from "next/headers";
 
-interface PaymentMethods {
+type PaymentMethods = {
   payment_methods: [];
-}
+};
 
-interface ErrorResponse {
+type ErrorResponse = {
   success: false;
   error: string;
   message: string;
-}
+};
 
-interface SuccessResponse {
+type SuccessResponse = {
   success: true;
   data: PaymentMethods;
-}
+};
 
 export async function GetPaymentMethods(): Promise<
   SuccessResponse | ErrorResponse
@@ -57,7 +57,7 @@ export async function GetPaymentMethods(): Promise<
 
     return {
       success: true,
-      data: data,
+      data,
     };
   } catch (error) {
     return {

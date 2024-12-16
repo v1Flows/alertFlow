@@ -9,10 +9,12 @@ import GetUserDetails from "@/lib/fetch/user/getDetails";
 export default async function DashboardExecutionPage({
   params,
 }: {
-  params: { id: string; executionID: string };
+  params: Promise<{ id: string; executionID: string }>;
 }) {
-  const flowData = GetFlow(params.id);
-  const executionData = GetExecution(params.executionID);
+  const { id, executionID } = await params;
+
+  const flowData = GetFlow(id);
+  const executionData = GetExecution(executionID);
   const settingsData = PageGetSettings();
   const userDetailsData = GetUserDetails();
 

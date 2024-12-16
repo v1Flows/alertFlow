@@ -1,40 +1,40 @@
 "use client";
-import React from "react";
-import { toast } from "sonner";
+import { Icon } from "@iconify/react";
 import {
+  Alert,
+  Button,
   Card,
-  CardHeader,
   CardBody,
+  CardFooter,
+  CardHeader,
+  Chip,
   Divider,
   Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
   DropdownItem,
+  DropdownMenu,
   DropdownSection,
-  Button,
-  Chip,
-  useDisclosure,
+  DropdownTrigger,
+  Input,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
   Select,
   SelectItem,
   Spacer,
-  Input,
   Tooltip,
-  CardFooter,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  Alert,
+  useDisclosure,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { Icon } from "@iconify/react";
+import React from "react";
+import { toast } from "sonner";
 
-import { InfoIcon, PlusIcon } from "@/components/icons";
-import { IconWrapper } from "@/lib/IconWrapper";
-import FunctionDeleteFlow from "@/components/functions/flows/deleteFlow";
-import FunctionCreateFlow from "@/components/functions/flows/create";
 import ChangeFlowMaintenanceModal from "@/components/functions/flows/changeMaintenance";
 import ChangeFlowStatusModal from "@/components/functions/flows/changeStatus";
+import FunctionCreateFlow from "@/components/functions/flows/create";
+import FunctionDeleteFlow from "@/components/functions/flows/deleteFlow";
 import EditFlowModal from "@/components/functions/flows/edit";
+import { InfoIcon, PlusIcon } from "@/components/icons";
+import { IconWrapper } from "@/lib/IconWrapper";
 
 export default function FlowList({
   flows,
@@ -48,7 +48,7 @@ export default function FlowList({
   const [projectFilter, setProjectFilter] = React.useState(new Set([]) as any);
   const [search, setSearch] = React.useState("");
 
-  const [status, setStatus] = React.useState(false);
+  const [status] = React.useState(false);
   const [maintenance, setMaintenance] = React.useState(false);
   const [targetFlow, setTargetFlow] = React.useState({} as any);
   const editModal = useDisclosure();
@@ -85,9 +85,7 @@ export default function FlowList({
     });
 
   const copyFlowIDtoClipboard = (key: string) => {
-    // eslint-disable-next-line no-undef
     if (typeof navigator !== "undefined" && navigator.clipboard) {
-      // eslint-disable-next-line no-undef
       navigator.clipboard.writeText(key);
       toast.success("Copied to clipboard!");
     } else {
@@ -127,13 +125,13 @@ export default function FlowList({
 
   return (
     <main>
-      <div className="grid lg:grid-cols-2 grid-cols-1 gap-2 items-center justify-between">
+      <div className="grid grid-cols-1 items-center justify-between gap-2 lg:grid-cols-2">
         <p className="text-2xl font-bold">Flows</p>
       </div>
       <Spacer y={4} />
       {flows.error && (
         <Card className="shadow shadow-danger">
-          <CardHeader className="justify-start gap-2 items-center">
+          <CardHeader className="items-center justify-start gap-2">
             <IconWrapper className="bg-danger/10 text-danger">
               <InfoIcon className="text-lg" />
             </IconWrapper>
@@ -151,7 +149,7 @@ export default function FlowList({
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <p className="text-md font-bold text-primary">
                   {filteredFlows.length}{" "}
-                  <span className="text-default-500 font-normal">
+                  <span className="font-normal text-default-500">
                     Flows found
                   </span>
                 </p>
@@ -170,7 +168,7 @@ export default function FlowList({
                         Filter & Sort
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="flex gap-4 p-3 items-center">
+                    <PopoverContent className="flex items-center gap-4 p-3">
                       <Input
                         className="max-w-xs"
                         placeholder="Search"
@@ -220,7 +218,7 @@ export default function FlowList({
             </CardBody>
           </Card>
           <Spacer y={4} />
-          <div className="grid lg:grid-cols-4 grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
             {filteredFlows.map((flow: any) => (
               <div key={flow.id} className="col-span-1">
                 <Card
@@ -229,7 +227,7 @@ export default function FlowList({
                   isPressable={!flow.disabled}
                   onPress={() => router.push(`/dashboard/flows/${flow.id}`)}
                 >
-                  <CardHeader className="justify-between items-center p-3 pb-0">
+                  <CardHeader className="items-center justify-between p-3 pb-0">
                     <Chip
                       color={
                         flow.disabled
@@ -386,7 +384,10 @@ export default function FlowList({
                           content={flow.description}
                           style={{ maxWidth: "450px" }}
                         >
-                          <span>{flow.description.slice(0, 50)}...</span>
+                          <span>
+                            {flow.description.slice(0, 50)}
+                            ...
+                          </span>
                         </Tooltip>
                       ) : (
                         flow.description
@@ -395,8 +396,8 @@ export default function FlowList({
                     <Spacer y={3} />
                     <Divider />
                   </CardBody>
-                  <CardFooter className="flex flex-wrap items-center gap-2 justify-between text-default-500">
-                    <div className="flex items-center text-start gap-2">
+                  <CardFooter className="flex flex-wrap items-center justify-between gap-2 text-default-500">
+                    <div className="flex items-center gap-2 text-start">
                       <Icon icon="solar:inbox-archive-outline" width={20} />
                       <p className="text-sm">
                         {projects.map(
@@ -405,7 +406,7 @@ export default function FlowList({
                         )}
                       </p>
                     </div>
-                    <div className="flex items-center text-start gap-2">
+                    <div className="flex items-center gap-2 text-start">
                       <Icon icon="solar:calendar-date-linear" width={26} />
                       <p className="text-sm">
                         {new Date(flow.created_at).toLocaleString("de-DE")}

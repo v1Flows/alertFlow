@@ -1,5 +1,6 @@
 "use client";
 
+import { Icon } from "@iconify/react";
 import {
   Card,
   CardBody,
@@ -10,11 +11,10 @@ import {
   Spacer,
   useDisclosure,
 } from "@nextui-org/react";
-import { Icon } from "@iconify/react";
-import ReactTimeago from "react-timeago";
-import { useRouter } from "next/navigation";
 import NumberFlow from "@number-flow/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import ReactTimeago from "react-timeago";
 
 import WelcomeModal from "../functions/users/welcome";
 
@@ -36,7 +36,7 @@ export function DashboardHome({
   const welcomeModal = useDisclosure();
 
   function runnerHeartbeatStatus(runner: any) {
-    var timeAgo =
+    const timeAgo =
       (new Date(runner.last_heartbeat).getTime() - Date.now()) / 1000;
 
     if (timeAgo < 0 && timeAgo > -30) {
@@ -47,7 +47,7 @@ export function DashboardHome({
   }
 
   function heartbeatColor(runner: any) {
-    var timeAgo =
+    const timeAgo =
       (new Date(runner.last_heartbeat).getTime() - Date.now()) / 1000;
 
     if (timeAgo < 0 && timeAgo > -30) {
@@ -68,17 +68,20 @@ export function DashboardHome({
 
   return (
     <main>
-      <p className="text-xl font-bold">Hello, {user.username} 👋</p>
+      <p className="text-xl font-bold">
+        Hello,
+        {user.username} 👋
+      </p>
       <p className="text-default-500">
         Here&apos;s the current status for today.
       </p>
       <Spacer y={4} />
-      <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 items-stretch gap-4">
+      <div className="grid grid-cols-1 items-stretch gap-4 md:grid-cols-2 lg:grid-cols-4">
         <div className="col-span-1">
           <Card fullWidth>
             <CardBody>
               <div className="flex items-center gap-2">
-                <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
+                <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
                   <Icon icon="solar:bell-outline" width={20} />
                 </div>
                 <div>
@@ -103,7 +106,7 @@ export function DashboardHome({
               <Card fullWidth isHoverable isPressable>
                 <CardBody>
                   <div className="flex items-center gap-2">
-                    <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
+                    <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
                       <Icon icon="solar:book-2-outline" width={20} />
                     </div>
                     <div>
@@ -131,9 +134,9 @@ export function DashboardHome({
                       router.push(`/dashboard/flows/${flow.id}`);
                     }}
                   >
-                    <div className="flex justify-between items-center gap-4">
+                    <div className="flex items-center justify-between gap-4">
                       <div className="flex items-center justify-start gap-2">
-                        <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
+                        <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
                           <Icon
                             className="text-warning"
                             icon="solar:danger-triangle-outline"
@@ -161,7 +164,7 @@ export function DashboardHome({
               <Card fullWidth isHoverable isPressable>
                 <CardBody>
                   <div className="flex items-center gap-2">
-                    <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
+                    <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
                       <Icon icon="solar:reorder-linear" width={20} />
                     </div>
                     <div>
@@ -171,7 +174,7 @@ export function DashboardHome({
                           new Date(e.created_at).getTime() >
                             Date.now() - 24 * 60 * 60 * 1000,
                       ).length > 0 ? (
-                        <div className="flex flex-cols items-center gap-1">
+                        <div className="flex-cols flex items-center gap-1">
                           {executions.filter((e: any) => e.interaction_required)
                             .length > 0 && (
                             <p className="text-md font-bold text-primary">
@@ -239,9 +242,9 @@ export function DashboardHome({
                       );
                     }}
                   >
-                    <div className="flex justify-between items-center gap-4">
+                    <div className="flex items-center justify-between gap-4">
                       <div className="flex items-center justify-start gap-2">
-                        <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
+                        <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
                           <Icon
                             className="text-primary"
                             icon="solar:hand-shake-linear"
@@ -286,9 +289,9 @@ export function DashboardHome({
                       );
                     }}
                   >
-                    <div className="flex justify-between items-center gap-4">
+                    <div className="flex items-center justify-between gap-4">
                       <div className="flex items-center justify-start gap-2">
-                        <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
+                        <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
                           <Icon
                             className="text-danger"
                             icon="solar:danger-triangle-outline"
@@ -324,7 +327,7 @@ export function DashboardHome({
               <Card fullWidth isHoverable isPressable>
                 <CardBody>
                   <div className="flex items-center gap-2">
-                    <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
+                    <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
                       <Icon icon="solar:rocket-2-outline" width={20} />
                     </div>
                     <div>
@@ -365,9 +368,9 @@ export function DashboardHome({
                       );
                     }}
                   >
-                    <div className="flex justify-between items-center gap-4">
+                    <div className="flex items-center justify-between gap-4">
                       <div className="flex items-center justify-start gap-2">
-                        <div className="flex bg-default/30 text-foreground items-center rounded-small justify-center w-10 h-10">
+                        <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
                           <Icon
                             className={`text-${heartbeatColor(runner)}`}
                             icon="solar:danger-triangle-outline"
@@ -381,7 +384,7 @@ export function DashboardHome({
                               <p>
                                 Last Heartbeat:{" "}
                                 <span
-                                  className={`font-bold text-${heartbeatColor(runner)}`}
+                                  className={`text- font-bold${heartbeatColor(runner)}`}
                                 >
                                   <ReactTimeago date={runner.last_heartbeat} />
                                 </span>
@@ -407,9 +410,9 @@ export function DashboardHome({
       <Stats stats={stats} />
 
       {/* Latest executions */}
-      <div className="flex items-end justify-between my-4">
+      <div className="my-4 flex items-end justify-between">
         <div>
-          <p className="text-2xl font-bold mb-0">
+          <p className="mb-0 text-2xl font-bold">
             Latest <span className="text-primary">Executions</span>
           </p>
         </div>

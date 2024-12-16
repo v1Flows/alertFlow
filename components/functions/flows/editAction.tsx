@@ -1,5 +1,6 @@
 import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
+import { Icon } from "@iconify/react";
 import {
   Button,
   ButtonGroup,
@@ -14,13 +15,12 @@ import {
   Textarea,
   Tooltip,
 } from "@nextui-org/react";
-import React, { useEffect, useState } from "react";
-import { Icon } from "@iconify/react";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
 
-import { cn } from "@/components/functions/cn/cn";
 import UpdateFlowActions from "@/lib/fetch/flow/PUT/UpdateActions";
+import { cn } from "@/components/functions/cn/cn";
 import ErrorCard from "@/components/error/ErrorCard";
 
 export const CustomRadio = (props: any) => {
@@ -143,11 +143,11 @@ export default function EditActionModal({
                 {error && (
                   <ErrorCard error={errorText} message={errorMessage} />
                 )}
-                <div className="w-full flex flex-col gap-4">
+                <div className="flex w-full flex-col gap-4">
                   {/* Status */}
                   <div className="flex flex-col">
-                    <div className="flex flex-cols items-center gap-2">
-                      <p className="text-lg text-default-500 font-bold">
+                    <div className="flex-cols flex items-center gap-2">
+                      <p className="text-lg font-bold text-default-500">
                         Status
                       </p>
                       <Tooltip content="Defined Actions will either be executed one after the other or all in parallel. If in Sequential type one action fails, the others won't be processed anymore.">
@@ -191,7 +191,7 @@ export default function EditActionModal({
                     </div>
                   </div>
                   <div>
-                    <p className="text-lg text-default-500 font-bold">
+                    <p className="text-lg font-bold text-default-500">
                       Details
                     </p>
                     <Spacer y={2} />
@@ -215,7 +215,7 @@ export default function EditActionModal({
                         }
                       />
                     </div>
-                    <p className="text-lg text-default-500 font-bold">
+                    <p className="text-lg font-bold text-default-500">
                       Parameters
                     </p>
                     <Spacer y={2} />

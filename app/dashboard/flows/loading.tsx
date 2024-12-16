@@ -5,9 +5,9 @@ import React from "react";
 export default function loader() {
   return (
     <>
-      <div className="grid lg:grid-cols-2 grid-cols-1 gap-2 items-center justify-between">
+      <div className="grid grid-cols-1 items-center justify-between gap-2 lg:grid-cols-2">
         <p className="text-2xl font-bold">Flows</p>
-        <div className="flex flex-cols justify-end items-center gap-4">
+        <div className="flex-cols flex items-center justify-end gap-4">
           <Skeleton className="w-2/5 rounded-lg">
             <div className="h-5 w-2/5 rounded-lg bg-default-200" />
           </Skeleton>

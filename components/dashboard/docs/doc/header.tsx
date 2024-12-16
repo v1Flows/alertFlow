@@ -10,9 +10,9 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 
-import { subtitle } from "@/components/primitives";
 import DeleteDocModal from "@/components/functions/docs/delete";
 import EditDocumentModal from "@/components/functions/docs/edit";
+import { subtitle } from "@/components/primitives";
 
 export default function DocHeader({ doc, user }: any) {
   const deleteDocumentModal = useDisclosure();
@@ -29,13 +29,13 @@ export default function DocHeader({ doc, user }: any) {
         </BreadcrumbItem>
       </Breadcrumbs>
       <Spacer y={2} />
-      <div className="flex flex-cols items-center justify-between">
+      <div className="flex-cols flex items-center justify-between">
         <div>
           <h1 className={subtitle({ className: "mb-0 font-bold" })}>
             {doc.title}
           </h1>
           <Spacer y={1} />
-          <div className="flex flex-wrap gap-2 items-center">
+          <div className="flex flex-wrap items-center gap-2">
             <Chip color="primary" radius="sm" variant="flat">
               Category: {doc.category}
             </Chip>
@@ -51,7 +51,7 @@ export default function DocHeader({ doc, user }: any) {
           </div>
         </div>
         {user.role === "admin" && (
-          <div className="flex flex-cols gap-2">
+          <div className="flex-cols flex gap-2">
             <Button
               color="warning"
               isDisabled={user.role !== "admin"}

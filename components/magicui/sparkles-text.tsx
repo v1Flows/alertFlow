@@ -1,12 +1,13 @@
-/* eslint-disable no-redeclare */
-/* eslint-disable no-undef */
 "use client";
 
-import { CSSProperties, ReactElement, useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { cn } from "@nextui-org/react";
+import type { CSSProperties, ReactElement } from "react";
 
-interface Sparkle {
+import { cn } from "@nextui-org/react";
+import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import React from "react";
+
+type Sparkle = {
   id: string;
   x: string;
   y: string;
@@ -14,15 +15,15 @@ interface Sparkle {
   delay: number;
   scale: number;
   lifespan: number;
-}
+};
 
-interface SparklesTextProps {
+type SparklesTextProps = {
   /**
    * @default <div />
    * @type ReactElement
    * @description
    * The component to be rendered as the text
-   * */
+   */
   as?: ReactElement;
 
   /**
@@ -38,7 +39,7 @@ interface SparklesTextProps {
    * @type string
    * @description
    * The text to be displayed
-   * */
+   */
   text: string;
 
   /**
@@ -46,7 +47,7 @@ interface SparklesTextProps {
    * @type number
    * @description
    * The count of sparkles
-   * */
+   */
   sparklesCount?: number;
 
   /**
@@ -54,12 +55,12 @@ interface SparklesTextProps {
    * @type string
    * @description
    * The colors of the sparkles
-   * */
+   */
   colors?: {
     first: string;
     second: string;
   };
-}
+};
 
 const SparklesText: React.FC<SparklesTextProps> = ({
   text,

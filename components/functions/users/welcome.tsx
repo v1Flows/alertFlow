@@ -2,6 +2,7 @@
 
 import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
+import { Icon } from "@iconify/react";
 import {
   Button,
   Modal,
@@ -10,10 +11,9 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@nextui-org/react";
-import React from "react";
 import { LibraryIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Icon } from "@iconify/react";
+import React from "react";
 import { toast } from "sonner";
 
 import Welcomed from "@/lib/fetch/user/PUT/welcomed";
@@ -69,8 +69,8 @@ export default function WelcomeModal({
         <ModalContent className="w-full">
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-cols items-center w-full justify-center">
-                <div className="flex flex-cols gap-1 font-bold">
+              <ModalHeader className="flex-cols flex w-full items-center justify-center">
+                <div className="flex-cols flex gap-1 font-bold">
                   New here, huh?
                   <Icon icon="solar:cup-hot-linear" width={28} />
                 </div>
@@ -87,7 +87,7 @@ export default function WelcomeModal({
                     </span>
                     ! We&apos;re thrilled to have you on board.
                   </p>
-                  <p className="text-center text-md">
+                  <p className="text-md text-center">
                     Click on the{" "}
                     <span className="font-bold">&quot;Documentation&quot;</span>{" "}
                     button below to dive in and learn how to make the most out
@@ -97,7 +97,7 @@ export default function WelcomeModal({
                     </span>
                     .
                   </p>
-                  <p className="text-center text-md">
+                  <p className="text-md text-center">
                     Or explore it on your own by clicking the{" "}
                     <span className="font-bold">&quot;Understood&quot;</span>{" "}
                     button.

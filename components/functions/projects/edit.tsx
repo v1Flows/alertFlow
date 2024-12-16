@@ -2,6 +2,7 @@
 
 import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
+import { Icon, listIcons, loadIcons } from "@iconify/react";
 import {
   Avatar,
   Button,
@@ -19,13 +20,12 @@ import {
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
-import { toast } from "sonner";
-import { Icon, listIcons, loadIcons } from "@iconify/react";
 import { ColorPicker, useColor } from "react-color-palette";
-import "react-color-palette/css";
+import { toast } from "sonner";
 
 import UpdateProject from "@/lib/fetch/project/PUT/UpdateProject";
 import ErrorCard from "@/components/error/ErrorCard";
+import "react-color-palette/css";
 
 export default function EditProjectModal({
   disclosure,
@@ -129,7 +129,7 @@ export default function EditProjectModal({
                 {error && (
                   <ErrorCard error={errorText} message={errorMessage} />
                 )}
-                <div className="grid lg:grid-cols-2 gap-2">
+                <div className="grid gap-2 lg:grid-cols-2">
                   <Input
                     label="Name"
                     name="name"
@@ -158,7 +158,7 @@ export default function EditProjectModal({
                     thumb: cn(
                       "w-6 h-6 border-2 shadow-lg",
                       "group-data-[hover=true]:border-primary",
-                      //selected
+                      // selected
                       "group-data-[selected=true]:ml-6",
                       // pressed
                       "group-data-[pressed=true]:w-7",
@@ -187,9 +187,9 @@ export default function EditProjectModal({
                 >
                   {(item) => (
                     <SelectItem key={item.textValue} textValue={item.textValue}>
-                      <div className="flex gap-2 items-center">
+                      <div className="flex items-center gap-2">
                         <Avatar
-                          className="flex-shrink-0"
+                          className="shrink-0"
                           color="primary"
                           icon={<Icon icon={item.textValue} width={22} />}
                           size="sm"

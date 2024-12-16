@@ -1,3 +1,11 @@
+import { closestCenter, DndContext } from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { Icon } from "@iconify/react";
 import {
   Accordion,
@@ -19,21 +27,13 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import React, { useEffect } from "react";
-import { DndContext, closestCenter } from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  useSortable,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import { toast } from "sonner";
 
-import DeleteActionModal from "@/components/functions/flows/deleteAction";
-import EditActionModal from "@/components/functions/flows/editAction";
-import AddActionModal from "@/components/functions/flows/addAction";
 import UpdateFlowActions from "@/lib/fetch/flow/PUT/UpdateActions";
 import EditFlowActionsDetails from "@/components/functions/flows/editDetails";
+import EditActionModal from "@/components/functions/flows/editAction";
+import DeleteActionModal from "@/components/functions/flows/deleteAction";
+import AddActionModal from "@/components/functions/flows/addAction";
 
 export default function Actions({
   flow,
@@ -75,7 +75,7 @@ export default function Actions({
           <CardBody>
             <div className="flex items-center justify-between gap-4">
               <div className="w-full">
-                <div className="flex flex-cols items-center justify-between gap-2">
+                <div className="flex-cols flex items-center justify-between gap-2">
                   <Tooltip
                     content={
                       <div>
@@ -89,11 +89,11 @@ export default function Actions({
                     size="lg"
                   >
                     <div className="flex items-center gap-2">
-                      <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                      <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
                         <Icon icon={action.icon} width={26} />
                       </div>
                       <div>
-                        <div className="flex flex-cols gap-2">
+                        <div className="flex-cols flex gap-2">
                           <p className="text-md font-bold">
                             {action.custom_name
                               ? action.custom_name
@@ -125,7 +125,7 @@ export default function Actions({
                       </div>
                     </div>
                   </Tooltip>
-                  <div className="flex flex-cols items-center gap-2">
+                  <div className="flex-cols flex items-center gap-2">
                     <Button
                       isIconOnly
                       color="warning"
@@ -186,7 +186,7 @@ export default function Actions({
                             <TableColumn align="center">Key</TableColumn>
                             <TableColumn align="center">Value</TableColumn>
                           </TableHeader>
-                          <TableBody emptyContent={"No patterns defined."}>
+                          <TableBody emptyContent="No patterns defined.">
                             {action.params.map((param: any, index: number) => (
                               <TableRow key={index}>
                                 <TableCell>{param.key}</TableCell>
@@ -216,7 +216,9 @@ export default function Actions({
   };
 
   const handleDragEnd = (event: any) => {
-    if (!isDragEnabled) return;
+    if (!isDragEnabled) {
+      return;
+    }
 
     const { active, over } = event;
 
@@ -243,11 +245,11 @@ export default function Actions({
   }
 
   return (
-    <div className="grid lg:grid-cols-3 grid-cols-1 gap-4">
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
       <div className="col-span-1">
         <Card fullWidth>
           <CardBody>
-            <div className="flex flex-cols items-start justify-between">
+            <div className="flex-cols flex items-start justify-between">
               <div className="flex flex-col">
                 <p className="text-md font-bold">Details</p>
                 <p className="text-sm text-default-500">
@@ -265,7 +267,7 @@ export default function Actions({
               </Button>
             </div>
             <Divider className="my-4" />
-            <div className="grid xl:grid-cols-2 gap-4">
+            <div className="grid gap-4 xl:grid-cols-2">
               <p>Execution Order</p>
               <Chip
                 color={flow.exec_parallel ? "secondary" : "primary"}
@@ -288,7 +290,7 @@ export default function Actions({
                   <TableColumn align="center">Type</TableColumn>
                   <TableColumn align="center">Value</TableColumn>
                 </TableHeader>
-                <TableBody emptyContent={"No patterns defined."}>
+                <TableBody emptyContent="No patterns defined.">
                   {flow.patterns.map((pattern: any, index: number) => (
                     <TableRow key={index}>
                       <TableCell>{pattern.key}</TableCell>
@@ -302,7 +304,7 @@ export default function Actions({
           </CardBody>
         </Card>
       </div>
-      <div className="flex flex-col gap-2 col-span-2">
+      <div className="col-span-2 flex flex-col gap-2">
         <Switch
           isDisabled={!canEdit}
           isSelected={isDragEnabled}
@@ -328,15 +330,15 @@ export default function Actions({
         </DndContext>
         <Card
           fullWidth
-          className="border border-dashed border-default-200 hover:border-primary bg-opacity-60"
+          className="border border-dashed border-default-200 bg-opacity-60 hover:border-primary"
           isDisabled={!canEdit}
           isPressable={canEdit}
           onPress={addFlowActionModal.onOpen}
         >
           <CardBody>
-            <div className="flex flex-cols items-center justify-between gap-2">
+            <div className="flex-cols flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
-                <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
                   <Icon icon="solar:add-square-outline" width={26} />
                 </div>
                 <div>

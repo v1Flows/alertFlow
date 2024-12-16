@@ -88,7 +88,10 @@ export default function DeleteExecutionModal({
                   <ErrorCard error={errorText} message={errorMessage} />
                 )}
                 <Snippet hideCopyButton hideSymbol>
-                  <span>ID: {execution.id}</span>
+                  <span>
+                    ID:
+                    {execution.id}
+                  </span>
                 </Snippet>
               </ModalBody>
               <ModalFooter className="grid grid-cols-2">

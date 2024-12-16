@@ -1,17 +1,18 @@
 "use client";
 
-import React from "react";
-import { Button, Chip, Tabs, Tab, ScrollShadow } from "@nextui-org/react";
+import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
+
+import { Icon } from "@iconify/react";
 import {
   Drawer,
-  DrawerContent,
   DrawerBody,
+  DrawerContent,
   DrawerFooter,
   DrawerHeader,
 } from "@nextui-org/drawer";
-import { Icon } from "@iconify/react";
+import { Button, Chip, ScrollShadow, Tab, Tabs } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { UseDisclosureReturn } from "@nextui-org/use-disclosure";
+import React from "react";
 
 import ReadUserNotification from "@/lib/fetch/user/PUT/readNotification";
 import ArchiveUserNotification from "@/lib/fetch/user/PUT/archiveNotification";

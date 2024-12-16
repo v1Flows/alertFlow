@@ -1,6 +1,7 @@
+import type { IconifyIcon } from "@iconify/react";
 import type { CSSProperties } from "react";
 
-import { IconifyIcon } from "@iconify/react";
+import React from "react";
 
 export enum CategoryEnum {
   COMMON = "common",
@@ -113,10 +114,10 @@ export type Attributes = {
   };
 };
 
-export interface TsConfigOptions {
+export type TsConfigOptions = {
   baseUrl?: string;
   paths?: Record<string, string[]>; // Explicit type for paths
-}
+};
 
 export type ComponentCodeFile = {
   fileName: string;
@@ -143,11 +144,11 @@ export type GroupInfo = {
 
 export type CategoryComponents = Record<CategoryEnum, ComponentInfo[]>;
 
-export interface ComponentPreviewPageInfo {
+export type ComponentPreviewPageInfo = {
   group?: string;
   category?: CategoryEnum;
   components?: ComponentInfo[];
-}
+};
 
 export type DynamicComponentProps = {
   category?: CategoryEnum;
@@ -155,14 +156,14 @@ export type DynamicComponentProps = {
   component?: ComponentInfo;
 };
 
-export interface SearchResultItem {
+export type SearchResultItem = {
   slug: string;
   url: string;
   group: GroupInfo;
   content: string;
   category: string;
   component: ComponentInfo;
-}
+};
 
 // eslint-disable-next-line no-undef
 export type MessagingChatMessageProps = React.HTMLAttributes<HTMLDivElement> & {

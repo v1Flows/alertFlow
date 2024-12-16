@@ -2,17 +2,17 @@
 
 import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
-import React, { useEffect } from "react";
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
   Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
 import { toast } from "sonner";
 
 import UpdatePlan from "@/lib/fetch/admin/PUT/UpdatePlan";
@@ -152,7 +152,7 @@ export default function EditPlanModal({
                   isRequired
                   endContent={
                     <div className="pointer-events-none flex items-center">
-                      <span className="text-default-400 text-small">€</span>
+                      <span className="text-small text-default-400">€</span>
                     </div>
                   }
                   label="Price"

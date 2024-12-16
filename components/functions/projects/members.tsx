@@ -3,29 +3,29 @@
 import type { Selection } from "@nextui-org/react";
 import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
-import React from "react";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  Button,
-  Input,
-  CardFooter,
-  Spacer,
-  Divider,
-  AvatarGroup,
-  Avatar,
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-  Modal,
-  ModalContent,
-  ModalBody,
-} from "@nextui-org/react";
 import { Icon } from "@iconify/react";
-import { toast } from "sonner";
+import {
+  Avatar,
+  AvatarGroup,
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Divider,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  Spacer,
+} from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import React from "react";
+import { toast } from "sonner";
 
 import AddProjectMember from "@/lib/fetch/project/POST/AddProjectMember";
 import ErrorCard from "@/components/error/ErrorCard";
@@ -71,16 +71,17 @@ export default function AddProjectMemberModal({
     () => (
       <div className="mt-2 flex flex-col gap-2">
         {members.map((member: any) => (
-          <>
+          <div key={member.user_id}>
             <UserCell
               key={member.user_id}
+              ref={null}
               avatar={member.username}
               color={statusColorMap[member.role]}
               name={member.username}
               permission={permissionLabels[member.role]}
             />
-            <Divider />
-          </>
+            <Divider className="m-1" />
+          </div>
         ))}
       </div>
     ),

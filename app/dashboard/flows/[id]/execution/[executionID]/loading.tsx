@@ -7,9 +7,9 @@ import ExecutionBreadcrumbs from "@/components/dashboard/flows/flow/execution/br
 export default function loader() {
   return (
     <>
-      <ExecutionBreadcrumbs executionID={"..."} flowID={"..."} />
-      <div className="flex items-center gap-2 mb-2 mt-2">
-        <div className="flex flex-col gap-2 w-full">
+      <ExecutionBreadcrumbs executionID="..." flowID="..." />
+      <div className="my-2 flex items-center gap-2">
+        <div className="flex w-full flex-col gap-2">
           <Skeleton className="w-1/12 rounded-lg">
             <div className="h-3 w-1/12 rounded-lg bg-default-200" />
           </Skeleton>
@@ -18,8 +18,8 @@ export default function loader() {
           </Skeleton>
         </div>
       </div>
-      <Divider className="mt-4 mb-4" />
-      <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 items-stretch gap-4">
+      <Divider className="my-4" />
+      <div className="grid grid-cols-1 items-stretch gap-4 md:grid-cols-2 lg:grid-cols-4">
         {[1, 2, 3, 4].map((_, i) => (
           <Card key={i} fullWidth>
             <CardBody>
@@ -27,7 +27,7 @@ export default function loader() {
                 <Skeleton className="w-2/12 rounded-lg">
                   <div className="h-12 w-2/12 rounded-lg bg-default-200" />
                 </Skeleton>
-                <div className="flex flex-col gap-2 w-full">
+                <div className="flex w-full flex-col gap-2">
                   <Skeleton className="w-1/12 rounded-lg">
                     <div className="h-3 w-1/12 rounded-lg bg-default-200" />
                   </Skeleton>
@@ -44,7 +44,7 @@ export default function loader() {
       <Card fullWidth>
         <CardBody>
           <Skeleton className="w-5/5 rounded-lg">
-            <div className="h-8 w-5/5 rounded-lg bg-default-200" />
+            <div className="w-5/5 h-8 rounded-lg bg-default-200" />
           </Skeleton>
         </CardBody>
       </Card>

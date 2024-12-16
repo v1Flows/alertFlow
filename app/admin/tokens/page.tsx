@@ -1,7 +1,7 @@
 import { TokensList } from "@/components/admin/tokens/list";
-import AdminGetTokens from "@/lib/fetch/admin/tokens";
-import AdminGetProjects from "@/lib/fetch/admin/projects";
 import ErrorCard from "@/components/error/ErrorCard";
+import AdminGetProjects from "@/lib/fetch/admin/projects";
+import AdminGetTokens from "@/lib/fetch/admin/tokens";
 
 export default async function AdminTokensPage() {
   const tokensData = AdminGetTokens();

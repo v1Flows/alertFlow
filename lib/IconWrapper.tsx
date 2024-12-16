@@ -1,5 +1,5 @@
-import React from "react";
 import { cn } from "@nextui-org/react";
+import React from "react";
 
 export const IconWrapper = ({ children, className }: any) => (
   <div

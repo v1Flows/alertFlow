@@ -1,4 +1,4 @@
-import type { ComponentInfo, Attributes } from "./data";
+import type { Attributes, ComponentInfo } from "./data";
 
 import { IMPORT_PATH_MATCH_REGEX, IMPORT_REGEX } from "./regex-constants";
 
@@ -10,7 +10,7 @@ export type SandpackFiles = {
 
 export function updateImportPaths(code: string): string {
   return code.replace(IMPORT_REGEX, (match, p1, p2) => {
-    let newImport = p2?.split("/").pop();
+    const newImport = p2?.split("/").pop();
 
     return match.replace(`${p1}${p2}`, `./${newImport}`);
   });
@@ -45,15 +45,29 @@ export function processFiles(component: ComponentInfo, language: "ts" | "js") {
         if (bIndexFileName === component.slug) {
           return 1;
         }
-        if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
-        if (aIndex !== -1 && bIndex === -1) return -1;
-        if (bIndex !== -1 && aIndex === -1) return 1;
+        if (aIndex !== -1 && bIndex !== -1) {
+          return aIndex - bIndex;
+        }
+        if (aIndex !== -1 && bIndex === -1) {
+          return -1;
+        }
+        if (bIndex !== -1 && aIndex === -1) {
+          return 1;
+        }
 
-        //both are not in the import array
-        if (aIndexFileName?.includes("cn")) return 1;
-        if (bIndexFileName?.includes("cn")) return -1;
-        if (aIndexFileName?.includes("types")) return 1;
-        if (bIndexFileName?.includes("types")) return -1;
+        // both are not in the import array
+        if (aIndexFileName?.includes("cn")) {
+          return 1;
+        }
+        if (bIndexFileName?.includes("cn")) {
+          return -1;
+        }
+        if (aIndexFileName?.includes("types")) {
+          return 1;
+        }
+        if (bIndexFileName?.includes("types")) {
+          return -1;
+        }
 
         return 0;
       }
@@ -84,7 +98,9 @@ export const getPriorityValue = (priority: Attributes["sortPriority"]) => {
     undefined: 4,
   };
 
-  if (!priority || !order[priority]) return order.undefined;
+  if (!priority || !order[priority]) {
+    return order.undefined;
+  }
 
   return order[priority];
 };

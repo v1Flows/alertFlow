@@ -1,33 +1,33 @@
 "use client";
-import React from "react";
+import { Icon } from "@iconify/react";
 import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
+  Button,
   Chip,
   Divider,
   Dropdown,
-  DropdownTrigger,
-  Button,
-  DropdownMenu,
   DropdownItem,
+  DropdownMenu,
   DropdownSection,
-  useDisclosure,
+  DropdownTrigger,
   Pagination,
   Snippet,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+  useDisclosure,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { Icon } from "@iconify/react";
+import React from "react";
 
-import { PlusIcon } from "@/components/icons";
-import FunctionDeleteFlow from "@/components/functions/flows/deleteFlow";
-import EditFlowModal from "@/components/functions/flows/edit";
+import ChangeFlowMaintenanceModal from "@/components/functions/flows/changeMaintenance";
 import ChangeFlowStatusModal from "@/components/functions/flows/changeStatus";
 import FunctionCreateFlow from "@/components/functions/flows/create";
-import ChangeFlowMaintenanceModal from "@/components/functions/flows/changeMaintenance";
+import FunctionDeleteFlow from "@/components/functions/flows/deleteFlow";
+import EditFlowModal from "@/components/functions/flows/edit";
+import { PlusIcon } from "@/components/icons";
 
 export function FlowsList({ flows, projects, runners }: any) {
   const router = useRouter();
@@ -127,7 +127,7 @@ export function FlowsList({ flows, projects, runners }: any) {
         return new Date(flow.updated_at).toLocaleString("de-DE");
       case "actions":
         return (
-          <div className="relative flex justify-center items-center gap-2">
+          <div className="relative flex items-center justify-center gap-2">
             <Dropdown>
               <DropdownTrigger>
                 <Button isIconOnly size="sm" variant="light">
@@ -267,9 +267,9 @@ export function FlowsList({ flows, projects, runners }: any) {
     <main>
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-1">
-          <p className="text-2xl font-bold mb-0 text-danger">Admin</p>
-          <p className="text-2xl mb-0">|</p>
-          <p className="text-2xl mb-0">Flows</p>
+          <p className="mb-0 text-2xl font-bold text-danger">Admin</p>
+          <p className="mb-0 text-2xl">|</p>
+          <p className="mb-0 text-2xl">Flows</p>
         </div>
         <Button
           color="primary"
@@ -326,7 +326,7 @@ export function FlowsList({ flows, projects, runners }: any) {
               Actions
             </TableColumn>
           </TableHeader>
-          <TableBody emptyContent={"No rows to display."} items={items}>
+          <TableBody emptyContent="No rows to display." items={items}>
             {(item: any) => (
               <TableRow key={item.id}>
                 {(columnKey) => (

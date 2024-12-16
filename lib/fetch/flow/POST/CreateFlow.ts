@@ -2,20 +2,20 @@
 
 import { cookies } from "next/headers";
 
-interface Result {
+type Result = {
   result: string;
-}
+};
 
-interface ErrorResponse {
+type ErrorResponse = {
   success: false;
   error: string;
   message: string;
-}
+};
 
-interface SuccessResponse {
+type SuccessResponse = {
   success: true;
   data: Result;
-}
+};
 
 export default async function CreateFlow(
   name: string,
@@ -42,8 +42,8 @@ export default async function CreateFlow(
         Authorization: token.value,
       },
       body: JSON.stringify({
-        name: name,
-        description: description,
+        name,
+        description,
         project_id: projectId,
         runner_id: runnerId,
       }),
@@ -63,7 +63,7 @@ export default async function CreateFlow(
 
     return {
       success: true,
-      data: data,
+      data,
     };
   } catch (error) {
     return {

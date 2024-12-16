@@ -1,19 +1,20 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
+
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
   Select,
   SelectItem,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
 import EditProjectMember from "@/lib/fetch/project/PUT/editProjectMember";
 import ErrorCard from "@/components/error/ErrorCard";

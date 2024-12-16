@@ -81,7 +81,8 @@ export default function DeleteUserModal({
                   <p className="text-lg font-bold">Are you sure?</p>
                   <p className="text-sm text-default-500">
                     You are about to delete your account which{" "}
-                    <span className="font-bold">cannot be undone</span>.
+                    <span className="font-bold">cannot be undone</span>
+                    .
                     <Spacer y={1} />
                     Any known data related to your account will be removed.
                   </p>
@@ -92,9 +93,18 @@ export default function DeleteUserModal({
                   <ErrorCard error={errorText} message={errorMessage} />
                 )}
                 <Snippet hideCopyButton hideSymbol>
-                  <span>Name: {user.username}</span>
-                  <span>Email: {user.email}</span>
-                  <span>ID: {user.id}</span>
+                  <span>
+                    Name:
+                    {user.username}
+                  </span>
+                  <span>
+                    Email:
+                    {user.email}
+                  </span>
+                  <span>
+                    ID:
+                    {user.id}
+                  </span>
                 </Snippet>
               </ModalBody>
               <ModalFooter className="grid grid-cols-2">

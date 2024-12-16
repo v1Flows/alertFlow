@@ -1,37 +1,37 @@
 "use client";
 
-import React from "react";
+import { Icon } from "@iconify/react";
 import {
   Avatar,
+  Badge,
   Button,
-  Spacer,
-  Image,
   Card,
   CardBody,
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-  Badge,
-  ScrollShadow,
   cn,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  Image,
+  ScrollShadow,
+  Spacer,
   useDisclosure,
 } from "@nextui-org/react";
-import { Icon } from "@iconify/react";
-import { useTheme } from "next-themes";
 import { useIsSSR } from "@react-aria/ssr";
+import { useTheme } from "next-themes";
 import { usePathname, useRouter } from "next/navigation";
+import React from "react";
 import { useMediaQuery } from "usehooks-ts";
 
-import { Logout } from "@/lib/logout";
 import { useSidebarStore } from "@/store/useSidebarStore";
+import { Logout } from "@/lib/logout";
 import Notifications from "@/components/notifications/notifications";
 
-import { ThemeSwitch } from "../theme-switch";
 import Search from "../search/search";
+import { ThemeSwitch } from "../theme-switch";
 
-import { sectionAdminItems, sectionItems } from "./sidebar-items";
 import Sidebar from "./sidebar";
+import { sectionAdminItems, sectionItems } from "./sidebar-items";
 
 /**
  * 💡 TIP: You can use the usePathname hook from Next.js App Router to get the current pathname
@@ -110,7 +110,7 @@ export default function SidebarMenu({
             },
           )}
         >
-          <div className="flex h-8 w-8 items-center justify-center rounded-full">
+          <div className="flex size-8 items-center justify-center rounded-full">
             <Image
               alt="Logo"
               height={32}
@@ -206,6 +206,7 @@ export default function SidebarMenu({
           <Spacer y={2} />
 
           <Sidebar
+            ref={null}
             defaultSelectedKey="home"
             isCompact={isCompact}
             items={user.role === "admin" ? sectionAdminItems : sectionItems}
@@ -218,11 +219,11 @@ export default function SidebarMenu({
         {user.role === "admin" && settings.maintenance && (
           <Card
             isBlurred
-            className="border-3 border-danger h-[80px]"
+            className="h-[80px] border-3 border-danger"
             shadow="sm"
           >
             <CardBody className="items-center text-center">
-              <div className="flex items-center justify-center text-danger font-bold space-x-2">
+              <div className="flex items-center justify-center space-x-2 font-bold text-danger">
                 <Icon icon="solar:danger-triangle-broken" width={20} />
                 {!isCompact && <p className="text-md">Maintenance Active</p>}
               </div>
@@ -288,7 +289,7 @@ export default function SidebarMenu({
         {!isCompact && (
           <div className="flex items-center justify-center gap-1">
             <span className="text-xs text-default-600">Powered by</span>
-            <p className="text-sm text-primary font-bold">JustLab</p>
+            <p className="text-sm font-bold text-primary">JustLab</p>
             <p className="text-sm text-default-600">
               &copy; {new Date().getFullYear()}
             </p>
@@ -296,8 +297,8 @@ export default function SidebarMenu({
         )}
       </div>
 
-      <div className="w-full flex-1 flex-col p-4 overflow-y-auto">
-        <main className="h-full w-full overflow-visible">{children}</main>
+      <div className="w-full flex-1 flex-col overflow-y-auto p-4">
+        <main className="size-full overflow-visible">{children}</main>
       </div>
     </div>
   );

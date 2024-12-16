@@ -10,10 +10,10 @@ export default function DashboardDocsHeader({ userDetails }: any) {
 
   return (
     <>
-      <div className="grid lg:grid-cols-2 grid-cols-1 gap-2 items-center justify-between">
+      <div className="grid grid-cols-1 items-center justify-between gap-2 lg:grid-cols-2">
         <p className="text-2xl font-bold">Documentation</p>
         {userDetails && userDetails.role === "admin" && (
-          <div className="flex flex-cols justify-end items-center gap-4">
+          <div className="flex-cols flex items-center justify-end gap-4">
             <Button
               color="danger"
               isDisabled={userDetails.role !== "admin"}

@@ -1,14 +1,14 @@
 "use client";
-import React from "react";
-import { Tabs, Tab } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
+import { Tab, Tabs } from "@nextui-org/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import React from "react";
 
 import { Flash } from "@/components/icons";
 
+import Actions from "./actions";
 import Executions from "./executions";
 import Payloads from "./payloads";
-import Actions from "./actions";
 import FlowStats from "./stats";
 
 export default function FlowTabs({

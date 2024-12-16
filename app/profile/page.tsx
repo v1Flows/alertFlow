@@ -1,22 +1,24 @@
 import { cookies } from "next/headers";
 
+import ErrorCard from "@/components/error/ErrorCard";
 import { UserProfile } from "@/components/user/profile";
 import PageGetPlans from "@/lib/fetch/page/plans";
 import PageGetSettings from "@/lib/fetch/page/settings";
-import GetPaymentMethods from "@/lib/fetch/user/GetPaymentMethods";
 import GetUserDetails from "@/lib/fetch/user/getDetails";
+import GetPaymentMethods from "@/lib/fetch/user/GetPaymentMethods";
 import GetUserStats from "@/lib/fetch/user/getStats";
 import GetUserSubscription from "@/lib/fetch/user/getSubscription";
-import ErrorCard from "@/components/error/ErrorCard";
 
 export default async function UserProfilePage() {
+  const c = await cookies();
+
   const settingsData = PageGetSettings();
   const userDetailsData = GetUserDetails();
   const paymentMethodsData = GetPaymentMethods();
   const plansData = PageGetPlans();
   const subscriptionData = GetUserSubscription();
   const statsData = GetUserStats();
-  const session = cookies().get("session")?.value;
+  const session = c.get("session")?.value;
 
   const [settings, userDetails, paymentMethods, plans, subscription, stats] =
     (await Promise.all([

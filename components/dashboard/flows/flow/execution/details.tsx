@@ -1,7 +1,7 @@
 import { Icon } from "@iconify/react";
 import { Card, CardBody, CircularProgress, Tooltip } from "@nextui-org/react";
-import ReactTimeago from "react-timeago";
 import NumberFlow from "@number-flow/react";
+import ReactTimeago from "react-timeago";
 
 export default function ExecutionDetails({ runners, execution, steps }: any) {
   function status(execution: any) {
@@ -53,9 +53,9 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="default"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -78,9 +78,9 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="warning"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -97,9 +97,9 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="danger"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -116,8 +116,8 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             color="secondary"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -134,9 +134,9 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="primary"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -153,9 +153,9 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="danger"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -172,9 +172,9 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="success"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -191,9 +191,9 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="success"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -210,7 +210,7 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
   }
 
   function getDuration() {
-    var calFinished = new Date().toISOString();
+    let calFinished = new Date().toISOString();
 
     if (execution.finished_at !== "0001-01-01T00:00:00Z") {
       calFinished = execution.finished_at;
@@ -237,14 +237,14 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
 
   return (
     <>
-      <div className="grid xl:grid-cols-6 lg:grid-cols-3 grid-cols-2 items-stretch items-start gap-4">
+      <div className="grid grid-cols-2 items-start items-stretch gap-4 lg:grid-cols-3 xl:grid-cols-6">
         <Card>
           <CardBody>
-            <div className="flex gap-4 items-center justify-start">
+            <div className="flex items-center justify-start gap-4">
               <div>{statusIcon(execution)}</div>
               <div>
                 <p
-                  className={`text-md font-bold text-${statusColor(execution)}`}
+                  className={`text-md text- font-bold${statusColor(execution)}`}
                 >
                   {status(execution)}
                 </p>
@@ -255,8 +255,8 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
         </Card>
         <Card>
           <CardBody>
-            <div className="flex gap-4 items-center justify-start">
-              <div className="flex items-center rounded-large justify-center bg-default bg-opacity-40 w-12 h-12">
+            <div className="flex items-center justify-start gap-4">
+              <div className="flex size-12 items-center justify-center rounded-large bg-default bg-opacity-40">
                 <Icon icon="solar:rocket-2-broken" width={28} />
               </div>
               <div>
@@ -271,8 +271,8 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
         </Card>
         <Card>
           <CardBody>
-            <div className="flex gap-4 items-center justify-start">
-              <div className="flex items-center rounded-large justify-center bg-default bg-opacity-40 w-12 h-12">
+            <div className="flex items-center justify-start gap-4">
+              <div className="flex size-12 items-center justify-center rounded-large bg-default bg-opacity-40">
                 <Icon
                   icon="solar:posts-carousel-vertical-line-duotone"
                   width={28}
@@ -292,8 +292,8 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
         </Card>
         <Card>
           <CardBody>
-            <div className="flex gap-4 items-center justify-start">
-              <div className="flex items-center rounded-large justify-center bg-default bg-opacity-40 w-12 h-12">
+            <div className="flex items-center justify-start gap-4">
+              <div className="flex size-12 items-center justify-center rounded-large bg-default bg-opacity-40">
                 <Icon icon="solar:delivery-line-duotone" width={28} />
               </div>
               <div>
@@ -307,8 +307,8 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
         </Card>
         <Card>
           <CardBody>
-            <div className="flex gap-4 items-center justify-start">
-              <div className="flex items-center rounded-large justify-center bg-default bg-opacity-40 w-12 h-12">
+            <div className="flex items-center justify-start gap-4">
+              <div className="flex size-12 items-center justify-center rounded-large bg-default bg-opacity-40">
                 <Icon icon="solar:delivery-outline" width={28} />
               </div>
               <div>
@@ -326,8 +326,8 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
         </Card>
         <Card>
           <CardBody>
-            <div className="flex gap-4 items-center justify-start">
-              <div className="flex items-center rounded-large justify-center bg-default bg-opacity-40 w-12 h-12">
+            <div className="flex items-center justify-start gap-4">
+              <div className="flex size-12 items-center justify-center rounded-large bg-default bg-opacity-40">
                 <Icon icon="solar:clock-circle-broken" width={28} />
               </div>
               <div>

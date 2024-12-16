@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-interface Stats {
+type Stats = {
   started_execution_stats: [];
   failed_execution_stats: [];
   incoming_payload_stats: [];
@@ -11,18 +11,18 @@ interface Stats {
   flow_creation_stats: [];
   users_per_plan_stats: [];
   users_per_role_stats: [];
-}
+};
 
-interface ErrorResponse {
+type ErrorResponse = {
   success: false;
   error: string;
   message: string;
-}
+};
 
-interface SuccessResponse {
+type SuccessResponse = {
   success: true;
   data: Stats;
-}
+};
 
 export async function AdminGetStats(
   interval: number,
@@ -64,7 +64,7 @@ export async function AdminGetStats(
 
     return {
       success: true,
-      data: data,
+      data,
     };
   } catch (error) {
     return {

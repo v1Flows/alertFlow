@@ -93,7 +93,7 @@ export default function CancelSubscriptionModal({
                 will be downgraded to the free Hobby plan.
                 <Divider />
                 <div>
-                  <p className="text-warning font-bold text-lg">Caution!</p>
+                  <p className="text-lg font-bold text-warning">Caution!</p>
                   <p className="font-bold">
                     Projects and Flows exceeding the free plan limits will be
                     disabled. You can always upgrade your plan to re-enable

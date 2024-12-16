@@ -15,9 +15,9 @@ import {
 import React from "react";
 import { toast } from "sonner";
 
-import DisableUser from "@/lib/fetch/user/PUT/disable";
-import { deleteSession } from "@/lib/auth/deleteSession";
 import ErrorCard from "@/components/error/ErrorCard";
+import { deleteSession } from "@/lib/auth/deleteSession";
+import DisableUser from "@/lib/fetch/user/PUT/disable";
 
 export default function DisableUserModal({
   disclosure,
@@ -91,9 +91,18 @@ export default function DisableUserModal({
                   <ErrorCard error={errorText} message={errorMessage} />
                 )}
                 <Snippet hideCopyButton hideSymbol>
-                  <span>Name: {user.username}</span>
-                  <span>Email: {user.email}</span>
-                  <span>ID: {user.id}</span>
+                  <span>
+                    Name:
+                    {user.username}
+                  </span>
+                  <span>
+                    Email:
+                    {user.email}
+                  </span>
+                  <span>
+                    ID:
+                    {user.id}
+                  </span>
                 </Snippet>
               </ModalBody>
               <ModalFooter className="grid grid-cols-2">

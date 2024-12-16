@@ -1,17 +1,17 @@
 import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
-import React from "react";
-import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-  Textarea,
-  Input,
-} from "@nextui-org/react";
 import { Icon } from "@iconify/react";
+import {
+  Button,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Textarea,
+} from "@nextui-org/react";
+import React from "react";
 import { toast } from "sonner";
 
 import SimulatePayload from "@/lib/fetch/payload/POST/send";

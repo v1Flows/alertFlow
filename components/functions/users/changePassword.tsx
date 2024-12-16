@@ -2,21 +2,21 @@
 
 import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
-import React from "react";
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
   Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
 } from "@nextui-org/react";
+import React from "react";
 import { toast } from "sonner";
 
-import ChangeUserPassword from "@/lib/fetch/user/PUT/changePassword";
-import { deleteSession } from "@/lib/auth/deleteSession";
 import ErrorCard from "@/components/error/ErrorCard";
+import { deleteSession } from "@/lib/auth/deleteSession";
+import ChangeUserPassword from "@/lib/fetch/user/PUT/changePassword";
 
 export default function ChangeUserPasswordModal({
   userId,
@@ -64,7 +64,9 @@ export default function ChangeUserPasswordModal({
     if (!currentPassword.length) {
       setIsCurrentPasswordValid(false);
     }
-    if (!checkNewAndConfirmPassword()) return;
+    if (!checkNewAndConfirmPassword()) {
+      return;
+    }
 
     setIsLoading(true);
 

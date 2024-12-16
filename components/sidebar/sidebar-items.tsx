@@ -1,4 +1,4 @@
-import { type SidebarItem } from "./sidebar";
+import type { SidebarItem } from "./sidebar";
 
 /**
  * Please check the https://nextui.org/docs/guide/routing to have a seamless router integration

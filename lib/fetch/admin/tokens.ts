@@ -2,20 +2,20 @@
 
 import { cookies } from "next/headers";
 
-interface Tokens {
+type Tokens = {
   tokens: [];
-}
+};
 
-interface ErrorResponse {
+type ErrorResponse = {
   success: false;
   error: string;
   message: string;
-}
+};
 
-interface SuccessResponse {
+type SuccessResponse = {
   success: true;
   data: Tokens;
-}
+};
 
 export async function AdminGetApiKeys(): Promise<
   SuccessResponse | ErrorResponse
@@ -57,7 +57,7 @@ export async function AdminGetApiKeys(): Promise<
 
     return {
       success: true,
-      data: data,
+      data,
     };
   } catch (error) {
     return {

@@ -2,20 +2,20 @@
 
 import { cookies } from "next/headers";
 
-interface Doc {
-  doc: {};
-}
+type Doc = {
+  doc: object;
+};
 
-interface ErrorResponse {
+type ErrorResponse = {
   success: false;
   error: string;
   message: string;
-}
+};
 
-interface SuccessResponse {
+type SuccessResponse = {
   success: true;
   data: Doc;
-}
+};
 
 export async function GetDoc(
   docID: any,
@@ -57,7 +57,7 @@ export async function GetDoc(
 
     return {
       success: true,
-      data: data,
+      data,
     };
   } catch (error) {
     return {

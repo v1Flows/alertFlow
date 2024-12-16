@@ -183,7 +183,7 @@ export default function AdminStepActions({
             className="capitalize"
             onPress={() => changeStepStatus("pending")}
           >
-            <div className="flex flex-cols gap-2">
+            <div className="flex-cols flex gap-2">
               <Icon
                 className="text-default-500"
                 icon="solar:sleeping-square-linear"
@@ -197,7 +197,7 @@ export default function AdminStepActions({
             className="capitalize"
             onPress={() => changeStepStatus("running")}
           >
-            <div className="flex flex-cols gap-2">
+            <div className="flex-cols flex gap-2">
               <Icon
                 className="text-primary"
                 icon="solar:play-bold-duotone"
@@ -211,7 +211,7 @@ export default function AdminStepActions({
             className="capitalize"
             onPress={() => changeStepStatus("paused")}
           >
-            <div className="flex flex-cols gap-2">
+            <div className="flex-cols flex gap-2">
               <Icon
                 className="text-warning"
                 icon="solar:pause-broken"
@@ -225,7 +225,7 @@ export default function AdminStepActions({
             className="capitalize"
             onPress={() => changeStepStatus("canceled")}
           >
-            <div className="flex flex-cols gap-2">
+            <div className="flex-cols flex gap-2">
               <Icon
                 className="text-danger"
                 icon="solar:forbidden-linear"
@@ -239,7 +239,7 @@ export default function AdminStepActions({
             className="capitalize"
             onPress={() => changeStepStatus("no_pattern_match")}
           >
-            <div className="flex flex-cols gap-2">
+            <div className="flex-cols flex gap-2">
               <Icon
                 className="text-secondary"
                 icon="solar:bill-cross-broken"
@@ -253,7 +253,7 @@ export default function AdminStepActions({
             className="capitalize"
             onPress={() => changeStepStatus("no_result")}
           >
-            <div className="flex flex-cols gap-2">
+            <div className="flex-cols flex gap-2">
               <Icon
                 className="text-default-500"
                 icon="solar:ghost-broken"
@@ -267,7 +267,7 @@ export default function AdminStepActions({
             className="capitalize"
             onPress={() => changeStepStatus("error")}
           >
-            <div className="flex flex-cols gap-2">
+            <div className="flex-cols flex gap-2">
               <Icon
                 className="text-danger"
                 icon="solar:danger-triangle-broken"
@@ -281,7 +281,7 @@ export default function AdminStepActions({
             className="capitalize"
             onPress={() => changeStepStatus("finished")}
           >
-            <div className="flex flex-cols gap-2">
+            <div className="flex-cols flex gap-2">
               <Icon
                 className="text-success"
                 icon="solar:check-read-broken"

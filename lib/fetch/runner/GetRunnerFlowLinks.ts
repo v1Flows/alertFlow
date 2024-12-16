@@ -2,20 +2,20 @@
 
 import { cookies } from "next/headers";
 
-interface RunnerFlowLinks {
+type RunnerFlowLinks = {
   flows: [];
-}
+};
 
-interface ErrorResponse {
+type ErrorResponse = {
   success: false;
   error: string;
   message: string;
-}
+};
 
-interface SuccessResponse {
+type SuccessResponse = {
   success: true;
   data: RunnerFlowLinks;
-}
+};
 
 export async function GetRunnerFlowLinks({
   runnerId,
@@ -57,7 +57,7 @@ export async function GetRunnerFlowLinks({
 
     return {
       success: true,
-      data: data,
+      data,
     };
   } catch (error) {
     return {

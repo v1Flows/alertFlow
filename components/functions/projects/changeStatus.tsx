@@ -42,7 +42,7 @@ export default function ChangeProjectStatusModal({
     const res = (await ChangeProjectStatus(
       project.id,
       status,
-      disableReason ? disableReason : "no info provided",
+      disableReason || "no info provided",
     )) as any;
 
     if (!res) {
@@ -93,7 +93,10 @@ export default function ChangeProjectStatusModal({
                     <ErrorCard error={errorText} message={errorMessage} />
                   )}
                   <Snippet hideCopyButton hideSymbol>
-                    <span>ID: {project.id}</span>
+                    <span>
+                      ID:
+                      {project.id}
+                    </span>
                   </Snippet>
                   <Input
                     label="Disable Reason"
@@ -134,7 +137,10 @@ export default function ChangeProjectStatusModal({
                 </ModalHeader>
                 <ModalBody>
                   <Snippet hideCopyButton hideSymbol>
-                    <span>ID: {project.id}</span>
+                    <span>
+                      ID:
+                      {project.id}
+                    </span>
                   </Snippet>
                 </ModalBody>
                 <ModalFooter className="grid grid-cols-2">

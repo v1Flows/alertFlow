@@ -1,11 +1,11 @@
 import React from "react";
 
-import AdminGetSettings from "@/lib/fetch/page/settings";
-import GetUserNotifications from "@/lib/fetch/user/getNotifications";
 import SidebarMenu from "@/components/sidebar/sidebar-menu";
-import GetUserDetails from "@/lib/fetch/user/getDetails";
-import GetProjects from "@/lib/fetch/project/all";
 import GetFlows from "@/lib/fetch/flow/all";
+import AdminGetSettings from "@/lib/fetch/page/settings";
+import GetProjects from "@/lib/fetch/project/all";
+import GetUserDetails from "@/lib/fetch/user/getDetails";
+import GetUserNotifications from "@/lib/fetch/user/getNotifications";
 
 export default async function DashboardHomeLayout({
   children,

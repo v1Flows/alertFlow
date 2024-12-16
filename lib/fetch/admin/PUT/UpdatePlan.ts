@@ -2,20 +2,20 @@
 
 import { cookies } from "next/headers";
 
-interface Result {
+type Result = {
   result: string;
-}
+};
 
-interface ErrorResponse {
+type ErrorResponse = {
   success: false;
   error: string;
   message: string;
-}
+};
 
-interface SuccessResponse {
+type SuccessResponse = {
   success: true;
   data: Result;
-}
+};
 
 export default async function UpdatePlan(
   id: string,
@@ -51,16 +51,16 @@ export default async function UpdatePlan(
           Authorization: token.value,
         },
         body: JSON.stringify({
-          name: name,
-          description: description,
-          price: price,
-          projects: projects,
-          project_members: project_members,
-          flows: flows,
-          self_hosted_runners: self_hosted_runners,
-          alertflow_runners: alertflow_runners,
-          executions_per_month: executions_per_month,
-          stripe_id: stripe_id,
+          name,
+          description,
+          price,
+          projects,
+          project_members,
+          flows,
+          self_hosted_runners,
+          alertflow_runners,
+          executions_per_month,
+          stripe_id,
         }),
       },
     );
@@ -79,7 +79,7 @@ export default async function UpdatePlan(
 
     return {
       success: true,
-      data: data,
+      data,
     };
   } catch (error) {
     return {

@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
 import { Icon } from "@iconify/react";
 import { Card, Chip } from "@nextui-org/react";
-import { Bar, BarChart, ResponsiveContainer, XAxis, Tooltip } from "recharts";
+import React from "react";
+import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
 
 import { cn } from "@/components/functions/cn/cn";
 
@@ -38,7 +38,7 @@ export default function Stats({ stats }: { stats: any }) {
     {
       title: "Total Payloads this week",
       value: stats.total_payloads,
-      change: stats.payload_trend_percentage + "% today",
+      change: `${stats.payload_trend_percentage}% today`,
       changeType: stats.payload_trend,
       trendChipPosition: "bottom",
       chartData: stats.payloads,
@@ -46,7 +46,7 @@ export default function Stats({ stats }: { stats: any }) {
     {
       title: "Total Executions this week",
       value: stats.total_executions,
-      change: stats.execution_trend_percentage + "% today",
+      change: `${stats.execution_trend_percentage}% today`,
       changeType: stats.execution_trend,
       trendChipPosition: "bottom",
       chartData: stats.executions,
@@ -121,17 +121,13 @@ export default function Stats({ stats }: { stats: any }) {
           size="sm"
           startContent={
             changeType === "positive" ? (
-              <Icon
-                height={16}
-                icon={"solar:arrow-right-up-linear"}
-                width={16}
-              />
+              <Icon height={16} icon="solar:arrow-right-up-linear" width={16} />
             ) : changeType === "neutral" ? (
-              <Icon height={16} icon={"solar:arrow-right-linear"} width={16} />
+              <Icon height={16} icon="solar:arrow-right-linear" width={16} />
             ) : (
               <Icon
                 height={16}
-                icon={"solar:arrow-right-down-linear"}
+                icon="solar:arrow-right-down-linear"
                 width={16}
               />
             )
@@ -155,7 +151,7 @@ export default function Stats({ stats }: { stats: any }) {
           >
             <section className="flex h-full flex-nowrap items-center justify-between">
               <div className="flex h-full flex-col gap-y-3 py-4 md:flex-row md:justify-between md:gap-x-2">
-                <div className="flex h-full w-full flex-col justify-between gap-y-3">
+                <div className="flex size-full flex-col justify-between gap-y-3">
                   <dt className="flex items-center gap-x-2 text-base font-medium text-default-500">
                     {title}
                   </dt>
@@ -207,7 +203,7 @@ export default function Stats({ stats }: { stats: any }) {
                     <Tooltip
                       content={({ label, payload }) => (
                         <div className="flex h-8 min-w-[80px] items-center gap-x-2 rounded-medium bg-background p-2 text-tiny shadow-small">
-                          <div className="h-2 w-2 rounded-sm bg-foreground" />
+                          <div className="size-2 rounded-sm bg-foreground" />
                           <span className="text-default-500">
                             {formatWeekday(label)}
                           </span>

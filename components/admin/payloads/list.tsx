@@ -1,24 +1,24 @@
 "use client";
-import React from "react";
+import { Icon } from "@iconify/react";
 import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
+  Button,
   Divider,
   Dropdown,
-  DropdownTrigger,
-  Button,
-  DropdownMenu,
   DropdownItem,
+  DropdownMenu,
   DropdownSection,
-  useDisclosure,
+  DropdownTrigger,
   Pagination,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+  useDisclosure,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { Icon } from "@iconify/react";
+import React from "react";
 
 import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
 import FunctionDeletePayloadModal from "@/components/functions/flows/deletePayload";
@@ -92,7 +92,7 @@ export function PayloadsList({ flows, payloads, executions, runners }: any) {
         return new Date(payload.created_at).toLocaleString("de-DE");
       case "actions":
         return (
-          <div className="relative flex justify-center items-center gap-2">
+          <div className="relative flex items-center justify-center gap-2">
             <Dropdown>
               <DropdownTrigger>
                 <Button isIconOnly size="sm" variant="light">
@@ -159,9 +159,9 @@ export function PayloadsList({ flows, payloads, executions, runners }: any) {
     <main>
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-1">
-          <p className="text-2xl font-bold mb-0 text-danger">Admin</p>
-          <p className="text-2xl mb-0">|</p>
-          <p className="text-2xl mb-0">Payloads</p>
+          <p className="mb-0 text-2xl font-bold text-danger">Admin</p>
+          <p className="mb-0 text-2xl">|</p>
+          <p className="mb-0 text-2xl">Payloads</p>
         </div>
       </div>
       <Divider className="my-4" />
@@ -206,7 +206,7 @@ export function PayloadsList({ flows, payloads, executions, runners }: any) {
               Actions
             </TableColumn>
           </TableHeader>
-          <TableBody emptyContent={"No rows to display."} items={items}>
+          <TableBody emptyContent="No rows to display." items={items}>
             {(item: any) => (
               <TableRow key={item.id}>
                 {(columnKey) => (

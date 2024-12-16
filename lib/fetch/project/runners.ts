@@ -2,20 +2,20 @@
 
 import { cookies } from "next/headers";
 
-interface Runners {
+type Runners = {
   runners: [];
-}
+};
 
-interface ErrorResponse {
+type ErrorResponse = {
   success: false;
   error: string;
   message: string;
-}
+};
 
-interface SuccessResponse {
+type SuccessResponse = {
   success: true;
   data: Runners;
-}
+};
 
 export async function GetProjectRunners(
   projectId: any,
@@ -57,7 +57,7 @@ export async function GetProjectRunners(
 
     return {
       success: true,
-      data: data,
+      data,
     };
   } catch (error) {
     return {

@@ -2,20 +2,20 @@
 
 import { cookies } from "next/headers";
 
-interface Result {
+type Result = {
   result: string;
-}
+};
 
-interface ErrorResponse {
+type ErrorResponse = {
   success: false;
   error: string;
   message: string;
-}
+};
 
-interface SuccessResponse {
+type SuccessResponse = {
   success: true;
   data: Result;
-}
+};
 
 export default async function CreateSubscription(
   planID: string,
@@ -62,7 +62,7 @@ export default async function CreateSubscription(
 
     return {
       success: true,
-      data: data,
+      data,
     };
   } catch (error) {
     return {

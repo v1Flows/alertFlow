@@ -2,20 +2,20 @@
 
 import { cookies } from "next/headers";
 
-interface Stats {
-  stats: {};
-}
+type Stats = {
+  stats: object;
+};
 
-interface ErrorResponse {
+type ErrorResponse = {
   success: false;
   error: string;
   message: string;
-}
+};
 
-interface SuccessResponse {
+type SuccessResponse = {
   success: true;
   data: Stats;
-}
+};
 
 export async function GetUserStats(): Promise<SuccessResponse | ErrorResponse> {
   try {
@@ -44,7 +44,7 @@ export async function GetUserStats(): Promise<SuccessResponse | ErrorResponse> {
 
     return {
       success: true,
-      data: data,
+      data,
     };
   } catch (error) {
     return {

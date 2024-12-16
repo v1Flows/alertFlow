@@ -8,7 +8,7 @@ cache:
     - node_modules/
 
 # run lint test if the commit is a merge request
-"Run lint test":
+Run lint test:
   stage: test
   image: node:latest
   before_script:
@@ -17,14 +17,14 @@ cache:
     - pnpm config set store-dir .pnpm-store
   script:
     - pnpm install
-    - pnpm run lint   
+    - pnpm run lint
   rules:
     - if: $CI_MERGE_REQUEST_ID
       when: always
     - when: never
 
 # build test image if the commit is a merge request
-"Build Docker image for testing":
+Build Docker image for testing:
   stage: build
   image: docker:stable
   services:
@@ -32,9 +32,9 @@ cache:
   variables:
     DOCKER_HOST: tcp://docker:2376
     DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: "/certs"
-    DOCKER_TLS_VERIFY: "1"
-    DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
+    DOCKER_TLS_CERTDIR: /certs
+    DOCKER_TLS_VERIFY: '1'
+    DOCKER_CERT_PATH: $DOCKER_TLS_CERTDIR/client
   script:
     - docker build . -f Dockerfile -t registry.justlab.xyz/alertflow/frontend:test
   rules:
@@ -43,7 +43,7 @@ cache:
     - when: never
 
 # build latest image if the commit is on main branch
-"Build Docker image for latest":
+Build Docker image for latest:
   stage: build
   image: docker:stable
   services:
@@ -51,9 +51,9 @@ cache:
   variables:
     DOCKER_HOST: tcp://docker:2376
     DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: "/certs"
-    DOCKER_TLS_VERIFY: "1"
-    DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
+    DOCKER_TLS_CERTDIR: /certs
+    DOCKER_TLS_VERIFY: '1'
+    DOCKER_CERT_PATH: $DOCKER_TLS_CERTDIR/client
   script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
     - docker build . -f Dockerfile -t registry.justlab.xyz/alertflow/frontend:latest
@@ -62,7 +62,7 @@ cache:
     - if: $CI_COMMIT_BRANCH == "main"
 
 # build versioned image and push to registry
-"Build Docker image for version":
+Build Docker image for version:
   stage: build
   image: docker:stable
   services:
@@ -70,9 +70,9 @@ cache:
   variables:
     DOCKER_HOST: tcp://docker:2376
     DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: "/certs"
-    DOCKER_TLS_VERIFY: "1"
-    DOCKER_CERT_PATH: "$DOCKER_TLS_CERTDIR/client"
+    DOCKER_TLS_CERTDIR: /certs
+    DOCKER_TLS_VERIFY: '1'
+    DOCKER_CERT_PATH: $DOCKER_TLS_CERTDIR/client
   script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
     - docker build . -f Dockerfile -t registry.justlab.xyz/alertflow/frontend:$CI_COMMIT_TAG
@@ -81,7 +81,7 @@ cache:
     - if: $CI_COMMIT_TAG =~ /^v[0-9]+\.[0-9]+\.[0-9]+/
 
 # if the commit is tagged with a version number and the branch is main, then release the version
-"Release version":
+Release version:
   stage: release
   image: registry.gitlab.com/gitlab-org/release-cli:latest
   rules:
@@ -90,6 +90,6 @@ cache:
     - echo "Releasing version $CI_COMMIT_TAG"
   release:
     tag_name: $CI_COMMIT_TAG
-    description: "Release $CI_COMMIT_TAG"
+    description: Release $CI_COMMIT_TAG
     name: $CI_COMMIT_TAG
     ref: $CI_COMMIT_REF_NAME

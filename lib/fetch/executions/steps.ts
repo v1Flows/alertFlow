@@ -2,20 +2,20 @@
 
 import { cookies } from "next/headers";
 
-interface Steps {
+type Steps = {
   steps: [];
-}
+};
 
-interface ErrorResponse {
+type ErrorResponse = {
   success: false;
   error: string;
   message: string;
-}
+};
 
-interface SuccessResponse {
+type SuccessResponse = {
   success: true;
   data: Steps;
-}
+};
 
 export async function GetExecutionSteps(
   executionID: any,
@@ -57,7 +57,7 @@ export async function GetExecutionSteps(
 
     return {
       success: true,
-      data: data,
+      data,
     };
   } catch (error) {
     return {

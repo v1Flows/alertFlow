@@ -1,15 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
-import { Button, Input, Checkbox, Link, Image } from "@nextui-org/react";
-import { Alert } from "@nextui-org/alert";
 import { Icon } from "@iconify/react";
-import { useTheme } from "next-themes";
+import { Alert } from "@nextui-org/alert";
+import { Button, Checkbox, Image, Input, Link } from "@nextui-org/react";
 import { useIsSSR } from "@react-aria/ssr";
+import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 
-import LoginAPI from "@/lib/auth/login";
 import { setSession } from "@/lib/setSession";
+import LoginAPI from "@/lib/auth/login";
 
 import { MailIcon } from "../icons";
 import Particles from "../magicui/particles";
@@ -50,7 +50,7 @@ export default function LoginPageComponent() {
   }
 
   return (
-    <div className="relative flex h-full w-full flex-col items-center justify-center">
+    <div className="relative flex size-full flex-col items-center justify-center">
       <Particles
         refresh
         className="absolute inset-0"
@@ -83,7 +83,7 @@ export default function LoginPageComponent() {
           <Input
             required
             endContent={
-              <MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+              <MailIcon className="pointer-events-none shrink-0 text-2xl text-default-400" />
             }
             label="Username / Email"
             name="email"

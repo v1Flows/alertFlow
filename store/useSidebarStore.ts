@@ -1,11 +1,11 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-interface SidebarState {
+type SidebarState = {
   isCollapsed: boolean;
   isLoading: boolean;
   toggleCollapsed: () => void;
-}
+};
 
 export const useSidebarStore = create<SidebarState>()(
   persist(

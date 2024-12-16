@@ -2,12 +2,16 @@ import React from "react";
 
 import { cn } from "./cn";
 
-const CellWrapper = React.forwardRef<
+const CellWrapper = ({
+  ref,
+  children,
+  className,
+  ...props
   // eslint-disable-next-line no-undef
-  HTMLDivElement,
+}: React.HTMLAttributes<HTMLDivElement> & {
   // eslint-disable-next-line no-undef
-  React.HTMLAttributes<HTMLDivElement>
->(({ children, className, ...props }, ref) => (
+  ref: React.RefObject<HTMLDivElement>;
+}) => (
   <div
     ref={ref}
     className={cn(
@@ -18,7 +22,7 @@ const CellWrapper = React.forwardRef<
   >
     {children}
   </div>
-));
+);
 
 CellWrapper.displayName = "CellWrapper";
 

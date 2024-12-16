@@ -1,11 +1,13 @@
 /* eslint-disable no-undef */
 "use client";
 
-import { motion } from "framer-motion";
-import { RefObject, useEffect, useId, useState } from "react";
-import { cn } from "@nextui-org/react";
+import type { RefObject } from "react";
 
-export interface AnimatedBeamProps {
+import { cn } from "@nextui-org/react";
+import { motion } from "framer-motion";
+import { useEffect, useId, useState } from "react";
+
+export type AnimatedBeamProps = {
   className?: string;
   containerRef: RefObject<HTMLElement>; // Container ref
   fromRef: RefObject<HTMLElement>;
@@ -23,7 +25,7 @@ export interface AnimatedBeamProps {
   startYOffset?: number;
   endXOffset?: number;
   endYOffset?: number;
-}
+};
 
 export const AnimatedBeam: React.FC<AnimatedBeamProps> = ({
   className,
@@ -97,7 +99,7 @@ export const AnimatedBeam: React.FC<AnimatedBeamProps> = ({
     const resizeObserver = new ResizeObserver((entries) => {
       // For all entries, recalculate the path
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      for (let entry of entries) {
+      for (const entry of entries) {
         updatePath();
       }
     });
@@ -160,7 +162,7 @@ export const AnimatedBeam: React.FC<AnimatedBeamProps> = ({
             y2: gradientCoordinates.y2,
           }}
           className="transform-gpu"
-          gradientUnits={"userSpaceOnUse"}
+          gradientUnits="userSpaceOnUse"
           id={id}
           initial={{
             x1: "0%",

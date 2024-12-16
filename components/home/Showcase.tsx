@@ -1,21 +1,21 @@
 "use client";
 
-import React from "react";
-import { Button } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
-import { AnimatePresence, LazyMotion, domAnimation, m } from "framer-motion";
+import { Button } from "@nextui-org/react";
+import { AnimatePresence, domAnimation, LazyMotion, m } from "framer-motion";
 import { useTheme } from "next-themes";
+import React from "react";
 
-import FadeInImage from "./fade-in-image";
 import AppScreenshotDark from "./app-screenshot-dark";
 import AppScreenshotWhite from "./app-screenshot-white";
+import FadeInImage from "./fade-in-image";
 
 export default function HomeShowcase() {
   const { theme } = useTheme();
 
   return (
     <div className="relative flex h-screen min-h-dvh w-full flex-col overflow-hidden bg-background">
-      <main className="container mx-auto mt-[80px] flex max-w-[1024px] flex-col items-start px-8">
+      <main className="container mx-auto mt-[80px] flex max-w-screen-lg flex-col items-start px-8">
         <section className="z-20 flex flex-col items-start justify-center gap-[18px] sm:gap-6">
           <LazyMotion features={domAnimation}>
             <m.div
@@ -86,7 +86,7 @@ export default function HomeShowcase() {
                     isDisabled
                     className="h-10 w-[163px] border-1 border-default-100 px-[16px] py-[10px] text-small font-medium leading-5"
                     endContent={
-                      <span className="pointer-events-none flex h-[22px] w-[22px] items-center justify-center rounded-full bg-default-100">
+                      <span className="pointer-events-none flex size-[22px] items-center justify-center rounded-full bg-default-100">
                         <Icon
                           className="text-default-500 [&>path]:stroke-[1.5]"
                           icon="solar:arrow-right-linear"
@@ -128,7 +128,7 @@ export default function HomeShowcase() {
       </LazyMotion>
 
       {theme === "dark" && (
-        <div className="pointer-events-none absolute inset-0 top-[-25%] z-10 scale-150 select-none sm:scale-125">
+        <div className="pointer-events-none absolute inset-0 -top-1/4 z-10 scale-150 select-none sm:scale-125">
           <FadeInImage
             fill
             priority

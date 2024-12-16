@@ -1,10 +1,10 @@
 "use client";
 
 import { Icon } from "@iconify/react";
-import React from "react";
-import { Link, Spacer, Image } from "@nextui-org/react";
-import { useTheme } from "next-themes";
+import { Image, Link, Spacer } from "@nextui-org/react";
 import { useIsSSR } from "@react-aria/ssr";
+import { useTheme } from "next-themes";
+import React from "react";
 
 import { siteConfig } from "@/config/site";
 
@@ -44,7 +44,7 @@ export default function Footer() {
   const isSSR = useIsSSR();
 
   return (
-    <footer className="flex w-full flex-col sticky top-[100vh]">
+    <footer className="sticky top-[100vh] flex w-full flex-col">
       <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-center px-6 py-12 lg:px-8">
         <div className="flex items-center justify-center">
           <Image
@@ -76,7 +76,7 @@ export default function Footer() {
           &copy; 2024 AlertFlow. All rights reserved. Version{" "}
           {siteConfig.version}
         </p>
-        <p className="flex gap-1 mt-1 text-center text-small text-default-400">
+        <p className="mt-1 flex gap-1 text-center text-small text-default-400">
           Made with <Icon icon="solar:hand-heart-linear" width={16} /> in
           Germany
         </p>

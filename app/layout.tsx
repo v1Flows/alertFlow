@@ -1,7 +1,7 @@
-import React from "react";
-import "@/styles/globals.css";
-import { Metadata, Viewport } from "next";
+import type { Metadata, Viewport } from "next";
+
 import clsx from "clsx";
+import React from "react";
 import { Toaster } from "sonner";
 
 import { siteConfig } from "@/config/site";
@@ -9,14 +9,45 @@ import { fontSans } from "@/config/fonts";
 
 import { Providers } from "./providers";
 
+import "@/styles/globals.css";
+
+const APP_NAME = siteConfig.name;
+const APP_DEFAULT_TITLE = siteConfig.name;
+const APP_TITLE_TEMPLATE = `%s - ${siteConfig.name}`;
+const APP_DESCRIPTION = siteConfig.description;
+
 export const metadata: Metadata = {
+  applicationName: APP_NAME,
   title: {
-    default: siteConfig.name,
-    template: `%s - ${siteConfig.name}`,
+    default: APP_DEFAULT_TITLE,
+    template: APP_TITLE_TEMPLATE,
   },
-  description: siteConfig.description,
-  icons: {
-    icon: "/favicon.ico",
+  description: APP_DESCRIPTION,
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: APP_DEFAULT_TITLE,
+    // startUpImage: [],
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  openGraph: {
+    type: "website",
+    siteName: APP_NAME,
+    title: {
+      default: APP_DEFAULT_TITLE,
+      template: APP_TITLE_TEMPLATE,
+    },
+    description: APP_DESCRIPTION,
+  },
+  twitter: {
+    card: "summary",
+    title: {
+      default: APP_DEFAULT_TITLE,
+      template: APP_TITLE_TEMPLATE,
+    },
+    description: APP_DESCRIPTION,
   },
 };
 
@@ -50,7 +81,7 @@ export default function RootLayout({
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <Toaster richColors position="bottom-center" />
-          <div className="relative flex flex-col h-screen">{children}</div>
+          <div className="relative flex h-screen flex-col">{children}</div>
         </Providers>
       </body>
     </html>

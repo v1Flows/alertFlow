@@ -1,20 +1,20 @@
 "use client";
 
-import React from "react";
+import { Icon } from "@iconify/react";
 import {
+  Alert,
+  Avatar,
+  Button,
   Card,
   CardBody,
   Divider,
   useDisclosure,
-  Button,
-  Avatar,
-  Alert,
 } from "@nextui-org/react";
-import { Icon } from "@iconify/react";
 import NumberFlow from "@number-flow/react";
+import React from "react";
 
-import { subtitle } from "@/components/primitives";
 import Reloader from "@/components/reloader/Reloader";
+import { subtitle } from "@/components/primitives";
 import EditProjectModal from "@/components/functions/projects/edit";
 
 import ProjectBreadcrumbs from "./project/breadcrumbs";
@@ -50,13 +50,13 @@ export default function Project({
 
   return (
     <main>
-      <div className="grid lg:grid-cols-2 items-center justify-between">
+      <div className="grid items-center justify-between lg:grid-cols-2">
         <ProjectBreadcrumbs id={project.id} />
-        <div className="lg:justify-self-end lg:mt-0 mt-2">
+        <div className="mt-2 lg:mt-0 lg:justify-self-end">
           <Reloader />
         </div>
       </div>
-      <div className="flex items-center justify-between mb-2 mt-2">
+      <div className="my-2 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Avatar
             classNames={{
@@ -104,12 +104,12 @@ export default function Project({
         </div>
       )}
       <div>
-        <div className="grid lg:grid-cols-4 grid-cols-2 items-stretch gap-4">
+        <div className="grid grid-cols-2 items-stretch gap-4 lg:grid-cols-4">
           <div className="col-span-1">
             <Card fullWidth className="h-full">
               <CardBody>
                 <div className="flex items-center gap-2">
-                  <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                  <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
                     <Icon icon="solar:smile-square-outline" width={20} />
                   </div>
                   <div>
@@ -129,7 +129,7 @@ export default function Project({
             <Card fullWidth>
               <CardBody>
                 <div className="flex items-center gap-2">
-                  <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                  <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
                     <Icon icon="solar:book-2-outline" width={20} />
                   </div>
                   <div>
@@ -144,7 +144,7 @@ export default function Project({
             <Card fullWidth className="h-full">
               <CardBody>
                 <div className="flex items-center gap-2">
-                  <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                  <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
                     <Icon icon="solar:rocket-2-outline" width={20} />
                   </div>
                   <div>
@@ -175,7 +175,7 @@ export default function Project({
             <Card fullWidth className="h-full">
               <CardBody>
                 <div className="flex items-center gap-2">
-                  <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                  <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
                     <Icon icon="solar:key-square-2-outline" width={20} />
                   </div>
                   <div>
@@ -193,7 +193,7 @@ export default function Project({
           </div>
         </div>
       </div>
-      <div className="w-full mt-6">
+      <div className="mt-6 w-full">
         <ProjectTabs
           audit={audit}
           members={members}

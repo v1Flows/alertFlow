@@ -42,7 +42,7 @@ export default function ChangeFlowStatusModal({
     const res = (await ChangeFlowStatus(
       flow.id,
       status,
-      disableReason ? disableReason : "no info provided",
+      disableReason || "no info provided",
     )) as any;
 
     if (!res) {
@@ -92,7 +92,10 @@ export default function ChangeFlowStatusModal({
                     <ErrorCard error={errorText} message={errorMessage} />
                   )}
                   <Snippet hideCopyButton hideSymbol>
-                    <span>ID: {flow.id}</span>
+                    <span>
+                      ID:
+                      {flow.id}
+                    </span>
                   </Snippet>
                   <Input
                     label="Disable Reason"
@@ -133,7 +136,10 @@ export default function ChangeFlowStatusModal({
                 </ModalHeader>
                 <ModalBody>
                   <Snippet hideCopyButton hideSymbol>
-                    <span>ID: {flow.id}</span>
+                    <span>
+                      ID:
+                      {flow.id}
+                    </span>
                   </Snippet>
                 </ModalBody>
                 <ModalFooter className="grid grid-cols-2">

@@ -1,6 +1,6 @@
 import { Button, Spacer } from "@nextui-org/react";
 
-import { title, subtitle } from "@/components/primitives";
+import { subtitle, title } from "@/components/primitives";
 
 export default function HomeTerraform() {
   return (

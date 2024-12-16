@@ -1,5 +1,6 @@
 "use client";
 
+import { Icon } from "@iconify/react";
 import {
   Button,
   Pagination,
@@ -13,10 +14,9 @@ import {
   Tooltip,
   useDisclosure,
 } from "@nextui-org/react";
-import { Icon } from "@iconify/react";
-import TimeAgo from "react-timeago";
 import { useRouter } from "next/navigation";
 import React, { useMemo } from "react";
+import TimeAgo from "react-timeago";
 import { toast } from "sonner";
 
 import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
@@ -75,9 +75,7 @@ export default function Payloads({
   }
 
   const copyPayloadIDtoClipboard = (id: string) => {
-    // eslint-disable-next-line no-undef
     if (typeof navigator !== "undefined" && navigator.clipboard) {
-      // eslint-disable-next-line no-undef
       navigator.clipboard.writeText(id);
       toast.success("Payload ID copied to clipboard!");
     } else {
@@ -93,7 +91,7 @@ export default function Payloads({
         return (
           <div className="flex items-center gap-2">
             <div
-              className={`flex bg-${endpointColor(payload.endpoint)}/10 text-${endpointColor(payload.endpoint)} items-center rounded-small justify-center w-8 h-8`}
+              className={`bg- flex${endpointColor(payload.endpoint)}/10 text-${endpointColor(payload.endpoint)} size-8 items-center justify-center rounded-small`}
             >
               <Icon icon={endpointIcon(payload.endpoint)} width={20} />
             </div>
