@@ -15,7 +15,6 @@ import DeleteUserModal from "../functions/users/delete";
 import DisableUserModal from "../functions/users/disable";
 
 import CellWrapper from "./cell-wrapper";
-import SwitchCell from "./switch-cell";
 
 export default function SecuritySettings({ user }: { user: any }) {
   const updatePasswordModal = useDisclosure();
@@ -72,13 +71,12 @@ export default function SecuritySettings({ user }: { user: any }) {
             </Button>
           </CellWrapper>
           {/* Two-Factor Authentication */}
-          <SwitchCell
-            ref={null}
+          {/* <SwitchCell
             isDisabled
             defaultSelected={false}
             description="Add an extra layer of security to your account."
             label="Two-Factor Authentication"
-          />
+          /> */}
           {/* Deactivate Account */}
           <CellWrapper ref={null}>
             <div>
