@@ -36,3 +36,31 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# If you prefer the allow list template instead of the deny list, see community template:
+# https://github.com/github/gitignore/blob/main/community/Golang/Go.AllowList.gitignore
+#
+# Binaries for programs and plugins
+api/*.exe
+api/*.exe~
+api/*.dll
+api/*.so
+api/*.dylib
+
+# Test binary, built with `go test -c`
+api/*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+api/*.out
+
+# Dependency directories (remove the comment below to include it)
+api/vendor/
+
+# Go workspace file
+api/go.work
+
+api/.envrc
+api/alertflow-backend
+
+api/config.yaml
+
