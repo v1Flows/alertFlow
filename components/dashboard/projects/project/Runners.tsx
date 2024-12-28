@@ -1,6 +1,5 @@
 import { Icon } from "@iconify/react";
 import {
-  Badge,
   Button,
   Card,
   CardBody,
@@ -12,6 +11,8 @@ import {
   DropdownMenu,
   DropdownSection,
   DropdownTrigger,
+  Spacer,
+  Spinner,
   useDisclosure,
 } from "@nextui-org/react";
 import React from "react";
@@ -19,10 +20,12 @@ import TimeAgo from "react-timeago";
 import { toast } from "sonner";
 import { useMediaQuery } from "usehooks-ts";
 
-import { PlusIcon, VerticalDotsIcon } from "@/components/icons";
-import RunnerPluginDrawer from "@/components/functions/runner/plugins";
+import { VerticalDotsIcon } from "@/components/icons";
+import RunnerDrawer from "@/components/functions/runner/plugins";
 import DeleteRunnerModal from "@/components/functions/runner/delete";
 import CreateRunnerModal from "@/components/functions/runner/create";
+
+import ProjectRunnerDetails from "./RunnerDetails";
 
 export default function Runners({
   runners,
@@ -33,7 +36,7 @@ export default function Runners({
   members,
 }: any) {
   const [targetRunner, setTargetRunner] = React.useState({} as any);
-  const showRunnerPluginsDrawer = useDisclosure();
+  const showRunnerDrawer = useDisclosure();
   const addRunnerModal = useDisclosure();
   const deleteRunnerModal = useDisclosure();
 
@@ -98,48 +101,47 @@ export default function Runners({
 
   return (
     <main>
-      <div className="mb-4 flex items-center justify-between">
-        <p className="text-lg font-bold">Selfhosted Runners</p>
-        <Button
-          color="primary"
-          isDisabled={checkQuotaDisabled()}
-          isIconOnly={isMobile}
-          startContent={<PlusIcon height={undefined} width={undefined} />}
-          onPress={() => addRunnerModal.onOpen()}
-        >
-          {!isMobile && "Add Runner"}
-        </Button>
+      <ProjectRunnerDetails project={project} />
+      <Spacer y={4} />
+      <div className="flex items-center justify-between">
+        <p className="text-lg font-bold">Your Runners</p>
       </div>
       <Divider className="mb-4" />
       <div className="flex flex-col gap-4">
         {runners.map(
           (runner: any) =>
             runner.alertflow_runner === false && (
-              <Card key={runner.id}>
+              <Card
+                key={runner.id}
+                isPressable
+                onPress={() => {
+                  setTargetRunner(runner);
+                  showRunnerDrawer.onOpen();
+                }}
+              >
                 <CardHeader className="items-center justify-between">
                   <div className="flex flex-col gap-1">
                     <div className="flex gap-2">
-                      <p className="text-md">{runner.name}</p>
-                      <div className="flex flex-wrap items-center gap-2">
-                        <Chip
-                          color={runner.disabled ? "danger" : "success"}
-                          radius="sm"
-                          size="sm"
-                          variant="flat"
-                        >
-                          {runner.disabled ? "Disabled" : "Enabled"}
-                        </Chip>
-                        <Chip
-                          color={heartbeatColor(runner)}
-                          radius="sm"
-                          size="sm"
-                          variant="flat"
-                        >
-                          {heartbeatStatus(runner) ? "Healthy" : "Unhealthy"}
-                        </Chip>
-                      </div>
+                      <p className="text-md font-bold">{runner.name}</p>
                     </div>
-                    <p className="text-sm text-default-500">{runner.id}</p>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Chip
+                        color={runner.disabled ? "danger" : "success"}
+                        radius="sm"
+                        size="sm"
+                        variant="flat"
+                      >
+                        {runner.disabled ? "Disabled" : "Enabled"}
+                      </Chip>
+                      <Chip
+                        color={heartbeatColor(runner)}
+                        radius="sm"
+                        size="sm"
+                        variant="flat"
+                      >
+                        {heartbeatStatus(runner) ? "Healthy" : "Unhealthy"}
+                      </Chip>
+                    </div>
                   </div>
                   <div className="relative flex items-center justify-end gap-2">
                     <Dropdown backdrop="opaque">
@@ -193,149 +195,14 @@ export default function Runners({
                     </Dropdown>
                   </div>
                 </CardHeader>
-                <Divider />
                 <CardBody className="flex flex-col">
                   {runner.disabled && (
                     <p className="mb-4 text-center text-lg font-bold text-danger">
                       {runner.disabled_reason}
                     </p>
                   )}
-                  <div className="flex flex-wrap items-center justify-between gap-4 text-center">
-                    <div className="flex flex-col items-center justify-center gap-1">
-                      <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
-                        <Icon
-                          icon="solar:diploma-verified-outline"
-                          width={20}
-                        />
-                      </div>
-                      <div>
-                        <p
-                          className={`text-md text-${runner.registered ? "success" : "danger"} font-bold`}
-                        >
-                          {runner.registered ? "Registered" : "Unregistered"}
-                        </p>
-                        <p className="text-sm text-default-500">
-                          Authentication
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col items-center justify-center gap-1">
-                      <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
-                        <Icon icon="solar:heart-pulse-outline" width={20} />
-                      </div>
-                      <div>
-                        <p
-                          className={`text-md text-${heartbeatColor(runner)} font-bold`}
-                        >
-                          {runner.last_heartbeat !== "0001-01-01T00:00:00Z" && (
-                            <TimeAgo date={runner.last_heartbeat} />
-                          )}
-                          {runner.last_heartbeat === "0001-01-01T00:00:00Z" &&
-                            "N/A"}
-                        </p>
-                        <p className="text-sm text-default-500">
-                          Last Heartbeat
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col items-center justify-center gap-1">
-                      <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
-                        <Icon
-                          icon="solar:gamepad-minimalistic-outline"
-                          width={20}
-                        />
-                      </div>
-                      <div>
-                        <p
-                          className={`text-md font-bold ${runner.executing_job && "text-success"}`}
-                        >
-                          {runner.executing_job ? "Executing Job" : "Idle"}
-                        </p>
-                        <p className="text-sm text-default-500">Status</p>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col items-center justify-center gap-1">
-                      <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
-                        <Icon icon="solar:sd-card-outline" width={20} />
-                      </div>
-                      <div>
-                        <p className="text-md font-bold">
-                          {runner.version ? runner.version : "N/A"}
-                        </p>
-                        <p className="text-sm text-default-500">Version</p>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col items-center justify-center gap-1">
-                      <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
-                        <Icon icon="solar:settings-linear" width={20} />
-                      </div>
-                      <div>
-                        <p className="text-md font-bold capitalize">
-                          {runner.mode ? runner.mode : "N/A"}
-                        </p>
-                        <p className="text-sm text-default-500">Mode</p>
-                      </div>
-                    </div>
-
-                    <Button
-                      className="h-full"
-                      variant="light"
-                      onPress={() => {
-                        setTargetRunner(runner);
-                        showRunnerPluginsDrawer.onOpen();
-                      }}
-                    >
-                      <div className="flex flex-col items-center justify-center	gap-1 hover:cursor-pointer hover:text-primary">
-                        <Badge
-                          isOneChar
-                          color="default"
-                          content={<Icon icon="solar:info-circle-linear" />}
-                          placement="bottom-right"
-                          shape="circle"
-                          variant="faded"
-                        >
-                          <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
-                            <Icon icon="solar:plug-circle-outline" width={20} />
-                          </div>
-                        </Badge>
-                        <div>
-                          <p className="text-md font-bold">
-                            {runner.plugins.length}
-                          </p>
-                          <p className="text-sm text-default-500">Plugins</p>
-                        </div>
-                      </div>
-                    </Button>
-
-                    <div className="flex flex-col items-center justify-center gap-1 hover:cursor-pointer hover:text-primary">
-                      <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
-                        <Icon icon="solar:bolt-outline" width={20} />
-                      </div>
-                      <div>
-                        <p className="text-md font-bold">
-                          {runner.actions.length}
-                        </p>
-                        <p className="text-sm text-default-500">Actions</p>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col items-center justify-center gap-1 hover:cursor-pointer hover:text-primary">
-                      <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
-                        <Icon icon="solar:letter-opened-outline" width={20} />
-                      </div>
-                      <div>
-                        <p className="text-md font-bold">
-                          {runner.payload_endpoints.length}
-                        </p>
-                        <p className="text-sm text-default-500">
-                          Payload Endpoints
-                        </p>
-                      </div>
-                    </div>
+                  <div className="flex flex-wrap items-center justify-center text-center">
+                    <Spinner label="Waiting for connection..." size="md" />
                   </div>
                 </CardBody>
               </Card>
@@ -343,7 +210,8 @@ export default function Runners({
         )}
       </div>
 
-      <p className="my-4 text-lg font-bold">AlertFlow Runners</p>
+      <Spacer y={4} />
+      <p className="text-lg font-bold">AlertFlow Runners</p>
       <Divider className="mb-4" />
       {project.alertflow_runners === true && (
         <div>
@@ -509,10 +377,7 @@ export default function Runners({
           </p>
         </div>
       )}
-      <RunnerPluginDrawer
-        disclosure={showRunnerPluginsDrawer}
-        runner={targetRunner}
-      />
+      <RunnerDrawer disclosure={showRunnerDrawer} runner={targetRunner} />
       <CreateRunnerModal
         alertflow_runner={false}
         disclosure={addRunnerModal}

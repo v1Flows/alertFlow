@@ -21,9 +21,11 @@ export default async function UpdateProject(
   id: string,
   name: string,
   description: string,
-  alertflowRunners: boolean,
+  alertflow_runners: boolean,
   icon: string,
   color: string,
+  enable_auto_runners: boolean,
+  disable_runner_join: boolean,
 ): Promise<SuccessResponse | ErrorResponse> {
   try {
     const cookieStore = await cookies();
@@ -48,9 +50,11 @@ export default async function UpdateProject(
         body: JSON.stringify({
           name,
           description,
-          alertflow_runners: alertflowRunners,
+          alertflow_runners,
           icon,
           color,
+          enable_auto_runners,
+          disable_runner_join,
         }),
       },
     );

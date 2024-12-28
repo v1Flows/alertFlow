@@ -76,6 +76,8 @@ export default function EditProjectModal({
       alertflowRunners,
       projectIcon,
       color.hex,
+      project.enable_auto_runners,
+      project.disable_runner_join,
     )) as any;
 
     if (!response) {
