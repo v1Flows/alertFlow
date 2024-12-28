@@ -1,5 +1,5 @@
-import React from "react";
 import { Checkbox, cn } from "@nextui-org/react";
+import React from "react";
 
 export const CustomCheckbox = ({ action }: { action: any }) => {
   return (
@@ -17,7 +17,7 @@ export const CustomCheckbox = ({ action }: { action: any }) => {
       }}
       value={action.name}
     >
-      <div className="w-full flex flex-col justify-between gap-1">
+      <div className="flex w-full flex-col justify-between gap-1">
         <p>{action.name}</p>
         <p className="text-default-500">{action.description}</p>
       </div>

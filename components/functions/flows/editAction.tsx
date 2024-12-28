@@ -1,5 +1,6 @@
 import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
+import { Icon } from "@iconify/react";
 import {
   Button,
   ButtonGroup,
@@ -14,12 +15,13 @@ import {
   Textarea,
   Tooltip,
 } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { Icon } from "@iconify/react";
 import { toast } from "sonner";
 
-import { cn } from "@/components/functions/cn/cn";
 import UpdateFlowActions from "@/lib/fetch/flow/PUT/UpdateActions";
+import { cn } from "@/components/functions/cn/cn";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export const CustomRadio = (props: any) => {
   const { children, ...otherProps } = props;
@@ -51,11 +53,15 @@ export default function EditActionModal({
   flow: any;
   targetAction: any;
 }) {
+  const router = useRouter();
   const { isOpen, onOpenChange } = disclosure;
 
   const [isLoading, setLoading] = useState(false);
   const [action, setAction] = useState({} as any);
   const [params, setParams] = useState([] as any);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   useEffect(() => {
     setAction(targetAction);
@@ -64,7 +70,7 @@ export default function EditActionModal({
 
   function searchActionOnRunners() {
     runners.map((runner: any) => {
-      runner.available_actions.map((availableAction: any) => {
+      runner.actions.map((availableAction: any) => {
         if (availableAction.type === targetAction.type) {
           setParams(availableAction.params);
         }
@@ -76,23 +82,41 @@ export default function EditActionModal({
     onOpenChange();
   }
 
-  function updateAction() {
+  async function updateAction() {
     setLoading(true);
     flow.actions.map((flowAction: any) => {
       if (flowAction.id === action.id) {
         flowAction.active = action.active;
         flowAction.params = action.params;
+        flowAction.custom_name = action.custom_name;
+        flowAction.custom_description = action.custom_description;
       }
     });
 
-    UpdateFlowActions(flow.id, flow.actions)
-      .then(() => {
-        toast.success("Flow action updated successfully.");
-        onOpenChange();
-      })
-      .catch(() => {
-        toast.error("Failed to update flow action.");
-      });
+    const res = (await UpdateFlowActions(flow.id, flow.actions)) as any;
+
+    if (!res) {
+      setError(true);
+      setErrorText("Error");
+      setErrorMessage("An error occurred while updating the action.");
+      setLoading(false);
+
+      return;
+    }
+
+    if (res.success) {
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
+      toast.success("Action updated successfully.");
+      onOpenChange();
+      router.refresh();
+    } else {
+      setError(true);
+      setErrorText(res.error);
+      setErrorMessage(res.message);
+      toast.error("An error occurred while updating the action.");
+    }
 
     setLoading(false);
   }
@@ -116,11 +140,16 @@ export default function EditActionModal({
                 </div>
               </ModalHeader>
               <ModalBody>
-                <div className="w-full flex flex-col gap-4">
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
+                <div className="flex w-full flex-col gap-4">
                   {/* Status */}
                   <div className="flex flex-col">
-                    <div className="flex flex-cols items-center gap-2">
-                      <p className="font-bold">Status</p>
+                    <div className="flex-cols flex items-center gap-2">
+                      <p className="text-lg font-bold text-default-500">
+                        Status
+                      </p>
                       <Tooltip content="Defined Actions will either be executed one after the other or all in parallel. If in Sequential type one action fails, the others won't be processed anymore.">
                         <Icon
                           className="text-default-500"
@@ -162,7 +191,33 @@ export default function EditActionModal({
                     </div>
                   </div>
                   <div>
-                    <p className="font-bold">Parameters</p>
+                    <p className="text-lg font-bold text-default-500">
+                      Details
+                    </p>
+                    <Spacer y={2} />
+                    <div className="grid grid-cols-2 gap-2">
+                      <Input
+                        description="Custom name for this action (optional)"
+                        label="Custom Name"
+                        type="text"
+                        value={action.custom_name}
+                        onValueChange={(e) =>
+                          setAction({ ...action, custom_name: e })
+                        }
+                      />
+                      <Input
+                        description="Custom description for this action (optional)"
+                        label="Custom Description"
+                        type="text"
+                        value={action.custom_description}
+                        onValueChange={(e) =>
+                          setAction({ ...action, custom_description: e })
+                        }
+                      />
+                    </div>
+                    <p className="text-lg font-bold text-default-500">
+                      Parameters
+                    </p>
                     <Spacer y={2} />
                     {params?.length > 0 ? (
                       <div className="grid grid-cols-2 gap-2">
@@ -171,12 +226,14 @@ export default function EditActionModal({
                             param.type === "number" ? (
                             <Input
                               key={param.key}
+                              description={param.description}
                               isRequired={param.required}
                               label={param.key}
                               type={param.type}
                               value={
-                                action.params.find((x: any) => x.key === param.key)
-                                  ?.value || ""
+                                action.params.find(
+                                  (x: any) => x.key === param.key,
+                                )?.value || ""
                               }
                               onValueChange={(e) => {
                                 setAction({
@@ -194,12 +251,14 @@ export default function EditActionModal({
                           ) : param.type === "textarea" ? (
                             <Textarea
                               key={param.key}
+                              description={param.description}
                               isRequired={param.required}
                               label={param.key}
                               type={param.type}
                               value={
-                                action.params.find((x: any) => x.key === param.key)
-                                  ?.value || ""
+                                action.params.find(
+                                  (x: any) => x.key === param.key,
+                                )?.value || ""
                               }
                               onValueChange={(e) => {
                                 setAction({
@@ -230,6 +289,7 @@ export default function EditActionModal({
                 <Button
                   color="warning"
                   isLoading={isLoading}
+                  variant="flat"
                   onPress={updateAction}
                 >
                   Update Action

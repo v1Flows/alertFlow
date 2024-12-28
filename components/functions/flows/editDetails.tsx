@@ -1,5 +1,6 @@
 import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
+import { Icon } from "@iconify/react";
 import {
   Button,
   ButtonGroup,
@@ -15,14 +16,14 @@ import {
   Spacer,
   Tooltip,
 } from "@nextui-org/react";
-import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Icon } from "@iconify/react";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-import { cn } from "@/components/functions/cn/cn";
-import { PlusIcon } from "@/components/icons";
 import UpdateFlowActionsDetails from "@/lib/fetch/flow/PUT/UpdateActionsDetails";
+import { PlusIcon } from "@/components/icons";
+import { cn } from "@/components/functions/cn/cn";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export const CustomRadio = (props: any) => {
   const { children, ...otherProps } = props;
@@ -56,6 +57,9 @@ export default function EditFlowActionsDetails({
   const [isLoading, setLoading] = useState(false);
   const [execParallel, setExecParallel] = useState(true);
   const [patterns, setPatterns] = useState([] as any);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   useEffect(() => {
     setExecParallel(flow.exec_parallel);
@@ -66,17 +70,37 @@ export default function EditFlowActionsDetails({
     onOpenChange();
   }
 
-  function updateDetails() {
+  async function updateDetails() {
     setLoading(true);
-    UpdateFlowActionsDetails(flow.id, execParallel, patterns)
-      .then(() => {
-        toast.success("Flow actions details updated successfully.");
-        router.refresh();
-        onOpenChange();
-      })
-      .catch(() => {
-        toast.error("Failed to update flow actions details.");
-      });
+    const res = (await UpdateFlowActionsDetails(
+      flow.id,
+      execParallel,
+      patterns,
+    )) as any;
+
+    if (res.error) {
+      setError(true);
+      setErrorText(res.error);
+      setErrorMessage(res.message);
+      setLoading(false);
+
+      return;
+    }
+
+    if (res.success) {
+      onOpenChange();
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
+      router.refresh();
+      toast.success("Flow Actions Details updated successfully!");
+    } else {
+      setError(true);
+      setErrorText(res.error);
+      setErrorMessage(res.message);
+      toast.error("Failed to update Flow Actions Details!");
+    }
+
     setLoading(false);
   }
 
@@ -102,10 +126,13 @@ export default function EditFlowActionsDetails({
                 </div>
               </ModalHeader>
               <ModalBody>
-                <div className="w-full flex flex-col gap-4">
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
+                <div className="flex w-full flex-col gap-4">
                   {/* Status */}
                   <div className="flex flex-col gap-1">
-                    <div className="flex flex-cols items-center gap-2">
+                    <div className="flex-cols flex items-center gap-2">
                       <p className="font-bold">Execution Order</p>
                       <Tooltip content="Defined Actions will either be executed one after the other or all in parallel. If in Sequential type one action fails, the others won't be processed anymore.">
                         <Icon
@@ -153,7 +180,7 @@ export default function EditFlowActionsDetails({
                           <>
                             {patterns.map((pattern: any, index: number) => (
                               <div key={index}>
-                                <div className="flex flex-cols items-center gap-4">
+                                <div className="flex-cols flex items-center gap-4">
                                   <Input
                                     label="Key"
                                     radius="sm"
@@ -204,7 +231,7 @@ export default function EditFlowActionsDetails({
                                         ...patterns.slice(0, index),
                                         {
                                           ...pattern,
-                                          value: value,
+                                          value,
                                         },
                                         ...patterns.slice(index + 1),
                                       ]);
@@ -223,7 +250,7 @@ export default function EditFlowActionsDetails({
                                     }}
                                   >
                                     <Icon
-                                      icon="solar:trash-bin-trash-broken"
+                                      icon="solar:trash-bin-trash-outline"
                                       width={20}
                                     />
                                   </Button>
@@ -268,6 +295,7 @@ export default function EditFlowActionsDetails({
                 <Button
                   color="warning"
                   isLoading={isLoading}
+                  variant="flat"
                   onPress={updateDetails}
                 >
                   Update Details

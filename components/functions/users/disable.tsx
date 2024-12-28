@@ -15,8 +15,9 @@ import {
 import React from "react";
 import { toast } from "sonner";
 
-import DisableUser from "@/lib/fetch/user/disable";
+import ErrorCard from "@/components/error/ErrorCard";
 import { deleteSession } from "@/lib/auth/deleteSession";
+import DisableUser from "@/lib/fetch/user/PUT/disable";
 
 export default function DisableUserModal({
   disclosure,
@@ -28,18 +29,37 @@ export default function DisableUserModal({
   const { isOpen, onOpenChange } = disclosure;
 
   const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   async function disableUser() {
     setIsLoading(true);
-    const response = await DisableUser();
+    const response = (await DisableUser()) as any;
 
-    if (!response.error) {
+    if (!response) {
       setIsLoading(false);
+      setError(true);
+      setErrorText("Failed to disable user");
+      setErrorMessage("Failed to disable user");
+      toast.error("Failed to disable user");
+
+      return;
+    }
+
+    if (response.success) {
+      setIsLoading(false);
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       onOpenChange();
       toast.success("User disabled successfully");
       deleteSession();
     } else {
       setIsLoading(false);
+      setError(true);
+      setErrorText(response.error);
+      setErrorMessage(response.message);
       toast.error("Failed to disable user");
     }
   }
@@ -67,10 +87,22 @@ export default function DisableUserModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <Snippet hideCopyButton hideSymbol>
-                  <span>Name: {user.username}</span>
-                  <span>Email: {user.email}</span>
-                  <span>ID: {user.id}</span>
+                  <span>
+                    Name:
+                    {user.username}
+                  </span>
+                  <span>
+                    Email:
+                    {user.email}
+                  </span>
+                  <span>
+                    ID:
+                    {user.id}
+                  </span>
                 </Snippet>
               </ModalBody>
               <ModalFooter className="grid grid-cols-2">

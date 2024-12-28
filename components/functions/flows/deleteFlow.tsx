@@ -14,6 +14,7 @@ import React from "react";
 import { toast } from "sonner";
 
 import DeleteFlow from "@/lib/fetch/flow/DELETE/DeleteFlow";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function FunctionDeleteFlow({
   disclosure,
@@ -27,22 +28,38 @@ export default function FunctionDeleteFlow({
   const { isOpen, onOpenChange } = disclosure;
 
   const [isDeleteLoading, setIsDeleteLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   async function deleteFlow() {
     setIsDeleteLoading(true);
-    const res = await DeleteFlow(flow.id);
+    const res = (await DeleteFlow(flow.id)) as any;
 
-    if (res.error) {
+    if (!res) {
+      setError(true);
+      setErrorText("Failed to delete flow");
+      setErrorMessage("Failed to delete flow");
       setIsDeleteLoading(false);
-      toast.error("Failed to delete flow");
 
       return;
     }
 
+    if (res.success) {
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
+      onOpenChange();
+      toast.success("Flow deleted successfully");
+      router.refresh();
+    } else {
+      setError(true);
+      setErrorText(res.error);
+      setErrorMessage(res.message);
+      toast.error("Failed to delete flow");
+    }
+
     setIsDeleteLoading(false);
-    onOpenChange();
-    toast.success("Flow deleted successfully");
-    router.refresh();
   }
 
   return (
@@ -66,9 +83,18 @@ export default function FunctionDeleteFlow({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <Snippet hideCopyButton hideSymbol>
-                  <span>Name: {flow.name}</span>
-                  <span>ID: {flow.id}</span>
+                  <span>
+                    Name:
+                    {flow.name}
+                  </span>
+                  <span>
+                    ID:
+                    {flow.id}
+                  </span>
                 </Snippet>
               </ModalBody>
               <ModalFooter className="grid grid-cols-2">

@@ -1,6 +1,8 @@
 "use client";
 
-import React from "react";
+import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
+
+import { Icon } from "@iconify/react";
 import {
   Button,
   Input,
@@ -9,15 +11,15 @@ import {
   ModalContent,
   Tooltip,
 } from "@nextui-org/react";
+import { useDisclosure } from "@nextui-org/use-disclosure";
 import { AnimatePresence, domAnimation, LazyMotion, m } from "framer-motion";
-import { Icon } from "@iconify/react";
-import { useDisclosure, UseDisclosureReturn } from "@nextui-org/use-disclosure";
+import React from "react";
 import { toast } from "sonner";
 
-import SignUpAPI from "@/lib/auth/signup";
 import { IconWrapper } from "@/lib/IconWrapper";
-import { InfoIcon } from "@/components/icons";
+import SignUpAPI from "@/lib/auth/signup";
 import CheckUserTaken from "@/lib/auth/checkTaken";
+import { InfoIcon } from "@/components/icons";
 
 import SuccessSignUpModal from "./successSignUp";
 
@@ -120,8 +122,8 @@ export default function SignUpModal({
     } else {
       setError(true);
       setErrorText(res.error);
-      setIsUsernameValid(res.error === "Username already taken" ? false : true);
-      setIsEmailValid(res.error === "Email already taken" ? false : true);
+      setIsUsernameValid(res.error !== "Username already taken");
+      setIsEmailValid(res.error !== "Email already taken");
     }
   };
 
@@ -185,7 +187,7 @@ export default function SignUpModal({
         onOpenChange={onOpenChange}
       >
         <ModalContent>
-          <div className="flex h-full w-full items-center justify-center">
+          <div className="flex size-full items-center justify-center">
             <div className="flex w-full max-w-sm flex-col gap-4 overflow-hidden rounded-large bg-transparent px-8 pb-10 pt-6">
               <LazyMotion features={domAnimation}>
                 <m.div className="flex min-h-[40px] items-center gap-2 pb-2">
@@ -231,7 +233,7 @@ export default function SignUpModal({
                           <IconWrapper className="bg-danger/10 text-danger">
                             <InfoIcon className="text-lg" />
                           </IconWrapper>
-                          <p className="text-md font-bold text-danger capitalize">
+                          <p className="text-md font-bold capitalize text-danger">
                             {errorText}
                           </p>
                         </div>

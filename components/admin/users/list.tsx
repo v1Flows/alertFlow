@@ -1,41 +1,41 @@
 "use client";
-import React from "react";
+import { Icon } from "@iconify/react";
 import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  User,
+  Button,
   Chip,
   Divider,
   Dropdown,
-  DropdownTrigger,
-  Button,
+  DropdownItem,
   DropdownMenu,
   DropdownSection,
-  DropdownItem,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
+  DropdownTrigger,
   Input,
+  Modal,
+  ModalBody,
+  ModalContent,
   ModalFooter,
-  useDisclosure,
+  ModalHeader,
   Pagination,
   Snippet,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+  useDisclosure,
+  User,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import React from "react";
 import { toast } from "sonner";
-import { Icon } from "@iconify/react";
 
-import { LockIcon, PlusIcon } from "@/components/icons";
-import UpdateUserStatus from "@/lib/fetch/admin/PUT/UpdateUserState";
-import DeleteUserModal from "@/components/functions/users/delete";
+import AdminDeleteUserModal from "@/components/functions/admin/delete";
+import AdminSendUserNotificationModal from "@/components/functions/admin/sendNotification";
 import SignUpModal from "@/components/functions/auth/signUp";
 import EditUserModal from "@/components/functions/users/edit";
-import AdminSendUserNotificationModal from "@/components/functions/admin/sendNotification";
+import { LockIcon, PlusIcon } from "@/components/icons";
+import UpdateUserStatus from "@/lib/fetch/admin/PUT/UpdateUserState";
 
 export function UsersList({ users, plans }: any) {
   const router = useRouter();
@@ -73,9 +73,9 @@ export function UsersList({ users, plans }: any) {
 
   function roleColor(role: string) {
     switch (role) {
-      case "Admin":
+      case "admin":
         return "danger";
-      case "VIP":
+      case "vip":
         return "warning";
       default:
         return "primary";
@@ -105,7 +105,7 @@ export function UsersList({ users, plans }: any) {
     if (!disableUser) {
       const res = await UpdateUserStatus(userID, disableUser, "");
 
-      if (!res.error) {
+      if (res.success) {
         setUserID("");
         router.refresh();
         toast.success("User status updated successfully");
@@ -117,7 +117,7 @@ export function UsersList({ users, plans }: any) {
       setIsDisableLoading(true);
       const res = await UpdateUserStatus(userID, disableUser, disableReason);
 
-      if (!res.error) {
+      if (res.success) {
         setIsDisableLoading(false);
         setDisableReason("");
         setUserID("");
@@ -156,9 +156,9 @@ export function UsersList({ users, plans }: any) {
               isBordered: true,
               name: user.username,
               color:
-                user.role === "Admin"
+                user.role === "admin"
                   ? "danger"
-                  : user.role === "VIP"
+                  : user.role === "vip"
                     ? "warning"
                     : "primary",
             }}
@@ -177,15 +177,17 @@ export function UsersList({ users, plans }: any) {
       case "plan":
         return (
           <p
-            className={`font-bold text-sm capitalize text-${planColor(cellValue)}`}
+            className={`text- text-sm font-bold capitalize${planColor(cellValue)}`}
           >
             {cellValue}
           </p>
         );
+      case "plan_valid_until":
+        return new Date(user.plan_valid_until).toLocaleString("de-DE");
       case "role":
         return (
           <p
-            className={`font-bold text-sm capitalize text-${roleColor(cellValue)}`}
+            className={`text- text-sm font-bold capitalize${roleColor(cellValue)}`}
           >
             {cellValue}
           </p>
@@ -219,7 +221,7 @@ export function UsersList({ users, plans }: any) {
         );
       case "actions":
         return (
-          <div className="relative flex justify-center items-center gap-2">
+          <div className="relative flex items-center justify-center gap-2">
             <Dropdown>
               <DropdownTrigger>
                 <Button isIconOnly size="sm" variant="light">
@@ -276,7 +278,7 @@ export function UsersList({ users, plans }: any) {
                           width={20}
                         />
                       }
-                      onClick={() => changeUserStatusModal(user.id, true)}
+                      onPress={() => changeUserStatusModal(user.id, true)}
                     >
                       Disable
                     </DropdownItem>
@@ -304,7 +306,7 @@ export function UsersList({ users, plans }: any) {
                     className="text-danger"
                     color="danger"
                     startContent={
-                      <Icon icon="solar:trash-bin-2-broken" width={20} />
+                      <Icon icon="solar:trash-bin-trash-outline" width={20} />
                     }
                     onPress={() => handleDeleteUser(user)}
                   >
@@ -324,9 +326,9 @@ export function UsersList({ users, plans }: any) {
     <main>
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-1">
-          <p className="text-2xl font-bold mb-0 text-danger">Admin</p>
-          <p className="text-2xl mb-0">|</p>
-          <p className="text-2xl mb-0">Users</p>
+          <p className="mb-0 text-2xl font-bold text-danger">Admin</p>
+          <p className="mb-0 text-2xl">|</p>
+          <p className="mb-0 text-2xl">Users</p>
         </div>
         <Button
           color="primary"
@@ -368,6 +370,9 @@ export function UsersList({ users, plans }: any) {
             </TableColumn>
             <TableColumn key="plan" align="start">
               Plan
+            </TableColumn>
+            <TableColumn key="plan_valid_until" align="start">
+              Valid Until
             </TableColumn>
             <TableColumn key="disabled" align="start">
               Status
@@ -441,7 +446,7 @@ export function UsersList({ users, plans }: any) {
         user={targetUser}
       />
       <SignUpModal skipSuccessModal disclosure={signUpModal} />
-      <DeleteUserModal disclosure={deleteUserModal} user={targetUser} />
+      <AdminDeleteUserModal disclosure={deleteUserModal} user={targetUser} />
     </main>
   );
 }

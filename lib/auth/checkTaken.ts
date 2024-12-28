@@ -7,20 +7,20 @@ export default async function CheckUserTaken(email: string, username: string) {
 
     headers.append("Content-Type", "application/json");
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/auth/user/taken`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/auth/user/taken`,
       {
         method: "POST",
-        headers: headers,
+        headers,
         body: JSON.stringify({
-          email: email,
-          username: username,
+          email,
+          username,
         }),
       },
     );
     const data = await res.json();
 
     return data;
-  } catch (error) {
+  } catch {
     return { error: "Failed to fetch data" };
   }
 }

@@ -2,37 +2,74 @@
 
 import { cookies } from "next/headers";
 
+type Result = {
+  result: string;
+};
+
+type ErrorResponse = {
+  success: false;
+  error: string;
+  message: string;
+};
+
+type SuccessResponse = {
+  success: true;
+  data: Result;
+};
+
 export default async function ChangeFlowMaintenance(
   id: string,
   maintenance: boolean,
   reason: string,
-) {
-  "use client";
-  const cookieStore = cookies();
-  const token = cookieStore.get("session")?.value;
-
+): Promise<SuccessResponse | ErrorResponse> {
   try {
-    const headers = new Headers();
+    const cookieStore = await cookies();
+    const token = cookieStore.get("session");
 
-    headers.append("Content-Type", "application/json");
-    if (token) {
-      headers.append("Authorization", token);
+    if (!token) {
+      return {
+        success: false,
+        error: "Authentication token not found",
+        message: "User is not authenticated",
+      };
     }
+
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/flows/${id}/maintenance`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/flows/${id}/maintenance`,
       {
         method: "PUT",
-        headers: headers,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token.value,
+        },
         body: JSON.stringify({
-          maintenance_required: maintenance,
+          maintenance,
           maintenance_message: reason,
         }),
       },
     );
+
+    if (!res.ok) {
+      const errorData = await res.json();
+
+      return {
+        success: false,
+        error: `API error: ${res.status} ${res.statusText}`,
+        message: errorData.message || "An error occurred",
+      };
+    }
+
     const data = await res.json();
 
-    return data;
+    return {
+      success: true,
+      data,
+    };
   } catch (error) {
-    return { error: "Failed to update flow" };
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error occurred",
+      message: "Failed to update flow maintenance status",
+    };
   }
 }

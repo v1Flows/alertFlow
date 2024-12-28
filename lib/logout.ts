@@ -3,8 +3,10 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export async function Logout() {
-  cookies().delete("session");
-  cookies().delete("user");
+  const c = await cookies();
+
+  c.delete("session");
+  c.delete("user");
 
   redirect("/");
 }

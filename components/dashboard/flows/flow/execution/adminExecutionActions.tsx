@@ -10,7 +10,7 @@ import {
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import UpdateExecution from "@/lib/fetch/executions/update";
+import UpdateExecution from "@/lib/fetch/executions/PUT/update";
 
 export default function AdminExecutionActions({
   execution,
@@ -23,79 +23,116 @@ export default function AdminExecutionActions({
     const newExecution = { ...execution };
 
     switch (status) {
-      case "finished":
-        newExecution.error = false;
-        newExecution.ghost = false;
-        newExecution.no_match = false;
-        newExecution.paused = false;
+      case "pending":
+        newExecution.pending = true;
         newExecution.running = false;
-        newExecution.waiting = false;
+        newExecution.paused = false;
+        newExecution.canceled = false;
+        newExecution.no_pattern_match = false;
+        newExecution.interaction_required = false;
+        newExecution.error = false;
+        newExecution.finished = false;
         newExecution.finished_at =
-          newExecution.finished_at !== "0001-01-01T00:00:00Z"
-            ? newExecution.finished_at
-            : new Date().toISOString();
+          execution.finished_at !== "0001-01-01T00:00:00Z"
+            ? execution.finished_at
+            : "0001-01-01T00:00:00Z";
         break;
       case "running":
-        newExecution.error = false;
-        newExecution.ghost = false;
-        newExecution.no_match = false;
-        newExecution.paused = false;
+        newExecution.pending = false;
         newExecution.running = true;
-        newExecution.waiting = false;
-        newExecution.finished_at = "0001-01-01T00:00:00Z";
-        break;
-      case "waiting":
-        newExecution.error = false;
-        newExecution.ghost = false;
-        newExecution.no_match = false;
         newExecution.paused = false;
-        newExecution.running = false;
-        newExecution.waiting = true;
-        newExecution.finished_at = "0001-01-01T00:00:00Z";
+        newExecution.canceled = false;
+        newExecution.no_pattern_match = false;
+        newExecution.interaction_required = false;
+        newExecution.error = false;
+        newExecution.finished = false;
+        newExecution.finished_at =
+          execution.finished_at !== "0001-01-01T00:00:00Z"
+            ? execution.finished_at
+            : "0001-01-01T00:00:00Z";
         break;
       case "paused":
-        newExecution.error = false;
-        newExecution.ghost = false;
-        newExecution.no_match = false;
+        newExecution.pending = false;
+        newExecution.running = false;
         newExecution.paused = true;
-        newExecution.running = false;
-        newExecution.waiting = false;
-        newExecution.finished_at = "0001-01-01T00:00:00Z";
-        break;
-      case "no_match":
+        newExecution.canceled = false;
+        newExecution.no_pattern_match = false;
+        newExecution.interaction_required = false;
         newExecution.error = false;
-        newExecution.ghost = false;
-        newExecution.no_match = true;
-        newExecution.paused = false;
-        newExecution.running = false;
-        newExecution.waiting = false;
+        newExecution.finished = false;
         newExecution.finished_at =
-          newExecution.finished_at !== "0001-01-01T00:00:00Z"
-            ? newExecution.finished_at
+          execution.finished_at !== "0001-01-01T00:00:00Z"
+            ? execution.finished_at
+            : "0001-01-01T00:00:00Z";
+        break;
+      case "canceled":
+        newExecution.pending = false;
+        newExecution.running = false;
+        newExecution.paused = false;
+        newExecution.canceled = true;
+        newExecution.no_pattern_match = false;
+        newExecution.interaction_required = false;
+        newExecution.error = false;
+        newExecution.finished = false;
+        newExecution.finished_at =
+          execution.finished_at !== "0001-01-01T00:00:00Z"
+            ? execution.finished_at
             : new Date().toISOString();
         break;
-      case "ghost":
-        newExecution.error = false;
-        newExecution.ghost = true;
-        newExecution.no_match = false;
-        newExecution.paused = false;
+      case "no_pattern_match":
+        newExecution.pending = false;
         newExecution.running = false;
-        newExecution.waiting = false;
+        newExecution.paused = false;
+        newExecution.canceled = false;
+        newExecution.no_pattern_match = true;
+        newExecution.interaction_required = false;
+        newExecution.error = false;
+        newExecution.finished = false;
         newExecution.finished_at =
-          newExecution.finished_at !== "0001-01-01T00:00:00Z"
-            ? newExecution.finished_at
-            : new Date().toISOString();
+          execution.finished_at !== "0001-01-01T00:00:00Z"
+            ? execution.finished_at
+            : "0001-01-01T00:00:00Z";
+        break;
+      case "interaction_required":
+        newExecution.pending = false;
+        newExecution.running = false;
+        newExecution.paused = false;
+        newExecution.canceled = false;
+        newExecution.no_pattern_match = false;
+        newExecution.interaction_required = true;
+        newExecution.error = false;
+        newExecution.finished = false;
+        newExecution.finished_at =
+          execution.finished_at !== "0001-01-01T00:00:00Z"
+            ? execution.finished_at
+            : "0001-01-01T00:00:00Z";
         break;
       case "error":
-        newExecution.error = true;
-        newExecution.ghost = false;
-        newExecution.no_match = false;
-        newExecution.paused = false;
+        newExecution.pending = false;
         newExecution.running = false;
-        newExecution.waiting = false;
+        newExecution.paused = false;
+        newExecution.canceled = false;
+        newExecution.no_pattern_match = false;
+        newExecution.interaction_required = false;
+        newExecution.error = true;
+        newExecution.finished = false;
         newExecution.finished_at =
-          newExecution.finished_at !== "0001-01-01T00:00:00Z"
-            ? newExecution.finished_at
+          execution.finished_at !== "0001-01-01T00:00:00Z"
+            ? execution.finished_at
+            : new Date().toISOString();
+        break;
+      case "finished":
+        newExecution.pending = false;
+        newExecution.running = false;
+        newExecution.paused = false;
+        newExecution.canceled = false;
+        newExecution.no_pattern_match = false;
+        newExecution.interaction_required = false;
+        newExecution.error = false;
+        newExecution.finished = true;
+        newExecution.finished_at =
+          execution.finished_at !== "0001-01-01T00:00:00Z"
+            ? execution.finished_at
             : new Date().toISOString();
         break;
       default:
@@ -104,7 +141,7 @@ export default function AdminExecutionActions({
 
     const response = await UpdateExecution(newExecution);
 
-    if (response.result === "success") {
+    if (response.success) {
       toast.success("Execution Status Changed");
       router.refresh();
     } else {
@@ -123,17 +160,17 @@ export default function AdminExecutionActions({
       <DropdownMenu aria-label="Table Columns" variant="flat">
         <DropdownSection title="Change Execution Status">
           <DropdownItem
-            key="finished"
+            key="pending"
             className="capitalize"
-            onPress={() => changeExecutionStatus("finished")}
+            onPress={() => changeExecutionStatus("pending")}
           >
-            <div className="flex flex-cols gap-2">
+            <div className="flex-cols flex gap-2">
               <Icon
-                className="text-success"
-                icon="solar:check-read-broken"
+                className="text-default-500"
+                icon="solar:sleeping-square-linear"
                 width={18}
               />
-              Finished
+              Pending
             </div>
           </DropdownItem>
           <DropdownItem
@@ -141,7 +178,7 @@ export default function AdminExecutionActions({
             className="capitalize"
             onPress={() => changeExecutionStatus("running")}
           >
-            <div className="flex flex-cols gap-2">
+            <div className="flex-cols flex gap-2">
               <Icon
                 className="text-primary"
                 icon="solar:play-bold-duotone"
@@ -151,25 +188,11 @@ export default function AdminExecutionActions({
             </div>
           </DropdownItem>
           <DropdownItem
-            key="waiting"
-            className="capitalize"
-            onPress={() => changeExecutionStatus("waiting")}
-          >
-            <div className="flex flex-cols gap-2">
-              <Icon
-                className="text-warning"
-                icon="solar:clock-circle-broken"
-                width={18}
-              />
-              Waiting
-            </div>
-          </DropdownItem>
-          <DropdownItem
             key="paused"
             className="capitalize"
             onPress={() => changeExecutionStatus("paused")}
           >
-            <div className="flex flex-cols gap-2">
+            <div className="flex-cols flex gap-2">
               <Icon
                 className="text-warning"
                 icon="solar:pause-broken"
@@ -179,31 +202,45 @@ export default function AdminExecutionActions({
             </div>
           </DropdownItem>
           <DropdownItem
+            key="canceled"
+            className="capitalize"
+            onPress={() => changeExecutionStatus("canceled")}
+          >
+            <div className="flex-cols flex gap-2">
+              <Icon
+                className="text-danger"
+                icon="solar:forbidden-linear"
+                width={18}
+              />
+              Canceled
+            </div>
+          </DropdownItem>
+          <DropdownItem
             key="no_pattern_match"
             className="capitalize"
-            onPress={() => changeExecutionStatus("no_match")}
+            onPress={() => changeExecutionStatus("no_pattern_match")}
           >
-            <div className="flex flex-cols gap-2">
+            <div className="flex-cols flex gap-2">
               <Icon
                 className="text-secondary"
                 icon="solar:bill-cross-broken"
                 width={18}
               />
-              No Match
+              No Pattern Match
             </div>
           </DropdownItem>
           <DropdownItem
-            key="no_flow_actions_found"
+            key="interaction_required"
             className="capitalize"
-            onPress={() => changeExecutionStatus("ghost")}
+            onPress={() => changeExecutionStatus("interaction_required")}
           >
-            <div className="flex flex-cols gap-2">
+            <div className="flex-cols flex gap-2">
               <Icon
-                className="text-default-500"
-                icon="solar:ghost-broken"
+                className="text-primary"
+                icon="solar:hand-shake-linear"
                 width={18}
               />
-              Ghost
+              Interaction Required
             </div>
           </DropdownItem>
           <DropdownItem
@@ -211,13 +248,27 @@ export default function AdminExecutionActions({
             className="capitalize"
             onPress={() => changeExecutionStatus("error")}
           >
-            <div className="flex flex-cols gap-2">
+            <div className="flex-cols flex gap-2">
               <Icon
                 className="text-danger"
                 icon="solar:danger-triangle-broken"
                 width={18}
               />
               Error
+            </div>
+          </DropdownItem>
+          <DropdownItem
+            key="finished"
+            className="capitalize"
+            onPress={() => changeExecutionStatus("finished")}
+          >
+            <div className="flex-cols flex gap-2">
+              <Icon
+                className="text-success"
+                icon="solar:check-read-broken"
+                width={18}
+              />
+              Finished
             </div>
           </DropdownItem>
         </DropdownSection>

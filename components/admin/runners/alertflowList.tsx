@@ -1,30 +1,30 @@
 "use client";
-import React from "react";
+import { Icon } from "@iconify/react";
 import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
+  Button,
   Chip,
   Dropdown,
-  DropdownTrigger,
-  Button,
-  DropdownMenu,
   DropdownItem,
+  DropdownMenu,
   DropdownSection,
-  useDisclosure,
+  DropdownTrigger,
   Pagination,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+  useDisclosure,
 } from "@nextui-org/react";
+import React from "react";
 import TimeAgo from "react-timeago";
-import { Icon } from "@iconify/react";
 
-import { PlusIcon } from "@/components/icons";
+import ChangeRunnerStatusModal from "@/components/functions/runner/changeStatus";
 import CreateRunnerModal from "@/components/functions/runner/create";
 import DeleteRunnerModal from "@/components/functions/runner/delete";
-import ChangeRunnerStatusModal from "@/components/functions/runner/changeStatus";
 import EditRunnerModal from "@/components/functions/runner/edit";
+import { PlusIcon } from "@/components/icons";
 
 export function AlertflowRunnerList({ runners }: any) {
   const [status, setStatus] = React.useState(false);
@@ -46,7 +46,7 @@ export function AlertflowRunnerList({ runners }: any) {
   }, [page, runners]);
 
   function heartbeatColor(runner: any) {
-    var timeAgo =
+    const timeAgo =
       (new Date(runner.last_heartbeat).getTime() - Date.now()) / 1000;
 
     if (timeAgo < 0 && timeAgo > -30) {
@@ -107,7 +107,7 @@ export function AlertflowRunnerList({ runners }: any) {
         );
       case "last_heartbeat":
         return (
-          <p className={"text-" + heartbeatColor(runner)}>
+          <p className={`text-${heartbeatColor(runner)}`}>
             {runner.last_heartbeat !== "0001-01-01T00:00:00Z" && (
               <TimeAgo date={runner.last_heartbeat} />
             )}
@@ -118,10 +118,10 @@ export function AlertflowRunnerList({ runners }: any) {
         return (
           <div>
             <p className="text-sm text-default-500">
-              Actions: {runner.available_actions.length}
+              Actions: {runner.actions.length}
             </p>
             <p className="text-sm text-default-500">
-              Payload Injectors: {runner.available_payload_injectors.length}
+              Payload Endpoints: {runner.payload_endpoints.length}
             </p>
           </div>
         );
@@ -129,7 +129,7 @@ export function AlertflowRunnerList({ runners }: any) {
         return <p>{runner.runner_version ? runner.runner_version : "N/A"}</p>;
       case "actions":
         return (
-          <div className="relative flex justify-center items-center gap-2">
+          <div className="relative flex items-center justify-center gap-2">
             <Dropdown>
               <DropdownTrigger>
                 <Button isIconOnly size="sm" variant="light">
@@ -202,7 +202,7 @@ export function AlertflowRunnerList({ runners }: any) {
                     className="text-danger"
                     color="danger"
                     startContent={
-                      <Icon icon="solar:trash-bin-2-broken" width={20} />
+                      <Icon icon="solar:trash-bin-trash-outline" width={20} />
                     }
                     onPress={() => {
                       setTargetRunner(runner);
@@ -223,8 +223,8 @@ export function AlertflowRunnerList({ runners }: any) {
 
   return (
     <main>
-      <div className="flex items-center justify-between mb-2">
-        <p className="text-2xl font-bold mb-0 text-primary">
+      <div className="mb-2 flex items-center justify-between">
+        <p className="mb-0 text-2xl font-bold text-primary">
           AlertFlow Runners
         </p>
         <Button
@@ -284,7 +284,7 @@ export function AlertflowRunnerList({ runners }: any) {
               ACTIONS
             </TableColumn>
           </TableHeader>
-          <TableBody emptyContent={"No rows to display."} items={items}>
+          <TableBody emptyContent="No rows to display." items={items}>
             {(item: any) => (
               <TableRow key={item.id}>
                 {(columnKey) => (
@@ -296,9 +296,9 @@ export function AlertflowRunnerList({ runners }: any) {
         </Table>
       </div>
       <CreateRunnerModal
-        alertflow_runner={true}
+        alertflow_runner
         disclosure={addRunnerModal}
-        project={"none"}
+        project="none"
       />
       <EditRunnerModal disclosure={editRunnerModal} runner={targetRunner} />
       <ChangeRunnerStatusModal

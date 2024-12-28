@@ -2,20 +2,21 @@
 
 import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
-import React, { useEffect } from "react";
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
   Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
 } from "@nextui-org/react";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
+import { toast } from "sonner";
 
 import UpdateToken from "@/lib/fetch/tokens/update";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function EditTokenModal({
   token,
@@ -31,6 +32,9 @@ export default function EditTokenModal({
 
   const [description, setDescription] = React.useState(token.description);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   useEffect(() => {
     setDescription(token.description);
@@ -39,14 +43,30 @@ export default function EditTokenModal({
   async function updateToken() {
     setIsLoading(true);
 
-    const response = await UpdateToken(token.id, description);
+    const response = (await UpdateToken(token.id, description)) as any;
 
-    if (response.result === "success") {
+    if (!response) {
+      setIsLoading(false);
+      setError(true);
+      setErrorText("Failed to update token");
+      setErrorMessage("Failed to update token");
+      toast.error("Failed to update token");
+
+      return;
+    }
+
+    if (response.success) {
+      setIsLoading(false);
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       router.refresh();
       onOpenChange();
-      setIsLoading(false);
     } else {
       setIsLoading(false);
+      setError(true);
+      setErrorText(response.error);
+      setErrorMessage(response.message);
       toast.error("Failed to update token");
     }
   }
@@ -72,6 +92,9 @@ export default function EditTokenModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <Input
                   isRequired
                   label="Description"

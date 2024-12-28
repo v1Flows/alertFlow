@@ -2,22 +2,23 @@
 
 import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
-import React, { useEffect } from "react";
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
   Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
   Select,
   SelectItem,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
 import { toast } from "sonner";
 
 import UpdateUser from "@/lib/fetch/admin/PUT/UpdateUser";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function EditUserModal({
   user,
@@ -37,6 +38,10 @@ export default function EditUserModal({
   const [role, setRole] = React.useState(new Set([]) as any);
   const [plan, setPlan] = React.useState(new Set([]) as any);
 
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
+
   // loading
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -52,19 +57,36 @@ export default function EditUserModal({
   async function editUser() {
     setIsLoading(true);
 
-    const response = await UpdateUser(
+    const response = (await UpdateUser(
       user.id,
       username,
       email,
       role.currentKey ? role.currentKey : user.role,
       plan.currentKey ? plan.currentKey : user.plan,
-    );
+    )) as any;
 
-    if (response.result === "success") {
+    if (!response) {
+      setError(true);
+      setErrorText("Failed to update user");
+      setErrorMessage("Failed to update user");
+      setIsLoading(false);
+      toast.error("Failed to update user");
+
+      return;
+    }
+
+    if (response.success) {
+      setIsLoading(false);
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       router.refresh();
       onOpenChange();
-      setIsLoading(false);
+      toast.success("User updated successfully");
     } else {
+      setError(true);
+      setErrorText(response.error);
+      setErrorMessage(response.message);
       setIsLoading(false);
       toast.error("Failed to update user");
     }
@@ -90,6 +112,9 @@ export default function EditUserModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <Input
                   isRequired
                   label="Username"
@@ -119,9 +144,9 @@ export default function EditUserModal({
                   variant="flat"
                   onSelectionChange={setRole}
                 >
-                  <SelectItem key="User">User</SelectItem>
-                  <SelectItem key="VIP">VIP</SelectItem>
-                  <SelectItem key="Admin">Admin</SelectItem>
+                  <SelectItem key="user">User</SelectItem>
+                  <SelectItem key="vip">VIP</SelectItem>
+                  <SelectItem key="admin">Admin</SelectItem>
                 </Select>
                 <Select
                   isRequired

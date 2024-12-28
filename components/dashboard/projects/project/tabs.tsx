@@ -1,8 +1,8 @@
 "use client";
-import React from "react";
-import { Tabs, Tab, Tooltip } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
+import { Tab, Tabs, Tooltip } from "@nextui-org/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import React from "react";
 
 import ProjectMembers from "@/components/dashboard/projects/project/tables/UserTable";
 import ProjectTokens from "@/components/dashboard/projects/project/tables/TokensTable";
@@ -28,9 +28,9 @@ export default function ProjectTabs({
   const params = new URLSearchParams(searchParams.toString());
 
   React.useEffect(() => {
-    var tab = params.get("tab") || "members";
+    let tab = params.get("tab") || "members";
 
-    if (tab === "audit" && plan.id !== "enterprise") {
+    if (tab === "audit" && plan.id !== "enterprise" && user.role !== "admin") {
       tab = "members";
     }
 
@@ -38,9 +38,10 @@ export default function ProjectTabs({
   }, [params]);
 
   const handleTabChange = (key: any) => {
-    if (key === "audit" && plan.id !== "enterprise") {
+    if (key === "audit" && plan.id !== "enterprise" && user.role !== "admin") {
       return;
     }
+
     params.set("tab", key);
     router.push(`${pathname}?${params.toString()}`);
   };
@@ -59,7 +60,7 @@ export default function ProjectTabs({
             key="members"
             title={
               <div className="flex items-center space-x-2">
-                <Icon icon="solar:smile-square-broken" width={20} />
+                <Icon icon="solar:smile-square-outline" width={20} />
                 <span>Members</span>
               </div>
             }
@@ -76,7 +77,7 @@ export default function ProjectTabs({
             key="runners"
             title={
               <div className="flex items-center space-x-2">
-                <Icon icon="solar:rocket-2-broken" width={20} />
+                <Icon icon="solar:rocket-2-outline" width={20} />
                 <span>Runners</span>
               </div>
             }
@@ -94,7 +95,7 @@ export default function ProjectTabs({
             key="tokens"
             title={
               <div className="flex items-center space-x-2">
-                <Icon icon="solar:key-square-2-broken" width={20} />
+                <Icon icon="solar:key-square-2-outline" width={20} />
                 <span>Tokens</span>
               </div>
             }
@@ -109,18 +110,18 @@ export default function ProjectTabs({
           </Tab>
           <Tab
             key="audit"
-            isDisabled={plan.id !== "enterprise"}
+            isDisabled={plan.id !== "enterprise" && user.role !== "admin"}
             title={
-              plan.id !== "enterprise" ? (
+              plan.id !== "enterprise" && user.role !== "admin" ? (
                 <Tooltip color="secondary" content="Enterprise Feature">
                   <div className="flex items-center space-x-2">
-                    <Icon icon="solar:notes-broken" width={20} />
+                    <Icon icon="solar:notes-outline" width={20} />
                     <span>Audit</span>
                   </div>
                 </Tooltip>
               ) : (
                 <div className="flex items-center space-x-2">
-                  <Icon icon="solar:notes-broken" width={20} />
+                  <Icon icon="solar:notes-outline" width={20} />
                   <span>Audit</span>
                 </div>
               )

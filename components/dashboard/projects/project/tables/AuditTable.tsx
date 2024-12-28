@@ -1,18 +1,17 @@
-/* eslint-disable no-undef */
-import React from "react";
-import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  Pagination,
-  User,
-  Tooltip,
-  Chip,
-} from "@nextui-org/react";
 import { Icon } from "@iconify/react";
+import {
+  Chip,
+  Pagination,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+  Tooltip,
+  User,
+} from "@nextui-org/react";
+import React from "react";
 
 export default function ProjectAuditLogs({ audit, members, user }: any) {
   // pagination
@@ -50,7 +49,7 @@ export default function ProjectAuditLogs({ audit, members, user }: any) {
           <Tooltip
             content={
               <div>
-                <p className="text-default-500 font-bold">User ID</p>
+                <p className="font-bold text-default-500">User ID</p>
                 <p>{entry.user_id}</p>
               </div>
             }
@@ -66,9 +65,9 @@ export default function ProjectAuditLogs({ audit, members, user }: any) {
                   {!members.find(
                     (member: any) => member.user_id === entry.user_id,
                   ) &&
-                    entry?.role !== "Admin" && (
+                    entry?.role !== "admin" && (
                       <Tooltip content="User left the project">
-                        <Icon icon="solar:ghost-broken" />
+                        <Icon icon="solar:ghost-outline" />
                       </Tooltip>
                     )}
                   {entry.user_id === user.id && (
@@ -76,7 +75,7 @@ export default function ProjectAuditLogs({ audit, members, user }: any) {
                       You
                     </Chip>
                   )}
-                  {entry?.role === "Admin" && (
+                  {entry?.role === "admin" && (
                     <Chip color="danger" radius="sm" size="sm" variant="flat">
                       Admin
                     </Chip>
@@ -142,7 +141,7 @@ export default function ProjectAuditLogs({ audit, members, user }: any) {
             CREATED AT
           </TableColumn>
         </TableHeader>
-        <TableBody emptyContent={"No rows to display."} items={items}>
+        <TableBody emptyContent="No rows to display." items={items}>
           {(item: any) => (
             <TableRow key={item.id}>
               {(columnKey) => (

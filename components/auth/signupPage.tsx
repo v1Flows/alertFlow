@@ -1,33 +1,24 @@
 "use client";
 
-import React from "react";
-import {
-  Button,
-  Input,
-  Link,
-  Image,
-  useDisclosure,
-  Tooltip,
-} from "@nextui-org/react";
 import { Icon } from "@iconify/react";
-import { useTheme } from "next-themes";
+import { Alert } from "@nextui-org/alert";
+import { Button, Image, Input, Link, Tooltip } from "@nextui-org/react";
 import { useIsSSR } from "@react-aria/ssr";
 import { AnimatePresence, domAnimation, LazyMotion, m } from "framer-motion";
+import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation";
+import React from "react";
 import { toast } from "sonner";
 
+import { setSession } from "@/lib/setSession";
 import SignUpAPI from "@/lib/auth/signup";
+import LoginAPI from "@/lib/auth/login";
 import CheckUserTaken from "@/lib/auth/checkTaken";
-import { IconWrapper } from "@/lib/IconWrapper";
 
-import { InfoIcon } from "../icons";
-import SuccessSignUpModal from "../functions/auth/successSignUp";
 import Particles from "../magicui/particles";
 
-export default function SignUpPage({
-  skipSuccessModal,
-}: {
-  skipSuccessModal?: boolean;
-}) {
+export default function SignUpPage() {
+  const router = useRouter();
   const { theme } = useTheme();
   const isSSR = useIsSSR();
 
@@ -48,7 +39,6 @@ export default function SignUpPage({
 
   const [error, setError] = React.useState(false);
   const [errorText, setErrorText] = React.useState("");
-  const successSignUpModal = useDisclosure();
 
   const togglePasswordVisibility = () =>
     setIsPasswordVisible(!isPasswordVisible);
@@ -121,8 +111,8 @@ export default function SignUpPage({
     } else {
       setError(true);
       setErrorText(res.error);
-      setIsUsernameValid(res.error === "Username already taken" ? false : true);
-      setIsEmailValid(res.error === "Email already taken" ? false : true);
+      setIsUsernameValid(res.error !== "Username already taken");
+      setIsEmailValid(res.error !== "Email already taken");
     }
   };
 
@@ -148,8 +138,18 @@ export default function SignUpPage({
     const res = await SignUpAPI(email, username, password);
 
     if (res.result === "success") {
-      setIsLoading(false);
-      skipSuccessModal ? null : successSignUpModal.onOpen();
+      // login
+      const loginRes = await LoginAPI(email, password, false);
+
+      if (!loginRes.error) {
+        await setSession(loginRes.token, loginRes.user, loginRes.expires_at);
+
+        setIsLoading(false);
+        router.push("/dashboard");
+        toast.success("Successfully signed up and logged in!");
+      } else {
+        toast.error(loginRes.error);
+      }
     } else {
       setIsLoading(false);
       setError(true);
@@ -177,7 +177,7 @@ export default function SignUpPage({
   };
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center">
+    <div className="flex size-full flex-col items-center justify-center">
       <Particles
         refresh
         className="absolute inset-0"
@@ -191,7 +191,7 @@ export default function SignUpPage({
           height={32}
           radius="none"
           shadow="none"
-          src={`/images/af_logo_${theme === "light" || isSSR ? "black" : "white"}.png`}
+          src={`https://s3-console.justlab.xyz/api/v1/buckets/alertflow/objects/download?preview=true&prefix=af_logo_${theme === "light" || isSSR ? "black" : "white"}.png`}
           width={32}
         />
         <p className="text-xl font-medium">Welcome</p>
@@ -232,14 +232,7 @@ export default function SignUpPage({
               </AnimatePresence>
               {error && (
                 <AnimatePresence custom={direction} initial={false} mode="wait">
-                  <div className="flex items-center gap-2">
-                    <IconWrapper className="bg-danger/10 text-danger">
-                      <InfoIcon className="text-lg" />
-                    </IconWrapper>
-                    <p className="text-md font-bold text-danger capitalize">
-                      {errorText}
-                    </p>
-                  </div>
+                  <Alert color="danger" description={errorText} title="Error" />
                 </AnimatePresence>
               )}
             </m.div>
@@ -372,7 +365,6 @@ export default function SignUpPage({
           </Link>
         </p>
       </div>
-      <SuccessSignUpModal disclosure={successSignUpModal} />
     </div>
   );
 }

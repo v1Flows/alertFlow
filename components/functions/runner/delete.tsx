@@ -17,8 +17,9 @@ import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { toast } from "sonner";
 
-import DeleteProjectRunner from "@/lib/fetch/project/DELETE/DeleteRunner";
 import GetRunnerFlowLinks from "@/lib/fetch/runner/GetRunnerFlowLinks";
+import DeleteProjectRunner from "@/lib/fetch/project/DELETE/DeleteRunner";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function DeleteRunnerModal({
   disclosure,
@@ -32,29 +33,63 @@ export default function DeleteRunnerModal({
 
   const [flowLinks, setFlowLinks] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   useEffect(() => {
     runner.id && getFlowLinks();
   }, [runner]);
 
   async function getFlowLinks() {
-    const data = await GetRunnerFlowLinks({ runnerId: runner.id });
+    const flows = (await GetRunnerFlowLinks({ runnerId: runner.id })) as any;
 
-    if (!data.error) {
-      setFlowLinks(data);
+    if (!flows) {
+      setError(true);
+      setErrorText("Failed to fetch runner flow links");
+      setErrorMessage("An error occurred while fetching the runner flow links");
+      router.refresh();
+      toast.error("Failed to fetch runner flow links");
+    }
+
+    if (flows.success) {
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
+      setFlowLinks(flows.data.flows);
+    } else {
+      setError(true);
+      setErrorText(flows.error);
+      setErrorMessage(flows.message);
     }
   }
 
   async function deleteRunner() {
     setIsLoading(true);
 
-    const response = await DeleteProjectRunner(runner.id);
+    const response = (await DeleteProjectRunner(runner.id)) as any;
 
-    if (response.result === "success") {
+    if (!response) {
+      setIsLoading(false);
+      setError(true);
+      setErrorText("Failed to delete runner");
+      setErrorMessage("An error occurred while deleting the runner");
+      toast.error("Failed to delete runner");
+
+      return;
+    }
+
+    if (response.success) {
       onOpenChange();
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       toast.success("Runner deleted successfully");
       router.refresh();
     } else {
+      setError(true);
+      setErrorText(response.error);
+      setErrorMessage(response.message);
       toast.error("Failed to create runner");
     }
 
@@ -82,9 +117,18 @@ export default function DeleteRunnerModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <Snippet hideCopyButton hideSymbol>
-                  <span>Name: {runner.name}</span>
-                  <span>ID: {runner.id}</span>
+                  <span>
+                    Name:
+                    {runner.name}
+                  </span>
+                  <span>
+                    ID:
+                    {runner.id}
+                  </span>
                 </Snippet>
                 {flowLinks.length > 0 && (
                   <>
@@ -92,7 +136,7 @@ export default function DeleteRunnerModal({
                     <p>
                       The runner is assigned to the following flows which will
                       need{" "}
-                      <span className="text-warning font-bold">
+                      <span className="font-bold text-warning">
                         Maintenance
                       </span>{" "}
                       after the runner got deleted:

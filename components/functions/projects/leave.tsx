@@ -1,18 +1,21 @@
 "use client";
 
-import React, { useState } from "react";
+import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
+
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
   Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 import { toast } from "sonner";
-import { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
 import LeaveProject from "@/lib/fetch/project/DELETE/leave";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function LeaveProjectModal({
   disclosure,
@@ -25,21 +28,39 @@ export default function LeaveProjectModal({
   const { isOpen, onOpenChange } = disclosure;
   const [isLeaveLoading, setIsLeaveLoading] = useState(false);
 
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
+
   async function handleLeaveProject() {
     setIsLeaveLoading(true);
 
-    const res = await LeaveProject(projectID);
+    const res = (await LeaveProject(projectID)) as any;
 
-    if (res.error) {
+    if (!res) {
       setIsLeaveLoading(false);
-      toast.error(res.error);
+      setError(true);
+      setErrorText("An error occurred");
+      setErrorMessage("An error occurred while leaving the project");
+      toast.error("An error occurred while leaving the project");
 
       return;
-    } else {
+    }
+
+    if (res.success) {
       setIsLeaveLoading(false);
       onOpenChange();
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       toast.success("You have left the project successfully");
       router.push("/dashboard/projects");
+    } else {
+      setIsLeaveLoading(false);
+      setError(true);
+      setErrorText(res.error);
+      setErrorMessage(res.message);
+      toast.error(res.error);
     }
 
     setIsLeaveLoading(false);
@@ -60,6 +81,11 @@ export default function LeaveProjectModal({
                   </p>
                 </div>
               </ModalHeader>
+              <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
+              </ModalBody>
               <ModalFooter className="grid grid-cols-2">
                 <Button color="default" variant="ghost" onPress={onClose}>
                   Cancel

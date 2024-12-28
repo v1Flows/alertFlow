@@ -1,21 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
+import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
+
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
-  User,
   Chip,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  User,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 import { toast } from "sonner";
-import { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
 import RemoveProjectMember from "@/lib/fetch/project/DELETE/removeProjectMember";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function DeleteProjectMemberModal({
   disclosure,
@@ -30,6 +32,10 @@ export default function DeleteProjectMemberModal({
   const { isOpen, onOpenChange } = disclosure;
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
 
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
+
   const statusColorMap: any = {
     Owner: "danger",
     Editor: "primary",
@@ -39,18 +45,32 @@ export default function DeleteProjectMemberModal({
   async function handleDeleteMember() {
     setIsDeleteLoading(true);
 
-    const res = await RemoveProjectMember(projectID, user.user_id);
+    const res = (await RemoveProjectMember(projectID, user.user_id)) as any;
 
-    if (res.error) {
+    if (!res) {
       setIsDeleteLoading(false);
-      toast.error(res.error);
+      setError(true);
+      setErrorText("An error occurred");
+      setErrorMessage("An error occurred while removing the member");
+      toast.error("An error occurred while removing the member");
 
       return;
-    } else {
+    }
+
+    if (res.success) {
       setIsDeleteLoading(false);
       onOpenChange();
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       toast.success("Member removed successfully");
       router.refresh();
+    } else {
+      setError(true);
+      setErrorText(res.error);
+      setErrorMessage(res.message);
+      setIsDeleteLoading(false);
+      toast.error(res.error);
     }
 
     setIsDeleteLoading(false);
@@ -72,6 +92,9 @@ export default function DeleteProjectMemberModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <User
                   avatarProps={{ radius: "lg", name: user.username }}
                   className="justify-start"

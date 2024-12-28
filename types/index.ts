@@ -1,4 +1,4 @@
-import { SVGProps } from "react";
+import type { SVGProps } from "react";
 
 // eslint-disable-next-line no-undef
 export type IconSvgProps = SVGProps<SVGSVGElement> & {

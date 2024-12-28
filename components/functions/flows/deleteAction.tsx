@@ -14,6 +14,7 @@ import React from "react";
 import { toast } from "sonner";
 
 import DeleteAction from "@/lib/fetch/flow/DELETE/DeleteAction";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function DeleteActionModal({
   disclosure,
@@ -29,22 +30,39 @@ export default function DeleteActionModal({
   const { isOpen, onOpenChange } = disclosure;
 
   const [isDeleteLoading, setIsDeleteLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   async function deleteAction() {
     setIsDeleteLoading(true);
-    const res = await DeleteAction(flowID, actionID);
+    const res = (await DeleteAction(flowID, actionID)) as any;
 
-    if (res.error) {
+    if (!res) {
+      setError(true);
+      setErrorText("Failed to delete action");
+      setErrorMessage("Failed to delete action");
       setIsDeleteLoading(false);
-      toast.error("Failed to delete action");
 
       return;
     }
 
+    if (res.success) {
+      onOpenChange();
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
+      toast.success("Action deleted successfully");
+      router.refresh();
+    } else {
+      setIsDeleteLoading(false);
+      setError(true);
+      setErrorText(res.error);
+      setErrorMessage(res.message);
+      toast.error("Failed to delete action");
+    }
+
     setIsDeleteLoading(false);
-    onOpenChange();
-    toast.success("Action deleted successfully");
-    router.refresh();
   }
 
   return (
@@ -68,8 +86,14 @@ export default function DeleteActionModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <Snippet hideCopyButton hideSymbol>
-                  <span>ID: {actionID}</span>
+                  <span>
+                    ID:
+                    {actionID}
+                  </span>
                 </Snippet>
               </ModalBody>
               <ModalFooter className="grid grid-cols-2">

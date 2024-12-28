@@ -2,26 +2,27 @@
 
 import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
-import React, { useEffect } from "react";
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
+  cn,
+  Divider,
   Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
   Select,
   SelectItem,
-  Divider,
   Switch,
-  cn,
 } from "@nextui-org/react";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
+import { toast } from "sonner";
 
 import GetProjectRunners from "@/lib/fetch/project/runners";
 import UpdateFlow from "@/lib/fetch/flow/PUT/UpdateFlow";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function EditFlowModal({
   flow,
@@ -44,9 +45,12 @@ export default function EditFlowModal({
 
   // loading
   const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
   // limit on runner?
   const [runnerLimit, setRunnerLimit] = React.useState(
-    flow.runner_id !== "any" ? true : false,
+    flow.runner_id !== "any",
   );
   // runner select list
   const [runners, setRunners] = React.useState([]);
@@ -56,18 +60,22 @@ export default function EditFlowModal({
     setDescription(flow.description);
     setProjectId(flow.project_id);
     setRunnerId(flow.runner_id);
-    setRunnerLimit(flow.runner_id !== "any" ? true : false);
+    setRunnerLimit(flow.runner_id !== "any");
     getCurrentProjectRunners();
   }, [flow]);
 
   async function getCurrentProjectRunners() {
-    setRunners(await GetProjectRunners(flow.project_id));
+    const runners = await GetProjectRunners(flow.project_id);
+
+    setRunners(runners.success ? runners.data.runners : []);
   }
 
   const projectSelected = async (e: any) => {
     setProjectId(e.currentKey);
     setRunnerId("");
-    setRunners(await GetProjectRunners(e.currentKey));
+    const runners = await GetProjectRunners(e.currentKey);
+
+    setRunners(runners.success ? runners.data.runners : []);
   };
 
   const handleSelectRunner = (e: any) => {
@@ -77,19 +85,32 @@ export default function EditFlowModal({
   async function editFlow() {
     setIsLoading(true);
 
-    const response = await UpdateFlow(
+    const response = (await UpdateFlow(
       flow.id,
       name,
       description,
       projectId,
       runnerLimit ? runnerId : "any",
-    );
+    )) as any;
 
-    if (response.result === "success") {
+    if (!response) {
+      setError(true);
+      setErrorText("Failed to update flow");
+      setErrorMessage("An error occurred while updating the flow");
+      setIsLoading(false);
+
+      return;
+    }
+
+    if (response.success) {
       router.refresh();
       onOpenChange();
       setIsLoading(false);
+      toast.success("Flow updated successfully");
     } else {
+      setError(true);
+      setErrorText(response.error);
+      setErrorMessage(response.message);
       setIsLoading(false);
       toast.error("Failed to update flow");
     }
@@ -115,6 +136,9 @@ export default function EditFlowModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <Input
                   isRequired
                   label="Name"
@@ -157,7 +181,7 @@ export default function EditFlowModal({
                     thumb: cn(
                       "w-6 h-6 border-2 shadow-lg",
                       "group-data-[hover=true]:border-primary",
-                      //selected
+                      // selected
                       "group-data-[selected=true]:ml-6",
                       // pressed
                       "group-data-[pressed=true]:w-7",

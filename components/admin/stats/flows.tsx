@@ -16,12 +16,12 @@ export default function FlowsStats({
     <div>
       <p className="text-xl font-bold">Flows</p>
       <Spacer y={1} />
-      <div className="grid lg:grid-cols-3 gap-4">
+      <div className="grid gap-4 lg:grid-cols-3">
         <Card>
           <CardBody>
             <div className="flex items-center gap-2">
-              <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                <Icon icon="solar:book-bookmark-broken" width={26} />
+              <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
+                <Icon icon="solar:book-2-outline" width={26} />
               </div>
               <div>
                 <p className="text-md font-bold">{flows.length}</p>
@@ -33,8 +33,8 @@ export default function FlowsStats({
         <Card>
           <CardBody>
             <div className="flex items-center gap-2">
-              <div className="flex bg-danger/10 text-danger items-center rounded-small justify-center w-10 h-10">
-                <Icon icon="solar:book-bookmark-broken" width={26} />
+              <div className="flex size-10 items-center justify-center rounded-small bg-danger/10 text-danger">
+                <Icon icon="solar:book-2-outline" width={26} />
               </div>
               <div>
                 <p className="text-md font-bold">
@@ -48,12 +48,12 @@ export default function FlowsStats({
         <Card>
           <CardBody>
             <div className="flex items-center gap-2">
-              <div className="flex bg-warning/10 text-warning items-center rounded-small justify-center w-10 h-10">
-                <Icon icon="solar:book-bookmark-broken" width={26} />
+              <div className="flex size-10 items-center justify-center rounded-small bg-warning/10 text-warning">
+                <Icon icon="solar:book-2-outline" width={26} />
               </div>
               <div>
                 <p className="text-md font-bold">
-                  {flows.filter((p: any) => p.maintenance_required).length}
+                  {flows.filter((p: any) => p.maintenance).length}
                 </p>
                 <p className="text-sm text-default-500">Flows in Maintenance</p>
               </div>
@@ -62,7 +62,7 @@ export default function FlowsStats({
         </Card>
       </div>
       <Spacer y={2} />
-      <div className="grid lg:grid-cols-3 gap-4">
+      <div className="grid gap-4 lg:grid-cols-3">
         <ChartCard
           color="#006fed"
           interval={interval}

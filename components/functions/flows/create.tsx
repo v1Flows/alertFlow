@@ -2,31 +2,32 @@
 
 import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
-import React from "react";
+import { Icon } from "@iconify/react";
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
-  useDisclosure,
+  ButtonGroup,
+  Divider,
   Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
   Select,
   SelectItem,
-  Divider,
   Snippet,
   Tooltip,
-  ButtonGroup,
+  useDisclosure,
 } from "@nextui-org/react";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { LibraryIcon } from "lucide-react";
-import { Icon } from "@iconify/react";
+import { useRouter } from "next/navigation";
+import React from "react";
+import { toast } from "sonner";
 
-import { CheckIcon } from "@/components/icons";
 import GetProjectRunners from "@/lib/fetch/project/runners";
 import CreateFlow from "@/lib/fetch/flow/POST/CreateFlow";
+import { CheckIcon } from "@/components/icons";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function FunctionCreateFlow({
   projects,
@@ -50,6 +51,9 @@ export default function FunctionCreateFlow({
 
   // loading
   const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
   // limit on runner?
   const [runnerLimit, setRunnerLimit] = React.useState(false);
   // runner select list
@@ -58,7 +62,9 @@ export default function FunctionCreateFlow({
   const projectSelected = async (e: any) => {
     setProjectId(e.currentKey);
     setRunnerId("");
-    setRunners(await GetProjectRunners(e.currentKey));
+    const runners = await GetProjectRunners(e.currentKey);
+
+    setRunners(runners.success ? runners.data.runners : []);
   };
 
   const handleSelectRunner = (e: any) => {
@@ -68,14 +74,23 @@ export default function FunctionCreateFlow({
   async function createFlow() {
     setIsLoading(true);
 
-    const response = await CreateFlow(
+    const response = (await CreateFlow(
       name,
       description,
       projectId,
       runnerLimit ? runnerId : "any",
-    );
+    )) as any;
 
-    if (response.result === "success") {
+    if (!response) {
+      setError(true);
+      setErrorText("Failed to create flow");
+      setErrorMessage("Failed to create flow");
+      setIsLoading(false);
+
+      return;
+    }
+
+    if (response.success) {
       router.refresh();
       onOpenChange();
       setName("");
@@ -83,12 +98,18 @@ export default function FunctionCreateFlow({
       setProjectId("");
       setRunnerId("");
       setRunnerLimit(false);
-      setIsLoading(false);
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       onOpenChangeInstructions();
     } else {
-      setIsLoading(false);
+      setError(true);
+      setErrorText(response.error);
+      setErrorMessage(response.message);
       toast.error("Failed to create flow");
     }
+
+    setIsLoading(false);
   }
 
   function cancel() {
@@ -117,6 +138,9 @@ export default function FunctionCreateFlow({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <div className="flex flex-col gap-4">
                   <Input
                     isRequired
@@ -152,7 +176,7 @@ export default function FunctionCreateFlow({
                     ))}
                   </Select>
                   <div className="flex flex-col gap-2">
-                    <div className="flex flex-cols items-center gap-2">
+                    <div className="flex-cols flex items-center gap-2">
                       <p className="text-sm">Limit Runner</p>
                       <Tooltip content="You can specify a specific runner which should take care of executing your flow.">
                         <Icon

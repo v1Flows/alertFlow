@@ -1,33 +1,42 @@
+"use client";
+
+import { Icon } from "@iconify/react";
 import {
-  Button,
   Card,
   CardBody,
-  CardFooter,
-  Divider,
-  Progress,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  Spacer,
+  useDisclosure,
 } from "@nextui-org/react";
-import { Icon } from "@iconify/react";
+import NumberFlow from "@number-flow/react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import ReactTimeago from "react-timeago";
 
-import { IconWrapper } from "@/lib/IconWrapper";
+import WelcomeModal from "../functions/users/welcome";
 
 import Executions from "./flows/flow/executions";
-import ExecutionChartCard from "./executionChartCard";
-import PayloadChartCard from "./payloadChartCard";
+import Stats from "./stats";
 
 export function DashboardHome({
   stats,
-  plans,
-  user,
   notifications,
   flows,
   runners,
   executions,
   payloads,
+  user,
 }: any) {
-  const plan = plans.find((plan: any) => plan.id === user.plan);
+  const router = useRouter();
+
+  const [welcomeModalWasOpened, setWelcomeModalWasOpened] = useState(false);
+  const welcomeModal = useDisclosure();
 
   function runnerHeartbeatStatus(runner: any) {
-    var timeAgo =
+    const timeAgo =
       (new Date(runner.last_heartbeat).getTime() - Date.now()) / 1000;
 
     if (timeAgo < 0 && timeAgo > -30) {
@@ -37,429 +46,380 @@ export function DashboardHome({
     }
   }
 
+  function heartbeatColor(runner: any) {
+    const timeAgo =
+      (new Date(runner.last_heartbeat).getTime() - Date.now()) / 1000;
+
+    if (timeAgo < 0 && timeAgo > -30) {
+      return "success";
+    } else if (timeAgo <= -30 && timeAgo > -60) {
+      return "warning";
+    } else if (timeAgo <= -60) {
+      return "danger";
+    }
+  }
+
+  useEffect(() => {
+    if (user && !user.welcomed && !welcomeModalWasOpened) {
+      welcomeModal.onOpen();
+      setWelcomeModalWasOpened(true);
+    }
+  });
+
   return (
     <main>
-      <div className="flex items-end justify-between mb-4 mt-2">
-        <div>
-          <p className="text-3xl font-bold mb-0">
-            👋 Welcome Back{" "}
-            <span
-              className={`text-${user.role === "Admin" ? "danger" : user.role === "VIP" ? "warning" : "primary"}`}
-            >
-              {user.username}
-            </span>
-          </p>
+      <p className="text-xl font-bold">
+        Hello,
+        {user.username} 👋
+      </p>
+      <p className="text-default-500">
+        Here&apos;s the current status for today.
+      </p>
+      <Spacer y={4} />
+      <div className="grid grid-cols-1 items-stretch gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="col-span-1">
+          <Card fullWidth>
+            <CardBody>
+              <div className="flex items-center gap-2">
+                <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
+                  <Icon icon="solar:bell-outline" width={20} />
+                </div>
+                <div>
+                  <p className="text-md font-bold">
+                    <NumberFlow
+                      locales="en-US" // Intl.NumberFormat locales
+                      value={
+                        notifications.filter((n: any) => !n.is_read).length
+                      }
+                    />
+                  </p>
+                  <p className="text-sm text-default-500">Notifications</p>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
+
+        <div className="col-span-1">
+          <Dropdown backdrop="opaque" placement="bottom">
+            <DropdownTrigger>
+              <Card fullWidth isHoverable isPressable>
+                <CardBody>
+                  <div className="flex items-center gap-2">
+                    <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
+                      <Icon icon="solar:book-2-outline" width={20} />
+                    </div>
+                    <div>
+                      {flows.filter((f: any) => f.maintenance).length > 0 ? (
+                        <p className="text-md font-bold text-warning">
+                          {flows.filter((f: any) => f.maintenance).length} need
+                          attention
+                        </p>
+                      ) : (
+                        <p className="text-md font-bold text-success">OK</p>
+                      )}
+                      <p className="text-sm text-default-500">Flows</p>
+                    </div>
+                  </div>
+                </CardBody>
+              </Card>
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Flow Problems">
+              {flows
+                .filter((f: any) => f.maintenance)
+                .map((flow: any) => (
+                  <DropdownItem
+                    key={flow.id}
+                    onPress={() => {
+                      router.push(`/dashboard/flows/${flow.id}`);
+                    }}
+                  >
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-center justify-start gap-2">
+                        <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
+                          <Icon
+                            className="text-warning"
+                            icon="solar:danger-triangle-outline"
+                            width={20}
+                          />
+                        </div>
+                        <div className="items-start">
+                          <p className="text-md font-bold">{flow.name}</p>
+                          <p className="text-sm text-default-500">
+                            Message: {flow.maintenance_message}
+                          </p>
+                        </div>
+                      </div>
+                      <Icon icon="akar-icons:arrow-right" />
+                    </div>
+                  </DropdownItem>
+                ))}
+            </DropdownMenu>
+          </Dropdown>
+        </div>
+
+        <div className="col-span-1">
+          <Dropdown backdrop="opaque" placement="bottom">
+            <DropdownTrigger>
+              <Card fullWidth isHoverable isPressable>
+                <CardBody>
+                  <div className="flex items-center gap-2">
+                    <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
+                      <Icon icon="solar:reorder-linear" width={20} />
+                    </div>
+                    <div>
+                      {executions.filter(
+                        (e: any) =>
+                          (e.error || e.interaction_required) &&
+                          new Date(e.created_at).getTime() >
+                            Date.now() - 24 * 60 * 60 * 1000,
+                      ).length > 0 ? (
+                        <div className="flex-cols flex items-center gap-1">
+                          {executions.filter((e: any) => e.interaction_required)
+                            .length > 0 && (
+                            <p className="text-md font-bold text-primary">
+                              {
+                                executions.filter(
+                                  (e: any) =>
+                                    e.interaction_required &&
+                                    new Date(e.created_at).getTime() >
+                                      Date.now() - 24 * 60 * 60 * 1000,
+                                ).length
+                              }{" "}
+                              Interaction Required
+                            </p>
+                          )}
+                          {executions.filter((e: any) => e.error).length > 0 &&
+                            executions.filter(
+                              (e: any) => e.interaction_required,
+                            ).length > 0 && (
+                              <p className="text-md font-bold">&</p>
+                            )}
+                          {executions.filter((e: any) => e.error).length >
+                            0 && (
+                            <p className="text-md font-bold text-danger">
+                              {
+                                executions.filter(
+                                  (e: any) =>
+                                    e.error &&
+                                    new Date(e.created_at).getTime() >
+                                      Date.now() - 24 * 60 * 60 * 1000,
+                                ).length
+                              }{" "}
+                              Failed
+                            </p>
+                          )}
+                        </div>
+                      ) : (
+                        <p className="text-md font-bold text-success">OK</p>
+                      )}
+                      <p className="text-sm text-default-500">
+                        Executions (last 24 hours)
+                      </p>
+                    </div>
+                  </div>
+                </CardBody>
+              </Card>
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Execution Problems">
+              {executions
+                .filter(
+                  (e: any) =>
+                    e.interaction_required &&
+                    new Date(e.created_at).getTime() >
+                      Date.now() - 24 * 60 * 60 * 1000,
+                )
+                .sort((a: any, b: any) =>
+                  new Date(a.created_at) < new Date(b.created_at) ? 1 : -1,
+                )
+                .map((execution: any, index: any) => (
+                  <DropdownItem
+                    key={execution.id}
+                    showDivider={index !== executions.length - 1}
+                    onPress={() => {
+                      router.push(
+                        `/dashboard/flows/${execution.flow_id}/execution/${execution.id}`,
+                      );
+                    }}
+                  >
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-center justify-start gap-2">
+                        <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
+                          <Icon
+                            className="text-primary"
+                            icon="solar:hand-shake-linear"
+                            width={20}
+                          />
+                        </div>
+                        <div>
+                          <p className="text-md font-bold">{execution.id}</p>
+                          <p className="text-sm text-default-500">
+                            Flow:{" "}
+                            {
+                              flows.find((f: any) => f.id === execution.flow_id)
+                                .name
+                            }
+                          </p>
+                          <p className="text-sm text-default-500">
+                            Executed at:{" "}
+                            <ReactTimeago date={execution.executed_at} />
+                          </p>
+                        </div>
+                      </div>
+                      <Icon icon="akar-icons:arrow-right" />
+                    </div>
+                  </DropdownItem>
+                ))}
+              {executions
+                .filter(
+                  (e: any) =>
+                    e.error &&
+                    new Date(e.created_at).getTime() >
+                      Date.now() - 24 * 60 * 60 * 1000,
+                )
+                .sort((a: any, b: any) =>
+                  new Date(a.created_at) < new Date(b.created_at) ? 1 : -1,
+                )
+                .map((execution: any) => (
+                  <DropdownItem
+                    key={execution.id}
+                    onPress={() => {
+                      router.push(
+                        `/dashboard/flows/${execution.flow_id}/execution/${execution.id}`,
+                      );
+                    }}
+                  >
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-center justify-start gap-2">
+                        <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
+                          <Icon
+                            className="text-danger"
+                            icon="solar:danger-triangle-outline"
+                            width={20}
+                          />
+                        </div>
+                        <div>
+                          <p className="text-md font-bold">{execution.id}</p>
+                          <p className="text-sm text-default-500">
+                            Flow:{" "}
+                            {
+                              flows.find((f: any) => f.id === execution.flow_id)
+                                .name
+                            }
+                          </p>
+                          <p className="text-sm text-default-500">
+                            Executed at:{" "}
+                            <ReactTimeago date={execution.executed_at} />
+                          </p>
+                        </div>
+                      </div>
+                      <Icon icon="akar-icons:arrow-right" />
+                    </div>
+                  </DropdownItem>
+                ))}
+            </DropdownMenu>
+          </Dropdown>
+        </div>
+
+        <div className="col-span-1">
+          <Dropdown backdrop="opaque" placement="bottom">
+            <DropdownTrigger>
+              <Card fullWidth isHoverable isPressable>
+                <CardBody>
+                  <div className="flex items-center gap-2">
+                    <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
+                      <Icon icon="solar:rocket-2-outline" width={20} />
+                    </div>
+                    <div>
+                      {runners.filter(
+                        (r: any) =>
+                          !r.alertflow_runner && !runnerHeartbeatStatus(r),
+                      ).length > 0 ? (
+                        <p className="text-md font-bold text-danger">
+                          {
+                            runners.filter(
+                              (r: any) =>
+                                !r.alertflow_runner &&
+                                !runnerHeartbeatStatus(r),
+                            ).length
+                          }{" "}
+                          with issues
+                        </p>
+                      ) : (
+                        <p className="text-md font-bold text-success">OK</p>
+                      )}
+                      <p className="text-sm text-default-500">Runners</p>
+                    </div>
+                  </div>
+                </CardBody>
+              </Card>
+            </DropdownTrigger>
+            <DropdownMenu aria-label="Runner Problems">
+              {runners
+                .filter(
+                  (r: any) => !r.alertflow_runner && !runnerHeartbeatStatus(r),
+                )
+                .map((runner: any) => (
+                  <DropdownItem
+                    key={runner.id}
+                    onPress={() => {
+                      router.push(
+                        `/dashboard/projects/${runner.project_id}?tab=runners`,
+                      );
+                    }}
+                  >
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-center justify-start gap-2">
+                        <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
+                          <Icon
+                            className={`text-${heartbeatColor(runner)}`}
+                            icon="solar:danger-triangle-outline"
+                            width={20}
+                          />
+                        </div>
+                        <div>
+                          <p className="text-md font-bold">{runner.name}</p>
+                          <p className="text-sm text-default-500">
+                            {runner.last_heartbeat ? (
+                              <p>
+                                Last Heartbeat:{" "}
+                                <span
+                                  className={`text- font-bold${heartbeatColor(runner)}`}
+                                >
+                                  <ReactTimeago date={runner.last_heartbeat} />
+                                </span>
+                              </p>
+                            ) : (
+                              "No heartbeat"
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                      <Icon icon="akar-icons:arrow-right" />
+                    </div>
+                  </DropdownItem>
+                ))}
+            </DropdownMenu>
+          </Dropdown>
         </div>
       </div>
-      <Divider className="my-4" />
+
+      <Spacer y={4} />
 
       {/* Stats */}
-      <div className="flex items-end justify-between my-4">
-        <div>
-          <p className="text-2xl font-bold mb-0">
-            Here are your <span className="text-primary">Stats</span>
-          </p>
-        </div>
-      </div>
-      <div className="grid lg:grid-cols-3 grid-cols-1 items-stretch items-center justify-between gap-4">
-        <Card>
-          <CardBody className="flex justify-center">
-            <ul className="flex flex-col gap-2">
-              {/* Notifications */}
-              {notifications.filter((n: any) => !n.is_read).length > 0 ? (
-                <li className="flex items-center gap-2">
-                  <IconWrapper className="bg-warning/10 text-warning">
-                    <Icon icon="solar:bell-bing-broken" width={24} />
-                  </IconWrapper>
-                  <p className="text-md font-bold">
-                    Notifications:{" "}
-                    {notifications.filter((n: any) => !n.is_read).length}{" "}
-                    <span className="text-warning">Missed</span>
-                  </p>
-                </li>
-              ) : (
-                <li className="flex items-center gap-2">
-                  <IconWrapper className="bg-success/10 text-success">
-                    <Icon icon="solar:verified-check-broken" width={24} />
-                  </IconWrapper>
-                  <p className="text-md font-bold">
-                    Notifications: <span className="text-success">OK</span>
-                  </p>
-                </li>
-              )}
-              {/* Flows */}
-              {flows.filter((f: any) => f.maintenance_required).length > 0 ? (
-                <li className="flex items-center gap-2">
-                  <IconWrapper className="bg-warning/10 text-warning">
-                    <Icon icon="solar:info-square-broken" width={24} />
-                  </IconWrapper>
-                  <p className="text-md font-bold">
-                    Flows: <span className="text-warning">need attention</span>
-                  </p>
-                </li>
-              ) : (
-                <li className="flex items-center gap-2">
-                  <IconWrapper className="bg-success/10 text-success">
-                    <Icon icon="solar:verified-check-broken" width={24} />
-                  </IconWrapper>
-                  <p className="text-md font-bold">
-                    Flows: <span className="text-success">OK</span>
-                  </p>
-                </li>
-              )}
-              {/* Executions */}
-              {executions.filter((e: any) => e.error).length > 0 ? (
-                <li className="flex items-center gap-2">
-                  <IconWrapper className="bg-danger/10 text-danger">
-                    <Icon icon="solar:slash-circle-broken" width={24} />
-                  </IconWrapper>
-                  <p className="text-md font-bold">
-                    Executions: {executions.filter((e: any) => e.error).length}{" "}
-                    <span className="text-danger">Failed</span>
-                  </p>
-                </li>
-              ) : (
-                <li className="flex items-center gap-2">
-                  <IconWrapper className="bg-success/10 text-success">
-                    <Icon icon="solar:verified-check-broken" width={24} />
-                  </IconWrapper>
-                  <p className="text-md font-bold">
-                    Executions: <span className="text-success">OK</span>
-                  </p>
-                </li>
-              )}
-              {/* Runners */}
-              {runners.filter(
-                (r: any) => !r.alertflow_runner && !runnerHeartbeatStatus(r),
-              ).length > 0 ? (
-                <li className="flex items-center gap-2">
-                  <IconWrapper className="bg-danger/10 text-danger">
-                    <Icon icon="solar:heart-pulse-broken" width={24} />
-                  </IconWrapper>
-                  <p className="text-md font-bold">
-                    Runners: <span className="text-danger">Unhealthy</span>
-                  </p>
-                </li>
-              ) : (
-                <li className="flex items-center gap-2">
-                  <IconWrapper className="bg-success/10 text-success">
-                    <Icon icon="solar:verified-check-broken" width={24} />
-                  </IconWrapper>
-                  <p className="text-md font-bold">
-                    Runners: <span className="text-success">OK</span>
-                  </p>
-                </li>
-              )}
-            </ul>
-          </CardBody>
-        </Card>
-        <ExecutionChartCard stats={stats} />
-        <PayloadChartCard stats={stats} />
-      </div>
-
-      {/* Quota */}
-      <div className="flex items-end justify-between mb-4 mt-2">
-        <div>
-          <p className="text-2xl font-bold mb-0">
-            Your <span className="text-primary">Quota</span>
-          </p>
-        </div>
-      </div>
-      <div className="grid lg:grid-cols-3 grid-cols-1 items-stretch gap-4">
-        <div className="col-span-1 grid grid-cols-2 items-start gap-4">
-          <Card className="h-full">
-            <CardBody className="flex gap-1 items-center justify-center">
-              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-12 h-12">
-                <Icon
-                  className="text-primary"
-                  icon="solar:box-broken"
-                  width={28}
-                />
-              </div>
-              <p className="text-default-600">Projects</p>
-              {plan.projects !== 999 && user.role !== "VIP" ? (
-                <>
-                  <p className="text-lg font-bold">
-                    {stats.projects} / {plan.projects}
-                  </p>
-                  <Progress
-                    color={
-                      stats.projects >= plan.projects ? "danger" : "primary"
-                    }
-                    maxValue={plan.projects}
-                    value={stats.projects}
-                  />
-                </>
-              ) : (
-                <p
-                  className={`text-lg font-bold text-${user.role === "VIP" ? "warning" : "secondary"}`}
-                >
-                  Unlimited
-                </p>
-              )}
-            </CardBody>
-          </Card>
-          <Card className="h-full">
-            <CardBody className="flex gap-1 items-center justify-center">
-              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-12 h-12">
-                <Icon
-                  className="text-primary"
-                  icon="solar:book-bookmark-broken"
-                  width={28}
-                />
-              </div>
-              <p className="text-default-600">Flows</p>
-              {plan.flows !== 999 && user.role !== "VIP" ? (
-                <>
-                  <p className="text-lg font-bold">
-                    {stats.flows} / {plan.flows}
-                  </p>
-                  <Progress
-                    color={stats.flows >= plan.flows ? "danger" : "primary"}
-                    maxValue={plan.flows}
-                    value={stats.flows}
-                  />
-                </>
-              ) : (
-                <p
-                  className={`text-lg font-bold text-${user.role === "VIP" ? "warning" : "secondary"}`}
-                >
-                  Unlimited
-                </p>
-              )}
-            </CardBody>
-          </Card>
-          <Card className="h-full">
-            <CardBody className="flex gap-1 items-center justify-center">
-              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-12 h-12">
-                <Icon
-                  className="text-primary"
-                  icon="solar:rocket-2-broken"
-                  width={28}
-                />
-              </div>
-              <p className="text-default-600">Self-Hosted Runners</p>
-              {plan.self_hosted_runners !== 999 && user.role !== "VIP" ? (
-                <>
-                  <p className="text-lg font-bold">
-                    {stats.runners ? stats.runners : 0} /{" "}
-                    {plan.self_hosted_runners}
-                  </p>
-                  <Progress
-                    color={
-                      stats.runners >= plan.self_hosted_runners
-                        ? "danger"
-                        : "primary"
-                    }
-                    maxValue={plan.self_hosted_runners}
-                    value={stats.runners}
-                  />
-                </>
-              ) : (
-                <p
-                  className={`text-lg font-bold text-${user.role === "VIP" ? "warning" : "secondary"}`}
-                >
-                  Unlimited
-                </p>
-              )}
-            </CardBody>
-          </Card>
-          <Card className="h-full">
-            <CardBody className="flex gap-1 items-center justify-center">
-              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-10 w-12 h-12">
-                <Icon
-                  className="text-primary"
-                  icon="solar:reorder-line-duotone"
-                  width={28}
-                />
-              </div>
-              <p className="text-default-600">Executions</p>
-              {plan.executions_per_month !== 999 && user.role !== "VIP" ? (
-                <>
-                  <p className="text-lg font-bold">
-                    {stats.total_executions ? stats.total_executions : 0} /{" "}
-                    {plan.executions_per_month}
-                  </p>
-                  <Progress
-                    color={
-                      stats.total_executions >= plan.executions_per_month
-                        ? "danger"
-                        : "primary"
-                    }
-                    maxValue={plan.executions_per_month}
-                    value={stats.total_executions}
-                  />
-                </>
-              ) : (
-                <p
-                  className={`text-lg font-bold text-${user.role === "VIP" ? "warning" : "secondary"}`}
-                >
-                  Unlimited
-                </p>
-              )}
-            </CardBody>
-          </Card>
-        </div>
-        <div className="col-span-2">
-          <Card className="relative w-full">
-            <Button
-              isDisabled
-              className="absolute right-4 top-8 z-10"
-              radius="full"
-              size="sm"
-            >
-              Change Plan
-            </Button>
-            <CardBody className="relative bg-gradient-to-br from-content1 to-default-100/50 p-8 before:inset-0 before:h-full before:w-full before:content-['']">
-              <h1 className="mb-4 text-default-400">Your Plan</h1>
-              {user.role === "Admin" && (
-                <h2 className="inline bg-clip-text text-6xl font-semibold tracking-tight text-danger">
-                  Admin
-                </h2>
-              )}
-              {user.role === "VIP" && (
-                <h2 className="flex gap-1 items-center inline bg-clip-text text-6xl font-semibold tracking-tight text-warning">
-                  <Icon icon="solar:crown-broken" /> VIP
-                </h2>
-              )}
-              {user.role === "User" && (
-                <h2 className="inline bg-gradient-to-br from-foreground-800 to-foreground-500 bg-clip-text text-6xl font-semibold tracking-tight text-transparent dark:to-foreground-200">
-                  {plan.name}
-                </h2>
-              )}
-            </CardBody>
-            <CardFooter>
-              <ul>
-                <li className="flex items-center gap-1">
-                  <Icon
-                    className="text-default-600"
-                    icon="ci:check"
-                    width={24}
-                  />
-                  <p className="text-small text-default-500">
-                    {plan.projects === 999 || user.role === "VIP" ? (
-                      <span
-                        className={`text-${user.role === "VIP" ? "warning" : "secondary"}`}
-                      >
-                        Unlimited
-                      </span>
-                    ) : (
-                      plan.projects
-                    )}{" "}
-                    Project
-                  </p>
-                </li>
-                <li className="flex items-center gap-1">
-                  <Icon
-                    className="text-default-600"
-                    icon="ci:check"
-                    width={24}
-                  />
-                  <p className="text-small text-default-500">
-                    {plan.project_members === 999 || user.role === "VIP" ? (
-                      <span
-                        className={`text-${user.role === "VIP" ? "warning" : "secondary"}`}
-                      >
-                        Unlimited
-                      </span>
-                    ) : (
-                      plan.project_members
-                    )}{" "}
-                    Project Members
-                  </p>
-                </li>
-                <li className="flex items-center gap-1">
-                  <Icon
-                    className="text-default-600"
-                    icon="ci:check"
-                    width={24}
-                  />
-                  <p className="text-small text-default-500">
-                    {plan.flows === 999 || user.role === "VIP" ? (
-                      <span
-                        className={`text-${user.role === "VIP" ? "warning" : "secondary"}`}
-                      >
-                        Unlimited
-                      </span>
-                    ) : (
-                      plan.flows
-                    )}{" "}
-                    Flows
-                  </p>
-                </li>
-                <li className="flex items-center gap-1">
-                  <Icon
-                    className="text-default-600"
-                    icon="ci:check"
-                    width={24}
-                  />
-                  <p className="text-small text-default-500">
-                    {plan.self_hosted_runners === 999 || user.role === "VIP" ? (
-                      <span
-                        className={`text-${user.role === "VIP" ? "warning" : "secondary"}`}
-                      >
-                        Unlimited
-                      </span>
-                    ) : (
-                      plan.self_hosted_runners
-                    )}{" "}
-                    Self-Hosted Runner
-                  </p>
-                </li>
-                <li className="flex items-center gap-1">
-                  <Icon
-                    className="text-default-600"
-                    icon="ci:check"
-                    width={24}
-                  />
-                  <p className="text-small text-default-500">
-                    {plan.alertflow_runners === 16 || user.role === "VIP" ? (
-                      <span
-                        className={`text-${user.role === "VIP" ? "warning" : "secondary"}`}
-                      >
-                        Unlimited
-                      </span>
-                    ) : (
-                      plan.alertflow_runners
-                    )}{" "}
-                    AlertFlow Runner
-                  </p>
-                </li>
-                <li className="flex items-center gap-1">
-                  <Icon
-                    className="text-default-600"
-                    icon="ci:check"
-                    width={24}
-                  />
-                  <p className="text-small text-default-500">
-                    {plan.executions_per_month === 999 ||
-                    user.role === "VIP" ? (
-                      <span
-                        className={`text-${user.role === "VIP" ? "warning" : "secondary"}`}
-                      >
-                        Unlimited
-                      </span>
-                    ) : (
-                      plan.executions_per_month
-                    )}{" "}
-                    Executions per Month
-                  </p>
-                </li>
-              </ul>
-            </CardFooter>
-          </Card>
-        </div>
-      </div>
+      <Stats stats={stats} />
 
       {/* Latest executions */}
-      <div className="flex items-end justify-between my-4">
+      <div className="my-4 flex items-end justify-between">
         <div>
-          <p className="text-2xl font-bold mb-0">
+          <p className="mb-0 text-2xl font-bold">
             Latest <span className="text-primary">Executions</span>
           </p>
         </div>
       </div>
       <Executions displayToFlow executions={executions} payloads={payloads} />
+
+      <WelcomeModal disclosure={welcomeModal} />
     </main>
   );
 }

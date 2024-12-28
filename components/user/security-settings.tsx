@@ -1,20 +1,19 @@
 "use client";
 
-import React from "react";
+import { Icon } from "@iconify/react";
 import {
-  Card,
-  CardHeader,
-  CardBody,
   Button,
+  Card,
+  CardBody,
+  CardHeader,
   useDisclosure,
 } from "@nextui-org/react";
-import { Icon } from "@iconify/react";
+import React from "react";
 
 import ChangeUserPasswordModal from "../functions/users/changePassword";
-import DisableUserModal from "../functions/users/disable";
 import DeleteUserModal from "../functions/users/delete";
+import DisableUserModal from "../functions/users/disable";
 
-import SwitchCell from "./switch-cell";
 import CellWrapper from "./cell-wrapper";
 
 export default function SecuritySettings({ user }: { user: any }) {
@@ -33,7 +32,7 @@ export default function SecuritySettings({ user }: { user: any }) {
         </CardHeader>
         <CardBody className="space-y-2">
           {/* Email */}
-          <CellWrapper>
+          <CellWrapper ref={null}>
             <div>
               <p>Email Address</p>
               <p className="text-small text-default-500">
@@ -56,7 +55,7 @@ export default function SecuritySettings({ user }: { user: any }) {
             </div>
           </CellWrapper>
           {/* Password */}
-          <CellWrapper>
+          <CellWrapper ref={null}>
             <div>
               <p>Password</p>
               <p className="text-small text-default-500">
@@ -66,20 +65,20 @@ export default function SecuritySettings({ user }: { user: any }) {
             <Button
               radius="full"
               variant="bordered"
-              onClick={updatePasswordModal.onOpen}
+              onPress={() => updatePasswordModal.onOpen}
             >
               Change
             </Button>
           </CellWrapper>
           {/* Two-Factor Authentication */}
-          <SwitchCell
+          {/* <SwitchCell
             isDisabled
             defaultSelected={false}
             description="Add an extra layer of security to your account."
             label="Two-Factor Authentication"
-          />
+          /> */}
           {/* Deactivate Account */}
-          <CellWrapper>
+          <CellWrapper ref={null}>
             <div>
               <p>Deactivate Account</p>
               <p className="text-small text-default-500">
@@ -89,13 +88,13 @@ export default function SecuritySettings({ user }: { user: any }) {
             <Button
               radius="full"
               variant="bordered"
-              onClick={disableUserModal.onOpen}
+              onPress={() => disableUserModal.onOpen}
             >
               Deactivate
             </Button>
           </CellWrapper>
           {/* Delete Account */}
-          <CellWrapper>
+          <CellWrapper ref={null}>
             <div>
               <p>Delete Account</p>
               <p className="text-small text-default-500">
@@ -106,7 +105,7 @@ export default function SecuritySettings({ user }: { user: any }) {
               color="danger"
               radius="full"
               variant="flat"
-              onClick={deleteUserModal.onOpen}
+              onPress={() => deleteUserModal.onOpen}
             >
               Delete
             </Button>

@@ -1,35 +1,35 @@
 "use client";
-import React from "react";
+import { Icon } from "@iconify/react";
 import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
+  Avatar,
+  AvatarGroup,
+  Button,
   Chip,
   Divider,
-  AvatarGroup,
-  Avatar,
-  Snippet,
   Dropdown,
-  DropdownTrigger,
-  Button,
-  DropdownMenu,
   DropdownItem,
+  DropdownMenu,
   DropdownSection,
-  useDisclosure,
+  DropdownTrigger,
   Pagination,
+  Snippet,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
   Tooltip,
+  useDisclosure,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { Icon } from "@iconify/react";
+import React from "react";
 
-import { PlusIcon } from "@/components/icons";
 import ChangeProjectStatusModal from "@/components/functions/projects/changeStatus";
-import EditProjectModal from "@/components/functions/projects/edit";
-import DeleteProjectModal from "@/components/functions/projects/delete";
 import CreateProjectModal from "@/components/functions/projects/create";
+import DeleteProjectModal from "@/components/functions/projects/delete";
+import EditProjectModal from "@/components/functions/projects/edit";
+import { PlusIcon } from "@/components/icons";
 
 export function ProjectList({ projects, members }: any) {
   const router = useRouter();
@@ -59,7 +59,7 @@ export function ProjectList({ projects, members }: any) {
       case "name":
         return (
           <div>
-            <p>{project.name}</p>
+            <p className="font-bold">{project.name}</p>
             <p className="text-sm text-default-500">{project.description}</p>
           </div>
         );
@@ -132,7 +132,7 @@ export function ProjectList({ projects, members }: any) {
         return new Date(project.created_at).toLocaleString("de-DE");
       case "actions":
         return (
-          <div className="relative flex justify-center items-center gap-2">
+          <div className="relative flex items-center justify-center gap-2">
             <Dropdown>
               <DropdownTrigger>
                 <Button isIconOnly size="sm" variant="light">
@@ -218,7 +218,7 @@ export function ProjectList({ projects, members }: any) {
                     className="text-danger"
                     color="danger"
                     startContent={
-                      <Icon icon="solar:trash-bin-2-broken" width={20} />
+                      <Icon icon="solar:trash-bin-trash-outline" width={20} />
                     }
                     onPress={() => {
                       setTargetProject(project);
@@ -241,9 +241,9 @@ export function ProjectList({ projects, members }: any) {
     <main>
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-1">
-          <p className="text-2xl font-bold mb-0 text-danger">Admin</p>
-          <p className="text-2xl mb-0">|</p>
-          <p className="text-2xl mb-0">Projects</p>
+          <p className="mb-0 text-2xl font-bold text-danger">Admin</p>
+          <p className="mb-0 text-2xl">|</p>
+          <p className="mb-0 text-2xl">Projects</p>
         </div>
         <Button
           color="primary"
@@ -297,7 +297,7 @@ export function ProjectList({ projects, members }: any) {
               ACTIONS
             </TableColumn>
           </TableHeader>
-          <TableBody emptyContent={"No rows to display."} items={items}>
+          <TableBody emptyContent="No rows to display." items={items}>
             {(item: any) => (
               <TableRow key={item.id}>
                 {(columnKey) => (

@@ -2,33 +2,71 @@
 
 import { cookies } from "next/headers";
 
-export default async function AdminGetRunners() {
-  // TOOD: return two objects: one with alertflow_runners and one with self_hosted_runners
-  "use client";
-  const cookieStore = cookies();
-  const token = cookieStore.get("session")?.value;
+type Runners = {
+  self_hosted_runners: [];
+  alertflow_runners: [];
+};
 
+type ErrorResponse = {
+  success: false;
+  error: string;
+  message: string;
+};
+
+type SuccessResponse = {
+  success: true;
+  data: Runners;
+};
+
+export async function AdminGetRunners(): Promise<
+  SuccessResponse | ErrorResponse
+> {
   try {
-    const headers = new Headers();
+    const cookieStore = await cookies();
+    const token = cookieStore.get("session");
 
-    headers.append("Content-Type", "application/json");
-    if (token) {
-      headers.append("Authorization", token);
+    if (!token) {
+      return {
+        success: false,
+        error: "Authentication token not found",
+        message: "User is not authenticated",
+      };
     }
+
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/admin/runners`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/admin/runners`,
       {
         method: "GET",
-        headers: headers,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token.value,
+        },
       },
     );
+
+    if (!res.ok) {
+      const errorData = await res.json();
+
+      return {
+        success: false,
+        error: `API error: ${res.status} ${res.statusText}`,
+        message: errorData.message || "An error occurred",
+      };
+    }
+
     const data = await res.json();
 
     return {
-      alertflow_runners: data.alertflow_runners,
-      self_hosted_runners: data.self_hosted_runners,
+      success: true,
+      data,
     };
   } catch (error) {
-    return { error: "Failed to fetch data" };
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error occurred",
+      message: "Failed to fetch runners",
+    };
   }
 }
+
+export default AdminGetRunners;

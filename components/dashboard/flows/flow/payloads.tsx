@@ -1,23 +1,34 @@
 "use client";
 
+import { Icon } from "@iconify/react";
 import {
   Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Chip,
   Pagination,
+  Spacer,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+  Tooltip,
   useDisclosure,
 } from "@nextui-org/react";
-import { Icon } from "@iconify/react";
-import TimeAgo from "react-timeago";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useMemo } from "react";
+import TimeAgo from "react-timeago";
+import { toast } from "sonner";
 
 import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
 import FunctionDeletePayloadModal from "@/components/functions/flows/deletePayload";
 
-export default function Payloads({ flow, executions, payloads, runners }: any) {
+export default function Payloads({
+  flow,
+  executions,
+  payloads,
+  runners,
+  canEdit,
+}: any) {
   const router = useRouter();
 
   const showPayloadModal = useDisclosure();
@@ -45,92 +56,156 @@ export default function Payloads({ flow, executions, payloads, runners }: any) {
     deletePayloadModal.onOpen();
   };
 
-  return (
-    <main>
-      {items.length === 0 && (
-        <p className="text-center text-default-500">No payloads found</p>
-      )}
-      <div className="grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-4">
-        {items.map((payload: any) => (
-          <Card key={payload.id} fullWidth>
-            <CardHeader className="flex items-center justify-between">
-              <div>
-                <p className="text-md">{payload.id}</p>
+  function endpointColor(endpoint: string) {
+    switch (endpoint) {
+      case "alertmanager":
+        return "warning";
+      default:
+        return "default";
+    }
+  }
+
+  function endpointIcon(endpoint: string): string {
+    switch (endpoint) {
+      case "alertmanager":
+        return "vscode-icons:file-type-prometheus";
+      default:
+        return "solar:forbidden-circle-outline";
+    }
+  }
+
+  const copyPayloadIDtoClipboard = (id: string) => {
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(id);
+      toast.success("Payload ID copied to clipboard!");
+    } else {
+      toast.error("Failed to copy Payload ID to clipboard");
+    }
+  };
+
+  const renderCell = React.useCallback((payload: any, columnKey: any) => {
+    const cellValue = payload[columnKey];
+
+    switch (columnKey) {
+      case "endpoint":
+        return (
+          <div className="flex items-center gap-2">
+            <div
+              className={`bg- flex${endpointColor(payload.endpoint)}/10 text-${endpointColor(payload.endpoint)} size-8 items-center justify-center rounded-small`}
+            >
+              <Icon icon={endpointIcon(payload.endpoint)} width={20} />
+            </div>
+            <div>
+              <p className="capitalize">{payload.endpoint || "No endpoint"}</p>
+            </div>
+          </div>
+        );
+      case "runner":
+        return (
+          <p>
+            {
+              runners.find((runner: any) => runner.id === payload.runner_id)
+                ?.name
+            }
+          </p>
+        );
+      case "executed":
+        return (
+          <>
+            {executions.find(
+              (execution: any) => execution.payload_id === payload.id,
+            ) ? (
+              <Tooltip
+                content={
+                  <>
+                    <Spacer y={2} />
+                    <Button
+                      color="primary"
+                      startContent={
+                        <Icon icon="solar:map-arrow-square-linear" width={20} />
+                      }
+                      variant="bordered"
+                      onPress={() =>
+                        router.push(
+                          `/dashboard/flows/${flow.id}/execution/${executions.find((execution: any) => execution.payload_id === payload.id).id}`,
+                        )
+                      }
+                    >
+                      View Execution
+                    </Button>
+                    <Spacer y={2} />
+                  </>
+                }
+              >
+                <p className="font-bold text-success">Yes</p>
+              </Tooltip>
+            ) : (
+              <div className="flex flex-col">
+                <p className="font-bold text-danger">No</p>
                 <p className="text-sm text-default-500">
-                  Runner:{" "}
-                  {
-                    runners.find(
-                      (runner: any) => runner.id === payload.runner_id,
-                    )?.name
-                  }
+                  or execution got deleted
                 </p>
               </div>
-              <Chip color="default" radius="sm" variant="light">
-                <TimeAgo date={new Date(payload.created_at)} />
-              </Chip>
-            </CardHeader>
-            <CardBody className="grid gap-2">
-              <div className="flex justify-between items-center gap-4">
-                <div className="flex justify-start items-center gap-4 w-full">
-                  <Button
-                    fullWidth
-                    color="primary"
-                    size="md"
-                    startContent={<Icon icon="solar:eye-broken" width={20} />}
-                    variant="flat"
-                    onPress={() => handleShow(payload)}
-                  >
-                    Show Payload
-                  </Button>
-                  <Button
-                    fullWidth
-                    color="default"
-                    isDisabled={
-                      !executions.find(
-                        (execution: any) => execution.payload_id === payload.id,
-                      )
-                    }
-                    size="md"
-                    startContent={
-                      <Icon icon="solar:reorder-line-duotone" width={20} />
-                    }
-                    variant="solid"
-                    onPress={() => {
-                      router.push(
-                        `/dashboard/flows/${flow.id}/execution/${
-                          executions.find(
-                            (execution: any) =>
-                              execution.payload_id === payload.id,
-                          ).id
-                        }`,
-                      );
-                    }}
-                  >
-                    View Execution
-                  </Button>
+            )}
+          </>
+        );
+      case "received":
+        return (
+          <>
+            <Tooltip
+              content={
+                <div className="px-1 py-2">
+                  <div className="text-small font-bold">Received at</div>
+                  <div className="text-tiny">
+                    {new Date(payload.created_at).toLocaleString()}
+                  </div>
                 </div>
-                <div className="flex justify-end items-center gap-4">
-                  <Button
-                    fullWidth
-                    isIconOnly
-                    color="danger"
-                    size="md"
-                    variant="flat"
-                    onPress={() => handleDelete(payload)}
-                  >
-                    <Icon
-                      height="20"
-                      icon="solar:trash-bin-minimalistic-broken"
-                      width="20"
-                    />
-                  </Button>
-                </div>
-              </div>
-            </CardBody>
-          </Card>
-        ))}
-      </div>
-      <div className="flex justify-center mt-4">
+              }
+            >
+              <p>
+                <TimeAgo date={payload.created_at} title="" />
+              </p>
+            </Tooltip>
+          </>
+        );
+      case "actions":
+        return (
+          <div className="flex items-center justify-end gap-2">
+            <Button
+              color="primary"
+              startContent={<Icon icon="solar:eye-outline" width={20} />}
+              onPress={() => handleShow(payload)}
+            >
+              View
+            </Button>
+            <Tooltip content="Copy Payload ID to clipboard">
+              <Button isIconOnly variant="flat">
+                <Icon
+                  icon="solar:copy-outline"
+                  width={20}
+                  onClick={() => copyPayloadIDtoClipboard(payload.id)}
+                />
+              </Button>
+            </Tooltip>
+            <Button
+              isIconOnly
+              color="danger"
+              isDisabled={!canEdit}
+              variant="flat"
+              onPress={() => handleDelete(payload)}
+            >
+              <Icon icon="solar:trash-bin-trash-outline" width={20} />
+            </Button>
+          </div>
+        );
+      default:
+        return cellValue;
+    }
+  }, []);
+
+  const bottomContent = useMemo(() => {
+    return (
+      <div className="flex justify-center">
         <Pagination
           showControls
           isDisabled={items.length === 0}
@@ -139,6 +214,43 @@ export default function Payloads({ flow, executions, payloads, runners }: any) {
           onChange={(page) => setPage(page)}
         />
       </div>
+    );
+  }, [items]);
+
+  return (
+    <main>
+      <Table
+        isStriped
+        aria-label="Payloads Table"
+        bottomContent={bottomContent}
+      >
+        <TableHeader>
+          <TableColumn key="endpoint" align="start">
+            Endpoint
+          </TableColumn>
+          <TableColumn key="runner" align="center">
+            Runner
+          </TableColumn>
+          <TableColumn key="executed" align="center">
+            Executed
+          </TableColumn>
+          <TableColumn key="received" align="center">
+            Received
+          </TableColumn>
+          <TableColumn key="actions" align="end">
+            Actions
+          </TableColumn>
+        </TableHeader>
+        <TableBody emptyContent="No payloads found" items={items}>
+          {(item: any) => (
+            <TableRow key={item.id}>
+              {(columnKey) => (
+                <TableCell>{renderCell(item, columnKey)}</TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
       <FunctionShowPayloadModal
         disclosure={showPayloadModal}
         payload={targetPayload}

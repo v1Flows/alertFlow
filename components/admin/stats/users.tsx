@@ -26,8 +26,8 @@ export default function UsersStats({
         <Card>
           <CardBody>
             <div className="flex items-center gap-2">
-              <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                <Icon icon="solar:book-bookmark-broken" width={26} />
+              <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
+                <Icon icon="solar:book-2-outline" width={26} />
               </div>
               <div>
                 <p className="text-md font-bold">{users.length}</p>
@@ -39,8 +39,8 @@ export default function UsersStats({
         <Card>
           <CardBody>
             <div className="flex items-center gap-2">
-              <div className="flex bg-danger/10 text-danger items-center rounded-small justify-center w-10 h-10">
-                <Icon icon="solar:book-bookmark-broken" width={26} />
+              <div className="flex size-10 items-center justify-center rounded-small bg-danger/10 text-danger">
+                <Icon icon="solar:book-2-outline" width={26} />
               </div>
               <div>
                 <p className="text-md font-bold">
@@ -53,7 +53,7 @@ export default function UsersStats({
         </Card>
       </div>
       <Spacer y={2} />
-      <div className="grid lg:grid-cols-3 gap-4">
+      <div className="grid gap-4 lg:grid-cols-3">
         <ChartCard
           color="#006fed"
           interval={interval}
@@ -64,7 +64,7 @@ export default function UsersStats({
           <CardBody>
             <p className="font-bold">Amount of Users per Plan</p>
             <Spacer y={1} />
-            <div className="grid lg:grid-cols-2 gap-2">
+            <div className="grid gap-2 lg:grid-cols-2">
               {stats.users_per_plan_stats.length === 0 && (
                 <div className="space-y-3">
                   <Skeleton className="w-3/5 rounded-lg">
@@ -85,10 +85,10 @@ export default function UsersStats({
                 <div key={p.plan}>
                   <div className="flex items-center gap-2">
                     <CircularProgress
+                      showValueLabel
                       aria-label="Loading..."
                       color="primary"
                       maxValue={users.length}
-                      showValueLabel={true}
                       size="lg"
                       value={p.count}
                     />
@@ -124,16 +124,16 @@ export default function UsersStats({
                 <div key={p.role}>
                   <div className="flex items-center gap-2">
                     <CircularProgress
+                      showValueLabel
                       aria-label="Loading..."
                       color={
-                        p.role === "Admin"
+                        p.role === "admin"
                           ? "danger"
-                          : p.role === "VIP"
+                          : p.role === "vip"
                             ? "warning"
                             : "primary"
                       }
                       maxValue={users.length}
-                      showValueLabel={true}
                       size="lg"
                       value={p.count}
                     />

@@ -4,7 +4,8 @@ import { NextResponse } from "next/server";
 
 export async function updateSession() {
   "use client";
-  const session = cookies().get("session")?.value;
+  const cookieStore = await cookies();
+  const session = cookieStore.get("session")?.value;
 
   try {
     const headers = new Headers();
@@ -15,10 +16,10 @@ export async function updateSession() {
     }
 
     const response = await fetch(
-      process.env.NEXT_PUBLIC_API_URL + "/token/refresh",
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/token/refresh`,
       {
         method: "POST",
-        headers: headers,
+        headers,
       },
     );
     const data = await response.json();
@@ -39,7 +40,7 @@ export async function updateSession() {
     });
 
     return true;
-  } catch (error) {
+  } catch {
     return false;
   }
 }

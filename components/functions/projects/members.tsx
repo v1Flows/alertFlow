@@ -3,31 +3,32 @@
 import type { Selection } from "@nextui-org/react";
 import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
-import React from "react";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  Button,
-  Input,
-  CardFooter,
-  Spacer,
-  Divider,
-  AvatarGroup,
-  Avatar,
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-  Modal,
-  ModalContent,
-  ModalBody,
-} from "@nextui-org/react";
 import { Icon } from "@iconify/react";
-import { toast } from "sonner";
+import {
+  Avatar,
+  AvatarGroup,
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Divider,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  Spacer,
+} from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import React from "react";
+import { toast } from "sonner";
 
 import AddProjectMember from "@/lib/fetch/project/POST/AddProjectMember";
+import ErrorCard from "@/components/error/ErrorCard";
 
 import UserCell from "./user-cell";
 
@@ -49,6 +50,10 @@ export default function AddProjectMemberModal({
   );
   const [isLoading, setIsLoading] = React.useState(false);
 
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
+
   const statusColorMap: any = {
     Owner: "danger",
     Editor: "primary",
@@ -66,16 +71,17 @@ export default function AddProjectMemberModal({
     () => (
       <div className="mt-2 flex flex-col gap-2">
         {members.map((member: any) => (
-          <>
+          <div key={member.user_id}>
             <UserCell
               key={member.user_id}
+              ref={null}
               avatar={member.username}
               color={statusColorMap[member.role]}
               name={member.username}
               permission={permissionLabels[member.role]}
             />
-            <Divider />
-          </>
+            <Divider className="m-1" />
+          </div>
         ))}
       </div>
     ),
@@ -87,17 +93,38 @@ export default function AddProjectMemberModal({
 
     setIsLoading(true);
 
-    const res = await AddProjectMember(project.id, email, role.toString());
+    const res = (await AddProjectMember(
+      project.id,
+      email,
+      role.toString(),
+    )) as any;
 
-    if (res.error) {
+    if (!res) {
       setIsLoading(false);
-      toast.error(res.error);
-    } else {
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
+      onOpenChange();
+      toast.success("Member invited successfully");
+
+      return;
+    }
+
+    if (res.success) {
       setIsLoading(false);
       setEmail("");
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       onOpenChange();
       router.refresh();
       toast.success("Member invited successfully");
+    } else {
+      setIsLoading(false);
+      setError(true);
+      setErrorText(res.error);
+      setErrorMessage(res.message);
+      toast.error(res.error);
     }
   }
 
@@ -131,6 +158,9 @@ export default function AddProjectMemberModal({
                 </div>
               </CardHeader>
               <CardBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <div className="flex items-center gap-2">
                   <Input
                     description="User must have an account"
@@ -157,8 +187,20 @@ export default function AddProjectMemberModal({
                           selectionMode="single"
                           onSelectionChange={setSelectedKeys}
                         >
-                          <DropdownItem key="Viewer">Can View</DropdownItem>
-                          <DropdownItem key="Editor">Can Edit</DropdownItem>
+                          <DropdownItem
+                            key="Viewer"
+                            startContent={<Icon icon="solar:eye-linear" />}
+                          >
+                            Can View
+                          </DropdownItem>
+                          <DropdownItem
+                            key="Editor"
+                            startContent={
+                              <Icon icon="solar:pen-new-square-linear" />
+                            }
+                          >
+                            Can Edit
+                          </DropdownItem>
                         </DropdownMenu>
                       </Dropdown>
                     }

@@ -1,23 +1,23 @@
-/* eslint-disable no-undef */
-import React from "react";
+import { Icon } from "@iconify/react";
 import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
-  Tooltip,
-  Chip,
   Button,
-  useDisclosure,
+  Chip,
   Pagination,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+  Tooltip,
+  useDisclosure,
 } from "@nextui-org/react";
+import React from "react";
 import { toast } from "sonner";
 
-import { CopyDocumentIcon, DeleteIcon, PlusIcon } from "@/components/icons";
-import CreateTokenModal from "@/components/functions/tokens/create";
+import { PlusIcon } from "@/components/icons";
 import DeleteTokenModal from "@/components/functions/tokens/delete";
+import CreateTokenModal from "@/components/functions/tokens/create";
 
 export default function ProjectTokens({
   tokens,
@@ -47,6 +47,25 @@ export default function ProjectTokens({
     toast.success("Copied to clipboard!");
   };
 
+  function checkAddTokenDisabled() {
+    if (!settings.create_api_keys) {
+      return true;
+    } else if (project.disabled) {
+      return true;
+    } else if (user.role === "vip") {
+      return false;
+    } else if (user.role === "admin") {
+      return false;
+    } else if (
+      members.find((m: any) => m.user_id === user.id) &&
+      members.filter((m: any) => m.user_id === user.id)[0].role === "Viewer"
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
   const renderCell = React.useCallback((key: any, columnKey: any) => {
     const cellValue = key[columnKey];
 
@@ -55,8 +74,10 @@ export default function ProjectTokens({
         return (
           <div className="relative flex items-center justify-center gap-2">
             <Tooltip content="Copy Token">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                <CopyDocumentIcon
+              <span className="cursor-pointer text-lg text-default-400 active:opacity-50">
+                <Icon
+                  icon="solar:copy-outline"
+                  width={20}
                   onClick={() => {
                     copyTokentoClipboard(key.key);
                   }}
@@ -64,8 +85,10 @@ export default function ProjectTokens({
               </span>
             </Tooltip>
             <Tooltip color="danger" content="Delete Token">
-              <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                <DeleteIcon
+              <span className="cursor-pointer text-lg text-danger active:opacity-50">
+                <Icon
+                  icon="solar:trash-bin-trash-outline"
+                  width={20}
                   onClick={() => {
                     if (
                       members.find((m: any) => m.user_id === user.id) &&
@@ -112,13 +135,7 @@ export default function ProjectTokens({
       <div className="flex flex-col items-end justify-center gap-4">
         <Button
           color="primary"
-          isDisabled={
-            !settings.create_api_keys ||
-            project.disabled ||
-            (members.find((m: any) => m.user_id === user.id) &&
-              members.filter((m: any) => m.user_id === user.id)[0].role ===
-                "Viewer")
-          }
+          isDisabled={checkAddTokenDisabled()}
           startContent={<PlusIcon height={undefined} width={undefined} />}
           onPress={() => addTokenModal.onOpen()}
         >
@@ -170,7 +187,7 @@ export default function ProjectTokens({
             ACTIONS
           </TableColumn>
         </TableHeader>
-        <TableBody emptyContent={"No rows to display."} items={items}>
+        <TableBody emptyContent="No rows to display." items={items}>
           {(item: any) => (
             <TableRow key={item.id}>
               {(columnKey) => (

@@ -10,9 +10,9 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@nextui-org/react";
-import React from "react";
 import { LibraryIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import React from "react";
 
 import { CheckIcon } from "@/components/icons";
 
@@ -36,7 +36,7 @@ export default function SuccessSignUpModal({
         <ModalContent className="w-full">
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1 text-success items-center">
+              <ModalHeader className="flex flex-col items-center gap-1 text-success">
                 🎉 Your Account got created
               </ModalHeader>
               <ModalBody>

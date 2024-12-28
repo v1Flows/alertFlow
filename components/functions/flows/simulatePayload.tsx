@@ -1,20 +1,21 @@
 import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
-import React from "react";
-import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-  Textarea,
-  Input,
-} from "@nextui-org/react";
 import { Icon } from "@iconify/react";
+import {
+  Button,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Textarea,
+} from "@nextui-org/react";
+import React from "react";
 import { toast } from "sonner";
 
-import SimulatePayload from "@/lib/fetch/payload/send";
+import SimulatePayload from "@/lib/fetch/payload/POST/send";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function SimulatePayloadModal({
   disclosure,
@@ -26,6 +27,9 @@ export default function SimulatePayloadModal({
   const { isOpen, onOpenChange } = disclosure;
 
   const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
   const [target, setTarget] = React.useState(
     "https://alertflow.org/payloads/alertmanager",
   );
@@ -69,12 +73,28 @@ export default function SimulatePayloadModal({
 
   async function sendPayload() {
     setIsLoading(true);
-    const res = await SimulatePayload(target, payload);
+    const send = (await SimulatePayload(target, payload)) as any;
 
-    if (res && !res.error) {
-      toast.error(res.error);
+    if (!send) {
+      setError(true);
+      setErrorText("Failed to send payload!");
+      setErrorMessage("Please try again later.");
+      setIsLoading(false);
+      toast.error("Failed to send payload!");
+
+      return;
+    }
+
+    if (!send.success) {
+      setError(true);
+      setErrorText(send.error);
+      setErrorMessage(send.message);
+      toast.error("Failed to send payload!");
     } else {
       onOpenChange();
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       toast.success("Payload sent successfully!");
     }
 
@@ -103,6 +123,9 @@ export default function SimulatePayloadModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <Input
                   description="The target URL where the payload will be sent to."
                   label="Target"

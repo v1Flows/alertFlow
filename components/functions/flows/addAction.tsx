@@ -1,27 +1,30 @@
 import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
+import { Icon } from "@iconify/react";
 import {
   Button,
   Card,
   CardBody,
+  Chip,
   Input,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
+  Pagination,
   Radio,
   Spacer,
   Textarea,
 } from "@nextui-org/react";
-import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
-import { Icon } from "@iconify/react";
 
-import { cn } from "@/components/functions/cn/cn";
 import AddFlowActions from "@/lib/fetch/flow/POST/AddFlowActions";
+import { cn } from "@/components/functions/cn/cn";
+import ErrorCard from "@/components/error/ErrorCard";
 
 import MinimalRowSteps from "../steps/minimal-row-steps";
 
@@ -48,10 +51,12 @@ export default function AddActionModal({
   disclosure,
   runners,
   flow,
+  user,
 }: {
   disclosure: UseDisclosureReturn;
   runners: any;
   flow: any;
+  user: any;
 }) {
   const router = useRouter();
 
@@ -60,10 +65,36 @@ export default function AddActionModal({
   const [steps] = useState(2);
   const [currentStep, setCurrentStep] = useState(0);
   const [isLoading, setLoading] = useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   const [disableNext, setDisableNext] = useState(false);
 
+  const [availableActions, setAvailableActions] = useState([] as any);
+  const [availableCategories, setAvailableCategories] = useState([
+    "All",
+  ] as any);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+
+  // pagination
+  const [actionPage, setActionPage] = useState(1);
+  const rowsPerPage = 6;
+  const actionItems = React.useMemo(() => {
+    const start = (actionPage - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    if (selectedCategory !== "All") {
+      return availableActions
+        .filter((action: any) => action.category === selectedCategory)
+        .slice(start, end);
+    }
+
+    return availableActions.slice(start, end);
+  }, [actionPage, availableActions, selectedCategory, runners]);
+
   // inputs
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [status, setStatus] = useState(true);
   const [action, setAction] = useState({
     id: uuidv4(),
@@ -71,23 +102,41 @@ export default function AddActionModal({
     description: "",
     icon: "",
     type: "",
+    category: "",
     active: true,
     params: [],
+    custom_name: "",
+    custom_description: "",
   });
   const [params, setParams] = useState([] as any);
 
+  function actionPages() {
+    let length = 0;
+
+    if (selectedCategory !== "All") {
+      length =
+        availableActions.filter(
+          (action: any) => action.category === selectedCategory,
+        ).length / rowsPerPage;
+    } else {
+      length = availableActions.length / rowsPerPage;
+    }
+
+    return Math.ceil(length);
+  }
+
   function countTotalAvailableActions() {
-    var actions = 0;
+    let actions = 0;
 
     for (let i = 0; i < runners.length; i++) {
-      var timeAgo =
+      const timeAgo =
         (new Date(runners[i].last_heartbeat).getTime() - Date.now()) / 1000;
 
       if (runners[i].disabled || !runners[i].registered || timeAgo <= -30) {
         continue;
       }
 
-      if (runners[i].available_actions.length > 0) {
+      if (runners[i].actions.length > 0) {
         actions++;
       }
     }
@@ -102,27 +151,47 @@ export default function AddActionModal({
   }
 
   function getUniqueActions() {
-    var actions = [] as any;
-
     for (let i = 0; i < runners.length; i++) {
-      for (let j = 0; j < runners[i].available_actions.length; j++) {
-        const action = runners[i].available_actions[j];
+      for (let j = 0; j < runners[i].actions.length; j++) {
+        const action = runners[i].actions[j];
 
-        if (actions.find((x: any) => x.type === action.type)) {
+        if (action.is_hidden && user.role !== "admin") {
           continue;
-        } else {
-          actions.push(action);
         }
+
+        setAvailableActions((prev: any) => {
+          const actionSet = new Set(prev.map((a: any) => a.type));
+
+          if (!actionSet.has(action.type)) {
+            return [...prev, action];
+          }
+
+          return prev;
+        });
       }
     }
+  }
 
-    return actions;
+  function getUniqueActionCategorys() {
+    for (let i = 0; i < runners.length; i++) {
+      for (let j = 0; j < runners[i].actions.length; j++) {
+        const action = runners[i].actions[j];
+
+        setAvailableCategories((prev: any) => {
+          const categorySet = new Set(prev);
+
+          if (!categorySet.has(action.category)) {
+            return [...prev, action.category];
+          }
+
+          return prev;
+        });
+      }
+    }
   }
 
   function handleActionSelect(action: any) {
-    const selectedAction = getUniqueActions().find(
-      (x: any) => x.type === action,
-    );
+    const selectedAction = availableActions.find((x: any) => x.type === action);
 
     setAction(selectedAction);
 
@@ -148,8 +217,11 @@ export default function AddActionModal({
       description: "",
       icon: "",
       type: "",
+      category: "",
       active: true,
       params: [],
+      custom_name: "",
+      custom_description: "",
     });
     setCurrentStep(0);
     onOpenChange();
@@ -165,37 +237,66 @@ export default function AddActionModal({
       icon: action.icon,
       type: action.type,
       active: true,
-      params: params,
+      params,
+      custom_name: action.custom_name,
+      custom_description: action.custom_description,
     };
 
     const updatedActions = [...flow.actions, sendAction];
 
-    const res = await AddFlowActions(flow.id, flow.project_id, updatedActions);
+    const res = (await AddFlowActions(
+      flow.id,
+      flow.project_id,
+      updatedActions,
+    )) as any;
 
-    if (!res.error) {
+    if (!res) {
+      setError(true);
+      setErrorText("Failed to add action");
+      setErrorMessage("An error occurred while adding action");
       setLoading(false);
+
+      return;
+    }
+
+    if (res.success) {
       setStatus(true);
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       setAction({
         id: uuidv4(),
         name: "",
         description: "",
         icon: "",
         type: "",
+        category: "",
         active: true,
         params: [],
+        custom_name: "",
+        custom_description: "",
       });
       setCurrentStep(0);
       onOpenChange();
       router.refresh();
       toast.success("Action added successfully");
     } else {
-      setLoading(false);
-      router.refresh();
-      toast.error(res.error);
+      setError(true);
+      setErrorText(res.error);
+      setErrorMessage(res.message);
+      toast.error("Failed to add action");
     }
 
     setLoading(false);
   }
+
+  useEffect(() => {
+    if (runners.length > 0) {
+      getUniqueActions();
+      getUniqueActionCategorys();
+    }
+  }),
+    [runners];
 
   return (
     <main>
@@ -203,7 +304,7 @@ export default function AddActionModal({
         isDismissable={false}
         isOpen={isOpen}
         placement="center"
-        size="3xl"
+        size="5xl"
         onOpenChange={onOpenChange}
       >
         <ModalContent>
@@ -219,8 +320,12 @@ export default function AddActionModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <div className="flex items-center justify-center">
                   <MinimalRowSteps
+                    ref={null}
                     className="w-fit overflow-hidden"
                     currentStep={currentStep}
                     label={`Step ${currentStep + 1} of ${steps}`}
@@ -228,15 +333,15 @@ export default function AddActionModal({
                     onStepChange={setCurrentStep}
                   />
                 </div>
-                <div className="w-full flex flex-cols gap-4">
-                  <div className="w-full col-span-1">
+                <div className="flex-cols flex w-full gap-4">
+                  <div className="col-span-1 w-full">
                     {currentStep === 0 && (
                       <div>
                         {countTotalAvailableActions() === 0 ? (
                           <div>
                             <Card className="border border-danger">
                               <CardBody>
-                                <p className="text-danger font-bold">
+                                <p className="font-bold text-danger">
                                   😕 Seems like there are no Actions available.
                                 </p>
                                 <p className="text-default-500">
@@ -249,37 +354,115 @@ export default function AddActionModal({
                           </div>
                         ) : (
                           <>
-                            <p className="text-lg text-default-500 font-bold">
+                            <p className="text-lg font-bold text-default-500">
                               Available Actions
                             </p>
                             <Spacer y={2} />
-                            <div className="grid grid-cols-2 gap-4">
-                              {getUniqueActions().map((act: any) => (
-                                <Card
-                                  key={act.type}
-                                  isHoverable
-                                  isPressable
-                                  className={`border-2 border-default-200 ${act.type === action.type ? "border-primary" : ""}`}
+                            <p className="text-sm text-default-500">
+                              Categories
+                            </p>
+                            <Spacer y={1} />
+                            <div className="flex gap-2">
+                              {availableCategories.map((category: any) => (
+                                <Chip
+                                  key={category}
+                                  color={
+                                    selectedCategory === category
+                                      ? "primary"
+                                      : "default"
+                                  }
                                   radius="sm"
-                                  onPress={() => handleActionSelect(act.type)}
+                                  size="lg"
+                                  variant={
+                                    selectedCategory === category
+                                      ? "solid"
+                                      : "flat"
+                                  }
+                                  onClick={() => {
+                                    setSelectedCategory(category);
+                                    setActionPage(1);
+                                  }}
                                 >
-                                  <CardBody>
-                                    <div className="flex items-center gap-2">
-                                      <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                                        <Icon icon={act.icon} width={26} />
-                                      </div>
-                                      <div className="flex flex-col gap-2">
-                                        <p className="text-lg font-bold">
-                                          {act.name}
-                                        </p>
-                                        <p className="text-sm text-default-500">
-                                          {act.description}
-                                        </p>
-                                      </div>
-                                    </div>
-                                  </CardBody>
-                                </Card>
+                                  {category}
+                                </Chip>
                               ))}
+                            </div>
+                            <Spacer y={4} />
+                            <div className="grid grid-cols-2 items-stretch gap-4">
+                              {actionItems.map((act: any) =>
+                                act.is_hidden ? (
+                                  <Card
+                                    key={act.type}
+                                    isHoverable
+                                    isPressable
+                                    className={`border-2 ${act.type === action.type ? "border-danger" : "border-danger-200"}`}
+                                    radius="sm"
+                                    onPress={() => handleActionSelect(act.type)}
+                                  >
+                                    <CardBody>
+                                      <div className="flex items-center gap-2">
+                                        <div className="flex size-10 items-center justify-center rounded-small bg-danger/10 text-danger">
+                                          <Icon icon={act.icon} width={26} />
+                                        </div>
+                                        <div className="flex flex-col gap-1">
+                                          <p className="text-lg font-bold">
+                                            {act.name}
+                                          </p>
+                                          <p className="text-sm text-default-500">
+                                            {act.description}
+                                          </p>
+                                        </div>
+                                      </div>
+                                      <Spacer y={2} />
+                                      <Chip
+                                        color="danger"
+                                        radius="sm"
+                                        size="sm"
+                                        variant="flat"
+                                      >
+                                        Admin Only
+                                      </Chip>
+                                    </CardBody>
+                                  </Card>
+                                ) : (
+                                  <Card
+                                    key={act.type}
+                                    isHoverable
+                                    isPressable
+                                    className={`border-2 border-default-200 ${act.type === action.type ? "border-primary" : ""}`}
+                                    radius="sm"
+                                    onPress={() => handleActionSelect(act.type)}
+                                  >
+                                    <CardBody>
+                                      <div className="flex items-center gap-2">
+                                        <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
+                                          <Icon icon={act.icon} width={26} />
+                                        </div>
+                                        <div className="flex flex-col gap-1">
+                                          <p className="text-lg font-bold">
+                                            {act.name}
+                                          </p>
+                                          <p className="text-sm text-default-500">
+                                            {act.description}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </CardBody>
+                                  </Card>
+                                ),
+                              )}
+                            </div>
+                            <Spacer y={4} />
+                            <div className="flex items-center justify-center">
+                              <Pagination
+                                showControls
+                                initialPage={1}
+                                page={actionPage}
+                                total={actionPages()}
+                                onChange={(actionPage) =>
+                                  setActionPage(actionPage)
+                                }
+                              />
                             </div>
                           </>
                         )}
@@ -287,11 +470,36 @@ export default function AddActionModal({
                     )}
                     {currentStep === 1 && (
                       <div>
-                        <p className="text-lg text-default-500 font-bold">
-                          Required Parameters
+                        <p className="text-lg font-bold text-default-500">
+                          Details
                         </p>
                         <Spacer y={2} />
-                        {action.params.length > 0 || action?.params ? (
+                        <div className="grid grid-cols-2 gap-2">
+                          <Input
+                            description="Custom name for this action (optional)"
+                            label="Custom Name"
+                            type="text"
+                            value={action.custom_name}
+                            onValueChange={(e) =>
+                              setAction({ ...action, custom_name: e })
+                            }
+                          />
+                          <Input
+                            description="Custom description for this action (optional)"
+                            label="Custom Description"
+                            type="text"
+                            value={action.custom_description}
+                            onValueChange={(e) =>
+                              setAction({ ...action, custom_description: e })
+                            }
+                          />
+                        </div>
+                        <p className="text-lg font-bold text-default-500">
+                          Parameters
+                        </p>
+                        <Spacer y={2} />
+                        {(action.params && action.params.length > 0) ||
+                        action?.params ? (
                           <div className="grid grid-cols-2 gap-2">
                             {action.params.map((param: any) => {
                               return param.type === "text" ||

@@ -1,14 +1,14 @@
 "use client";
 
-import React from "react";
 import { Card, CardBody, CardHeader, Skeleton } from "@nextui-org/react";
+import React from "react";
 import {
-  LineChart,
   Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  Tooltip,
-  ResponsiveContainer,
 } from "recharts";
 
 export default function ChartCard({
@@ -31,7 +31,7 @@ export default function ChartCard({
       {stats.length > 0 ? (
         <Card>
           <CardHeader className="flex flex-col items-start px-4 pt-4">
-            <p className="text-sm uppercase font-bold">{name}</p>
+            <p className="text-sm font-bold uppercase">{name}</p>
             <small className="text-default-500">
               Overview of the {name} within the last {interval} days
             </small>
@@ -49,7 +49,7 @@ export default function ChartCard({
               )}
             </div>
           </CardHeader>
-          <CardBody className="py-2 overflow-hidden">
+          <CardBody className="overflow-hidden py-2">
             <ResponsiveContainer height={70} width="100%">
               <LineChart data={stats}>
                 <XAxis hide dataKey="date" />

@@ -1,13 +1,30 @@
 import { TokensList } from "@/components/admin/tokens/list";
-import AdminGetTokens from "@/lib/fetch/admin/tokens";
+import ErrorCard from "@/components/error/ErrorCard";
 import AdminGetProjects from "@/lib/fetch/admin/projects";
+import AdminGetTokens from "@/lib/fetch/admin/tokens";
+
 export default async function AdminTokensPage() {
-  const tokens = await AdminGetTokens();
-  const projects = await AdminGetProjects();
+  const tokensData = AdminGetTokens();
+  const projectsData = AdminGetProjects();
+
+  const [tokens, projects] = (await Promise.all([
+    tokensData,
+    projectsData,
+  ])) as any;
 
   return (
     <>
-      <TokensList projects={projects.projects} tokens={tokens} />
+      {tokens.success && projects.success ? (
+        <TokensList
+          projects={projects.data.projects}
+          tokens={tokens.data.tokens}
+        />
+      ) : (
+        <ErrorCard
+          error={tokens.error || projects.error}
+          message={tokens.message || projects.message}
+        />
+      )}
     </>
   );
 }

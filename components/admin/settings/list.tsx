@@ -1,4 +1,5 @@
 "use client";
+import { Icon } from "@iconify/react";
 import {
   Button,
   Card,
@@ -7,10 +8,9 @@ import {
   Switch,
   Tooltip,
 } from "@nextui-org/react";
-import React from "react";
 import { useRouter } from "next/navigation";
+import React from "react";
 import { toast } from "sonner";
-import { Icon } from "@iconify/react";
 
 import UpdateSettings from "@/lib/fetch/admin/PUT/UpdateSettings";
 
@@ -46,7 +46,7 @@ export function Settings({ settings }: any) {
 
   async function updateSettings() {
     setIsLoading(true);
-    const response = await UpdateSettings(
+    const response = (await UpdateSettings(
       maintenance,
       signup,
       createProjects,
@@ -57,9 +57,9 @@ export function Settings({ settings }: any) {
       addFlowActions,
       startExecutions,
       injectPayloads,
-    );
+    )) as any;
 
-    if (!response.error) {
+    if (response.success) {
       setIsLoading(false);
       toast.success("Settings updated successfully");
       router.refresh();
@@ -74,13 +74,13 @@ export function Settings({ settings }: any) {
     <main>
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-1">
-          <p className="text-2xl font-bold mb-0 text-danger">Admin</p>
-          <p className="text-2xl mb-0">|</p>
-          <p className="text-2xl mb-0">Settings</p>
+          <p className="mb-0 text-2xl font-bold text-danger">Admin</p>
+          <p className="mb-0 text-2xl">|</p>
+          <p className="mb-0 text-2xl">Settings</p>
         </div>
       </div>
       <Divider className="my-4" />
-      <div className="grid md:grid-cols-2 gap-4 items-center justify-between">
+      <div className="grid items-center justify-between gap-4 md:grid-cols-2">
         <Card
           className={`${maintenance ? "border-danger-200" : "border-default-200"} border-2`}
         >
@@ -88,7 +88,7 @@ export function Settings({ settings }: any) {
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <div
-                  className={`flex ${maintenance ? "bg-danger/10 text-danger" : "bg-primary/10 text-primary"} items-center rounded-small justify-center w-10 h-10`}
+                  className={`flex ${maintenance ? "bg-danger/10 text-danger" : "bg-primary/10 text-primary"} size-10 items-center justify-center rounded-small`}
                 >
                   <Icon icon="solar:paint-roller-broken" width={20} />
                 </div>
@@ -133,7 +133,7 @@ export function Settings({ settings }: any) {
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <div
-                  className={`flex ${signup ? "bg-primary/10 text-primary" : "bg-danger/10 text-danger"} items-center rounded-small justify-center w-10 h-10`}
+                  className={`flex ${signup ? "bg-primary/10 text-primary" : "bg-danger/10 text-danger"} size-10 items-center justify-center rounded-small`}
                 >
                   <Icon icon="solar:user-plus-broken" width={20} />
                 </div>
@@ -142,11 +142,7 @@ export function Settings({ settings }: any) {
                     <p className="text-md font-bold">
                       {signup ? "Enabled" : "Disabled"}
                     </p>
-                    <Tooltip
-                      content={
-                        "Disabling this option will prevent users from signing up."
-                      }
-                    >
+                    <Tooltip content="Disabling this option will prevent users from signing up.">
                       <Icon
                         className="text-default-500"
                         icon="solar:info-circle-bold"
@@ -174,7 +170,7 @@ export function Settings({ settings }: any) {
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <div
-                  className={`flex ${createProjects ? "bg-primary/10 text-primary" : "bg-danger/10 text-danger"} items-center rounded-small justify-center w-10 h-10`}
+                  className={`flex ${createProjects ? "bg-primary/10 text-primary" : "bg-danger/10 text-danger"} size-10 items-center justify-center rounded-small`}
                 >
                   <Icon icon="solar:box-broken" width={20} />
                 </div>
@@ -183,11 +179,7 @@ export function Settings({ settings }: any) {
                     <p className="text-md font-bold">
                       {createProjects ? "Enabled" : "Disabled"}
                     </p>
-                    <Tooltip
-                      content={
-                        "Disabling this option will prevent users from creating new projects"
-                      }
-                    >
+                    <Tooltip content="Disabling this option will prevent users from creating new projects">
                       <Icon
                         className="text-default-500"
                         icon="solar:info-circle-bold"
@@ -215,20 +207,16 @@ export function Settings({ settings }: any) {
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <div
-                  className={`flex ${createFlows ? "bg-primary/10 text-primary" : "bg-danger/10 text-danger"} items-center rounded-small justify-center w-10 h-10`}
+                  className={`flex ${createFlows ? "bg-primary/10 text-primary" : "bg-danger/10 text-danger"} size-10 items-center justify-center rounded-small`}
                 >
-                  <Icon icon="solar:book-bookmark-broken" width={20} />
+                  <Icon icon="solar:book-2-outline" width={20} />
                 </div>
                 <div>
                   <div className="flex items-center gap-1">
                     <p className="text-md font-bold">
                       {createFlows ? "Enabled" : "Disabled"}
                     </p>
-                    <Tooltip
-                      content={
-                        "Disabling this option will prevent users from creating new flows"
-                      }
-                    >
+                    <Tooltip content="Disabling this option will prevent users from creating new flows">
                       <Icon
                         className="text-default-500"
                         icon="solar:info-circle-bold"
@@ -256,7 +244,7 @@ export function Settings({ settings }: any) {
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <div
-                  className={`flex ${createRunners ? "bg-primary/10 text-primary" : "bg-danger/10 text-danger"} items-center rounded-small justify-center w-10 h-10`}
+                  className={`flex ${createRunners ? "bg-primary/10 text-primary" : "bg-danger/10 text-danger"} size-10 items-center justify-center rounded-small`}
                 >
                   <Icon icon="solar:rocket-2-broken" width={20} />
                 </div>
@@ -265,11 +253,7 @@ export function Settings({ settings }: any) {
                     <p className="text-md font-bold">
                       {createRunners ? "Enabled" : "Disabled"}
                     </p>
-                    <Tooltip
-                      content={
-                        "Disabling this option will prevent users from creating new runners within projects"
-                      }
-                    >
+                    <Tooltip content="Disabling this option will prevent users from creating new runners within projects">
                       <Icon
                         className="text-default-500"
                         icon="solar:info-circle-bold"
@@ -297,7 +281,7 @@ export function Settings({ settings }: any) {
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <div
-                  className={`flex ${createTokens ? "bg-primary/10 text-primary" : "bg-danger/10 text-danger"} items-center rounded-small justify-center w-10 h-10`}
+                  className={`flex ${createTokens ? "bg-primary/10 text-primary" : "bg-danger/10 text-danger"} size-10 items-center justify-center rounded-small`}
                 >
                   <Icon icon="solar:key-square-2-broken" width={20} />
                 </div>
@@ -306,11 +290,7 @@ export function Settings({ settings }: any) {
                     <p className="text-md font-bold">
                       {createTokens ? "Enabled" : "Disabled"}
                     </p>
-                    <Tooltip
-                      content={
-                        "Disabling this option will prevent users from creating new tokens within projects"
-                      }
-                    >
+                    <Tooltip content="Disabling this option will prevent users from creating new tokens within projects">
                       <Icon
                         className="text-default-500"
                         icon="solar:info-circle-bold"
@@ -338,7 +318,7 @@ export function Settings({ settings }: any) {
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <div
-                  className={`flex ${addProjectMembers ? "bg-primary/10 text-primary" : "bg-danger/10 text-danger"} items-center rounded-small justify-center w-10 h-10`}
+                  className={`flex ${addProjectMembers ? "bg-primary/10 text-primary" : "bg-danger/10 text-danger"} size-10 items-center justify-center rounded-small`}
                 >
                   <Icon
                     icon="solar:users-group-two-rounded-bold-duotone"
@@ -350,11 +330,7 @@ export function Settings({ settings }: any) {
                     <p className="text-md font-bold">
                       {addProjectMembers ? "Enabled" : "Disabled"}
                     </p>
-                    <Tooltip
-                      content={
-                        "Disabling this option will prevent project owners and editors from inviting new members to projects"
-                      }
-                    >
+                    <Tooltip content="Disabling this option will prevent project owners and editors from inviting new members to projects">
                       <Icon
                         className="text-default-500"
                         icon="solar:info-circle-bold"
@@ -384,7 +360,7 @@ export function Settings({ settings }: any) {
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <div
-                  className={`flex ${addFlowActions ? "bg-primary/10 text-primary" : "bg-danger/10 text-danger"} items-center rounded-small justify-center w-10 h-10`}
+                  className={`flex ${addFlowActions ? "bg-primary/10 text-primary" : "bg-danger/10 text-danger"} size-10 items-center justify-center rounded-small`}
                 >
                   <Icon icon="solar:bolt-bold-duotone" width={20} />
                 </div>
@@ -393,11 +369,7 @@ export function Settings({ settings }: any) {
                     <p className="text-md font-bold">
                       {addFlowActions ? "Enabled" : "Disabled"}
                     </p>
-                    <Tooltip
-                      content={
-                        "Disabling this option will prevent project owners & editors from adding new actions to any flow"
-                      }
-                    >
+                    <Tooltip content="Disabling this option will prevent project owners & editors from adding new actions to any flow">
                       <Icon
                         className="text-default-500"
                         icon="solar:info-circle-bold"
@@ -425,7 +397,7 @@ export function Settings({ settings }: any) {
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <div
-                  className={`flex ${startExecutions ? "bg-primary/10 text-primary" : "bg-danger/10 text-danger"} items-center rounded-small justify-center w-10 h-10`}
+                  className={`flex ${startExecutions ? "bg-primary/10 text-primary" : "bg-danger/10 text-danger"} size-10 items-center justify-center rounded-small`}
                 >
                   <Icon icon="solar:reorder-line-duotone" width={20} />
                 </div>
@@ -434,11 +406,7 @@ export function Settings({ settings }: any) {
                     <p className="text-md font-bold">
                       {startExecutions ? "Enabled" : "Disabled"}
                     </p>
-                    <Tooltip
-                      content={
-                        "Disabling this option will prevent runners from starting a new executions"
-                      }
-                    >
+                    <Tooltip content="Disabling this option will prevent runners from starting a new executions">
                       <Icon
                         className="text-default-500"
                         icon="solar:info-circle-bold"
@@ -466,7 +434,7 @@ export function Settings({ settings }: any) {
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <div
-                  className={`flex ${injectPayloads ? "bg-primary/10 text-primary" : "bg-danger/10 text-danger"} items-center rounded-small justify-center w-10 h-10`}
+                  className={`flex ${injectPayloads ? "bg-primary/10 text-primary" : "bg-danger/10 text-danger"} size-10 items-center justify-center rounded-small`}
                 >
                   <Icon icon="solar:letter-opened-broken" width={20} />
                 </div>
@@ -475,11 +443,7 @@ export function Settings({ settings }: any) {
                     <p className="text-md font-bold">
                       {injectPayloads ? "Enabled" : "Disabled"}
                     </p>
-                    <Tooltip
-                      content={
-                        "Disabling this option will prevent incoming payloads from being registered at AlertFlow."
-                      }
-                    >
+                    <Tooltip content="Disabling this option will prevent incoming payloads from being registered at AlertFlow.">
                       <Icon
                         className="text-default-500"
                         icon="solar:info-circle-bold"

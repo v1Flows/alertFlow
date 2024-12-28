@@ -1,12 +1,12 @@
 "use client";
-import React from "react";
 import { Divider, Input, Spacer } from "@nextui-org/react";
+import React from "react";
 import { toast } from "sonner";
 
 import AdminGetStats from "@/lib/fetch/admin/stats";
 
-import ProjectsStats from "./projects";
 import FlowsStats from "./flows";
+import ProjectsStats from "./projects";
 import UsersStats from "./users";
 
 export function PageStats({
@@ -33,10 +33,13 @@ export function PageStats({
   async function getStats() {
     const stats = await AdminGetStats(interval);
 
-    if (stats.error) {
-      toast.error(stats.error);
+    if (!stats.success) {
+      if ("error" in stats) {
+        toast.error(stats.error);
+      }
+    } else {
+      setStats(stats.data);
     }
-    setStats(stats);
   }
 
   React.useEffect(() => {
@@ -47,15 +50,15 @@ export function PageStats({
     <main>
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-1">
-          <p className="text-2xl font-bold mb-0 text-danger">Admin</p>
-          <p className="text-2xl mb-0">|</p>
-          <p className="text-2xl mb-0">Stats</p>
+          <p className="mb-0 text-2xl font-bold text-danger">Admin</p>
+          <p className="mb-0 text-2xl">|</p>
+          <p className="mb-0 text-2xl">Stats</p>
         </div>
         <Input
           className="max-w-[100px]"
           endContent={
             <div className="pointer-events-none flex items-center">
-              <span className="text-default-400 text-small">days</span>
+              <span className="text-small text-default-400">days</span>
             </div>
           }
           label="Interval"

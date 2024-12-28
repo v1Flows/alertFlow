@@ -1,5 +1,6 @@
 "use client";
 
+import { Icon } from "@iconify/react";
 import {
   Button,
   Card,
@@ -21,18 +22,19 @@ import {
   Tooltip,
   useDisclosure,
 } from "@nextui-org/react";
-import { Icon } from "@iconify/react";
-import TimeAgo from "react-timeago";
+import NumberFlow from "@number-flow/react";
 import { useRouter } from "next/navigation";
 import React, { useMemo, useState } from "react";
+import TimeAgo from "react-timeago";
 
-import DeleteExecutionModal from "@/components/functions/flows/deleteExecution";
 import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
+import DeleteExecutionModal from "@/components/functions/flows/deleteExecution";
 
 export default function Executions({
   executions,
   payloads,
   displayToFlow,
+  canEdit,
 }: any) {
   const router = useRouter();
 
@@ -63,7 +65,7 @@ export default function Executions({
   }, [page, executions, statusFilter]);
 
   function pages() {
-    var length = 0;
+    let length = 0;
 
     if (statusFilter.size > 0) {
       length =
@@ -78,75 +80,82 @@ export default function Executions({
   }
 
   function status(execution: any) {
-    if (execution.running) {
+    if (execution.pending) {
+      return "Pending";
+    } else if (execution.running) {
       return "Running";
-    } else if (execution.waiting) {
-      return "Waiting";
     } else if (execution.paused) {
       return "Paused";
+    } else if (execution.canceled) {
+      return "Canceled";
+    } else if (execution.no_pattern_match) {
+      return "No Pattern Match";
+    } else if (execution.interaction_required) {
+      return "Interaction Required";
     } else if (execution.error) {
       return "Error";
-    } else if (execution.no_match) {
-      return "No Pattern Match";
-    } else if (execution.ghost) {
-      return "No Flow Actions found";
-    } else {
+    } else if (execution.finished) {
       return "Finished";
+    } else {
+      return "Unknown";
     }
   }
 
   function statusFilterReturn(execution: any) {
-    if (execution.running) {
+    if (execution.pending) {
+      return "pending";
+    } else if (execution.running) {
       return "running";
-    } else if (execution.waiting) {
-      return "waiting";
     } else if (execution.paused) {
       return "paused";
+    } else if (execution.canceled) {
+      return "canceled";
+    } else if (execution.no_pattern_match) {
+      return "no_pattern_match";
+    } else if (execution.interaction_required) {
+      return "interaction_required";
     } else if (execution.error) {
       return "error";
-    } else if (execution.no_match) {
-      return "no_pattern_match";
-    } else if (execution.ghost) {
-      return "no_flow_actions_found";
-    } else {
+    } else if (execution.finished) {
       return "finished";
+    } else {
+      return "unknown";
     }
   }
 
   function statusIcon(execution: any) {
-    if (execution.running) {
-      return (
-        <Tooltip content={`${status(execution)}`}>
-          <CircularProgress aria-label="Step" color="primary" size="md" />
-        </Tooltip>
-      );
-    } else if (execution.waiting) {
+    if (execution.pending) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
-            color="warning"
-            maxValue={5}
-            showValueLabel={true}
+            color="default"
             size="md"
-            value={5}
+            value={100}
             valueLabel={
               <Icon
-                className="text-warning"
-                icon="solar:clock-circle-broken"
-                width={16}
+                className="text-default-500"
+                icon="solar:sleeping-square-linear"
+                width={20}
               />
             }
           />
         </Tooltip>
       );
+    } else if (execution.running) {
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress aria-label="Step" color="primary" size="md" />
+        </Tooltip>
+      );
     } else if (execution.paused) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="warning"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -159,31 +168,31 @@ export default function Executions({
           />
         </Tooltip>
       );
-    } else if (execution.error) {
+    } else if (execution.canceled) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="danger"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
               <Icon
                 className="text-danger"
-                icon="solar:danger-triangle-broken"
+                icon="solar:forbidden-linear"
                 width={20}
               />
             }
           />
         </Tooltip>
       );
-    } else if (execution.no_match) {
+    } else if (execution.no_pattern_match) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             color="secondary"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -196,34 +205,53 @@ export default function Executions({
           />
         </Tooltip>
       );
-    } else if (execution.ghost) {
+    } else if (execution.interaction_required) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
-            color="default"
-            showValueLabel={true}
+            showValueLabel
+            aria-label="Step"
+            color="primary"
             size="md"
             value={100}
             valueLabel={
               <Icon
-                className="text-default-500"
-                icon="solar:ghost-broken"
+                className="text-primary"
+                icon="solar:hand-shake-linear"
+                width={22}
+              />
+            }
+          />
+        </Tooltip>
+      );
+    } else if (execution.error) {
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress
+            showValueLabel
+            aria-label="Step"
+            color="danger"
+            size="md"
+            value={100}
+            valueLabel={
+              <Icon
+                className="text-danger"
+                icon="solar:danger-triangle-broken"
                 width={20}
               />
             }
           />
         </Tooltip>
       );
-    } else {
+    } else if (execution.finished) {
       return (
-        <Tooltip content={`${status(execution)}. Steps 5 / 5`}>
+        <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="success"
-            maxValue={5}
-            showValueLabel={true}
             size="md"
-            value={5}
+            value={100}
             valueLabel={
               <Icon
                 className="text-success"
@@ -234,14 +262,35 @@ export default function Executions({
           />
         </Tooltip>
       );
+    } else {
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress
+            showValueLabel
+            aria-label="Step"
+            color="success"
+            size="md"
+            value={100}
+            valueLabel={
+              <Icon
+                className="text-success"
+                icon="solar:question-square-linear"
+                width={22}
+              />
+            }
+          />
+        </Tooltip>
+      );
     }
   }
 
   function getDuration(execution: any) {
-    if (execution.finished_at === "0001-01-01T00:00:00Z") return "0s";
+    if (execution.finished_at === "0001-01-01T00:00:00Z") {
+      return "0s";
+    }
     const ms =
       new Date(execution.finished_at).getTime() -
-      new Date(execution.created_at).getTime();
+      new Date(execution.executed_at).getTime();
     const sec = Math.floor(ms / 1000);
     const min = Math.floor(sec / 60);
     const hr = Math.floor(min / 60);
@@ -333,7 +382,7 @@ export default function Executions({
             <Button
               color="primary"
               size="md"
-              startContent={<Icon icon="solar:eye-broken" width={18} />}
+              startContent={<Icon icon="solar:eye-outline" width={18} />}
               variant="solid"
               onPress={() =>
                 router.push(
@@ -346,6 +395,7 @@ export default function Executions({
             <Button
               isIconOnly
               color="danger"
+              isDisabled={!canEdit}
               size="md"
               variant="flat"
               onPress={() => {
@@ -355,7 +405,7 @@ export default function Executions({
             >
               <Icon
                 height="20"
-                icon="solar:trash-bin-minimalistic-broken"
+                icon="solar:trash-bin-trash-outline"
                 width="20"
               />
             </Button>
@@ -369,7 +419,7 @@ export default function Executions({
   const topContent = useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
-        <div className="flex justify-between gap-3 items-end">
+        <div className="flex items-end justify-between gap-3">
           <div className="flex gap-3">
             <Dropdown>
               <DropdownTrigger>
@@ -394,18 +444,18 @@ export default function Executions({
                   setPage(1);
                 }}
               >
-                <DropdownItem key="finished" className="capitalize">
-                  <div className="flex flex-cols gap-2">
+                <DropdownItem key="pending" className="capitalize">
+                  <div className="flex-cols flex gap-2">
                     <Icon
-                      className="text-success"
-                      icon="solar:check-read-broken"
+                      className="text-default-500"
+                      icon="solar:sleeping-square-linear"
                       width={18}
                     />
-                    Finished
+                    Pending
                   </div>
                 </DropdownItem>
                 <DropdownItem key="running" className="capitalize">
-                  <div className="flex flex-cols gap-2">
+                  <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-primary"
                       icon="solar:play-bold-duotone"
@@ -414,57 +464,64 @@ export default function Executions({
                     Running
                   </div>
                 </DropdownItem>
-                <DropdownItem key="waiting" className="capitalize">
-                  <div className="flex flex-cols gap-2">
-                    <Icon
-                      className="text-warning"
-                      icon="solar:clock-circle-broken"
-                      width={18}
-                    />
-                    Waiting
-                  </div>
-                </DropdownItem>
                 <DropdownItem key="paused" className="capitalize">
-                  <div className="flex flex-cols gap-2">
+                  <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-warning"
-                      icon="solar:pause-broken"
+                      icon="solar:pause-outline"
                       width={18}
                     />
                     Paused
                   </div>
                 </DropdownItem>
-                <DropdownItem key="no_pattern_match" className="capitalize">
-                  <div className="flex flex-cols gap-2">
+                <DropdownItem key="canceled" className="capitalize">
+                  <div className="flex-cols flex gap-2">
                     <Icon
-                      className="text-secondary"
-                      icon="solar:bill-cross-broken"
+                      className="text-danger"
+                      icon="solar:forbidden-linear"
                       width={18}
                     />
-                    No Match
+                    Canceled
                   </div>
                 </DropdownItem>
-                <DropdownItem
-                  key="no_flow_actions_found"
-                  className="capitalize"
-                >
-                  <div className="flex flex-cols gap-2">
+                <DropdownItem key="no_pattern_match" className="capitalize">
+                  <div className="flex-cols flex gap-2">
                     <Icon
-                      className="text-default-500"
-                      icon="solar:ghost-broken"
+                      className="text-secondary"
+                      icon="solar:bill-cross-outline"
                       width={18}
                     />
-                    Ghost
+                    No Pattern Match
+                  </div>
+                </DropdownItem>
+                <DropdownItem key="interaction_required" className="capitalize">
+                  <div className="flex-cols flex gap-2">
+                    <Icon
+                      className="text-primary"
+                      icon="solar:hand-shake-linear"
+                      width={18}
+                    />
+                    Interaction Required
                   </div>
                 </DropdownItem>
                 <DropdownItem key="error" className="capitalize">
-                  <div className="flex flex-cols gap-2">
+                  <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-danger"
-                      icon="solar:danger-triangle-broken"
+                      icon="solar:danger-triangle-outline"
                       width={18}
                     />
                     Error
+                  </div>
+                </DropdownItem>
+                <DropdownItem key="finished" className="capitalize">
+                  <div className="flex-cols flex gap-2">
+                    <Icon
+                      className="text-success"
+                      icon="solar:check-read-outline"
+                      width={18}
+                    />
+                    Finished
                   </div>
                 </DropdownItem>
               </DropdownMenu>
@@ -500,13 +557,52 @@ export default function Executions({
 
   return (
     <>
-      <div className="grid xl:grid-cols-7 lg:grid-cols-4 grid-cols-2 gap-4">
-        <div className="col-span-1">
+      <div className="flex flex-wrap items-stretch gap-4">
+        {executions.filter((e: any) => status(e) == "Pending").length > 0 && (
           <Card
-            fullWidth
             isHoverable
             isPressable
-            className={statusFilter.has("finished") ? "bg-success/30" : ""}
+            className={
+              statusFilter.has("pending")
+                ? "w-[240px] grow bg-default/50"
+                : "w-[240px] grow"
+            }
+            onPress={() => {
+              setStatusFilter(new Set(["pending"]));
+              setPage(1);
+            }}
+          >
+            <CardBody>
+              <div className="flex items-center gap-2">
+                <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-default-500">
+                  <Icon icon="solar:sleeping-square-linear" width={20} />
+                </div>
+                <div>
+                  <p className="text-md font-bold">
+                    <NumberFlow
+                      locales="en-US" // Intl.NumberFormat locales
+                      value={
+                        executions.filter((e: any) => status(e) == "Pending")
+                          .length
+                      }
+                    />
+                  </p>
+                  <p className="text-sm text-default-500">Pending</p>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        )}
+
+        {executions.filter((e: any) => status(e) == "Finished").length > 0 && (
+          <Card
+            isHoverable
+            isPressable
+            className={
+              statusFilter.has("finished")
+                ? "w-[240px] grow bg-success/30"
+                : "w-[240px] grow"
+            }
             onPress={() => {
               setStatusFilter(new Set(["finished"]));
               setPage(1);
@@ -514,29 +610,35 @@ export default function Executions({
           >
             <CardBody>
               <div className="flex items-center gap-2">
-                <div className="flex bg-success/10 text-success items-center rounded-small justify-center w-10 h-10">
-                  <Icon icon="solar:check-read-broken" width={20} />
+                <div className="flex size-10 items-center justify-center rounded-small bg-success/10 text-success">
+                  <Icon icon="solar:check-read-outline" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">
-                    {
-                      executions.filter((e: any) => status(e) == "Finished")
-                        .length
-                    }
+                    <NumberFlow
+                      locales="en-US" // Intl.NumberFormat locales
+                      value={
+                        executions.filter((e: any) => status(e) == "Finished")
+                          .length
+                      }
+                    />
                   </p>
                   <p className="text-sm text-default-500">Finished</p>
                 </div>
               </div>
             </CardBody>
           </Card>
-        </div>
+        )}
 
-        <div className="col-span-1">
+        {executions.filter((e: any) => status(e) == "Running").length > 0 && (
           <Card
-            fullWidth
             isHoverable
             isPressable
-            className={statusFilter.has("running") ? "bg-primary/30" : ""}
+            className={
+              statusFilter.has("running")
+                ? "w-[240px] grow bg-primary/30"
+                : "w-[240px] grow"
+            }
             onPress={() => {
               setStatusFilter(new Set(["running"]));
               setPage(1);
@@ -544,59 +646,35 @@ export default function Executions({
           >
             <CardBody>
               <div className="flex items-center gap-2">
-                <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
+                <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
                   <Icon icon="solar:play-bold-duotone" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">
-                    {
-                      executions.filter((e: any) => status(e) == "Running")
-                        .length
-                    }
+                    <NumberFlow
+                      locales="en-US" // Intl.NumberFormat locales
+                      value={
+                        executions.filter((e: any) => status(e) == "Running")
+                          .length
+                      }
+                    />
                   </p>
                   <p className="text-sm text-default-500">Running</p>
                 </div>
               </div>
             </CardBody>
           </Card>
-        </div>
+        )}
 
-        <div className="col-span-1">
+        {executions.filter((e: any) => status(e) == "Paused").length > 0 && (
           <Card
-            fullWidth
             isHoverable
             isPressable
-            className={statusFilter.has("waiting") ? "bg-warning/30" : ""}
-            onPress={() => {
-              setStatusFilter(new Set(["waiting"]));
-              setPage(1);
-            }}
-          >
-            <CardBody>
-              <div className="flex items-center gap-2">
-                <div className="flex bg-warning/10 text-warning items-center rounded-small justify-center w-10 h-10">
-                  <Icon icon="solar:clock-circle-broken" width={20} />
-                </div>
-                <div>
-                  <p className="text-md font-bold">
-                    {
-                      executions.filter((e: any) => status(e) == "Waiting")
-                        .length
-                    }
-                  </p>
-                  <p className="text-sm text-default-500">Waiting</p>
-                </div>
-              </div>
-            </CardBody>
-          </Card>
-        </div>
-
-        <div className="col-span-1">
-          <Card
-            fullWidth
-            isHoverable
-            isPressable
-            className={statusFilter.has("paused") ? "bg-warning/30" : ""}
+            className={
+              statusFilter.has("paused")
+                ? "w-[240px] grow bg-warning/30"
+                : "w-[240px] grow"
+            }
             onPress={() => {
               setStatusFilter(new Set(["paused"]));
               setPage(1);
@@ -604,30 +682,75 @@ export default function Executions({
           >
             <CardBody>
               <div className="flex items-center gap-2">
-                <div className="flex bg-warning/10 text-warning items-center rounded-small justify-center w-10 h-10">
-                  <Icon icon="solar:pause-broken" width={20} />
+                <div className="flex size-10 items-center justify-center rounded-small bg-warning/10 text-warning">
+                  <Icon icon="solar:pause-outline" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">
-                    {
-                      executions.filter((e: any) => status(e) == "Paused")
-                        .length
-                    }
+                    <NumberFlow
+                      locales="en-US" // Intl.NumberFormat locales
+                      value={
+                        executions.filter((e: any) => status(e) == "Paused")
+                          .length
+                      }
+                    />
                   </p>
                   <p className="text-sm text-default-500">Paused</p>
                 </div>
               </div>
             </CardBody>
           </Card>
-        </div>
+        )}
 
-        <div className="col-span-1">
+        {executions.filter((e: any) => status(e) == "Interaction Required")
+          .length > 0 && (
           <Card
-            fullWidth
             isHoverable
             isPressable
             className={
-              statusFilter.has("no_pattern_match") ? "bg-secondary/30" : ""
+              statusFilter.has("interaction_required")
+                ? "w-[240px] grow bg-primary/30"
+                : "w-[240px] grow"
+            }
+            onPress={() => {
+              setStatusFilter(new Set(["interaction_required"]));
+              setPage(1);
+            }}
+          >
+            <CardBody>
+              <div className="flex items-center gap-2">
+                <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
+                  <Icon icon="solar:hand-shake-linear" width={20} />
+                </div>
+                <div>
+                  <p className="text-md font-bold">
+                    <NumberFlow
+                      locales="en-US" // Intl.NumberFormat locales
+                      value={
+                        executions.filter(
+                          (e: any) => status(e) == "Interaction Required",
+                        ).length
+                      }
+                    />
+                  </p>
+                  <p className="text-sm text-default-500">
+                    Interaction Required
+                  </p>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        )}
+
+        {executions.filter((e: any) => status(e) == "No Pattern Match").length >
+          0 && (
+          <Card
+            isHoverable
+            isPressable
+            className={
+              statusFilter.has("no_pattern_match")
+                ? "w-[240px] grow bg-secondary/30"
+                : "w-[240px] grow"
             }
             onPress={() => {
               setStatusFilter(new Set(["no_pattern_match"]));
@@ -636,63 +759,72 @@ export default function Executions({
           >
             <CardBody>
               <div className="flex items-center gap-2">
-                <div className="flex bg-secondary/10 text-secondary items-center rounded-small justify-center w-10 h-10">
-                  <Icon icon="solar:bill-cross-broken" width={20} />
+                <div className="flex size-10 items-center justify-center rounded-small bg-secondary/10 text-secondary">
+                  <Icon icon="solar:bill-cross-outline" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">
-                    {
-                      executions.filter(
-                        (e: any) => status(e) == "No Pattern Match",
-                      ).length
-                    }
+                    <NumberFlow
+                      locales="en-US" // Intl.NumberFormat locales
+                      value={
+                        executions.filter(
+                          (e: any) => status(e) == "No Pattern Match",
+                        ).length
+                      }
+                    />
                   </p>
-                  <p className="text-sm text-default-500">No Match</p>
+                  <p className="text-sm text-default-500">No Pattern Match</p>
                 </div>
               </div>
             </CardBody>
           </Card>
-        </div>
+        )}
 
-        <div className="col-span-1">
+        {executions.filter((e: any) => status(e) == "Canceled").length > 0 && (
           <Card
-            fullWidth
             isHoverable
             isPressable
             className={
-              statusFilter.has("no_flow_actions_found") ? "bg-default/60" : ""
+              statusFilter.has("cancelled")
+                ? "w-[240px] grow bg-danger/30"
+                : "w-[240px] grow"
             }
             onPress={() => {
-              setStatusFilter(new Set(["no_flow_actions_found"]));
+              setStatusFilter(new Set(["canceled"]));
               setPage(1);
             }}
           >
             <CardBody>
               <div className="flex items-center gap-2">
-                <div className="flex bg-default/20 text-default-500 items-center rounded-small justify-center w-10 h-10">
-                  <Icon icon="solar:ghost-broken" width={20} />
+                <div className="flex size-10 items-center justify-center rounded-small bg-danger/10 text-danger">
+                  <Icon icon="solar:forbidden-linear" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">
-                    {
-                      executions.filter(
-                        (e: any) => status(e) == "No Flow Actions found",
-                      ).length
-                    }
+                    <NumberFlow
+                      locales="en-US" // Intl.NumberFormat locales
+                      value={
+                        executions.filter((e: any) => status(e) == "Canceled")
+                          .length
+                      }
+                    />
                   </p>
-                  <p className="text-sm text-default-500">Ghost</p>
+                  <p className="text-sm text-default-500">Canceled</p>
                 </div>
               </div>
             </CardBody>
           </Card>
-        </div>
+        )}
 
-        <div className="col-span-1">
+        {executions.filter((e: any) => status(e) == "Error").length > 0 && (
           <Card
-            fullWidth
             isHoverable
             isPressable
-            className={statusFilter.has("error") ? "bg-danger/30" : ""}
+            className={
+              statusFilter.has("error")
+                ? "w-[240px] grow bg-danger/30"
+                : "w-[240px] grow"
+            }
             onPress={() => {
               setStatusFilter(new Set(["error"]));
               setPage(1);
@@ -700,19 +832,25 @@ export default function Executions({
           >
             <CardBody>
               <div className="flex items-center gap-2">
-                <div className="flex bg-danger/10 text-danger items-center rounded-small justify-center w-10 h-10">
-                  <Icon icon="solar:danger-triangle-broken" width={20} />
+                <div className="flex size-10 items-center justify-center rounded-small bg-danger/10 text-danger">
+                  <Icon icon="solar:danger-triangle-outline" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">
-                    {executions.filter((e: any) => status(e) == "Error").length}
+                    <NumberFlow
+                      locales="en-US" // Intl.NumberFormat locales
+                      value={
+                        executions.filter((e: any) => status(e) == "Error")
+                          .length
+                      }
+                    />
                   </p>
                   <p className="text-sm text-default-500">Error</p>
                 </div>
               </div>
             </CardBody>
           </Card>
-        </div>
+        )}
       </div>
       <Spacer y={2} />
       <Table

@@ -1,25 +1,23 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
+
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
   Select,
   SelectItem,
-  Card,
-  CardHeader,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
-import { InfoIcon } from "@/components/icons";
-import { IconWrapper } from "@/lib/IconWrapper";
 import EditProjectMember from "@/lib/fetch/project/PUT/editProjectMember";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function EditProjectMemberModal({
   disclosure,
@@ -35,8 +33,9 @@ export default function EditProjectMemberModal({
   const [isLoginLoading, setIsLoginLoading] = useState(false);
   const [role, setRole] = React.useState(user.role);
 
-  const [error, setError] = useState(false);
-  const [errorText, setErrorText] = useState("");
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   const handleSelectRole = (e: any) => {
     setRole(e.currentKey);
@@ -49,18 +48,35 @@ export default function EditProjectMemberModal({
   async function handleUpdateUser() {
     setIsLoginLoading(true);
 
-    const response = await EditProjectMember(projectID, role, user.user_id);
+    const response = (await EditProjectMember(
+      projectID,
+      role,
+      user.user_id,
+    )) as any;
 
-    if (response.result === "success") {
+    if (!response) {
+      setIsLoginLoading(false);
+      setError(true);
+      setErrorText("Failed to edit member");
+      setErrorMessage("Failed to edit member");
+      onOpenChange();
+      toast.success("Member edited successfully");
+
+      return;
+    }
+
+    if (response.success) {
       setError(false);
       setErrorText("");
+      setErrorMessage("");
       onOpenChange();
       toast.success("Member edited successfully");
       router.refresh();
-    } else if (response.error) {
+    } else {
       setError(true);
       setErrorText(response.error);
-      toast.error("Failure: " + response.error);
+      setErrorMessage(response.message);
+      toast.error("Failed to edit member");
     }
 
     setIsLoginLoading(false);
@@ -82,16 +98,7 @@ export default function EditProjectMemberModal({
               </ModalHeader>
               <ModalBody>
                 {error && (
-                  <Card className="border border-danger-300 border-2">
-                    <CardHeader className="justify-start gap-2 items-center">
-                      <IconWrapper className="bg-danger/10 text-danger">
-                        <InfoIcon className="text-lg" />
-                      </IconWrapper>
-                      <p className="text-md font-bold text-danger">
-                        {errorText}
-                      </p>
-                    </CardHeader>
-                  </Card>
+                  <ErrorCard error={errorText} message={errorMessage} />
                 )}
                 <Select
                   className="w-full"

@@ -2,31 +2,70 @@
 
 import { cookies } from "next/headers";
 
-export default async function GetProjectRunners(projectId: any) {
-  "use client";
-  const cookieStore = cookies();
-  const token = cookieStore.get("session")?.value;
+type Runners = {
+  runners: [];
+};
 
-  if (!token) {
-    return { error: "No token found" };
-  }
+type ErrorResponse = {
+  success: false;
+  error: string;
+  message: string;
+};
 
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/projects/${projectId}/runners`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token,
+type SuccessResponse = {
+  success: true;
+  data: Runners;
+};
+
+export async function GetProjectRunners(
+  projectId: any,
+): Promise<SuccessResponse | ErrorResponse> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("session");
+
+    if (!token) {
+      return {
+        success: false,
+        error: "Authentication token not found",
+        message: "User is not authenticated",
+      };
+    }
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/projects/${projectId}/runners`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token.value,
+        },
       },
-    },
-  );
+    );
 
-  if (!res.ok) {
-    return { error: "Failed to fetch data" };
+    if (!res.ok) {
+      const errorData = await res.json();
+
+      return {
+        success: false,
+        error: `API error: ${res.status} ${res.statusText}`,
+        message: errorData.message || "An error occurred",
+      };
+    }
+
+    const data = await res.json();
+
+    return {
+      success: true,
+      data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error occurred",
+      message: "Failed to fetch runners",
+    };
   }
-
-  const data = await res.json();
-
-  return data.runners;
 }
+
+export default GetProjectRunners;

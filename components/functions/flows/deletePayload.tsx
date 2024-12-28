@@ -14,6 +14,7 @@ import React from "react";
 import { toast } from "sonner";
 
 import DeletePayload from "@/lib/fetch/flow/DELETE/DeletePayload";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function FunctionDeletePayloadModal({
   disclosure,
@@ -29,22 +30,38 @@ export default function FunctionDeletePayloadModal({
   const { isOpen, onOpenChange } = disclosure;
 
   const [isDeleteLoading, setIsDeleteLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   async function deletePayload() {
     setIsDeleteLoading(true);
-    const res = await DeletePayload(flow.id, payload.id);
+    const res = (await DeletePayload(flow.id, payload.id)) as any;
 
-    if (res.error) {
+    if (!res) {
+      setError(true);
+      setErrorText("Failed to delete payload");
+      setErrorMessage("Failed to delete payload");
       setIsDeleteLoading(false);
-      toast.error("Failed to delete payload");
 
       return;
     }
 
+    if (res.success) {
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
+      toast.success("Payload deleted successfully");
+      router.refresh();
+      onOpenChange();
+    } else {
+      setError(true);
+      setErrorText(res.message);
+      setErrorMessage(res.error);
+      toast.error("Failed to delete payload");
+    }
+
     setIsDeleteLoading(false);
-    onOpenChange();
-    toast.success("Payload deleted successfully");
-    router.refresh();
   }
 
   return (
@@ -68,8 +85,14 @@ export default function FunctionDeletePayloadModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <Snippet hideCopyButton hideSymbol>
-                  <span>ID: {payload.id}</span>
+                  <span>
+                    ID:
+                    {payload.id}
+                  </span>
                 </Snippet>
               </ModalBody>
               <ModalFooter className="grid grid-cols-2">

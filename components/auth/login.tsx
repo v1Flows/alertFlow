@@ -1,22 +1,21 @@
-/* eslint-disable no-undef */
 "use client";
-import React from "react";
+import { Icon } from "@iconify/react";
 import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownItem,
-  Button,
   Avatar,
-  User,
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
   Tooltip,
+  User,
 } from "@nextui-org/react";
 import { LogInIcon, UserPlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import React from "react";
 import { toast } from "sonner";
 
 import { Logout } from "@/lib/logout";
-import { CopyDocumentIcon } from "@/components/icons";
 
 export default function Login({ user, session, showSignUp, settings }: any) {
   const router = useRouter();
@@ -55,12 +54,12 @@ export default function Login({ user, session, showSignUp, settings }: any) {
                 }}
                 classNames={{
                   name:
-                    userData?.role === "Admin" ? "text-danger font-bold" : "",
+                    userData?.role === "admin" ? "text-danger font-bold" : "",
                 }}
                 description={userData?.email}
                 name={
-                  userData?.role === "Admin"
-                    ? userData?.username + " | " + userData?.role
+                  userData?.role === "admin"
+                    ? `${userData?.username} | ${userData?.role}`
                     : userData?.username
                 }
               />
@@ -74,7 +73,7 @@ export default function Login({ user, session, showSignUp, settings }: any) {
             <DropdownItem
               key="api_key"
               showDivider
-              startContent={<CopyDocumentIcon />}
+              startContent={<Icon icon="solar:copy-outline" width={18} />}
               onPress={() => {
                 navigator.clipboard.writeText(session);
                 toast.success("Copied to clipboard!");

@@ -1,78 +1,86 @@
 import { Icon } from "@iconify/react";
 import { Card, CardBody, CircularProgress, Tooltip } from "@nextui-org/react";
+import NumberFlow from "@number-flow/react";
 import ReactTimeago from "react-timeago";
 
 export default function ExecutionDetails({ runners, execution, steps }: any) {
   function status(execution: any) {
-    if (execution.running) {
+    if (execution.pending) {
+      return "Pending";
+    } else if (execution.running) {
       return "Running";
-    } else if (execution.waiting) {
-      return "Waiting";
     } else if (execution.paused) {
       return "Paused";
+    } else if (execution.canceled) {
+      return "Canceled";
+    } else if (execution.no_pattern_match) {
+      return "No Pattern Match";
+    } else if (execution.interaction_required) {
+      return "Interaction Required";
     } else if (execution.error) {
       return "Error";
-    } else if (execution.no_match) {
-      return "No Pattern Match";
-    } else if (execution.ghost) {
-      return "No Flow Actions found";
-    } else {
+    } else if (execution.finished) {
       return "Finished";
+    } else {
+      return "Unknown";
     }
   }
 
   function statusColor(execution: any) {
-    if (execution.running) {
+    if (execution.pending) {
+      return "default-500";
+    } else if (execution.running) {
       return "primary";
-    } else if (execution.waiting) {
-      return "warning";
     } else if (execution.paused) {
       return "warning";
+    } else if (execution.canceled) {
+      return "danger";
+    } else if (execution.no_pattern_match) {
+      return "default";
+    } else if (execution.interaction_required) {
+      return "primary";
     } else if (execution.error) {
       return "danger";
-    } else if (execution.no_match) {
-      return "secondary";
-    } else if (execution.ghost) {
-      return "default-500";
-    } else {
+    } else if (execution.finished) {
       return "success";
+    } else {
+      return "default";
     }
   }
 
   function statusIcon(execution: any) {
-    if (execution.running) {
-      return (
-        <Tooltip content={`${status(execution)}`}>
-          <CircularProgress aria-label="Step" color="primary" size="md" />
-        </Tooltip>
-      );
-    } else if (execution.waiting) {
+    if (execution.pending) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
-            color="warning"
-            maxValue={5}
-            showValueLabel={true}
+            color="default"
             size="md"
-            value={5}
+            value={100}
             valueLabel={
               <Icon
-                className="text-warning"
-                icon="solar:clock-circle-broken"
-                width={16}
+                className="text-default-500"
+                icon="solar:sleeping-square-linear"
+                width={20}
               />
             }
           />
         </Tooltip>
       );
+    } else if (execution.running) {
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress aria-label="Step" color="primary" size="md" />
+        </Tooltip>
+      );
     } else if (execution.paused) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="warning"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -85,31 +93,31 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
           />
         </Tooltip>
       );
-    } else if (execution.error) {
+    } else if (execution.canceled) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="danger"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
               <Icon
                 className="text-danger"
-                icon="solar:danger-triangle-broken"
+                icon="solar:forbidden-linear"
                 width={20}
               />
             }
           />
         </Tooltip>
       );
-    } else if (execution.no_match) {
+    } else if (execution.no_pattern_match) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             color="secondary"
-            showValueLabel={true}
             size="md"
             value={100}
             valueLabel={
@@ -122,34 +130,53 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
           />
         </Tooltip>
       );
-    } else if (execution.ghost) {
+    } else if (execution.interaction_required) {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
-            color="default"
-            showValueLabel={true}
+            showValueLabel
+            aria-label="Step"
+            color="primary"
             size="md"
             value={100}
             valueLabel={
               <Icon
-                className="text-default-500"
-                icon="solar:ghost-broken"
+                className="text-primary"
+                icon="solar:hand-shake-linear"
+                width={22}
+              />
+            }
+          />
+        </Tooltip>
+      );
+    } else if (execution.error) {
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress
+            showValueLabel
+            aria-label="Step"
+            color="danger"
+            size="md"
+            value={100}
+            valueLabel={
+              <Icon
+                className="text-danger"
+                icon="solar:danger-triangle-broken"
                 width={20}
               />
             }
           />
         </Tooltip>
       );
-    } else {
+    } else if (execution.finished) {
       return (
-        <Tooltip content={`${status(execution)}. Steps 5 / 5`}>
+        <Tooltip content={`${status(execution)}`}>
           <CircularProgress
+            showValueLabel
             aria-label="Step"
             color="success"
-            maxValue={5}
-            showValueLabel={true}
             size="md"
-            value={5}
+            value={100}
             valueLabel={
               <Icon
                 className="text-success"
@@ -160,14 +187,38 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
           />
         </Tooltip>
       );
+    } else {
+      return (
+        <Tooltip content={`${status(execution)}`}>
+          <CircularProgress
+            showValueLabel
+            aria-label="Step"
+            color="success"
+            size="md"
+            value={100}
+            valueLabel={
+              <Icon
+                className="text-success"
+                icon="solar:question-square-linear"
+                width={22}
+              />
+            }
+          />
+        </Tooltip>
+      );
     }
   }
 
   function getDuration() {
-    if (execution.finished_at === "0001-01-01T00:00:00Z") return "-";
+    let calFinished = new Date().toISOString();
+
+    if (execution.finished_at !== "0001-01-01T00:00:00Z") {
+      calFinished = execution.finished_at;
+    }
+
     const ms =
-      new Date(execution.finished_at).getTime() -
-      new Date(execution.created_at).getTime();
+      new Date(calFinished).getTime() -
+      new Date(execution.executed_at).getTime();
     const sec = Math.floor(ms / 1000);
     const min = Math.floor(sec / 60);
     const hr = Math.floor(min / 60);
@@ -186,14 +237,14 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
 
   return (
     <>
-      <div className="grid xl:grid-cols-6 lg:grid-cols-3 grid-cols-2 items-stretch items-start gap-4">
+      <div className="grid grid-cols-2 items-start items-stretch gap-4 lg:grid-cols-3 xl:grid-cols-6">
         <Card>
           <CardBody>
-            <div className="flex gap-4 items-center justify-start">
+            <div className="flex items-center justify-start gap-4">
               <div>{statusIcon(execution)}</div>
               <div>
                 <p
-                  className={`text-md font-bold text-${statusColor(execution)}`}
+                  className={`text-md text- font-bold${statusColor(execution)}`}
                 >
                   {status(execution)}
                 </p>
@@ -204,9 +255,9 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
         </Card>
         <Card>
           <CardBody>
-            <div className="flex gap-4 items-center justify-start">
-              <div className="flex items-center rounded-large justify-center bg-secondary bg-opacity-40 w-10 h-10">
-                <Icon icon="solar:rocket-2-broken" width={24} />
+            <div className="flex items-center justify-start gap-4">
+              <div className="flex size-12 items-center justify-center rounded-large bg-default bg-opacity-40">
+                <Icon icon="solar:rocket-2-broken" width={28} />
               </div>
               <div>
                 <p className="text-md font-bold">
@@ -220,12 +271,20 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
         </Card>
         <Card>
           <CardBody>
-            <div className="flex gap-4 items-center justify-start">
-              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-40 w-10 h-10">
-                <Icon icon="solar:bill-list-broken" width={24} />
+            <div className="flex items-center justify-start gap-4">
+              <div className="flex size-12 items-center justify-center rounded-large bg-default bg-opacity-40">
+                <Icon
+                  icon="solar:posts-carousel-vertical-line-duotone"
+                  width={28}
+                />
               </div>
               <div>
-                <p className="text-md font-bold">{steps.length - 1}</p>
+                <p className="text-md font-bold">
+                  <NumberFlow
+                    locales="en-US" // Intl.NumberFormat locales
+                    value={steps.length}
+                  />
+                </p>
                 <p className="text-sm text-default-500">Total Steps</p>
               </div>
             </div>
@@ -233,8 +292,8 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
         </Card>
         <Card>
           <CardBody>
-            <div className="flex gap-4 items-center justify-start">
-              <div className="flex items-center rounded-large justify-center bg-default bg-opacity-40 w-12 h-12">
+            <div className="flex items-center justify-start gap-4">
+              <div className="flex size-12 items-center justify-center rounded-large bg-default bg-opacity-40">
                 <Icon icon="solar:delivery-line-duotone" width={28} />
               </div>
               <div>
@@ -248,8 +307,8 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
         </Card>
         <Card>
           <CardBody>
-            <div className="flex gap-4 items-center justify-start">
-              <div className="flex items-center rounded-large justify-center bg-default bg-opacity-40 w-12 h-12">
+            <div className="flex items-center justify-start gap-4">
+              <div className="flex size-12 items-center justify-center rounded-large bg-default bg-opacity-40">
                 <Icon icon="solar:delivery-outline" width={28} />
               </div>
               <div>
@@ -267,8 +326,8 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
         </Card>
         <Card>
           <CardBody>
-            <div className="flex gap-4 items-center justify-start">
-              <div className="flex items-center rounded-large justify-center bg-primary bg-opacity-40 w-12 h-12">
+            <div className="flex items-center justify-start gap-4">
+              <div className="flex size-12 items-center justify-center rounded-large bg-default bg-opacity-40">
                 <Icon icon="solar:clock-circle-broken" width={28} />
               </div>
               <div>

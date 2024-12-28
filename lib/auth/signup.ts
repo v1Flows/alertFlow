@@ -11,21 +11,21 @@ export default async function SignUpAPI(
 
     headers.append("Content-Type", "application/json");
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
+      `${process.env.NEXT_PUBLIC_API_URL}/v1/auth/register`,
       {
         method: "POST",
-        headers: headers,
+        headers,
         body: JSON.stringify({
-          email: email,
-          username: username,
-          password: password,
+          email,
+          username,
+          password,
         }),
       },
     );
     const data = await res.json();
 
     return data;
-  } catch (error) {
+  } catch {
     return { error: "Failed to fetch data" };
   }
 }

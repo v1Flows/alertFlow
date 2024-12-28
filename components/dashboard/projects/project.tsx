@@ -1,20 +1,20 @@
 "use client";
 
-import React from "react";
+import { Icon } from "@iconify/react";
 import {
+  Alert,
+  Avatar,
+  Button,
   Card,
   CardBody,
   Divider,
   useDisclosure,
-  Button,
-  Avatar,
 } from "@nextui-org/react";
-import { Icon } from "@iconify/react";
+import NumberFlow from "@number-flow/react";
+import React from "react";
 
-import { InfoIcon } from "@/components/icons";
-import { IconWrapper } from "@/lib/IconWrapper";
-import { subtitle } from "@/components/primitives";
 import Reloader from "@/components/reloader/Reloader";
+import { subtitle } from "@/components/primitives";
 import EditProjectModal from "@/components/functions/projects/edit";
 
 import ProjectBreadcrumbs from "./project/breadcrumbs";
@@ -29,18 +29,34 @@ export default function Project({
   tokens,
   plan,
   audit,
+  flows,
 }: any) {
   const editProjectModal = useDisclosure();
 
+  function checkEditDisabled() {
+    if (project.disabled) {
+      return true;
+    } else if (user.role === "admin") {
+      return false;
+    } else if (
+      members.find((m: any) => m.user_id === user.id) &&
+      members.filter((m: any) => m.user_id === user.id)[0].role === "Viewer"
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
   return (
     <main>
-      <div className="grid lg:grid-cols-2 items-center justify-between">
+      <div className="grid items-center justify-between lg:grid-cols-2">
         <ProjectBreadcrumbs id={project.id} />
-        <div className="lg:justify-self-end lg:mt-0 mt-2">
+        <div className="mt-2 lg:mt-0 lg:justify-self-end">
           <Reloader />
         </div>
       </div>
-      <div className="flex items-center justify-between mb-2 mt-2">
+      <div className="my-2 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Avatar
             classNames={{
@@ -49,7 +65,7 @@ export default function Project({
             icon={
               <Icon
                 icon={
-                  project.icon ? project.icon : "solar:question-square-broken"
+                  project.icon ? project.icon : "solar:question-square-outline"
                 }
                 width={24}
               />
@@ -60,10 +76,7 @@ export default function Project({
             }}
           />
           <div className="flex flex-col items-start">
-            <h1
-              className={subtitle({ className: "mb-0 font-bold" })}
-              style={{ color: "#0072f5" }}
-            >
+            <h1 className={subtitle({ className: "mb-0 font-bold" })}>
               {project.name}
             </h1>
             <p className="text-sm text-default-500">{project.description}</p>
@@ -71,13 +84,8 @@ export default function Project({
         </div>
         <Button
           color="warning"
-          isDisabled={
-            project.disabled ||
-            (members.find((m: any) => m.user_id === user.id) &&
-              members.filter((m: any) => m.user_id === user.id)[0].role ===
-              "Viewer")
-          }
-          startContent={<Icon icon="solar:pen-new-square-broken" width={20} />}
+          isDisabled={checkEditDisabled()}
+          startContent={<Icon icon="solar:pen-new-square-outline" width={20} />}
           variant="flat"
           onPress={() => editProjectModal.onOpen()}
         >
@@ -87,35 +95,46 @@ export default function Project({
       <Divider className="mb-4" />
       {project.disabled && (
         <div className="mb-4">
-          <Card className="bg-danger/20">
-            <CardBody>
-              <div className="flex items-center gap-2">
-                <IconWrapper className="bg-danger/10 text-danger">
-                  <InfoIcon className="text-lg" />
-                </IconWrapper>
-                <p className="text-md font-bold text-danger">
-                  Project is currently disabled
-                </p>
-              </div>
-              <p className="text-default-500 font-bold">
-                Reason: {project.disabled_reason}
-              </p>
-            </CardBody>
-          </Card>
+          <Alert
+            color="danger"
+            description={project.disabled_reason}
+            title="Project is currently disabled"
+            variant="flat"
+          />
         </div>
       )}
       <div>
-        <div className="grid lg:grid-cols-4 grid-cols-2 items-stretch gap-4">
+        <div className="grid grid-cols-2 items-stretch gap-4 lg:grid-cols-4">
           <div className="col-span-1">
             <Card fullWidth className="h-full">
               <CardBody>
                 <div className="flex items-center gap-2">
-                  <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                    <Icon icon="solar:smile-square-broken" width={20} />
+                  <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
+                    <Icon icon="solar:smile-square-outline" width={20} />
                   </div>
                   <div>
-                    <p className="text-md font-bold">{members.length}</p>
+                    <p className="text-md font-bold">
+                      <NumberFlow
+                        locales="en-US" // Intl.NumberFormat locales
+                        value={members.length}
+                      />
+                    </p>
                     <p className="text-sm text-default-500">Members</p>
+                  </div>
+                </div>
+              </CardBody>
+            </Card>
+          </div>
+          <div className="col-span-1">
+            <Card fullWidth>
+              <CardBody>
+                <div className="flex items-center gap-2">
+                  <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
+                    <Icon icon="solar:book-2-outline" width={20} />
+                  </div>
+                  <div>
+                    <p className="text-md font-bold">{flows.length}</p>
+                    <p className="text-sm text-default-500">Flows</p>
                   </div>
                 </div>
               </CardBody>
@@ -125,21 +144,25 @@ export default function Project({
             <Card fullWidth className="h-full">
               <CardBody>
                 <div className="flex items-center gap-2">
-                  <div className="flex bg-warning/10 text-warning items-center rounded-small justify-center w-10 h-10">
-                    <Icon icon="solar:rocket-2-broken" width={20} />
+                  <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
+                    <Icon icon="solar:rocket-2-outline" width={20} />
                   </div>
                   <div>
                     <p className="text-md font-bold">
                       {project.alertflow_runners ? (
-                        <p>{runners.length}</p>
+                        <NumberFlow
+                          locales="en-US" // Intl.NumberFormat locales
+                          value={runners.length}
+                        />
                       ) : (
-                        <p>
-                          {
+                        <NumberFlow
+                          locales="en-US" // Intl.NumberFormat locales
+                          value={
                             runners.filter(
                               (r: any) => r.alertflow_runner === false,
                             ).length
                           }
-                        </p>
+                        />
                       )}
                     </p>
                     <p className="text-sm text-default-500">Runners</p>
@@ -152,29 +175,17 @@ export default function Project({
             <Card fullWidth className="h-full">
               <CardBody>
                 <div className="flex items-center gap-2">
-                  <div className="flex bg-default/50 text-foreground items-center rounded-small justify-center w-10 h-10">
-                    <Icon icon="solar:key-square-2-broken" width={20} />
-                  </div>
-                  <div>
-                    <p className="text-md font-bold">{tokens.length}</p>
-                    <p className="text-sm text-default-500">Tokens</p>
-                  </div>
-                </div>
-              </CardBody>
-            </Card>
-          </div>
-          <div className="col-span-1">
-            <Card fullWidth>
-              <CardBody>
-                <div className="flex items-center gap-2">
-                  <div className="flex bg-secondary/10 text-secondary items-center rounded-small justify-center w-10 h-10">
-                    <Icon icon="solar:calendar-broken" width={20} />
+                  <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
+                    <Icon icon="solar:key-square-2-outline" width={20} />
                   </div>
                   <div>
                     <p className="text-md font-bold">
-                      {new Date(project.created_at).toLocaleString("de-DE")}
+                      <NumberFlow
+                        locales="en-US" // Intl.NumberFormat locales
+                        value={tokens.length}
+                      />
                     </p>
-                    <p className="text-sm text-default-500">Created At</p>
+                    <p className="text-sm text-default-500">Tokens</p>
                   </div>
                 </div>
               </CardBody>
@@ -182,7 +193,7 @@ export default function Project({
           </div>
         </div>
       </div>
-      <div className="w-full mt-6">
+      <div className="mt-6 w-full">
         <ProjectTabs
           audit={audit}
           members={members}

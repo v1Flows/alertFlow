@@ -1,25 +1,25 @@
 "use client";
 
 import {
-  Navbar as NextUINavbar,
+  Chip,
+  Divider,
+  Image,
+  Link,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  Link,
-  Chip,
-  Image,
-  NavbarMenuToggle,
   NavbarMenu,
   NavbarMenuItem,
-  Divider,
+  NavbarMenuToggle,
+  Navbar as NextUINavbar,
 } from "@nextui-org/react";
-import React from "react";
-import { useRouter } from "next/navigation";
-import { useTheme } from "next-themes";
 import { useIsSSR } from "@react-aria/ssr";
+import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation";
+import React from "react";
 
-import Login from "@/components/auth/login";
 import { ThemeSwitch } from "@/components/theme-switch";
+import Login from "@/components/auth/login";
 
 export default function Navbar({ user, session, settings }: any) {
   const router = useRouter();
@@ -40,19 +40,19 @@ export default function Navbar({ user, session, settings }: any) {
       position="sticky"
       onMenuOpenChange={setIsMenuOpen}
     >
-      <NavbarBrand as="li" className="gap-1 max-w-fit">
+      <NavbarBrand as="li" className="max-w-fit gap-1">
         <Image
           alt="Logo"
           height={32}
           radius="none"
           shadow="none"
-          src={`/images/af_logo_${theme === "light" || isSSR ? "black" : "white"}.png`}
+          src={`https://s3-console.justlab.xyz/api/v1/buckets/alertflow/objects/download?preview=true&prefix=af_logo_${theme === "light" || isSSR ? "black" : "white"}.png`}
           width={32}
         />
         <p className="font-bold text-inherit">AlertFlow</p>
       </NavbarBrand>
       <NavbarContent
-        className="hidden sm:flex basis-1/5 sm:basis-full"
+        className="hidden basis-1/5 sm:flex sm:basis-full"
         justify="start"
       >
         {user?.email && (
@@ -69,7 +69,7 @@ export default function Navbar({ user, session, settings }: any) {
         )}
       </NavbarContent>
 
-      {user.role === "Admin" && settings.maintenance && (
+      {user.role === "admin" && settings.maintenance && (
         <NavbarContent justify="center">
           <NavbarItem>
             <Chip color="danger" radius="sm" variant="flat">
@@ -80,10 +80,10 @@ export default function Navbar({ user, session, settings }: any) {
       )}
 
       <NavbarContent
-        className="hidden sm:flex basis-1/5 sm:basis-full"
+        className="hidden basis-1/5 sm:flex sm:basis-full"
         justify="end"
       >
-        <NavbarItem className="sm:flex gap-2">
+        <NavbarItem className="gap-2 sm:flex">
           <ThemeSwitch />
         </NavbarItem>
         <NavbarItem className="sm:flex">
@@ -91,7 +91,7 @@ export default function Navbar({ user, session, settings }: any) {
         </NavbarItem>
       </NavbarContent>
 
-      <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
+      <NavbarContent className="basis-1 pl-4 sm:hidden" justify="end">
         <ThemeSwitch />
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}

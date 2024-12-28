@@ -14,14 +14,15 @@ import {
   Snippet,
   useDisclosure,
 } from "@nextui-org/react";
+import { LibraryIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
-import { LibraryIcon } from "lucide-react";
 
-import { CheckIcon } from "@/components/icons";
-import AddRunner from "@/lib/fetch/runner/AddRunner";
+import AddRunner from "@/lib/fetch/runner/POST/AddRunner";
 import CreateRunnerToken from "@/lib/fetch/project/POST/CreateRunnerToken";
+import { CheckIcon } from "@/components/icons";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function CreateRunnerModal({
   disclosure,
@@ -44,32 +45,61 @@ export default function CreateRunnerModal({
   const [name, setName] = React.useState("");
 
   const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   async function createRunner() {
     setIsLoading(true);
 
-    const response = await AddRunner({
+    const response = (await AddRunner({
       projectId: project.id ? project.id : "none",
       name,
       alertflow_runner,
-    });
+    })) as any;
 
-    const tokenResponse = await CreateRunnerToken({
+    if (!response) {
+      setIsLoading(false);
+      setError(true);
+      setErrorText("Failed to create runner");
+      setErrorMessage("An error occurred while creating the runner");
+      toast.error("Failed to create runner");
+
+      return;
+    }
+
+    const tokenResponse = (await CreateRunnerToken({
       projectId: project.id ? project.id : "none",
-      description: name + " Runner Token",
-    });
+      description: `${name} Runner Token`,
+    })) as any;
 
-    if (response.result === "success" && tokenResponse.result === "success") {
+    if (!tokenResponse) {
+      setIsLoading(false);
+      setError(true);
+      setErrorText("Failed to create runner token");
+      setErrorMessage("An error occurred while creating the runner token");
+      router.refresh();
+      toast.error("Failed to create runner token");
+    }
+
+    if (response.success && tokenResponse.success) {
       setName("");
       onOpenChange();
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
 
       // set variables
-      setInApikey(tokenResponse.key);
-      setInRunnerId(response.runner.id);
+      setInApikey(tokenResponse.data.key);
+      setInRunnerId(response.data.runner.id);
       onOpenChangeInstructions();
       router.refresh();
+      toast.success("Runner created successfully");
     } else {
-      toast.error("Failed to create runner");
+      setError(true);
+      setErrorText(response.error.error);
+      setErrorMessage(response.error.message);
+      toast.error(`Failed to create runner: ${response.error.error}`);
     }
 
     setIsLoading(false);
@@ -90,6 +120,9 @@ export default function CreateRunnerModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <Input
                   label="Name"
                   labelPlacement="outside"
@@ -141,13 +174,13 @@ export default function CreateRunnerModal({
                 <div>
                   <p className="text-sm font-bold text-default-400">Token</p>
                   <Snippet hideSymbol className="w-full" codeString={inApikey}>
-                    <span>{inApikey.slice(0, 30) + "..."}</span>
+                    <span>{`${inApikey.slice(0, 30)}...`}</span>
                   </Snippet>
                   <p className="text-sm text-default-400">
                     The Token can always be found on the &quot;Tokens&quot; tab.
                   </p>
                 </div>
-                <p className="text-sm text-default-500 mt-2">
+                <p className="mt-2 text-sm text-default-500">
                   If you need help with the configuration, please click the
                   documentation button below.
                 </p>

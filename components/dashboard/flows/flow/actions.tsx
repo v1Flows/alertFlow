@@ -1,21 +1,4 @@
-import { Icon } from "@iconify/react";
-import {
-  Button,
-  Card,
-  CardBody,
-  Chip,
-  Divider,
-  Spacer,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-  useDisclosure,
-} from "@nextui-org/react";
-import React, { useEffect } from "react";
-import { DndContext, closestCenter } from "@dnd-kit/core";
+import { closestCenter, DndContext } from "@dnd-kit/core";
 import {
   arrayMove,
   SortableContext,
@@ -23,20 +6,45 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { Icon } from "@iconify/react";
+import {
+  Accordion,
+  AccordionItem,
+  Button,
+  Card,
+  CardBody,
+  Chip,
+  Divider,
+  Spacer,
+  Switch,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+  Tooltip,
+  useDisclosure,
+} from "@nextui-org/react";
+import React, { useEffect } from "react";
 import { toast } from "sonner";
 
-import DeleteActionModal from "@/components/functions/flows/deleteAction";
-import EditActionModal from "@/components/functions/flows/editAction";
-import AddActionModal from "@/components/functions/flows/addAction";
 import UpdateFlowActions from "@/lib/fetch/flow/PUT/UpdateActions";
 import EditFlowActionsDetails from "@/components/functions/flows/editDetails";
+import EditActionModal from "@/components/functions/flows/editAction";
+import DeleteActionModal from "@/components/functions/flows/deleteAction";
+import AddActionModal from "@/components/functions/flows/addAction";
 
 export default function Actions({
   flow,
   runners,
+  user,
+  canEdit,
 }: {
   flow: any;
   runners: any;
+  user: any;
+  canEdit: boolean;
 }) {
   const [actions, setActions] = React.useState([] as any);
   const [targetAction, setTargetAction] = React.useState({} as any);
@@ -44,6 +52,9 @@ export default function Actions({
   const addFlowActionModal = useDisclosure();
   const editActionModal = useDisclosure();
   const deleteActionModal = useDisclosure();
+
+  const [expandedParams, setExpandedParams] = React.useState([] as any);
+  const [isDragEnabled, setIsDragEnabled] = React.useState(false);
 
   useEffect(() => {
     setActions(flow.actions);
@@ -59,96 +70,145 @@ export default function Actions({
     };
 
     return (
-      <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+      <div ref={setNodeRef} style={style} {...attributes}>
         <Card key={action.type} fullWidth>
           <CardBody>
-            <div className="flex flex-cols items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
-                <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                  <Icon icon={action.icon} width={26} />
-                </div>
-                <div>
-                  <div className="flex flex-cols gap-2">
-                    <p className="text-md font-bold">{action.name}</p>
-                    <Chip
-                      className="max-lg:hidden"
-                      color="primary"
-                      radius="sm"
-                      size="sm"
-                      variant="dot"
+            <div className="flex items-center justify-between gap-4">
+              <div className="w-full">
+                <div className="flex-cols flex items-center justify-between gap-2">
+                  <Tooltip
+                    content={
+                      <div>
+                        <p className="text-md font-bold">{action.name}</p>
+                        <p className="text-sm text-default-500">
+                          {action.description}
+                        </p>
+                      </div>
+                    }
+                    placement="top"
+                    size="lg"
+                  >
+                    <div className="flex items-center gap-2">
+                      <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
+                        <Icon icon={action.icon} width={26} />
+                      </div>
+                      <div>
+                        <div className="flex-cols flex gap-2">
+                          <p className="text-md font-bold">
+                            {action.custom_name
+                              ? action.custom_name
+                              : action.name}
+                          </p>
+                          <Chip
+                            className="max-lg:hidden"
+                            color="default"
+                            radius="sm"
+                            size="sm"
+                            variant="flat"
+                          >
+                            {action.id}
+                          </Chip>
+                          <Chip
+                            color={action.active ? "success" : "danger"}
+                            radius="sm"
+                            size="sm"
+                            variant="flat"
+                          >
+                            {action.active ? "Active" : "Inactive"}
+                          </Chip>
+                        </div>
+                        <p className="text-sm text-default-500">
+                          {action.custom_description
+                            ? action.custom_description
+                            : action.description}
+                        </p>
+                      </div>
+                    </div>
+                  </Tooltip>
+                  <div className="flex-cols flex items-center gap-2">
+                    <Button
+                      isIconOnly
+                      color="warning"
+                      isDisabled={!canEdit}
+                      variant="light"
+                      onPress={() => {
+                        setTargetAction(action);
+                        editActionModal.onOpen();
+                      }}
                     >
-                      {action.id}
-                    </Chip>
-                    <Chip
-                      color={action.active ? "success" : "danger"}
-                      radius="sm"
-                      size="sm"
-                      variant="flat"
+                      <Icon icon="solar:pen-new-square-outline" width={20} />
+                    </Button>
+                    <Button
+                      isIconOnly
+                      color="danger"
+                      isDisabled={!canEdit}
+                      variant="light"
+                      onPress={() => {
+                        setTargetAction(action.id);
+                        deleteActionModal.onOpen();
+                      }}
                     >
-                      {action.active ? "Active" : "Inactive"}
-                    </Chip>
+                      <Icon icon="solar:trash-bin-trash-outline" width={20} />
+                    </Button>
                   </div>
-                  <p className="text-sm text-default-500">
-                    {action.description}
-                  </p>
                 </div>
-              </div>
-              <div className="flex flex-cols items-center gap-2">
-                <Button
-                  isIconOnly
-                  color="warning"
-                  variant="light"
-                  onPress={() => {
-                    setTargetAction(action);
-                    editActionModal.onOpen();
-                  }}
-                >
-                  <Icon icon="solar:pen-new-square-broken" width={20} />
-                </Button>
-                <Button
-                  isIconOnly
-                  color="danger"
-                  variant="light"
-                  onPress={() => {
-                    setTargetAction(action.id);
-                    deleteActionModal.onOpen();
-                  }}
-                >
-                  <Icon icon="solar:trash-bin-2-broken" width={20} />
-                </Button>
-              </div>
-            </div>
-            <Spacer y={2} />
-            <Chip
-              className="lg:hidden"
-              color="primary"
-              radius="sm"
-              size="sm"
-              variant="dot"
-            >
-              {action.id}
-            </Chip>
-            {action.params.length > 0 && (
-              <>
                 <Spacer y={2} />
-                <p>Parameters</p>
-                <Spacer y={1} />
-                <Table removeWrapper aria-label="Parameters" className="w-full">
-                  <TableHeader>
-                    <TableColumn align="center">Key</TableColumn>
-                    <TableColumn align="center">Value</TableColumn>
-                  </TableHeader>
-                  <TableBody emptyContent={"No patterns defined."}>
-                    {action.params.map((param: any, index: number) => (
-                      <TableRow key={index}>
-                        <TableCell>{param.key}</TableCell>
-                        <TableCell>{param.value}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </>
-            )}
+                <Chip
+                  className="lg:hidden"
+                  color="default"
+                  radius="sm"
+                  size="sm"
+                  variant="flat"
+                >
+                  {action.id}
+                </Chip>
+                {action.params.length > 0 && (
+                  <>
+                    <Accordion
+                      isCompact
+                      selectedKeys={expandedParams}
+                      selectionMode="multiple"
+                      variant="light"
+                      onSelectionChange={setExpandedParams}
+                    >
+                      <AccordionItem
+                        key={action.id}
+                        aria-label="Parameters"
+                        subtitle="View action parameters (click to expand)"
+                        title="Parameters"
+                      >
+                        <Table
+                          removeWrapper
+                          aria-label="Parameters"
+                          className="w-full"
+                        >
+                          <TableHeader>
+                            <TableColumn align="center">Key</TableColumn>
+                            <TableColumn align="center">Value</TableColumn>
+                          </TableHeader>
+                          <TableBody emptyContent="No patterns defined.">
+                            {action.params.map((param: any, index: number) => (
+                              <TableRow key={index}>
+                                <TableCell>{param.key}</TableCell>
+                                <TableCell>{param.value}</TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </AccordionItem>
+                    </Accordion>
+                  </>
+                )}
+              </div>
+              {isDragEnabled && (
+                <div
+                  {...listeners}
+                  style={{ cursor: "grab", touchAction: "none" }}
+                >
+                  <Icon icon="mi:drag" width={20} />
+                </div>
+              )}
+            </div>
           </CardBody>
         </Card>
       </div>
@@ -156,6 +216,10 @@ export default function Actions({
   };
 
   const handleDragEnd = (event: any) => {
+    if (!isDragEnabled) {
+      return;
+    }
+
     const { active, over } = event;
 
     if (active.id !== over.id) {
@@ -167,12 +231,6 @@ export default function Actions({
 
       updateFlowActions(newArray);
       setActions(newArray);
-
-      // setActions((items: any) => {
-      //   updateFlowActions(newArray);
-
-      //   return newArray;
-      // });
     }
   };
 
@@ -187,11 +245,11 @@ export default function Actions({
   }
 
   return (
-    <div className="grid lg:grid-cols-3 grid-cols-1 gap-4">
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
       <div className="col-span-1">
         <Card fullWidth>
           <CardBody>
-            <div className="flex flex-cols items-start justify-between">
+            <div className="flex-cols flex items-start justify-between">
               <div className="flex flex-col">
                 <p className="text-md font-bold">Details</p>
                 <p className="text-sm text-default-500">
@@ -201,14 +259,15 @@ export default function Actions({
               <Button
                 isIconOnly
                 color="warning"
+                isDisabled={!canEdit}
                 variant="light"
                 onPress={editFlowActionsDetails.onOpen}
               >
-                <Icon icon="solar:pen-new-square-broken" width={18} />
+                <Icon icon="solar:pen-new-square-outline" width={18} />
               </Button>
             </div>
             <Divider className="my-4" />
-            <div className="grid xl:grid-cols-2 gap-4">
+            <div className="grid gap-4 xl:grid-cols-2">
               <p>Execution Order</p>
               <Chip
                 color={flow.exec_parallel ? "secondary" : "primary"}
@@ -231,7 +290,7 @@ export default function Actions({
                   <TableColumn align="center">Type</TableColumn>
                   <TableColumn align="center">Value</TableColumn>
                 </TableHeader>
-                <TableBody emptyContent={"No patterns defined."}>
+                <TableBody emptyContent="No patterns defined.">
                   {flow.patterns.map((pattern: any, index: number) => (
                     <TableRow key={index}>
                       <TableCell>{pattern.key}</TableCell>
@@ -245,7 +304,15 @@ export default function Actions({
           </CardBody>
         </Card>
       </div>
-      <div className="flex flex-col gap-2 col-span-2">
+      <div className="col-span-2 flex flex-col gap-2">
+        <Switch
+          isDisabled={!canEdit}
+          isSelected={isDragEnabled}
+          size="sm"
+          onValueChange={setIsDragEnabled}
+        >
+          Reorder actions
+        </Switch>
         <DndContext
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
@@ -255,16 +322,6 @@ export default function Actions({
             strategy={verticalListSortingStrategy}
           >
             <div className="flex flex-col gap-2">
-              <div className="flex flex-cols items-center gap-2">
-                <Icon
-                  className="text-default-500"
-                  icon="solar:info-circle-linear"
-                  width={18}
-                />
-                <p className="text-sm text-default-500">
-                  You can reorder actions by dragging them
-                </p>
-              </div>
               {actions.map((action: any) => (
                 <SortableItem key={action.id} action={action} />
               ))}
@@ -273,17 +330,16 @@ export default function Actions({
         </DndContext>
         <Card
           fullWidth
-          isHoverable
-          isPressable
-          className="border border-dashed border-default-200 hover:border-primary bg-opacity-60"
-          isDisabled={flow.disabled}
+          className="border border-dashed border-default-200 bg-opacity-60 hover:border-primary"
+          isDisabled={!canEdit}
+          isPressable={canEdit}
           onPress={addFlowActionModal.onOpen}
         >
           <CardBody>
-            <div className="flex flex-cols items-center justify-between gap-2">
+            <div className="flex-cols flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
-                <div className="flex bg-primary/10 text-primary items-center rounded-small justify-center w-10 h-10">
-                  <Icon icon="solar:add-square-broken" width={26} />
+                <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
+                  <Icon icon="solar:add-square-outline" width={26} />
                 </div>
                 <div>
                   <p className="text-md font-bold">Add Action</p>
@@ -301,6 +357,7 @@ export default function Actions({
         disclosure={addFlowActionModal}
         flow={flow}
         runners={runners}
+        user={user}
       />
       <EditActionModal
         disclosure={editActionModal}

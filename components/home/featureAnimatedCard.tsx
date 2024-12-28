@@ -1,7 +1,7 @@
 "use client";
+import { Icon } from "@iconify/react";
 import { animate, motion } from "framer-motion";
 import React, { useEffect } from "react";
-import { Icon } from "@iconify/react";
 
 import { cn } from "@/lib/utils";
 
@@ -68,34 +68,34 @@ const Skeleton = () => {
 
   useEffect(() => {
     // @ts-ignore
-    animate(sequence, {
+    animate(sequence, [], {
       repeat: Infinity,
       repeatDelay: 1,
     });
   }, []);
 
   return (
-    <div className="p-8 overflow-hidden h-full relative flex items-center justify-center">
-      <div className="flex flex-row flex-shrink-0 justify-center items-center gap-2">
-        <Container className="h-8 w-8 circle-1">
-          <ClaudeLogo className="h-4 w-4 " />
+    <div className="relative flex h-full items-center justify-center overflow-hidden p-8">
+      <div className="flex shrink-0 flex-row items-center justify-center gap-2">
+        <Container className="circle-1 size-8">
+          <ClaudeLogo className="size-4 " />
         </Container>
-        <Container className="h-12 w-12 circle-2">
-          <Icon className="h-6 w-6 dark:text-white" icon="mdi:copilot" />
+        <Container className="circle-2 size-12">
+          <Icon className="size-6 dark:text-white" icon="mdi:copilot" />
         </Container>
         <Container className="circle-3">
-          <OpenAILogo className="h-8 w-8 dark:text-white" />
+          <OpenAILogo className="size-8 dark:text-white" />
         </Container>
-        <Container className="h-12 w-12 circle-4">
-          <MetaIconOutline className="h-6 w-6 " />
+        <Container className="circle-4 size-12">
+          <MetaIconOutline className="size-6 " />
         </Container>
-        <Container className="h-8 w-8 circle-5">
-          <GeminiLogo className="h-4 w-4 " />
+        <Container className="circle-5 size-8">
+          <GeminiLogo className="size-4 " />
         </Container>
       </div>
 
-      <div className="h-40 w-px absolute top-20 m-auto z-40 bg-gradient-to-b from-transparent via-cyan-500 to-transparent animate-move">
-        <div className="w-10 h-32 top-1/2 -translate-y-1/2 absolute -left-10">
+      <div className="animate-move absolute top-20 z-40 m-auto h-40 w-px bg-gradient-to-b from-transparent via-cyan-500 to-transparent">
+        <div className="absolute -left-10 top-1/2 h-32 w-10 -translate-y-1/2">
           <Sparkles />
         </div>
       </div>
@@ -109,7 +109,7 @@ const Sparkles = () => {
 
   return (
     <div className="absolute inset-0">
-      {[...Array(12)].map((_, i) => (
+      {[...Array.from({ length: 12 })].map((_, i) => (
         <motion.span
           key={`star-${i}`}
           animate={{

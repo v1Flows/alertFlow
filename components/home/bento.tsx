@@ -1,29 +1,32 @@
+/* eslint-disable no-undef */
 "use client";
 
-import React from "react";
-import { Image, Tooltip } from "@nextui-org/react";
-import createGlobe from "cobe";
-import { useEffect, useRef, forwardRef } from "react";
 import { Icon } from "@iconify/react";
-import { useTheme } from "next-themes";
+import { Image, Tooltip } from "@nextui-org/react";
 import { useIsSSR } from "@react-aria/ssr";
+import createGlobe from "cobe";
+import { useTheme } from "next-themes";
+import React, { useEffect, useRef } from "react";
 
-import { AnimatedBeam } from "@/components/magicui/animated-beam";
 import { cn } from "@/lib/utils";
+import { AnimatedBeam } from "@/components/magicui/animated-beam";
+
+import { title } from "../primitives";
 
 export function FeaturesSectionDemo() {
   const features = [
     {
       title: "Combine everything in Projects",
-      description: "Users, Runners, Flows. You can pack it all in one place.",
+      description:
+        "Projects are the key part of AlertFlow. Here you manage User Access, assign Flows and more.",
       skeleton: <SkeletonOne />,
       className:
         "col-span-1 lg:col-span-4 border-b lg:border-r dark:border-neutral-800",
     },
     {
-      title: "Monitoring is a Global Operation",
+      title: "Easy Access & Navigation",
       description:
-        "Monitoring takes place all over the world. Your Server is located in America and you're located in Europe? We take care of the Alarms while you continue to take your well deserved sleep.",
+        "With our easy to use interface and shortcut based search, you can navigate through your projects, flows, etc. with ease.",
       skeleton: <SkeletonFour />,
       className: "border-b col-span-1 lg:col-span-2 dark:border-neutral-800",
     },
@@ -45,26 +48,31 @@ export function FeaturesSectionDemo() {
   ];
 
   return (
-    <div className="relative z-20 max-w-7xl mx-auto">
+    <div className="relative z-20 mx-auto max-w-7xl">
       <div className="px-8">
-        <h4 className="text-3xl lg:text-5xl lg:leading-tight max-w-5xl mx-auto text-center tracking-tight font-medium text-black dark:text-white">
-          Packed with <span className="text-primary">fundamental features</span>
-        </h4>
+        <div className="text-center">
+          <h1 className={title({ size: "lg" })}>
+            Packed with{" "}
+            <span className={title({ color: "green", size: "lg" })}>
+              fundamental features.
+            </span>{" "}
+          </h1>
+        </div>
 
-        <p className="text-sm lg:text-base  max-w-2xl  my-4 mx-auto text-neutral-500 text-center font-normal dark:text-neutral-300">
-          From Sending emails to triggering ansible playbooks. AlertFlow offers
-          you many ways to react on your Infrastructure Alarms. You say what you
-          want, we do the rest.
+        <p className="mx-auto my-4  max-w-2xl  text-center text-sm font-normal text-neutral-500 dark:text-neutral-300 lg:text-base">
+          From sending emails to trigger ansible playbooks. AlertFlow offers you
+          many ways to react on your Infrastructure Alarms. You say what you
+          need, we do the rest.
         </p>
       </div>
 
       <div className="relative ">
-        <div className="grid grid-cols-1 lg:grid-cols-6 mt-12 xl:border rounded-md dark:border-neutral-800">
+        <div className="mt-12 grid grid-cols-1 rounded-md dark:border-neutral-800 lg:grid-cols-6 xl:border">
           {features.map((feature) => (
             <FeatureCard key={feature.title} className={feature.className}>
               <FeatureTitle>{feature.title}</FeatureTitle>
               <FeatureDescription>{feature.description}</FeatureDescription>
-              <div className=" h-full w-full">{feature.skeleton}</div>
+              <div className=" size-full">{feature.skeleton}</div>
             </FeatureCard>
           ))}
         </div>
@@ -89,7 +97,7 @@ const FeatureCard = ({
 
 const FeatureTitle = ({ children }: { children?: React.ReactNode }) => {
   return (
-    <p className=" max-w-5xl mx-auto text-left tracking-tight text-black dark:text-white text-xl md:text-2xl md:leading-snug">
+    <p className="mx-auto max-w-5xl text-left text-xl font-bold tracking-tight text-black dark:text-white md:text-2xl md:leading-snug">
       {children}
     </p>
   );
@@ -114,31 +122,32 @@ export const SkeletonOne = () => {
   const isSSR = useIsSSR();
 
   return (
-    <div className="relative flex py-8 px-2 gap-10 h-full">
-      <div className="w-full  p-5  mx-auto bg-white dark:bg-neutral-900 shadow-2xl group h-full">
-        <div className="flex flex-1 w-full h-full flex-col space-y-2  ">
+    <div className="relative flex h-full gap-10 px-2 py-8">
+      <div className="group mx-auto size-full bg-transparent p-5">
+        <div className="flex size-full flex-1 flex-col space-y-2  ">
           <Image
             alt="header"
-            className="h-full w-full aspect-square object-cover object-left-top rounded-sm"
+            className="aspect-square size-full rounded-sm object-cover object-left-top"
             height={400}
             src={`/images/project_${theme === "light" || isSSR ? "white" : "dark"}.png`}
             width={800}
           />
         </div>
-      </div>
 
-      <div className="absolute bottom-0 z-40 inset-x-0 h-60 bg-gradient-to-t from-white dark:from-black via-white dark:via-black to-transparent w-full pointer-events-none" />
-      <div className="absolute top-0 z-40 inset-x-0 h-60 bg-gradient-to-b from-white dark:from-black via-transparent to-transparent w-full pointer-events-none" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-40 h-60 w-full bg-gradient-to-t from-white via-white to-transparent dark:from-black dark:via-black" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-40 h-60 w-full bg-gradient-to-b from-white via-transparent to-transparent dark:from-black" />
+      </div>
     </div>
   );
 };
 
-// eslint-disable-next-line react/display-name
-const Circle = forwardRef<
-  // eslint-disable-next-line no-undef
-  HTMLDivElement,
-  { className?: string; children?: React.ReactNode }
->(({ className, children }, ref) => {
+const Circle = ({
+  ref,
+  className,
+  children,
+}: { className?: string; children?: React.ReactNode } & {
+  ref: React.RefObject<HTMLDivElement>;
+}) => {
   return (
     <div
       ref={ref}
@@ -150,20 +159,19 @@ const Circle = forwardRef<
       {children}
     </div>
   );
-});
+};
 
 export const SkeletonTwo = () => {
-  // eslint-disable-next-line no-undef
   const containerRef = useRef<HTMLDivElement>(null);
-  // eslint-disable-next-line no-undef
+
   const div1Ref = useRef<HTMLDivElement>(null);
-  // eslint-disable-next-line no-undef
+
   const div2Ref = useRef<HTMLDivElement>(null);
-  // eslint-disable-next-line no-undef
+
   const div3Ref = useRef<HTMLDivElement>(null);
-  // eslint-disable-next-line no-undef
+
   const div6Ref = useRef<HTMLDivElement>(null);
-  // eslint-disable-next-line no-undef
+
   const div7Ref = useRef<HTMLDivElement>(null);
 
   return (
@@ -245,39 +253,54 @@ export const SkeletonThree = () => {
   const isSSR = useIsSSR();
 
   return (
-    <div className="relative flex flex-col items-start p-8 gap-10 h-full overflow-hidden">
-      <div className="flex flex-1 w-full h-full flex-col space-y-2  ">
+    <div className="relative flex h-full flex-col items-start gap-10 overflow-hidden p-8">
+      <div className="flex size-full flex-1 flex-col space-y-2  ">
         <Image
           alt="header"
-          className="h-full w-full aspect-square object-cover object-left-top rounded-sm"
+          className="aspect-square size-full rounded-sm object-cover object-left-top"
           height={250}
           src={`/images/plan_${theme === "light" || isSSR ? "white" : "dark"}.png`}
           width={800}
         />
       </div>
 
-      <div className="absolute bottom-0 z-40 inset-x-0 h-60 bg-gradient-to-t from-white dark:from-black via-white dark:via-black to-transparent w-full pointer-events-none" />
-      <div className="absolute top-0 z-40 inset-x-0 h-60 bg-gradient-to-b from-white dark:from-black via-transparent to-transparent w-full pointer-events-none" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-40 h-60 w-full bg-gradient-to-t from-white via-white to-transparent dark:from-black dark:via-black" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-40 h-60 w-full bg-gradient-to-b from-white via-transparent to-transparent dark:from-black" />
     </div>
   );
 };
 
 export const SkeletonFour = () => {
+  const { theme } = useTheme();
+  const isSSR = useIsSSR();
+
   return (
-    <div className="h-60 md:h-60  flex flex-col items-center relative bg-transparent dark:bg-transparent mt-10">
-      <Globe className="absolute -right-10 md:-right-10 -bottom-80 md:-bottom-72" />
+    <div className="relative flex h-full flex-col items-start gap-10 overflow-hidden p-8">
+      <div className="flex size-full flex-1 flex-col space-y-2  ">
+        <Image
+          alt="header"
+          className="aspect-square size-full rounded-sm object-cover object-left-top"
+          height={250}
+          src={`/images/command_${theme === "light" || isSSR ? "white" : "dark"}.png`}
+          width={800}
+        />
+      </div>
+
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-40 h-60 w-full bg-gradient-to-t from-white via-white to-transparent dark:from-black dark:via-black" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-40 h-60 w-full bg-gradient-to-b from-white via-transparent to-transparent dark:from-black" />
     </div>
   );
 };
 
 export const Globe = ({ className }: { className?: string }) => {
-  // eslint-disable-next-line no-undef
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     let phi = 0;
 
-    if (!canvasRef.current) return;
+    if (!canvasRef.current) {
+      return;
+    }
 
     const globe = createGlobe(canvasRef.current, {
       devicePixelRatio: 2,

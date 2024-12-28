@@ -1,17 +1,24 @@
 "use client";
-import React from "react";
-import { Tabs, Tab } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
+import { Tab, Tabs } from "@nextui-org/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import React from "react";
 
 import { Flash } from "@/components/icons";
 
+import Actions from "./actions";
 import Executions from "./executions";
 import Payloads from "./payloads";
-import Actions from "./actions";
 import FlowStats from "./stats";
 
-export default function FlowTabs({ flow, executions, payloads, runners }: any) {
+export default function FlowTabs({
+  flow,
+  executions,
+  payloads,
+  runners,
+  user,
+  canEdit,
+}: any) {
   const [selected, setSelected] = React.useState("actions");
 
   const router = useRouter();
@@ -49,22 +56,27 @@ export default function FlowTabs({ flow, executions, payloads, runners }: any) {
               </div>
             }
           >
-            <Actions flow={flow} runners={runners} />
+            <Actions
+              canEdit={canEdit}
+              flow={flow}
+              runners={runners}
+              user={user}
+            />
           </Tab>
           <Tab
             key="executions"
             title={
               <div className="flex items-center space-x-2">
-                <Icon
-                  height={20}
-                  icon="solar:reorder-line-duotone"
-                  width="20"
-                />
+                <Icon height={20} icon="solar:reorder-linear" width="20" />
                 <span>Executions</span>
               </div>
             }
           >
-            <Executions executions={executions} payloads={payloads} />
+            <Executions
+              canEdit={canEdit}
+              executions={executions}
+              payloads={payloads}
+            />
           </Tab>
           <Tab
             key="payloads"
@@ -72,7 +84,7 @@ export default function FlowTabs({ flow, executions, payloads, runners }: any) {
               <div className="flex items-center space-x-2">
                 <Icon
                   height="20"
-                  icon="solar:letter-opened-broken"
+                  icon="solar:letter-opened-outline"
                   width="20"
                 />
                 <span>Payloads</span>
@@ -80,6 +92,7 @@ export default function FlowTabs({ flow, executions, payloads, runners }: any) {
             }
           >
             <Payloads
+              canEdit={canEdit}
               executions={executions}
               flow={flow}
               payloads={payloads}
@@ -90,7 +103,7 @@ export default function FlowTabs({ flow, executions, payloads, runners }: any) {
             key="stats"
             title={
               <div className="flex items-center space-x-2">
-                <Icon height="20" icon="solar:chart-2-broken" width="20" />
+                <Icon height="20" icon="solar:chart-2-outline" width="20" />
                 <span>Stats</span>
               </div>
             }

@@ -1,31 +1,31 @@
 "use client";
-import React from "react";
+import { Icon } from "@iconify/react";
 import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
+  Button,
   Chip,
   Divider,
-  Snippet,
   Dropdown,
-  DropdownTrigger,
-  Button,
-  DropdownMenu,
   DropdownItem,
+  DropdownMenu,
   DropdownSection,
-  useDisclosure,
+  DropdownTrigger,
   Pagination,
+  Snippet,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+  useDisclosure,
 } from "@nextui-org/react";
-import { Icon } from "@iconify/react";
+import React from "react";
 
-import { PlusIcon } from "@/components/icons";
+import ChangeTokenStatusModal from "@/components/functions/tokens/changeStatus";
 import CreateTokenModal from "@/components/functions/tokens/create";
 import DeleteTokenModal from "@/components/functions/tokens/delete";
-import ChangeTokenStatusModal from "@/components/functions/tokens/changeStatus";
 import EditTokenModal from "@/components/functions/tokens/edit";
+import { PlusIcon } from "@/components/icons";
 
 export function TokensList({ tokens, projects }: any) {
   const [status, setStatus] = React.useState(false);
@@ -98,12 +98,12 @@ export function TokensList({ tokens, projects }: any) {
       case "key":
         return (
           <Snippet hideSymbol className="w-full" codeString={token.key}>
-            <span>{token.key.slice(0, 15) + "..."}</span>
+            <span>{`${token.key.slice(0, 15)}...`}</span>
           </Snippet>
         );
       case "actions":
         return (
-          <div className="relative flex justify-center items-center gap-2">
+          <div className="relative flex items-center justify-center gap-2">
             <Dropdown>
               <DropdownTrigger>
                 <Button isIconOnly size="sm" variant="light">
@@ -176,7 +176,7 @@ export function TokensList({ tokens, projects }: any) {
                     className="text-danger"
                     color="danger"
                     startContent={
-                      <Icon icon="solar:trash-bin-2-broken" width={20} />
+                      <Icon icon="solar:trash-bin-trash-outline" width={20} />
                     }
                     onPress={() => {
                       setTargetToken(token);
@@ -199,9 +199,9 @@ export function TokensList({ tokens, projects }: any) {
     <main>
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-1">
-          <p className="text-2xl font-bold mb-0 text-danger">Admin</p>
-          <p className="text-2xl mb-0">|</p>
-          <p className="text-2xl mb-0">Tokens</p>
+          <p className="mb-0 text-2xl font-bold text-danger">Admin</p>
+          <p className="mb-0 text-2xl">|</p>
+          <p className="mb-0 text-2xl">Tokens</p>
         </div>
         <Button
           color="primary"
@@ -255,7 +255,7 @@ export function TokensList({ tokens, projects }: any) {
               ACTIONS
             </TableColumn>
           </TableHeader>
-          <TableBody emptyContent={"No rows to display."} items={items}>
+          <TableBody emptyContent="No rows to display." items={items}>
             {(item: any) => (
               <TableRow key={item.id}>
                 {(columnKey) => (
@@ -266,7 +266,7 @@ export function TokensList({ tokens, projects }: any) {
           </TableBody>
         </Table>
       </div>
-      <CreateTokenModal disclosure={addTokenModal} projectID={"none"} />
+      <CreateTokenModal disclosure={addTokenModal} projectID="none" />
       <ChangeTokenStatusModal
         disclosure={changeStatusModal}
         status={status}

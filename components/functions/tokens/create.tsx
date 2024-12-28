@@ -16,6 +16,7 @@ import React from "react";
 import { toast } from "sonner";
 
 import CreateRunnerToken from "@/lib/fetch/project/POST/CreateRunnerToken";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function CreateTokenModal({
   disclosure,
@@ -29,23 +30,36 @@ export default function CreateTokenModal({
 
   const [description, setDescription] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   async function handleCreateToken() {
     setIsLoading(true);
 
-    const response = await CreateRunnerToken({
+    const response = (await CreateRunnerToken({
       projectId: projectID,
       description,
-    });
+    })) as any;
 
-    if (response.result === "success") {
+    if (!response) {
+      setIsLoading(false);
+      setError(true);
+      setErrorText("Failed to create token");
+      setErrorMessage("Failed to create token");
+      toast.error("Failed to create token");
+
+      return;
+    }
+
+    if (response.success) {
       router.refresh();
       onOpenChange();
       setDescription("");
       setIsLoading(false);
     } else {
       setIsLoading(false);
-      toast.error("Failed to create project");
+      toast.error("Failed to create token");
     }
   }
 
@@ -64,6 +78,9 @@ export default function CreateTokenModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <Input
                   label="Description"
                   labelPlacement="outside"

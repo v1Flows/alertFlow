@@ -1,25 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
-import {
-  Button,
-  Input,
-  Checkbox,
-  Link,
-  Image,
-  Card,
-  CardHeader,
-} from "@nextui-org/react";
 import { Icon } from "@iconify/react";
-import { useTheme } from "next-themes";
+import { Alert } from "@nextui-org/alert";
+import { Button, Checkbox, Image, Input, Link } from "@nextui-org/react";
 import { useIsSSR } from "@react-aria/ssr";
+import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 
-import LoginAPI from "@/lib/auth/login";
 import { setSession } from "@/lib/setSession";
-import { IconWrapper } from "@/lib/IconWrapper";
+import LoginAPI from "@/lib/auth/login";
 
-import { InfoIcon, MailIcon } from "../icons";
+import { MailIcon } from "../icons";
 import Particles from "../magicui/particles";
 
 export default function LoginPageComponent() {
@@ -28,7 +20,7 @@ export default function LoginPageComponent() {
   const router = useRouter();
 
   const [isLoginLoading, setIsLoginLoading] = useState(false);
-  const [email, setEmail] = useState("");
+  const [usernameEmail, setUsernameEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
@@ -44,7 +36,7 @@ export default function LoginPageComponent() {
     setError(false);
     setErrorText("");
 
-    const res = await LoginAPI(email, password);
+    const res = await LoginAPI(usernameEmail, password, rememberMe);
 
     if (!res.error) {
       await setSession(res.token, res.user, res.expires_at);
@@ -58,7 +50,7 @@ export default function LoginPageComponent() {
   }
 
   return (
-    <div className="relative flex h-full w-full flex-col items-center justify-center">
+    <div className="relative flex size-full flex-col items-center justify-center">
       <Particles
         refresh
         className="absolute inset-0"
@@ -72,7 +64,7 @@ export default function LoginPageComponent() {
           height={32}
           radius="none"
           shadow="none"
-          src={`/images/af_logo_${theme === "light" || isSSR ? "black" : "white"}.png`}
+          src={`https://s3-console.justlab.xyz/api/v1/buckets/alertflow/objects/download?preview=true&prefix=af_logo_${theme === "light" || isSSR ? "black" : "white"}.png`}
           width={32}
         />
         <p className="text-xl font-medium">Welcome Back</p>
@@ -82,16 +74,7 @@ export default function LoginPageComponent() {
       </div>
       <div className="mt-2 flex w-full max-w-sm flex-col gap-4 rounded-large bg-content1 px-8 py-6 shadow-small">
         {error && (
-          <Card className="border border-danger-300 border-2">
-            <CardHeader className="justify-start gap-2 items-center">
-              <IconWrapper className="bg-danger/10 text-danger">
-                <InfoIcon className="text-lg" />
-              </IconWrapper>
-              <p className="text-md font-bold text-danger capitalize">
-                {errorText}
-              </p>
-            </CardHeader>
-          </Card>
+          <Alert color="danger" description={errorText} title="Error" />
         )}
         <form
           className="flex flex-col gap-3"
@@ -100,15 +83,15 @@ export default function LoginPageComponent() {
           <Input
             required
             endContent={
-              <MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+              <MailIcon className="pointer-events-none shrink-0 text-2xl text-default-400" />
             }
-            label="Email"
+            label="Username / Email"
             name="email"
-            placeholder="Enter your email"
-            type="email"
-            value={email}
+            placeholder="Enter your username or email"
+            type="text"
+            value={usernameEmail}
             variant="bordered"
-            onValueChange={setEmail}
+            onValueChange={setUsernameEmail}
           />
           <Input
             isRequired

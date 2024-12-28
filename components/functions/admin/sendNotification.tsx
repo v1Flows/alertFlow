@@ -2,21 +2,22 @@
 
 import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
-import React from "react";
+import { Icon } from "@iconify/react";
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
   Textarea,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { Icon } from "@iconify/react";
+import React from "react";
 import { toast } from "sonner";
 
-import AdminSendUserNotification from "@/lib/fetch/admin/sendUserNotification";
+import AdminSendUserNotification from "@/lib/fetch/admin/POST/sendUserNotification";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function AdminSendUserNotificationModal({
   user,
@@ -33,21 +34,40 @@ export default function AdminSendUserNotificationModal({
 
   // loading
   const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   async function sendNotification() {
     setIsLoading(true);
-    const response = await AdminSendUserNotification(user.id, text);
+    const response = (await AdminSendUserNotification(user.id, text)) as any;
 
-    if (response.result === "success") {
-      router.refresh();
-      onOpenChange();
-      setIsLoading(false);
-      setText("");
-      toast.success("Notification sent successfully");
-    } else {
+    if (!response) {
+      setError(true);
+      setErrorMessage("Failed to send notification");
+      setErrorText("Failed to send notification");
       setIsLoading(false);
       toast.error("Failed to send notification");
+
+      return;
     }
+
+    if (response.success) {
+      router.refresh();
+      onOpenChange();
+      setText("");
+      setError(false);
+      setErrorMessage("");
+      setErrorText("");
+      toast.success("Notification sent successfully");
+    } else {
+      setError(true);
+      setErrorMessage(response.message);
+      setErrorText(response.error);
+      toast.error("Failed to send notification");
+    }
+
+    setIsLoading(false);
   }
 
   return (
@@ -73,6 +93,9 @@ export default function AdminSendUserNotificationModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
                 <Textarea
                   isRequired
                   label="Text"

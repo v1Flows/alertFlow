@@ -2,20 +2,21 @@
 
 import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
-import React, { useEffect } from "react";
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
   Button,
   Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
 import { toast } from "sonner";
 
 import UpdatePlan from "@/lib/fetch/admin/PUT/UpdatePlan";
+import ErrorCard from "@/components/error/ErrorCard";
 
 export default function EditPlanModal({
   plan,
@@ -28,6 +29,8 @@ export default function EditPlanModal({
 
   const { isOpen, onOpenChange, onClose } = disclosure;
 
+  const [name, setName] = React.useState("");
+  const [description, setDescription] = React.useState("");
   const [price, setPrice] = React.useState(0);
   const [projects, setProjects] = React.useState(0);
   const [projectMembers, setProjectMembers] = React.useState(0);
@@ -35,12 +38,18 @@ export default function EditPlanModal({
   const [selfHostedRunners, setSelfHostedRunners] = React.useState(0);
   const [alertflowRunners, setAlertflowRunners] = React.useState(0);
   const [executionsPerMonth, setExecutionsPerMonth] = React.useState(0);
+  const [stripeID, setStripeID] = React.useState("");
+  const [error, setError] = React.useState(false);
+  const [errorText, setErrorText] = React.useState("");
+  const [errorMessage, setErrorMessage] = React.useState("");
 
   // loading
   const [isLoading, setIsLoading] = React.useState(false);
 
   useEffect(() => {
     if (plan !== null) {
+      setName(plan.name);
+      setDescription(plan.description);
       setPrice(plan.price);
       setProjects(plan.projects);
       setProjectMembers(plan.project_members);
@@ -48,14 +57,17 @@ export default function EditPlanModal({
       setSelfHostedRunners(plan.self_hosted_runners);
       setAlertflowRunners(plan.alertflow_runners);
       setExecutionsPerMonth(plan.executions_per_month);
+      setStripeID(plan.stripe_id);
     }
   }, [plan]);
 
   async function editPlan() {
     setIsLoading(true);
 
-    const response = await UpdatePlan(
+    const response = (await UpdatePlan(
       plan.id,
+      name,
+      description,
       price,
       projects,
       projectMembers,
@@ -63,14 +75,31 @@ export default function EditPlanModal({
       selfHostedRunners,
       alertflowRunners,
       executionsPerMonth,
-    );
+      stripeID,
+    )) as any;
 
-    if (response.result === "success") {
+    if (!response) {
+      setError(true);
+      setErrorText("Network error");
+      setErrorMessage("Failed to update plan");
+      setIsLoading(false);
+      toast.error("Failed to update plan");
+
+      return;
+    }
+
+    if (response.success) {
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       router.refresh();
       onOpenChange();
       setIsLoading(false);
       toast.success("Plan updated successfully");
     } else {
+      setError(true);
+      setErrorText(response.error);
+      setErrorMessage(response.message);
       setIsLoading(false);
       toast.error("Failed to update user");
     }
@@ -96,11 +125,34 @@ export default function EditPlanModal({
                 </div>
               </ModalHeader>
               <ModalBody>
+                {error && (
+                  <ErrorCard error={errorText} message={errorMessage} />
+                )}
+                <Input
+                  isRequired
+                  label="Name"
+                  labelPlacement="outside"
+                  placeholder="Enter the name"
+                  type="text"
+                  value={name}
+                  variant="flat"
+                  onValueChange={(value) => setName(value)}
+                />
+                <Input
+                  isRequired
+                  label="Description"
+                  labelPlacement="outside"
+                  placeholder="Enter the description"
+                  type="text"
+                  value={description}
+                  variant="flat"
+                  onValueChange={(value) => setDescription(value)}
+                />
                 <Input
                   isRequired
                   endContent={
                     <div className="pointer-events-none flex items-center">
-                      <span className="text-default-400 text-small">€</span>
+                      <span className="text-small text-default-400">€</span>
                     </div>
                   }
                   label="Price"
@@ -179,6 +231,16 @@ export default function EditPlanModal({
                   onValueChange={(value) =>
                     setExecutionsPerMonth(Number(value))
                   }
+                />
+                <Input
+                  isRequired
+                  label="Stripe ID"
+                  labelPlacement="outside"
+                  placeholder="Enter the stripe ID"
+                  type="text"
+                  value={stripeID}
+                  variant="flat"
+                  onValueChange={(value) => setStripeID(value)}
                 />
               </ModalBody>
               <ModalFooter>
