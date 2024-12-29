@@ -61,7 +61,6 @@ func StartPostgres(dbServer string, dbPort int, dbUser string, dbPass string, db
 	}
 
 	createDefaultSettings(db)
-	createDefaultPlans(db)
 
 	return db
 }

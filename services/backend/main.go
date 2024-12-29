@@ -4,7 +4,6 @@ import (
 	"alertflow-backend/config"
 	"alertflow-backend/database"
 	"alertflow-backend/functions/background_checks"
-	functions "alertflow-backend/functions/user"
 	"alertflow-backend/router"
 	"strings"
 
@@ -52,6 +51,5 @@ func main() {
 	database := database.StartPostgres(config.Database.Server, config.Database.Port, config.Database.User, config.Database.Password, config.Database.Name)
 
 	go background_checks.Init(database)
-	go functions.PeriodicUserPlanValidCheck(database)
 	router.StartRouter(database)
 }

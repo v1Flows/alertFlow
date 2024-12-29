@@ -22,9 +22,6 @@ func Admin(router *gin.RouterGroup, db *bun.DB) {
 		admin.PUT("/settings", func(c *gin.Context) {
 			admins.UpdateSettings(c, db)
 		})
-		admin.PUT("/plans/:planID", func(c *gin.Context) {
-			admins.UpdatePlan(c, db)
-		})
 
 		// users
 		admin.GET("/users", func(c *gin.Context) {
