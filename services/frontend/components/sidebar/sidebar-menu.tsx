@@ -66,11 +66,7 @@ export default function SidebarMenu({
   const { theme } = useTheme();
   const isSSR = useIsSSR();
   const pathname = usePathname();
-  const currentPath1 = pathname.split("/")?.[1];
-  const currentPath2 = pathname.split("/")?.[2];
-  const currentPath = currentPath2
-    ? `${currentPath1}_${currentPath2}`
-    : currentPath1;
+  const currentPath = pathname.split("/")?.[1];
 
   const { isCollapsed, isLoading, toggleCollapsed } = useSidebarStore();
 
