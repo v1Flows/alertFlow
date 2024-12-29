@@ -49,7 +49,7 @@ require (
 	golang.org/x/arch v0.11.0 // indirect
 	golang.org/x/net v0.33.0 // indirect
 	golang.org/x/text v0.21.0 // indirect
-	google.golang.org/protobuf v1.35.1 // indirect
+	google.golang.org/protobuf v1.35.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	mellium.im/sasl v0.3.2 // indirect
@@ -63,8 +63,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/lib/pq v1.10.9
 	github.com/sirupsen/logrus v1.9.3
-	github.com/stripe/stripe-go/v72 v72.122.0
 	github.com/uptrace/bun/dialect/pgdialect v1.2.5
-	github.com/zeromicro/go-zero v1.7.3
+	github.com/zeromicro/go-zero v1.7.4
 	golang.org/x/sys v0.28.0 // indirect
 )
