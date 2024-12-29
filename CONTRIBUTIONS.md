@@ -63,4 +63,4 @@ Please note that this project is released with a Contributor Code of Conduct. By
 
 ## License
 
-By contributing to AlertFlow, you agree that your contributions will be licensed under the Creative Commons Attribution-NonCommercial 4.0 International Public License.
+By contributing to AlertFlow, you agree that your contributions will be licensed under the GNU AFFERO GENERAL PUBLIC LICENSE Version 3.
