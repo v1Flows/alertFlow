@@ -39,12 +39,6 @@ export const sectionItems: SidebarItem[] = [
         icon: "solar:notebook-outline",
         title: "API",
       },
-      {
-        key: "help",
-        href: "/",
-        icon: "solar:incoming-call-rounded-outline",
-        title: "Support",
-      },
     ],
   },
 ];
