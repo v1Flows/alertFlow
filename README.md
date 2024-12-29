@@ -112,4 +112,4 @@ We welcome contributions to the AlertFlow project! To contribute, follow these s
 
 ## License
 
-This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International Public License. See the [LICENSE](https://github.com/AlertFlow/alertflow/blob/main/LICENSE) file for details.
+This project is licensed under the GNU AFFERO GENERAL PUBLIC LICENSE Version 3. See the [LICENSE](https://github.com/AlertFlow/alertflow/blob/main/LICENSE) file for details.
