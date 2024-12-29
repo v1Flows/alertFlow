@@ -37,7 +37,7 @@ import EditUserModal from "@/components/functions/users/edit";
 import { LockIcon, PlusIcon } from "@/components/icons";
 import UpdateUserStatus from "@/lib/fetch/admin/PUT/UpdateUserState";
 
-export function UsersList({ users, plans }: any) {
+export function UsersList({ users }: any) {
   const router = useRouter();
   const { isOpen, onOpenChange } = useDisclosure();
   const [disableReason, setDisableReason] = React.useState("");
@@ -57,19 +57,6 @@ export function UsersList({ users, plans }: any) {
       changeUserStatus();
     }
   }, [userID, disableUser]);
-
-  function planColor(plan: string) {
-    switch (plan) {
-      case "hobby":
-        return "default";
-      case "pro":
-        return "primary";
-      case "advanced":
-        return "warning";
-      default:
-        return "secondary";
-    }
-  }
 
   function roleColor(role: string) {
     switch (role) {
@@ -174,16 +161,6 @@ export function UsersList({ users, plans }: any) {
             {cellValue}
           </Snippet>
         );
-      case "plan":
-        return (
-          <p
-            className={`text- text-sm font-bold capitalize${planColor(cellValue)}`}
-          >
-            {cellValue}
-          </p>
-        );
-      case "plan_valid_until":
-        return new Date(user.plan_valid_until).toLocaleString("de-DE");
       case "role":
         return (
           <p
@@ -368,12 +345,6 @@ export function UsersList({ users, plans }: any) {
             <TableColumn key="role" align="start">
               Role
             </TableColumn>
-            <TableColumn key="plan" align="start">
-              Plan
-            </TableColumn>
-            <TableColumn key="plan_valid_until" align="start">
-              Valid Until
-            </TableColumn>
             <TableColumn key="disabled" align="start">
               Status
             </TableColumn>
@@ -438,7 +409,6 @@ export function UsersList({ users, plans }: any) {
       </div>
       <EditUserModal
         disclosure={editUserModal}
-        plans={plans}
         user={targetUser}
       />
       <AdminSendUserNotificationModal

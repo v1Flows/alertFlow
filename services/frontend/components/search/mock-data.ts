@@ -15,7 +15,7 @@ const searchData = {
           },
         },
       },
-      url: "/dashboard",
+      url: "/",
       group: {
         key: "dashboard",
         name: "Dashboard",
@@ -37,7 +37,7 @@ const searchData = {
           },
         },
       },
-      url: "/dashboard/projects",
+      url: "/projects",
       group: {
         key: "dashboard",
         name: "dashboard",
@@ -59,7 +59,7 @@ const searchData = {
           },
         },
       },
-      url: "/dashboard/flows",
+      url: "/flows",
       group: {
         key: "dashboard",
         name: "Dashboard",
@@ -112,76 +112,10 @@ const searchData = {
       },
       content: "Security",
     },
-    {
-      slug: "profile-subscription-billing",
-      component: {
-        name: "Subscription & Billing",
-        slug: "profile-subscription-billing",
-        icon: "solar:card-2-broken",
-        attributes: {
-          group: "profile",
-          groupOrder: 3,
-          iframe: {
-            initialHeight: 220,
-            initialMobileHeight: 220,
-          },
-        },
-      },
-      url: "/profile?tab=subscription",
-      group: {
-        key: "profile",
-        name: "Profile",
-      },
-      content: "Subscription & Billing",
-    },
-    {
-      slug: "profile-quota",
-      component: {
-        name: "Quota",
-        slug: "profile-quota",
-        icon: "solar:pie-chart-2-broken",
-        attributes: {
-          group: "profile",
-          groupOrder: 4,
-          iframe: {
-            initialHeight: 220,
-            initialMobileHeight: 220,
-          },
-        },
-      },
-      url: "/profile?tab=quota",
-      group: {
-        key: "profile",
-        name: "Profile",
-      },
-      content: "Quota",
-    },
   ],
   projects: [],
   flows: [],
   help: [
-    {
-      slug: "help-documentation",
-      component: {
-        name: "Documentation",
-        slug: "help-documentation",
-        icon: "solar:notes-outline",
-        attributes: {
-          group: "informations",
-          groupOrder: 1,
-          iframe: {
-            initialHeight: 220,
-            initialMobileHeight: 220,
-          },
-        },
-      },
-      url: "/dashboard/docs",
-      group: {
-        key: "informations",
-        name: "Informations",
-      },
-      content: "Documentation",
-    },
     {
       slug: "help-api",
       component: {
@@ -197,34 +131,12 @@ const searchData = {
           },
         },
       },
-      url: "/dashboard/docs",
+      url: "/docs",
       group: {
         key: "informations",
         name: "Informations",
       },
       content: "API",
-    },
-    {
-      slug: "help-support",
-      component: {
-        name: "Support",
-        slug: "help-support",
-        icon: "solar:incoming-call-rounded-outline",
-        attributes: {
-          group: "support",
-          groupOrder: 1,
-          iframe: {
-            initialHeight: 220,
-            initialMobileHeight: 220,
-          },
-        },
-      },
-      url: "/dashboard",
-      group: {
-        key: "support",
-        name: "Support",
-      },
-      content: "Support",
     },
   ],
 };

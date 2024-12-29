@@ -145,7 +145,7 @@ export default function SignUpPage() {
         await setSession(loginRes.token, loginRes.user, loginRes.expires_at);
 
         setIsLoading(false);
-        router.push("/dashboard");
+        router.push("/");
         toast.success("Successfully signed up and logged in!");
       } else {
         toast.error(loginRes.error);

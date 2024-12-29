@@ -11,7 +11,6 @@ module.exports = async (phase) => {
     trailingSlash: false,
     env: {
       NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
-      NEXT_PUBLIC_STRIPE_PUBLIC_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY,
     },
     reactStrictMode: true,
     images: {

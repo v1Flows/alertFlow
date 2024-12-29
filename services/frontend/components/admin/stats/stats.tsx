@@ -26,7 +26,6 @@ export function PageStats({
     incoming_payload_stats: [],
     project_creation_stats: [],
     flow_creation_stats: [],
-    users_per_plan_stats: [],
     users_per_role_stats: [],
   });
 

@@ -61,7 +61,7 @@ export default function Navbar({ user, session, settings }: any) {
               aria-current="page"
               color="primary"
               isDisabled={!user?.email}
-              onPress={() => goTo("/dashboard")}
+              onPress={() => goTo("/")}
             >
               Dashboard
             </Link>
@@ -110,7 +110,7 @@ export default function Navbar({ user, session, settings }: any) {
               aria-current="page"
               color="foreground"
               isDisabled={!user?.email}
-              onPress={() => goTo("/dashboard")}
+              onPress={() => goTo("/")}
             >
               Dashboard
             </Link>

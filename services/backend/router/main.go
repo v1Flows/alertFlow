@@ -36,7 +36,6 @@ func StartRouter(db *bun.DB) {
 		Token(v1, db)
 		User(v1, db)
 		Health(v1)
-		Docs(v1, db)
 	}
 
 	log.Info("Starting Router on port 8080")

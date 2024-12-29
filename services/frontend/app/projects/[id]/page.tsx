@@ -7,7 +7,6 @@ import GetProject from "@/lib/fetch/project/data";
 import GetProjectRunners from "@/lib/fetch/project/runners";
 import GetProjectApiKeys from "@/lib/fetch/project/tokens";
 import GetUserDetails from "@/lib/fetch/user/getDetails";
-import GetUserPlan from "@/lib/fetch/user/getPlan";
 
 export default async function DashboardProjectPage({
   params,
@@ -20,18 +19,16 @@ export default async function DashboardProjectPage({
   const projectData = GetProject(id);
   const runnersData = GetProjectRunners(id);
   const tokensData = GetProjectApiKeys(id);
-  const planData = GetUserPlan();
   const auditData = GetProjectAuditLogs(id);
   const userDetailsData = GetUserDetails();
   const flowsData = GetFlows();
 
-  const [settings, project, runners, tokens, plan, audit, userDetails, flows] =
+  const [settings, project, runners, tokens, audit, userDetails, flows] =
     (await Promise.all([
       settingsData,
       projectData,
       runnersData,
       tokensData,
-      planData,
       auditData,
       userDetailsData,
       flowsData,
@@ -42,7 +39,6 @@ export default async function DashboardProjectPage({
       {audit.success &&
       flows.success &&
       project.success &&
-      plan.success &&
       runners.success &&
       settings.success &&
       tokens.success &&
@@ -51,7 +47,6 @@ export default async function DashboardProjectPage({
           audit={audit.data.audit}
           flows={flows.data.flows}
           members={project.data.members}
-          plan={plan.data.plan}
           project={project.data.project}
           runners={runners.data.runners}
           settings={settings.data.settings}
@@ -64,7 +59,6 @@ export default async function DashboardProjectPage({
             audit.error ||
             flows.error ||
             project.error ||
-            plan.error ||
             runners.error ||
             settings.error ||
             tokens.error ||
@@ -74,7 +68,6 @@ export default async function DashboardProjectPage({
             audit.message ||
             flows.message ||
             project.message ||
-            plan.message ||
             runners.message ||
             settings.message ||
             tokens.message ||

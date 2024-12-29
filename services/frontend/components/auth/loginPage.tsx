@@ -40,7 +40,7 @@ export default function LoginPageComponent() {
 
     if (!res.error) {
       await setSession(res.token, res.user, res.expires_at);
-      router.push("/dashboard");
+      router.push("/");
       setIsLoginLoading(false);
     } else {
       setIsLoginLoading(false);

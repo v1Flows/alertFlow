@@ -10,20 +10,20 @@ export const sectionItems: SidebarItem[] = [
     title: "Dashboard",
     items: [
       {
-        key: "dashboard",
-        href: "/dashboard",
+        key: "",
+        href: "/",
         icon: "solar:home-smile-outline",
         title: "Home",
       },
       {
-        key: "dashboard_projects",
-        href: "/dashboard/projects",
+        key: "projects",
+        href: "/projects",
         icon: "solar:inbox-archive-outline",
         title: "Projects",
       },
       {
-        key: "dashboard_flows",
-        href: "/dashboard/flows",
+        key: "flows",
+        href: "/flows",
         icon: "solar:book-2-outline",
         title: "Flows",
       },
@@ -34,22 +34,10 @@ export const sectionItems: SidebarItem[] = [
     title: "Informations & Help",
     items: [
       {
-        key: "dashboard_docs",
-        href: "/dashboard/docs",
-        icon: "solar:notes-outline",
-        title: "Documentation",
-      },
-      {
-        key: "dashboard_docs_api",
-        href: "/dashboard",
+        key: "docs_api",
+        href: "/",
         icon: "solar:notebook-outline",
         title: "API",
-      },
-      {
-        key: "help",
-        href: "/dashboard",
-        icon: "solar:incoming-call-rounded-outline",
-        title: "Support",
       },
     ],
   },
@@ -108,12 +96,6 @@ export const sectionAdminItems: SidebarItem[] = [
         href: "/admin/tokens",
         icon: "solar:key-square-2-outline",
         title: "Tokens",
-      },
-      {
-        key: "admin_plans",
-        href: "/admin/plans",
-        icon: "solar:planet-outline",
-        title: "Plans",
       },
       {
         key: "admin_settings",

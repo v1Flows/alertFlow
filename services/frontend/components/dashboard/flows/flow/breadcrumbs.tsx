@@ -7,10 +7,10 @@ import React from "react";
 export default function FlowBreadcrumbs({ id }: any) {
   return (
     <Breadcrumbs>
-      <BreadcrumbItem href="/dashboard/flows">
+      <BreadcrumbItem href="/flows">
         <Icon icon="solar:book-2-outline" width={20} /> Flows
       </BreadcrumbItem>
-      <BreadcrumbItem href={`/dashboard/flows/${id}`}>
+      <BreadcrumbItem href={`/flows/${id}`}>
         <Snippet hideSymbol className="bg-transparent" size="sm" variant="flat">
           {id}
         </Snippet>

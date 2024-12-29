@@ -31,7 +31,6 @@ export default function Runners({
   runners,
   project,
   settings,
-  plan,
   user,
   members,
 }: any) {
@@ -84,11 +83,6 @@ export default function Runners({
       return false;
     } else if (user.role === "admin") {
       return false;
-    } else if (
-      runners.filter((runner: any) => runner.alertflow_runner === false)
-        .length >= plan.self_hosted_runners
-    ) {
-      return true;
     } else if (
       members.find((m: any) => m.user_id === user.id) &&
       members.filter((m: any) => m.user_id === user.id)[0].role === "Viewer"

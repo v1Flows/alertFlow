@@ -19,20 +19,10 @@ type JWTConf struct {
 	Secret string `json:"Secret"`
 }
 
-type StripeConf struct {
-	Secret string `json:"Secret"`
-}
-
-type ResendConf struct {
-	APIKey string `json:"APIKey"`
-}
-
 type RestfulConf struct {
 	LogLevel string `json:"LogLevel"`
 	Database DatabaseConf
 	JWT      JWTConf
-	Stripe   StripeConf
-	Resend   ResendConf
 }
 
 func ReadConfig(configFile string) (*RestfulConf, error) {

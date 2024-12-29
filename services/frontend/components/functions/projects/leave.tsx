@@ -54,7 +54,7 @@ export default function LeaveProjectModal({
       setErrorText("");
       setErrorMessage("");
       toast.success("You have left the project successfully");
-      router.push("/dashboard/projects");
+      router.push("/projects");
     } else {
       setIsLeaveLoading(false);
       setError(true);

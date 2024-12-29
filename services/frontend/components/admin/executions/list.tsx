@@ -369,7 +369,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
                     }
                     onPress={() =>
                       router.push(
-                        `/dashboard/flows/${execution.flow_id}/execution/${execution.id}`,
+                        `/flows/${execution.flow_id}/execution/${execution.id}`,
                       )
                     }
                   >

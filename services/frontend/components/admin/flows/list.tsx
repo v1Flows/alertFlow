@@ -144,7 +144,7 @@ export function FlowsList({ flows, projects, runners }: any) {
                     key="view"
                     color="primary"
                     startContent={<Icon icon="solar:eye-broken" width={20} />}
-                    onPress={() => router.push(`/dashboard/flows/${flow.id}`)}
+                    onPress={() => router.push(`/flows/${flow.id}`)}
                   >
                     View
                   </DropdownItem>

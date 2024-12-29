@@ -220,7 +220,7 @@ function flattenSearchData(projects: any, flows: any) {
             },
           },
         },
-        url: `/dashboard/projects/${project.id}`,
+        url: `/projects/${project.id}`,
         group: {
           key: "projects",
           name: "Projects",
@@ -249,7 +249,7 @@ function flattenSearchData(projects: any, flows: any) {
             },
           },
         },
-        url: `/dashboard/flows/${flow.id}`,
+        url: `/flows/${flow.id}`,
         group: {
           key: flow.project_id,
           name: projects.find((p: any) => p.id === flow.project_id)?.name,

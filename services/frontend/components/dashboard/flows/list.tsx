@@ -40,7 +40,6 @@ export default function FlowList({
   flows,
   projects,
   settings,
-  plan,
   user,
 }: any) {
   const router = useRouter();
@@ -100,8 +99,6 @@ export default function FlowList({
       return false;
     } else if (user.role === "admin") {
       return false;
-    } else if (flows.length >= plan.flows) {
-      return true;
     }
 
     return false;
@@ -225,7 +222,7 @@ export default function FlowList({
                   fullWidth
                   isDisabled={flow.disabled}
                   isPressable={!flow.disabled}
-                  onPress={() => router.push(`/dashboard/flows/${flow.id}`)}
+                  onPress={() => router.push(`/flows/${flow.id}`)}
                 >
                   <CardHeader className="items-center justify-between p-3 pb-0">
                     <Chip

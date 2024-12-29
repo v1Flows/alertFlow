@@ -4,6 +4,14 @@ import clsx from "clsx";
 import React from "react";
 import { Toaster } from "sonner";
 
+import Footer from "@/components/footer/Footer";
+import SidebarMenu from "@/components/sidebar/sidebar-menu";
+import GetFlows from "@/lib/fetch/flow/all";
+import AdminGetSettings from "@/lib/fetch/page/settings";
+import GetProjects from "@/lib/fetch/project/all";
+import GetUserDetails from "@/lib/fetch/user/getDetails";
+import GetUserNotifications from "@/lib/fetch/user/getNotifications";
+
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 
@@ -58,11 +66,26 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const settingsData = AdminGetSettings();
+  const notificationsData = GetUserNotifications();
+  const userDetailsData = GetUserDetails();
+  const projectsData = GetProjects();
+  const flowsData = GetFlows();
+
+  const [settings, notifications, userDetails, projects, flows] =
+    await Promise.all([
+      settingsData,
+      notificationsData,
+      userDetailsData,
+      projectsData,
+      flowsData,
+    ]);
+
   return (
     <html suppressHydrationWarning lang="en">
       <head>
@@ -81,7 +104,20 @@ export default function RootLayout({
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <Toaster richColors position="bottom-center" />
-          <div className="relative flex h-screen flex-col">{children}</div>
+          <div className="relative flex h-screen flex-col">
+          <SidebarMenu
+      flows={flows.success ? flows.data.flows : []}
+      notifications={
+        notifications.success ? notifications.data.notifications : []
+      }
+      projects={projects.success ? projects.data.projects : []}
+      settings={settings.success ? settings.data.settings : {}}
+      user={userDetails.success ? userDetails.data.user : {}}
+    >
+      {children}
+      <Footer />
+    </SidebarMenu>
+          </div>
         </Providers>
       </body>
     </html>

@@ -150,7 +150,7 @@ export function ProjectList({ projects, members }: any) {
                     color="primary"
                     startContent={<Icon icon="solar:eye-broken" width={20} />}
                     onPress={() =>
-                      router.push(`/dashboard/projects/${project.id}`)
+                      router.push(`/projects/${project.id}`)
                     }
                   >
                     View
