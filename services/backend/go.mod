@@ -1,9 +1,10 @@
 module alertflow-backend
 
 go 1.22.3
+toolchain go1.23.4
 
 require (
-	github.com/uptrace/bun v1.2.5
+	github.com/uptrace/bun v1.2.6
 	github.com/uptrace/bun/driver/pgdriver v1.2.5
 	github.com/uptrace/bun/extra/bunotel v1.2.5
 	golang.org/x/crypto v0.31.0
@@ -11,6 +12,8 @@ require (
 
 require (
 	github.com/alecthomas/units v0.0.0-20240927000941-0f3dac36c52b // indirect
+	github.com/bahlo/generic-list-go v0.2.0 // indirect
+	github.com/buger/jsonparser v1.1.1 // indirect
 	github.com/bytedance/sonic v1.12.3 // indirect
 	github.com/bytedance/sonic/loader v0.2.1 // indirect
 	github.com/cloudwego/base64x v0.1.4 // indirect
@@ -28,6 +31,7 @@ require (
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.8 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
+	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
@@ -41,6 +45,7 @@ require (
 	github.com/uptrace/opentelemetry-go-extra/otelsql v0.3.2 // indirect
 	github.com/vmihailenco/msgpack/v5 v5.4.1 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
+	github.com/wk8/go-ordered-map/v2 v2.1.9-0.20240816141633-0a40785b4f41 // indirect
 	github.com/xhit/go-str2duration/v2 v2.1.0 // indirect
 	go.opentelemetry.io/otel v1.31.0 // indirect
 	go.opentelemetry.io/otel/metric v1.31.0 // indirect
@@ -63,8 +68,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/lib/pq v1.10.9
 	github.com/sirupsen/logrus v1.9.3
-	github.com/stripe/stripe-go/v72 v72.122.0
-	github.com/uptrace/bun/dialect/pgdialect v1.2.5
+	github.com/uptrace/bun/dialect/pgdialect v1.2.6
 	github.com/zeromicro/go-zero v1.7.3
 	golang.org/x/sys v0.28.0 // indirect
 )
