@@ -34,12 +34,6 @@ export const sectionItems: SidebarItem[] = [
     title: "Informations & Help",
     items: [
       {
-        key: "dashboard_docs",
-        href: "/docs",
-        icon: "solar:notes-outline",
-        title: "Documentation",
-      },
-      {
         key: "dashboard_docs_api",
         href: "/",
         icon: "solar:notebook-outline",
@@ -108,12 +102,6 @@ export const sectionAdminItems: SidebarItem[] = [
         href: "/admin/tokens",
         icon: "solar:key-square-2-outline",
         title: "Tokens",
-      },
-      {
-        key: "admin_plans",
-        href: "/admin/plans",
-        icon: "solar:planet-outline",
-        title: "Plans",
       },
       {
         key: "admin_settings",

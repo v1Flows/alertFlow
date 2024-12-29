@@ -27,7 +27,6 @@ export default function Project({
   members,
   runners,
   tokens,
-  plan,
   audit,
   flows,
 }: any) {
@@ -197,7 +196,6 @@ export default function Project({
         <ProjectTabs
           audit={audit}
           members={members}
-          plan={plan}
           project={project}
           runners={runners}
           settings={settings}

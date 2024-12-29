@@ -7,10 +7,10 @@ import React from "react";
 export default function ProjectBreadcrumbs({ id }: any) {
   return (
     <Breadcrumbs>
-      <BreadcrumbItem href="/dashboard/projects">
+      <BreadcrumbItem href="/projects">
         <Icon icon="solar:inbox-archive-outline" width={20} /> Projects
       </BreadcrumbItem>
-      <BreadcrumbItem href={`/dashboard/projects/${id}`}>
+      <BreadcrumbItem href={`/projects/${id}`}>
         <Snippet hideSymbol className="bg-transparent" size="sm" variant="flat">
           {id}
         </Snippet>

@@ -373,7 +373,7 @@ export default function Executions({
                 size="md"
                 variant="bordered"
                 onPress={() =>
-                  router.push(`/dashboard/flows/${execution.flow_id}/`)
+                  router.push(`/flows/${execution.flow_id}/`)
                 }
               >
                 View Flow
@@ -386,7 +386,7 @@ export default function Executions({
               variant="solid"
               onPress={() =>
                 router.push(
-                  `/dashboard/flows/${execution.flow_id}/execution/${execution.id}`,
+                  `/flows/${execution.flow_id}/execution/${execution.id}`,
                 )
               }
             >

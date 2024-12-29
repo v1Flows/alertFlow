@@ -36,7 +36,6 @@ export function ProjectsList({
   projects,
   pending_projects,
   settings,
-  plan,
   user,
 }: any) {
   const router = useRouter();
@@ -62,8 +61,6 @@ export function ProjectsList({
       return false;
     } else if (user.role === "admin") {
       return false;
-    } else if (projects.length >= plan.projects) {
-      return true;
     }
 
     return false;
@@ -114,7 +111,7 @@ export function ProjectsList({
               isDisabled={project.disabled}
               isPressable={!project.disabled}
               onPress={() => {
-                router.push(`/dashboard/projects/${project.id}`);
+                router.push(`/projects/${project.id}`);
               }}
             >
               <CardHeader className="items-center justify-between p-3 pb-0">

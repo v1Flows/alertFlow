@@ -15,7 +15,7 @@ const searchData = {
           },
         },
       },
-      url: "/dashboard",
+      url: "/",
       group: {
         key: "dashboard",
         name: "Dashboard",
@@ -37,7 +37,7 @@ const searchData = {
           },
         },
       },
-      url: "/dashboard/projects",
+      url: "/projects",
       group: {
         key: "dashboard",
         name: "dashboard",
@@ -59,7 +59,7 @@ const searchData = {
           },
         },
       },
-      url: "/dashboard/flows",
+      url: "/flows",
       group: {
         key: "dashboard",
         name: "Dashboard",
@@ -175,7 +175,7 @@ const searchData = {
           },
         },
       },
-      url: "/dashboard/docs",
+      url: "/docs",
       group: {
         key: "informations",
         name: "Informations",
@@ -197,7 +197,7 @@ const searchData = {
           },
         },
       },
-      url: "/dashboard/docs",
+      url: "/docs",
       group: {
         key: "informations",
         name: "Informations",
@@ -219,7 +219,7 @@ const searchData = {
           },
         },
       },
-      url: "/dashboard",
+      url: "/",
       group: {
         key: "support",
         name: "Support",

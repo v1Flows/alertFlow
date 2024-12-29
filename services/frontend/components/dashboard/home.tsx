@@ -131,7 +131,7 @@ export function DashboardHome({
                   <DropdownItem
                     key={flow.id}
                     onPress={() => {
-                      router.push(`/dashboard/flows/${flow.id}`);
+                      router.push(`/flows/${flow.id}`);
                     }}
                   >
                     <div className="flex items-center justify-between gap-4">
@@ -238,7 +238,7 @@ export function DashboardHome({
                     showDivider={index !== executions.length - 1}
                     onPress={() => {
                       router.push(
-                        `/dashboard/flows/${execution.flow_id}/execution/${execution.id}`,
+                        `/flows/${execution.flow_id}/execution/${execution.id}`,
                       );
                     }}
                   >
@@ -285,7 +285,7 @@ export function DashboardHome({
                     key={execution.id}
                     onPress={() => {
                       router.push(
-                        `/dashboard/flows/${execution.flow_id}/execution/${execution.id}`,
+                        `/flows/${execution.flow_id}/execution/${execution.id}`,
                       );
                     }}
                   >
@@ -364,7 +364,7 @@ export function DashboardHome({
                     key={runner.id}
                     onPress={() => {
                       router.push(
-                        `/dashboard/projects/${runner.project_id}?tab=runners`,
+                        `/projects/${runner.project_id}?tab=runners`,
                       );
                     }}
                   >

@@ -62,48 +62,6 @@ export default function UsersStats({
         />
         <Card>
           <CardBody>
-            <p className="font-bold">Amount of Users per Plan</p>
-            <Spacer y={1} />
-            <div className="grid gap-2 lg:grid-cols-2">
-              {stats.users_per_plan_stats.length === 0 && (
-                <div className="space-y-3">
-                  <Skeleton className="w-3/5 rounded-lg">
-                    <div className="h-3 w-3/5 rounded-lg bg-default-200" />
-                  </Skeleton>
-                  <Skeleton className="w-3/5 rounded-lg">
-                    <div className="h-3 w-3/5 rounded-lg bg-default-200" />
-                  </Skeleton>
-                  <Skeleton className="w-3/5 rounded-lg">
-                    <div className="h-3 w-3/5 rounded-lg bg-default-200" />
-                  </Skeleton>
-                  <Skeleton className="w-3/5 rounded-lg">
-                    <div className="h-3 w-3/5 rounded-lg bg-default-200" />
-                  </Skeleton>
-                </div>
-              )}
-              {stats.users_per_plan_stats.map((p: any) => (
-                <div key={p.plan}>
-                  <div className="flex items-center gap-2">
-                    <CircularProgress
-                      showValueLabel
-                      aria-label="Loading..."
-                      color="primary"
-                      maxValue={users.length}
-                      size="lg"
-                      value={p.count}
-                    />
-                    <div>
-                      <p className="text-md font-bold">{p.count}</p>
-                      <p className="text-sm text-default-500">{p.plan}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardBody>
-        </Card>
-        <Card>
-          <CardBody>
             <p className="font-bold">Amount of Users per Role</p>
             <Spacer y={1} />
             <div className="flex flex-col gap-2">

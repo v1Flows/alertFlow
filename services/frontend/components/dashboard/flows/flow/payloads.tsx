@@ -127,7 +127,7 @@ export default function Payloads({
                       variant="bordered"
                       onPress={() =>
                         router.push(
-                          `/dashboard/flows/${flow.id}/execution/${executions.find((execution: any) => execution.payload_id === payload.id).id}`,
+                          `/flows/${flow.id}/execution/${executions.find((execution: any) => execution.payload_id === payload.id).id}`,
                         )
                       }
                     >

@@ -16,15 +16,12 @@ import { toast } from "sonner";
 import ChangeUserDetails from "@/lib/fetch/user/PUT/changeDetails";
 import CheckUserTaken from "@/lib/auth/checkTaken";
 
-import BillingSettings from "./billing-settings";
-import Quota from "./quota";
 import SecuritySettings from "./security-settings";
 
 export function UserProfile({
   user,
   session,
   paymentMethods,
-  plans,
   subscription,
   stats,
 }: any) {
@@ -169,33 +166,6 @@ export function UserProfile({
             }
           >
             <SecuritySettings user={user} />
-          </Tab>
-          <Tab
-            key="subscription"
-            title={
-              <div className="flex items-center gap-1.5">
-                <Icon icon="solar:card-2-broken" width={20} />
-                <p>Subscription & Billing</p>
-              </div>
-            }
-          >
-            <BillingSettings
-              paymentMethods={paymentMethods}
-              plans={plans}
-              subscription={subscription}
-              user={user}
-            />
-          </Tab>
-          <Tab
-            key="quota"
-            title={
-              <div className="flex items-center gap-1.5">
-                <Icon icon="solar:pie-chart-2-broken" width={20} />
-                <p>Quota</p>
-              </div>
-            }
-          >
-            <Quota plans={plans} stats={stats} user={user} />
           </Tab>
           <Tab key="appearance" isDisabled title="Appearance">
             <Card>

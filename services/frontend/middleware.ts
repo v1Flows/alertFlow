@@ -63,15 +63,15 @@ export async function middleware(request: NextRequest) {
     }
 
     if (request.url.includes("/auth/login") && hasSessionCookie) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
+      return NextResponse.redirect(new URL("/", request.url));
     }
 
     if (request.url.includes("/auth/signup") && hasSessionCookie) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
+      return NextResponse.redirect(new URL("/", request.url));
     }
 
     if (
-      (request.url.includes("/dashboard") || request.url.includes("/admin")) &&
+      (request.url.includes("/") || request.url.includes("/admin")) &&
       !hasSessionCookie
     ) {
       return NextResponse.redirect(new URL("/", request.url));

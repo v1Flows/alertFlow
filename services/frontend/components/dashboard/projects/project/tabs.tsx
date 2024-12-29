@@ -16,7 +16,6 @@ export default function ProjectTabs({
   runners,
   tokens,
   settings,
-  plan,
   audit,
   user,
 }: any) {
@@ -30,18 +29,10 @@ export default function ProjectTabs({
   React.useEffect(() => {
     let tab = params.get("tab") || "members";
 
-    if (tab === "audit" && plan.id !== "enterprise" && user.role !== "admin") {
-      tab = "members";
-    }
-
     setSelected(tab);
   }, [params]);
 
   const handleTabChange = (key: any) => {
-    if (key === "audit" && plan.id !== "enterprise" && user.role !== "admin") {
-      return;
-    }
-
     params.set("tab", key);
     router.push(`${pathname}?${params.toString()}`);
   };
@@ -67,7 +58,6 @@ export default function ProjectTabs({
           >
             <ProjectMembers
               members={members}
-              plan={plan}
               project={project}
               settings={settings}
               user={user}
@@ -84,7 +74,6 @@ export default function ProjectTabs({
           >
             <Runners
               members={members}
-              plan={plan}
               project={project}
               runners={runners}
               settings={settings}
@@ -110,21 +99,11 @@ export default function ProjectTabs({
           </Tab>
           <Tab
             key="audit"
-            isDisabled={plan.id !== "enterprise" && user.role !== "admin"}
             title={
-              plan.id !== "enterprise" && user.role !== "admin" ? (
-                <Tooltip color="secondary" content="Enterprise Feature">
-                  <div className="flex items-center space-x-2">
-                    <Icon icon="solar:notes-outline" width={20} />
-                    <span>Audit</span>
-                  </div>
-                </Tooltip>
-              ) : (
                 <div className="flex items-center space-x-2">
                   <Icon icon="solar:notes-outline" width={20} />
                   <span>Audit</span>
                 </div>
-              )
             }
           >
             <ProjectAuditLogs audit={audit} members={members} user={user} />

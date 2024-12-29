@@ -131,7 +131,7 @@ export default function CreateProjectModal({
                   <p className="text-lg font-bold">Create new project</p>
                   <p className="text-sm text-default-500">
                     Projects are where you manage team members, create flows or
-                    runners. Depending on your Plan you also see Audit logs.{" "}
+                    runners.
                   </p>
                 </div>
               </ModalHeader>

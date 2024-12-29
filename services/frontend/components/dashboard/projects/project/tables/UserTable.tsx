@@ -35,7 +35,6 @@ export default function ProjectMembers({
   project,
   members,
   settings,
-  plan,
   user,
 }: any) {
   const addProjectMemberModal = useDisclosure();
@@ -199,8 +198,6 @@ export default function ProjectMembers({
       return false;
     } else if (user.role === "admin") {
       return false;
-    } else if (members.length >= plan.project_members) {
-      return true;
     } else if (
       members.find((m: any) => m.user_id === user.id) &&
       members.filter((m: any) => m.user_id === user.id)[0].role === "Viewer"

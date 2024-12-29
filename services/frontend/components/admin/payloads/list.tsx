@@ -126,7 +126,7 @@ export function PayloadsList({ flows, payloads, executions, runners }: any) {
                     }
                     onPress={() =>
                       router.push(
-                        `/dashboard/flows/${payload.flow_id}/execution/${executions.find((e: any) => e.payload_id === payload.id)?.id}`,
+                        `/flows/${payload.flow_id}/execution/${executions.find((e: any) => e.payload_id === payload.id)?.id}`,
                       )
                     }
                   >

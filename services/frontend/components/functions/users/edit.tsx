@@ -22,11 +22,9 @@ import ErrorCard from "@/components/error/ErrorCard";
 
 export default function EditUserModal({
   user,
-  plans,
   disclosure,
 }: {
   user: any;
-  plans: any;
   disclosure: UseDisclosureReturn;
 }) {
   const router = useRouter();
@@ -36,7 +34,6 @@ export default function EditUserModal({
   const [username, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [role, setRole] = React.useState(new Set([]) as any);
-  const [plan, setPlan] = React.useState(new Set([]) as any);
 
   const [error, setError] = React.useState(false);
   const [errorText, setErrorText] = React.useState("");
@@ -50,7 +47,6 @@ export default function EditUserModal({
       setUsername(user.username);
       setEmail(user.email);
       setRole(new Set([user.role]));
-      setPlan(new Set([user.plan]));
     }
   }, [user]);
 
@@ -62,7 +58,6 @@ export default function EditUserModal({
       username,
       email,
       role.currentKey ? role.currentKey : user.role,
-      plan.currentKey ? plan.currentKey : user.plan,
     )) as any;
 
     if (!response) {
@@ -147,19 +142,6 @@ export default function EditUserModal({
                   <SelectItem key="user">User</SelectItem>
                   <SelectItem key="vip">VIP</SelectItem>
                   <SelectItem key="admin">Admin</SelectItem>
-                </Select>
-                <Select
-                  isRequired
-                  label="Plan"
-                  labelPlacement="outside"
-                  placeholder="Select the user plan"
-                  selectedKeys={plan}
-                  variant="flat"
-                  onSelectionChange={setPlan}
-                >
-                  {plans.map((plan: any) => (
-                    <SelectItem key={plan.id}>{plan.name}</SelectItem>
-                  ))}
                 </Select>
               </ModalBody>
               <ModalFooter>
