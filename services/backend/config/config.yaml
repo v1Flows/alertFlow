@@ -11,9 +11,3 @@ Database:
 
 JWT:
   Secret: null
-
-Stripe:
-  Secret: null
-
-Resend:
-  APIKey: null

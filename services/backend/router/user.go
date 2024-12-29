@@ -49,8 +49,5 @@ func User(router *gin.RouterGroup, db *bun.DB) {
 		user.DELETE("/", func(c *gin.Context) {
 			users.DeleteUser(c, db)
 		})
-		user.DELETE("/payment/card/:cardID", func(c *gin.Context) {
-			users.RemoveCard(c, db)
-		})
 	}
 }
