@@ -11,19 +11,19 @@ export const sectionItems: SidebarItem[] = [
     items: [
       {
         key: "dashboard",
-        href: "/dashboard",
+        href: "/",
         icon: "solar:home-smile-outline",
         title: "Home",
       },
       {
         key: "dashboard_projects",
-        href: "/dashboard/projects",
+        href: "/projects",
         icon: "solar:inbox-archive-outline",
         title: "Projects",
       },
       {
         key: "dashboard_flows",
-        href: "/dashboard/flows",
+        href: "/flows",
         icon: "solar:book-2-outline",
         title: "Flows",
       },
@@ -35,19 +35,19 @@ export const sectionItems: SidebarItem[] = [
     items: [
       {
         key: "dashboard_docs",
-        href: "/dashboard/docs",
+        href: "/docs",
         icon: "solar:notes-outline",
         title: "Documentation",
       },
       {
         key: "dashboard_docs_api",
-        href: "/dashboard",
+        href: "/",
         icon: "solar:notebook-outline",
         title: "API",
       },
       {
         key: "help",
-        href: "/dashboard",
+        href: "/",
         icon: "solar:incoming-call-rounded-outline",
         title: "Support",
       },

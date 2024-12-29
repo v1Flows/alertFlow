@@ -1,52 +1,73 @@
-import { Spacer } from "@nextui-org/react";
-import { cookies } from "next/headers";
+import { DashboardHome } from "@/components/dashboard/home";
+import ErrorCard from "@/components/error/ErrorCard";
+import GetExecutions from "@/lib/fetch/executions/all";
+import GetFlows from "@/lib/fetch/flow/all";
+import GetPayloads from "@/lib/fetch/payload/payloads";
+import GetRunners from "@/lib/fetch/runner/get";
+import GetUserDetails from "@/lib/fetch/user/getDetails";
+import GetUserNotifications from "@/lib/fetch/user/getNotifications";
+import GetUserStats from "@/lib/fetch/user/getStats";
 
-import Footer from "@/components/footer/Footer";
-import { FeaturesSectionDemo } from "@/components/home/bento";
-import HomeFlows from "@/components/home/Flows";
-import HomeRunners from "@/components/home/Runners";
-import HomeShowcase from "@/components/home/Showcase";
-import HomeTerraform from "@/components/home/Terraform";
-import Navbar from "@/components/navbar";
-import PageGetSettings from "@/lib/fetch/page/settings";
+export default async function DashboardHomePage() {
+  const statsData = GetUserStats();
+  const notificationsData = GetUserNotifications();
+  const flowsData = GetFlows();
+  const runnersData = GetRunners();
+  const executionsData = GetExecutions();
+  const payloadsData = GetPayloads();
+  const userData = GetUserDetails();
 
-export default async function Home() {
-  const cookieStore = await cookies();
-  const user = JSON.parse(cookieStore.get("user")?.value || "{}");
-  const session = cookieStore.get("session")?.value;
-  const settingsData = PageGetSettings();
-
-  const [settings] = await Promise.all([settingsData]);
+  const [stats, notifications, flows, runners, executions, payloads, user] =
+    (await Promise.all([
+      statsData,
+      notificationsData,
+      flowsData,
+      runnersData,
+      executionsData,
+      payloadsData,
+      userData,
+    ])) as any;
 
   return (
     <>
-      {settings.success ? (
-        <Navbar
-          session={session}
-          settings={settings.data.settings}
-          user={user}
+      {executions.success &&
+      flows.success &&
+      notifications.success &&
+      payloads.success &&
+      runners.success &&
+      stats.success &&
+      user.success ? (
+        <DashboardHome
+          executions={executions.data.executions}
+          flows={flows.data.flows}
+          notifications={notifications.data.notifications}
+          payloads={payloads.data.payloads}
+          runners={runners.data.runners}
+          stats={stats.data.stats}
+          user={user.data.user}
         />
-      ) : null}
-      <HomeShowcase />
-      <Spacer y={28} />
-      <main className="container mx-auto w-full grow px-6 pt-2">
-        <section>
-          <FeaturesSectionDemo />
-        </section>
-        <Spacer y={28} />
-        <section>
-          <HomeFlows />
-        </section>
-        <Spacer y={28} />
-        <section>
-          <HomeRunners />
-        </section>
-        <Spacer y={28} />
-        <section>
-          <HomeTerraform />
-        </section>
-      </main>
-      <Footer />
+      ) : (
+        <ErrorCard
+          error={
+            executions.error ||
+            flows.error ||
+            notifications.error ||
+            payloads.error ||
+            runners.error ||
+            stats.error ||
+            user.error
+          }
+          message={
+            executions.message ||
+            flows.message ||
+            notifications.message ||
+            payloads.message ||
+            runners.message ||
+            stats.message ||
+            user.message
+          }
+        />
+      )}
     </>
   );
 }
