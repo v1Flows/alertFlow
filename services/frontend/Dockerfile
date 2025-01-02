@@ -7,8 +7,9 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # Install dependencies based on the preferred package manager
-COPY services/frontend/package.json services/frontend/yarn.lock* services/frontend/package-lock.json* services/frontend/pnpm-lock.yaml* ./
-RUN corepack enable pnpm && pnpm install
+COPY services/frontend/package.json services/frontend/package-lock.json services/frontend/pnpm-lock.yaml ./
+RUN corepack enable pnpm && pnpm --version
+RUN pnpm install
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -21,7 +22,8 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN corepack enable pnpm && pnpm run build;
+RUN corepack enable pnpm && pnpm --version
+RUN pnpm run build
 
 # Production image, copy all the files and run next
 FROM base AS runner
