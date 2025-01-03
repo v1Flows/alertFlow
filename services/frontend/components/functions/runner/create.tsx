@@ -68,21 +68,7 @@ export default function CreateRunnerModal({
       return;
     }
 
-    const tokenResponse = (await CreateRunnerToken({
-      projectId: project.id ? project.id : "none",
-      description: `${name} Runner Token`,
-    })) as any;
-
-    if (!tokenResponse) {
-      setIsLoading(false);
-      setError(true);
-      setErrorText("Failed to create runner token");
-      setErrorMessage("An error occurred while creating the runner token");
-      router.refresh();
-      toast.error("Failed to create runner token");
-    }
-
-    if (response.success && tokenResponse.success) {
+    if (response.success) {
       setName("");
       onOpenChange();
       setError(false);
@@ -90,7 +76,7 @@ export default function CreateRunnerModal({
       setErrorMessage("");
 
       // set variables
-      setInApikey(tokenResponse.data.key);
+      setInApikey(response.data.token);
       setInRunnerId(response.data.runner.id);
       onOpenChangeInstructions();
       router.refresh();

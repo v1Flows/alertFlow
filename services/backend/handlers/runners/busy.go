@@ -1,6 +1,7 @@
 package runners
 
 import (
+	"alertflow-backend/functions/auth"
 	"alertflow-backend/functions/httperror"
 	"alertflow-backend/models"
 	"errors"
@@ -11,22 +12,20 @@ import (
 )
 
 func Busy(context *gin.Context, db *bun.DB) {
-	runnerID := context.Param("runnerID")
-
-	var runner models.Runners
-	if err := context.ShouldBindJSON(&runner); err != nil {
-		httperror.StatusBadRequest(context, "Error parsing incoming data", err)
+	runnerID, _, _, err := auth.GetRunnerDataFromToken(context.GetHeader("Authorization"))
+	if err != nil {
+		httperror.Unauthorized(context, "Error receiving userID from token", err)
 		return
 	}
 
 	// check if runner is disabled
-	var runnerDB models.Runners
-	err := db.NewSelect().Model(&runnerDB).Where("id = ?", runnerID).Scan(context)
+	var runner models.Runners
+	err = db.NewSelect().Model(&runner).Where("id = ?", runnerID).Scan(context)
 	if err != nil {
 		httperror.InternalServerError(context, "Error collecting runner data from db", err)
 		return
 	}
-	if runnerDB.Disabled {
+	if runner.Disabled {
 		httperror.StatusBadRequest(context, "Runner is disabled", errors.New("runner is disabled"))
 		return
 	}

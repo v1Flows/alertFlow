@@ -70,9 +70,9 @@ export default function ProjectRunnerDetails({ project }: { project: any }) {
     }
   }
 
-  function copyJoinSecret() {
-    navigator.clipboard.writeText(project.runner_join_secret);
-    toast.success("Join secret copied to clipboard");
+  function copyJoinToken() {
+    navigator.clipboard.writeText(project.runner_auto_join_token);
+    toast.success("Join token copied to clipboard");
   }
 
   return (
@@ -140,9 +140,9 @@ export default function ProjectRunnerDetails({ project }: { project: any }) {
         <Card fullWidth>
           <CardBody className="flex items-center justify-between text-center">
             <div className="flex flex-col">
-              <p className="text-md font-bold">Join Secret</p>
+              <p className="text-md font-bold">Auto Join Token</p>
               <p className="text-sm text-default-500">
-                Use this secret in your runner configuration to allow auto join
+                Use this token in your runner configuration to allow auto join
               </p>
             </div>
             <Spacer y={2} />
@@ -150,10 +150,10 @@ export default function ProjectRunnerDetails({ project }: { project: any }) {
               color="primary"
               size="sm"
               variant="flat"
-              onPress={copyJoinSecret}
+              onPress={copyJoinToken}
             >
               <Icon icon="solar:copy-linear" />
-              Copy Secret
+              Copy Token
             </Button>
           </CardBody>
         </Card>
@@ -170,7 +170,6 @@ export default function ProjectRunnerDetails({ project }: { project: any }) {
             <Button
               isIconOnly
               color="primary"
-              isDisabled={disableJoin}
               size="sm"
               variant="flat"
               onPress={addRunnerModal.onOpen}

@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   CardBody,
+  CardFooter,
   CardHeader,
   Chip,
   Divider,
@@ -11,6 +12,7 @@ import {
   DropdownMenu,
   DropdownSection,
   DropdownTrigger,
+  Progress,
   Spacer,
   Spinner,
   useDisclosure,
@@ -101,107 +103,128 @@ export default function Runners({
         <p className="text-lg font-bold">Your Runners</p>
       </div>
       <Divider className="mb-4" />
-      <div className="flex flex-col gap-4">
-        {runners.map(
-          (runner: any) =>
-            runner.alertflow_runner === false && (
-              <Card
-                key={runner.id}
-                isPressable
-                onPress={() => {
-                  setTargetRunner(runner);
-                  showRunnerDrawer.onOpen();
-                }}
-              >
-                <CardHeader className="items-center justify-between">
-                  <div className="flex flex-col gap-1">
-                    <div className="flex gap-2">
-                      <p className="text-md font-bold">{runner.name}</p>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-2">
-                      <Chip
-                        color={runner.disabled ? "danger" : "success"}
-                        radius="sm"
-                        size="sm"
-                        variant="flat"
-                      >
-                        {runner.disabled ? "Disabled" : "Enabled"}
-                      </Chip>
-                      <Chip
-                        color={heartbeatColor(runner)}
-                        radius="sm"
-                        size="sm"
-                        variant="flat"
-                      >
-                        {heartbeatStatus(runner) ? "Healthy" : "Unhealthy"}
-                      </Chip>
-                    </div>
-                  </div>
-                  <div className="relative flex items-center justify-end gap-2">
-                    <Dropdown backdrop="opaque">
-                      <DropdownTrigger>
-                        <Button isIconOnly size="sm" variant="light">
-                          <VerticalDotsIcon
-                            className="text-default-300"
-                            height={undefined}
-                            width={undefined}
-                          />
-                        </Button>
-                      </DropdownTrigger>
-                      <DropdownMenu>
-                        <DropdownSection title="Actions">
-                          <DropdownItem
-                            key="copy"
-                            startContent={
-                              <Icon icon="solar:copy-outline" width={18} />
-                            }
-                            onPress={() => copyRunnerIDtoClipboard(runner.id)}
-                          >
-                            Copy ID
-                          </DropdownItem>
-                        </DropdownSection>
-                        <DropdownSection title="Danger zone">
-                          <DropdownItem
-                            key="delete"
-                            className="text-danger"
-                            color="danger"
-                            isDisabled={
-                              members.find((m: any) => m.user_id === user.id) &&
-                              members.filter(
-                                (m: any) => m.user_id === user.id,
-                              )[0].role === "Viewer"
-                            }
-                            startContent={
-                              <Icon
-                                icon="solar:trash-bin-trash-outline"
-                                width={18}
-                              />
-                            }
-                            onPress={() => {
-                              setTargetRunner(runner);
-                              deleteRunnerModal.onOpen();
-                            }}
-                          >
-                            Delete
-                          </DropdownItem>
-                        </DropdownSection>
-                      </DropdownMenu>
-                    </Dropdown>
-                  </div>
-                </CardHeader>
-                <CardBody className="flex flex-col">
-                  {runner.disabled && (
-                    <p className="mb-4 text-center text-lg font-bold text-danger">
-                      {runner.disabled_reason}
-                    </p>
-                  )}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {runners
+          .filter((runner: any) => runner.alertflow_runner === false)
+          .sort((a: any, b: any) => {
+            const aStatus = heartbeatStatus(a) ? 1 : 0;
+            const bStatus = heartbeatStatus(b) ? 1 : 0;
+
+            return bStatus - aStatus;
+          })
+          .map((runner: any) => (
+            <Card
+              key={runner.id}
+              fullWidth
+              isPressable
+              onPress={() => {
+                setTargetRunner(runner);
+                showRunnerDrawer.onOpen();
+              }}
+            >
+              <CardHeader className="flex flex-cols items-center justify-between">
+                <div className="flex flex-col gap-1">
+                  <Progress className="max-w-[100px]" size="sm" />
+                  <p className="text-sm text-default-500">{runner.id}</p>
+                </div>
+                <div className="relative flex items-center justify-end gap-2">
+                  <Chip
+                    color={heartbeatColor(runner)}
+                    radius="sm"
+                    size="sm"
+                    variant="flat"
+                  >
+                    {heartbeatStatus(runner) ? "Healthy" : "Unhealthy"}
+                  </Chip>
+                  <Dropdown backdrop="opaque">
+                    <DropdownTrigger>
+                      <Button isIconOnly size="sm" variant="light">
+                        <VerticalDotsIcon
+                          className="text-default-300"
+                          height={undefined}
+                          width={undefined}
+                        />
+                      </Button>
+                    </DropdownTrigger>
+                    <DropdownMenu>
+                      <DropdownSection title="Actions">
+                        <DropdownItem
+                          key="copy"
+                          startContent={
+                            <Icon icon="solar:copy-outline" width={18} />
+                          }
+                          onPress={() => copyRunnerIDtoClipboard(runner.id)}
+                        >
+                          Copy ID
+                        </DropdownItem>
+                      </DropdownSection>
+                      <DropdownSection title="Danger zone">
+                        <DropdownItem
+                          key="delete"
+                          className="text-danger"
+                          color="danger"
+                          isDisabled={
+                            members.find((m: any) => m.user_id === user.id) &&
+                            members.filter((m: any) => m.user_id === user.id)[0]
+                              .role === "Viewer"
+                          }
+                          startContent={
+                            <Icon
+                              icon="solar:trash-bin-trash-outline"
+                              width={18}
+                            />
+                          }
+                          onPress={() => {
+                            setTargetRunner(runner);
+                            deleteRunnerModal.onOpen();
+                          }}
+                        >
+                          Delete
+                        </DropdownItem>
+                      </DropdownSection>
+                    </DropdownMenu>
+                  </Dropdown>
+                </div>
+              </CardHeader>
+              <CardBody className="flex flex-col">
+                {runner.auto_runner ? (
+                  <p className="text-md font-bold">Auto Runner</p>
+                ) : (
+                  <p className="text-md font-bold">{runner.name}</p>
+                )}
+                {runner.disabled && (
+                  <p className="mb-4 text-center text-lg font-bold text-danger">
+                    {runner.disabled_reason}
+                  </p>
+                )}
+                {!runner.registered && (
                   <div className="flex flex-wrap items-center justify-center text-center">
                     <Spinner label="Waiting for connection..." size="md" />
                   </div>
-                </CardBody>
-              </Card>
-            ),
-        )}
+                )}
+              </CardBody>
+              <CardFooter>
+                <div className="flex flex-wrap items-start gap-2">
+                  <Chip
+                    color={runner.disabled ? "danger" : "success"}
+                    radius="sm"
+                    size="sm"
+                    variant="flat"
+                  >
+                    {runner.disabled ? "Disabled" : "Enabled"}
+                  </Chip>
+                  <Chip
+                    color={runner.registered ? "success" : "warning"}
+                    radius="sm"
+                    size="sm"
+                    variant="flat"
+                  >
+                    {runner.registered ? "Registered" : "Unregistered"}
+                  </Chip>
+                </div>
+              </CardFooter>
+            </Card>
+          ))}
       </div>
 
       <Spacer y={4} />
