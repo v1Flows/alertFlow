@@ -3,6 +3,7 @@ package projects
 import (
 	"alertflow-backend/functions/auth"
 	"alertflow-backend/functions/httperror"
+	functions_runner "alertflow-backend/functions/runner"
 	"alertflow-backend/models"
 	"crypto/rand"
 	"encoding/hex"
@@ -48,12 +49,12 @@ func CreateProject(context *gin.Context, db *bun.DB) {
 
 	project.ID = uuid.New()
 
-	project.RunnerJoinSecret, err = GenerateProjectRunnerJoinSecretKey()
+	project.RunnerAutoJoinToken, err = functions_runner.GenerateProjectAutoJoinToken(project.ID.String(), db)
 	if err != nil {
 		return
 	}
 
-	_, err = db.NewInsert().Model(&project).Column("id", "name", "description", "alertflow_runners", "icon", "color", "runner_join_secret").Exec(context)
+	_, err = db.NewInsert().Model(&project).Column("id", "name", "description", "alertflow_runners", "icon", "color", "runner_auto_join_token").Exec(context)
 	if err != nil {
 		log.Error(err)
 		httperror.InternalServerError(context, "Error creating project on db", err)

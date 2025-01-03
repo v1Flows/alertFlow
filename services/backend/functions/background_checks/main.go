@@ -3,7 +3,6 @@ package background_checks
 import (
 	"time"
 
-	log "github.com/sirupsen/logrus"
 	"github.com/uptrace/bun"
 )
 
@@ -15,8 +14,8 @@ func Init(db *bun.DB) {
 		for {
 			select {
 			case <-ticker.C:
-				log.Info("Bot: Checking for hanging executions")
 				checkHangingExecutions(db)
+				checkDisconnectedAutoRunners(db)
 			case <-quit:
 				ticker.Stop()
 				return
