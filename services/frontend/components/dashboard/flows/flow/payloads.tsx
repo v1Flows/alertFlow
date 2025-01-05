@@ -91,7 +91,7 @@ export default function Payloads({
         return (
           <div className="flex items-center gap-2">
             <div
-              className={`bg- flex${endpointColor(payload.endpoint)}/10 text-${endpointColor(payload.endpoint)} size-8 items-center justify-center rounded-small`}
+              className={`flex bg-${endpointColor(payload.endpoint)}/10 text-${endpointColor(payload.endpoint)} size-8 items-center justify-center rounded-small`}
             >
               <Icon icon={endpointIcon(payload.endpoint)} width={20} />
             </div>
