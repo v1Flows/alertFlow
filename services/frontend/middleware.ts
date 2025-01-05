@@ -33,7 +33,8 @@ export async function middleware(request: NextRequest) {
       !request.url.includes(".jpeg") &&
       !request.url.includes(".svg") &&
       !request.url.includes(".gif") &&
-      !request.url.includes(".json")
+      !request.url.includes(".json") &&
+      !request.url.includes(".js")
     ) {
       const settings = await PageGetSettings();
 
@@ -48,36 +49,30 @@ export async function middleware(request: NextRequest) {
       }
 
       if (
+        !hasSessionCookie &&
+        !request.url.includes("/auth/login") &&
+        !request.url.includes("/auth/signup")
+      ) {
+        return NextResponse.redirect(new URL("/auth/login", request.url));
+      }
+
+      if (
         request.url.includes("/maintenance") &&
         !settings.data.settings.maintenance
       ) {
         return NextResponse.redirect(new URL("/", request.url));
       }
 
-      if (
-        request.url.includes("/auth/signup") &&
-        !settings.data.settings.signup
-      ) {
+      if (request.url.includes("/auth/login") && hasSessionCookie) {
         return NextResponse.redirect(new URL("/", request.url));
       }
-    }
 
-    if (request.url.includes("/auth/login") && hasSessionCookie) {
-      return NextResponse.redirect(new URL("/", request.url));
-    }
+      if (request.url.includes("/auth/signup") && hasSessionCookie) {
+        return NextResponse.redirect(new URL("/", request.url));
+      }
 
-    if (request.url.includes("/auth/signup") && hasSessionCookie) {
-      return NextResponse.redirect(new URL("/", request.url));
+      return NextResponse.next();
     }
-
-    if (
-      (request.url.includes("/") || request.url.includes("/admin")) &&
-      !hasSessionCookie
-    ) {
-      return NextResponse.redirect(new URL("/", request.url));
-    }
-
-    return NextResponse.next();
   } catch (error) {
     console.error("Cookie handling error:", error);
 

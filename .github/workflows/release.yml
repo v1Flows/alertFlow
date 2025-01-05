@@ -1,0 +1,52 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Frontend Docker Image
+        run: docker build . --file services/frontend/Dockerfile --tag justnz/alertflow:frontend-latest --tag justnz/alertflow:frontend-${{ github.sha }} --tag justnz/alertflow-runner:${{ github.ref_name }}
+
+      - name: Build Backend Docker Image
+        run: docker build . --file services/backend/Dockerfile --tag justnz/alertflow:backend-latest --tag justnz/alertflow:backend-${{ github.sha }} --tag justnz/alertflow-runner:${{ github.ref_name }}
+
+      - name: Build AlertFlow Docker Image
+        run: docker build . --file services/backend/Dockerfile --tag justnz/alertflow:latest --tag justnz/alertflow:${{ github.sha }} --tag justnz/alertflow-runner:${{ github.ref_name }}
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push Docker Images
+        run: |
+          docker push justnz/alertflow:frontend-latest
+          docker push justnz/alertflow:frontend-${{ github.sha }}
+          docker push justnz/alertflow:frontend-${{ github.ref_name }}
+          docker push justnz/alertflow:backend-latest
+          docker push justnz/alertflow:backend-${{ github.sha }}
+          docker push justnz/alertflow:backend-${{ github.ref_name }}
+          docker push justnz/alertflow:latest
+          docker push justnz/alertflow:${{ github.sha }}
+          docker push justnz/alertflow:${{ github.ref_name }}
+
+      - name: Create Release
+        id: create_release
+        uses: ncipollo/release-action@v1
+        with:
+          name: Release ${{ github.ref_name }}
+          tag: ${{ github.ref_name }}
+          artifacts: alertflow-runner
+          skipIfReleaseExists: true
+          generateReleaseNotes: true
+          token: ${{ secrets.ACCESS_TOKEN }}

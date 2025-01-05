@@ -2,10 +2,10 @@ FROM golang:1.22-alpine as builder
 
 WORKDIR /backend
 
-COPY go.mod go.sum ./
+COPY services/backend/go.mod services/backend/go.sum ./
 RUN go mod download
 
-COPY . ./
+COPY services/backend/ ./
 
 # Build
 RUN CGO_ENABLED=0 GOOS=linux go build -o /alertflow-backend
@@ -16,7 +16,7 @@ COPY --from=builder /alertflow-backend /alertflow-backend
 
 RUN mkdir /backend
 RUN mkdir /backend/config
-COPY config/config.yaml /backend/config/config.yaml
+COPY services/backend/config/config.yaml /backend/config/config.yaml
 
 VOLUME /backend
 

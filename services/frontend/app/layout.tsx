@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 
+import { cookies } from "next/headers";
 import clsx from "clsx";
 import React from "react";
 import { Toaster } from "sonner";
@@ -11,7 +12,6 @@ import AdminGetSettings from "@/lib/fetch/page/settings";
 import GetProjects from "@/lib/fetch/project/all";
 import GetUserDetails from "@/lib/fetch/user/getDetails";
 import GetUserNotifications from "@/lib/fetch/user/getNotifications";
-
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 
@@ -71,6 +71,9 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get("session");
+
   const settingsData = AdminGetSettings();
   const notificationsData = GetUserNotifications();
   const userDetailsData = GetUserDetails();
@@ -105,18 +108,25 @@ export default async function RootLayout({
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
           <Toaster richColors position="bottom-center" />
           <div className="relative flex h-screen flex-col">
-          <SidebarMenu
-      flows={flows.success ? flows.data.flows : []}
-      notifications={
-        notifications.success ? notifications.data.notifications : []
-      }
-      projects={projects.success ? projects.data.projects : []}
-      settings={settings.success ? settings.data.settings : {}}
-      user={userDetails.success ? userDetails.data.user : {}}
-    >
-      {children}
-      <Footer />
-    </SidebarMenu>
+            {sessionCookie ? (
+              <SidebarMenu
+                flows={flows.success ? flows.data.flows : []}
+                notifications={
+                  notifications.success ? notifications.data.notifications : []
+                }
+                projects={projects.success ? projects.data.projects : []}
+                settings={settings.success ? settings.data.settings : {}}
+                user={userDetails.success ? userDetails.data.user : {}}
+              >
+                {children}
+                <Footer />
+              </SidebarMenu>
+            ) : (
+              <>
+                {children}
+                <Footer />
+              </>
+            )}
           </div>
         </Providers>
       </body>

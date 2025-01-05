@@ -244,7 +244,7 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
               <div>{statusIcon(execution)}</div>
               <div>
                 <p
-                  className={`text-md text- font-bold${statusColor(execution)}`}
+                  className={`text-md text- font-bold text-${statusColor(execution)}`}
                 >
                   {status(execution)}
                 </p>
@@ -262,7 +262,10 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
               <div>
                 <p className="text-md font-bold">
                   {runners.find((r: any) => r.id === execution.runner_id)
-                    ?.name || "-"}
+                    ?.name ||
+                    runners.find((r: any) => r.id === execution.runner_id)
+                      ?.id ||
+                    "N/A"}
                 </p>
                 <p className="text-sm text-default-500">Runner</p>
               </div>

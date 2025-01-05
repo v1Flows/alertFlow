@@ -12,6 +12,8 @@ import (
 func checkHangingExecutions(db *bun.DB) {
 	context := context.Background()
 
+	log.Info("Bot: Checking for hanging executions")
+
 	// get all executions that are not finished
 	var executions []models.Executions
 	err := db.NewSelect().Model(&executions).Where("running = ? AND executed_at < NOW() - INTERVAL '15 minutes'", true).Scan(context)
