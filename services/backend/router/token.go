@@ -22,9 +22,6 @@ func Token(router *gin.RouterGroup, db *bun.DB) {
 		token.GET("/service/validate", func(c *gin.Context) {
 			tokens.ValidateServiceToken(c, db)
 		})
-		token.POST("/runner/:id", func(c *gin.Context) {
-			tokens.GenerateRunnerToken(c, db)
-		})
 		token.PUT("/:id", func(c *gin.Context) {
 			tokens.UpdateToken(c, db)
 		})

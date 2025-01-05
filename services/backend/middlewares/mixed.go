@@ -29,7 +29,7 @@ func Mixed(db *bun.DB) gin.HandlerFunc {
 			return
 		}
 
-		if tokenType == "runner" {
+		if tokenType == "runner" || tokenType == "project_auto_runner" {
 			context.Next()
 		} else if tokenType == "user" {
 			userId, err := auth.GetUserIDFromToken(tokenString)

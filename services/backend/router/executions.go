@@ -14,9 +14,6 @@ func Executions(router *gin.RouterGroup, db *bun.DB) {
 		execution.GET("/", func(c *gin.Context) {
 			executions.GetExecutions(c, db)
 		})
-		execution.GET("/:executionID/pending", func(c *gin.Context) {
-			executions.GetPendingExecutions(c, db)
-		})
 
 		execution.GET("/:executionID", func(c *gin.Context) {
 			executions.GetExecution(c, db)

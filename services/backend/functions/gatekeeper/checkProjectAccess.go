@@ -20,7 +20,7 @@ func CheckUserProjectAccess(projectID string, context *gin.Context, db *bun.DB) 
 		return false, err
 	}
 
-	if tokenType == "runner" {
+	if tokenType == "runner" || tokenType == "project_auto_runner" {
 		// check if projectID in runner token equals to the requested projectID
 		tokenProjectID, err := auth.GetProjectIDFromToken(tokenString)
 		if err != nil {

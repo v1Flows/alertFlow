@@ -1,6 +1,7 @@
 package router
 
 import (
+	"alertflow-backend/handlers/executions"
 	"alertflow-backend/handlers/runners"
 	"alertflow-backend/middlewares"
 
@@ -30,7 +31,10 @@ func Runners(router *gin.RouterGroup, db *bun.DB) {
 		})
 
 		// Runner Access Endpoints
-		runner.PUT("/:runnerID/register", func(c *gin.Context) {
+		runner.GET("/:runnerID/executions/pending", func(c *gin.Context) {
+			executions.GetPendingExecutions(c, db)
+		})
+		runner.PUT("/register", func(c *gin.Context) {
 			runners.RegisterRunner(c, db)
 		})
 		runner.PUT("/:runnerID/heartbeat", func(c *gin.Context) {

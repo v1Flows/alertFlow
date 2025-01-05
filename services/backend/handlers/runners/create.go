@@ -4,6 +4,7 @@ import (
 	"alertflow-backend/functions/auth"
 	"alertflow-backend/functions/gatekeeper"
 	"alertflow-backend/functions/httperror"
+	functions_runner "alertflow-backend/functions/runner"
 	"alertflow-backend/models"
 	"errors"
 	"net/http"
@@ -57,5 +58,12 @@ func CreateRunner(context *gin.Context, db *bun.DB) {
 		return
 	}
 
-	context.JSON(http.StatusCreated, gin.H{"result": "success", "runner": runner})
+	// generate token for runner
+	token, err := functions_runner.GenerateRunnerToken(runner.ProjectID, runner.ID.String(), db)
+	if err != nil {
+		httperror.InternalServerError(context, "Error generating runner token", err)
+		return
+	}
+
+	context.JSON(http.StatusCreated, gin.H{"result": "success", "runner": runner, "token": token})
 }
