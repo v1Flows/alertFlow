@@ -12,7 +12,6 @@ import {
   DropdownMenu,
   DropdownSection,
   DropdownTrigger,
-  Progress,
   Spacer,
   Spinner,
   useDisclosure,
@@ -123,10 +122,7 @@ export default function Runners({
               }}
             >
               <CardHeader className="flex flex-cols items-center justify-between">
-                <div className="flex flex-col gap-1">
-                  <Progress className="max-w-[100px]" size="sm" />
-                  <p className="text-sm text-default-500">{runner.id}</p>
-                </div>
+                <p className="text-sm text-default-500">{runner.id}</p>
                 <div className="relative flex items-center justify-end gap-2">
                   <Chip
                     color={heartbeatColor(runner)}
