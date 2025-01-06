@@ -3,7 +3,7 @@ module alertflow-backend
 go 1.22.3
 
 require (
-	github.com/uptrace/bun v1.2.7
+	github.com/uptrace/bun v1.2.8
 	github.com/uptrace/bun/driver/pgdriver v1.2.5
 	github.com/uptrace/bun/extra/bunotel v1.2.5
 	golang.org/x/crypto v0.31.0
@@ -65,5 +65,5 @@ require (
 	github.com/sirupsen/logrus v1.9.3
 	github.com/uptrace/bun/dialect/pgdialect v1.2.7
 	github.com/zeromicro/go-zero v1.7.5
-	golang.org/x/sys v0.28.0 // indirect
+	golang.org/x/sys v0.29.0 // indirect
 )
