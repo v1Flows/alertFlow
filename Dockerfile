@@ -22,7 +22,8 @@ WORKDIR /app
 
 # Install necessary packages
 RUN apk update && apk add --no-cache \
-    ca-certificates
+    ca-certificates \
+    tini
 
 # Create user and group
 RUN addgroup --system --gid 1001 nodejs \
@@ -57,6 +58,9 @@ VOLUME [ "/app/config" ]
 EXPOSE 8080 3000
 
 USER nextjs
+
+# Use tini as the entrypoint
+ENTRYPOINT ["/sbin/tini", "--"]
 
 # Start the backend and frontend
 CMD ["sh", "-c", "./alertflow-backend --config /app/config/config.yaml & node server.js"]
