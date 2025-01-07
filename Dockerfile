@@ -45,15 +45,15 @@ RUN mkdir .next \
 COPY --from=frontend-builder --chown=nextjs:nodejs /app/frontend/.next/standalone ./
 COPY --from=frontend-builder --chown=nextjs:nodejs /app/frontend/.next/static ./.next/static
 
-RUN mkdir -p /etc/backend/config
-COPY services/backend/config/config.yaml /etc/backend/config/config.yaml
+RUN mkdir -p /etc/alertflow
+COPY services/backend/config/config.yaml /etc/alertflow/backend_config.yaml
 
 # Set environment variables
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NEXT_PUBLIC_API_URL="http://localhost:8080/api"
 
-VOLUME [ "/etc/backend/config" ]
+VOLUME [ "/etc/alertflow" ]
 
 # Expose ports
 EXPOSE 8080 3000
@@ -64,4 +64,4 @@ USER nextjs
 ENTRYPOINT ["/sbin/tini", "--"]
 
 # Start the backend and frontend
-CMD ["sh", "-c", "./alertflow-backend --config /etc/backend/config/config.yaml & node /app/server.js"]
+CMD ["sh", "-c", "./alertflow-backend --config /etc/alertflow/backend_config.yaml & node /app/server.js"]
