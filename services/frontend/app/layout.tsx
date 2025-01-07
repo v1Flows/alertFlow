@@ -92,11 +92,6 @@ export default async function RootLayout({
   return (
     <html suppressHydrationWarning lang="en">
       <head>
-        <script
-          defer
-          data-domain="alertflow.org"
-          src="https://analytics.alertflow.org/js/script.js"
-        />
         <link href="/manifest.json" rel="manifest" />
       </head>
       <body
