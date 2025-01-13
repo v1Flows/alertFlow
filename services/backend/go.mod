@@ -6,7 +6,7 @@ require (
 	github.com/uptrace/bun v1.2.8
 	github.com/uptrace/bun/driver/pgdriver v1.2.8
 	github.com/uptrace/bun/extra/bunotel v1.2.8
-	golang.org/x/crypto v0.31.0
+	golang.org/x/crypto v0.32.0
 )
 
 require (
