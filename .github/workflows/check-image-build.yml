@@ -17,6 +17,9 @@ jobs:
 
       - name: Build Frontend Docker Image
         run: docker build . --file services/frontend/Dockerfile --tag justnz/alertflow:frontend-test
+
+      - name: Run Frontend Docker Image
+        run: docker run --rm justnz/alertflow:frontend-test
   backend:
     name: Check Standalone Backend Build
     runs-on: ubuntu-latest
@@ -26,6 +29,9 @@ jobs:
 
       - name: Build Backend Docker Image
         run: docker build . --file services/backend/Dockerfile --tag justnz/alertflow:backend-test
+
+      - name: Run Backend Docker Image
+        run: docker run --rm justnz/alertflow:backend-test
   alertflow:
     name: Check AlertFlow Build
     runs-on: ubuntu-latest
@@ -35,3 +41,6 @@ jobs:
 
       - name: Build AlertFlow Docker Image
         run: docker build . --file Dockerfile --tag justnz/alertflow:test
+
+      - name: Run Backend Docker Image
+        run: docker run --rm justnz/alertflow:test
