@@ -149,9 +149,7 @@ export function ProjectList({ projects, members }: any) {
                     key="view"
                     color="primary"
                     startContent={<Icon icon="solar:eye-broken" width={20} />}
-                    onPress={() =>
-                      router.push(`/projects/${project.id}`)
-                    }
+                    onPress={() => router.push(`/projects/${project.id}`)}
                   >
                     View
                   </DropdownItem>

@@ -33,9 +33,7 @@ export default async function DashboardProjectsPage() {
   return (
     <main>
       <ProjectsHeading />
-      {projects.success &&
-      settings.success &&
-      userDetails.success ? (
+      {projects.success && settings.success && userDetails.success ? (
         <ProjectsList
           pending_projects={projects.data.pending_projects}
           projects={projects.data.projects}
@@ -44,14 +42,8 @@ export default async function DashboardProjectsPage() {
         />
       ) : (
         <ErrorCard
-          error={
-            projects.error || settings.error || userDetails.error
-          }
-          message={
-            projects.message ||
-            settings.message ||
-            userDetails.message
-          }
+          error={projects.error || settings.error || userDetails.error}
+          message={projects.message || settings.message || userDetails.message}
         />
       )}
     </main>
