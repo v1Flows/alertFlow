@@ -42,7 +42,7 @@ export default async function UpdateSettings(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/admin/settings`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/settings`,
       {
         method: "PUT",
         headers: {

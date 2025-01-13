@@ -33,7 +33,7 @@ export default async function DeleteRunnerToken(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/token/runner/${tokenId}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/token/runner/${tokenId}`,
       {
         method: "DELETE",
         headers: {

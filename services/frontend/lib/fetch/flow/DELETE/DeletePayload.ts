@@ -34,7 +34,7 @@ export default async function DeletePayload(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/flows/${flowID}/payloads/${payloadID}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/flows/${flowID}/payloads/${payloadID}`,
       {
         method: "DELETE",
         headers: {

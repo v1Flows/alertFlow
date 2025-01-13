@@ -35,7 +35,7 @@ export async function GetFlowStats(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/flows/${flowID}/stats?interval=${interval}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/flows/${flowID}/stats?interval=${interval}`,
       {
         method: "GET",
         headers: {

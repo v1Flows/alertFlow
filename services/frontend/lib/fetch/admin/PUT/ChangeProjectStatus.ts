@@ -35,7 +35,7 @@ export default async function ChangeProjectStatus(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/admin/projects/${id}/status`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/projects/${id}/status`,
       {
         method: "PUT",
         headers: {

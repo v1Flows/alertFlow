@@ -22,7 +22,7 @@ export async function GetRunners(): Promise<SuccessResponse | ErrorResponse> {
     const cookieStore = await cookies();
     const token = cookieStore.get("session");
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/runners/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/runners/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

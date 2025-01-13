@@ -33,7 +33,7 @@ export async function GetFlowExecutions(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/flows/${flowID}/executions`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/flows/${flowID}/executions`,
       {
         method: "GET",
         headers: {

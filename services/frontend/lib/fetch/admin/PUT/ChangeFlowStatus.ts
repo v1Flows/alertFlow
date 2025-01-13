@@ -35,7 +35,7 @@ export async function ChangeFlowStatus(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/admin/flows/${id}/status`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/flows/${id}/status`,
       {
         method: "PUT",
         headers: {

@@ -33,7 +33,7 @@ export async function GetUserNotifications(): Promise<
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/user/notifications`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/notifications`,
       {
         method: "GET",
         headers: {

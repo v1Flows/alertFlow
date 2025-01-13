@@ -34,7 +34,7 @@ export default async function UpdateToken(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/token/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/token/${id}`,
       {
         method: "PUT",
         headers: {

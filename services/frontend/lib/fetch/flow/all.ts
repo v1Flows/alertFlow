@@ -30,7 +30,7 @@ export async function GetFlows(): Promise<SuccessResponse | ErrorResponse> {
       };
     }
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/flows/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/flows/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
