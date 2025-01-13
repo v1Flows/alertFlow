@@ -31,7 +31,7 @@ export async function GetUserStats(): Promise<SuccessResponse | ErrorResponse> {
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/user/stats`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/stats`,
       {
         method: "GET",
         headers: {

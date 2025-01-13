@@ -32,7 +32,7 @@ export default async function DeleteUser(): Promise<
       };
     }
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/user/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

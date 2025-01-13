@@ -33,7 +33,7 @@ export default async function DeleteProjectRunner(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/runners/${runnerID}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/runners/${runnerID}`,
       {
         method: "DELETE",
         headers: {

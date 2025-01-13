@@ -36,10 +36,10 @@ func GetFlow(context *gin.Context, db *bun.DB) {
 	}
 
 	// decrypt action params
-	if config.Config.Encryption.Enabled && flow.EncryptActionParams {
+	if config.Config.Encryption.Enabled && flow.EncryptActionParams && len(flow.Actions) > 0 {
 		flow.Actions, err = encryption.DecryptParams(flow.Actions)
 		if err != nil {
-			httperror.InternalServerError(context, "Error encrypting action params", err)
+			httperror.InternalServerError(context, "Error decrypting action params", err)
 			return
 		}
 	}

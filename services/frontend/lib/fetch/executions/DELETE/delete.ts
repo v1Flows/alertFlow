@@ -33,7 +33,7 @@ export default async function DeleteExecution(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/executions/${executionID}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/executions/${executionID}`,
       {
         method: "DELETE",
         headers: {

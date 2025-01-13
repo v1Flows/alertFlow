@@ -33,7 +33,7 @@ export async function AdminGetPayloads(): Promise<
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/admin/payloads`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/payloads`,
       {
         method: "GET",
         headers: {

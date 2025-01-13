@@ -8,6 +8,9 @@ COPY services/frontend/package.json services/frontend/package-lock.json services
 RUN corepack enable pnpm && pnpm --version
 RUN pnpm install
 COPY services/frontend/ ./
+
+ENV NEXT_TELEMETRY_DISABLED=1
+
 RUN pnpm run build
 
 # Stage 2: Build the backend
@@ -45,13 +48,14 @@ RUN mkdir .next \
 COPY --from=frontend-builder --chown=nextjs:nodejs /app/frontend/.next/standalone ./
 COPY --from=frontend-builder --chown=nextjs:nodejs /app/frontend/.next/static ./.next/static
 
+# Copy .env file to the working directory
+COPY --from=frontend-builder --chown=nextjs:nodejs /app/frontend/.env /app/.env
+
 RUN mkdir -p /etc/alertflow
 COPY services/backend/config/config.yaml /etc/alertflow/backend_config.yaml
 
 # Set environment variables
 ENV NODE_ENV=production
-ENV NEXT_TELEMETRY_DISABLED=1
-ENV NEXT_PUBLIC_API_URL="http://localhost:8080/api"
 
 VOLUME [ "/etc/alertflow" ]
 
