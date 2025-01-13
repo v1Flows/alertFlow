@@ -40,6 +40,10 @@ jobs:
           docker push justnz/alertflow:${{ github.sha }}
           docker push justnz/alertflow:${{ github.ref_name }}
 
+  release:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
       - name: Create Release
         id: create_release
         uses: ncipollo/release-action@v1
