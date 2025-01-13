@@ -2,6 +2,7 @@ import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
 
 import { Icon } from "@iconify/react";
 import {
+  Alert,
   Button,
   ButtonGroup,
   Input,
@@ -55,6 +56,7 @@ export default function EditFlowActionsDetails({
   const { isOpen, onOpenChange } = disclosure;
 
   const [isLoading, setLoading] = useState(false);
+  const [encryptedActionParams, setEncryptedActionParams] = useState(true);
   const [execParallel, setExecParallel] = useState(true);
   const [patterns, setPatterns] = useState([] as any);
   const [error, setError] = React.useState(false);
@@ -62,6 +64,7 @@ export default function EditFlowActionsDetails({
   const [errorMessage, setErrorMessage] = React.useState("");
 
   useEffect(() => {
+    setEncryptedActionParams(flow.encrypted_action_params);
     setExecParallel(flow.exec_parallel);
     setPatterns(flow.patterns);
   }, [isOpen]);
@@ -74,6 +77,7 @@ export default function EditFlowActionsDetails({
     setLoading(true);
     const res = (await UpdateFlowActionsDetails(
       flow.id,
+      encryptedActionParams,
       execParallel,
       patterns,
     )) as any;
@@ -130,6 +134,39 @@ export default function EditFlowActionsDetails({
                   <ErrorCard error={errorText} message={errorMessage} />
                 )}
                 <div className="flex w-full flex-col gap-4">
+                  <div className="flex flex-col gap-1">
+                    <p className="font-bold">Action Parameters</p>
+                    <Alert
+                      hideIconWrapper
+                      color="warning"
+                      description="This will break all existing actions and they have to be recreated."
+                      title="Warning"
+                      variant="flat"
+                    />
+                    <Spacer y={2} />
+                    <div>
+                      <ButtonGroup radius="sm" variant="flat">
+                        <Button
+                          className={`${encryptedActionParams ? "bg-success" : ""}`}
+                          onPress={() => {
+                            setEncryptedActionParams(true);
+                          }}
+                        >
+                          <Icon icon="solar:lock-linear" width={22} />
+                          Encrypted
+                        </Button>
+                        <Button
+                          className={`${!encryptedActionParams ? "bg-warning" : ""}`}
+                          onPress={() => {
+                            setEncryptedActionParams(false);
+                          }}
+                        >
+                          <Icon icon="solar:lock-unlocked-linear" width={22} />
+                          Unencrypted
+                        </Button>
+                      </ButtonGroup>
+                    </div>
+                  </div>
                   {/* Status */}
                   <div className="flex flex-col gap-1">
                     <div className="flex-cols flex items-center gap-2">

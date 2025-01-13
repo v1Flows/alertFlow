@@ -127,7 +127,7 @@ export default function EditActionModal({
         isDismissable={false}
         isOpen={isOpen}
         placement="center"
-        size="xl"
+        size="5xl"
         onOpenChange={onOpenChange}
       >
         <ModalContent>
@@ -252,6 +252,31 @@ export default function EditActionModal({
                             <Textarea
                               key={param.key}
                               description={param.description}
+                              isRequired={param.required}
+                              label={param.key}
+                              type={param.type}
+                              value={
+                                action.params.find(
+                                  (x: any) => x.key === param.key,
+                                )?.value || ""
+                              }
+                              onValueChange={(e) => {
+                                setAction({
+                                  ...action,
+                                  params: action.params.map((x: any) => {
+                                    if (x.key === param.key) {
+                                      return { ...x, value: e };
+                                    }
+
+                                    return x;
+                                  }),
+                                });
+                              }}
+                            />
+                          ) : param.type === "password" ? (
+                            <Input
+                              key={param.key}
+                              description={param?.description}
                               isRequired={param.required}
                               label={param.key}
                               type={param.type}

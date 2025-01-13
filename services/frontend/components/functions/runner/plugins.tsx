@@ -9,7 +9,6 @@ import {
 } from "@nextui-org/drawer";
 import { Chip, Divider } from "@nextui-org/react";
 import TimeAgo from "react-timeago";
-import Reloader from "@/components/reloader/Reloader";
 
 export default function RunnerDrawer({
   disclosure,
@@ -52,6 +51,14 @@ export default function RunnerDrawer({
                   className={`text-small font-medium text-${runner.registered ? "success" : "danger"}`}
                 >
                   {runner.registered ? "Registered" : "Unregistered"}
+                </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="text-small text-default-500">Registered At</div>
+                <div
+                  className={`text-small font-medium text-${runner.registered ? "success" : "danger"}`}
+                >
+                  {new Date(runner.registered_at).toLocaleString()}
                 </div>
               </div>
               <div className="flex items-center justify-between">
