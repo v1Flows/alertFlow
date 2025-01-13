@@ -26,6 +26,7 @@ type Runners struct {
 	Plugins          json.RawMessage `bun:"plugins,type:jsonb,default:jsonb('[]')" json:"plugins"`
 	Actions          json.RawMessage `bun:"actions,type:jsonb,default:jsonb('[]')" json:"actions"`
 	PayloadEndpoints json.RawMessage `bun:"payload_endpoints,type:jsonb,default:jsonb('[]')" json:"payload_endpoints"`
+	RegisteredAt     time.Time       `bun:"registered_at,type:timestamptz,default:now()" json:"registered_at"`
 }
 
 type IncomingAutoRunners struct {

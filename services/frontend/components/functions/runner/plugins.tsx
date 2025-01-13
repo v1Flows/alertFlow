@@ -55,6 +55,14 @@ export default function RunnerDrawer({
                 </div>
               </div>
               <div className="flex items-center justify-between">
+                <div className="text-small text-default-500">Registered At</div>
+                <div
+                  className={`text-small font-medium text-${runner.registered ? "success" : "danger"}`}
+                >
+                  {new Date(runner.registered_at).toLocaleString()}
+                </div>
+              </div>
+              <div className="flex items-center justify-between">
                 <div className="text-small text-default-500">
                   Last Heartbeat
                 </div>
