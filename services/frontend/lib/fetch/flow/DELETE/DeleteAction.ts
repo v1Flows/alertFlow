@@ -34,7 +34,7 @@ export default async function DeleteAction(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/flows/${flowID}/actions/${actionID}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/flows/${flowID}/actions/${actionID}`,
       {
         method: "DELETE",
         headers: {
