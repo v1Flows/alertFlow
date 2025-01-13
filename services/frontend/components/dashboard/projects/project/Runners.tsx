@@ -19,7 +19,6 @@ import {
 import React from "react";
 import TimeAgo from "react-timeago";
 import { toast } from "sonner";
-import { useMediaQuery } from "usehooks-ts";
 
 import { VerticalDotsIcon } from "@/components/icons";
 import RunnerDrawer from "@/components/functions/runner/plugins";
@@ -28,19 +27,11 @@ import CreateRunnerModal from "@/components/functions/runner/create";
 
 import ProjectRunnerDetails from "./RunnerDetails";
 
-export default function Runners({
-  runners,
-  project,
-  settings,
-  user,
-  members,
-}: any) {
+export default function Runners({ runners, project, user, members }: any) {
   const [targetRunner, setTargetRunner] = React.useState({} as any);
   const showRunnerDrawer = useDisclosure();
   const addRunnerModal = useDisclosure();
   const deleteRunnerModal = useDisclosure();
-
-  const isMobile = useMediaQuery("(max-width: 650px)");
 
   const copyRunnerIDtoClipboard = (id: string) => {
     if (typeof navigator !== "undefined" && navigator.clipboard) {
@@ -73,25 +64,6 @@ export default function Runners({
     } else if (timeAgo <= -30) {
       return false;
     }
-  }
-
-  function checkQuotaDisabled() {
-    if (!settings.create_runners) {
-      return true;
-    } else if (project.disabled) {
-      return true;
-    } else if (user.role === "vip") {
-      return false;
-    } else if (user.role === "admin") {
-      return false;
-    } else if (
-      members.find((m: any) => m.user_id === user.id) &&
-      members.filter((m: any) => m.user_id === user.id)[0].role === "Viewer"
-    ) {
-      return true;
-    }
-
-    return false;
   }
 
   return (

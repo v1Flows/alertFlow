@@ -9,7 +9,6 @@ import {
 } from "@nextui-org/drawer";
 import { Chip, Divider } from "@nextui-org/react";
 import TimeAgo from "react-timeago";
-import Reloader from "@/components/reloader/Reloader";
 
 export default function RunnerDrawer({
   disclosure,

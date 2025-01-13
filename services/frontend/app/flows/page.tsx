@@ -46,10 +46,7 @@ export default async function DashboardFlowsPage() {
       ) : (
         <ErrorCard
           error={
-            flows.error ||
-            projects.error ||
-            settings.error ||
-            userDetails.error
+            flows.error || projects.error || settings.error || userDetails.error
           }
           message={
             flows.message ||

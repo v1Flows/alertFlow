@@ -1,6 +1,6 @@
 "use client";
 import { Icon } from "@iconify/react";
-import { Tab, Tabs, Tooltip } from "@nextui-org/react";
+import { Tab, Tabs } from "@nextui-org/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 
@@ -76,7 +76,6 @@ export default function ProjectTabs({
               members={members}
               project={project}
               runners={runners}
-              settings={settings}
               user={user}
             />
           </Tab>
@@ -100,10 +99,10 @@ export default function ProjectTabs({
           <Tab
             key="audit"
             title={
-                <div className="flex items-center space-x-2">
-                  <Icon icon="solar:notes-outline" width={20} />
-                  <span>Audit</span>
-                </div>
+              <div className="flex items-center space-x-2">
+                <Icon icon="solar:notes-outline" width={20} />
+                <span>Audit</span>
+              </div>
             }
           >
             <ProjectAuditLogs audit={audit} members={members} user={user} />

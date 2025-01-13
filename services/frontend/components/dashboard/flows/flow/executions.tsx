@@ -372,9 +372,7 @@ export default function Executions({
                 color="primary"
                 size="md"
                 variant="bordered"
-                onPress={() =>
-                  router.push(`/flows/${execution.flow_id}/`)
-                }
+                onPress={() => router.push(`/flows/${execution.flow_id}/`)}
               >
                 View Flow
               </Button>
