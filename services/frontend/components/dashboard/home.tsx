@@ -363,9 +363,7 @@ export function DashboardHome({
                   <DropdownItem
                     key={runner.id}
                     onPress={() => {
-                      router.push(
-                        `/projects/${runner.project_id}?tab=runners`,
-                      );
+                      router.push(`/projects/${runner.project_id}?tab=runners`);
                     }}
                   >
                     <div className="flex items-center justify-between gap-4">
