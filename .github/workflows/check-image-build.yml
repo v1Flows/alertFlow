@@ -42,5 +42,5 @@ jobs:
       - name: Build AlertFlow Docker Image
         run: docker build . --file Dockerfile --tag justnz/alertflow:test
 
-      - name: Run Backend Docker Image
+      - name: Run AlertFlow Docker Image
         run: docker run --rm justnz/alertflow:test
