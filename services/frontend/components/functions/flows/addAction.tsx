@@ -549,6 +549,29 @@ export default function AddActionModal({
                                     );
                                   }}
                                 />
+                              ) : param.type === "password" ? (
+                                <Input
+                                  key={param.key}
+                                  description={param?.description}
+                                  isRequired={param.required}
+                                  label={param.key}
+                                  type={param.type}
+                                  value={
+                                    params.find((x: any) => x.key === param.key)
+                                      ?.value || ""
+                                  }
+                                  onValueChange={(e) => {
+                                    setParams(
+                                      params.map((x: any) => {
+                                        if (x.key === param.key) {
+                                          return { ...x, value: e };
+                                        }
+
+                                        return x;
+                                      }),
+                                    );
+                                  }}
+                                />
                               ) : null;
                             })}
                           </div>

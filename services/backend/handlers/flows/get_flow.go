@@ -1,6 +1,8 @@
 package flows
 
 import (
+	"alertflow-backend/config"
+	"alertflow-backend/functions/encryption"
 	"alertflow-backend/functions/gatekeeper"
 	"alertflow-backend/functions/httperror"
 	"alertflow-backend/models"
@@ -31,6 +33,15 @@ func GetFlow(context *gin.Context, db *bun.DB) {
 	if !access {
 		httperror.Unauthorized(context, "You do not have access to this flow", errors.New("you do not have access to this flow"))
 		return
+	}
+
+	// decrypt action params
+	if config.Config.Encryption.Enabled && flow.EncryptActionParams {
+		flow.Actions, err = encryption.DecryptParams(flow.Actions)
+		if err != nil {
+			httperror.InternalServerError(context, "Error encrypting action params", err)
+			return
+		}
 	}
 
 	context.JSON(http.StatusOK, gin.H{"flow": flow})

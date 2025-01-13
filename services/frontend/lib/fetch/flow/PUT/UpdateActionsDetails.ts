@@ -19,6 +19,7 @@ type SuccessResponse = {
 
 export default async function UpdateFlowActionsDetails(
   flowID: string,
+  encryptedActionParams: boolean,
   execParallel: boolean,
   patterns: any,
 ): Promise<SuccessResponse | ErrorResponse> {
@@ -43,6 +44,7 @@ export default async function UpdateFlowActionsDetails(
           Authorization: token.value,
         },
         body: JSON.stringify({
+          encrypt_action_params: encryptedActionParams,
           exec_parallel: execParallel,
           patterns,
         }),
