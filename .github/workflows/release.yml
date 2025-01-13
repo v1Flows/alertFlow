@@ -20,7 +20,7 @@ jobs:
         run: docker build . --file services/backend/Dockerfile --tag justnz/alertflow:backend-latest --tag justnz/alertflow:backend-${{ github.sha }} --tag justnz/alertflow:backend-${{ github.ref_name }}
 
       - name: Build AlertFlow Docker Image
-        run: docker build . --file services/backend/Dockerfile --tag justnz/alertflow:latest --tag justnz/alertflow:${{ github.sha }} --tag justnz/alertflow:${{ github.ref_name }}
+        run: docker build . --file Dockerfile --tag justnz/alertflow:latest --tag justnz/alertflow:${{ github.sha }} --tag justnz/alertflow:${{ github.ref_name }}
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
