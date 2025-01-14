@@ -10,32 +10,12 @@ import { siteConfig } from "@/config/site";
 
 const navLinks = [
   {
-    name: "Home",
-    href: "/",
+    name: "GitHub",
+    href: "https://github.com/AlertFlow/alertflow",
   },
   {
-    name: "About",
-    href: "/about",
-  },
-  {
-    name: "System Status",
-    href: "https://status.justlab.xyz/status/alertflow",
-  },
-  {
-    name: "Contact",
-    href: "/contact",
-  },
-  {
-    name: "Privacy Policy",
-    href: "/privacy",
-  },
-  {
-    name: "Terms of Service",
-    href: "/terms",
-  },
-  {
-    name: "Legal Disclosure",
-    href: "/legal",
+    name: "Components",
+    href: "https://github.com/orgs/AlertFlow/repositories",
   },
 ];
 
