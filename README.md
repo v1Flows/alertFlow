@@ -5,6 +5,7 @@ AlertFlow is a monitoring automation platform designed to streamline workflows, 
 ## Table of Contents
 
 - [Features](#features)
+- [Preview](#preview)
 - [Self Hosting](#self-hosting)
 - [Runners](#runners)
 - [Project Structure](#project-structure)
@@ -23,8 +24,19 @@ AlertFlow is a monitoring automation platform designed to streamline workflows, 
 - **Team Collaboration**: Invite team members, assign roles, and manage permissions.
 - **Audit Logs**: Track changes and activities within projects and flows.
 
+## Preview
+If you want to checkout AlertFlow before hosting it on your own, have a look at
+https://alertflow.org
+
+Login Details:
+```
+Username: Demo
+Password: demo123
+```
+
 ## Self Hosting
-To run your own version of AlertFlow we provide various docker images.
+To run your own version of AlertFlow we provide various docker images available at 
+[Docker Hub](https://hub.docker.com/repository/docker/justnz/alertflow/general).
 - **justnz/alertflow:latest** - Full version including frontend and backend
 - **justnz/alertflow:vx.x.x** - Versioned release. Also available for the single frontend and backend images
 - **justnz/alertflow:frontend-latest** - Only frontend
@@ -35,14 +47,26 @@ To run your own version of AlertFlow we provide various docker images.
 Config example: [config.yaml](https://github.com/AlertFlow/alertflow/blob/main/services/backend/config/config.yaml)
 
 ```sh
-docker run -p 8080:3000 -v /your/config/path/config.yaml:/etc/alertflow/backend_config.yaml justnz/alertflow:latest
+docker run -p 80:3000 -v /your/config/path/config.yaml:/etc/alertflow/backend_config.yaml justnz/alertflow:latest
 ```
 
 ### Frontend Only
+If you want to run only the frontend of AlertFlow, please provide the backend endpoint via the below env flag.
+```sh
+docker run -p 80:3000 -e NEXT_PUBLIC_API_URL=https://api-url.com justnz/alertflow:frontend-latest
+```
 
 ### Backend Only
+```sh
+docker run -p 8080:8080 -v /your/config/path/config.yaml:/etc/alertflow/backend_config.yaml justnz/alertflow:backend-latest
+```
 
 ## Runners
+Runners are the key part of AlertFlow and provide the functionality of execution so called Workflows.
+
+To create / run your own runners you require to have a fully set up AlertFlow instance.
+
+Please see the repo [Runner](https://github.com/AlertFlow/runner) for more informations.
 
 ## Project Structure
 
@@ -78,6 +102,10 @@ To get started with the AlertFlow project, follow these steps:
       Name: postgres
       User: postgres
       Password: postgres
+
+    Encryption:
+      Enabled: true
+      Key: your-encryption-key
 
     JWT:
       Secret: your-jwt-secret
