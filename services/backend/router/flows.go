@@ -46,10 +46,6 @@ func Flows(router *gin.RouterGroup, db *bun.DB) {
 		flow.PUT("/:flowID/actions/details", func(c *gin.Context) {
 			flows.UpdateFlowActionsDetails(c, db)
 		})
-		flow.PUT("/:flowID/actions/:actionID", func(c *gin.Context) {
-			flows.UpdateFlowAction(c, db)
-		})
-		// actions
 		flow.DELETE("/:flowID/actions/:actionID", func(c *gin.Context) {
 			flows.DeleteFlowAction(c, db)
 		})

@@ -9,5 +9,9 @@ Database:
   User: postgres
   Password: postgres
 
+Encryption:
+  Enabled: true
+  Key: null
+
 JWT:
   Secret: null
