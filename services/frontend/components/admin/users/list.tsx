@@ -407,10 +407,7 @@ export function UsersList({ users }: any) {
           </ModalContent>
         </Modal>
       </div>
-      <EditUserModal
-        disclosure={editUserModal}
-        user={targetUser}
-      />
+      <EditUserModal disclosure={editUserModal} user={targetUser} />
       <AdminSendUserNotificationModal
         disclosure={sendUserNotificationModal}
         user={targetUser}

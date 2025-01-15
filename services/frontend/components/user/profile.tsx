@@ -18,13 +18,7 @@ import CheckUserTaken from "@/lib/auth/checkTaken";
 
 import SecuritySettings from "./security-settings";
 
-export function UserProfile({
-  user,
-  session,
-  paymentMethods,
-  subscription,
-  stats,
-}: any) {
+export function UserProfile({ user, session }: any) {
   const [selected, setSelected] = React.useState("account");
 
   const router = useRouter();

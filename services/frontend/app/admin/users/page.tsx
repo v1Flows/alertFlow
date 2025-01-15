@@ -12,10 +12,7 @@ export default async function AdminUsersPage() {
       {user.success ? (
         <UsersList users={user.data.users} />
       ) : (
-        <ErrorCard
-          error={user.error}
-          message={user.message}
-        />
+        <ErrorCard error={user.error} message={user.message} />
       )}
     </>
   );

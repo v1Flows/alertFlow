@@ -20,7 +20,6 @@ import React from "react";
 import { toast } from "sonner";
 
 import AddRunner from "@/lib/fetch/runner/POST/AddRunner";
-import CreateRunnerToken from "@/lib/fetch/project/POST/CreateRunnerToken";
 import { CheckIcon } from "@/components/icons";
 import ErrorCard from "@/components/error/ErrorCard";
 
