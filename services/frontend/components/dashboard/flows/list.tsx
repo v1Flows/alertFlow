@@ -36,12 +36,7 @@ import EditFlowModal from "@/components/functions/flows/edit";
 import { InfoIcon, PlusIcon } from "@/components/icons";
 import { IconWrapper } from "@/lib/IconWrapper";
 
-export default function FlowList({
-  flows,
-  projects,
-  settings,
-  user,
-}: any) {
+export default function FlowList({ flows, projects, settings, user }: any) {
   const router = useRouter();
 
   const [projectFilter, setProjectFilter] = React.useState(new Set([]) as any);
