@@ -82,7 +82,7 @@
     "react-router-dom": "^6.26.2",
     "react-test-renderer": "19.0.0",
     "react-timeago": "^7.2.0",
-    "recharts": "2.14.1",
+    "recharts": "2.15.0",
     "scroll-into-view-if-needed": "^3.1.0",
     "sonner": "^1.7.1",
     "tailwind-merge": "^2.5.3",
