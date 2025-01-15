@@ -35,7 +35,7 @@ export default async function ChangeFlowMaintenance(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/flows/${id}/maintenance`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/flows/${id}/maintenance`,
       {
         method: "PUT",
         headers: {

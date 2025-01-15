@@ -31,7 +31,7 @@ export async function GetProjects(): Promise<SuccessResponse | ErrorResponse> {
       };
     }
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/projects/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

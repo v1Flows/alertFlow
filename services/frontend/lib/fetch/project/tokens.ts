@@ -33,7 +33,7 @@ export async function GetProjectApiKeys(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/projects/${projectId}/tokens`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/${projectId}/tokens`,
       {
         method: "GET",
         headers: {

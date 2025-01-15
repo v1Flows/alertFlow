@@ -35,7 +35,7 @@ export default async function InteractExecutionStep(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/executions/${executionID}/steps/${stepID}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/executions/${executionID}/steps/${stepID}`,
       {
         method: "PUT",
         headers: {

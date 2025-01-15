@@ -34,7 +34,7 @@ export default async function UpdateFlowAction(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/flows/${flowID}/actions/${action.id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/flows/${flowID}/actions/${action.id}`,
       {
         method: "PUT",
         headers: {

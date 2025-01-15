@@ -33,7 +33,7 @@ export async function GetRunnerFlowLinks({
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/runners/${runnerId}/flows/links`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/runners/${runnerId}/flows/links`,
       {
         method: "GET",
         headers: {

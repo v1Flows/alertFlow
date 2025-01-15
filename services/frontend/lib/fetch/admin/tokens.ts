@@ -33,7 +33,7 @@ export async function AdminGetApiKeys(): Promise<
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/admin/tokens`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/tokens`,
       {
         method: "GET",
         headers: {

@@ -32,7 +32,7 @@ export async function AdminGetProjects(): Promise<
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/admin/projects`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/projects`,
       {
         method: "GET",
         headers: {

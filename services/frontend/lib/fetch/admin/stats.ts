@@ -39,7 +39,7 @@ export async function AdminGetStats(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/admin/stats?interval=${interval}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/stats?interval=${interval}`,
       {
         method: "GET",
         headers: {

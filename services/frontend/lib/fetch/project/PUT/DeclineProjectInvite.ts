@@ -33,7 +33,7 @@ export default async function DeclineProjectInvite(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/projects/${id}/invite`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/${id}/invite`,
       {
         method: "DELETE",
         headers: {
