@@ -25,6 +25,8 @@ type Flows struct {
 	CreatedAt           time.Time `bun:"created_at,type:timestamptz,default:now()" json:"created_at"`
 	UpdatedAt           time.Time `bun:"updated_at,type:timestamptz" json:"updated_at"`
 	EncryptActionParams bool      `bun:"encrypt_action_params,type:bool,default:true" json:"encrypt_action_params"`
+	EncryptPayloads     bool      `bun:"encrypt_payloads,type:bool,default:true" json:"encrypt_payloads"`
+	EncryptExecutions   bool      `bun:"encrypt_executions,type:bool,default:true" json:"encrypt_executions"`
 }
 
 type Actions struct {

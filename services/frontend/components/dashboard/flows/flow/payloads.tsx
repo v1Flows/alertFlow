@@ -109,6 +109,16 @@ export default function Payloads({
             }
           </p>
         );
+      case "encrypted":
+        return (
+          <>
+            {payload.encrypted ? (
+              <p className="font-bold text-success">Yes</p>
+            ) : (
+              <p className="font-bold text-danger">No</p>
+            )}
+          </>
+        );
       case "executed":
         return (
           <>
@@ -230,6 +240,9 @@ export default function Payloads({
           </TableColumn>
           <TableColumn key="runner" align="center">
             Runner
+          </TableColumn>
+          <TableColumn key="encrypted" align="center">
+            Encrypted
           </TableColumn>
           <TableColumn key="executed" align="center">
             Executed

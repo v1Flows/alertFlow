@@ -39,4 +39,5 @@ type ExecutionSteps struct {
 	CreatedAt           time.Time `bun:"created_at,type:timestamptz,default:now()" json:"created_at"`
 	StartedAt           time.Time `bun:"started_at,type:timestamptz" json:"started_at"`
 	FinishedAt          time.Time `bun:"finished_at,type:timestamptz" json:"finished_at"`
+	Encrypted           bool      `bun:"encrypted,type:bool,default:false" json:"encrypted"`
 }

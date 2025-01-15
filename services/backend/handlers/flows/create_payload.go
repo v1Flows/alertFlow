@@ -1,6 +1,8 @@
 package flows
 
 import (
+	"alertflow-backend/config"
+	"alertflow-backend/functions/encryption"
 	functions "alertflow-backend/functions/flow"
 	"alertflow-backend/functions/httperror"
 	"alertflow-backend/models"
@@ -22,7 +24,7 @@ func CreatePayload(context *gin.Context, db *bun.DB) {
 	}
 
 	var flow models.Flows
-	flowCount, err := db.NewSelect().Model(&flow).Where("id = ?", payload.FlowID).Count(context)
+	flowCount, err := db.NewSelect().Model(&flow).Where("id = ?", payload.FlowID).ScanAndCount(context)
 	if err != nil {
 		httperror.InternalServerError(context, "Error collecting flow data from db", err)
 		return
@@ -33,7 +35,18 @@ func CreatePayload(context *gin.Context, db *bun.DB) {
 	}
 
 	payload.ID = uuid.New()
-	res, err := db.NewInsert().Model(&payload).Column("id", "payload", "flow_id", "runner_id", "endpoint").Exec(context)
+
+	// encrypt payload if enabled
+	if flow.EncryptPayloads && config.Config.Encryption.Enabled {
+		payload.Payload, err = encryption.EncryptPayload(payload.Payload)
+		if err != nil {
+			httperror.InternalServerError(context, "Error encrypting payload", err)
+			return
+		}
+		payload.Encrypted = true
+	}
+
+	res, err := db.NewInsert().Model(&payload).Column("id", "payload", "flow_id", "runner_id", "endpoint", "encrypted").Exec(context)
 	if err != nil {
 		httperror.InternalServerError(context, "Error creating payload on db", err)
 		return

@@ -1,6 +1,7 @@
 package executions
 
 import (
+	"alertflow-backend/functions/encryption"
 	"alertflow-backend/functions/httperror"
 	"alertflow-backend/models"
 	"net/http"
@@ -26,6 +27,30 @@ func UpdateStep(context *gin.Context, db *bun.DB) {
 		return
 	}
 
+	// get parent execution data
+	var execution models.Executions
+	err = db.NewSelect().Model(&execution).Column("flow_id").Where("id = ?", dbStep.ExecutionID).Scan(context)
+	if err != nil {
+		httperror.InternalServerError(context, "Error fetching parent execution data", err)
+		return
+	}
+	// get flow data
+	var flow models.Flows
+	err = db.NewSelect().Model(&flow).Where("id = ?", execution.FlowID).Scan(context)
+	if err != nil {
+		httperror.InternalServerError(context, "Error fetching flow data", err)
+		return
+	}
+
+	// check for ecryption and decrypt if needed
+	if flow.EncryptExecutions && dbStep.ActionMessages != nil && len(dbStep.ActionMessages) > 0 {
+		dbStep.ActionMessages, err = encryption.DecryptExecutionStepActionMessage(dbStep.ActionMessages)
+		if err != nil {
+			httperror.InternalServerError(context, "Error decrypting execution step action messages", err)
+			return
+		}
+	}
+
 	// append new message to existing
 	step.ActionMessages = append(dbStep.ActionMessages, step.ActionMessages...)
 
@@ -39,6 +64,17 @@ func UpdateStep(context *gin.Context, db *bun.DB) {
 
 	if step.RunnerID == "" {
 		step.RunnerID = dbStep.RunnerID
+	}
+
+	// check for ecryption and encrypt if needed
+	if flow.EncryptExecutions && step.ActionMessages != nil && len(step.ActionMessages) > 0 {
+		step.ActionMessages, err = encryption.EncryptExecutionStepActionMessage(step.ActionMessages)
+		if err != nil {
+			httperror.InternalServerError(context, "Error encrypting execution step action messages", err)
+			return
+		}
+
+		step.Encrypted = true
 	}
 
 	_, err = db.NewUpdate().Model(&step).Column(
@@ -62,6 +98,7 @@ func UpdateStep(context *gin.Context, db *bun.DB) {
 		"finished",
 		"started_at",
 		"finished_at",
+		"encrypted",
 	).Where("id = ?", stepID).Exec(context)
 	if err != nil {
 		httperror.InternalServerError(context, "Error updating step on db", err)
