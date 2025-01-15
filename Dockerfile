@@ -1,5 +1,5 @@
 # Stage 1: Build the frontend
-FROM node:23-alpine AS frontend-builder
+FROM node:22-alpine AS frontend-builder
 RUN apk add --no-cache libc6-compat
 WORKDIR /app/frontend
 COPY services/frontend/package.json services/frontend/package-lock.json services/frontend/pnpm-lock.yaml ./
@@ -17,18 +17,13 @@ COPY services/backend/ ./
 RUN go build -o alertflow-backend
 
 # Stage 3: Create the final image
-FROM ubuntu:20.04
+FROM node:23-alpine
 WORKDIR /app
 
 # Install necessary packages
-RUN apt-get update && apt-get install -y \
+RUN apk update && apk add --no-cache \
     ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
-
-# Set environment variables
-ENV NODE_ENV=production
-ENV NEXT_TELEMETRY_DISABLED=1
-ENV NEXT_PUBLIC_API_URL="https://your-api-url.com"
+    tini
 
 # Create user and group
 RUN addgroup --system --gid 1001 nodejs \
@@ -49,10 +44,23 @@ RUN mkdir .next \
 COPY --from=frontend-builder --chown=nextjs:nodejs /app/frontend/.next/standalone ./
 COPY --from=frontend-builder --chown=nextjs:nodejs /app/frontend/.next/static ./.next/static
 
-USER nextjs
+RUN mkdir -p /app/config
+COPY services/backend/config/config.yaml /app/config/config.yaml
+
+# Set environment variables
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV NEXT_PUBLIC_API_URL="http://localhost:8080/api"
+
+VOLUME [ "/app/config" ]
 
 # Expose ports
 EXPOSE 8080 3000
 
+USER nextjs
+
+# Use tini as the entrypoint
+ENTRYPOINT ["/sbin/tini", "--"]
+
 # Start the backend and frontend
-CMD ["sh", "-c", "./alertflow-backend --config /app/backend/config/config.yaml & node server.js"]
+CMD ["sh", "-c", "./alertflow-backend --config /app/config/config.yaml & node server.js"]
