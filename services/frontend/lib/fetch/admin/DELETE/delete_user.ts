@@ -33,7 +33,7 @@ export default async function AdminDeleteUser(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/admin/users/${userID}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/users/${userID}`,
       {
         method: "DELETE",
         headers: {

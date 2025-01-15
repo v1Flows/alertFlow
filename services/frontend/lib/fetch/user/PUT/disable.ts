@@ -33,7 +33,7 @@ export default async function DisableUser(): Promise<
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/user/disable`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/disable`,
       {
         method: "PUT",
         headers: {

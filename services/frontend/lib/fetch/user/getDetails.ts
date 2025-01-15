@@ -32,7 +32,7 @@ export async function GetUserDetails(): Promise<
       };
     }
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/user/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

@@ -34,7 +34,7 @@ export default async function AdminSendUserNotification(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/admin/users/${userID}/notification`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/users/${userID}/notification`,
       {
         method: "POST",
         headers: {

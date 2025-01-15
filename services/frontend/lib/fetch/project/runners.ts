@@ -33,7 +33,7 @@ export async function GetProjectRunners(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/projects/${projectId}/runners`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/${projectId}/runners`,
       {
         method: "GET",
         headers: {

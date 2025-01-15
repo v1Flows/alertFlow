@@ -29,7 +29,7 @@ export default async function UpdateFlow(
     const token = cookieStore.get("session");
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/flows/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/flows/${id}`,
       {
         method: "PUT",
         headers: {

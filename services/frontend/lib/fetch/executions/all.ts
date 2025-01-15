@@ -33,7 +33,7 @@ export async function GetExecutions(): Promise<
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/executions/`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/executions/`,
       {
         method: "GET",
         headers: {

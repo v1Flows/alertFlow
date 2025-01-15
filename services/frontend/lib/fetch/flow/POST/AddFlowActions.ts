@@ -35,7 +35,7 @@ export default async function AddFlowActions(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/flows/${flowID}/actions`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/flows/${flowID}/actions`,
       {
         method: "POST",
         headers: {

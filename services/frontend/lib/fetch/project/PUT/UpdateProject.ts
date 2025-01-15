@@ -40,7 +40,7 @@ export default async function UpdateProject(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/projects/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/${id}`,
       {
         method: "PUT",
         headers: {
