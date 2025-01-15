@@ -10,7 +10,7 @@ import Actions from "./actions";
 import Executions from "./executions";
 import Payloads from "./payloads";
 import FlowStats from "./stats";
-import FlowEncryption from "./Encryption";
+import FlowEncryption from "./encryption";
 
 export default function FlowTabs({
   flow,

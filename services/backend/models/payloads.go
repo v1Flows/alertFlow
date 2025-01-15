@@ -18,4 +18,5 @@ type Payloads struct {
 	RunnerID    string          `bun:"runner_id,type:text,default:''" json:"runner_id"`
 	Endpoint    string          `bun:"endpoint,type:text,default:''" json:"endpoint"`
 	CreatedAt   time.Time       `bun:"created_at,type:timestamptz,default:now()" json:"created_at"`
+	Encrypted   bool            `bun:"encrypted,type:bool,default:false" json:"encrypted"`
 }
