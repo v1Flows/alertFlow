@@ -9,6 +9,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"io"
+	"strconv"
 )
 
 func EncryptParams(actions []models.Actions) ([]models.Actions, error) {
@@ -19,6 +20,17 @@ func EncryptParams(actions []models.Actions) ([]models.Actions, error) {
 
 	for i, action := range actions {
 		for j, param := range action.Params {
+			// Skip encryption if the value is empty
+			if param.Value == "" {
+				continue
+			}
+
+			// Check if the param value is a number
+			if _, err := strconv.ParseFloat(param.Value, 64); err == nil {
+				// Skip encryption if the value is a number
+				continue
+			}
+
 			plaintext := []byte(param.Value)
 			ciphertext := make([]byte, aes.BlockSize+len(plaintext))
 			iv := ciphertext[:aes.BlockSize]
@@ -45,6 +57,17 @@ func DecryptParams(actions []models.Actions) ([]models.Actions, error) {
 
 	for i, action := range actions {
 		for j, param := range action.Params {
+			// Skip decryption if the value is empty
+			if param.Value == "" {
+				continue
+			}
+
+			// Check if the param value is a number
+			if _, err := strconv.ParseFloat(param.Value, 64); err == nil {
+				// Skip encryption if the value is a number
+				continue
+			}
+
 			ciphertext, err := hex.DecodeString(param.Value)
 			if err != nil {
 				return nil, errors.New("failed to decode hex string: " + err.Error())
