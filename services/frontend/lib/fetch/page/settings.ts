@@ -20,7 +20,7 @@ export async function PageGetSettings(): Promise<
 > {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/page/settings`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/page/settings`,
       {
         method: "GET",
         headers: {

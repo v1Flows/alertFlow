@@ -33,7 +33,7 @@ export default async function Welcomed(): Promise<
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/user/welcomed`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/welcomed`,
       {
         method: "PUT",
         headers: {

@@ -33,7 +33,7 @@ export default async function ReadUserNotification(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/user/notifications/${id}/read`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/notifications/${id}/read`,
       {
         method: "PUT",
         headers: {

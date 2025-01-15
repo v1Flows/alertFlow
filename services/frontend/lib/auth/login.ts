@@ -11,7 +11,7 @@ export default async function LoginAPI(
 
     headers.append("Content-Type", "application/json");
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/auth/login`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/login`,
       {
         method: "POST",
         headers,

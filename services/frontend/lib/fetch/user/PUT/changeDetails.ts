@@ -34,7 +34,7 @@ export default async function ChangeUserDetails(
       };
     }
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/v1/user/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

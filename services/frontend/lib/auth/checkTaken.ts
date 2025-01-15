@@ -7,7 +7,7 @@ export default async function CheckUserTaken(email: string, username: string) {
 
     headers.append("Content-Type", "application/json");
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/auth/user/taken`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/user/taken`,
       {
         method: "POST",
         headers,

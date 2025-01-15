@@ -34,7 +34,7 @@ export default async function ProjectTransferOwnershipAPI(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/projects/${project_id}/transfer_ownership`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/${project_id}/transfer_ownership`,
       {
         method: "PUT",
         headers: {

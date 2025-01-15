@@ -16,10 +16,10 @@ WORKDIR /app
 COPY --from=builder /alertflow-backend /alertflow-backend
 
 RUN mkdir /app/config
-COPY services/backend/config/config.yaml /app/config/config.yaml
+COPY services/backend/config/config.yaml /etc/alertflow/backend_config.yaml
 
-VOLUME [ "/app/config" ]
+VOLUME [ "/etc/alertflow" ]
 
 EXPOSE 8080
 
-CMD [ "/alertflow-backend", "--config", "/app/config/config.yaml" ]
+CMD [ "/alertflow-backend", "--config", "/etc/alertflow/backend_config.yaml" ]

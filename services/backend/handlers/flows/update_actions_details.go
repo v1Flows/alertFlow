@@ -1,6 +1,8 @@
 package flows
 
 import (
+	"alertflow-backend/config"
+	"alertflow-backend/functions/encryption"
 	"alertflow-backend/functions/gatekeeper"
 	"alertflow-backend/functions/httperror"
 	functions_project "alertflow-backend/functions/project"
@@ -53,7 +55,23 @@ func UpdateFlowActionsDetails(context *gin.Context, db *bun.DB) {
 		return
 	}
 
-	_, err = db.NewUpdate().Model(&flow).Column("encrypt_action_params", "exec_parallel", "patterns").Where("id = ?", flowID).Exec(context)
+	if (!flowDB.EncryptActionParams && flow.EncryptActionParams) && config.Config.Encryption.Enabled {
+		flow.Actions, err = encryption.EncryptParams(flowDB.Actions)
+		if err != nil {
+			httperror.InternalServerError(context, "Error encrypting action params", err)
+			return
+		}
+	} else if flowDB.EncryptActionParams && !flow.EncryptActionParams && config.Config.Encryption.Enabled {
+		flow.Actions, err = encryption.DecryptParams(flowDB.Actions)
+		if err != nil {
+			httperror.InternalServerError(context, "Error decrypting action params", err)
+			return
+		}
+	} else {
+		flow.Actions = flowDB.Actions
+	}
+
+	_, err = db.NewUpdate().Model(&flow).Column("encrypt_action_params", "exec_parallel", "patterns", "actions").Where("id = ?", flowID).Exec(context)
 	if err != nil {
 		httperror.InternalServerError(context, "Error updating actions details on db", err)
 		return

@@ -64,7 +64,7 @@ export default function EditFlowActionsDetails({
   const [errorMessage, setErrorMessage] = React.useState("");
 
   useEffect(() => {
-    setEncryptedActionParams(flow.encrypted_action_params);
+    setEncryptedActionParams(flow.encrypt_action_params);
     setExecParallel(flow.exec_parallel);
     setPatterns(flow.patterns);
   }, [isOpen]);
@@ -138,9 +138,9 @@ export default function EditFlowActionsDetails({
                     <p className="font-bold">Action Parameters</p>
                     <Alert
                       hideIconWrapper
-                      color="warning"
-                      description="This will break all existing actions and they have to be recreated."
-                      title="Warning"
+                      color="primary"
+                      description="All existing action parameters will be automatically encrypted/unencrypted when this setting is changed."
+                      title="Info"
                       variant="flat"
                     />
                     <Spacer y={2} />

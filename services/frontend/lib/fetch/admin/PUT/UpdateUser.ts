@@ -36,7 +36,7 @@ export default async function UpdateUser(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/admin/users/${id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/users/${id}`,
       {
         method: "PUT",
         headers: {
