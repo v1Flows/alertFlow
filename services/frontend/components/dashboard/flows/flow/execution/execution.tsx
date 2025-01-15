@@ -63,6 +63,8 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
     });
   }, [execution]);
 
+  console.log(steps);
+
   function status(step: any) {
     if (step.pending) {
       return "Pending";
@@ -445,27 +447,45 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
               </p>
             </div>
           );
-        case "data":
+        case "message":
           return (
             <>
               {step.pending ? (
                 <p>Step not started yet</p>
               ) : (
                 <div className="flex flex-col gap-2">
-                  <Snippet fullWidth hideCopyButton hideSymbol radius="sm">
-                    {step.action_messages.map((data: any, index: any) => (
-                      <p
-                        key={index}
-                        className="flex-cols flex items-center gap-1"
-                      >
-                        <Icon
-                          icon="solar:double-alt-arrow-right-bold-duotone"
-                          width={16}
-                        />
-                        {data}
-                      </p>
-                    ))}
-                  </Snippet>
+                  <div className="flex flex-cols items-center gap-2">
+                    <Snippet fullWidth hideCopyButton hideSymbol radius="sm">
+                      {step.action_messages.map((data: any, index: any) => (
+                        <p
+                          key={index}
+                          className="flex-cols flex items-center gap-1"
+                        >
+                          <Icon
+                            icon="solar:double-alt-arrow-right-bold-duotone"
+                            width={16}
+                          />
+                          {data}
+                        </p>
+                      ))}
+                    </Snippet>
+                    {step.encrypted && (
+                      <Tooltip content="Encrypted">
+                        <Chip
+                          color="success"
+                          radius="sm"
+                          size="sm"
+                          variant="flat"
+                        >
+                          <Icon
+                            className="text-success"
+                            icon="solar:lock-linear"
+                            width={16}
+                          />
+                        </Chip>
+                      </Tooltip>
+                    )}
+                  </div>
                   {step.interactive && !step.interacted && (
                     <div className="flex-cols flex items-center gap-4">
                       <Button
@@ -552,52 +572,59 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
           );
         case "info":
           return (
-            <Tooltip
-              content={
-                <div className="flex flex-col items-start justify-between p-1">
-                  <div className="flex-cols flex gap-4">
-                    <div className="flex items-center gap-2">
-                      <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
-                        <Icon icon={step.icon} width={20} />
+            <div className="flex items-center justify-center">
+              <Tooltip
+                content={
+                  <div className="flex flex-col items-start justify-between p-1">
+                    <div className="flex-cols flex gap-4">
+                      <div className="flex items-center gap-2">
+                        <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
+                          <Icon icon={step.icon} width={20} />
+                        </div>
+                        <div>
+                          <p className="font-bold">{step.action_name}</p>
+                          <p className="text-sm text-default-500">
+                            {step.action_id || "N/A"}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="font-bold">{step.action_name}</p>
-                        <p className="text-sm text-default-500">
-                          {step.action_id || "N/A"}
-                        </p>
+                      <div className="flex items-start justify-self-end">
+                        <Chip
+                          color={statusColor(step)}
+                          radius="sm"
+                          size="sm"
+                          variant="flat"
+                        >
+                          {status(step)}
+                        </Chip>
                       </div>
                     </div>
-                    <div className="flex items-start justify-self-end">
+                    <Divider className="m-2" />
+                    <div className="flex flex-wrap gap-2">
                       <Chip
-                        color={statusColor(step)}
+                        color="primary"
                         radius="sm"
                         size="sm"
                         variant="flat"
                       >
-                        {status(step)}
+                        Runner:{" "}
+                        {runners.find((r: any) => r.id === step.runner_id)
+                          ?.name || "N/A"}
+                      </Chip>
+                      <Chip radius="sm" size="sm" variant="flat">
+                        Step ID: {step.id}
                       </Chip>
                     </div>
                   </div>
-                  <Divider className="m-2" />
-                  <div className="flex flex-wrap gap-2">
-                    <Chip color="primary" radius="sm" size="sm" variant="flat">
-                      Runner:{" "}
-                      {runners.find((r: any) => r.id === step.runner_id)
-                        ?.name || "N/A"}
-                    </Chip>
-                    <Chip radius="sm" size="sm" variant="flat">
-                      Step ID: {step.id}
-                    </Chip>
-                  </div>
-                </div>
-              }
-            >
-              <Icon
-                className="text-default-500"
-                icon="solar:info-circle-linear"
-                width={20}
-              />
-            </Tooltip>
+                }
+              >
+                <Icon
+                  className="text-default-500"
+                  icon="solar:info-circle-linear"
+                  width={20}
+                />
+              </Tooltip>
+            </div>
           );
         case "status":
           return <div>{statusIcon(step)}</div>;
@@ -676,8 +703,8 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
           <TableColumn key="name" align="center">
             Step
           </TableColumn>
-          <TableColumn key="data" align="center">
-            Data
+          <TableColumn key="message" align="center">
+            Message
           </TableColumn>
           <TableColumn key="duration" align="center">
             Duration

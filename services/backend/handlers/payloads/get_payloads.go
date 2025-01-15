@@ -1,6 +1,7 @@
 package payloads
 
 import (
+	"alertflow-backend/functions/encryption"
 	"alertflow-backend/functions/httperror"
 	"alertflow-backend/models"
 	"net/http"
@@ -16,6 +17,16 @@ func GetMultiple(context *gin.Context, db *bun.DB) {
 	if err != nil {
 		httperror.InternalServerError(context, "Error collecting payloads data from db", err)
 		return
+	}
+
+	for i := range payloads {
+		if payloads[i].Encrypted {
+			payloads[i].Payload, err = encryption.DecryptPayload(payloads[i].Payload)
+			if err != nil {
+				httperror.InternalServerError(context, "Error decrypting payload", err)
+				return
+			}
+		}
 	}
 
 	context.JSON(http.StatusOK, gin.H{"payloads": payloads})

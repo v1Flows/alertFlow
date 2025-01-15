@@ -1,6 +1,7 @@
 package payloads
 
 import (
+	"alertflow-backend/functions/encryption"
 	"alertflow-backend/functions/gatekeeper"
 	"alertflow-backend/functions/httperror"
 	"alertflow-backend/models"
@@ -38,6 +39,14 @@ func GetSingle(context *gin.Context, db *bun.DB) {
 	if !access {
 		httperror.Unauthorized(context, "You are not allowed to view this payload", errors.New("unauthorized"))
 		return
+	}
+
+	if payload.Encrypted {
+		payload.Payload, err = encryption.DecryptPayload(payload.Payload)
+		if err != nil {
+			httperror.InternalServerError(context, "Error decrypting payload", err)
+			return
+		}
 	}
 
 	context.JSON(http.StatusOK, gin.H{"payload": payload})
