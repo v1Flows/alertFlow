@@ -14,18 +14,15 @@ export default async function UserProfilePage() {
   const statsData = GetUserStats();
   const session = c.get("session")?.value;
 
-  const [settings, userDetails, stats] =
-    (await Promise.all([
-      settingsData,
-      userDetailsData,
-      statsData,
-    ])) as any;
+  const [settings, userDetails, stats] = (await Promise.all([
+    settingsData,
+    userDetailsData,
+    statsData,
+  ])) as any;
 
   return (
     <>
-      {settings.success &&
-      userDetails.success &&
-      stats.success ? (
+      {settings.success && userDetails.success && stats.success ? (
         <UserProfile
           session={session}
           settings={settings.data.settings}
@@ -34,16 +31,8 @@ export default async function UserProfilePage() {
         />
       ) : (
         <ErrorCard
-          error={
-            settings.error ||
-            userDetails.error ||
-            stats.error
-          }
-          message={
-            settings.message ||
-            userDetails.message ||
-            stats.message
-          }
+          error={settings.error || userDetails.error || stats.error}
+          message={settings.message || userDetails.message || stats.message}
         />
       )}
     </>
