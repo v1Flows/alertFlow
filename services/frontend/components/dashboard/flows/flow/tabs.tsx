@@ -10,6 +10,7 @@ import Actions from "./actions";
 import Executions from "./executions";
 import Payloads from "./payloads";
 import FlowStats from "./stats";
+import FlowEncryption from "./Encryption";
 
 export default function FlowTabs({
   flow,
@@ -98,6 +99,17 @@ export default function FlowTabs({
               payloads={payloads}
               runners={runners}
             />
+          </Tab>
+          <Tab
+            key="encryption"
+            title={
+              <div className="flex items-center space-x-2">
+                <Icon icon="solar:lock-linear" width={20} />
+                <span>Encryption</span>
+              </div>
+            }
+          >
+            <FlowEncryption flow={flow} />
           </Tab>
           <Tab
             key="stats"
