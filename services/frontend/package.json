@@ -26,7 +26,7 @@
     "@nextui-org/system": "^2.4.5",
     "@nextui-org/theme": "^2.4.4",
     "@nextui-org/use-disclosure": "2.2.2",
-    "@number-flow/react": "^0.4.2",
+    "@number-flow/react": "^0.5.2",
     "@radix-ui/react-popover": "^1.1.2",
     "@react-aria/ssr": "3.9.7",
     "@react-aria/utils": "^3.25.3",
