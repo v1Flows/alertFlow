@@ -115,16 +115,37 @@ export function ProjectsList({
               }}
             >
               <CardHeader className="items-center justify-between p-3 pb-0">
-                <Chip
-                  color={project.disabled ? "danger" : "success"}
-                  radius="sm"
-                  size="sm"
-                  variant="flat"
-                >
-                  <p className="font-bold">
-                    {project.disabled ? "Disabled" : "Active"}
-                  </p>
-                </Chip>
+                <div className="flex flex-cols items-center gap-2">
+                  <Avatar
+                    classNames={{
+                      base: `text-white`,
+                    }}
+                    icon={
+                      <Icon
+                        icon={
+                          project.icon
+                            ? project.icon
+                            : "solar:question-square-outline"
+                        }
+                        width={24}
+                      />
+                    }
+                    radius="md"
+                    style={{
+                      backgroundColor: project.color,
+                    }}
+                  />
+                  <Chip
+                    color={project.disabled ? "danger" : "success"}
+                    radius="sm"
+                    size="sm"
+                    variant="flat"
+                  >
+                    <p className="font-bold">
+                      {project.disabled ? "Disabled" : "Active"}
+                    </p>
+                  </Chip>
+                </div>
                 <Dropdown backdrop="opaque">
                   <DropdownTrigger>
                     <Button isIconOnly size="sm" variant="light">
@@ -201,18 +222,7 @@ export function ProjectsList({
                   </>
                 )}
                 <Spacer y={2} />
-                <div className="flex items-center gap-2">
-                  <Icon
-                    icon={
-                      project.icon
-                        ? project.icon
-                        : "solar:question-square-outline"
-                    }
-                    width={32}
-                  />
-                  <p className="text-lg font-bold">{project.name}</p>
-                </div>
-                <Spacer y={2} />
+                <p className="text-lg font-bold">{project.name}</p>
                 <p className="text-sm text-default-500">
                   {project.description.length > 50 ? (
                     <Tooltip
@@ -228,12 +238,6 @@ export function ProjectsList({
                     project.description
                   )}
                 </p>
-                <Spacer y={3} />
-                <Card
-                  className="h-[3px]"
-                  radius="lg"
-                  style={{ backgroundColor: project.color }}
-                />
               </CardBody>
               <CardFooter className="flex items-center justify-between gap-2 text-default-500">
                 <AvatarGroup isBordered className="pl-2" size="sm">

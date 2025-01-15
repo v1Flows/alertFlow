@@ -8,13 +8,12 @@ import (
 	"github.com/google/uuid"
 )
 
-func GenerateRunnerJWT(runnerID string, projectID string, id uuid.UUID) (tokenString string, err error) {
+func GenerateProjectAutoRunnerJWT(projectID string, id uuid.UUID) (tokenString string, err error) {
 	expirationTime := time.Now().Add(50 * 365 * 24 * time.Hour) // 10 years
 	claims := &models.JWTProjectClaim{
-		RunnerID:  runnerID,
 		ProjectID: projectID,
 		ID:        id,
-		Type:      "runner",
+		Type:      "project_auto_runner",
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
 		},

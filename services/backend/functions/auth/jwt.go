@@ -95,6 +95,28 @@ func GetUserIDFromToken(signedToken string) (id uuid.UUID, err error) {
 	return
 }
 
+func GetRunnerDataFromToken(signedToken string) (runnerID string, projectID string, runnerType string, err error) {
+	token, err := jwt.ParseWithClaims(
+		signedToken,
+		&models.JWTProjectClaim{},
+		func(token *jwt.Token) (interface{}, error) {
+			return []byte(jwtKey), nil
+		},
+	)
+	if err != nil {
+		return
+	}
+	claims, ok := token.Claims.(*models.JWTProjectClaim)
+	if !ok {
+		err = errors.New("couldn't parse claims")
+		return
+	}
+	runnerID = claims.RunnerID
+	projectID = claims.ProjectID
+	runnerType = claims.Type
+	return
+}
+
 func RefreshToken(signedToken string) (newToken string, ExpiresAt int64, err error) {
 	token, err := jwt.ParseWithClaims(
 		signedToken,
