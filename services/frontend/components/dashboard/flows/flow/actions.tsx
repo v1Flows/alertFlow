@@ -268,7 +268,25 @@ export default function Actions({
             </div>
             <Divider className="my-4" />
             <div className="grid gap-4 xl:grid-cols-2">
-              <p>Execution Order</p>
+              <p className="font-medium">Reorder Actions</p>
+              <Switch
+                isDisabled={!canEdit}
+                isSelected={isDragEnabled}
+                size="sm"
+                onValueChange={setIsDragEnabled}
+              />
+              <p className="font-medium">Action Parameters</p>
+              <Chip
+                color={flow.encrypt_action_params ? "success" : "warning"}
+                radius="sm"
+                size="sm"
+                variant="flat"
+              >
+                <p className="font-bold">
+                  {flow.encrypt_action_params ? "Enrypted" : "Unencrypted"}
+                </p>
+              </Chip>
+              <p className="font-medium">Execution Order</p>
               <Chip
                 color={flow.exec_parallel ? "secondary" : "primary"}
                 radius="sm"
@@ -279,7 +297,7 @@ export default function Actions({
                   {flow.exec_parallel ? "Parallel" : "Sequential"}
                 </p>
               </Chip>
-              <p>Patterns</p>
+              <p className="font-medium">Patterns</p>
               <Table
                 removeWrapper
                 aria-label="Match Action Patterns"
@@ -305,14 +323,6 @@ export default function Actions({
         </Card>
       </div>
       <div className="col-span-2 flex flex-col gap-2">
-        <Switch
-          isDisabled={!canEdit}
-          isSelected={isDragEnabled}
-          size="sm"
-          onValueChange={setIsDragEnabled}
-        >
-          Reorder actions
-        </Switch>
         <DndContext
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}

@@ -53,7 +53,7 @@ func UpdateFlowActionsDetails(context *gin.Context, db *bun.DB) {
 		return
 	}
 
-	_, err = db.NewUpdate().Model(&flow).Column("exec_parallel", "patterns").Where("id = ?", flowID).Exec(context)
+	_, err = db.NewUpdate().Model(&flow).Column("encrypt_action_params", "exec_parallel", "patterns").Where("id = ?", flowID).Exec(context)
 	if err != nil {
 		httperror.InternalServerError(context, "Error updating actions details on db", err)
 		return

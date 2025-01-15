@@ -19,10 +19,16 @@ type JWTConf struct {
 	Secret string `json:"Secret"`
 }
 
+type EncryptionConf struct {
+	Enabled bool   `json:"Enabled"`
+	Key     string `json:"Key"`
+}
+
 type RestfulConf struct {
-	LogLevel string `json:"LogLevel"`
-	Database DatabaseConf
-	JWT      JWTConf
+	LogLevel   string `json:"LogLevel"`
+	Database   DatabaseConf
+	JWT        JWTConf
+	Encryption EncryptionConf
 }
 
 func ReadConfig(configFile string) (*RestfulConf, error) {
