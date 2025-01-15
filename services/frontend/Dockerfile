@@ -44,7 +44,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Copy .env file to the working directory
-COPY .env .env
+COPY --from=builder /app/.env .env
 
 USER nextjs
 

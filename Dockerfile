@@ -49,7 +49,7 @@ COPY --from=frontend-builder --chown=nextjs:nodejs /app/frontend/.next/standalon
 COPY --from=frontend-builder --chown=nextjs:nodejs /app/frontend/.next/static ./.next/static
 
 # Copy .env file to the working directory
-COPY .env /app/.env
+COPY --from=frontend-builder --chown=nextjs:nodejs /app/frontend/.env /app/.env
 
 RUN mkdir -p /etc/alertflow
 COPY services/backend/config/config.yaml /etc/alertflow/backend_config.yaml
