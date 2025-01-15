@@ -6,6 +6,7 @@ import (
 	"alertflow-backend/models"
 	"errors"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -79,7 +80,9 @@ func runnerRegister(runnerID string, projectID string, runner models.Runners, co
 		return
 	}
 
-	_, err = db.NewUpdate().Model(&runner).Column("registered", "last_heartbeat", "version", "mode", "plugins", "actions", "payload_endpoints").Where("id = ?", runnerID).Exec(context)
+	runner.RegisteredAt = time.Now()
+
+	_, err = db.NewUpdate().Model(&runner).Column("registered", "last_heartbeat", "version", "mode", "plugins", "actions", "payload_endpoints", "registered_at").Where("id = ?", runnerID).Exec(context)
 	if err != nil {
 		httperror.InternalServerError(context, "Error updating runner informations on db", err)
 		return
@@ -113,6 +116,7 @@ func autoRunnerRegister(projectID string, runner models.Runners, context *gin.Co
 	runner.Name = runner.ID.String() + "_auto_runner"
 	runner.ProjectID = projectID
 	runner.AutoRunner = true
+	runner.RegisteredAt = time.Now()
 
 	_, err = db.NewInsert().Model(&runner).Exec(context)
 	if err != nil {

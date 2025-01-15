@@ -199,7 +199,7 @@ export default function Runners({
                   </div>
                 )}
               </CardBody>
-              <CardFooter>
+              <CardFooter className="flex flex-cols items-center justify-between">
                 <div className="flex flex-wrap items-start gap-2">
                   <Chip
                     color={runner.disabled ? "danger" : "success"}
@@ -217,6 +217,17 @@ export default function Runners({
                   >
                     {runner.registered ? "Registered" : "Unregistered"}
                   </Chip>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Icon
+                    className="text-default-500"
+                    icon="solar:archive-down-minimlistic-linear"
+                    width={20}
+                  />
+                  <TimeAgo
+                    className="text-sm text-default-500"
+                    date={runner.registered_at}
+                  />
                 </div>
               </CardFooter>
             </Card>
