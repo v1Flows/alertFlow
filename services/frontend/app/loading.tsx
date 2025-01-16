@@ -1,5 +1,5 @@
 "use client";
-import { Card, CardBody, Skeleton, Spacer } from "@nextui-org/react";
+import { Card, CardBody, Skeleton, Spacer } from "@heroui/react";
 import React from "react";
 
 export default function loader() {

@@ -1,6 +1,6 @@
 "use client";
 
-import { Progress } from "@nextui-org/react";
+import { Progress } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
 

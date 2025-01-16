@@ -18,7 +18,7 @@ import {
   TableHeader,
   TableRow,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import React from "react";
 
 import ChangeTokenStatusModal from "@/components/functions/tokens/changeStatus";

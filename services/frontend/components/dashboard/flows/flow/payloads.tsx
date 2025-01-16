@@ -13,7 +13,7 @@ import {
   TableRow,
   Tooltip,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React, { useMemo } from "react";
 import TimeAgo from "react-timeago";

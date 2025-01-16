@@ -3,7 +3,7 @@
 
 import type { RefObject } from "react";
 
-import { cn } from "@nextui-org/react";
+import { cn } from "@heroui/react";
 import { motion } from "framer-motion";
 import { useEffect, useId, useState } from "react";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { Icon } from "@iconify/react";
-import { Card, Chip } from "@nextui-org/react";
+import { Card, Chip } from "@heroui/react";
 import React from "react";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis } from "recharts";
 
@@ -65,7 +65,7 @@ export default function Stats({ stats }: { stats: any }) {
           const path = bar.querySelector("path");
 
           if (path) {
-            path.setAttribute("fill", "hsl(var(--nextui-default-300))");
+            path.setAttribute("fill", "hsl(var(--heroui-default-300))");
           }
         }
       });
@@ -83,7 +83,7 @@ export default function Stats({ stats }: { stats: any }) {
       const path = bar.querySelector("path");
 
       if (path) {
-        path.setAttribute("fill", "hsl(var(--nextui-foreground))");
+        path.setAttribute("fill", "hsl(var(--heroui-foreground))");
       }
     });
   }, []);
@@ -197,7 +197,7 @@ export default function Stats({ stats }: { stats: any }) {
                     <XAxis
                       axisLine={false}
                       dataKey="weekday"
-                      style={{ fontSize: "var(--nextui-font-size-tiny)" }}
+                      style={{ fontSize: "var(--heroui-font-size-tiny)" }}
                       tickLine={false}
                     />
                     <Tooltip
@@ -216,12 +216,12 @@ export default function Stats({ stats }: { stats: any }) {
                     />
                     <Bar
                       background={{
-                        fill: "hsl(var(--nextui-default-200))",
+                        fill: "hsl(var(--heroui-default-200))",
                         radius: 8,
                       }}
                       className="transition-colors"
                       dataKey="value"
-                      fill="hsl(var(--nextui-foreground))"
+                      fill="hsl(var(--heroui-foreground))"
                       radius={8}
                       onMouseEnter={(_, itemIndex) =>
                         handleMouseEnter(index, itemIndex)

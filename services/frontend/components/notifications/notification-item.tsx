@@ -8,7 +8,7 @@ import {
   Card,
   CardBody,
   Spacer,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import ReactTimeago from "react-timeago";

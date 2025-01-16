@@ -1,8 +1,8 @@
 "use client";
-import type { ModalProps } from "@nextui-org/react";
+import type { ModalProps } from "@heroui/react";
 
-import { TRANSITION_EASINGS } from "@nextui-org/framer-utils";
-import { Modal, ModalBody, ModalContent } from "@nextui-org/react";
+import { TRANSITION_EASINGS } from "@heroui/framer-utils";
+import { Modal, ModalBody, ModalContent } from "@heroui/react";
 import React from "react";
 
 import { cn } from "@/components/functions/cn/cn";

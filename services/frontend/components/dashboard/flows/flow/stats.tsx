@@ -1,7 +1,7 @@
 "use client";
 
 import { Icon } from "@iconify/react";
-import { Card, Chip, cn, Spacer, Tab, Tabs } from "@nextui-org/react";
+import { Card, Chip, cn, Spacer, Tab, Tabs } from "@heroui/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import {
@@ -306,19 +306,19 @@ export default function FlowStats({ flowID }: { flowID: string }) {
               <linearGradient id="colorGradient" x1="0" x2="0" y1="0" y2="1">
                 <stop
                   offset="10%"
-                  stopColor={`hsl(var(--nextui-${color}-500))`}
+                  stopColor={`hsl(var(--heroui-${color}-500))`}
                   stopOpacity={0.3}
                 />
                 <stop
                   offset="100%"
-                  stopColor={`hsl(var(--nextui-${color}-100))`}
+                  stopColor={`hsl(var(--heroui-${color}-100))`}
                   stopOpacity={0.1}
                 />
               </linearGradient>
             </defs>
             <CartesianGrid
               horizontalCoordinatesGenerator={() => [200, 150, 100, 50]}
-              stroke="hsl(var(--nextui-default-200))"
+              stroke="hsl(var(--heroui-default-200))"
               strokeDasharray="3 3"
               vertical={false}
             />
@@ -326,7 +326,7 @@ export default function FlowStats({ flowID }: { flowID: string }) {
               axisLine={false}
               dataKey="key"
               style={{
-                fontSize: "var(--nextui-font-size-tiny)",
+                fontSize: "var(--heroui-font-size-tiny)",
                 transform: "translateX(-40px)",
               }}
               tickLine={false}
@@ -363,31 +363,31 @@ export default function FlowStats({ flowID }: { flowID: string }) {
             />
             <Area
               activeDot={{
-                stroke: `hsl(var(--nextui-${color === "default" ? "foreground" : color}))`,
+                stroke: `hsl(var(--heroui-${color === "default" ? "foreground" : color}))`,
                 strokeWidth: 2,
-                fill: "hsl(var(--nextui-background))",
+                fill: "hsl(var(--heroui-background))",
                 r: 5,
               }}
               animationDuration={1000}
               animationEasing="ease"
               dataKey="payloads"
               fill="url(#colorGradient)"
-              stroke={`hsl(var(--nextui-${color === "default" ? "foreground" : color}))`}
+              stroke={`hsl(var(--heroui-${color === "default" ? "foreground" : color}))`}
               strokeWidth={2}
               type="monotone"
             />
             <Area
               activeDot={{
-                stroke: "hsl(var(--nextui-default-400))",
+                stroke: "hsl(var(--heroui-default-400))",
                 strokeWidth: 2,
-                fill: "hsl(var(--nextui-background))",
+                fill: "hsl(var(--heroui-background))",
                 r: 5,
               }}
               animationDuration={1000}
               animationEasing="ease"
               dataKey="executions"
               fill="transparent"
-              stroke="hsl(var(--nextui-primary-400))"
+              stroke="hsl(var(--heroui-primary-400))"
               strokeWidth={2}
               type="monotone"
             />

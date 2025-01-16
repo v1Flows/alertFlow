@@ -5,7 +5,7 @@ import {
   CircularProgress,
   Skeleton,
   Spacer,
-} from "@nextui-org/react";
+} from "@heroui/react";
 
 import ChartCard from "../../charts/chartCard";
 

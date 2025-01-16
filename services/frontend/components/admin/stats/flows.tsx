@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { Card, CardBody, Spacer } from "@nextui-org/react";
+import { Card, CardBody, Spacer } from "@heroui/react";
 
 import ChartCard from "../../charts/chartCard";
 

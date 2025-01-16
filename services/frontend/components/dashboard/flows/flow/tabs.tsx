@@ -1,6 +1,6 @@
 "use client";
 import { Icon } from "@iconify/react";
-import { Tab, Tabs } from "@nextui-org/react";
+import { Tab, Tabs } from "@heroui/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 

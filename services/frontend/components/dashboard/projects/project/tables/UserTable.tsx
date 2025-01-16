@@ -13,7 +13,7 @@ import {
   Tooltip,
   useDisclosure,
   User,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import React from "react";
 import { useMediaQuery } from "usehooks-ts";
 

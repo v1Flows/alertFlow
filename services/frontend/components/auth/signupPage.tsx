@@ -1,8 +1,8 @@
 "use client";
 
 import { Icon } from "@iconify/react";
-import { Alert } from "@nextui-org/alert";
-import { Button, Image, Input, Link, Tooltip } from "@nextui-org/react";
+import { Alert } from "@heroui/alert";
+import { Button, Image, Input, Link, Tooltip } from "@heroui/react";
 import { useIsSSR } from "@react-aria/ssr";
 import { AnimatePresence, domAnimation, LazyMotion, m } from "framer-motion";
 import { useTheme } from "next-themes";
