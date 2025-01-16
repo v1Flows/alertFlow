@@ -63,8 +63,6 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
     });
   }, [execution]);
 
-  console.log(steps);
-
   function status(step: any) {
     if (step.pending) {
       return "Pending";
@@ -561,9 +559,9 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
                   <CircularProgress
                     showValueLabel
                     aria-label="StepDuration"
-                    maxValue={getTotalDurationSeconds()}
+                    maxValue={getTotalDurationSeconds() || 1}
                     size="lg"
-                    value={getDurationSeconds(step)}
+                    value={getDurationSeconds(step) || 0}
                   />
                   <p className="text-xs">{getDuration(step)}</p>
                 </div>
