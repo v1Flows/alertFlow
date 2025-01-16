@@ -26,10 +26,12 @@ import DeleteRunnerModal from "@/components/functions/runner/delete";
 import EditRunnerModal from "@/components/functions/runner/edit";
 
 import AdminAlertFlowRunnerDetails from "./AlertFlowRunnerDetails";
+import RunnerDrawer from "@/components/functions/runner/plugins";
 
 export function AlertflowRunnerList({ runners, settings }: any) {
   const [status, setStatus] = React.useState(false);
   const [targetRunner, setTargetRunner] = React.useState({} as any);
+  const showRunnerDrawer = useDisclosure();
   const editRunnerModal = useDisclosure();
   const changeStatusModal = useDisclosure();
   const deleteRunnerModal = useDisclosure();
@@ -141,6 +143,20 @@ export function AlertflowRunnerList({ runners, settings }: any) {
                 </Button>
               </DropdownTrigger>
               <DropdownMenu variant="faded">
+                <DropdownSection showDivider title="View Zone">
+                  <DropdownItem
+                    key="details"
+                    startContent={
+                      <Icon icon="solar:clipboard-list-linear" width={20} />
+                    }
+                    onPress={() => {
+                      setTargetRunner(runner);
+                      showRunnerDrawer.onOpen();
+                    }}
+                  >
+                    Show Details
+                  </DropdownItem>
+                </DropdownSection>
                 <DropdownSection showDivider title="Edit Zone">
                   <DropdownItem
                     key="edit"
@@ -295,6 +311,7 @@ export function AlertflowRunnerList({ runners, settings }: any) {
         status={status}
       />
       <DeleteRunnerModal disclosure={deleteRunnerModal} runner={targetRunner} />
+      <RunnerDrawer disclosure={showRunnerDrawer} runner={targetRunner} />
     </main>
   );
 }
