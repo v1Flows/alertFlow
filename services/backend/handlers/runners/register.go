@@ -6,11 +6,13 @@ import (
 	"alertflow-backend/models"
 	"errors"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
+	"golang.org/x/exp/rand"
 )
 
 func RegisterRunner(context *gin.Context, db *bun.DB) {
@@ -30,6 +32,21 @@ func RegisterRunner(context *gin.Context, db *bun.DB) {
 		}
 
 		autoRunnerRegister(projectID, models.Runners{
+			Registered:       autoRunner.Registered,
+			LastHeartbeat:    autoRunner.LastHeartbeat,
+			Version:          autoRunner.Version,
+			Mode:             autoRunner.Mode,
+			Plugins:          autoRunner.Plugins,
+			Actions:          autoRunner.Actions,
+			PayloadEndpoints: autoRunner.PayloadEndpoints,
+		}, context, db)
+	} else if runnerType == "alertflow_auto_runner" {
+		if err := context.ShouldBindJSON(&autoRunner); err != nil {
+			httperror.StatusBadRequest(context, "Error parsing incoming data", err)
+			return
+		}
+
+		alertflowAutoRunnerRegister(models.Runners{
 			Registered:       autoRunner.Registered,
 			LastHeartbeat:    autoRunner.LastHeartbeat,
 			Version:          autoRunner.Version,
@@ -67,17 +84,19 @@ func runnerRegister(runnerID string, projectID string, runner models.Runners, co
 		return
 	}
 
-	// check if runner join is disabled for project
-	var project models.Projects
-	err = db.NewSelect().Model(&project).Where("id = ?", projectID).Scan(context)
-	if err != nil {
-		httperror.InternalServerError(context, "Error collecting project data from db", err)
-		return
-	}
+	if projectID != "admin" {
+		// check if runner join is disabled for project
+		var project models.Projects
+		err = db.NewSelect().Model(&project).Where("id = ?", projectID).Scan(context)
+		if err != nil {
+			httperror.InternalServerError(context, "Error collecting project data from db", err)
+			return
+		}
 
-	if project.DisableRunnerJoin && !runnerDB.Registered {
-		httperror.StatusBadRequest(context, "Runner join is disabled for this project", errors.New("runner join is disabled for this project"))
-		return
+		if project.DisableRunnerJoin && !runnerDB.Registered {
+			httperror.StatusBadRequest(context, "Runner join is disabled for this project", errors.New("runner join is disabled for this project"))
+			return
+		}
 	}
 
 	runner.RegisteredAt = time.Now()
@@ -115,6 +134,43 @@ func autoRunnerRegister(projectID string, runner models.Runners, context *gin.Co
 	runner.ID = uuid.New()
 	runner.Name = runner.ID.String() + "_auto_runner"
 	runner.ProjectID = projectID
+	runner.AutoRunner = true
+	runner.RegisteredAt = time.Now()
+
+	_, err = db.NewInsert().Model(&runner).Exec(context)
+	if err != nil {
+		httperror.InternalServerError(context, "Error inserting auto runner to db", err)
+		return
+	}
+
+	context.JSON(http.StatusCreated, gin.H{"result": "success", "runner_id": runner.ID})
+}
+
+func alertflowAutoRunnerRegister(runner models.Runners, context *gin.Context, db *bun.DB) {
+	// check if runner join is disabled for alertflow
+	var settings models.Settings
+	err := db.NewSelect().Model(&settings).Where("id = 1").Scan(context)
+	if err != nil {
+		httperror.InternalServerError(context, "Error collecting settings data from db", err)
+		return
+	}
+
+	// check if auto runners is disabled for alertflow
+	if !settings.AllowAlertFlowRunnerAutoJoin {
+		httperror.StatusBadRequest(context, "Auto runner join is disabled for AlertFlow", errors.New("auto runner join is disabled for alertflow"))
+		return
+	}
+
+	if !settings.AllowAlertFlowRunnerJoin {
+		httperror.StatusBadRequest(context, "Runner join is not disabled for AlertFlow", errors.New("runner join is not disabled for alertflow"))
+		return
+	}
+
+	// generate random id for runner
+	runner.ID = uuid.New()
+	runner.Name = "AlertFlow Auto Runner " + strconv.Itoa(rand.Intn(1000))
+	runner.ProjectID = "admin"
+	runner.AlertFlowRunner = true
 	runner.AutoRunner = true
 	runner.RegisteredAt = time.Now()
 

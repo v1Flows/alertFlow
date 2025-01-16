@@ -19,6 +19,11 @@ func Admin(router *gin.RouterGroup, db *bun.DB) {
 		admin.GET("/projects", func(c *gin.Context) {
 			admins.GetProjects(c, db)
 		})
+
+		// settings
+		admin.GET("/settings", func(c *gin.Context) {
+			admins.GetSettings(c, db)
+		})
 		admin.PUT("/settings", func(c *gin.Context) {
 			admins.UpdateSettings(c, db)
 		})

@@ -9,6 +9,7 @@ import {
   DropdownSection,
   DropdownTrigger,
   Pagination,
+  Spacer,
   Table,
   TableBody,
   TableCell,
@@ -21,15 +22,16 @@ import React from "react";
 import TimeAgo from "react-timeago";
 
 import ChangeRunnerStatusModal from "@/components/functions/runner/changeStatus";
-import CreateRunnerModal from "@/components/functions/runner/create";
 import DeleteRunnerModal from "@/components/functions/runner/delete";
 import EditRunnerModal from "@/components/functions/runner/edit";
-import { PlusIcon } from "@/components/icons";
 
-export function AlertflowRunnerList({ runners }: any) {
+import AdminAlertFlowRunnerDetails from "./AlertFlowRunnerDetails";
+import RunnerDrawer from "@/components/functions/runner/plugins";
+
+export function AlertflowRunnerList({ runners, settings }: any) {
   const [status, setStatus] = React.useState(false);
   const [targetRunner, setTargetRunner] = React.useState({} as any);
-  const addRunnerModal = useDisclosure();
+  const showRunnerDrawer = useDisclosure();
   const editRunnerModal = useDisclosure();
   const changeStatusModal = useDisclosure();
   const deleteRunnerModal = useDisclosure();
@@ -70,7 +72,7 @@ export function AlertflowRunnerList({ runners }: any) {
           </div>
         );
       case "project":
-        return <p>None</p>;
+        return <p className="capitalize">{runner.project_id}</p>;
       case "registered":
         return (
           <Chip color={runner.registered ? "success" : "danger"} variant="dot">
@@ -141,6 +143,20 @@ export function AlertflowRunnerList({ runners }: any) {
                 </Button>
               </DropdownTrigger>
               <DropdownMenu variant="faded">
+                <DropdownSection showDivider title="View Zone">
+                  <DropdownItem
+                    key="details"
+                    startContent={
+                      <Icon icon="solar:clipboard-list-linear" width={20} />
+                    }
+                    onPress={() => {
+                      setTargetRunner(runner);
+                      showRunnerDrawer.onOpen();
+                    }}
+                  >
+                    Show Details
+                  </DropdownItem>
+                </DropdownSection>
                 <DropdownSection showDivider title="Edit Zone">
                   <DropdownItem
                     key="edit"
@@ -227,16 +243,9 @@ export function AlertflowRunnerList({ runners }: any) {
         <p className="mb-0 text-2xl font-bold text-primary">
           AlertFlow Runners
         </p>
-        <Button
-          color="primary"
-          radius="lg"
-          startContent={<PlusIcon height={undefined} width={undefined} />}
-          variant="solid"
-          onPress={() => addRunnerModal.onOpen()}
-        >
-          Add Runner
-        </Button>
       </div>
+      <AdminAlertFlowRunnerDetails settings={settings} />
+      <Spacer y={2} />
       <div>
         <Table
           aria-label="Example table with custom cells"
@@ -259,7 +268,7 @@ export function AlertflowRunnerList({ runners }: any) {
             <TableColumn key="name" align="start">
               NAME
             </TableColumn>
-            <TableColumn key="runner_version" align="start">
+            <TableColumn key="version" align="start">
               VERSION
             </TableColumn>
             <TableColumn key="project" align="start">
@@ -295,11 +304,6 @@ export function AlertflowRunnerList({ runners }: any) {
           </TableBody>
         </Table>
       </div>
-      <CreateRunnerModal
-        alertflow_runner
-        disclosure={addRunnerModal}
-        project="none"
-      />
       <EditRunnerModal disclosure={editRunnerModal} runner={targetRunner} />
       <ChangeRunnerStatusModal
         disclosure={changeStatusModal}
@@ -307,6 +311,7 @@ export function AlertflowRunnerList({ runners }: any) {
         status={status}
       />
       <DeleteRunnerModal disclosure={deleteRunnerModal} runner={targetRunner} />
+      <RunnerDrawer disclosure={showRunnerDrawer} runner={targetRunner} />
     </main>
   );
 }

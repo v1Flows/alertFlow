@@ -2,8 +2,8 @@
 
 import { cookies } from "next/headers";
 
-type Result = {
-  result: string;
+type Settings = {
+  settings: any;
 };
 
 type ErrorResponse = {
@@ -14,24 +14,12 @@ type ErrorResponse = {
 
 type SuccessResponse = {
   success: true;
-  data: Result;
+  data: Settings;
 };
 
-export default async function UpdateSettings(
-  maintenance: boolean,
-  signup: boolean,
-  create_projects: boolean,
-  create_flows: boolean,
-  create_runners: boolean,
-  create_api_keys: boolean,
-  add_project_members: boolean,
-  add_flow_actions: boolean,
-  start_executions: boolean,
-  inject_payloads: boolean,
-  allow_alertflow_runner_auto_join: boolean,
-  allow_alertflow_runner_join: boolean,
-  alertflow_runner_auto_join_token: string,
-): Promise<SuccessResponse | ErrorResponse> {
+export async function AdminGetPageSettings(): Promise<
+  SuccessResponse | ErrorResponse
+> {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get("session");
@@ -47,26 +35,11 @@ export default async function UpdateSettings(
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/settings`,
       {
-        method: "PUT",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: token.value,
         },
-        body: JSON.stringify({
-          maintenance,
-          signup,
-          create_projects,
-          create_flows,
-          create_runners,
-          create_api_keys,
-          add_project_members,
-          add_flow_actions,
-          start_executions,
-          inject_payloads,
-          allow_alertflow_runner_auto_join,
-          allow_alertflow_runner_join,
-          alertflow_runner_auto_join_token,
-        }),
       },
     );
 
@@ -90,7 +63,9 @@ export default async function UpdateSettings(
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error occurred",
-      message: "Failed to update settings",
+      message: "Failed to fetch settings",
     };
   }
 }
+
+export default AdminGetPageSettings;
