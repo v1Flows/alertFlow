@@ -4,33 +4,39 @@ import { SelfHostedRunnerList } from "@/components/admin/runners/list";
 import ErrorCard from "@/components/error/ErrorCard";
 import AdminGetProjects from "@/lib/fetch/admin/projects";
 import AdminGetRunners from "@/lib/fetch/admin/runners";
+import AdminGetPageSettings from "@/lib/fetch/admin/settings";
 
 export default async function AdminRunnersPage() {
   const runnersData = AdminGetRunners();
   const projectsData = AdminGetProjects();
+  const settingsData = AdminGetPageSettings();
 
-  const [runners, projects2] = (await Promise.all([
+  const [runners, projects, settings] = (await Promise.all([
     runnersData,
     projectsData,
+    settingsData,
   ])) as any;
 
   return (
     <>
       <RunnersHeading />
-      {runners.success && projects2.success ? (
+      {runners.success && projects.success ? (
         <>
           <SelfHostedRunnerList
-            projects={projects2.data.projects}
+            projects={projects.data.projects}
             runners={runners.data.self_hosted_runners}
           />
           <div className="mt-4">
-            <AlertflowRunnerList runners={runners.data.alertflow_runners} />
+            <AlertflowRunnerList
+              runners={runners.data.alertflow_runners}
+              settings={settings.data.settings}
+            />
           </div>
         </>
       ) : (
         <ErrorCard
-          error={runners.error || projects2.error}
-          message={runners.message || projects2.message}
+          error={runners.error || projects.error || settings.error}
+          message={runners.message || projects.message || settings.message}
         />
       )}
     </>

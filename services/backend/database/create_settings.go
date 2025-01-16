@@ -4,6 +4,8 @@ import (
 	"alertflow-backend/models"
 	"context"
 
+	functions_runner "alertflow-backend/functions/runner"
+
 	log "github.com/sirupsen/logrus"
 	"github.com/uptrace/bun"
 )
@@ -20,6 +22,11 @@ func createDefaultSettings(db *bun.DB) {
 	if count == 0 {
 		log.Info("No existing settings found. Creating default...")
 		settings.ID = 1
+		settings.AlertFlowRunnerAutoJoinToken, err = functions_runner.GenerateAlertFlowAutoJoinToken(db)
+		if err != nil {
+			panic(err)
+		}
+
 		_, err := db.NewInsert().Model(&settings).Exec(ctx)
 		if err != nil {
 			panic(err)

@@ -351,9 +351,7 @@ export default function Runners({ runners, project, user, members }: any) {
                           </div>
                           <div>
                             <p className="text-md font-bold">
-                              {runner.runner_version
-                                ? runner.runner_version
-                                : "N/A"}
+                              {runner.version ? runner.version : "N/A"}
                             </p>
                             <p className="text-sm text-default-500">Version</p>
                           </div>
