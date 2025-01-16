@@ -4,7 +4,6 @@ import (
 	"alertflow-backend/functions/httperror"
 	functions_project "alertflow-backend/functions/project"
 	"alertflow-backend/models"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -24,7 +23,7 @@ func ChangeFlowStatus(context *gin.Context, db *bun.DB) {
 	_, err := db.NewUpdate().Model(&flow).Column("disabled", "disabled_reason").Where("id = ?", flowID).Exec(context)
 	if err != nil {
 		httperror.InternalServerError(context, "Error updating flow on db", err)
-		fmt.Println(err)
+		return
 	}
 
 	// get flow data
