@@ -68,7 +68,7 @@
     "eslint-plugin-unused-imports": "^4.1.4",
     "framer-motion": "^11.15.0",
     "globals": "^15.13.0",
-    "intl-messageformat": "^10.5.14",
+    "intl-messageformat": "^10.7.12",
     "lodash": "^4.17.21",
     "lucide-react": "^0.473.0",
     "match-sorter": "^8.0.0",
