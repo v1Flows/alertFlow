@@ -25,8 +25,15 @@ func AddFlowActions(context *gin.Context, db *bun.DB) {
 		return
 	}
 
+	var flowDB models.Flows
+	err := db.NewSelect().Model(&flowDB).Where("id = ?", flowID).Scan(context)
+	if err != nil {
+		httperror.InternalServerError(context, "Error collecting flow data from db", err)
+		return
+	}
+
 	// check if user has access to project
-	access, err := gatekeeper.CheckUserProjectAccess(flow.ProjectID, context, db)
+	access, err := gatekeeper.CheckUserProjectAccess(flowDB.ProjectID, context, db)
 	if err != nil {
 		httperror.InternalServerError(context, "Error checking for flow access", err)
 		return
@@ -37,7 +44,7 @@ func AddFlowActions(context *gin.Context, db *bun.DB) {
 	}
 
 	// check the requestors role in project
-	canModify, err := gatekeeper.CheckRequestUserProjectModifyRole(flow.ProjectID, context, db)
+	canModify, err := gatekeeper.CheckRequestUserProjectModifyRole(flowDB.ProjectID, context, db)
 	if err != nil {
 		httperror.InternalServerError(context, "Error checking your user permissions on flow", err)
 		return
@@ -48,7 +55,7 @@ func AddFlowActions(context *gin.Context, db *bun.DB) {
 	}
 
 	// encrypt action params
-	if config.Config.Encryption.Enabled && flow.EncryptActionParams {
+	if config.Config.Encryption.Enabled && flowDB.EncryptActionParams {
 		flow.Actions, err = encryption.EncryptParams(flow.Actions)
 		if err != nil {
 			httperror.InternalServerError(context, "Error encrypting action params", err)
