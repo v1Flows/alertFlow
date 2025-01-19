@@ -1,6 +1,6 @@
 "use client";
 
-import { Chip, cn } from "@nextui-org/react";
+import { Chip, cn } from "@heroui/react";
 import { startsWith } from "lodash";
 
 // eslint-disable-next-line no-undef

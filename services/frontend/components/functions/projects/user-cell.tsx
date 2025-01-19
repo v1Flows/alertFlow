@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, cn } from "@nextui-org/react";
+import { Avatar, cn } from "@heroui/react";
 import React from "react";
 
 import CellWrapper from "./cell-wrapper";

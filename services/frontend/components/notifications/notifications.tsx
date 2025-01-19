@@ -1,6 +1,6 @@
 "use client";
 
-import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
+import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import { Icon } from "@iconify/react";
 import {
@@ -9,8 +9,8 @@ import {
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-} from "@nextui-org/drawer";
-import { Button, Chip, ScrollShadow, Tab, Tabs } from "@nextui-org/react";
+} from "@heroui/drawer";
+import { Button, Chip, ScrollShadow, Tab, Tabs } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
 

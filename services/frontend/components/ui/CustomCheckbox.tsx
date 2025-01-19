@@ -1,4 +1,4 @@
-import { Checkbox, cn } from "@nextui-org/react";
+import { Checkbox, cn } from "@heroui/react";
 import React from "react";
 
 export const CustomCheckbox = ({ action }: { action: any }) => {

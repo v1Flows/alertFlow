@@ -1,8 +1,8 @@
 "use client";
 
 import { Icon } from "@iconify/react";
-import { Alert } from "@nextui-org/alert";
-import { Button, Checkbox, Image, Input, Link } from "@nextui-org/react";
+import { Alert } from "@heroui/alert";
+import { Button, Checkbox, Image, Input, Link } from "@heroui/react";
 import { useIsSSR } from "@react-aria/ssr";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";

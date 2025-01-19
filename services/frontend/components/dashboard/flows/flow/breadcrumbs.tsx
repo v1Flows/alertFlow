@@ -1,7 +1,7 @@
 "use client";
 
 import { Icon } from "@iconify/react";
-import { BreadcrumbItem, Breadcrumbs, Snippet } from "@nextui-org/react";
+import { BreadcrumbItem, Breadcrumbs, Snippet } from "@heroui/react";
 import React from "react";
 
 export default function FlowBreadcrumbs({ id }: any) {

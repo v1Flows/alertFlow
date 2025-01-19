@@ -1,6 +1,6 @@
 "use client";
 
-import type { ButtonProps } from "@nextui-org/react";
+import type { ButtonProps } from "@heroui/react";
 import type { ComponentProps } from "react";
 
 import { useControlledState } from "@react-stately/utils";
@@ -113,38 +113,38 @@ const MinimalRowSteps = ({
       "[--active-color:hsl(var(--step-color))]",
       "[--complete-background-color:hsl(var(--step-color))]",
       "[--complete-border-color:hsl(var(--step-color))]",
-      "[--inactive-border-color:hsl(var(--nextui-default-300))]",
-      "[--inactive-color:hsl(var(--nextui-default-300))]",
+      "[--inactive-border-color:hsl(var(--heroui-default-300))]",
+      "[--inactive-color:hsl(var(--heroui-default-300))]",
     ];
 
     switch (color) {
       case "primary":
-        userColor = "[--step-color:var(--nextui-primary)]";
-        fgColor = "[--step-fg-color:var(--nextui-primary-foreground)]";
+        userColor = "[--step-color:var(--heroui-primary)]";
+        fgColor = "[--step-fg-color:var(--heroui-primary-foreground)]";
         break;
       case "secondary":
-        userColor = "[--step-color:var(--nextui-secondary)]";
-        fgColor = "[--step-fg-color:var(--nextui-secondary-foreground)]";
+        userColor = "[--step-color:var(--heroui-secondary)]";
+        fgColor = "[--step-fg-color:var(--heroui-secondary-foreground)]";
         break;
       case "success":
-        userColor = "[--step-color:var(--nextui-success)]";
-        fgColor = "[--step-fg-color:var(--nextui-success-foreground)]";
+        userColor = "[--step-color:var(--heroui-success)]";
+        fgColor = "[--step-fg-color:var(--heroui-success-foreground)]";
         break;
       case "warning":
-        userColor = "[--step-color:var(--nextui-warning)]";
-        fgColor = "[--step-fg-color:var(--nextui-warning-foreground)]";
+        userColor = "[--step-color:var(--heroui-warning)]";
+        fgColor = "[--step-fg-color:var(--heroui-warning-foreground)]";
         break;
       case "danger":
-        userColor = "[--step-color:var(--nextui-error)]";
-        fgColor = "[--step-fg-color:var(--nextui-error-foreground)]";
+        userColor = "[--step-color:var(--heroui-error)]";
+        fgColor = "[--step-fg-color:var(--heroui-error-foreground)]";
         break;
       case "default":
-        userColor = "[--step-color:var(--nextui-default)]";
-        fgColor = "[--step-fg-color:var(--nextui-default-foreground)]";
+        userColor = "[--step-color:var(--heroui-default)]";
+        fgColor = "[--step-fg-color:var(--heroui-default-foreground)]";
         break;
       default:
-        userColor = "[--step-color:var(--nextui-primary)]";
-        fgColor = "[--step-fg-color:var(--nextui-primary-foreground)]";
+        userColor = "[--step-color:var(--heroui-primary)]";
+        fgColor = "[--step-fg-color:var(--heroui-primary-foreground)]";
         break;
     }
 

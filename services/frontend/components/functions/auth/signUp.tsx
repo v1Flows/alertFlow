@@ -1,6 +1,6 @@
 "use client";
 
-import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
+import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import { Icon } from "@iconify/react";
 import {
@@ -10,8 +10,8 @@ import {
   Modal,
   ModalContent,
   Tooltip,
-} from "@nextui-org/react";
-import { useDisclosure } from "@nextui-org/use-disclosure";
+} from "@heroui/react";
+import { useDisclosure } from "@heroui/use-disclosure";
 import { AnimatePresence, domAnimation, LazyMotion, m } from "framer-motion";
 import React from "react";
 import { toast } from "sonner";

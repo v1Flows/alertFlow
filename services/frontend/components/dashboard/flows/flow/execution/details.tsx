@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { Card, CardBody, CircularProgress, Tooltip } from "@nextui-org/react";
+import { Card, CardBody, CircularProgress, Tooltip } from "@heroui/react";
 import NumberFlow from "@number-flow/react";
 import ReactTimeago from "react-timeago";
 

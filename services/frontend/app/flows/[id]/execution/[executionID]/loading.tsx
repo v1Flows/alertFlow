@@ -1,5 +1,5 @@
 "use client";
-import { Card, CardBody, Divider, Skeleton, Spacer } from "@nextui-org/react";
+import { Card, CardBody, Divider, Skeleton, Spacer } from "@heroui/react";
 import React from "react";
 
 import ExecutionBreadcrumbs from "@/components/dashboard/flows/flow/execution/breadcrumbs";

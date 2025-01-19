@@ -10,7 +10,7 @@ import {
   TableRow,
   Tooltip,
   User,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import React from "react";
 
 export default function ProjectAuditLogs({ audit, members, user }: any) {

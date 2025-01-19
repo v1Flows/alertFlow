@@ -1,4 +1,4 @@
-import { Card, CardBody, Spacer, Switch } from "@nextui-org/react";
+import { Card, CardBody, Spacer, Switch } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
