@@ -8,12 +8,12 @@ import (
 	"github.com/google/uuid"
 )
 
-func GenerateAlertFlowAutoRunnerJWT(id uuid.UUID) (tokenString string, expirationTime time.Time, err error) {
-	expirationTime = time.Now().Add(50 * 365 * 24 * time.Hour) // 10 years
-	claims := &models.JWTProjectRunnerClaim{
-		ProjectID: "admin",
-		ID:        id,
-		Type:      "alertflow_auto_runner",
+func GenerateServiceJWT(days int, id uuid.UUID) (tokenString string, expirationTime time.Time, err error) {
+	// Set expiration time by adding days to current time
+	expirationTime = time.Now().AddDate(0, 0, days)
+	claims := &models.JWTClaim{
+		ID:   id,
+		Type: "service",
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
 		},

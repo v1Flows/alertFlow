@@ -26,7 +26,7 @@ func GetProjectTokens(context *gin.Context, db *bun.DB) {
 	}
 
 	tokens := make([]models.Tokens, 0)
-	err = db.NewSelect().Model(&tokens).Where("project_id = ?", projectID).Scan(context)
+	err = db.NewSelect().Model(&tokens).Where("project_id = ? and type != 'project_auto_runner'", projectID).Order("expires_at asc").Scan(context)
 	if err != nil {
 		httperror.InternalServerError(context, "Error receiving project tokens from db", err)
 		return

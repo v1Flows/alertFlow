@@ -1,21 +1,26 @@
 package projects
 
 import (
+	"alertflow-backend/functions/auth"
 	"alertflow-backend/functions/gatekeeper"
 	"alertflow-backend/functions/httperror"
-	functions_project "alertflow-backend/functions/project"
 	"alertflow-backend/models"
 	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	_ "github.com/lib/pq"
-	log "github.com/sirupsen/logrus"
+	"github.com/google/uuid"
 	"github.com/uptrace/bun"
 )
 
-func UpdateProject(context *gin.Context, db *bun.DB) {
+func GenerateProjectToken(context *gin.Context, db *bun.DB) {
 	projectID := context.Param("projectID")
+
+	var incToken models.IncExpireTokenRequest
+	if err := context.ShouldBindJSON(&incToken); err != nil {
+		httperror.StatusBadRequest(context, "Error parsing incoming data", err)
+		return
+	}
 
 	// check if user has access to project
 	access, err := gatekeeper.CheckUserProjectAccess(projectID, context, db)
@@ -39,22 +44,29 @@ func UpdateProject(context *gin.Context, db *bun.DB) {
 		return
 	}
 
-	var project models.Projects
-	if err := context.ShouldBindJSON(&project); err != nil {
-		httperror.StatusBadRequest(context, "Error parsing incoming data", err)
+	// generate api key
+	var token models.Tokens
+	token.ID = uuid.New()
+	token.ProjectID = projectID
+	token.Type = "project"
+	token.Description = incToken.Description
+
+	tokenKey, expirationTime, err := auth.GenerateProjectJWT(token.ProjectID, incToken.ExpiresIn, token.ID)
+	if err != nil {
+		httperror.InternalServerError(context, "Error generating token", err)
 		return
 	}
 
-	_, err = db.NewUpdate().Model(&project).Column("name", "description", "alertflow_runners", "icon", "color", "enable_auto_runners", "disable_runner_join").Where("id = ?", projectID).Exec(context)
+	token.Key = tokenKey
+	token.ExpiresAt = expirationTime
+
+	_, err = db.NewInsert().Model(&token).Exec(context)
 	if err != nil {
-		httperror.InternalServerError(context, "Error updating project informations on db", err)
+		httperror.InternalServerError(context, "Error saving token", err)
+		return
 	}
 
-	// Audit
-	err = functions_project.CreateAuditEntry(projectID, "update", "Project got updated", db, context)
-	if err != nil {
-		log.Error(err)
-	}
-
-	context.JSON(http.StatusCreated, gin.H{"result": "success"})
+	context.JSON(http.StatusCreated, gin.H{
+		"key": tokenKey,
+	})
 }

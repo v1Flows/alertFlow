@@ -3,19 +3,17 @@ package projects
 import (
 	"alertflow-backend/functions/gatekeeper"
 	"alertflow-backend/functions/httperror"
-	functions_project "alertflow-backend/functions/project"
 	"alertflow-backend/models"
 	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	_ "github.com/lib/pq"
-	log "github.com/sirupsen/logrus"
 	"github.com/uptrace/bun"
 )
 
-func UpdateProject(context *gin.Context, db *bun.DB) {
+func UpdateToken(context *gin.Context, db *bun.DB) {
 	projectID := context.Param("projectID")
+	tokenID := context.Param("tokenID")
 
 	// check if user has access to project
 	access, err := gatekeeper.CheckUserProjectAccess(projectID, context, db)
@@ -39,21 +37,15 @@ func UpdateProject(context *gin.Context, db *bun.DB) {
 		return
 	}
 
-	var project models.Projects
-	if err := context.ShouldBindJSON(&project); err != nil {
+	var token models.Tokens
+	if err := context.ShouldBindJSON(&token); err != nil {
 		httperror.StatusBadRequest(context, "Error parsing incoming data", err)
 		return
 	}
 
-	_, err = db.NewUpdate().Model(&project).Column("name", "description", "alertflow_runners", "icon", "color", "enable_auto_runners", "disable_runner_join").Where("id = ?", projectID).Exec(context)
+	_, err = db.NewUpdate().Model(&token).Column("disabled", "disabled_reason").Where("id = ?", tokenID).Exec(context)
 	if err != nil {
-		httperror.InternalServerError(context, "Error updating project informations on db", err)
-	}
-
-	// Audit
-	err = functions_project.CreateAuditEntry(projectID, "update", "Project got updated", db, context)
-	if err != nil {
-		log.Error(err)
+		httperror.InternalServerError(context, "Error updating token informations on db", err)
 	}
 
 	context.JSON(http.StatusCreated, gin.H{"result": "success"})
