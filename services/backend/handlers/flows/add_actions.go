@@ -47,8 +47,15 @@ func AddFlowActions(context *gin.Context, db *bun.DB) {
 		return
 	}
 
+	var flowDB models.Flows
+	err = db.NewSelect().Model(&flowDB).Where("id = ?", flowID).Scan(context)
+	if err != nil {
+		httperror.InternalServerError(context, "Error collecting flow data from db", err)
+		return
+	}
+
 	// encrypt action params
-	if config.Config.Encryption.Enabled && flow.EncryptActionParams {
+	if config.Config.Encryption.Enabled && flowDB.EncryptActionParams {
 		flow.Actions, err = encryption.EncryptParams(flow.Actions)
 		if err != nil {
 			httperror.InternalServerError(context, "Error encrypting action params", err)
