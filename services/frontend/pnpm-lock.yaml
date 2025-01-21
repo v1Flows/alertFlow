@@ -258,8 +258,8 @@ importers:
         specifier: ^3.1.0
         version: 3.1.0(react@19.0.0)
       uuid:
-        specifier: ^11.0.3
-        version: 11.0.3
+        specifier: ^11.0.5
+        version: 11.0.5
       zustand:
         specifier: ^5.0.0
         version: 5.0.2(@types/react@18.3.3)(react@19.0.0)(use-sync-external-store@1.4.0(react@19.0.0))
@@ -6705,8 +6705,8 @@ packages:
     resolution: {integrity: sha512-6Z7Ma2aVEWisaL6TvBCy7P8rm2LQoPv6dJ7ecIaIixHcwfbJ0x7mWdbcwlIM5IGQxPZSFYeqRCqlOOeKoJYMkw==}
     engines: {node: '>= 4'}
 
-  uuid@11.0.3:
-    resolution: {integrity: sha512-d0z310fCWv5dJwnX1Y/MncBAqGMKEzlBb1AOf7z9K8ALnd0utBX/msg/fA0+sbyN1ihbMsLhrBlnl1ak7Wa0rg==}
+  uuid@11.0.5:
+    resolution: {integrity: sha512-508e6IcKLrhxKdBbcA2b4KQZlLVp2+J5UwQ6F7Drckkc5N9ZJwFa4TgWtsww9UG8fGHbm6gbV19TdM5pQ4GaIA==}
     hasBin: true
 
   uuid@9.0.1:
@@ -15629,7 +15629,7 @@ snapshots:
 
   utility-types@3.11.0: {}
 
-  uuid@11.0.3: {}
+  uuid@11.0.5: {}
 
   uuid@9.0.1: {}
 
