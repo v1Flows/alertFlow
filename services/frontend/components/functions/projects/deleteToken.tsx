@@ -1,6 +1,6 @@
 "use client";
 
-import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
+import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
   Button,
@@ -10,19 +10,21 @@ import {
   ModalFooter,
   ModalHeader,
   Snippet,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
-import DeleteRunnerToken from "@/lib/fetch/project/DELETE/DeleteRunnerToken";
 import ErrorCard from "@/components/error/ErrorCard";
+import DeleteProjectToken from "@/lib/fetch/project/DELETE/DeleteProjectToken";
 
-export default function DeleteTokenModal({
+export default function DeleteProjectTokenModal({
   disclosure,
+  projectID,
   token,
 }: {
   disclosure: UseDisclosureReturn;
+  projectID: any;
   token: any;
 }) {
   const router = useRouter();
@@ -36,7 +38,7 @@ export default function DeleteTokenModal({
   async function handleDeleteToken() {
     setIsLoading(true);
 
-    const response = (await DeleteRunnerToken(token.id)) as any;
+    const response = (await DeleteProjectToken(projectID, token.id)) as any;
 
     if (!response) {
       setIsLoading(false);
@@ -78,7 +80,7 @@ export default function DeleteTokenModal({
                     You are about to delete the following token which{" "}
                     <span className="font-bold">cannot be undone</span>
                     .
-                    <br /> Any runners using this token will become unusable.
+                    <br /> this token will become unusable.
                   </p>
                 </div>
               </ModalHeader>

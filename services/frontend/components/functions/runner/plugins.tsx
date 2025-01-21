@@ -1,4 +1,4 @@
-import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
+import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import { Icon } from "@iconify/react";
 import {
@@ -6,8 +6,8 @@ import {
   DrawerBody,
   DrawerContent,
   DrawerHeader,
-} from "@nextui-org/drawer";
-import { Chip, Divider } from "@nextui-org/react";
+} from "@heroui/drawer";
+import { Chip, Divider } from "@heroui/react";
 import TimeAgo from "react-timeago";
 
 export default function RunnerDrawer({

@@ -35,14 +35,17 @@ export default async function AddRunner({
       };
     }
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/runners/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token.value,
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/runners/`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token.value,
+        },
+        body: JSON.stringify({ name, project_id: projectId, alertflow_runner }),
       },
-      body: JSON.stringify({ name, project_id: projectId, alertflow_runner }),
-    });
+    );
 
     if (!res.ok) {
       const errorData = await res.json();

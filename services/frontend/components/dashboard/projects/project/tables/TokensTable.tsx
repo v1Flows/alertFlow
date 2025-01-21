@@ -11,13 +11,15 @@ import {
   TableRow,
   Tooltip,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import React from "react";
 import { toast } from "sonner";
 
 import { PlusIcon } from "@/components/icons";
-import DeleteTokenModal from "@/components/functions/tokens/delete";
-import CreateTokenModal from "@/components/functions/tokens/create";
+import CreateProjectTokenModal from "@/components/functions/projects/createToken";
+import DeleteRunnerTokenModal from "@/components/functions/tokens/deleteRunnerToken";
+import DeleteProjectTokenModal from "@/components/functions/projects/deleteToken";
+import ChangeProjectTokenStatusModal from "@/components/functions/projects/changeTokenStatus";
 
 export default function ProjectTokens({
   tokens,
@@ -28,7 +30,11 @@ export default function ProjectTokens({
 }: any) {
   const [targetToken, setTargetToken] = React.useState({} as any);
 
-  const addTokenModal = useDisclosure();
+  // project tokens
+  const addProjectTokenModal = useDisclosure();
+  const deleteProjectTokenModal = useDisclosure();
+  const changeProjectTokenStatusModal = useDisclosure();
+
   const deleteTokenModal = useDisclosure();
 
   // pagination
@@ -72,7 +78,7 @@ export default function ProjectTokens({
     switch (columnKey) {
       case "actions":
         return (
-          <div className="relative flex items-center justify-center gap-2">
+          <div className="relative flex items-center justify-center gap-4">
             <Tooltip content="Copy Token">
               <span className="cursor-pointer text-lg text-default-400 active:opacity-50">
                 <Icon
@@ -84,6 +90,48 @@ export default function ProjectTokens({
                 />
               </span>
             </Tooltip>
+            {!key.disabled && (
+              <Tooltip color="danger" content="Disable Token">
+                <span className="cursor-pointer text-lg text-danger active:opacity-50">
+                  <Icon
+                    icon="solar:lock-linear"
+                    width={20}
+                    onClick={() => {
+                      if (
+                        members.find((m: any) => m.user_id === user.id) &&
+                        members.filter((m: any) => m.user_id === user.id)[0]
+                          .role !== "Viewer"
+                      ) {
+                        key.disabled = true;
+                        setTargetToken(key);
+                        changeProjectTokenStatusModal.onOpen();
+                      }
+                    }}
+                  />
+                </span>
+              </Tooltip>
+            )}
+            {key.disabled && (
+              <Tooltip color="success" content="Enable Token">
+                <span className="cursor-pointer text-lg text-success active:opacity-50">
+                  <Icon
+                    icon="solar:lock-unlocked-linear"
+                    width={20}
+                    onClick={() => {
+                      if (
+                        members.find((m: any) => m.user_id === user.id) &&
+                        members.filter((m: any) => m.user_id === user.id)[0]
+                          .role !== "Viewer"
+                      ) {
+                        key.disabled = false;
+                        setTargetToken(key);
+                        changeProjectTokenStatusModal.onOpen();
+                      }
+                    }}
+                  />
+                </span>
+              </Tooltip>
+            )}
             <Tooltip color="danger" content="Delete Token">
               <span className="cursor-pointer text-lg text-danger active:opacity-50">
                 <Icon
@@ -96,7 +144,12 @@ export default function ProjectTokens({
                         .role !== "Viewer"
                     ) {
                       setTargetToken(key);
-                      deleteTokenModal.onOpen();
+
+                      if (key.type === "project") {
+                        deleteProjectTokenModal.onOpen();
+                      } else if (key.type === "runner") {
+                        deleteTokenModal.onOpen();
+                      }
                     }
                   }}
                 />
@@ -104,6 +157,8 @@ export default function ProjectTokens({
             </Tooltip>
           </div>
         );
+      case "expires_at":
+        return new Date(key.expires_at).toLocaleString();
       case "created_at":
         return new Date(key.created_at).toLocaleString();
       case "status":
@@ -124,7 +179,7 @@ export default function ProjectTokens({
           </div>
         );
       case "type":
-        return <p className="capitalize">{key.type}</p>;
+        return <p>{key.type}</p>;
       default:
         return cellValue;
     }
@@ -137,9 +192,9 @@ export default function ProjectTokens({
           color="primary"
           isDisabled={checkAddTokenDisabled()}
           startContent={<PlusIcon height={undefined} width={undefined} />}
-          onPress={() => addTokenModal.onOpen()}
+          onPress={() => addProjectTokenModal.onOpen()}
         >
-          Add Token
+          Generate Token
         </Button>
       </div>
     );
@@ -172,19 +227,22 @@ export default function ProjectTokens({
             ID
           </TableColumn>
           <TableColumn key="description" align="start">
-            DESCRIPTION
+            Description
           </TableColumn>
           <TableColumn key="status" align="start">
-            STATUS
+            Status
           </TableColumn>
           <TableColumn key="type" align="start">
-            TYPE
+            Type
+          </TableColumn>
+          <TableColumn key="expires_at" align="start">
+            Expires At
           </TableColumn>
           <TableColumn key="created_at" align="start">
-            CREATED AT
+            Created At
           </TableColumn>
           <TableColumn key="actions" align="center">
-            ACTIONS
+            Actions
           </TableColumn>
         </TableHeader>
         <TableBody emptyContent="No rows to display." items={items}>
@@ -197,8 +255,27 @@ export default function ProjectTokens({
           )}
         </TableBody>
       </Table>
-      <CreateTokenModal disclosure={addTokenModal} projectID={project.id} />
-      <DeleteTokenModal disclosure={deleteTokenModal} token={targetToken} />
+      <CreateProjectTokenModal
+        disclosure={addProjectTokenModal}
+        projectID={project.id}
+      />
+      <ChangeProjectTokenStatusModal
+        disabled={targetToken.disabled}
+        disclosure={changeProjectTokenStatusModal}
+        projectID={project.id}
+        token={targetToken}
+      />
+      <DeleteProjectTokenModal
+        disclosure={deleteProjectTokenModal}
+        projectID={project.id}
+        token={targetToken}
+      />
+
+      {/* Runner Token */}
+      <DeleteRunnerTokenModal
+        disclosure={deleteTokenModal}
+        token={targetToken}
+      />
     </div>
   );
 }

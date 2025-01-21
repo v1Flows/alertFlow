@@ -9,7 +9,7 @@ import {
   CardBody,
   Divider,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import NumberFlow from "@number-flow/react";
 import React from "react";
 

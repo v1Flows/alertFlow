@@ -7,7 +7,7 @@ import {
   Divider,
   Switch,
   Tooltip,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";

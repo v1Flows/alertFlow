@@ -1,6 +1,6 @@
 "use client";
 
-import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
+import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
   Button,
@@ -11,7 +11,7 @@ import {
   ModalFooter,
   ModalHeader,
   User,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "sonner";

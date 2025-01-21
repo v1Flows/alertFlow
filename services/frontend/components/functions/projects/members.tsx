@@ -1,7 +1,7 @@
 "use client";
 
-import type { Selection } from "@nextui-org/react";
-import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
+import type { Selection } from "@heroui/react";
+import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import { Icon } from "@iconify/react";
 import {
@@ -22,7 +22,7 @@ import {
   ModalBody,
   ModalContent,
   Spacer,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";

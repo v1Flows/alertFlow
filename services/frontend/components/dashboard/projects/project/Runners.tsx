@@ -15,7 +15,7 @@ import {
   Spacer,
   Spinner,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import React from "react";
 import TimeAgo from "react-timeago";
 import { toast } from "sonner";

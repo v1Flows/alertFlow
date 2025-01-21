@@ -2,7 +2,7 @@
 
 import type { CSSProperties, ReactElement } from "react";
 
-import { cn } from "@nextui-org/react";
+import { cn } from "@heroui/react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import React from "react";

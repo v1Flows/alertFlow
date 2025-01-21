@@ -19,7 +19,7 @@ func GenerateRunnerToken(projectID string, runnerID string, db *bun.DB) (token s
 	key.Type = "runner"
 	key.Description = "Token for runner " + runnerID
 
-	key.Key, err = auth.GenerateRunnerJWT(runnerID, projectID, key.ID)
+	key.Key, key.ExpiresAt, err = auth.GenerateRunnerJWT(runnerID, projectID, key.ID)
 	if err != nil {
 		return "", err
 	}

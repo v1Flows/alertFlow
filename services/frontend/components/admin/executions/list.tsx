@@ -21,7 +21,7 @@ import {
   TableRow,
   Tooltip,
   useDisclosure,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import NumberFlow from "@number-flow/react";
 import { useRouter } from "next/navigation";
 import React, { useMemo, useState } from "react";

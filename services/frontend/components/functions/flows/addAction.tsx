@@ -1,4 +1,4 @@
-import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
+import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import { Icon } from "@iconify/react";
 import {
@@ -16,7 +16,7 @@ import {
   Radio,
   Spacer,
   Textarea,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";

@@ -6,7 +6,6 @@ import (
 	functions_project "alertflow-backend/functions/project"
 	"alertflow-backend/models"
 	"errors"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -45,8 +44,6 @@ func UpdateProject(context *gin.Context, db *bun.DB) {
 		httperror.StatusBadRequest(context, "Error parsing incoming data", err)
 		return
 	}
-
-	fmt.Println(project)
 
 	_, err = db.NewUpdate().Model(&project).Column("name", "description", "alertflow_runners", "icon", "color", "enable_auto_runners", "disable_runner_join").Where("id = ?", projectID).Exec(context)
 	if err != nil {

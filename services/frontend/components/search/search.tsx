@@ -6,7 +6,7 @@ import {
   type ButtonProps,
   type Selection,
   Tooltip,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import {
   Button,
   cn,
@@ -16,7 +16,7 @@ import {
   Modal,
   ModalContent,
   ScrollShadow,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { isAppleDevice, isWebKit } from "@react-aria/utils";
 import { Command } from "cmdk";
 import { capitalize, intersectionBy, isEmpty } from "lodash";
@@ -147,7 +147,7 @@ const cmdk = tv({
 });
 
 const MATCH_KEYS = ["content", "group", "category"] as const;
-const RECENT_SEARCHES_KEY = "recent-searches--nextui-pro";
+const RECENT_SEARCHES_KEY = "recent-searches--heroui-pro";
 const MAX_RECENT_SEARCHES = 10;
 const MAX_RESULTS = 20;
 const CATEGORY_ICON_MAP = {

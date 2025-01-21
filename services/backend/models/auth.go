@@ -11,8 +11,15 @@ type JWTClaim struct {
 	jwt.RegisteredClaims
 }
 
-type JWTProjectClaim struct {
+type JWTProjectRunnerClaim struct {
 	RunnerID  string    `json:"runner_id"`
+	ProjectID string    `json:"project_id"`
+	ID        uuid.UUID `json:"id"`
+	Type      string    `json:"type"`
+	jwt.RegisteredClaims
+}
+
+type JWTProjectClaim struct {
 	ProjectID string    `json:"project_id"`
 	ID        uuid.UUID `json:"id"`
 	Type      string    `json:"type"`

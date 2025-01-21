@@ -12,7 +12,7 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
   Navbar as NextUINavbar,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useIsSSR } from "@react-aria/ssr";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";

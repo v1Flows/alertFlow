@@ -1,4 +1,4 @@
-import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
+import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
   Button,
@@ -9,7 +9,7 @@ import {
   ModalFooter,
   ModalHeader,
   Snippet,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";

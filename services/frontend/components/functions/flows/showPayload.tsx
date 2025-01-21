@@ -1,4 +1,4 @@
-import type { UseDisclosureReturn } from "@nextui-org/use-disclosure";
+import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
   Button,
@@ -8,7 +8,7 @@ import {
   ModalFooter,
   ModalHeader,
   Snippet,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import React from "react";
 
 export default function FunctionShowPayloadModal({
