@@ -210,6 +210,12 @@ export default function EditFlowActionsDetails({
                   </div>
                   <div>
                     <p className="font-bold">Patterns</p>
+                    <p className="text-sm text-default-500">
+                      You can access object values by using dot (.) notation.
+                    </p>
+                    <p className="text-sm text-default-500">
+                      Example: commonLabels.alertname or alerts.0.status
+                    </p>
                     <Spacer y={2} />
                     <div>
                       <div className="flex flex-col gap-4">
