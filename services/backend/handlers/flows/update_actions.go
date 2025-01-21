@@ -56,7 +56,7 @@ func UpdateFlowActions(context *gin.Context, db *bun.DB) {
 	}
 
 	// encrypt action params
-	if config.Config.Encryption.Enabled && flow.EncryptActionParams {
+	if config.Config.Encryption.Enabled && flowDB.EncryptActionParams {
 		flow.Actions, err = encryption.EncryptParams(flow.Actions)
 		if err != nil {
 			httperror.InternalServerError(context, "Error encrypting action params", err)
