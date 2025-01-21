@@ -4,66 +4,64 @@ import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
   Button,
-  Input,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
+  Snippet,
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
 import ErrorCard from "@/components/error/ErrorCard";
-import CreateProjectToken from "@/lib/fetch/project/POST/CreateProjectToken";
+import AdminDeleteToken from "@/lib/fetch/admin/DELETE/DeleteToken";
 
-export default function CreateProjectTokenModal({
+export default function AdminDeleteTokenModal({
   disclosure,
-  projectID,
+  token,
 }: {
   disclosure: UseDisclosureReturn;
-  projectID: any;
+  token: any;
 }) {
   const router = useRouter();
   const { isOpen, onOpenChange } = disclosure;
 
-  const [description, setDescription] = React.useState("");
-  const [expiresIn, setExpiresIn] = React.useState("1");
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState(false);
   const [errorText, setErrorText] = React.useState("");
   const [errorMessage, setErrorMessage] = React.useState("");
 
-  async function handleCreateToken() {
+  async function handleDeleteToken() {
     setIsLoading(true);
 
-    const res = (await CreateProjectToken({
-      projectId: projectID,
-      expiresIn: expiresIn,
-      description: description,
-    })) as any;
+    const response = (await AdminDeleteToken(token.id)) as any;
 
-    if (!res) {
+    if (!response) {
       setIsLoading(false);
       setError(true);
-      setErrorText("Failed to create token");
-      setErrorMessage("Failed to create token");
-      toast.error("Failed to create token");
+      setErrorText("Failed to delete token");
+      setErrorMessage("Failed to delete token");
+      toast.error("Failed to delete token");
 
       return;
     }
 
-    if (res.success) {
+    if (response.success) {
+      setIsLoading(false);
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       router.refresh();
       onOpenChange();
-      setIsLoading(false);
+      toast.success("Token deleted successfully");
     } else {
-      setIsLoading(false);
       setError(true);
-      setErrorText(res.error);
-      setErrorMessage(res.message);
-      toast.error("Failed to create token");
+      setErrorText(response.error);
+      setErrorMessage(response.message);
+      setIsLoading(false);
+      toast.error("Failed to delete token");
     }
   }
 
@@ -75,9 +73,12 @@ export default function CreateProjectTokenModal({
             <>
               <ModalHeader className="flex flex-wrap items-center">
                 <div className="flex flex-col gap-2">
-                  <p className="text-lg font-bold">Create Project Token</p>
+                  <p className="text-lg font-bold">Are you sure?</p>
                   <p className="text-sm text-default-500">
-                    Create a new token for your project.
+                    You are about to delete the following token which{" "}
+                    <span className="font-bold">cannot be undone</span>
+                    .
+                    <br /> this token will become unusable.
                   </p>
                 </div>
               </ModalHeader>
@@ -85,35 +86,23 @@ export default function CreateProjectTokenModal({
                 {error && (
                   <ErrorCard error={errorText} message={errorMessage} />
                 )}
-                <Input
-                  label="Description"
-                  labelPlacement="outside"
-                  placeholder="Enter the key description"
-                  value={description}
-                  variant="flat"
-                  onValueChange={setDescription}
-                />
-                <Input
-                  endContent="days"
-                  label="Expires In"
-                  labelPlacement="outside"
-                  placeholder="Enter the token expiration time"
-                  type="number"
-                  value={expiresIn}
-                  variant="flat"
-                  onValueChange={setExpiresIn}
-                />
+                <Snippet hideCopyButton hideSymbol>
+                  <span>
+                    ID:
+                    {token.id}
+                  </span>
+                </Snippet>
               </ModalBody>
-              <ModalFooter>
+              <ModalFooter className="grid grid-cols-2">
                 <Button color="default" variant="ghost" onPress={onClose}>
-                  Discard
+                  Cancel
                 </Button>
                 <Button
-                  color="primary"
+                  color="danger"
                   isLoading={isLoading}
-                  onPress={handleCreateToken}
+                  onPress={handleDeleteToken}
                 >
-                  Create
+                  Delete
                 </Button>
               </ModalFooter>
             </>

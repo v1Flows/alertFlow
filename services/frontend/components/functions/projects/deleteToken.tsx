@@ -43,9 +43,9 @@ export default function DeleteProjectTokenModal({
     if (!response) {
       setIsLoading(false);
       setError(true);
-      setErrorText("Failed to delete api key");
-      setErrorMessage("Failed to delete api key");
-      toast.error("Failed to delete api key");
+      setErrorText("Failed to delete token");
+      setErrorMessage("Failed to delete token");
+      toast.error("Failed to delete token");
 
       return;
     }
@@ -57,13 +57,13 @@ export default function DeleteProjectTokenModal({
       setErrorMessage("");
       router.refresh();
       onOpenChange();
-      toast.success("API Key deleted successfully");
+      toast.success("Token deleted successfully");
     } else {
       setError(true);
       setErrorText(response.error);
       setErrorMessage(response.message);
       setIsLoading(false);
-      toast.error("Failed to delete api key");
+      toast.error("Failed to delete token");
     }
   }
 
@@ -77,10 +77,10 @@ export default function DeleteProjectTokenModal({
                 <div className="flex flex-col gap-2">
                   <p className="text-lg font-bold">Are you sure?</p>
                   <p className="text-sm text-default-500">
-                    You are about to delete the following api key which{" "}
+                    You are about to delete the following token which{" "}
                     <span className="font-bold">cannot be undone</span>
                     .
-                    <br /> this api key will become unusable.
+                    <br /> this token will become unusable.
                   </p>
                 </div>
               </ModalHeader>

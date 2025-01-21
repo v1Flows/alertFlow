@@ -19,33 +19,31 @@ import {
   TableRow,
   useDisclosure,
 } from "@heroui/react";
-import React from "react";
+import React, { useCallback, useMemo, useState } from "react";
 
-import ChangeTokenStatusModal from "@/components/functions/projects/changeTokenStatus";
-import DeleteTokenModal from "@/components/functions/tokens/deleteRunnerToken";
-import EditTokenModal from "@/components/functions/tokens/edit";
 import { PlusIcon } from "@/components/icons";
+import CreateServiceTokenModal from "@/components/functions/admin/createToken";
+import AdminDeleteTokenModal from "@/components/functions/admin/deleteToken";
+import AdminEditTokenModal from "@/components/functions/admin/edit";
 
 export function TokensList({ tokens, projects }: any) {
-  const [status, setStatus] = React.useState(false);
-  const [targetToken, setTargetToken] = React.useState({} as any);
+  const [targetToken, setTargetToken] = useState({} as any);
   const addTokenModal = useDisclosure();
-  const changeStatusModal = useDisclosure();
   const editModal = useDisclosure();
   const deleteTokenModal = useDisclosure();
 
   // pagination
-  const [page, setPage] = React.useState(1);
-  const rowsPerPage = 7;
+  const [page, setPage] = useState(1);
+  const rowsPerPage = 25;
   const pages = Math.ceil(tokens.length / rowsPerPage);
-  const items = React.useMemo(() => {
+  const items = useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
 
     return tokens.slice(start, end);
   }, [page, tokens]);
 
-  const renderCell = React.useCallback((token: any, columnKey: any) => {
+  const renderCell = useCallback((token: any, columnKey: any) => {
     const cellValue = token[columnKey];
 
     switch (columnKey) {
@@ -54,7 +52,7 @@ export function TokensList({ tokens, projects }: any) {
           <div>
             {token.project_id !== "none" && (
               <span>
-                <p>
+                <p className="font-semibold">
                   {projects.find((p: any) => p.id === token.project_id)?.name ||
                     "Unknown"}
                 </p>
@@ -63,7 +61,7 @@ export function TokensList({ tokens, projects }: any) {
             )}
             {token.project_id === "none" && (
               <span>
-                <p>None</p>
+                <p className="font-semibold">None</p>
                 <p className="text-sm text-default-400">
                   Probaply an Token for anything Alertflow related
                 </p>
@@ -72,7 +70,9 @@ export function TokensList({ tokens, projects }: any) {
           </div>
         );
       case "description":
-        return <p className="text-sm text-default-500">{token.description}</p>;
+        return <p className="text-sm">{token.description}</p>;
+      case "type":
+        return <p className="text-sm">{token.type}</p>;
       case "status":
         return (
           <div>
@@ -92,6 +92,8 @@ export function TokensList({ tokens, projects }: any) {
             )}
           </div>
         );
+      case "expires_at":
+        return new Date(token.expires_at).toLocaleString("de-DE");
       case "created_at":
         return new Date(token.created_at).toLocaleString("de-DE");
       case "key":
@@ -108,7 +110,7 @@ export function TokensList({ tokens, projects }: any) {
                 <Button isIconOnly size="sm" variant="light">
                   <Icon
                     className="text-default-400"
-                    icon="solar:menu-dots-broken"
+                    icon="solar:menu-dots-linear"
                     width={24}
                   />
                 </Button>
@@ -120,7 +122,7 @@ export function TokensList({ tokens, projects }: any) {
                     className="text-warning"
                     color="warning"
                     startContent={
-                      <Icon icon="solar:pen-new-square-broken" width={20} />
+                      <Icon icon="solar:pen-new-square-linear" width={20} />
                     }
                     onPress={() => {
                       setTargetToken(token);
@@ -129,45 +131,6 @@ export function TokensList({ tokens, projects }: any) {
                   >
                     Edit
                   </DropdownItem>
-                  {token.disabled ? (
-                    <DropdownItem
-                      key="disable"
-                      className="text-success"
-                      color="success"
-                      startContent={
-                        <Icon
-                          icon="solar:lock-keyhole-minimalistic-unlocked-broken"
-                          width={20}
-                        />
-                      }
-                      onPress={() => {
-                        setTargetToken(token);
-                        setStatus(false);
-                        changeStatusModal.onOpen();
-                      }}
-                    >
-                      Enable
-                    </DropdownItem>
-                  ) : (
-                    <DropdownItem
-                      key="disable"
-                      className="text-danger"
-                      color="danger"
-                      startContent={
-                        <Icon
-                          icon="solar:lock-keyhole-minimalistic-broken"
-                          width={20}
-                        />
-                      }
-                      onPress={() => {
-                        setTargetToken(token);
-                        setStatus(true);
-                        changeStatusModal.onOpen();
-                      }}
-                    >
-                      Disable
-                    </DropdownItem>
-                  )}
                 </DropdownSection>
                 <DropdownSection title="Danger Zone">
                   <DropdownItem
@@ -209,7 +172,7 @@ export function TokensList({ tokens, projects }: any) {
           variant="solid"
           onPress={() => addTokenModal.onOpen()}
         >
-          Add New
+          Generate Service Token
         </Button>
       </div>
       <Divider className="my-4" />
@@ -232,26 +195,32 @@ export function TokensList({ tokens, projects }: any) {
           }}
         >
           <TableHeader>
-            <TableColumn key="project_id" align="start">
-              PROJECT
-            </TableColumn>
             <TableColumn key="id" align="start">
               ID
             </TableColumn>
+            <TableColumn key="project_id" align="start">
+              Project
+            </TableColumn>
             <TableColumn key="description" align="start">
-              DESCRIPTION
+              Description
+            </TableColumn>
+            <TableColumn key="type" align="start">
+              Type
             </TableColumn>
             <TableColumn key="key" align="start">
-              KEY
+              Key
             </TableColumn>
             <TableColumn key="status" align="start">
-              STATUS
+              Status
             </TableColumn>
             <TableColumn key="created_at" align="start">
-              CREATED AT
+              Created At
+            </TableColumn>
+            <TableColumn key="expires_at" align="start">
+              Expires At
             </TableColumn>
             <TableColumn key="actions" align="center">
-              ACTIONS
+              Actions
             </TableColumn>
           </TableHeader>
           <TableBody emptyContent="No rows to display." items={items}>
@@ -265,14 +234,12 @@ export function TokensList({ tokens, projects }: any) {
           </TableBody>
         </Table>
       </div>
-      {/* <CreateTokenModal disclosure={addTokenModal} projectID="none" /> */}
-      <ChangeTokenStatusModal
-        disclosure={changeStatusModal}
-        status={status}
+      <CreateServiceTokenModal disclosure={addTokenModal} />
+      <AdminEditTokenModal disclosure={editModal} token={targetToken} />
+      <AdminDeleteTokenModal
+        disclosure={deleteTokenModal}
         token={targetToken}
       />
-      <EditTokenModal disclosure={editModal} token={targetToken} />
-      <DeleteTokenModal disclosure={deleteTokenModal} token={targetToken} />
     </main>
   );
 }
