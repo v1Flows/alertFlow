@@ -19,7 +19,7 @@ func GenerateProjectAutoJoinToken(projectID string, db *bun.DB) (token string, e
 	key.Type = "project_auto_runner"
 	key.Description = "Token for Project Auto Runner Join"
 
-	key.Key, err = auth.GenerateProjectAutoRunnerJWT(projectID, key.ID)
+	key.Key, key.ExpiresAt, err = auth.GenerateProjectAutoRunnerJWT(projectID, key.ID)
 	if err != nil {
 		return "", err
 	}

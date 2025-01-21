@@ -4,62 +4,66 @@ import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
   Button,
-  Input,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
+  Snippet,
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
-import CreateRunnerToken from "@/lib/fetch/project/POST/CreateRunnerToken";
 import ErrorCard from "@/components/error/ErrorCard";
+import DeleteProjectToken from "@/lib/fetch/project/DELETE/DeleteProjectToken";
 
-export default function CreateTokenModal({
+export default function DeleteProjectTokenModal({
   disclosure,
   projectID,
+  token,
 }: {
   disclosure: UseDisclosureReturn;
   projectID: any;
+  token: any;
 }) {
   const router = useRouter();
   const { isOpen, onOpenChange } = disclosure;
 
-  const [description, setDescription] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState(false);
   const [errorText, setErrorText] = React.useState("");
   const [errorMessage, setErrorMessage] = React.useState("");
 
-  async function handleCreateToken() {
+  async function handleDeleteToken() {
     setIsLoading(true);
 
-    const response = (await CreateRunnerToken({
-      projectId: projectID,
-      description,
-    })) as any;
+    const response = (await DeleteProjectToken(projectID, token.id)) as any;
 
     if (!response) {
       setIsLoading(false);
       setError(true);
-      setErrorText("Failed to create token");
-      setErrorMessage("Failed to create token");
-      toast.error("Failed to create token");
+      setErrorText("Failed to delete api key");
+      setErrorMessage("Failed to delete api key");
+      toast.error("Failed to delete api key");
 
       return;
     }
 
     if (response.success) {
+      setIsLoading(false);
+      setError(false);
+      setErrorText("");
+      setErrorMessage("");
       router.refresh();
       onOpenChange();
-      setDescription("");
-      setIsLoading(false);
+      toast.success("API Key deleted successfully");
     } else {
+      setError(true);
+      setErrorText(response.error);
+      setErrorMessage(response.message);
       setIsLoading(false);
-      toast.error("Failed to create token");
+      toast.error("Failed to delete api key");
     }
   }
 
@@ -71,9 +75,12 @@ export default function CreateTokenModal({
             <>
               <ModalHeader className="flex flex-wrap items-center">
                 <div className="flex flex-col gap-2">
-                  <p className="text-lg font-bold">Create Token</p>
+                  <p className="text-lg font-bold">Are you sure?</p>
                   <p className="text-sm text-default-500">
-                    Create a new token for your project.
+                    You are about to delete the following api key which{" "}
+                    <span className="font-bold">cannot be undone</span>
+                    .
+                    <br /> this api key will become unusable.
                   </p>
                 </div>
               </ModalHeader>
@@ -81,25 +88,23 @@ export default function CreateTokenModal({
                 {error && (
                   <ErrorCard error={errorText} message={errorMessage} />
                 )}
-                <Input
-                  label="Description"
-                  labelPlacement="outside"
-                  placeholder="Enter the project description"
-                  value={description}
-                  variant="flat"
-                  onValueChange={setDescription}
-                />
+                <Snippet hideCopyButton hideSymbol>
+                  <span>
+                    ID:
+                    {token.id}
+                  </span>
+                </Snippet>
               </ModalBody>
-              <ModalFooter>
+              <ModalFooter className="grid grid-cols-2">
                 <Button color="default" variant="ghost" onPress={onClose}>
-                  Discard
+                  Cancel
                 </Button>
                 <Button
-                  color="primary"
+                  color="danger"
                   isLoading={isLoading}
-                  onPress={handleCreateToken}
+                  onPress={handleDeleteToken}
                 >
-                  Create
+                  Delete
                 </Button>
               </ModalFooter>
             </>

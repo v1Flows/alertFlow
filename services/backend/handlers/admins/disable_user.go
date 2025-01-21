@@ -3,7 +3,6 @@ package admins
 import (
 	"alertflow-backend/functions/httperror"
 	"alertflow-backend/models"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -25,7 +24,7 @@ func DisableUser(context *gin.Context, db *bun.DB) {
 	res, err := db.NewUpdate().Model(&user).Column("disabled", "disabled_reason", "updated_at").Where("id = ?", userID).Exec(context)
 	if err != nil {
 		httperror.InternalServerError(context, "Error updating user on db", err)
-		fmt.Println(err)
+		return
 	}
 
 	context.JSON(http.StatusOK, gin.H{"result": "success", "response": res})

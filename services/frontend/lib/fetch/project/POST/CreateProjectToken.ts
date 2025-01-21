@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 
 type Result = {
   result: string;
+  key: string;
 };
 
 type ErrorResponse = {
@@ -17,11 +18,11 @@ type SuccessResponse = {
   data: Result;
 };
 
-export default async function ChangeTokenStatus(
-  id: string,
-  status: boolean,
-  reason: string,
-): Promise<SuccessResponse | ErrorResponse> {
+export default async function CreateProjectToken({
+  projectId,
+  expiresIn,
+  description,
+}: any): Promise<SuccessResponse | ErrorResponse> {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get("session");
@@ -35,17 +36,14 @@ export default async function ChangeTokenStatus(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/tokens/${id}/status`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/${projectId}/tokens`,
       {
-        method: "PUT",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: token.value,
         },
-        body: JSON.stringify({
-          disabled: status,
-          disabled_reason: reason,
-        }),
+        body: JSON.stringify({ expires_in: Number(expiresIn), description }),
       },
     );
 
@@ -69,7 +67,7 @@ export default async function ChangeTokenStatus(
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error occurred",
-      message: "Failed to update token status",
+      message: "Failed to create project api key",
     };
   }
 }

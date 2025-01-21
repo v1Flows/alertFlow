@@ -15,8 +15,13 @@ type Tokens struct {
 	Key            string    `bun:"key,type:text,notnull" json:"key"`
 	Description    string    `bun:"description,type:text,default:''" json:"description"`
 	Type           string    `bun:"type,type:text,notnull" json:"type"`
-	Expired        bool      `bun:"expired,type:bool,default:false" json:"expired"`
 	Disabled       bool      `bun:"disabled,type:bool,default:false" json:"disabled"`
 	DisabledReason string    `bun:"disabled_reason,type:text,default:''" json:"disabled_reason"`
 	CreatedAt      time.Time `bun:"created_at,type:timestamptz,default:now()" json:"created_at"`
+	ExpiresAt      time.Time `bun:"expires_at,type:timestamptz" json:"expires_at"`
+}
+
+type IncExpireTokenRequest struct {
+	ExpiresIn   int    `json:"expires_in"`
+	Description string `json:"description"`
 }

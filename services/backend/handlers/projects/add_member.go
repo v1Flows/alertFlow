@@ -3,7 +3,6 @@ package projects
 import (
 	"alertflow-backend/functions/gatekeeper"
 	"alertflow-backend/functions/httperror"
-	functions_project "alertflow-backend/functions/project"
 	project_function "alertflow-backend/functions/project"
 	functions "alertflow-backend/functions/user"
 	"alertflow-backend/models"
@@ -106,7 +105,7 @@ func AddProjectMember(context *gin.Context, db *bun.DB) {
 	}
 
 	// Audit
-	err = functions_project.CreateAuditEntry(projectID, "info", "User invited to project: "+user.Username, db, context)
+	err = project_function.CreateAuditEntry(projectID, "info", "User invited to project: "+user.Username, db, context)
 	if err != nil {
 		log.Error(err)
 	}
