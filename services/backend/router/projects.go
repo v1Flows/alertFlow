@@ -14,26 +14,43 @@ func Projects(router *gin.RouterGroup, db *bun.DB) {
 		project.GET("/", func(c *gin.Context) {
 			projects.GetProjects(c, db)
 		})
+		project.POST("/", func(c *gin.Context) {
+			projects.CreateProject(c, db)
+		})
+
 		project.GET("/:projectID", func(c *gin.Context) {
 			projects.GetProject(c, db)
 		})
-		project.GET("/:projectID/tokens", func(c *gin.Context) {
-			projects.GetProjectTokens(c, db)
+		project.DELETE("/:projectID", func(c *gin.Context) {
+			projects.DeleteProject(c, db)
 		})
+		project.PUT("/:projectID", func(c *gin.Context) {
+			projects.UpdateProject(c, db)
+		})
+
 		project.GET("/:projectID/runners", func(c *gin.Context) {
 			projects.GetProjectRunners(c, db)
 		})
 		project.GET("/:projectID/audit", func(c *gin.Context) {
 			projects.GetProjectAuditLogs(c, db)
 		})
-		project.POST("/", func(c *gin.Context) {
-			projects.CreateProject(c, db)
-		})
-		project.PUT("/:projectID", func(c *gin.Context) {
-			projects.UpdateProject(c, db)
-		})
+
 		project.DELETE("/:projectID/leave", func(c *gin.Context) {
 			projects.LeaveProject(c, db)
+		})
+
+		// tokens
+		project.GET("/:projectID/tokens", func(c *gin.Context) {
+			projects.GetProjectTokens(c, db)
+		})
+		project.POST("/:projectID/tokens", func(c *gin.Context) {
+			projects.GenerateProjectToken(c, db)
+		})
+		project.PUT("/:projectID/tokens/:tokenID", func(c *gin.Context) {
+			projects.UpdateToken(c, db)
+		})
+		project.DELETE("/:projectID/tokens/:tokenID", func(c *gin.Context) {
+			projects.DeleteToken(c, db)
 		})
 
 		// project members
@@ -57,10 +74,6 @@ func Projects(router *gin.RouterGroup, db *bun.DB) {
 
 		project.PUT("/:projectID/transfer_ownership", func(c *gin.Context) {
 			projects.TransferOwnership(c, db)
-		})
-
-		project.DELETE("/:projectID", func(c *gin.Context) {
-			projects.DeleteProject(c, db)
 		})
 	}
 }

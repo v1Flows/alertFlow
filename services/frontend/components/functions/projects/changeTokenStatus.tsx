@@ -14,17 +14,19 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
-import ChangeTokenStatus from "@/lib/fetch/admin/PUT/ChangeTokenStatus";
 import ErrorCard from "@/components/error/ErrorCard";
+import ChangeProjectTokenStatus from "@/lib/fetch/project/PUT/ChangeProjectTokenStatus";
 
-export default function ChangeTokenStatusModal({
+export default function ChangeProjectTokenStatusModal({
   disclosure,
+  projectID,
   token,
-  status,
+  disabled,
 }: {
   disclosure: UseDisclosureReturn;
+  projectID: string;
   token: any;
-  status: any;
+  disabled: any;
 }) {
   const router = useRouter();
 
@@ -39,9 +41,10 @@ export default function ChangeTokenStatusModal({
   async function changeTokenStatus() {
     setLoading(true);
 
-    const res = (await ChangeTokenStatus(
+    const res = (await ChangeProjectTokenStatus(
+      projectID,
       token.id,
-      status,
+      disabled,
       disableReason || "no info provided",
     )) as any;
 
@@ -76,7 +79,7 @@ export default function ChangeTokenStatusModal({
   return (
     <main>
       <Modal isOpen={isOpen} placement="top-center" onOpenChange={onOpenChange}>
-        {status && (
+        {disabled && (
           <ModalContent>
             {(onClose) => (
               <>
@@ -123,7 +126,7 @@ export default function ChangeTokenStatusModal({
             )}
           </ModalContent>
         )}
-        {!status && (
+        {!disabled && (
           <ModalContent>
             {(onClose) => (
               <>

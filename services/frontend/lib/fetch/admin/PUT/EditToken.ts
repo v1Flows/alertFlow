@@ -17,10 +17,11 @@ type SuccessResponse = {
   data: Result;
 };
 
-export default async function ChangeTokenStatus(
+export default async function AdminUpdateToken(
   id: string,
-  status: boolean,
-  reason: string,
+  disabled: boolean,
+  disabledReason: string,
+  description: string,
 ): Promise<SuccessResponse | ErrorResponse> {
   try {
     const cookieStore = await cookies();
@@ -35,7 +36,7 @@ export default async function ChangeTokenStatus(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/tokens/${id}/status`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/tokens/${id}`,
       {
         method: "PUT",
         headers: {
@@ -43,8 +44,9 @@ export default async function ChangeTokenStatus(
           Authorization: token.value,
         },
         body: JSON.stringify({
-          disabled: status,
-          disabled_reason: reason,
+          description,
+          disabled,
+          disabled_reason: disabledReason,
         }),
       },
     );
@@ -69,7 +71,7 @@ export default async function ChangeTokenStatus(
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error occurred",
-      message: "Failed to update token status",
+      message: "Failed to update token",
     };
   }
 }

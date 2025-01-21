@@ -57,8 +57,14 @@ func Admin(router *gin.RouterGroup, db *bun.DB) {
 		admin.GET("/tokens", func(c *gin.Context) {
 			admins.GetTokens(c, db)
 		})
-		admin.PUT("/tokens/:tokenID/status", func(c *gin.Context) {
-			admins.ChangeTokenStatus(c, db)
+		admin.POST("/tokens", func(c *gin.Context) {
+			admins.GenerateServiceToken(c, db)
+		})
+		admin.PUT("/tokens/:tokenID", func(c *gin.Context) {
+			admins.UpdateToken(c, db)
+		})
+		admin.DELETE("/tokens/:tokenID", func(c *gin.Context) {
+			admins.DeleteToken(c, db)
 		})
 
 		// projects

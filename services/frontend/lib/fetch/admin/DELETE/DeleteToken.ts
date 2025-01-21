@@ -4,7 +4,6 @@ import { cookies } from "next/headers";
 
 type Result = {
   result: string;
-  runner: object;
 };
 
 type ErrorResponse = {
@@ -18,11 +17,9 @@ type SuccessResponse = {
   data: Result;
 };
 
-export default async function AddRunner({
-  projectId,
-  name,
-  alertflow_runner,
-}: any): Promise<SuccessResponse | ErrorResponse> {
+export default async function AdminDeleteToken(
+  tokenId: any,
+): Promise<SuccessResponse | ErrorResponse> {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get("session");
@@ -36,14 +33,13 @@ export default async function AddRunner({
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/runners/`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/tokens/${tokenId}`,
       {
-        method: "POST",
+        method: "DELETE",
         headers: {
           "Content-Type": "application/json",
           Authorization: token.value,
         },
-        body: JSON.stringify({ name, project_id: projectId, alertflow_runner }),
       },
     );
 
@@ -67,7 +63,7 @@ export default async function AddRunner({
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error occurred",
-      message: "Failed to add runner",
+      message: "Failed to delete token",
     };
   }
 }
