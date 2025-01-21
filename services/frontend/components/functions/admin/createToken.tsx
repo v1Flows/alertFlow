@@ -12,34 +12,32 @@ import {
   ModalHeader,
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import { toast } from "sonner";
 
 import ErrorCard from "@/components/error/ErrorCard";
 import CreateProjectToken from "@/lib/fetch/project/POST/CreateProjectToken";
+import CreateServiceToken from "@/lib/fetch/admin/POST/CreateServiceToken";
 
-export default function CreateProjectTokenModal({
+export default function CreateServiceTokenModal({
   disclosure,
-  projectID,
 }: {
   disclosure: UseDisclosureReturn;
-  projectID: any;
 }) {
   const router = useRouter();
   const { isOpen, onOpenChange } = disclosure;
 
-  const [description, setDescription] = React.useState("");
-  const [expiresIn, setExpiresIn] = React.useState("1");
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [error, setError] = React.useState(false);
-  const [errorText, setErrorText] = React.useState("");
-  const [errorMessage, setErrorMessage] = React.useState("");
+  const [description, setDescription] = useState("");
+  const [expiresIn, setExpiresIn] = useState("1");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorText, setErrorText] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   async function handleCreateToken() {
     setIsLoading(true);
 
-    const res = (await CreateProjectToken({
-      projectId: projectID,
+    const res = (await CreateServiceToken({
       expiresIn: expiresIn,
       description: description,
     })) as any;
@@ -47,9 +45,9 @@ export default function CreateProjectTokenModal({
     if (!res) {
       setIsLoading(false);
       setError(true);
-      setErrorText("Failed to create token");
-      setErrorMessage("Failed to create token");
-      toast.error("Failed to create token");
+      setErrorText("Failed to create service token");
+      setErrorMessage("Failed to create service token");
+      toast.error("Failed to create service token");
 
       return;
     }
@@ -63,7 +61,7 @@ export default function CreateProjectTokenModal({
       setError(true);
       setErrorText(res.error);
       setErrorMessage(res.message);
-      toast.error("Failed to create token");
+      toast.error("Failed to create service token");
     }
   }
 
@@ -75,9 +73,9 @@ export default function CreateProjectTokenModal({
             <>
               <ModalHeader className="flex flex-wrap items-center">
                 <div className="flex flex-col gap-2">
-                  <p className="text-lg font-bold">Create Project Token</p>
+                  <p className="text-lg font-bold">Create Service Token</p>
                   <p className="text-sm text-default-500">
-                    Create a new token for your project.
+                    Create a new service token to manage AlertFlow via the API
                   </p>
                 </div>
               </ModalHeader>
@@ -97,7 +95,7 @@ export default function CreateProjectTokenModal({
                   endContent="days"
                   label="Expires In"
                   labelPlacement="outside"
-                  placeholder="Enter the token expiration time"
+                  placeholder="Enter the api key expiration time"
                   type="number"
                   value={expiresIn}
                   variant="flat"

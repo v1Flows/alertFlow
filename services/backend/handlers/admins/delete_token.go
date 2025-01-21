@@ -9,7 +9,7 @@ import (
 	"github.com/uptrace/bun"
 )
 
-func DeleteProjectAPIKey(context *gin.Context, db *bun.DB) {
+func DeleteToken(context *gin.Context, db *bun.DB) {
 	tokenID := context.Param("tokenID")
 
 	_, err := db.NewDelete().Model(&models.Tokens{}).Where("id = ?", tokenID).Exec(context)
