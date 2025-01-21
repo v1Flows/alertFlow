@@ -6,7 +6,6 @@ import (
 	functions_project "alertflow-backend/functions/project"
 	"alertflow-backend/models"
 	"errors"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -56,7 +55,7 @@ func ChangeFlowMaintenance(context *gin.Context, db *bun.DB) {
 	_, err = db.NewUpdate().Model(&flow).Column("maintenance", "maintenance_message").Where("id = ?", flowID).Exec(context)
 	if err != nil {
 		httperror.InternalServerError(context, "Error updating flow on db", err)
-		fmt.Println(err)
+		return
 	}
 
 	// Audit

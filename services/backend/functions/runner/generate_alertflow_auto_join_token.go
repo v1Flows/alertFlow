@@ -19,7 +19,7 @@ func GenerateAlertFlowAutoJoinToken(db *bun.DB) (token string, err error) {
 	key.Type = "alertflow_auto_runner"
 	key.Description = "Token for AlertFlow Shared Auto Runner Join"
 
-	key.Key, err = auth.GenerateAlertFlowAutoRunnerJWT(key.ID)
+	key.Key, key.ExpiresAt, err = auth.GenerateAlertFlowAutoRunnerJWT(key.ID)
 	if err != nil {
 		return "", err
 	}
