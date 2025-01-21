@@ -31,6 +31,12 @@ func EncryptParams(actions []models.Actions) ([]models.Actions, error) {
 				continue
 			}
 
+			// Check if the param value is a valid hex string
+			if _, err := hex.DecodeString(param.Value); err == nil {
+				// Skip encryption if the value is already a valid hex string
+				continue
+			}
+
 			plaintext := []byte(param.Value)
 			ciphertext := make([]byte, aes.BlockSize+len(plaintext))
 			iv := ciphertext[:aes.BlockSize]
@@ -65,6 +71,12 @@ func DecryptParams(actions []models.Actions) ([]models.Actions, error) {
 			// Check if the param value is a number
 			if _, err := strconv.ParseFloat(param.Value, 64); err == nil {
 				// Skip encryption if the value is a number
+				continue
+			}
+
+			// Check if the param value is a valid hex string
+			if _, err := hex.DecodeString(param.Value); err != nil {
+				// Skip decryption if the value is already a valid hex string
 				continue
 			}
 
