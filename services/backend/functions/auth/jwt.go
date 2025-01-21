@@ -55,10 +55,10 @@ func GetTypeFromToken(signedToken string) (tokenType string, err error) {
 	return
 }
 
-func GetProjectIDFromToken(signedToken string) (tokenType string, err error) {
+func GetIDFromToken(signedToken string) (tokenID string, err error) {
 	token, err := jwt.ParseWithClaims(
 		signedToken,
-		&models.JWTProjectClaim{},
+		&models.JWTClaim{},
 		func(token *jwt.Token) (interface{}, error) {
 			return []byte(jwtKey), nil
 		},
@@ -66,7 +66,27 @@ func GetProjectIDFromToken(signedToken string) (tokenType string, err error) {
 	if err != nil {
 		return
 	}
-	claims, ok := token.Claims.(*models.JWTProjectClaim)
+	claims, ok := token.Claims.(*models.JWTClaim)
+	if !ok {
+		err = errors.New("couldn't parse claims")
+		return
+	}
+	tokenID = claims.ID.String()
+	return
+}
+
+func GetProjectIDFromToken(signedToken string) (tokenType string, err error) {
+	token, err := jwt.ParseWithClaims(
+		signedToken,
+		&models.JWTProjectRunnerClaim{},
+		func(token *jwt.Token) (interface{}, error) {
+			return []byte(jwtKey), nil
+		},
+	)
+	if err != nil {
+		return
+	}
+	claims, ok := token.Claims.(*models.JWTProjectRunnerClaim)
 	if !ok {
 		err = errors.New("couldn't parse claims")
 		return
@@ -98,7 +118,7 @@ func GetUserIDFromToken(signedToken string) (id uuid.UUID, err error) {
 func GetRunnerDataFromToken(signedToken string) (runnerID string, projectID string, runnerType string, err error) {
 	token, err := jwt.ParseWithClaims(
 		signedToken,
-		&models.JWTProjectClaim{},
+		&models.JWTProjectRunnerClaim{},
 		func(token *jwt.Token) (interface{}, error) {
 			return []byte(jwtKey), nil
 		},
@@ -106,7 +126,7 @@ func GetRunnerDataFromToken(signedToken string) (runnerID string, projectID stri
 	if err != nil {
 		return
 	}
-	claims, ok := token.Claims.(*models.JWTProjectClaim)
+	claims, ok := token.Claims.(*models.JWTProjectRunnerClaim)
 	if !ok {
 		err = errors.New("couldn't parse claims")
 		return

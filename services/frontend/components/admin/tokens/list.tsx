@@ -21,9 +21,8 @@ import {
 } from "@heroui/react";
 import React from "react";
 
-import ChangeTokenStatusModal from "@/components/functions/tokens/changeStatus";
-import CreateTokenModal from "@/components/functions/tokens/create";
-import DeleteTokenModal from "@/components/functions/tokens/delete";
+import ChangeTokenStatusModal from "@/components/functions/projects/changeTokenStatus";
+import DeleteTokenModal from "@/components/functions/tokens/deleteRunnerToken";
 import EditTokenModal from "@/components/functions/tokens/edit";
 import { PlusIcon } from "@/components/icons";
 
@@ -266,7 +265,7 @@ export function TokensList({ tokens, projects }: any) {
           </TableBody>
         </Table>
       </div>
-      <CreateTokenModal disclosure={addTokenModal} projectID="none" />
+      {/* <CreateTokenModal disclosure={addTokenModal} projectID="none" /> */}
       <ChangeTokenStatusModal
         disclosure={changeStatusModal}
         status={status}
