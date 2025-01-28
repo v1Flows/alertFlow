@@ -68,10 +68,7 @@ export function DashboardHome({
 
   return (
     <main>
-      <p className="text-xl font-bold">
-        Hello,
-        {user.username} 👋
-      </p>
+      <p className="text-xl font-bold">Hello, {user.username} 👋</p>
       <p className="text-default-500">
         Here&apos;s the current status for today.
       </p>

@@ -191,7 +191,7 @@ export default function SignUpPage() {
           height={32}
           radius="none"
           shadow="none"
-          src={`https://s3-console.justlab.xyz/api/v1/buckets/alertflow/objects/download?preview=true&prefix=af_logo_${theme === "light" || isSSR ? "black" : "white"}.png`}
+          src={`/images/af_logo_${theme === "light" || isSSR ? "black" : "white"}.png`}
           width={32}
         />
         <p className="text-xl font-medium">Welcome</p>
