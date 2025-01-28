@@ -35,19 +35,22 @@ export default async function CreateFlow(
       };
     }
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/flows/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token.value,
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/flows/`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token.value,
+        },
+        body: JSON.stringify({
+          name,
+          description,
+          project_id: projectId,
+          runner_id: runnerId,
+        }),
       },
-      body: JSON.stringify({
-        name,
-        description,
-        project_id: projectId,
-        runner_id: runnerId,
-      }),
-    });
+    );
 
     if (!res.ok) {
       const errorData = await res.json();

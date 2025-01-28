@@ -16,7 +16,6 @@ import React, { useState } from "react";
 import { toast } from "sonner";
 
 import ErrorCard from "@/components/error/ErrorCard";
-import CreateProjectToken from "@/lib/fetch/project/POST/CreateProjectToken";
 import CreateServiceToken from "@/lib/fetch/admin/POST/CreateServiceToken";
 
 export default function CreateServiceTokenModal({
