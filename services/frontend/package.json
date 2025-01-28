@@ -39,7 +39,7 @@
     "@tabler/icons-react": "^3.26.0",
     "@tsparticles/engine": "^3.5.0",
     "@tsparticles/react": "^3.0.0",
-    "@tsparticles/slim": "^3.5.0",
+    "@tsparticles/slim": "^3.8.0",
     "@types/node": "20.5.7",
     "@types/react": "18.3.3",
     "@types/react-dom": "19.0.1",
