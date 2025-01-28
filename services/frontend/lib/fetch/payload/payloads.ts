@@ -30,13 +30,16 @@ export async function GetPayloads(): Promise<SuccessResponse | ErrorResponse> {
       };
     }
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/payloads/`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token.value,
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/payloads/`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token.value,
+        },
       },
-    });
+    );
 
     if (!res.ok) {
       const errorData = await res.json();
