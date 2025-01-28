@@ -36,20 +36,23 @@ export default async function CreateProject(
       };
     }
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token.value,
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token.value,
+        },
+        body: JSON.stringify({
+          name,
+          description,
+          alertflow_runners: alertflowRunners,
+          icon,
+          color,
+        }),
       },
-      body: JSON.stringify({
-        name,
-        description,
-        alertflow_runners: alertflowRunners,
-        icon,
-        color,
-      }),
-    });
+    );
 
     if (!res.ok) {
       const errorData = await res.json();

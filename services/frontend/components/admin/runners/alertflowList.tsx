@@ -24,9 +24,9 @@ import TimeAgo from "react-timeago";
 import ChangeRunnerStatusModal from "@/components/functions/runner/changeStatus";
 import DeleteRunnerModal from "@/components/functions/runner/delete";
 import EditRunnerModal from "@/components/functions/runner/edit";
+import RunnerDrawer from "@/components/functions/runner/plugins";
 
 import AdminAlertFlowRunnerDetails from "./AlertFlowRunnerDetails";
-import RunnerDrawer from "@/components/functions/runner/plugins";
 
 export function AlertflowRunnerList({ runners, settings }: any) {
   const [status, setStatus] = React.useState(false);
