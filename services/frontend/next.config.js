@@ -18,7 +18,7 @@ module.exports = async (phase) => {
     },
     reactStrictMode: true,
     images: {
-      domains: ['localhost', 'alertflow.org', 'justlab.xyz', 's3-console.justlab.xyz'],
+      domains: ['localhost', 'alertflow.org'],
     },
   };
   if (phase === PHASE_DEVELOPMENT_SERVER || phase === PHASE_PRODUCTION_BUILD) {
