@@ -1,7 +1,5 @@
 "use client";
 
-import type { ThemeProviderProps } from "next-themes/dist/types";
-
 import { HeroUIProvider } from "@heroui/system";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { useRouter } from "next/navigation";
@@ -9,7 +7,7 @@ import * as React from "react";
 
 export type ProvidersProps = {
   children: React.ReactNode;
-  themeProps?: ThemeProviderProps;
+  themeProps?: React.ComponentProps<typeof NextThemesProvider>;
 };
 
 export function Providers({ children, themeProps }: ProvidersProps) {
