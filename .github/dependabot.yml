@@ -14,6 +14,9 @@ updates:
       - "frontend"
     open-pull-requests-limit: 5
     target-branch: "develop"
+    ignore:
+      - dependency-name: "tailwind*"
+        versions: ["^4.0.0"]
     groups:
       frontend:
         patterns:
