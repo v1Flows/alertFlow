@@ -48,8 +48,6 @@ func EncryptParams(actions []models.Actions) ([]models.Actions, error) {
 		}
 	}
 
-	fmt.Println(actions)
-
 	return actions, nil
 }
 

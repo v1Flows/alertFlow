@@ -58,25 +58,13 @@ export default function EditActionModal({
 
   const [isLoading, setLoading] = useState(false);
   const [action, setAction] = useState({} as any);
-  const [params, setParams] = useState([] as any);
   const [error, setError] = React.useState(false);
   const [errorText, setErrorText] = React.useState("");
   const [errorMessage, setErrorMessage] = React.useState("");
 
   useEffect(() => {
     setAction(targetAction);
-    searchActionOnRunners();
   }, [targetAction]);
-
-  function searchActionOnRunners() {
-    runners.map((runner: any) => {
-      runner.actions.map((availableAction: any) => {
-        if (availableAction.type === targetAction.type) {
-          setParams(availableAction.params);
-        }
-      });
-    });
-  }
 
   function cancel() {
     onOpenChange();
@@ -219,9 +207,9 @@ export default function EditActionModal({
                       Parameters
                     </p>
                     <Spacer y={2} />
-                    {params?.length > 0 ? (
+                    {action.params && action.params.length > 0 ? (
                       <div className="grid grid-cols-2 gap-2">
-                        {params.map((param: any) => {
+                        {action.params.map((param: any) => {
                           return param.type === "text" ||
                             param.type === "number" ? (
                             <Input
