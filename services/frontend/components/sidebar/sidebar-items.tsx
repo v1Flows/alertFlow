@@ -29,18 +29,6 @@ export const sectionItems: SidebarItem[] = [
       },
     ],
   },
-  {
-    key: "help_center",
-    title: "Informations & Help",
-    items: [
-      {
-        key: "docs_api",
-        href: "/",
-        icon: "solar:notebook-outline",
-        title: "API",
-      },
-    ],
-  },
 ];
 
 export const sectionAdminItems: SidebarItem[] = [
