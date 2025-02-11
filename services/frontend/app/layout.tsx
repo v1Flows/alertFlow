@@ -18,6 +18,7 @@ import { fontSans } from "@/config/fonts";
 import { Providers } from "./providers";
 
 import "@/styles/globals.css";
+import Favicon from "/public/favicon.ico";
 
 const APP_NAME = siteConfig.name;
 const APP_DEFAULT_TITLE = siteConfig.name;
@@ -26,6 +27,7 @@ const APP_DESCRIPTION = siteConfig.description;
 
 export const metadata: Metadata = {
   applicationName: APP_NAME,
+  icons: [{ rel: "icon", url: Favicon.src }],
   title: {
     default: APP_DEFAULT_TITLE,
     template: APP_TITLE_TEMPLATE,

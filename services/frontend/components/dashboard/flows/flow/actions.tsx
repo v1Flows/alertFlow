@@ -106,7 +106,16 @@ export default function Actions({
                             size="sm"
                             variant="flat"
                           >
-                            {action.id}
+                            ID: {action.id}
+                          </Chip>
+                          <Chip
+                            className="max-lg:hidden"
+                            color="primary"
+                            radius="sm"
+                            size="sm"
+                            variant="flat"
+                          >
+                            Vers. {action.version}
                           </Chip>
                           <Chip
                             color={action.active ? "success" : "danger"}
@@ -153,15 +162,26 @@ export default function Actions({
                   </div>
                 </div>
                 <Spacer y={2} />
-                <Chip
-                  className="lg:hidden"
-                  color="default"
-                  radius="sm"
-                  size="sm"
-                  variant="flat"
-                >
-                  {action.id}
-                </Chip>
+                <div className="flex-cols flex gap-2">
+                  <Chip
+                    className="lg:hidden"
+                    color="default"
+                    radius="sm"
+                    size="sm"
+                    variant="flat"
+                  >
+                    ID: {action.id}
+                  </Chip>
+                  <Chip
+                    className="lg:hidden"
+                    color="primary"
+                    radius="sm"
+                    size="sm"
+                    variant="flat"
+                  >
+                    Vers. {action.version}
+                  </Chip>
+                </div>
                 {action.params.length > 0 && (
                   <>
                     <Accordion

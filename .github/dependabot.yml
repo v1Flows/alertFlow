@@ -15,8 +15,8 @@ updates:
     open-pull-requests-limit: 5
     target-branch: "develop"
     groups:
-      frontend:
-        patterns:
+      dev-dependencies:
+        patterns: 
           - "*"
 
   - package-ecosystem: "gomod" # See documentation for possible values
