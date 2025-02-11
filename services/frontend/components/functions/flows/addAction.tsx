@@ -100,6 +100,7 @@ export default function AddActionModal({
     id: uuidv4(),
     name: "",
     description: "",
+    version: "",
     icon: "",
     type: "",
     category: "",
@@ -108,7 +109,6 @@ export default function AddActionModal({
     custom_name: "",
     custom_description: "",
   });
-  const [params, setParams] = useState([] as any);
 
   function actionPages() {
     let length = 0;
@@ -160,9 +160,15 @@ export default function AddActionModal({
         }
 
         setAvailableActions((prev: any) => {
-          const actionSet = new Set(prev.map((a: any) => a.type));
+          if (!action.version) {
+            return prev;
+          }
 
-          if (!actionSet.has(action.type)) {
+          const actionSet = new Set(
+            prev.map((a: any) => `${a.type}-${a.version}`),
+          );
+
+          if (!actionSet.has(`${action.type}-${action.version}`)) {
             return [...prev, action];
           }
 
@@ -191,22 +197,17 @@ export default function AddActionModal({
   }
 
   function handleActionSelect(action: any) {
-    const selectedAction = availableActions.find((x: any) => x.type === action);
-
-    setAction(selectedAction);
-
-    if (selectedAction.params?.length > 0) {
-      const fnParams = [] as any;
-
-      selectedAction.params.map((param: any) => {
-        fnParams.push({
-          key: param.key,
-          value: param.default || "",
-        });
+    // add value field to action params
+    if (action.params && action.params.length > 0) {
+      action.params.map((param: any) => {
+        param.value = param.default;
+        param.default = param.default.toString();
       });
-
-      setParams(fnParams);
+    } else {
+      action.params = [];
     }
+
+    setAction(action);
   }
 
   function cancel() {
@@ -215,6 +216,7 @@ export default function AddActionModal({
       id: uuidv4(),
       name: "",
       description: "",
+      version: "",
       icon: "",
       type: "",
       category: "",
@@ -234,10 +236,11 @@ export default function AddActionModal({
       id: uuidv4(),
       name: action.name,
       description: action.description,
+      version: action.version,
       icon: action.icon,
       type: action.type,
       active: true,
-      params,
+      params: action.params,
       custom_name: action.custom_name,
       custom_description: action.custom_description,
     };
@@ -268,6 +271,7 @@ export default function AddActionModal({
         id: uuidv4(),
         name: "",
         description: "",
+        version: "",
         icon: "",
         type: "",
         category: "",
@@ -397,31 +401,40 @@ export default function AddActionModal({
                                     isPressable
                                     className={`border-2 ${act.type === action.type ? "border-danger" : "border-danger-200"}`}
                                     radius="sm"
-                                    onPress={() => handleActionSelect(act.type)}
+                                    onPress={() => handleActionSelect(act)}
                                   >
                                     <CardBody>
                                       <div className="flex items-center gap-2">
                                         <div className="flex size-10 items-center justify-center rounded-small bg-danger/10 text-danger">
                                           <Icon icon={act.icon} width={26} />
                                         </div>
-                                        <div className="flex flex-col gap-1">
-                                          <p className="text-lg font-bold">
-                                            {act.name}
-                                          </p>
+                                        <div className="flex flex-col">
+                                          <div className="flex flex-cols gap-2 items-center">
+                                            <p className="text-lg font-bold">
+                                              {act.name}
+                                            </p>
+                                            <Chip
+                                              color="primary"
+                                              radius="sm"
+                                              size="sm"
+                                              variant="flat"
+                                            >
+                                              Ver. {act.version}
+                                            </Chip>
+                                            <Chip
+                                              color="danger"
+                                              radius="sm"
+                                              size="sm"
+                                              variant="solid"
+                                            >
+                                              Admin Only
+                                            </Chip>
+                                          </div>
                                           <p className="text-sm text-default-500">
                                             {act.description}
                                           </p>
                                         </div>
                                       </div>
-                                      <Spacer y={2} />
-                                      <Chip
-                                        color="danger"
-                                        radius="sm"
-                                        size="sm"
-                                        variant="flat"
-                                      >
-                                        Admin Only
-                                      </Chip>
                                     </CardBody>
                                   </Card>
                                 ) : (
@@ -429,19 +442,29 @@ export default function AddActionModal({
                                     key={act.type}
                                     isHoverable
                                     isPressable
-                                    className={`border-2 border-default-200 ${act.type === action.type ? "border-primary" : ""}`}
+                                    className={`border-2 border-default-200 ${act.type === action.type && act.version === action.version ? "border-primary" : ""}`}
                                     radius="sm"
-                                    onPress={() => handleActionSelect(act.type)}
+                                    onPress={() => handleActionSelect(act)}
                                   >
                                     <CardBody>
                                       <div className="flex items-center gap-2">
                                         <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
                                           <Icon icon={act.icon} width={26} />
                                         </div>
-                                        <div className="flex flex-col gap-1">
-                                          <p className="text-lg font-bold">
-                                            {act.name}
-                                          </p>
+                                        <div className="flex flex-col">
+                                          <div className="flex flex-cols gap-2 items-center">
+                                            <p className="text-lg font-bold">
+                                              {act.name}
+                                            </p>
+                                            <Chip
+                                              color="primary"
+                                              radius="sm"
+                                              size="sm"
+                                              variant="flat"
+                                            >
+                                              Ver. {act.version}
+                                            </Chip>
+                                          </div>
                                           <p className="text-sm text-default-500">
                                             {act.description}
                                           </p>
@@ -470,6 +493,37 @@ export default function AddActionModal({
                     )}
                     {currentStep === 1 && (
                       <div>
+                        <Card
+                          className="border-2 border-default-200 border-primary"
+                          radius="sm"
+                        >
+                          <CardBody>
+                            <div className="flex items-center gap-2">
+                              <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
+                                <Icon icon={action.icon} width={26} />
+                              </div>
+                              <div className="flex flex-col">
+                                <div className="flex flex-cols gap-2 items-center">
+                                  <p className="text-lg font-bold">
+                                    {action.name}
+                                  </p>
+                                  <Chip
+                                    color="primary"
+                                    radius="sm"
+                                    size="sm"
+                                    variant="flat"
+                                  >
+                                    Ver. {action.version}
+                                  </Chip>
+                                </div>
+                                <p className="text-sm text-default-500">
+                                  {action.description}
+                                </p>
+                              </div>
+                            </div>
+                          </CardBody>
+                        </Card>
+                        <Spacer y={2} />
                         <p className="text-lg font-bold text-default-500">
                           Details
                         </p>
@@ -510,20 +564,18 @@ export default function AddActionModal({
                                   isRequired={param.required}
                                   label={param.key}
                                   type={param.type}
-                                  value={
-                                    params.find((x: any) => x.key === param.key)
-                                      ?.value || ""
-                                  }
+                                  value={param.value}
                                   onValueChange={(e) => {
-                                    setParams(
-                                      params.map((x: any) => {
+                                    setAction({
+                                      ...action,
+                                      params: action.params.map((x: any) => {
                                         if (x.key === param.key) {
                                           return { ...x, value: e };
                                         }
 
                                         return x;
                                       }),
-                                    );
+                                    });
                                   }}
                                 />
                               ) : param.type === "textarea" ? (
@@ -533,20 +585,18 @@ export default function AddActionModal({
                                   isRequired={param.required}
                                   label={param.key}
                                   type={param.type}
-                                  value={
-                                    params.find((x: any) => x.key === param.key)
-                                      ?.value || ""
-                                  }
+                                  value={param.value}
                                   onValueChange={(e) => {
-                                    setParams(
-                                      params.map((x: any) => {
+                                    setAction({
+                                      ...action,
+                                      params: action.params.map((x: any) => {
                                         if (x.key === param.key) {
                                           return { ...x, value: e };
                                         }
 
                                         return x;
                                       }),
-                                    );
+                                    });
                                   }}
                                 />
                               ) : param.type === "password" ? (
@@ -556,20 +606,18 @@ export default function AddActionModal({
                                   isRequired={param.required}
                                   label={param.key}
                                   type={param.type}
-                                  value={
-                                    params.find((x: any) => x.key === param.key)
-                                      ?.value || ""
-                                  }
+                                  value={param.value}
                                   onValueChange={(e) => {
-                                    setParams(
-                                      params.map((x: any) => {
+                                    setAction({
+                                      ...action,
+                                      params: action.params.map((x: any) => {
                                         if (x.key === param.key) {
                                           return { ...x, value: e };
                                         }
 
                                         return x;
                                       }),
-                                    );
+                                    });
                                   }}
                                 />
                               ) : null;
