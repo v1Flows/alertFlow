@@ -8,7 +8,7 @@ export default function ExecutionBreadcrumbs({ flowID, executionID }: any) {
   return (
     <Breadcrumbs>
       <BreadcrumbItem href="/flows">
-        <Icon icon="solar:book-2-outline" width={20} />
+        <Icon icon="solar:book-2-outline" width={20} /> Flows
       </BreadcrumbItem>
       <BreadcrumbItem href={`/flows/${flowID}`}>Flow</BreadcrumbItem>
       <BreadcrumbItem

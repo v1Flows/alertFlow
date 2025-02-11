@@ -261,11 +261,22 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
               </div>
               <div>
                 <p className="text-md font-bold">
-                  {runners.find((r: any) => r.id === execution.runner_id)
-                    ?.name ||
+                  {runners.find((r: any) => r.id === execution.runner_id)?.name
+                    .length > 20 ? (
+                    <Tooltip
+                      content={
+                        runners.find((r: any) => r.id === execution.runner_id)
+                          ?.name
+                      }
+                    >
+                      {runners
+                        .find((r: any) => r.id === execution.runner_id)
+                        ?.name.slice(0, 20) + "..."}
+                    </Tooltip>
+                  ) : (
                     runners.find((r: any) => r.id === execution.runner_id)
-                      ?.id ||
-                    "N/A"}
+                      ?.name || "N/A"
+                  )}
                 </p>
                 <p className="text-sm text-default-500">Runner</p>
               </div>
