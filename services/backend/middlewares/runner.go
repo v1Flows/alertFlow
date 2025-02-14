@@ -1,8 +1,8 @@
 package middlewares
 
 import (
-	"alertflow-backend/functions/auth"
-	"alertflow-backend/functions/httperror"
+	"github.com/v1Flows/alertFlow/services/backend/functions/auth"
+	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
 	"errors"
 
 	"github.com/gin-gonic/gin"

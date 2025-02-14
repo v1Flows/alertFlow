@@ -1,8 +1,8 @@
 package flows
 
 import (
-	"alertflow-backend/functions/flow_stats"
-	"alertflow-backend/functions/httperror"
+	"github.com/v1Flows/alertFlow/services/backend/functions/flow_stats"
+	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

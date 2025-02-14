@@ -1,8 +1,8 @@
 package auth
 
 import (
-	"alertflow-backend/config"
-	"alertflow-backend/pkg/models"
+	"github.com/v1Flows/alertFlow/services/backend/config"
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 	"errors"
 	"time"
 

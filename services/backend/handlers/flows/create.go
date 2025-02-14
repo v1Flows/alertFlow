@@ -1,9 +1,9 @@
 package flows
 
 import (
-	"alertflow-backend/functions/httperror"
-	functions_project "alertflow-backend/functions/project"
-	"alertflow-backend/pkg/models"
+	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
+	functions_project "github.com/v1Flows/alertFlow/services/backend/functions/project"
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 	"errors"
 	"net/http"
 

@@ -1,11 +1,11 @@
 package flows
 
 import (
-	"alertflow-backend/config"
-	"alertflow-backend/functions/encryption"
-	functions "alertflow-backend/functions/flow"
-	"alertflow-backend/functions/httperror"
-	"alertflow-backend/pkg/models"
+	"github.com/v1Flows/alertFlow/services/backend/config"
+	"github.com/v1Flows/alertFlow/services/backend/functions/encryption"
+	functions "github.com/v1Flows/alertFlow/services/backend/functions/flow"
+	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

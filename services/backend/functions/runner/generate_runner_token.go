@@ -1,8 +1,8 @@
 package functions_runner
 
 import (
-	"alertflow-backend/functions/auth"
-	"alertflow-backend/pkg/models"
+	"github.com/v1Flows/alertFlow/services/backend/functions/auth"
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 	"context"
 	"time"
 

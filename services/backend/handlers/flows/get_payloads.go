@@ -1,10 +1,10 @@
 package flows
 
 import (
-	"alertflow-backend/functions/encryption"
-	"alertflow-backend/functions/gatekeeper"
-	"alertflow-backend/functions/httperror"
-	"alertflow-backend/pkg/models"
+	"github.com/v1Flows/alertFlow/services/backend/functions/encryption"
+	"github.com/v1Flows/alertFlow/services/backend/functions/gatekeeper"
+	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 	"errors"
 	"net/http"
 

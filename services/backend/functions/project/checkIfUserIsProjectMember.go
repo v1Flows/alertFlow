@@ -1,7 +1,7 @@
 package functions_project
 
 import (
-	"alertflow-backend/pkg/models"
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 	"context"
 
 	"github.com/uptrace/bun"

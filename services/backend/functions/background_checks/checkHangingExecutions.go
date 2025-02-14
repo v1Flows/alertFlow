@@ -1,7 +1,7 @@
 package background_checks
 
 import (
-	"alertflow-backend/pkg/models"
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 	"context"
 	"time"
 

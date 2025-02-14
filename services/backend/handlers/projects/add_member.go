@@ -1,11 +1,11 @@
 package projects
 
 import (
-	"alertflow-backend/functions/gatekeeper"
-	"alertflow-backend/functions/httperror"
-	project_function "alertflow-backend/functions/project"
-	functions "alertflow-backend/functions/user"
-	"alertflow-backend/pkg/models"
+	"github.com/v1Flows/alertFlow/services/backend/functions/gatekeeper"
+	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
+	project_function "github.com/v1Flows/alertFlow/services/backend/functions/project"
+	functions "github.com/v1Flows/alertFlow/services/backend/functions/user"
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 	"errors"
 	"net/http"
 

@@ -1,9 +1,9 @@
 package admins
 
 import (
-	"alertflow-backend/functions/auth"
-	"alertflow-backend/functions/httperror"
-	"alertflow-backend/pkg/models"
+	"github.com/v1Flows/alertFlow/services/backend/functions/auth"
+	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

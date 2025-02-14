@@ -1,10 +1,10 @@
 package database
 
 import (
-	"alertflow-backend/pkg/models"
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 	"context"
 
-	functions_runner "alertflow-backend/functions/runner"
+	functions_runner "github.com/v1Flows/alertFlow/services/backend/functions/runner"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/uptrace/bun"

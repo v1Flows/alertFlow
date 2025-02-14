@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"alertflow-backend/pkg/models"
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"

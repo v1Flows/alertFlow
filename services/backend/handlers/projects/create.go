@@ -1,10 +1,10 @@
 package projects
 
 import (
-	"alertflow-backend/functions/auth"
-	"alertflow-backend/functions/httperror"
-	functions_runner "alertflow-backend/functions/runner"
-	"alertflow-backend/pkg/models"
+	"github.com/v1Flows/alertFlow/services/backend/functions/auth"
+	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
+	functions_runner "github.com/v1Flows/alertFlow/services/backend/functions/runner"
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 	"crypto/rand"
 	"encoding/hex"
 	"errors"

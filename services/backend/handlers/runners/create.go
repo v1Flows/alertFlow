@@ -1,11 +1,11 @@
 package runners
 
 import (
-	"alertflow-backend/functions/auth"
-	"alertflow-backend/functions/gatekeeper"
-	"alertflow-backend/functions/httperror"
-	functions_runner "alertflow-backend/functions/runner"
-	"alertflow-backend/pkg/models"
+	"github.com/v1Flows/alertFlow/services/backend/functions/auth"
+	"github.com/v1Flows/alertFlow/services/backend/functions/gatekeeper"
+	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
+	functions_runner "github.com/v1Flows/alertFlow/services/backend/functions/runner"
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 	"errors"
 	"net/http"
 
