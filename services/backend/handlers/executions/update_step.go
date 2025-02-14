@@ -3,7 +3,7 @@ package executions
 import (
 	"alertflow-backend/functions/encryption"
 	"alertflow-backend/functions/httperror"
-	"alertflow-backend/models"
+	"alertflow-backend/pkg/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -43,8 +43,8 @@ func UpdateStep(context *gin.Context, db *bun.DB) {
 	}
 
 	// check for ecryption and decrypt if needed
-	if flow.EncryptExecutions && dbStep.ActionMessages != nil && len(dbStep.ActionMessages) > 0 {
-		dbStep.ActionMessages, err = encryption.DecryptExecutionStepActionMessage(dbStep.ActionMessages)
+	if flow.EncryptExecutions && dbStep.Messages != nil && len(dbStep.Messages) > 0 {
+		dbStep.Messages, err = encryption.DecryptExecutionStepActionMessage(dbStep.Messages)
 		if err != nil {
 			httperror.InternalServerError(context, "Error decrypting execution step action messages", err)
 			return
@@ -52,11 +52,7 @@ func UpdateStep(context *gin.Context, db *bun.DB) {
 	}
 
 	// append new message to existing
-	step.ActionMessages = append(dbStep.ActionMessages, step.ActionMessages...)
-
-	if step.Icon == "" {
-		step.Icon = dbStep.Icon
-	}
+	step.Messages = append(dbStep.Messages, step.Messages...)
 
 	if step.StartedAt.IsZero() {
 		step.StartedAt = dbStep.StartedAt
@@ -67,8 +63,8 @@ func UpdateStep(context *gin.Context, db *bun.DB) {
 	}
 
 	// check for ecryption and encrypt if needed
-	if flow.EncryptExecutions && step.ActionMessages != nil && len(step.ActionMessages) > 0 {
-		step.ActionMessages, err = encryption.EncryptExecutionStepActionMessage(step.ActionMessages)
+	if flow.EncryptExecutions && step.Messages != nil && len(step.Messages) > 0 {
+		step.Messages, err = encryption.EncryptExecutionStepActionMessage(step.Messages)
 		if err != nil {
 			httperror.InternalServerError(context, "Error encrypting execution step action messages", err)
 			return
@@ -77,29 +73,7 @@ func UpdateStep(context *gin.Context, db *bun.DB) {
 		step.Encrypted = true
 	}
 
-	_, err = db.NewUpdate().Model(&step).Column(
-		"action_messages",
-		"runner_id",
-		"interactive",
-		"interacted",
-		"interaction_approved",
-		"interaction_rejected",
-		"interacted_by",
-		"interacted_at",
-		"pending",
-		"running",
-		"paused",
-		"canceled",
-		"canceled_by",
-		"canceled_at",
-		"no_pattern_match",
-		"no_result",
-		"error",
-		"finished",
-		"started_at",
-		"finished_at",
-		"encrypted",
-	).Where("id = ?", stepID).Exec(context)
+	_, err = db.NewUpdate().Model(&step).Where("id = ?", stepID).Exec(context)
 	if err != nil {
 		httperror.InternalServerError(context, "Error updating step on db", err)
 		return
