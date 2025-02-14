@@ -2,7 +2,7 @@ package functions_project
 
 import (
 	"alertflow-backend/functions/auth"
-	"alertflow-backend/models"
+	"alertflow-backend/pkg/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/uptrace/bun"

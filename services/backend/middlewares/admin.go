@@ -4,7 +4,7 @@ import (
 	"alertflow-backend/functions/auth"
 	"alertflow-backend/functions/gatekeeper"
 	"alertflow-backend/functions/httperror"
-	"alertflow-backend/models"
+	"alertflow-backend/pkg/models"
 	"errors"
 
 	"github.com/gin-gonic/gin"

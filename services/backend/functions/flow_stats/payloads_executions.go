@@ -2,7 +2,7 @@ package flow_stats
 
 import (
 	"alertflow-backend/functions/httperror"
-	"alertflow-backend/models"
+	"alertflow-backend/pkg/models"
 	"fmt"
 	"sort"
 	"strconv"

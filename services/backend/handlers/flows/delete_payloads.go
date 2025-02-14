@@ -3,7 +3,7 @@ package flows
 import (
 	"alertflow-backend/functions/gatekeeper"
 	"alertflow-backend/functions/httperror"
-	"alertflow-backend/models"
+	"alertflow-backend/pkg/models"
 	"errors"
 	"net/http"
 

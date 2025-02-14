@@ -3,7 +3,7 @@ package executions
 import (
 	"alertflow-backend/functions/encryption"
 	"alertflow-backend/functions/httperror"
-	"alertflow-backend/models"
+	"alertflow-backend/pkg/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -22,7 +22,7 @@ func GetSteps(context *gin.Context, db *bun.DB) {
 
 	for i := range steps {
 		if steps[i].Encrypted {
-			steps[i].ActionMessages, err = encryption.DecryptExecutionStepActionMessage(steps[i].ActionMessages)
+			steps[i].Messages, err = encryption.DecryptExecutionStepActionMessage(steps[i].Messages)
 			if err != nil {
 				httperror.InternalServerError(context, "Error decrypting execution step action messages", err)
 				return

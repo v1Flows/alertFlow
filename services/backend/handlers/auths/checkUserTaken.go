@@ -2,7 +2,7 @@ package auths
 
 import (
 	"alertflow-backend/functions/httperror"
-	"alertflow-backend/models"
+	"alertflow-backend/pkg/models"
 	"errors"
 	"net/http"
 

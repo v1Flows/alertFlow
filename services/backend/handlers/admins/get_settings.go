@@ -3,7 +3,7 @@ package admins
 import (
 	"alertflow-backend/functions/httperror"
 	functions_runner "alertflow-backend/functions/runner"
-	"alertflow-backend/models"
+	"alertflow-backend/pkg/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

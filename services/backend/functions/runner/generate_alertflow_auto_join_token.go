@@ -2,7 +2,7 @@ package functions_runner
 
 import (
 	"alertflow-backend/functions/auth"
-	"alertflow-backend/models"
+	"alertflow-backend/pkg/models"
 	"context"
 	"time"
 

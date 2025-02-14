@@ -1,7 +1,7 @@
 package functions
 
 import (
-	"alertflow-backend/models"
+	"alertflow-backend/pkg/models"
 	"context"
 	"time"
 

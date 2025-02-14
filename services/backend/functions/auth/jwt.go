@@ -2,7 +2,7 @@ package auth
 
 import (
 	"alertflow-backend/config"
-	"alertflow-backend/models"
+	"alertflow-backend/pkg/models"
 	"errors"
 	"time"
 

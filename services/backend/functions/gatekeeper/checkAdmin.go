@@ -1,7 +1,7 @@
 package gatekeeper
 
 import (
-	"alertflow-backend/models"
+	"alertflow-backend/pkg/models"
 	"context"
 
 	"github.com/google/uuid"

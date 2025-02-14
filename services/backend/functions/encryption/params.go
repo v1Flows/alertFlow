@@ -2,7 +2,7 @@ package encryption
 
 import (
 	"alertflow-backend/config"
-	"alertflow-backend/models"
+	"alertflow-backend/pkg/models"
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"

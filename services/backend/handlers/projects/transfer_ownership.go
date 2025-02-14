@@ -3,7 +3,7 @@ package projects
 import (
 	"alertflow-backend/functions/auth"
 	"alertflow-backend/functions/httperror"
-	"alertflow-backend/models"
+	"alertflow-backend/pkg/models"
 	"errors"
 
 	"github.com/gin-gonic/gin"

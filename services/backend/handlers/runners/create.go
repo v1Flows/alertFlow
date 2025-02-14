@@ -5,7 +5,7 @@ import (
 	"alertflow-backend/functions/gatekeeper"
 	"alertflow-backend/functions/httperror"
 	functions_runner "alertflow-backend/functions/runner"
-	"alertflow-backend/models"
+	"alertflow-backend/pkg/models"
 	"errors"
 	"net/http"
 

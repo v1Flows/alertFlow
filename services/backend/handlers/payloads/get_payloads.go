@@ -3,7 +3,7 @@ package payloads
 import (
 	"alertflow-backend/functions/encryption"
 	"alertflow-backend/functions/httperror"
-	"alertflow-backend/models"
+	"alertflow-backend/pkg/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

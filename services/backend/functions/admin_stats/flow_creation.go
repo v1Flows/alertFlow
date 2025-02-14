@@ -2,7 +2,7 @@ package admin_stats
 
 import (
 	"alertflow-backend/functions/httperror"
-	"alertflow-backend/models"
+	"alertflow-backend/pkg/models"
 	"sort"
 	"strconv"
 	"time"

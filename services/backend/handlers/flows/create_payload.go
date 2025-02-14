@@ -5,7 +5,7 @@ import (
 	"alertflow-backend/functions/encryption"
 	functions "alertflow-backend/functions/flow"
 	"alertflow-backend/functions/httperror"
-	"alertflow-backend/models"
+	"alertflow-backend/pkg/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

@@ -1,7 +1,7 @@
 package database
 
 import (
-	"alertflow-backend/models"
+	"alertflow-backend/pkg/models"
 	"context"
 
 	functions_runner "alertflow-backend/functions/runner"

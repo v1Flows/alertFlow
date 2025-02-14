@@ -1,7 +1,7 @@
 package gatekeeper
 
 import (
-	"alertflow-backend/models"
+	"alertflow-backend/pkg/models"
 	"context"
 
 	_ "github.com/lib/pq"

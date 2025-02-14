@@ -5,7 +5,7 @@ import (
 	"alertflow-backend/functions/httperror"
 	project_function "alertflow-backend/functions/project"
 	functions "alertflow-backend/functions/user"
-	"alertflow-backend/models"
+	"alertflow-backend/pkg/models"
 	"errors"
 	"net/http"
 

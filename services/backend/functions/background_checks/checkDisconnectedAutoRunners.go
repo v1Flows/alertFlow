@@ -1,7 +1,7 @@
 package background_checks
 
 import (
-	"alertflow-backend/models"
+	"alertflow-backend/pkg/models"
 	"context"
 	"fmt"
 
