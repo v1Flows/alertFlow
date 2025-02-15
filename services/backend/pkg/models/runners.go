@@ -35,12 +35,12 @@ type IncomingAutoRunners struct {
 	Version          string           `bun:"version,type:text,default:''" json:"version"`
 	Mode             string           `bun:"mode,type:text,default:''" json:"mode"`
 	LastHeartbeat    time.Time        `bun:"last_heartbeat,type:timestamptz" json:"last_heartbeat"`
-	Plugins          Plugin           `bun:"plugins,type:jsonb,default:jsonb('[]')" json:"plugins"`
+	Plugins          Plugins          `bun:"plugins,type:jsonb,default:jsonb('[]')" json:"plugins"`
 	Actions          Actions          `bun:"actions,type:jsonb,default:jsonb('[]')" json:"actions"`
 	PayloadEndpoints PayloadEndpoints `bun:"payload_endpoints,type:jsonb,default:jsonb('[]')" json:"payload_endpoints"`
 }
 
-type Plugin struct {
+type Plugins struct {
 	Name      string `json:"name"`
 	Type      string `json:"type"`
 	Version   string `json:"version"`
