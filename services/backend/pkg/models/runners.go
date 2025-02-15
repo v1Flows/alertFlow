@@ -41,10 +41,10 @@ type IncomingAutoRunners struct {
 }
 
 type Plugins struct {
-	Name      string `json:"name"`
-	Type      string `json:"type"`
-	Version   string `json:"version"`
-	Author    string `json:"author"`
-	Action    Actions
-	Endpoints PayloadEndpoints
+	Name      string           `json:"name"`
+	Type      string           `json:"type"`
+	Version   string           `json:"version"`
+	Author    string           `json:"author"`
+	Actions   Actions          `json:"actions"`
+	Endpoints PayloadEndpoints `json:"endpoints"`
 }
