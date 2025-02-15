@@ -33,6 +33,7 @@ type Actions struct {
 	ID          uuid.UUID `json:"id"`
 	Name        string    `json:"name"`
 	Description string    `json:"description"`
+	Plugin      string    `json:"plugin"`
 	Version     string    `json:"version"`
 	Icon        string    `json:"icon"`
 	Type        string    `json:"type"`
