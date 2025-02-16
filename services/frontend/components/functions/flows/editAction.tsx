@@ -211,7 +211,8 @@ export default function EditActionModal({
                       <div className="grid grid-cols-2 gap-2">
                         {action.params.map((param: any) => {
                           return param.type === "text" ||
-                            param.type === "number" ? (
+                            param.type === "number" ||
+                            param.type === "boolean" ? (
                             <Input
                               key={param.key}
                               description={param.description}

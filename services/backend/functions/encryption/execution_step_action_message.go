@@ -1,7 +1,7 @@
 package encryption
 
 import (
-	"alertflow-backend/config"
+	"github.com/v1Flows/alertFlow/services/backend/config"
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"

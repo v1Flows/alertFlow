@@ -20,3 +20,9 @@ type Payloads struct {
 	CreatedAt   time.Time       `bun:"created_at,type:timestamptz,default:now()" json:"created_at"`
 	Encrypted   bool            `bun:"encrypted,type:bool,default:false" json:"encrypted"`
 }
+
+type PayloadEndpoints struct {
+	ID       string `json:"id"`
+	Name     string `json:"name"`
+	Endpoint string `json:"endpoint"`
+}

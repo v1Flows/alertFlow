@@ -1,9 +1,9 @@
 package executions
 
 import (
-	"alertflow-backend/functions/encryption"
-	"alertflow-backend/functions/httperror"
-	"alertflow-backend/models"
+	"github.com/v1Flows/alertFlow/services/backend/functions/encryption"
+	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -33,9 +33,9 @@ func CreateStep(context *gin.Context, db *bun.DB) {
 		return
 	}
 
-	// check for ecryption
-	if flow.EncryptExecutions && step.ActionMessages != nil && len(step.ActionMessages) > 0 {
-		step.ActionMessages, err = encryption.EncryptExecutionStepActionMessage(step.ActionMessages)
+	// check for encryption
+	if flow.EncryptExecutions && step.Messages != nil && len(step.Messages) > 0 {
+		step.Messages, err = encryption.EncryptExecutionStepActionMessage(step.Messages)
 		if err != nil {
 			httperror.InternalServerError(context, "Error encrypting execution step action messages", err)
 			return

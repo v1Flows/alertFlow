@@ -1,10 +1,11 @@
 package executions
 
 import (
-	"alertflow-backend/functions/encryption"
-	"alertflow-backend/functions/httperror"
-	"alertflow-backend/models"
 	"net/http"
+
+	"github.com/v1Flows/alertFlow/services/backend/functions/encryption"
+	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/uptrace/bun"
@@ -14,7 +15,7 @@ func GetSteps(context *gin.Context, db *bun.DB) {
 	executionID := context.Param("executionID")
 
 	steps := make([]models.ExecutionSteps, 0)
-	err := db.NewSelect().Model(&steps).Where("execution_id = ?", executionID).Order("created_at ASC").Scan(context)
+	err := db.NewSelect().Model(&steps).Where("execution_id = ?", executionID).Order("started_at ASC").Scan(context)
 	if err != nil {
 		httperror.InternalServerError(context, "Error collecting execution steps from db", err)
 		return
@@ -22,7 +23,7 @@ func GetSteps(context *gin.Context, db *bun.DB) {
 
 	for i := range steps {
 		if steps[i].Encrypted {
-			steps[i].ActionMessages, err = encryption.DecryptExecutionStepActionMessage(steps[i].ActionMessages)
+			steps[i].Messages, err = encryption.DecryptExecutionStepActionMessage(steps[i].Messages)
 			if err != nil {
 				httperror.InternalServerError(context, "Error decrypting execution step action messages", err)
 				return

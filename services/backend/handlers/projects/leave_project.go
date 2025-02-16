@@ -1,11 +1,11 @@
 package projects
 
 import (
-	"alertflow-backend/functions/auth"
-	"alertflow-backend/functions/httperror"
-	functions_project "alertflow-backend/functions/project"
-	functions "alertflow-backend/functions/user"
-	"alertflow-backend/models"
+	"github.com/v1Flows/alertFlow/services/backend/functions/auth"
+	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
+	functions_project "github.com/v1Flows/alertFlow/services/backend/functions/project"
+	functions "github.com/v1Flows/alertFlow/services/backend/functions/user"
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 	"errors"
 	"net/http"
 

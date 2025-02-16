@@ -1,4 +1,4 @@
-module alertflow-backend
+module github.com/v1Flows/alertFlow/services/backend
 
 go 1.22.3
 

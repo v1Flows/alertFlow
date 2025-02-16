@@ -12,7 +12,7 @@ import (
 	"github.com/uptrace/bun/extra/bunotel"
 	"github.com/uptrace/bun/migrate"
 
-	"alertflow-backend/database/migrations"
+	"github.com/v1Flows/alertFlow/services/backend/database/migrations"
 
 	log "github.com/sirupsen/logrus"
 )

@@ -1,7 +1,7 @@
 package migrations
 
 import (
-	"alertflow-backend/models"
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 	"context"
 	"fmt"
 

@@ -14,10 +14,6 @@ updates:
       - "frontend"
     open-pull-requests-limit: 5
     target-branch: "develop"
-    groups:
-      dev-dependencies:
-        patterns: 
-          - "*"
 
   - package-ecosystem: "gomod" # See documentation for possible values
     directory: "/services/backend" # Location of package manifests

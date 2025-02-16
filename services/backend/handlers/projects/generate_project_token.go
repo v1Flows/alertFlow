@@ -1,10 +1,10 @@
 package projects
 
 import (
-	"alertflow-backend/functions/auth"
-	"alertflow-backend/functions/gatekeeper"
-	"alertflow-backend/functions/httperror"
-	"alertflow-backend/models"
+	"github.com/v1Flows/alertFlow/services/backend/functions/auth"
+	"github.com/v1Flows/alertFlow/services/backend/functions/gatekeeper"
+	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 	"errors"
 	"net/http"
 

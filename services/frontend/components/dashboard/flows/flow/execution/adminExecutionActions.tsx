@@ -24,112 +24,56 @@ export default function AdminExecutionActions({
 
     switch (status) {
       case "pending":
-        newExecution.pending = true;
-        newExecution.running = false;
-        newExecution.paused = false;
-        newExecution.canceled = false;
-        newExecution.no_pattern_match = false;
-        newExecution.interaction_required = false;
-        newExecution.error = false;
-        newExecution.finished = false;
+        newExecution.status = "pending";
         newExecution.finished_at =
           execution.finished_at !== "0001-01-01T00:00:00Z"
             ? execution.finished_at
             : "0001-01-01T00:00:00Z";
         break;
       case "running":
-        newExecution.pending = false;
-        newExecution.running = true;
-        newExecution.paused = false;
-        newExecution.canceled = false;
-        newExecution.no_pattern_match = false;
-        newExecution.interaction_required = false;
-        newExecution.error = false;
-        newExecution.finished = false;
+        newExecution.status = "running";
         newExecution.finished_at =
           execution.finished_at !== "0001-01-01T00:00:00Z"
             ? execution.finished_at
             : "0001-01-01T00:00:00Z";
         break;
       case "paused":
-        newExecution.pending = false;
-        newExecution.running = false;
-        newExecution.paused = true;
-        newExecution.canceled = false;
-        newExecution.no_pattern_match = false;
-        newExecution.interaction_required = false;
-        newExecution.error = false;
-        newExecution.finished = false;
+        newExecution.status = "paused";
         newExecution.finished_at =
           execution.finished_at !== "0001-01-01T00:00:00Z"
             ? execution.finished_at
             : "0001-01-01T00:00:00Z";
         break;
       case "canceled":
-        newExecution.pending = false;
-        newExecution.running = false;
-        newExecution.paused = false;
-        newExecution.canceled = true;
-        newExecution.no_pattern_match = false;
-        newExecution.interaction_required = false;
-        newExecution.error = false;
-        newExecution.finished = false;
+        newExecution.status = "canceled";
         newExecution.finished_at =
           execution.finished_at !== "0001-01-01T00:00:00Z"
             ? execution.finished_at
             : new Date().toISOString();
         break;
       case "no_pattern_match":
-        newExecution.pending = false;
-        newExecution.running = false;
-        newExecution.paused = false;
-        newExecution.canceled = false;
-        newExecution.no_pattern_match = true;
-        newExecution.interaction_required = false;
-        newExecution.error = false;
-        newExecution.finished = false;
+        newExecution.status = "noPatternMatch";
         newExecution.finished_at =
           execution.finished_at !== "0001-01-01T00:00:00Z"
             ? execution.finished_at
             : "0001-01-01T00:00:00Z";
         break;
       case "interaction_required":
-        newExecution.pending = false;
-        newExecution.running = false;
-        newExecution.paused = false;
-        newExecution.canceled = false;
-        newExecution.no_pattern_match = false;
-        newExecution.interaction_required = true;
-        newExecution.error = false;
-        newExecution.finished = false;
+        newExecution.status = "interactionRequired";
         newExecution.finished_at =
           execution.finished_at !== "0001-01-01T00:00:00Z"
             ? execution.finished_at
             : "0001-01-01T00:00:00Z";
         break;
       case "error":
-        newExecution.pending = false;
-        newExecution.running = false;
-        newExecution.paused = false;
-        newExecution.canceled = false;
-        newExecution.no_pattern_match = false;
-        newExecution.interaction_required = false;
-        newExecution.error = true;
-        newExecution.finished = false;
+        newExecution.status = "error";
         newExecution.finished_at =
           execution.finished_at !== "0001-01-01T00:00:00Z"
             ? execution.finished_at
             : new Date().toISOString();
         break;
       case "finished":
-        newExecution.pending = false;
-        newExecution.running = false;
-        newExecution.paused = false;
-        newExecution.canceled = false;
-        newExecution.no_pattern_match = false;
-        newExecution.interaction_required = false;
-        newExecution.error = false;
-        newExecution.finished = true;
+        newExecution.status = "finished";
         newExecution.finished_at =
           execution.finished_at !== "0001-01-01T00:00:00Z"
             ? execution.finished_at
