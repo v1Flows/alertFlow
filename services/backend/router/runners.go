@@ -1,9 +1,9 @@
 package router
 
 import (
-	"alertflow-backend/handlers/executions"
-	"alertflow-backend/handlers/runners"
-	"alertflow-backend/middlewares"
+	"github.com/v1Flows/alertFlow/services/backend/handlers/executions"
+	"github.com/v1Flows/alertFlow/services/backend/handlers/runners"
+	"github.com/v1Flows/alertFlow/services/backend/middlewares"
 
 	"github.com/gin-gonic/gin"
 	"github.com/uptrace/bun"

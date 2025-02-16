@@ -122,7 +122,7 @@ export default function RunnerDrawer({
                     <div>
                       <p className="font-bold">{plugin.name}</p>
                       <p className="text-sm text-default-500">
-                        Creator: {plugin.creator || "N/A"}
+                        Creator: {plugin.author || "N/A"}
                       </p>
                     </div>
                   </div>

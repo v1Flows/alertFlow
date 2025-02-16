@@ -1,8 +1,8 @@
 package admin_stats
 
 import (
-	"alertflow-backend/functions/httperror"
-	"alertflow-backend/models"
+	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 	"sort"
 	"strconv"
 	"time"

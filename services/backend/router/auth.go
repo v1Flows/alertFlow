@@ -1,8 +1,8 @@
 package router
 
 import (
-	"alertflow-backend/handlers/auths"
-	"alertflow-backend/handlers/tokens"
+	"github.com/v1Flows/alertFlow/services/backend/handlers/auths"
+	"github.com/v1Flows/alertFlow/services/backend/handlers/tokens"
 
 	"github.com/gin-gonic/gin"
 	"github.com/uptrace/bun"

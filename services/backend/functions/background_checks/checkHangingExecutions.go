@@ -1,9 +1,10 @@
 package background_checks
 
 import (
-	"alertflow-backend/models"
 	"context"
 	"time"
+
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/uptrace/bun"
@@ -16,7 +17,7 @@ func checkHangingExecutions(db *bun.DB) {
 
 	// get all executions that are not finished
 	var executions []models.Executions
-	err := db.NewSelect().Model(&executions).Where("running = ? AND executed_at < NOW() - INTERVAL '15 minutes'", true).Scan(context)
+	err := db.NewSelect().Model(&executions).Where("status = 'running' AND executed_at < NOW() - INTERVAL '15 minutes'").Scan(context)
 	if err != nil {
 		log.Error("Bot: Error getting running executions. ", err)
 	}
@@ -32,7 +33,7 @@ func checkHangingExecutions(db *bun.DB) {
 		// check if all steps are finished
 		allFinished := true
 		for _, step := range steps {
-			if !step.Finished {
+			if step.Status != "finished" {
 				allFinished = false
 				break
 			}
@@ -54,20 +55,21 @@ func checkHangingExecutions(db *bun.DB) {
 			// add an error step
 			_, err := db.NewInsert().Model(&models.ExecutionSteps{
 				ExecutionID: execution.ID.String(),
-				ActionName:  "Automated Check",
-				ActionMessages: []string{
+				Action: models.Actions{
+					Name: "Automated Check",
+				},
+				Messages: []string{
 					"All steps finished since 15 minutes but execution is still running",
 					"Marking as error",
 				},
-				Finished:   true,
+				Status:     "error",
 				FinishedAt: time.Now(),
-				Error:      true,
 			}).Exec(context)
 			if err != nil {
 				log.Error("Bot: Error adding error step", err)
 			}
 
-			_, err = db.NewUpdate().Model(&execution).Set("running = ?", false).Set("error = ?", true).Set("finished_at = ?", time.Now()).Where("id = ?", execution.ID).Exec(context)
+			_, err = db.NewUpdate().Model(&execution).Set("status = 'running'").Set("error = ?", true).Set("finished_at = ?", time.Now()).Where("id = ?", execution.ID).Exec(context)
 			if err != nil {
 				log.Error("Bot: Error updating execution", err)
 			}

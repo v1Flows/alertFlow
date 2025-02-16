@@ -80,21 +80,21 @@ export default function Executions({
   }
 
   function status(execution: any) {
-    if (execution.pending) {
+    if (execution.status === "pending") {
       return "Pending";
-    } else if (execution.running) {
+    } else if (execution.status === "running") {
       return "Running";
-    } else if (execution.paused) {
+    } else if (execution.status === "paused") {
       return "Paused";
-    } else if (execution.canceled) {
+    } else if (execution.status === "canceled") {
       return "Canceled";
-    } else if (execution.no_pattern_match) {
+    } else if (execution.status === "noPatternMatch") {
       return "No Pattern Match";
-    } else if (execution.interaction_required) {
+    } else if (execution.status === "interactionRequired") {
       return "Interaction Required";
-    } else if (execution.error) {
+    } else if (execution.status === "error") {
       return "Error";
-    } else if (execution.finished) {
+    } else if (execution.status === "finished") {
       return "Finished";
     } else {
       return "Unknown";
@@ -102,21 +102,21 @@ export default function Executions({
   }
 
   function statusFilterReturn(execution: any) {
-    if (execution.pending) {
+    if (execution.status === "pending") {
       return "pending";
-    } else if (execution.running) {
+    } else if (execution.status === "running") {
       return "running";
-    } else if (execution.paused) {
+    } else if (execution.status === "paused") {
       return "paused";
-    } else if (execution.canceled) {
+    } else if (execution.status === "canceled") {
       return "canceled";
-    } else if (execution.no_pattern_match) {
+    } else if (execution.status === "noPatternMatch") {
       return "no_pattern_match";
-    } else if (execution.interaction_required) {
+    } else if (execution.status === "interactionRequired") {
       return "interaction_required";
-    } else if (execution.error) {
+    } else if (execution.status === "error") {
       return "error";
-    } else if (execution.finished) {
+    } else if (execution.status === "finished") {
       return "finished";
     } else {
       return "unknown";
@@ -124,7 +124,7 @@ export default function Executions({
   }
 
   function statusIcon(execution: any) {
-    if (execution.pending) {
+    if (execution.status === "pending") {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
@@ -143,13 +143,13 @@ export default function Executions({
           />
         </Tooltip>
       );
-    } else if (execution.running) {
+    } else if (execution.status === "running") {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress aria-label="Step" color="primary" size="md" />
         </Tooltip>
       );
-    } else if (execution.paused) {
+    } else if (execution.status === "paused") {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
@@ -168,7 +168,7 @@ export default function Executions({
           />
         </Tooltip>
       );
-    } else if (execution.canceled) {
+    } else if (execution.status === "canceled") {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
@@ -187,7 +187,7 @@ export default function Executions({
           />
         </Tooltip>
       );
-    } else if (execution.no_pattern_match) {
+    } else if (execution.status === "noPatternMatch") {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
@@ -205,7 +205,7 @@ export default function Executions({
           />
         </Tooltip>
       );
-    } else if (execution.interaction_required) {
+    } else if (execution.status === "interactionRequired") {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
@@ -224,7 +224,7 @@ export default function Executions({
           />
         </Tooltip>
       );
-    } else if (execution.error) {
+    } else if (execution.status === "error") {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
@@ -243,7 +243,7 @@ export default function Executions({
           />
         </Tooltip>
       );
-    } else if (execution.finished) {
+    } else if (execution.status === "finished") {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress

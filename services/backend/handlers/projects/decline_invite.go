@@ -1,10 +1,10 @@
 package projects
 
 import (
-	"alertflow-backend/functions/auth"
-	"alertflow-backend/functions/httperror"
-	functions_project "alertflow-backend/functions/project"
-	"alertflow-backend/models"
+	"github.com/v1Flows/alertFlow/services/backend/functions/auth"
+	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
+	functions_project "github.com/v1Flows/alertFlow/services/backend/functions/project"
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

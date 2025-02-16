@@ -1,7 +1,7 @@
 package functions
 
 import (
-	"alertflow-backend/models"
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 	"context"
 	"time"
 
@@ -19,9 +19,9 @@ func StartExecution(flowID string, payloadID uuid.UUID, flow models.Flows, db *b
 
 	execution.FlowID = flowID
 	execution.PayloadID = payloadID.String()
-	execution.Pending = true
+	execution.Status = "pending"
 	execution.ExecutedAt = time.Now()
-	_, err := db.NewInsert().Model(&execution).Column("flow_id", "payload_id", "pending", "executed_at").Exec(context)
+	_, err := db.NewInsert().Model(&execution).Column("flow_id", "payload_id", "status", "executed_at").Exec(context)
 	if err != nil {
 		return err
 	}

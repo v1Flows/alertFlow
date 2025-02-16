@@ -1,11 +1,12 @@
 package main
 
 import (
-	"alertflow-backend/config"
-	"alertflow-backend/database"
-	"alertflow-backend/functions/background_checks"
-	"alertflow-backend/router"
 	"strings"
+
+	"github.com/v1Flows/alertFlow/services/backend/config"
+	"github.com/v1Flows/alertFlow/services/backend/database"
+	"github.com/v1Flows/alertFlow/services/backend/functions/background_checks"
+	"github.com/v1Flows/alertFlow/services/backend/router"
 
 	"github.com/alecthomas/kingpin/v2"
 	log "github.com/sirupsen/logrus"
