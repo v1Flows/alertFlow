@@ -76,7 +76,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
       return "No Pattern Match";
     } else if (step.status === "noResult") {
       return "No Result";
-    } else if (step.status === "interactive") {
+    } else if (step.status === "interactionRequired") {
       return "Interactive";
     } else if (step.status === "error") {
       return "Error";
@@ -100,11 +100,11 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
       return "secondary";
     } else if (step.status === "noResult") {
       return "default";
-    } else if (step.status === "interactive") {
+    } else if (step.status === "interactionRequired") {
       return "primary";
-    } else if (execution.status === "error") {
+    } else if (step.status === "error") {
       return "danger";
-    } else if (execution.status === "finished") {
+    } else if (step.status === "finished") {
       return "success";
     } else {
       return "default";
@@ -212,7 +212,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
           />
         </Tooltip>
       );
-    } else if (step.status === "interactive") {
+    } else if (step.status === "interactionRequired") {
       return (
         <Tooltip content={`${status(step)}`}>
           <CircularProgress
@@ -306,7 +306,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
   }
 
   function getDurationSeconds(step: any) {
-    if (step.pending) {
+    if (step.status === "pending") {
       return 0;
     }
     if (step.finished_at === "0001-01-01T00:00:00Z") {
@@ -321,7 +321,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
   }
 
   function getDuration(step: any) {
-    if (step.pending) {
+    if (step.status === "pending") {
       return "-";
     }
     if (step.finished_at === "0001-01-01T00:00:00Z") {
@@ -356,7 +356,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
     }
 
     step.interacted = true;
-    step.action_messages = [
+    step.messages = [
       `Step interacted by ${userDetails.username} (${userDetails.id})`,
     ];
     step.interaced_by = userDetails.id;
@@ -383,7 +383,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
         case "name":
           return (
             <div className="flex flex-col items-center gap-2">
-              {steps.find((s: any) => s.parent_id === step.action_name) ? (
+              {steps.find((s: any) => s.parent_id === step.action.id) ? (
                 <Badge
                   color="primary"
                   content={
@@ -402,7 +402,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
                     onPress={() => {
                       // set is_hidden to false for all child steps
                       const newSteps = steps.map((s: any) => {
-                        if (s.parent_id === step.action_name) {
+                        if (s.parent_id === step.action.id) {
                           s.is_hidden = !s.is_hidden;
                         }
 
@@ -413,7 +413,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
                     }}
                   >
                     <Icon
-                      icon={`${step.icon || "solar:question-square-line-duotone"}`}
+                      icon={`${step.action.icon || "solar:question-square-line-duotone"}`}
                       width={24}
                     />
                   </Button>
@@ -426,29 +426,29 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
                   shape="circle"
                 >
                   <Icon
-                    icon={`${step.icon || "solar:question-square-line-duotone"}`}
+                    icon={`${step.action.icon || "solar:question-square-line-duotone"}`}
                     width={24}
                   />
                 </Badge>
               ) : (
                 <Icon
-                  icon={`${step.icon || "solar:question-square-line-duotone"}`}
+                  icon={`${step.action.icon || "solar:question-square-line-duotone"}`}
                   width={24}
                 />
               )}
               <p className="text-md font-medium">
-                {flow.actions.find((a: any) => a.id === step.action_id)
+                {flow.actions.find((a: any) => a.id === step.action.id)
                   ?.custom_name
-                  ? flow.actions.find((a: any) => a.id === step.action_id)
+                  ? flow.actions.find((a: any) => a.id === step.action.id)
                       .custom_name
-                  : step.action_name}
+                  : step.action.name}
               </p>
             </div>
           );
         case "message":
           return (
             <>
-              {step.pending ? (
+              {step.action.status === "pending" ? (
                 <p>Step not started yet</p>
               ) : (
                 <div className="flex flex-col gap-2">
@@ -484,36 +484,40 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
                       </Tooltip>
                     )}
                   </div>
-                  {step.interactive && !step.interacted && (
-                    <div className="flex-cols flex items-center gap-4">
-                      <Button
-                        fullWidth
-                        color="success"
-                        startContent={
-                          <Icon icon="solar:verified-check-linear" width={18} />
-                        }
-                        variant="flat"
-                        onPress={() => {
-                          interactStep(step, true);
-                        }}
-                      >
-                        Approve & Continue
-                      </Button>
-                      <Button
-                        fullWidth
-                        color="danger"
-                        startContent={
-                          <Icon icon="solar:forbidden-outline" width={18} />
-                        }
-                        variant="flat"
-                        onPress={() => {
-                          interactStep(step, false);
-                        }}
-                      >
-                        Reject & Stop
-                      </Button>
-                    </div>
-                  )}
+                  {step.status === "interactionRequired" &&
+                    !step.interacted && (
+                      <div className="flex-cols flex items-center gap-4">
+                        <Button
+                          fullWidth
+                          color="success"
+                          startContent={
+                            <Icon
+                              icon="solar:verified-check-linear"
+                              width={18}
+                            />
+                          }
+                          variant="flat"
+                          onPress={() => {
+                            interactStep(step, true);
+                          }}
+                        >
+                          Approve & Continue
+                        </Button>
+                        <Button
+                          fullWidth
+                          color="danger"
+                          startContent={
+                            <Icon icon="solar:forbidden-outline" width={18} />
+                          }
+                          variant="flat"
+                          onPress={() => {
+                            interactStep(step, false);
+                          }}
+                        >
+                          Reject & Stop
+                        </Button>
+                      </div>
+                    )}
                 </div>
               )}
             </>
@@ -577,12 +581,12 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
                     <div className="flex-cols flex gap-4">
                       <div className="flex items-center gap-2">
                         <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
-                          <Icon icon={step.icon} width={20} />
+                          <Icon icon={step.action.icon} width={20} />
                         </div>
                         <div>
-                          <p className="font-bold">{step.action_name}</p>
+                          <p className="font-bold">{step.action.name}</p>
                           <p className="text-sm text-default-500">
-                            {step.action_id || "N/A"}
+                            {step.action.id || "N/A"}
                           </p>
                         </div>
                       </div>
@@ -644,7 +648,9 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
   const bottomContent = useMemo(() => {
     return (
       <div className="mt flex w-full items-center justify-center">
-        {(execution.running || execution.pending || execution.paused) && (
+        {(execution.status === "running" ||
+          execution.status === "pending" ||
+          execution.status === "paused") && (
           <>
             <Progress
               isIndeterminate
@@ -676,10 +682,10 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
             <AdminExecutionActions execution={execution} />
           )}
 
-          {execution.running ||
-          execution.pending ||
-          execution.paused ||
-          execution.interaction_required ? (
+          {execution.status === "running" ||
+          execution.status === "pending" ||
+          execution.status === "paused" ||
+          execution.status === "interactionRequired" ? (
             <div>
               <Reloader />
             </div>

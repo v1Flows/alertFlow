@@ -1,10 +1,11 @@
 package executions
 
 import (
+	"net/http"
+
 	"github.com/v1Flows/alertFlow/services/backend/functions/encryption"
 	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
 	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/uptrace/bun"
@@ -73,7 +74,7 @@ func UpdateStep(context *gin.Context, db *bun.DB) {
 		step.Encrypted = true
 	}
 
-	_, err = db.NewUpdate().Model(&step).Where("id = ?", stepID).Exec(context)
+	_, err = db.NewUpdate().Model(&step).ExcludeColumn("id", "execution_id", "action").Where("id = ?", stepID).Exec(context)
 	if err != nil {
 		httperror.InternalServerError(context, "Error updating step on db", err)
 		return

@@ -26,62 +26,32 @@ export default function AdminStepActions({
 
     switch (status) {
       case "pending":
-        newStep.pending = true;
-        newStep.running = false;
-        newStep.paused = false;
-        newStep.canceled = false;
-        newStep.no_pattern_match = false;
-        newStep.no_result = false;
-        newStep.error = false;
-        newStep.finished = false;
-        newStep.action_messages = ["Action Status changed by Admin to Pending"];
+        newStep.status = "pending";
+        newStep.messages = ["Action Status changed by Admin to Pending"];
         newStep.finished_at =
           step.finished_at !== "0001-01-01T00:00:00Z"
             ? step.finished_at
             : "0001-01-01T00:00:00Z";
         break;
       case "running":
-        newStep.pending = false;
-        newStep.running = true;
-        newStep.paused = false;
-        newStep.canceled = false;
-        newStep.no_pattern_match = false;
-        newStep.no_result = false;
-        newStep.error = false;
-        newStep.finished = false;
-        newStep.action_messages = ["Action Status changed by Admin to Running"];
+        newStep.status = "running";
+        newStep.messages = ["Action Status changed by Admin to Running"];
         newStep.finished_at =
           step.finished_at !== "0001-01-01T00:00:00Z"
             ? step.finished_at
             : "0001-01-01T00:00:00Z";
         break;
       case "paused":
-        newStep.pending = false;
-        newStep.running = false;
-        newStep.paused = true;
-        newStep.canceled = false;
-        newStep.no_pattern_match = false;
-        newStep.no_result = false;
-        newStep.error = false;
-        newStep.finished = false;
-        newStep.action_messages = ["Action Status changed by Admin to Paused"];
+        newStep.status = "paused";
+        newStep.messages = ["Action Status changed by Admin to Paused"];
         newStep.finished_at =
           step.finished_at !== "0001-01-01T00:00:00Z"
             ? step.finished_at
             : "0001-01-01T00:00:00Z";
         break;
       case "canceled":
-        newStep.pending = false;
-        newStep.running = false;
-        newStep.paused = false;
-        newStep.canceled = true;
-        newStep.no_pattern_match = false;
-        newStep.no_result = false;
-        newStep.error = false;
-        newStep.finished = false;
-        newStep.action_messages = [
-          "Action Status changed by Admin to Canceled",
-        ];
+        newStep.status = "canceled";
+        newStep.messages = ["Action Status changed by Admin to Canceled"];
         newStep.canceled_by = "admin";
         newStep.canceled_at = new Date().toISOString();
         newStep.finished_at =
@@ -90,15 +60,8 @@ export default function AdminStepActions({
             : new Date().toISOString();
         break;
       case "no_pattern_match":
-        newStep.pending = false;
-        newStep.running = false;
-        newStep.paused = false;
-        newStep.canceled = false;
-        newStep.no_pattern_match = true;
-        newStep.no_result = false;
-        newStep.error = false;
-        newStep.finished = false;
-        newStep.action_messages = [
+        newStep.status = "noPatternMatch";
+        newStep.messages = [
           "Action Status changed by Admin to No Pattern Match",
         ];
         newStep.finished_at =
@@ -107,49 +70,24 @@ export default function AdminStepActions({
             : "0001-01-01T00:00:00Z";
         break;
       case "no_result":
-        newStep.pending = false;
-        newStep.running = false;
-        newStep.paused = false;
-        newStep.canceled = false;
-        newStep.no_pattern_match = false;
-        newStep.no_result = true;
-        newStep.error = false;
-        newStep.finished = false;
-        newStep.action_messages = [
-          "Action Status changed by Admin to No Result",
-        ];
+        newStep.status = "noResult";
+        newStep.messages = ["Action Status changed by Admin to No Result"];
         newStep.finished_at =
           step.finished_at !== "0001-01-01T00:00:00Z"
             ? step.finished_at
             : "0001-01-01T00:00:00Z";
         break;
       case "error":
-        newStep.pending = false;
-        newStep.running = false;
-        newStep.paused = false;
-        newStep.canceled = false;
-        newStep.no_pattern_match = false;
-        newStep.no_result = false;
-        newStep.error = true;
-        newStep.finished = false;
-        newStep.action_messages = ["Action Status changed by Admin to Error"];
+        newStep.status = "error";
+        newStep.messages = ["Action Status changed by Admin to Error"];
         newStep.finished_at =
           step.finished_at !== "0001-01-01T00:00:00Z"
             ? step.finished_at
             : new Date().toISOString();
         break;
       case "finished":
-        newStep.pending = false;
-        newStep.running = false;
-        newStep.paused = false;
-        newStep.canceled = false;
-        newStep.no_pattern_match = false;
-        newStep.no_result = false;
-        newStep.error = false;
-        newStep.finished = true;
-        newStep.action_messages = [
-          "Action Status changed by Admin to Finished",
-        ];
+        newStep.status = "finished";
+        newStep.messages = ["Action Status changed by Admin to Finished"];
         newStep.finished_at =
           step.finished_at !== "0001-01-01T00:00:00Z"
             ? step.finished_at

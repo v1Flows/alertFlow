@@ -182,43 +182,64 @@ export default function Actions({
                     Vers. {action.version}
                   </Chip>
                 </div>
-                {action.params.length > 0 && (
-                  <>
-                    <Accordion
-                      isCompact
-                      selectedKeys={expandedParams}
-                      selectionMode="multiple"
-                      variant="light"
-                      onSelectionChange={setExpandedParams}
+                <Accordion
+                  isCompact
+                  selectedKeys={expandedParams}
+                  selectionMode="multiple"
+                  variant="light"
+                  onSelectionChange={setExpandedParams}
+                >
+                  <AccordionItem
+                    key={action.id + "-details"}
+                    aria-label="Details"
+                    subtitle="View action details (click to expand)"
+                    title="Details"
+                  >
+                    <Table
+                      removeWrapper
+                      aria-label="Details"
+                      className="w-full"
                     >
-                      <AccordionItem
-                        key={action.id}
+                      <TableHeader>
+                        <TableColumn align="center">Name</TableColumn>
+                        <TableColumn align="center">Value</TableColumn>
+                      </TableHeader>
+                      <TableBody emptyContent="No patterns defined.">
+                        <TableRow>
+                          <TableCell>Plugin</TableCell>
+                          <TableCell>{action.plugin}</TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </AccordionItem>
+                  {action.params.length > 0 && (
+                    <AccordionItem
+                      key={action.id + "-params"}
+                      aria-label="Parameters"
+                      subtitle="View action parameters (click to expand)"
+                      title="Parameters"
+                    >
+                      <Table
+                        removeWrapper
                         aria-label="Parameters"
-                        subtitle="View action parameters (click to expand)"
-                        title="Parameters"
+                        className="w-full"
                       >
-                        <Table
-                          removeWrapper
-                          aria-label="Parameters"
-                          className="w-full"
-                        >
-                          <TableHeader>
-                            <TableColumn align="center">Key</TableColumn>
-                            <TableColumn align="center">Value</TableColumn>
-                          </TableHeader>
-                          <TableBody emptyContent="No patterns defined.">
-                            {action.params.map((param: any, index: number) => (
-                              <TableRow key={index}>
-                                <TableCell>{param.key}</TableCell>
-                                <TableCell>{param.value}</TableCell>
-                              </TableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </AccordionItem>
-                    </Accordion>
-                  </>
-                )}
+                        <TableHeader>
+                          <TableColumn align="center">Key</TableColumn>
+                          <TableColumn align="center">Value</TableColumn>
+                        </TableHeader>
+                        <TableBody emptyContent="No patterns defined.">
+                          {action.params.map((param: any, index: number) => (
+                            <TableRow key={index}>
+                              <TableCell>{param.key}</TableCell>
+                              <TableCell>{param.value}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </AccordionItem>
+                  )}
+                </Accordion>
               </div>
               {isDragEnabled && (
                 <div

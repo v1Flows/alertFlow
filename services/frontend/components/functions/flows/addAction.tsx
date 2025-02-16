@@ -100,9 +100,9 @@ export default function AddActionModal({
     id: uuidv4(),
     name: "",
     description: "",
+    plugin: "",
     version: "",
     icon: "",
-    type: "",
     category: "",
     active: true,
     params: [],
@@ -155,20 +155,16 @@ export default function AddActionModal({
       for (let j = 0; j < runners[i].actions.length; j++) {
         const action = runners[i].actions[j];
 
-        if (action.is_hidden && user.role !== "admin") {
-          continue;
-        }
-
         setAvailableActions((prev: any) => {
           if (!action.version) {
             return prev;
           }
 
           const actionSet = new Set(
-            prev.map((a: any) => `${a.type}-${a.version}`),
+            prev.map((a: any) => `${a.plugin}-${a.version}`),
           );
 
-          if (!actionSet.has(`${action.type}-${action.version}`)) {
+          if (!actionSet.has(`${action.plugin}-${action.version}`)) {
             return [...prev, action];
           }
 
@@ -216,9 +212,9 @@ export default function AddActionModal({
       id: uuidv4(),
       name: "",
       description: "",
+      plugin: "",
       version: "",
       icon: "",
-      type: "",
       category: "",
       active: true,
       params: [],
@@ -236,9 +232,9 @@ export default function AddActionModal({
       id: uuidv4(),
       name: action.name,
       description: action.description,
+      plugin: action.plugin,
       version: action.version,
       icon: action.icon,
-      type: action.type,
       active: true,
       params: action.params,
       custom_name: action.custom_name,
@@ -271,9 +267,9 @@ export default function AddActionModal({
         id: uuidv4(),
         name: "",
         description: "",
+        plugin: "",
         version: "",
         icon: "",
-        type: "",
         category: "",
         active: true,
         params: [],
@@ -393,87 +389,42 @@ export default function AddActionModal({
                             </div>
                             <Spacer y={4} />
                             <div className="grid grid-cols-2 items-stretch gap-4">
-                              {actionItems.map((act: any) =>
-                                act.is_hidden ? (
-                                  <Card
-                                    key={act.type}
-                                    isHoverable
-                                    isPressable
-                                    className={`border-2 ${act.type === action.type ? "border-danger" : "border-danger-200"}`}
-                                    radius="sm"
-                                    onPress={() => handleActionSelect(act)}
-                                  >
-                                    <CardBody>
-                                      <div className="flex items-center gap-2">
-                                        <div className="flex size-10 items-center justify-center rounded-small bg-danger/10 text-danger">
-                                          <Icon icon={act.icon} width={26} />
-                                        </div>
-                                        <div className="flex flex-col">
-                                          <div className="flex flex-cols gap-2 items-center">
-                                            <p className="text-lg font-bold">
-                                              {act.name}
-                                            </p>
-                                            <Chip
-                                              color="primary"
-                                              radius="sm"
-                                              size="sm"
-                                              variant="flat"
-                                            >
-                                              Ver. {act.version}
-                                            </Chip>
-                                            <Chip
-                                              color="danger"
-                                              radius="sm"
-                                              size="sm"
-                                              variant="solid"
-                                            >
-                                              Admin Only
-                                            </Chip>
-                                          </div>
-                                          <p className="text-sm text-default-500">
-                                            {act.description}
-                                          </p>
-                                        </div>
+                              {actionItems.map((act: any) => (
+                                <Card
+                                  key={act.type}
+                                  isHoverable
+                                  isPressable
+                                  className={`border-2 border-default-200 ${act.plugin === action.plugin && act.version === action.version ? "border-primary" : ""}`}
+                                  radius="sm"
+                                  onPress={() => handleActionSelect(act)}
+                                >
+                                  <CardBody>
+                                    <div className="flex items-center gap-2">
+                                      <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
+                                        <Icon icon={act.icon} width={26} />
                                       </div>
-                                    </CardBody>
-                                  </Card>
-                                ) : (
-                                  <Card
-                                    key={act.type}
-                                    isHoverable
-                                    isPressable
-                                    className={`border-2 border-default-200 ${act.type === action.type && act.version === action.version ? "border-primary" : ""}`}
-                                    radius="sm"
-                                    onPress={() => handleActionSelect(act)}
-                                  >
-                                    <CardBody>
-                                      <div className="flex items-center gap-2">
-                                        <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
-                                          <Icon icon={act.icon} width={26} />
-                                        </div>
-                                        <div className="flex flex-col">
-                                          <div className="flex flex-cols gap-2 items-center">
-                                            <p className="text-lg font-bold">
-                                              {act.name}
-                                            </p>
-                                            <Chip
-                                              color="primary"
-                                              radius="sm"
-                                              size="sm"
-                                              variant="flat"
-                                            >
-                                              Ver. {act.version}
-                                            </Chip>
-                                          </div>
-                                          <p className="text-sm text-default-500">
-                                            {act.description}
+                                      <div className="flex flex-col">
+                                        <div className="flex flex-cols gap-2 items-center">
+                                          <p className="text-lg font-bold">
+                                            {act.name}
                                           </p>
+                                          <Chip
+                                            color="primary"
+                                            radius="sm"
+                                            size="sm"
+                                            variant="flat"
+                                          >
+                                            Ver. {act.version}
+                                          </Chip>
                                         </div>
+                                        <p className="text-sm text-default-500">
+                                          {act.description}
+                                        </p>
                                       </div>
-                                    </CardBody>
-                                  </Card>
-                                ),
-                              )}
+                                    </div>
+                                  </CardBody>
+                                </Card>
+                              ))}
                             </div>
                             <Spacer y={4} />
                             <div className="flex items-center justify-center">
@@ -557,7 +508,8 @@ export default function AddActionModal({
                           <div className="grid grid-cols-2 gap-2">
                             {action.params.map((param: any) => {
                               return param.type === "text" ||
-                                param.type === "number" ? (
+                                param.type === "number" ||
+                                param.type === "boolean" ? (
                                 <Input
                                   key={param.key}
                                   description={param?.description}
