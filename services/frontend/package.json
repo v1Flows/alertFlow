@@ -27,7 +27,7 @@
     "@heroui/use-disclosure": "2.2.2",
     "@iconify/react": "^5.0.2",
     "@number-flow/react": "^0.5.2",
-    "@radix-ui/react-popover": "^1.1.2",
+    "@radix-ui/react-popover": "^1.1.6",
     "@react-aria/ssr": "3.9.7",
     "@react-aria/utils": "^3.27.0",
     "@react-aria/visually-hidden": "3.8.18",
