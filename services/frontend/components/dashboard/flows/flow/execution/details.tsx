@@ -5,21 +5,21 @@ import ReactTimeago from "react-timeago";
 
 export default function ExecutionDetails({ runners, execution, steps }: any) {
   function status(execution: any) {
-    if (execution.pending) {
+    if (execution.status === "pending") {
       return "Pending";
-    } else if (execution.running) {
+    } else if (execution.status === "running") {
       return "Running";
-    } else if (execution.paused) {
+    } else if (execution.status === "paused") {
       return "Paused";
-    } else if (execution.canceled) {
+    } else if (execution.status === "canceled") {
       return "Canceled";
-    } else if (execution.no_pattern_match) {
+    } else if (execution.status === "noPatternMatch") {
       return "No Pattern Match";
-    } else if (execution.interaction_required) {
+    } else if (execution.status === "interactionRequired") {
       return "Interaction Required";
-    } else if (execution.error) {
+    } else if (execution.status === "error") {
       return "Error";
-    } else if (execution.finished) {
+    } else if (execution.status === "finished") {
       return "Finished";
     } else {
       return "Unknown";
@@ -27,21 +27,21 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
   }
 
   function statusColor(execution: any) {
-    if (execution.pending) {
+    if (execution.status === "pending") {
       return "default-500";
-    } else if (execution.running) {
+    } else if (execution.status === "running") {
       return "primary";
-    } else if (execution.paused) {
+    } else if (execution.status === "paused") {
       return "warning";
-    } else if (execution.canceled) {
+    } else if (execution.status === "canceled") {
       return "danger";
-    } else if (execution.no_pattern_match) {
+    } else if (execution.status === "noPatternMatch") {
       return "default";
-    } else if (execution.interaction_required) {
+    } else if (execution.status === "interactionRequired") {
       return "primary";
-    } else if (execution.error) {
+    } else if (execution.status === "error") {
       return "danger";
-    } else if (execution.finished) {
+    } else if (execution.status === "finished") {
       return "success";
     } else {
       return "default";
@@ -49,7 +49,7 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
   }
 
   function statusIcon(execution: any) {
-    if (execution.pending) {
+    if (execution.status === "pending") {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
@@ -68,13 +68,13 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
           />
         </Tooltip>
       );
-    } else if (execution.running) {
+    } else if (execution.status === "running") {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress aria-label="Step" color="primary" size="md" />
         </Tooltip>
       );
-    } else if (execution.paused) {
+    } else if (execution.status === "paused") {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
@@ -93,7 +93,7 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
           />
         </Tooltip>
       );
-    } else if (execution.canceled) {
+    } else if (execution.status === "canceled") {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
@@ -112,7 +112,7 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
           />
         </Tooltip>
       );
-    } else if (execution.no_pattern_match) {
+    } else if (execution.status === "noPatternMatch") {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
@@ -130,7 +130,7 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
           />
         </Tooltip>
       );
-    } else if (execution.interaction_required) {
+    } else if (execution.status === "interactionRequired") {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
@@ -149,7 +149,7 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
           />
         </Tooltip>
       );
-    } else if (execution.error) {
+    } else if (execution.status === "error") {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
@@ -168,7 +168,7 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
           />
         </Tooltip>
       );
-    } else if (execution.finished) {
+    } else if (execution.status === "finished") {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress

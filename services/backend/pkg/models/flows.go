@@ -30,25 +30,26 @@ type Flows struct {
 }
 
 type Actions struct {
-	ID          uuid.UUID `json:"id"`
-	Name        string    `json:"name"`
-	Description string    `json:"description"`
-	Plugin      string    `json:"plugin"`
-	Version     string    `json:"version"`
-	Icon        string    `json:"icon"`
-	Type        string    `json:"type"`
-	Category    string    `json:"category"`
-	Active      bool      `json:"active"`
-	Params      []struct {
-		Key         string `json:"key"`
-		Value       string `json:"value"`
-		Default     string `json:"default"`
-		Description string `json:"description"`
-		Required    bool   `json:"required"`
-		Type        string `json:"type"`
-	} `json:"params"`
-	CustomName        string `json:"custom_name"`
-	CustomDescription string `json:"custom_description"`
+	ID                uuid.UUID `json:"id"`
+	Name              string    `json:"name"`
+	Description       string    `json:"description"`
+	Plugin            string    `json:"plugin"`
+	Version           string    `json:"version"`
+	Icon              string    `json:"icon"`
+	Category          string    `json:"category"`
+	Active            bool      `json:"active"`
+	Params            []Params  `json:"params"`
+	CustomName        string    `json:"custom_name"`
+	CustomDescription string    `json:"custom_description"`
+}
+
+type Params struct {
+	Key         string `json:"key"`
+	Value       string `json:"value"`
+	Default     string `json:"default"`
+	Description string `json:"description"`
+	Required    bool   `json:"required"`
+	Type        string `json:"type"`
 }
 
 type Pattern struct {
