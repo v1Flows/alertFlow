@@ -620,7 +620,7 @@ export default function AddActionModal({
                 ) : (
                   <Button
                     color="primary"
-                    isDisabled={disableNext || action.type == ""}
+                    isDisabled={disableNext || action.plugin == ""}
                     isLoading={isLoading}
                     onPress={() => setCurrentStep(currentStep + 1)}
                   >
