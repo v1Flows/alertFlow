@@ -13,7 +13,7 @@ type ExecutionSteps struct {
 	ID                  uuid.UUID `bun:",pk,type:uuid,default:gen_random_uuid()" json:"id"`
 	ExecutionID         string    `bun:"execution_id,type:text,notnull" json:"execution_id"`
 	Action              Actions   `bun:"action,type:jsonb,default:jsonb('{}')" json:"action"`
-	Messages            []string  `bun:"messages,type:text[],default:'{}'" json:"action_messages"`
+	Messages            []string  `bun:"messages,type:text[],default:'{}'" json:"messages"`
 	RunnerID            string    `bun:"runner_id,type:text,default:''" json:"runner_id"`
 	ParentID            string    `bun:"parent_id,type:text,default:''" json:"parent_id"`
 	IsHidden            bool      `bun:"is_hidden,type:bool,default:false" json:"is_hidden"`

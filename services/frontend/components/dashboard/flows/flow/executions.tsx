@@ -94,8 +94,8 @@ export default function Executions({
       return "Interaction Required";
     } else if (execution.status === "error") {
       return "Error";
-    } else if (execution.status === "finished") {
-      return "Finished";
+    } else if (execution.status === "success") {
+      return "Success";
     } else {
       return "Unknown";
     }
@@ -116,8 +116,8 @@ export default function Executions({
       return "interaction_required";
     } else if (execution.status === "error") {
       return "error";
-    } else if (execution.status === "finished") {
-      return "finished";
+    } else if (execution.status === "success") {
+      return "success";
     } else {
       return "unknown";
     }
@@ -243,7 +243,7 @@ export default function Executions({
           />
         </Tooltip>
       );
-    } else if (execution.status === "finished") {
+    } else if (execution.status === "success") {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
@@ -512,14 +512,14 @@ export default function Executions({
                     Error
                   </div>
                 </DropdownItem>
-                <DropdownItem key="finished" className="capitalize">
+                <DropdownItem key="success" className="capitalize">
                   <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-success"
                       icon="solar:check-read-outline"
                       width={18}
                     />
-                    Finished
+                    Success
                   </div>
                 </DropdownItem>
               </DropdownMenu>
@@ -592,17 +592,17 @@ export default function Executions({
           </Card>
         )}
 
-        {executions.filter((e: any) => status(e) == "Finished").length > 0 && (
+        {executions.filter((e: any) => status(e) == "Success").length > 0 && (
           <Card
             isHoverable
             isPressable
             className={
-              statusFilter.has("finished")
+              statusFilter.has("success")
                 ? "w-[240px] grow bg-success/30"
                 : "w-[240px] grow"
             }
             onPress={() => {
-              setStatusFilter(new Set(["finished"]));
+              setStatusFilter(new Set(["success"]));
               setPage(1);
             }}
           >
@@ -616,12 +616,12 @@ export default function Executions({
                     <NumberFlow
                       locales="en-US" // Intl.NumberFormat locales
                       value={
-                        executions.filter((e: any) => status(e) == "Finished")
+                        executions.filter((e: any) => status(e) == "Success")
                           .length
                       }
                     />
                   </p>
-                  <p className="text-sm text-default-500">Finished</p>
+                  <p className="text-sm text-default-500">Success</p>
                 </div>
               </div>
             </CardBody>

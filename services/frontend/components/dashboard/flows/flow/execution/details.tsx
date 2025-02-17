@@ -19,8 +19,8 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
       return "Interaction Required";
     } else if (execution.status === "error") {
       return "Error";
-    } else if (execution.status === "finished") {
-      return "Finished";
+    } else if (execution.status === "success") {
+      return "Success";
     } else {
       return "Unknown";
     }
@@ -41,7 +41,7 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
       return "primary";
     } else if (execution.status === "error") {
       return "danger";
-    } else if (execution.status === "finished") {
+    } else if (execution.status === "success") {
       return "success";
     } else {
       return "default";
@@ -168,7 +168,7 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
           />
         </Tooltip>
       );
-    } else if (execution.status === "finished") {
+    } else if (execution.status === "success") {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress

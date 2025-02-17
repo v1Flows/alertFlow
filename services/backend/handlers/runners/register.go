@@ -1,18 +1,20 @@
 package runners
 
 import (
-	"github.com/v1Flows/alertFlow/services/backend/functions/auth"
-	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
-	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 	"errors"
 	"net/http"
 	"strconv"
 	"time"
 
+	"github.com/v1Flows/alertFlow/services/backend/functions/auth"
+	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
+
+	"math/rand"
+
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/uptrace/bun"
-	"golang.org/x/exp/rand"
 )
 
 func RegisterRunner(context *gin.Context, db *bun.DB) {
@@ -168,7 +170,7 @@ func alertflowAutoRunnerRegister(runner models.Runners, context *gin.Context, db
 
 	// generate random id for runner
 	runner.ID = uuid.New()
-	runner.Name = "AlertFlow Auto Runner " + strconv.Itoa(rand.Intn(1000))
+	runner.Name = "AlertFlow Auto Runner " + strconv.Itoa(rand.Intn(100000))
 	runner.ProjectID = "admin"
 	runner.AlertFlowRunner = true
 	runner.AutoRunner = true

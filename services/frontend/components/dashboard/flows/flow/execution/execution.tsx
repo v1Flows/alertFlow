@@ -76,12 +76,12 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
       return "No Pattern Match";
     } else if (step.status === "noResult") {
       return "No Result";
-    } else if (step.status === "interactionRequired") {
+    } else if (step.status === "interactionWaiting") {
       return "Interactive";
     } else if (step.status === "error") {
       return "Error";
-    } else if (step.status === "finished") {
-      return "Finished";
+    } else if (step.status === "success") {
+      return "Success";
     } else {
       return "N/A";
     }
@@ -100,11 +100,11 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
       return "secondary";
     } else if (step.status === "noResult") {
       return "default";
-    } else if (step.status === "interactionRequired") {
+    } else if (step.status === "interactionWaiting") {
       return "primary";
     } else if (step.status === "error") {
       return "danger";
-    } else if (step.status === "finished") {
+    } else if (step.status === "success") {
       return "success";
     } else {
       return "default";
@@ -212,7 +212,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
           />
         </Tooltip>
       );
-    } else if (step.status === "interactionRequired") {
+    } else if (step.status === "interactionWaiting") {
       return (
         <Tooltip content={`${status(step)}`}>
           <CircularProgress
@@ -250,7 +250,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
           />
         </Tooltip>
       );
-    } else if (step.status === "finished") {
+    } else if (step.status === "success") {
       return (
         <Tooltip content={`${status(step)}`}>
           <CircularProgress
@@ -361,6 +361,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
     ];
     step.interaced_by = userDetails.id;
     step.interacted_at = new Date().toISOString();
+
     const res = (await InteractExecutionStep(
       execution.id,
       step.id,
@@ -454,7 +455,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
                 <div className="flex flex-col gap-2">
                   <div className="flex flex-cols items-center gap-2">
                     <Snippet fullWidth hideCopyButton hideSymbol radius="sm">
-                      {step.action_messages.map((data: any, index: any) => (
+                      {step.messages.map((data: any, index: any) => (
                         <p
                           key={index}
                           className="flex-cols flex items-center gap-1"
@@ -484,40 +485,36 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
                       </Tooltip>
                     )}
                   </div>
-                  {step.status === "interactionRequired" &&
-                    !step.interacted && (
-                      <div className="flex-cols flex items-center gap-4">
-                        <Button
-                          fullWidth
-                          color="success"
-                          startContent={
-                            <Icon
-                              icon="solar:verified-check-linear"
-                              width={18}
-                            />
-                          }
-                          variant="flat"
-                          onPress={() => {
-                            interactStep(step, true);
-                          }}
-                        >
-                          Approve & Continue
-                        </Button>
-                        <Button
-                          fullWidth
-                          color="danger"
-                          startContent={
-                            <Icon icon="solar:forbidden-outline" width={18} />
-                          }
-                          variant="flat"
-                          onPress={() => {
-                            interactStep(step, false);
-                          }}
-                        >
-                          Reject & Stop
-                        </Button>
-                      </div>
-                    )}
+                  {step.status === "interactionWaiting" && !step.interacted && (
+                    <div className="flex-cols flex items-center gap-4">
+                      <Button
+                        fullWidth
+                        color="success"
+                        startContent={
+                          <Icon icon="solar:verified-check-linear" width={18} />
+                        }
+                        variant="flat"
+                        onPress={() => {
+                          interactStep(step, true);
+                        }}
+                      >
+                        Approve & Continue
+                      </Button>
+                      <Button
+                        fullWidth
+                        color="danger"
+                        startContent={
+                          <Icon icon="solar:forbidden-outline" width={18} />
+                        }
+                        variant="flat"
+                        onPress={() => {
+                          interactStep(step, false);
+                        }}
+                      >
+                        Reject & Stop
+                      </Button>
+                    </div>
+                  )}
                 </div>
               )}
             </>
