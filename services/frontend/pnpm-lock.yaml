@@ -6338,9 +6338,6 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
-  serialize-javascript@4.0.0:
-    resolution: {integrity: sha512-GaNA54380uFefWghODBWEGisLZFj00nS5ACs6yHa9nLqlLpVLO8ChDGeKRjZnV4Nh4n0Qi7nhYZD/9fCPzEqkw==}
-
   serialize-javascript@6.0.2:
     resolution: {integrity: sha512-Saa1xPByTTq2gdeFZYLLo+RFE35NHZkAbqZeWNd3BpzppeVisAqpDjcp8dyf6uIvEqJRd46jemmyA4iFIeVk8g==}
 
@@ -15528,7 +15525,7 @@ snapshots:
       '@babel/code-frame': 7.26.2
       jest-worker: 26.6.2
       rollup: 2.79.2
-      serialize-javascript: 4.0.0
+      serialize-javascript: 6.0.2
       terser: 5.37.0
 
   rollup@2.79.2:
@@ -15604,10 +15601,6 @@ snapshots:
   semver@6.3.1: {}
 
   semver@7.7.1: {}
-
-  serialize-javascript@4.0.0:
-    dependencies:
-      randombytes: 2.1.0
 
   serialize-javascript@6.0.2:
     dependencies:
