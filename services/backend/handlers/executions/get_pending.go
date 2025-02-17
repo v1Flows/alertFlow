@@ -31,19 +31,41 @@ func GetPendingExecutions(context *gin.Context, db *bun.DB) {
 
 	executions := make([]models.Executions, 0)
 
+	tx, err := db.Begin()
+	if err != nil {
+		httperror.InternalServerError(context, "Error starting transaction", err)
+		return
+	}
+	defer tx.Rollback()
+
 	if !runner.AlertFlowRunner {
-		err = db.NewSelect().Model(&executions).Where("flow_id::text IN (SELECT id::text FROM flows WHERE project_id = ?)", projectID).Where("status = 'pending' AND runner_id = ''").Scan(context)
+		err = tx.NewSelect().Model(&executions).Where("flow_id::text IN (SELECT id::text FROM flows WHERE project_id = ?)", projectID).Where("status = 'pending' AND runner_id = ''").For("UPDATE").Limit(1).Scan(context)
 		if err != nil {
 			httperror.InternalServerError(context, "Error collecting executions from db", err)
 			fmt.Println(err.Error())
 			return
 		}
 	} else {
-		err = db.NewSelect().Model(&executions).Where("status = 'pending' AND runner_id = ''").Scan(context)
+		err = tx.NewSelect().Model(&executions).Where("status = 'pending' AND runner_id = ''").For("UPDATE").Limit(1).Scan(context)
 		if err != nil {
 			httperror.InternalServerError(context, "Error collecting executions from db", err)
 			return
 		}
+	}
+
+	// Update the runner_id of the fetched executions to the current runner's ID
+	for i := range executions {
+		executions[i].RunnerID = runnerID
+		_, err = tx.NewUpdate().Model(&executions[i]).Column("runner_id").Where("id = ?", executions[i].ID).Exec(context)
+		if err != nil {
+			httperror.InternalServerError(context, "Error updating execution runner_id in db", err)
+			return
+		}
+	}
+
+	if err := tx.Commit(); err != nil {
+		httperror.InternalServerError(context, "Error committing transaction", err)
+		return
 	}
 
 	context.JSON(http.StatusOK, gin.H{"executions": executions})

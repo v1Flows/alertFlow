@@ -1,10 +1,11 @@
 package runners
 
 import (
-	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
-	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 	"errors"
 	"net/http"
+
+	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/uptrace/bun"
@@ -13,14 +14,20 @@ import (
 func Busy(context *gin.Context, db *bun.DB) {
 	runnerID := context.Param("runnerID")
 
-	// check if runner is disabled
 	var runner models.Runners
-	err := db.NewSelect().Model(&runner).Where("id = ?", runnerID).Scan(context)
+	if err := context.ShouldBindJSON(&runner); err != nil {
+		httperror.StatusBadRequest(context, "Error parsing incoming data", err)
+		return
+	}
+
+	// check if runner is disabled
+	var runnerDB models.Runners
+	err := db.NewSelect().Model(&runnerDB).Where("id = ?", runnerID).Scan(context)
 	if err != nil {
 		httperror.InternalServerError(context, "Error collecting runner data from db", err)
 		return
 	}
-	if runner.Disabled {
+	if runnerDB.Disabled {
 		httperror.StatusBadRequest(context, "Runner is disabled", errors.New("runner is disabled"))
 		return
 	}
