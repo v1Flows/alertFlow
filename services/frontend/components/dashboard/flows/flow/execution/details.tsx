@@ -212,6 +212,10 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
   function getDuration() {
     let calFinished = new Date().toISOString();
 
+    if (execution.executed_at === "0001-01-01T00:00:00Z") {
+      return "N/A";
+    }
+
     if (execution.finished_at !== "0001-01-01T00:00:00Z") {
       calFinished = execution.finished_at;
     }
@@ -312,7 +316,11 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
               </div>
               <div>
                 <p className="text-md font-bold">
-                  <ReactTimeago date={execution.executed_at} />
+                  {execution.executed_at === "0001-01-01T00:00:00Z" ? (
+                    "N/A"
+                  ) : (
+                    <ReactTimeago date={execution.executed_at} />
+                  )}
                 </p>
                 <p className="text-sm text-default-500">Executed At</p>
               </div>

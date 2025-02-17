@@ -15,7 +15,7 @@ func GetSteps(context *gin.Context, db *bun.DB) {
 	executionID := context.Param("executionID")
 
 	steps := make([]models.ExecutionSteps, 0)
-	err := db.NewSelect().Model(&steps).Where("execution_id = ?", executionID).Order("started_at ASC").Scan(context)
+	err := db.NewSelect().Model(&steps).Where("execution_id = ?", executionID).Order("created_at ASC").Order("started_at DESC").Scan(context)
 	if err != nil {
 		httperror.InternalServerError(context, "Error collecting execution steps from db", err)
 		return

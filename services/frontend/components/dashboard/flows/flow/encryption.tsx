@@ -9,9 +9,6 @@ import ErrorCard from "@/components/error/ErrorCard";
 export default function FlowEncryption({ flow }: { flow: any }) {
   const router = useRouter();
 
-  const [encryptActionParams, setEncryptActionParams] = useState(
-    flow.encrypt_action_params,
-  );
   const [encryptPayloads, setEncryptPayloads] = useState(flow.encrypt_payloads);
   const [encryptExecutions, setEncryptExecutions] = useState(
     flow.encrypt_executions,
@@ -21,21 +18,19 @@ export default function FlowEncryption({ flow }: { flow: any }) {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    setEncryptActionParams(flow.encrypt_action_params);
     setEncryptPayloads(flow.encrypt_payloads);
     setEncryptExecutions(flow.encrypt_executions);
   }, [flow]);
 
   useEffect(() => {
     if (
-      encryptActionParams === flow.encrypt_action_params &&
       encryptPayloads === flow.encrypt_payloads &&
       encryptExecutions === flow.encrypt_executions
     ) {
       return;
     }
     updateFlow();
-  }, [encryptActionParams, encryptPayloads, encryptExecutions]);
+  }, [encryptPayloads, encryptExecutions]);
 
   async function updateFlow() {
     const response = (await UpdateFlow(
@@ -44,7 +39,6 @@ export default function FlowEncryption({ flow }: { flow: any }) {
       flow.description,
       flow.project_id,
       flow.runner_id,
-      encryptActionParams,
       encryptPayloads,
       encryptExecutions,
     )) as any;
@@ -69,26 +63,7 @@ export default function FlowEncryption({ flow }: { flow: any }) {
   return (
     <>
       {error && <ErrorCard error={error} message={errorMessage} />}
-      <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
-        <Card fullWidth>
-          <CardBody className="flex items-center justify-between text-center">
-            <div className="flex flex-col">
-              <p className="text-md font-bold">Encrypted Action Parameters</p>
-              <p className="text-sm text-default-500">
-                All action parameters will be encrypted.
-              </p>
-            </div>
-            <Spacer y={2} />
-            <Switch
-              isSelected={encryptActionParams}
-              size="sm"
-              onValueChange={(value) => {
-                setEncryptActionParams(value);
-              }}
-            />
-          </CardBody>
-        </Card>
-
+      <div className="grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-4">
         <Card fullWidth>
           <CardBody className="flex items-center justify-between text-center">
             <div className="flex flex-col">

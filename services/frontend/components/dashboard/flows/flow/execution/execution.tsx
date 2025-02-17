@@ -583,7 +583,10 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
                         <div>
                           <p className="font-bold">{step.action.name}</p>
                           <p className="text-sm text-default-500">
-                            {step.action.id || "N/A"}
+                            {step.action.id ===
+                            "00000000-0000-0000-0000-000000000000"
+                              ? "N/A"
+                              : step.action.id}
                           </p>
                         </div>
                       </div>

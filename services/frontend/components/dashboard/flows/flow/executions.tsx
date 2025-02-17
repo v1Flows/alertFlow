@@ -286,7 +286,26 @@ export default function Executions({
 
   function getDuration(execution: any) {
     if (execution.finished_at === "0001-01-01T00:00:00Z") {
-      return "0s";
+      if (execution.executed_at !== "0001-01-01T00:00:00Z") {
+        const ms =
+          new Date().getTime() - new Date(execution.executed_at).getTime();
+        const sec = Math.floor(ms / 1000);
+        const min = Math.floor(sec / 60);
+        const hr = Math.floor(min / 60);
+        const day = Math.floor(hr / 24);
+
+        if (day > 0) {
+          return `${day}d ${hr % 24}h ${min % 60}m ${sec % 60}s`;
+        } else if (hr > 0) {
+          return `${hr}h ${min % 60}m ${sec % 60}s`;
+        } else if (min > 0) {
+          return `${min}m ${sec % 60}s`;
+        } else {
+          return `${sec}s`;
+        }
+      } else {
+        return "0s";
+      }
     }
     const ms =
       new Date(execution.finished_at).getTime() -
@@ -566,8 +585,15 @@ export default function Executions({
                 : "w-[240px] grow"
             }
             onPress={() => {
-              setStatusFilter(new Set(["pending"]));
-              setPage(1);
+              if (statusFilter.has("pending")) {
+                statusFilter.delete("pending");
+                setStatusFilter(new Set(statusFilter));
+                setPage(1);
+              } else {
+                statusFilter.add("pending");
+                setStatusFilter(new Set(statusFilter));
+                setPage(1);
+              }
             }}
           >
             <CardBody>
@@ -602,8 +628,15 @@ export default function Executions({
                 : "w-[240px] grow"
             }
             onPress={() => {
-              setStatusFilter(new Set(["success"]));
-              setPage(1);
+              if (statusFilter.has("success")) {
+                statusFilter.delete("success");
+                setStatusFilter(new Set(statusFilter));
+                setPage(1);
+              } else {
+                statusFilter.add("success");
+                setStatusFilter(new Set(statusFilter));
+                setPage(1);
+              }
             }}
           >
             <CardBody>
@@ -638,8 +671,15 @@ export default function Executions({
                 : "w-[240px] grow"
             }
             onPress={() => {
-              setStatusFilter(new Set(["running"]));
-              setPage(1);
+              if (statusFilter.has("running")) {
+                statusFilter.delete("running");
+                setStatusFilter(new Set(statusFilter));
+                setPage(1);
+              } else {
+                statusFilter.add("running");
+                setStatusFilter(new Set(statusFilter));
+                setPage(1);
+              }
             }}
           >
             <CardBody>
@@ -674,8 +714,15 @@ export default function Executions({
                 : "w-[240px] grow"
             }
             onPress={() => {
-              setStatusFilter(new Set(["paused"]));
-              setPage(1);
+              if (statusFilter.has("paused")) {
+                statusFilter.delete("paused");
+                setStatusFilter(new Set(statusFilter));
+                setPage(1);
+              } else {
+                statusFilter.add("paused");
+                setStatusFilter(new Set(statusFilter));
+                setPage(1);
+              }
             }}
           >
             <CardBody>
@@ -711,8 +758,15 @@ export default function Executions({
                 : "w-[240px] grow"
             }
             onPress={() => {
-              setStatusFilter(new Set(["interaction_required"]));
-              setPage(1);
+              if (statusFilter.has("interaction_required")) {
+                statusFilter.delete("interaction_required");
+                setStatusFilter(new Set(statusFilter));
+                setPage(1);
+              } else {
+                statusFilter.add("interaction_required");
+                setStatusFilter(new Set(statusFilter));
+                setPage(1);
+              }
             }}
           >
             <CardBody>
@@ -751,8 +805,15 @@ export default function Executions({
                 : "w-[240px] grow"
             }
             onPress={() => {
-              setStatusFilter(new Set(["no_pattern_match"]));
-              setPage(1);
+              if (statusFilter.has("no_pattern_match")) {
+                statusFilter.delete("no_pattern_match");
+                setStatusFilter(new Set(statusFilter));
+                setPage(1);
+              } else {
+                statusFilter.add("no_pattern_match");
+                setStatusFilter(new Set(statusFilter));
+                setPage(1);
+              }
             }}
           >
             <CardBody>
@@ -788,8 +849,15 @@ export default function Executions({
                 : "w-[240px] grow"
             }
             onPress={() => {
-              setStatusFilter(new Set(["canceled"]));
-              setPage(1);
+              if (statusFilter.has("canceled")) {
+                statusFilter.delete("canceled");
+                setStatusFilter(new Set(statusFilter));
+                setPage(1);
+              } else {
+                statusFilter.add("canceled");
+                setStatusFilter(new Set(statusFilter));
+                setPage(1);
+              }
             }}
           >
             <CardBody>
@@ -824,8 +892,15 @@ export default function Executions({
                 : "w-[240px] grow"
             }
             onPress={() => {
-              setStatusFilter(new Set(["error"]));
-              setPage(1);
+              if (statusFilter.has("error")) {
+                statusFilter.delete("error");
+                setStatusFilter(new Set(statusFilter));
+                setPage(1);
+              } else {
+                statusFilter.add("error");
+                setStatusFilter(new Set(statusFilter));
+                setPage(1);
+              }
             }}
           >
             <CardBody>
