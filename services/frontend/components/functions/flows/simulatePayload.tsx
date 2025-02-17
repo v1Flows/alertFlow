@@ -31,7 +31,8 @@ export default function SimulatePayloadModal({
   const [errorText, setErrorText] = React.useState("");
   const [errorMessage, setErrorMessage] = React.useState("");
   const [target, setTarget] = React.useState(
-    "https://alertflow.org/payloads/alertmanager",
+    // eslint-disable-next-line no-undef
+    `${window.location.origin}/payloads/alertmanager`,
   );
   const [payload, setPayload] = React.useState(`{
   "receiver": "${flow.id}",

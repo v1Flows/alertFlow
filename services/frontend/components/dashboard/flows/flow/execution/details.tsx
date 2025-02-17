@@ -19,8 +19,8 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
       return "Interaction Required";
     } else if (execution.status === "error") {
       return "Error";
-    } else if (execution.status === "finished") {
-      return "Finished";
+    } else if (execution.status === "success") {
+      return "Success";
     } else {
       return "Unknown";
     }
@@ -41,7 +41,7 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
       return "primary";
     } else if (execution.status === "error") {
       return "danger";
-    } else if (execution.status === "finished") {
+    } else if (execution.status === "success") {
       return "success";
     } else {
       return "default";
@@ -168,7 +168,7 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
           />
         </Tooltip>
       );
-    } else if (execution.status === "finished") {
+    } else if (execution.status === "success") {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
@@ -211,6 +211,10 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
 
   function getDuration() {
     let calFinished = new Date().toISOString();
+
+    if (execution.executed_at === "0001-01-01T00:00:00Z") {
+      return "N/A";
+    }
 
     if (execution.finished_at !== "0001-01-01T00:00:00Z") {
       calFinished = execution.finished_at;
@@ -312,7 +316,11 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
               </div>
               <div>
                 <p className="text-md font-bold">
-                  <ReactTimeago date={execution.executed_at} />
+                  {execution.executed_at === "0001-01-01T00:00:00Z" ? (
+                    "N/A"
+                  ) : (
+                    <ReactTimeago date={execution.executed_at} />
+                  )}
                 </p>
                 <p className="text-sm text-default-500">Executed At</p>
               </div>

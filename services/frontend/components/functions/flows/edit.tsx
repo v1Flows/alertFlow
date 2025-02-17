@@ -91,7 +91,6 @@ export default function EditFlowModal({
       description,
       projectId,
       runnerLimit ? runnerId : "any",
-      flow.encrypt_action_params,
       flow.encrypt_payloads,
       flow.encrypt_executions,
     )) as any;

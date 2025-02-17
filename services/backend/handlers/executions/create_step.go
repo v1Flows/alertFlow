@@ -1,10 +1,12 @@
 package executions
 
 import (
+	"net/http"
+	"time"
+
 	"github.com/v1Flows/alertFlow/services/backend/functions/encryption"
 	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
 	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -45,6 +47,7 @@ func CreateStep(context *gin.Context, db *bun.DB) {
 	}
 
 	step.ID = uuid.New()
+	step.CreatedAt = time.Now()
 	_, err = db.NewInsert().Model(&step).Exec(context)
 	if err != nil {
 		httperror.InternalServerError(context, "Error creating execution step on db", err)

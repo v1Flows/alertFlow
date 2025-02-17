@@ -18,6 +18,7 @@ module.exports = async (phase) => {
     },
     reactStrictMode: true,
     images: {
+      unoptimized: true,
       domains: ['localhost', 'alertflow.org'],
     },
   };

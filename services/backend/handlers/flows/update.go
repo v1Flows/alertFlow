@@ -1,13 +1,14 @@
 package flows
 
 import (
+	"errors"
+	"net/http"
+	"time"
+
 	"github.com/v1Flows/alertFlow/services/backend/functions/gatekeeper"
 	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
 	functions_project "github.com/v1Flows/alertFlow/services/backend/functions/project"
 	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
-	"errors"
-	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
@@ -47,7 +48,7 @@ func UpdateFlow(context *gin.Context, db *bun.DB) {
 	}
 
 	flow.UpdatedAt = time.Now()
-	_, err = db.NewUpdate().Model(&flow).Column("name", "description", "project_id", "runner_id", "encrypt_action_params", "encrypt_payloads", "encrypt_executions", "updated_at").Where("id = ?", flowID).Exec(context)
+	_, err = db.NewUpdate().Model(&flow).Column("name", "description", "project_id", "runner_id", "encrypt_payloads", "encrypt_executions", "updated_at").Where("id = ?", flowID).Exec(context)
 	if err != nil {
 		httperror.InternalServerError(context, "Error updating flow on db", err)
 		return
