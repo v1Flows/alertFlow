@@ -16,7 +16,7 @@ import (
 func Delete(context *gin.Context, db *bun.DB) {
 	alertID := context.Param("alertID")
 
-	// get flow_id from payload
+	// get flow_id from alert
 	var alert models.Alerts
 	err := db.NewSelect().Model(&alert).Where("id = ?", alertID).Scan(context)
 	if err != nil {
@@ -39,13 +39,13 @@ func Delete(context *gin.Context, db *bun.DB) {
 		return
 	}
 	if !canModify {
-		httperror.Unauthorized(context, "You are not allowed to delete this payload", errors.New("unauthorized"))
+		httperror.Unauthorized(context, "You are not allowed to delete this alert", errors.New("unauthorized"))
 		return
 	}
 
 	_, err = db.NewDelete().Model((*models.Alerts)(nil)).Where("id = ?", alertID).Exec(context)
 	if err != nil {
-		httperror.InternalServerError(context, "Error deleting payload on db", err)
+		httperror.InternalServerError(context, "Error deleting alert on db", err)
 		return
 	}
 

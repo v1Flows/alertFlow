@@ -103,7 +103,7 @@ func runnerRegister(runnerID string, projectID string, runner models.Runners, co
 
 	runner.RegisteredAt = time.Now()
 
-	_, err = db.NewUpdate().Model(&runner).Column("registered", "last_heartbeat", "version", "mode", "plugins", "actions", "payload_endpoints", "registered_at").Where("id = ?", runnerID).Exec(context)
+	_, err = db.NewUpdate().Model(&runner).Column("registered", "last_heartbeat", "version", "mode", "plugins", "actions", "alert_endpoints", "registered_at").Where("id = ?", runnerID).Exec(context)
 	if err != nil {
 		httperror.InternalServerError(context, "Error updating runner informations on db", err)
 		return

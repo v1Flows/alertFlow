@@ -12,7 +12,7 @@ type Executions struct {
 
 	ID         uuid.UUID `bun:",pk,type:uuid,default:gen_random_uuid()" json:"id"`
 	FlowID     string    `bun:"flow_id,type:text,default:''" json:"flow_id"`
-	PayloadID  string    `bun:"payload_id,type:text,default:''" json:"payload_id"`
+	AlertID    string    `bun:"alert_id,type:text,default:''" json:"alert_id"`
 	RunnerID   string    `bun:"runner_id,type:text,default:''" json:"runner_id"`
 	Status     string    `bun:"status,type:text,default:''" json:"status"`
 	CreatedAt  time.Time `bun:"created_at,type:timestamptz,default:now()" json:"created_at"`

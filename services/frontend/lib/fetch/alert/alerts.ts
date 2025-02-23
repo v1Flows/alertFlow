@@ -2,8 +2,8 @@
 
 import { cookies } from "next/headers";
 
-type Payload = {
-  payload: object;
+type Payloads = {
+  payloads: [];
 };
 
 type ErrorResponse = {
@@ -14,12 +14,10 @@ type ErrorResponse = {
 
 type SuccessResponse = {
   success: true;
-  data: Payload;
+  data: Payloads;
 };
 
-export async function GetPayload(
-  payloadID: any,
-): Promise<SuccessResponse | ErrorResponse> {
+export async function GetAlerts(): Promise<SuccessResponse | ErrorResponse> {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get("session");
@@ -33,7 +31,7 @@ export async function GetPayload(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/payloads/${payloadID}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/alerts/`,
       {
         method: "GET",
         headers: {
@@ -63,9 +61,9 @@ export async function GetPayload(
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error occurred",
-      message: "Failed to fetch payload",
+      message: "Failed to fetch alerts",
     };
   }
 }
 
-export default GetPayload;
+export default GetAlerts;

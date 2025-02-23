@@ -37,11 +37,11 @@ func CreateAlert(context *gin.Context, db *bun.DB) {
 
 	alert.ID = uuid.New()
 
-	// encrypt payload if enabled
-	if flow.EncryptPayloads && config.Config.Encryption.Enabled {
+	// encrypt alert if enabled
+	if flow.EncryptAlerts && config.Config.Encryption.Enabled {
 		alert.Payload, err = encryption.EncryptPayload(alert.Payload)
 		if err != nil {
-			httperror.InternalServerError(context, "Error encrypting payload", err)
+			httperror.InternalServerError(context, "Error encrypting alert", err)
 			return
 		}
 		alert.Encrypted = true
@@ -49,7 +49,7 @@ func CreateAlert(context *gin.Context, db *bun.DB) {
 
 	res, err := db.NewInsert().Model(&alert).Column("id", "payload", "flow_id", "runner_id", "endpoint", "encrypted").Exec(context)
 	if err != nil {
-		httperror.InternalServerError(context, "Error creating payload on db", err)
+		httperror.InternalServerError(context, "Error creating alert on db", err)
 		return
 	}
 

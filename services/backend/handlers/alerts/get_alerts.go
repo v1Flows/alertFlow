@@ -24,7 +24,7 @@ func GetMultiple(context *gin.Context, db *bun.DB) {
 		if alerts[i].Encrypted {
 			alerts[i].Payload, err = encryption.DecryptPayload(alerts[i].Payload)
 			if err != nil {
-				httperror.InternalServerError(context, "Error decrypting payload", err)
+				httperror.InternalServerError(context, "Error decrypting alert", err)
 				return
 			}
 		}

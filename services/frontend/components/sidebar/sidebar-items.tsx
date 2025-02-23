@@ -16,6 +16,12 @@ export const sectionItems: SidebarItem[] = [
         title: "Home",
       },
       {
+        key: "alerts",
+        href: "/alerts",
+        icon: "solar:siren-rounded-outline",
+        title: "Alerts",
+      },
+      {
         key: "projects",
         href: "/projects",
         icon: "solar:inbox-archive-outline",

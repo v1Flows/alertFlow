@@ -27,7 +27,7 @@ export function DashboardHome({
   flows,
   runners,
   executions,
-  payloads,
+  alerts,
   user,
 }: any) {
   const router = useRouter();
@@ -412,7 +412,7 @@ export function DashboardHome({
           </p>
         </div>
       </div>
-      <Executions displayToFlow executions={executions} payloads={payloads} />
+      <Executions displayToFlow alerts={alerts} executions={executions} />
 
       <WelcomeModal disclosure={welcomeModal} />
     </main>

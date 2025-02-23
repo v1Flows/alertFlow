@@ -53,7 +53,7 @@ func DeleteFlow(context *gin.Context, db *bun.DB) {
 		return
 	}
 
-	// delete all payloads linked to the flow
+	// delete all alerts linked to the flow
 	_, err = db.NewDelete().Model((*models.Alerts)(nil)).Where("flow_id = ?", flowID).Exec(context)
 	if err != nil {
 		httperror.InternalServerError(context, "Error deleting flow alerts from db", err)

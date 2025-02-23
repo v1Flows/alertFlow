@@ -10,7 +10,7 @@ type SuccessResponse = {
   success: true;
 };
 
-export default async function SimulatePayload(
+export default async function SimulateAlert(
   target: any,
   payload: any,
 ): Promise<SuccessResponse | ErrorResponse> {
@@ -40,7 +40,7 @@ export default async function SimulatePayload(
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error occurred",
-      message: "Failed to send payload",
+      message: "Failed to send alert",
     };
   }
 }

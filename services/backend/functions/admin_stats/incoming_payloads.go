@@ -1,23 +1,24 @@
 package admin_stats
 
 import (
-	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
-	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 	"sort"
 	"strconv"
 	"time"
+
+	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/uptrace/bun"
 )
 
-func IncomingPayloadsStats(interval string, context *gin.Context, db *bun.DB) []models.Stats {
+func IncomingAlertsStats(interval string, context *gin.Context, db *bun.DB) []models.Stats {
 	var stats []models.Stats
 	err := db.NewSelect().
-		TableExpr("(SELECT DATE(created_at) as date, COUNT(*) as value FROM payloads WHERE created_at >= NOW() - INTERVAL '"+interval+" days' GROUP BY DATE(created_at)) AS subquery").
+		TableExpr("(SELECT DATE(created_at) as date, COUNT(*) as value FROM alerts WHERE created_at >= NOW() - INTERVAL '"+interval+" days' GROUP BY DATE(created_at)) AS subquery").
 		Scan(context, &stats)
 	if err != nil {
-		httperror.InternalServerError(context, "Error collecting payloads stats from db", err)
+		httperror.InternalServerError(context, "Error collecting alerts stats from db", err)
 		return nil
 	}
 

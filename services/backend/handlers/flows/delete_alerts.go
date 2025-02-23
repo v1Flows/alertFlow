@@ -16,7 +16,7 @@ import (
 func DeleteAlert(context *gin.Context, db *bun.DB) {
 	alertID := context.Param("alertID")
 
-	// get payload data from db
+	// get alert data from db
 	var alert models.Alerts
 	err := db.NewSelect().Model(&alert).Where("id = ?", alertID).Scan(context)
 	if err != nil {

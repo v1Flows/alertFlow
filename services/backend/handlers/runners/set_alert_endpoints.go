@@ -10,7 +10,7 @@ import (
 	"github.com/uptrace/bun"
 )
 
-func SetRunnerPayloadEndpoints(context *gin.Context, db *bun.DB) {
+func SetRunnerAlertEndpoints(context *gin.Context, db *bun.DB) {
 	id := context.Param("id")
 
 	var runner models.Runners

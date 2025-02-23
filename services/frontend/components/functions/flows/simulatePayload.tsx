@@ -14,7 +14,7 @@ import {
 import React from "react";
 import { toast } from "sonner";
 
-import SimulatePayload from "@/lib/fetch/payload/POST/send";
+import SimulatePayload from "@/lib/fetch/alert/POST/send";
 import ErrorCard from "@/components/error/ErrorCard";
 
 export default function SimulatePayloadModal({

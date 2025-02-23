@@ -32,7 +32,7 @@ import DeleteExecutionModal from "@/components/functions/flows/deleteExecution";
 
 export default function Executions({
   executions,
-  payloads,
+  alerts,
   displayToFlow,
   canEdit,
 }: any) {
@@ -340,13 +340,11 @@ export default function Executions({
       case "trigger":
         return (
           <Button
-            isDisabled={
-              !payloads.find((p: any) => p.id === execution.payload_id)
-            }
+            isDisabled={!alerts.find((p: any) => p.id === execution.alert_id)}
             variant="light"
             onPress={() => {
               setTargetPayload(
-                payloads.find((p: any) => p.id === execution.payload_id),
+                alerts.find((p: any) => p.id === execution.alert_id),
               );
               showPayloadModal.onOpen();
             }}
