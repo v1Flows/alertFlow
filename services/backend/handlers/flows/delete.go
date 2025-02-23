@@ -1,12 +1,13 @@
 package flows
 
 import (
+	"errors"
+	"net/http"
+
 	"github.com/v1Flows/alertFlow/services/backend/functions/gatekeeper"
 	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
 	functions_project "github.com/v1Flows/alertFlow/services/backend/functions/project"
 	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
-	"errors"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
@@ -53,9 +54,9 @@ func DeleteFlow(context *gin.Context, db *bun.DB) {
 	}
 
 	// delete all payloads linked to the flow
-	_, err = db.NewDelete().Model((*models.Payloads)(nil)).Where("flow_id = ?", flowID).Exec(context)
+	_, err = db.NewDelete().Model((*models.Alerts)(nil)).Where("flow_id = ?", flowID).Exec(context)
 	if err != nil {
-		httperror.InternalServerError(context, "Error deleting flow payloads from db", err)
+		httperror.InternalServerError(context, "Error deleting flow alerts from db", err)
 		return
 	}
 

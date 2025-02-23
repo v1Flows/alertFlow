@@ -1,15 +1,15 @@
 package models
 
-type StatsPayloadExecutions struct {
+type StatsAlertExecutions struct {
 	Key        string `json:"key"`
-	Payloads   int    `json:"payloads"`
+	Alerts     int    `json:"alerts"`
 	Executions int    `json:"executions"`
 }
 
-type StatsPayloadExecutionsTotals struct {
-	PayloadCount   int   `json:"total_payloads"`
+type StatsAlertExecutionsTotals struct {
+	AlertCount     int   `json:"total_alerts"`
 	ExecutionCount int   `json:"total_executions"`
-	PayloadTrend   Trend `json:"payload_trend"`
+	AlertTrend     Trend `json:"alert_trend"`
 	ExecutionTrend Trend `json:"execution_trend"`
 }
 

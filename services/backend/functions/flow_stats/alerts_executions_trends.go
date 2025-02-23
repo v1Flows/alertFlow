@@ -1,19 +1,20 @@
 package flow_stats
 
 import (
-	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
-	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 	"errors"
 	"math"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
+
 	"github.com/gin-gonic/gin"
 	"github.com/uptrace/bun"
 )
 
-func PayloadExecutionsTrends(interval string, flowID string, context *gin.Context, db *bun.DB) (models.StatsPayloadExecutionsTotals, error) {
+func AlertExecutionsTrends(interval string, flowID string, context *gin.Context, db *bun.DB) (models.StatsAlertExecutionsTotals, error) {
 	// Parse the interval
 	intervalParts := strings.Split(interval, "-")
 	intervalValue, _ := strconv.Atoi(intervalParts[0])
@@ -29,7 +30,7 @@ func PayloadExecutionsTrends(interval string, flowID string, context *gin.Contex
 		duration = time.Duration(intervalValue) * 30 * 24 * time.Hour
 	default:
 		httperror.InternalServerError(context, "Invalid interval format", nil)
-		return models.StatsPayloadExecutionsTotals{}, errors.New("invalid interval format")
+		return models.StatsAlertExecutionsTotals{}, errors.New("invalid interval format")
 	}
 
 	// Calculate the start date based on the duration
@@ -40,53 +41,53 @@ func PayloadExecutionsTrends(interval string, flowID string, context *gin.Contex
 	var executions []models.Executions
 	executionCount, err := db.NewSelect().Model(&executions).Where("flow_id = ?", flowID).Where("created_at >= ?", startDate).ScanAndCount(context)
 	if err != nil {
-		httperror.InternalServerError(context, "Error collecting payload stats from db", err)
-		return models.StatsPayloadExecutionsTotals{}, err
+		httperror.InternalServerError(context, "Error collecting alert stats from db", err)
+		return models.StatsAlertExecutionsTotals{}, err
 	}
 
 	// Query for previous executions
 	var previousExecutions []models.Executions
 	previousExecutionCount, err := db.NewSelect().Model(&previousExecutions).Where("flow_id = ?", flowID).Where("created_at >= ?", previousStartDate).Where("created_at < ?", startDate).ScanAndCount(context)
 	if err != nil {
-		httperror.InternalServerError(context, "Error collecting payload stats from db", err)
-		return models.StatsPayloadExecutionsTotals{}, err
+		httperror.InternalServerError(context, "Error collecting alert stats from db", err)
+		return models.StatsAlertExecutionsTotals{}, err
 	}
 
-	// Query for payloads
-	var payloads []models.Payloads
-	payloadCount, err := db.NewSelect().Model(&payloads).Where("flow_id = ?", flowID).Where("created_at >= ?", startDate).ScanAndCount(context)
+	// Query for alerts
+	var alerts []models.Alerts
+	alertCount, err := db.NewSelect().Model(&alerts).Where("flow_id = ?", flowID).Where("created_at >= ?", startDate).ScanAndCount(context)
 	if err != nil {
-		httperror.InternalServerError(context, "Error collecting payload stats from db", err)
-		return models.StatsPayloadExecutionsTotals{}, err
+		httperror.InternalServerError(context, "Error collecting alert stats from db", err)
+		return models.StatsAlertExecutionsTotals{}, err
 	}
 
-	// Query for previous payloads
-	var previousPayloads []models.Payloads
-	previousPayloadCount, err := db.NewSelect().Model(&previousPayloads).Where("flow_id = ?", flowID).Where("created_at >= ?", previousStartDate).Where("created_at < ?", startDate).ScanAndCount(context)
+	// Query for previous alerts
+	var previousAlerts []models.Alerts
+	previousAlertCount, err := db.NewSelect().Model(&previousAlerts).Where("flow_id = ?", flowID).Where("created_at >= ?", previousStartDate).Where("created_at < ?", startDate).ScanAndCount(context)
 	if err != nil {
-		httperror.InternalServerError(context, "Error collecting payload stats from db", err)
-		return models.StatsPayloadExecutionsTotals{}, err
+		httperror.InternalServerError(context, "Error collecting alert stats from db", err)
+		return models.StatsAlertExecutionsTotals{}, err
 	}
 
-	// Handle cases where there are no payloads or executions
-	if executionCount == 0 && previousExecutionCount == 0 && payloadCount == 0 && previousPayloadCount == 0 {
-		return models.StatsPayloadExecutionsTotals{
+	// Handle cases where there are no alerts or executions
+	if executionCount == 0 && previousExecutionCount == 0 && alertCount == 0 && previousAlertCount == 0 {
+		return models.StatsAlertExecutionsTotals{
 			ExecutionCount: 0,
 			ExecutionTrend: models.Trend{Direction: "neutral", Percentage: 0},
-			PayloadCount:   0,
-			PayloadTrend:   models.Trend{Direction: "neutral", Percentage: 0},
+			AlertCount:     0,
+			AlertTrend:     models.Trend{Direction: "neutral", Percentage: 0},
 		}, nil
 	}
 
 	// Calculate trends
 	executionTrend := calculateTrend(previousExecutionCount, executionCount)
-	payloadTrend := calculateTrend(previousPayloadCount, payloadCount)
+	alertTrend := calculateTrend(previousAlertCount, alertCount)
 
-	return models.StatsPayloadExecutionsTotals{
+	return models.StatsAlertExecutionsTotals{
 		ExecutionCount: executionCount,
 		ExecutionTrend: executionTrend,
-		PayloadCount:   payloadCount,
-		PayloadTrend:   payloadTrend,
+		AlertCount:     alertCount,
+		AlertTrend:     alertTrend,
 	}, nil
 }
 

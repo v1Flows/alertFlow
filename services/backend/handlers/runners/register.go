@@ -34,13 +34,13 @@ func RegisterRunner(context *gin.Context, db *bun.DB) {
 		}
 
 		autoRunnerRegister(projectID, models.Runners{
-			Registered:       autoRunner.Registered,
-			LastHeartbeat:    autoRunner.LastHeartbeat,
-			Version:          autoRunner.Version,
-			Mode:             autoRunner.Mode,
-			Plugins:          autoRunner.Plugins,
-			Actions:          autoRunner.Actions,
-			PayloadEndpoints: autoRunner.PayloadEndpoints,
+			Registered:     autoRunner.Registered,
+			LastHeartbeat:  autoRunner.LastHeartbeat,
+			Version:        autoRunner.Version,
+			Mode:           autoRunner.Mode,
+			Plugins:        autoRunner.Plugins,
+			Actions:        autoRunner.Actions,
+			AlertEndpoints: autoRunner.AlertEndpoints,
 		}, context, db)
 	} else if runnerType == "alertflow_auto_runner" {
 		if err := context.ShouldBindJSON(&autoRunner); err != nil {
@@ -49,13 +49,13 @@ func RegisterRunner(context *gin.Context, db *bun.DB) {
 		}
 
 		alertflowAutoRunnerRegister(models.Runners{
-			Registered:       autoRunner.Registered,
-			LastHeartbeat:    autoRunner.LastHeartbeat,
-			Version:          autoRunner.Version,
-			Mode:             autoRunner.Mode,
-			Plugins:          autoRunner.Plugins,
-			Actions:          autoRunner.Actions,
-			PayloadEndpoints: autoRunner.PayloadEndpoints,
+			Registered:     autoRunner.Registered,
+			LastHeartbeat:  autoRunner.LastHeartbeat,
+			Version:        autoRunner.Version,
+			Mode:           autoRunner.Mode,
+			Plugins:        autoRunner.Plugins,
+			Actions:        autoRunner.Actions,
+			AlertEndpoints: autoRunner.AlertEndpoints,
 		}, context, db)
 	} else {
 		if err := context.ShouldBindJSON(&runner); err != nil {

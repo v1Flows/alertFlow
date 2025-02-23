@@ -50,15 +50,15 @@ func Flows(router *gin.RouterGroup, db *bun.DB) {
 			flows.DeleteFlowAction(c, db)
 		})
 
-		// payloads
-		flow.GET("/:flowID/payloads", func(c *gin.Context) {
-			flows.GetFlowPayloads(c, db)
+		// alerts
+		flow.GET("/:flowID/alerts", func(c *gin.Context) {
+			flows.GetFlowAlerts(c, db)
 		})
-		flow.POST("/:flowID/payloads", func(c *gin.Context) {
-			flows.CreatePayload(c, db)
+		flow.POST("/:flowID/alerts", func(c *gin.Context) {
+			flows.CreateAlert(c, db)
 		})
-		flow.DELETE("/:flowID/payloads/:payloadID", func(c *gin.Context) {
-			flows.DeletePayload(c, db)
+		flow.DELETE("/:flowID/alerts/:alertID", func(c *gin.Context) {
+			flows.DeleteAlert(c, db)
 		})
 
 		// executions

@@ -30,7 +30,7 @@ func StartRouter(db *bun.DB) {
 		Executions(v1, db)
 		Flows(v1, db)
 		Page(v1, db)
-		Payloads(v1, db)
+		Alerts(v1, db)
 		Projects(v1, db)
 		Runners(v1, db)
 		Token(v1, db)

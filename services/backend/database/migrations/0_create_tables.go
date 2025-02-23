@@ -1,9 +1,10 @@
 package migrations
 
 import (
-	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 	"context"
 	"fmt"
+
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 
 	"github.com/uptrace/bun"
 )
@@ -22,7 +23,7 @@ func createSchema(ctx context.Context, db *bun.DB) error {
 		(*models.ExecutionSteps)(nil),
 		(*models.Executions)(nil),
 		(*models.Flows)(nil),
-		(*models.Payloads)(nil),
+		(*models.Alerts)(nil),
 		(*models.Projects)(nil),
 		(*models.Runners)(nil),
 		(*models.Settings)(nil),
@@ -48,7 +49,7 @@ func dropSchema(ctx context.Context, db *bun.DB) error {
 		(*models.ExecutionSteps)(nil),
 		(*models.Executions)(nil),
 		(*models.Flows)(nil),
-		(*models.Payloads)(nil),
+		(*models.Alerts)(nil),
 		(*models.Projects)(nil),
 		(*models.Runners)(nil),
 		(*models.Settings)(nil),

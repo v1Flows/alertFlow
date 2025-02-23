@@ -8,8 +8,8 @@ import (
 	"github.com/uptrace/bun"
 )
 
-type Payloads struct {
-	bun.BaseModel `bun:"table:payloads"`
+type Alerts struct {
+	bun.BaseModel `bun:"table:alerts"`
 
 	ID          uuid.UUID       `bun:",pk,type:uuid,default:gen_random_uuid()" json:"id"`
 	Payload     json.RawMessage `bun:"payload,type:jsonb,default:jsonb('[]')" json:"payload"`
@@ -21,7 +21,7 @@ type Payloads struct {
 	Encrypted   bool            `bun:"encrypted,type:bool,default:false" json:"encrypted"`
 }
 
-type PayloadEndpoints struct {
+type AlertEndpoints struct {
 	ID       string `json:"id"`
 	Name     string `json:"name"`
 	Endpoint string `json:"endpoint"`
