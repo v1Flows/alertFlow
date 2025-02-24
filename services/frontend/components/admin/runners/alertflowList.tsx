@@ -123,7 +123,7 @@ export function AlertflowRunnerList({ runners, settings }: any) {
               Actions: {runner.actions.length}
             </p>
             <p className="text-sm text-default-500">
-              Payload Endpoints: {runner.payload_endpoints.length}
+              Alert Endpoints: {runner.alert_endpoints.length}
             </p>
           </div>
         );
