@@ -56,7 +56,7 @@ export const sectionAdminItems: SidebarItem[] = [
         title: "Users",
       },
       {
-        key: "alerts",
+        key: "admin_alerts",
         href: "/admin/alerts",
         icon: "hugeicons:alert-02",
         title: "Alerts",

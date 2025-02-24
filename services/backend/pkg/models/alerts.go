@@ -12,7 +12,7 @@ type Alerts struct {
 	bun.BaseModel `bun:"table:alerts"`
 
 	ID            uuid.UUID       `bun:",pk,type:uuid,default:gen_random_uuid()" json:"id"`
-	Name          string          `bun:"alert_name,type:text,default:''" json:"alert_name"`
+	Name          string          `bun:"name,type:text,default:''" json:"name"`
 	Status        string          `bun:"status,type:text,default:''" json:"status"`
 	Affected      []string        `bun:"affected,type:jsonb,default:jsonb('[]')" json:"affected"`
 	GroupedAlerts []GroupedAlert  `bun:"grouped_alerts,type:jsonb,default:jsonb('[]')" json:"grouped_alerts"`
