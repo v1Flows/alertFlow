@@ -1,12 +1,13 @@
 module github.com/v1Flows/alertFlow/services/backend
 
 go 1.22.3
+toolchain go1.23.6
 
 require (
-	github.com/uptrace/bun v1.2.9
-	github.com/uptrace/bun/driver/pgdriver v1.2.9
-	github.com/uptrace/bun/extra/bunotel v1.2.9
-	golang.org/x/crypto v0.33.0
+	github.com/uptrace/bun v1.2.10
+	github.com/uptrace/bun/driver/pgdriver v1.2.10
+	github.com/uptrace/bun/extra/bunotel v1.2.10
+	golang.org/x/crypto v0.34.0
 )
 
 require (
@@ -33,7 +34,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.3 // indirect
-	github.com/puzpuzpuz/xsync/v3 v3.5.0 // indirect
+	github.com/puzpuzpuz/xsync/v3 v3.5.1 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
@@ -64,8 +65,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/lib/pq v1.10.9
 	github.com/sirupsen/logrus v1.9.3
-	github.com/uptrace/bun/dialect/pgdialect v1.2.9
+	github.com/uptrace/bun/dialect/pgdialect v1.2.10
 	github.com/zeromicro/go-zero v1.8.0
-	golang.org/x/exp v0.0.0-20250106191152-7588d65b2ba8
 	golang.org/x/sys v0.30.0 // indirect
 )
