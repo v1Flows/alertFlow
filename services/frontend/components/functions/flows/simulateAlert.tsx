@@ -14,10 +14,10 @@ import {
 import React from "react";
 import { toast } from "sonner";
 
-import SimulatePayload from "@/lib/fetch/alert/POST/send";
+import SimulateAlert from "@/lib/fetch/alert/POST/send";
 import ErrorCard from "@/components/error/ErrorCard";
 
-export default function SimulatePayloadModal({
+export default function SimulateAlertModal({
   disclosure,
   flow,
 }: {
@@ -74,14 +74,14 @@ export default function SimulatePayloadModal({
 
   async function sendPayload() {
     setIsLoading(true);
-    const send = (await SimulatePayload(target, payload)) as any;
+    const send = (await SimulateAlert(target, payload)) as any;
 
     if (!send) {
       setError(true);
-      setErrorText("Failed to send payload!");
+      setErrorText("Failed to send alert!");
       setErrorMessage("Please try again later.");
       setIsLoading(false);
-      toast.error("Failed to send payload!");
+      toast.error("Failed to send alert!");
 
       return;
     }
@@ -90,13 +90,13 @@ export default function SimulatePayloadModal({
       setError(true);
       setErrorText(send.error);
       setErrorMessage(send.message);
-      toast.error("Failed to send payload!");
+      toast.error("Failed to send alert!");
     } else {
       onOpenChange();
       setError(false);
       setErrorText("");
       setErrorMessage("");
-      toast.success("Payload sent successfully!");
+      toast.success("Alert sent successfully!");
     }
 
     setIsLoading(false);
@@ -116,7 +116,7 @@ export default function SimulatePayloadModal({
             <>
               <ModalHeader className="flex flex-wrap items-center">
                 <div className="flex flex-col gap-2">
-                  <p className="text-lg font-bold">Simulate an Payload</p>
+                  <p className="text-lg font-bold">Simulate an Alert</p>
                   <p className="text-sm text-default-500">
                     With this Simulation you can test your Flow with a
                     predefined payload.

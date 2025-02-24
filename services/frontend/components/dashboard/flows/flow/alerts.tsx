@@ -22,10 +22,10 @@ import { toast } from "sonner";
 import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
 import FunctionDeletePayloadModal from "@/components/functions/flows/deletePayload";
 
-export default function Payloads({
+export default function Alerts({
   flow,
   executions,
-  payloads,
+  alerts,
   runners,
   canEdit,
 }: any) {
@@ -38,13 +38,13 @@ export default function Payloads({
   // pagination
   const [page, setPage] = React.useState(1);
   const rowsPerPage = 9;
-  const pages = Math.ceil(payloads.length / rowsPerPage);
+  const pages = Math.ceil(alerts.length / rowsPerPage);
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
 
-    return payloads.slice(start, end);
-  }, [page, payloads]);
+    return alerts.slice(start, end);
+  }, [page, alerts]);
 
   const handleShow = (payload: any) => {
     setTargetPayload(payload);

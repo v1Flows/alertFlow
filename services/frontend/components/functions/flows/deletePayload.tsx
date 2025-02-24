@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
-import DeletePayload from "@/lib/fetch/flow/DELETE/DeletePayload";
+import DeletePayload from "@/lib/fetch/flow/DELETE/DeleteAlert";
 import ErrorCard from "@/components/error/ErrorCard";
 
 export default function FunctionDeletePayloadModal({
