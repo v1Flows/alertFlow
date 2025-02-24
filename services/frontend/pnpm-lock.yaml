@@ -280,8 +280,8 @@ importers:
         specifier: ^10.0.0
         version: 10.0.0
       serwist:
-        specifier: ^9.0.11
-        version: 9.0.11(typescript@5.7.2)
+        specifier: ^9.0.12
+        version: 9.0.12(typescript@5.7.2)
 
 packages:
 
@@ -4945,6 +4945,9 @@ packages:
   idb@8.0.0:
     resolution: {integrity: sha512-l//qvlAKGmQO31Qn7xdzagVPPaHTxXx199MhrAFuVBTPqydcPYBWjkrbv4Y0ktB+GmWOiwHl237UUOrLmQxLvw==}
 
+  idb@8.0.2:
+    resolution: {integrity: sha512-CX70rYhx7GDDQzwwQMDwF6kDRQi5vVs6khHUumDrMecBylKkwvZ8HWvKV08AGb7VbpoGCWUQ4aHzNDgoUiOIUg==}
+
   ieee754@1.2.1:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
 
@@ -6338,11 +6341,22 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
+  serialize-javascript@4.0.0:
+    resolution: {integrity: sha512-GaNA54380uFefWghODBWEGisLZFj00nS5ACs6yHa9nLqlLpVLO8ChDGeKRjZnV4Nh4n0Qi7nhYZD/9fCPzEqkw==}
+
   serialize-javascript@6.0.2:
     resolution: {integrity: sha512-Saa1xPByTTq2gdeFZYLLo+RFE35NHZkAbqZeWNd3BpzppeVisAqpDjcp8dyf6uIvEqJRd46jemmyA4iFIeVk8g==}
 
   serwist@9.0.11:
     resolution: {integrity: sha512-oUuyOuIFZoj+ZYdwWnPYVsndOw5CoGsTy106mHJ2wxjnz01TrDhg2l26yrsoJek1qT/Doi0pzknYLLXTIFs5og==}
+    peerDependencies:
+      typescript: '>=5.0.0'
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+
+  serwist@9.0.12:
+    resolution: {integrity: sha512-u5UIJfG/RwkHtffLzlHAaBjXTHQFkKIGvdLQu/zpCWG3cN/AdMbvmtT7Kx2360wQqfE6infDORMdNTtNXpIpjQ==}
     peerDependencies:
       typescript: '>=5.0.0'
     peerDependenciesMeta:
@@ -13930,6 +13944,8 @@ snapshots:
 
   idb@8.0.0: {}
 
+  idb@8.0.2: {}
+
   ieee754@1.2.1: {}
 
   ignore@5.3.2: {}
@@ -15525,7 +15541,7 @@ snapshots:
       '@babel/code-frame': 7.26.2
       jest-worker: 26.6.2
       rollup: 2.79.2
-      serialize-javascript: 6.0.2
+      serialize-javascript: 4.0.0
       terser: 5.37.0
 
   rollup@2.79.2:
@@ -15602,6 +15618,10 @@ snapshots:
 
   semver@7.7.1: {}
 
+  serialize-javascript@4.0.0:
+    dependencies:
+      randombytes: 2.1.0
+
   serialize-javascript@6.0.2:
     dependencies:
       randombytes: 2.1.0
@@ -15609,6 +15629,12 @@ snapshots:
   serwist@9.0.11(typescript@5.7.2):
     dependencies:
       idb: 8.0.0
+    optionalDependencies:
+      typescript: 5.7.2
+
+  serwist@9.0.12(typescript@5.7.2):
+    dependencies:
+      idb: 8.0.2
     optionalDependencies:
       typescript: 5.7.2
 
