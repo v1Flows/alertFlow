@@ -33,7 +33,7 @@ func GetMultiple(context *gin.Context, db *bun.DB) {
 	// get all alerts for each flow
 	for i := range flows {
 		flowAlerts := make([]models.Alerts, 0)
-		err = db.NewSelect().Model(&flowAlerts).Where("flow_id = ?", flows[i].ID).Scan(context)
+		err = db.NewSelect().Model(&flowAlerts).Order("created_at DESC").Where("flow_id = ?", flows[i].ID).Scan(context)
 		if err != nil {
 			httperror.InternalServerError(context, "Error collecting alerts from db", err)
 			return

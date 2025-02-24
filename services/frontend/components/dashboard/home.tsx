@@ -20,6 +20,7 @@ import WelcomeModal from "../functions/users/welcome";
 
 import Executions from "./flows/flow/executions";
 import Stats from "./stats";
+import AlertsList from "./alerts/list";
 
 export function DashboardHome({
   stats,
@@ -82,13 +83,15 @@ export function DashboardHome({
                   <Icon icon="hugeicons:alert-02" width={24} />
                 </div>
                 <div>
-                  <p className="text-md font-bold">
+                  <p className="text-md font-bold text-danger">
                     <NumberFlow
                       locales="en-US" // Intl.NumberFormat locales
-                      value={112}
+                      value={
+                        alerts.filter((a: any) => a.status === "firing").length
+                      }
                     />
                   </p>
-                  <p className="text-sm text-default-500">Alerts</p>
+                  <p className="text-sm text-default-500">Firing Alerts</p>
                 </div>
               </div>
             </CardBody>
@@ -402,14 +405,16 @@ export function DashboardHome({
       {/* Stats */}
       <Stats stats={stats} />
 
-      {/* Latest executions */}
       <div className="my-4 flex items-end justify-between">
         <div>
           <p className="mb-0 text-2xl font-bold">
-            Latest <span className="text-primary">Executions</span>
+            Recent <span className="text-[#e6522c]">Alerts</span> &{" "}
+            <span className="text-primary">Executions</span>
           </p>
         </div>
       </div>
+      <AlertsList alerts={alerts} runners={runners} />
+      <Spacer y={4} />
       <Executions displayToFlow alerts={alerts} executions={executions} />
 
       <WelcomeModal disclosure={welcomeModal} />

@@ -4,11 +4,16 @@ import AlertsHeading from "@/components/dashboard/alerts/heading";
 import AlertsList from "@/components/dashboard/alerts/list";
 import ErrorCard from "@/components/error/ErrorCard";
 import GetAlerts from "@/lib/fetch/alert/alerts";
+import GetRunners from "@/lib/fetch/runner/get";
 
 export default async function DashboardAlertsPage() {
   const alertsData = GetAlerts();
+  const runnersData = GetRunners();
 
-  const [alerts] = (await Promise.all([alertsData])) as any;
+  const [alerts, runners] = (await Promise.all([
+    alertsData,
+    runnersData,
+  ])) as any;
 
   return (
     <>
@@ -16,7 +21,11 @@ export default async function DashboardAlertsPage() {
         <>
           <AlertsHeading alerts={alerts.data.alerts} />
           <Spacer y={4} />
-          <AlertsList alerts={alerts.data.alerts} />
+          <p className="text-xl font-bold mb-2 text-default-500">List</p>
+          <AlertsList
+            alerts={alerts.data.alerts}
+            runners={runners.data.runners}
+          />
         </>
       ) : (
         <ErrorCard error={alerts.error} message={alerts.message} />
