@@ -21,7 +21,7 @@ type Alerts struct {
 	FlowID        string          `bun:"flow_id,type:text,default:''" json:"flow_id"`
 	ExecutionID   string          `bun:"execution_id,type:text,default:''" json:"execution_id"`
 	RunnerID      string          `bun:"runner_id,type:text,default:''" json:"runner_id"`
-	Plugin        string          `bun:"endpoint,type:text,default:''" json:"endpoint"`
+	Plugin        string          `bun:"plugin,type:text,default:''" json:"plugin"`
 	Encrypted     bool            `bun:"encrypted,type:bool,default:false" json:"encrypted"`
 	StartedAt     time.Time       `bun:"started_at,type:timestamptz" json:"started_at"`
 	EndedAt       time.Time       `bun:"ended_at,type:timestamptz" json:"ended_at"`

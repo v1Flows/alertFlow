@@ -47,7 +47,7 @@ func CreateAlert(context *gin.Context, db *bun.DB) {
 		alert.Encrypted = true
 	}
 
-	res, err := db.NewInsert().Model(&alert).Column("id", "payload", "flow_id", "runner_id", "endpoint", "encrypted").Exec(context)
+	res, err := db.NewInsert().Model(&alert).ExcludeColumn("execution_id").Exec(context)
 	if err != nil {
 		httperror.InternalServerError(context, "Error creating alert on db", err)
 		return
