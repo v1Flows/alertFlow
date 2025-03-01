@@ -191,16 +191,13 @@ export default function SidebarMenu({
           </DropdownMenu>
         </Dropdown>
 
-        <ScrollShadow className="-mr-6 h-full max-h-full py-6 pr-6">
-          <div className="flex items-center justify-center">
-            <Search
-              flows={flows}
-              isCollapsed={isCollapsed}
-              projects={projects}
-            />
-          </div>
-          <Spacer y={2} />
+        <Spacer y={4} />
 
+        <div className="flex items-center justify-center">
+          <Search flows={flows} isCollapsed={isCollapsed} projects={projects} />
+        </div>
+
+        <ScrollShadow className="-mr-6 h-full max-h-full py-2 pr-2">
           <Sidebar
             ref={null}
             defaultSelectedKey="home"
