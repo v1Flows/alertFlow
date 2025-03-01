@@ -4,13 +4,17 @@ import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import { Icon } from "@iconify/react";
 import {
+  Button,
+  Chip,
+  ScrollShadow,
+  Tab,
+  Tabs,
   Drawer,
   DrawerBody,
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-} from "@heroui/drawer";
-import { Button, Chip, ScrollShadow, Tab, Tabs } from "@heroui/react";
+} from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
