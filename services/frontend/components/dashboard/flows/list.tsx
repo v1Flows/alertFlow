@@ -5,7 +5,6 @@ import {
   Button,
   Card,
   CardBody,
-  CardFooter,
   CardHeader,
   Chip,
   Divider,
@@ -220,26 +219,22 @@ export default function FlowList({ flows, projects, settings, user }: any) {
                   onPress={() => router.push(`/flows/${flow.id}`)}
                 >
                   <CardHeader className="items-center justify-between p-3 pb-0">
-                    <Chip
-                      color={
-                        flow.disabled
-                          ? "danger"
-                          : flow.maintenance
-                            ? "warning"
-                            : "success"
-                      }
-                      radius="sm"
-                      size="sm"
-                      variant="flat"
-                    >
-                      <p className="font-bold">
-                        {flow.disabled
-                          ? "Disabled"
-                          : flow.maintenance
-                            ? "Maintenance"
-                            : "Active"}
+                    <div className="flex items-center text-default-500 gap-2">
+                      <Icon
+                        icon={
+                          projects.find(
+                            (project: any) => project.id === flow.project_id,
+                          ).icon || "hugeicons:bubble-chat-question"
+                        }
+                        width={20}
+                      />
+                      <p className="text-sm">
+                        {projects.map(
+                          (project: any) =>
+                            project.id === flow.project_id && project.name,
+                        )}
                       </p>
-                    </Chip>
+                    </div>
                     <Dropdown backdrop="opaque">
                       <DropdownTrigger>
                         <Button isIconOnly size="sm" variant="light">
@@ -369,42 +364,47 @@ export default function FlowList({ flows, projects, settings, user }: any) {
                         <Spacer y={2} />
                       </>
                     )}
-                    <p className="text-lg font-bold">{flow.name}</p>
-                    <p className="text-sm text-default-500">
-                      {flow.description.length > 50 ? (
-                        <Tooltip
-                          content={flow.description}
-                          style={{ maxWidth: "450px" }}
-                        >
-                          <span>
-                            {flow.description.slice(0, 50)}
-                            ...
-                          </span>
-                        </Tooltip>
-                      ) : (
-                        flow.description
-                      )}
-                    </p>
-                    <Spacer y={3} />
-                    <Divider />
+                    <div className="flex flex-cols items-end justify-between gap-2">
+                      <div>
+                        <p className="text-lg font-bold">{flow.name}</p>
+                        <p className="text-sm text-default-500">
+                          {flow.description.length > 50 ? (
+                            <Tooltip
+                              content={flow.description}
+                              style={{ maxWidth: "450px" }}
+                            >
+                              <span>
+                                {flow.description.slice(0, 50)}
+                                ...
+                              </span>
+                            </Tooltip>
+                          ) : (
+                            flow.description
+                          )}
+                        </p>
+                      </div>
+                      <Chip
+                        color={
+                          flow.disabled
+                            ? "danger"
+                            : flow.maintenance
+                              ? "warning"
+                              : "success"
+                        }
+                        radius="sm"
+                        size="sm"
+                        variant="light"
+                      >
+                        <p className="font-bold">
+                          {flow.disabled
+                            ? "Disabled"
+                            : flow.maintenance
+                              ? "Maintenance"
+                              : "Active"}
+                        </p>
+                      </Chip>
+                    </div>
                   </CardBody>
-                  <CardFooter className="flex flex-wrap items-center justify-between gap-2 text-default-500">
-                    <div className="flex items-center gap-2 text-start">
-                      <Icon icon="solar:inbox-archive-outline" width={20} />
-                      <p className="text-sm">
-                        {projects.map(
-                          (project: any) =>
-                            project.id === flow.project_id && project.name,
-                        )}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-2 text-start">
-                      <Icon icon="solar:calendar-date-linear" width={26} />
-                      <p className="text-sm">
-                        {new Date(flow.created_at).toLocaleString("de-DE")}
-                      </p>
-                    </div>
-                  </CardFooter>
                 </Card>
               </div>
             ))}

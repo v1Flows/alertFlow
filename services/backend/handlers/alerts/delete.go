@@ -1,11 +1,12 @@
-package payloads
+package alerts
 
 import (
+	"errors"
+	"net/http"
+
 	"github.com/v1Flows/alertFlow/services/backend/functions/gatekeeper"
 	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
 	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
-	"errors"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
@@ -13,19 +14,19 @@ import (
 )
 
 func Delete(context *gin.Context, db *bun.DB) {
-	payloadID := context.Param("payloadID")
+	alertID := context.Param("alertID")
 
-	// get flow_id from payload
-	var payload models.Payloads
-	err := db.NewSelect().Model(&payload).Where("id = ?", payloadID).Scan(context)
+	// get flow_id from alert
+	var alert models.Alerts
+	err := db.NewSelect().Model(&alert).Where("id = ?", alertID).Scan(context)
 	if err != nil {
-		httperror.InternalServerError(context, "Error collecting payload data from db", err)
+		httperror.InternalServerError(context, "Error collecting alert data from db", err)
 		return
 	}
 
 	// get project_id from flow_id
 	var flow models.Flows
-	err = db.NewSelect().Model(&flow).Where("id = ?", payload.FlowID).Scan(context)
+	err = db.NewSelect().Model(&flow).Where("id = ?", alert.FlowID).Scan(context)
 	if err != nil {
 		httperror.InternalServerError(context, "Error collecting flow data from db", err)
 		return
@@ -38,13 +39,13 @@ func Delete(context *gin.Context, db *bun.DB) {
 		return
 	}
 	if !canModify {
-		httperror.Unauthorized(context, "You are not allowed to delete this payload", errors.New("unauthorized"))
+		httperror.Unauthorized(context, "You are not allowed to delete this alert", errors.New("unauthorized"))
 		return
 	}
 
-	_, err = db.NewDelete().Model((*models.Payloads)(nil)).Where("id = ?", payloadID).Exec(context)
+	_, err = db.NewDelete().Model((*models.Alerts)(nil)).Where("id = ?", alertID).Exec(context)
 	if err != nil {
-		httperror.InternalServerError(context, "Error deleting payload on db", err)
+		httperror.InternalServerError(context, "Error deleting alert on db", err)
 		return
 	}
 

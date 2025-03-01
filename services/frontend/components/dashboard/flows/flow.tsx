@@ -15,7 +15,7 @@ import React from "react";
 
 import FlowBreadcrumbs from "@/components/dashboard/flows/flow/breadcrumbs";
 import EditFlowModal from "@/components/functions/flows/edit";
-import SimulatePayloadModal from "@/components/functions/flows/simulatePayload";
+import SimulateAlertModal from "@/components/functions/flows/simulateAlert";
 import Reloader from "@/components/reloader/Reloader";
 
 import FlowTabs from "./flow/tabs";
@@ -27,12 +27,12 @@ export function Flow({
   members,
   flow,
   executions,
-  payloads,
+  alerts,
   runners,
   user,
 }: any) {
   const editFlowModal = useDisclosure();
-  const simulatePayloadModal = useDisclosure();
+  const simulateAlertModal = useDisclosure();
 
   function checkUserCanEdit() {
     if (
@@ -63,13 +63,13 @@ export function Flow({
           <Button
             color="secondary"
             isDisabled={flow.disabled}
-            startContent={<Icon icon="solar:play-bold-duotone" width={20} />}
-            variant="ghost"
+            startContent={<Icon icon="hugeicons:alert-02" width={20} />}
+            variant="flat"
             onPress={() => {
-              simulatePayloadModal.onOpen();
+              simulateAlertModal.onOpen();
             }}
           >
-            Simulate Payload
+            Simulate Alert
           </Button>
           <Button
             color="warning"
@@ -113,22 +113,15 @@ export function Flow({
             <Card fullWidth>
               <CardBody>
                 <div className="flex items-center gap-2">
-                  <div
-                    className={`bg- flex${flow.disabled ? "danger" : "success"}/10 text-${flow.disabled ? "danger" : "success"} size-10 items-center justify-center rounded-small`}
-                  >
-                    <Icon
-                      icon={
-                        flow.disabled
-                          ? "solar:danger-triangle-outline"
-                          : "solar:check-read-outline"
-                      }
-                      width={26}
-                    />
+                  <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
+                    <Icon icon="hugeicons:stethoscope-02" width={24} />
                   </div>
                   <div>
-                    <p className="text-md font-bold">
-                      {flow.disabled ? "Disabled" : "Active"}
-                    </p>
+                    {flow.disabled ? (
+                      <p className="text-md font-bold text-danger">Disabled</p>
+                    ) : (
+                      <p className="text-md font-bold text-success">Active</p>
+                    )}
                     <p className="text-sm text-default-500">Status</p>
                   </div>
                 </div>
@@ -140,7 +133,7 @@ export function Flow({
               <CardBody>
                 <div className="flex items-center gap-2">
                   <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
-                    <Icon icon="solar:inbox-archive-outline" width={20} />
+                    <Icon icon="hugeicons:ai-folder-01" width={24} />
                   </div>
                   <div>
                     <p className="text-md font-bold">{project.name}</p>
@@ -155,7 +148,7 @@ export function Flow({
               <CardBody>
                 <div className="flex items-center gap-2">
                   <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
-                    <Icon icon="solar:rocket-2-outline" width={20} />
+                    <Icon icon="hugeicons:ai-brain-04" width={24} />
                   </div>
                   <div>
                     <p className="text-md font-bold">
@@ -176,20 +169,20 @@ export function Flow({
               <CardBody>
                 <div className="flex items-center gap-2">
                   <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
-                    <Icon icon="solar:letter-opened-outline" width={20} />
+                    <Icon icon="hugeicons:alert-02" width={24} />
                   </div>
                   <div>
                     <p className="text-md font-bold">
                       <NumberFlow
                         locales="en-US" // Intl.NumberFormat locales
                         value={
-                          payloads.filter(
-                            (payload: any) => payload.flow_id === flow.id,
+                          alerts.filter(
+                            (alert: any) => alert.flow_id === flow.id,
                           ).length
                         }
                       />
                     </p>
-                    <p className="text-sm text-default-500">Payloads</p>
+                    <p className="text-sm text-default-500">Alerts</p>
                   </div>
                 </div>
               </CardBody>
@@ -200,7 +193,7 @@ export function Flow({
               <CardBody>
                 <div className="flex items-center gap-2">
                   <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
-                    <Icon icon="solar:reorder-linear" width={20} />
+                    <Icon icon="hugeicons:rocket-02" width={24} />
                   </div>
                   <div>
                     <p className="text-md font-bold">
@@ -223,10 +216,10 @@ export function Flow({
       </div>
       <div className="mt-6 w-full">
         <FlowTabs
+          alerts={alerts}
           canEdit={checkUserCanEdit() && !flow.disabled}
           executions={executions}
           flow={flow}
-          payloads={payloads}
           runners={runners}
           user={user}
         />
@@ -236,7 +229,7 @@ export function Flow({
         flow={flow}
         projects={projects}
       />
-      <SimulatePayloadModal disclosure={simulatePayloadModal} flow={flow} />
+      <SimulateAlertModal disclosure={simulateAlertModal} flow={flow} />
     </main>
   );
 }

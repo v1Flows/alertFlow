@@ -2,8 +2,8 @@
 
 import { cookies } from "next/headers";
 
-type Result = {
-  result: string;
+type Alert = {
+  alert: object;
 };
 
 type ErrorResponse = {
@@ -14,12 +14,11 @@ type ErrorResponse = {
 
 type SuccessResponse = {
   success: true;
-  data: Result;
+  data: Alert;
 };
 
-export default async function DeletePayload(
-  flowID: any,
-  payloadID: any,
+export async function GetAlert(
+  alertID: any,
 ): Promise<SuccessResponse | ErrorResponse> {
   try {
     const cookieStore = await cookies();
@@ -34,9 +33,9 @@ export default async function DeletePayload(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/flows/${flowID}/payloads/${payloadID}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/alerts/${alertID}`,
       {
-        method: "DELETE",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: token.value,
@@ -64,7 +63,9 @@ export default async function DeletePayload(
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error occurred",
-      message: "Failed to delete payload",
+      message: "Failed to fetch alert",
     };
   }
 }
+
+export default GetAlert;

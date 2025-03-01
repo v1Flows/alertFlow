@@ -132,7 +132,7 @@ export default function FunctionCreateFlow({
                 <div className="flex flex-col gap-2">
                   <p className="text-lg font-bold">Create new Flow</p>
                   <p className="text-sm text-default-500">
-                    Flows are the entrypoint for incoming payloads. You define
+                    Flows are the entrypoint for incoming alerts. You define
                     actions and can view ongoing and completed executions.
                   </p>
                 </div>
@@ -277,7 +277,7 @@ export default function FunctionCreateFlow({
                 <Divider />
                 <div>
                   <p className="text-sm font-bold text-default-400">
-                    Payload URL
+                    Alert URL
                   </p>
                   <Snippet hideSymbol className="w-full">
                     {`${process.env.NEXT_PUBLIC_API_URL}/payloads`}

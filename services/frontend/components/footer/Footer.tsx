@@ -53,7 +53,7 @@ export default function Footer() {
         </div>
         <Spacer y={4} />
         <p className="mt-1 text-center text-small text-default-400">
-          &copy; 2024 AlertFlow. All rights reserved. Version{" "}
+          &copy; 2025 AlertFlow. All rights reserved. Version{" "}
           {siteConfig.version}
         </p>
         <p className="mt-1 flex gap-1 text-center text-small text-default-400">

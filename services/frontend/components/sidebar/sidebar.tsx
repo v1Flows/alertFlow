@@ -240,7 +240,7 @@ const Sidebar = ({
                 {item.icon ? (
                   <Icon
                     className={cn(
-                      "text-default-500 group-data-[selected=true]:text-foreground",
+                      "text-default-500 group-data-[selected=true]:text-white",
                       iconClassName,
                     )}
                     icon={item.icon}
@@ -273,7 +273,7 @@ const Sidebar = ({
       itemClasses={{
         ...itemClasses,
         base: cn(
-          "px-3 min-h-11 rounded-large h-[44px] data-[selected=true]:bg-primary-300",
+          "px-3 min-h-11 rounded-large h-[44px] data-[selected=true]:bg-primary",
           itemClasses?.base,
         ),
         title: cn(

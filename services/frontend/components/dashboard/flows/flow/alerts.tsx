@@ -19,100 +19,68 @@ import React, { useMemo } from "react";
 import TimeAgo from "react-timeago";
 import { toast } from "sonner";
 
-import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
-import FunctionDeletePayloadModal from "@/components/functions/flows/deletePayload";
+import FunctionShowAlertModal from "@/components/functions/flows/showAlert";
+import FunctionDeleteAlertModal from "@/components/functions/flows/deleteAlert";
 
-export default function Payloads({
+export default function Alerts({
   flow,
   executions,
-  payloads,
+  alerts,
   runners,
   canEdit,
 }: any) {
   const router = useRouter();
 
-  const showPayloadModal = useDisclosure();
-  const deletePayloadModal = useDisclosure();
-  const [targetPayload, setTargetPayload] = React.useState({} as any);
+  const showAlertModal = useDisclosure();
+  const deleteAlertModal = useDisclosure();
+  const [targetAlert, setTargetAlert] = React.useState({} as any);
 
   // pagination
   const [page, setPage] = React.useState(1);
   const rowsPerPage = 9;
-  const pages = Math.ceil(payloads.length / rowsPerPage);
+  const pages = Math.ceil(alerts.length / rowsPerPage);
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
 
-    return payloads.slice(start, end);
-  }, [page, payloads]);
+    return alerts.slice(start, end);
+  }, [page, alerts]);
 
-  const handleShow = (payload: any) => {
-    setTargetPayload(payload);
-    showPayloadModal.onOpen();
+  const handleShow = (alert: any) => {
+    setTargetAlert(alert);
+    showAlertModal.onOpen();
   };
 
-  const handleDelete = (payload: any) => {
-    setTargetPayload(payload);
-    deletePayloadModal.onOpen();
+  const handleDelete = (alert: any) => {
+    setTargetAlert(alert);
+    deleteAlertModal.onOpen();
   };
 
-  function endpointColor(endpoint: string) {
-    switch (endpoint) {
-      case "alertmanager":
-        return "warning";
-      default:
-        return "default";
-    }
-  }
-
-  function endpointIcon(endpoint: string): string {
-    switch (endpoint) {
-      case "alertmanager":
-        return "vscode-icons:file-type-prometheus";
-      default:
-        return "solar:forbidden-circle-outline";
-    }
-  }
-
-  const copyPayloadIDtoClipboard = (id: string) => {
+  const copyAlertIDtoClipboard = (id: string) => {
     if (typeof navigator !== "undefined" && navigator.clipboard) {
       navigator.clipboard.writeText(id);
-      toast.success("Payload ID copied to clipboard!");
+      toast.success("Alert ID copied to clipboard!");
     } else {
-      toast.error("Failed to copy Payload ID to clipboard");
+      toast.error("Failed to copy Alert ID to clipboard");
     }
   };
 
-  const renderCell = React.useCallback((payload: any, columnKey: any) => {
-    const cellValue = payload[columnKey];
+  const renderCell = React.useCallback((alert: any, columnKey: any) => {
+    const cellValue = alert[columnKey];
 
     switch (columnKey) {
-      case "endpoint":
-        return (
-          <div className="flex items-center gap-2">
-            <div
-              className={`flex bg-${endpointColor(payload.endpoint)}/10 text-${endpointColor(payload.endpoint)} size-8 items-center justify-center rounded-small`}
-            >
-              <Icon icon={endpointIcon(payload.endpoint)} width={20} />
-            </div>
-            <div>
-              <p className="capitalize">{payload.endpoint || "No endpoint"}</p>
-            </div>
-          </div>
-        );
+      case "plugin":
+        return <p className="capitalize">{alert.plugin || "No endpoint"}</p>;
       case "runner":
         return (
           <p>
-            {
-              runners.find((runner: any) => runner.id === payload.runner_id)
-                ?.name
-            }
+            {runners.find((runner: any) => runner.id === alert.runner_id)?.name}
           </p>
         );
       case "encrypted":
         return (
           <>
-            {payload.encrypted ? (
+            {alert.encrypted ? (
               <p className="font-bold text-success">Yes</p>
             ) : (
               <p className="font-bold text-danger">No</p>
@@ -123,7 +91,7 @@ export default function Payloads({
         return (
           <>
             {executions.find(
-              (execution: any) => execution.payload_id === payload.id,
+              (execution: any) => execution.alert_id === alert.id,
             ) ? (
               <Tooltip
                 content={
@@ -137,7 +105,7 @@ export default function Payloads({
                       variant="bordered"
                       onPress={() =>
                         router.push(
-                          `/flows/${flow.id}/execution/${executions.find((execution: any) => execution.payload_id === payload.id).id}`,
+                          `/flows/${flow.id}/execution/${executions.find((execution: any) => execution.alert_id === alert.id).id}`,
                         )
                       }
                     >
@@ -167,13 +135,13 @@ export default function Payloads({
                 <div className="px-1 py-2">
                   <div className="text-small font-bold">Received at</div>
                   <div className="text-tiny">
-                    {new Date(payload.created_at).toLocaleString()}
+                    {new Date(alert.created_at).toLocaleString()}
                   </div>
                 </div>
               }
             >
               <p>
-                <TimeAgo date={payload.created_at} title="" />
+                <TimeAgo date={alert.created_at} title="" />
               </p>
             </Tooltip>
           </>
@@ -184,16 +152,16 @@ export default function Payloads({
             <Button
               color="primary"
               startContent={<Icon icon="solar:eye-outline" width={20} />}
-              onPress={() => handleShow(payload)}
+              onPress={() => handleShow(alert)}
             >
               View
             </Button>
-            <Tooltip content="Copy Payload ID to clipboard">
+            <Tooltip content="Copy Alert ID to clipboard">
               <Button isIconOnly variant="flat">
                 <Icon
                   icon="solar:copy-outline"
                   width={20}
-                  onClick={() => copyPayloadIDtoClipboard(payload.id)}
+                  onClick={() => copyAlertIDtoClipboard(alert.id)}
                 />
               </Button>
             </Tooltip>
@@ -202,7 +170,7 @@ export default function Payloads({
               color="danger"
               isDisabled={!canEdit}
               variant="flat"
-              onPress={() => handleDelete(payload)}
+              onPress={() => handleDelete(alert)}
             >
               <Icon icon="solar:trash-bin-trash-outline" width={20} />
             </Button>
@@ -229,14 +197,10 @@ export default function Payloads({
 
   return (
     <main>
-      <Table
-        isStriped
-        aria-label="Payloads Table"
-        bottomContent={bottomContent}
-      >
+      <Table isStriped aria-label="Alerts Table" bottomContent={bottomContent}>
         <TableHeader>
-          <TableColumn key="endpoint" align="start">
-            Endpoint
+          <TableColumn key="plugin" align="start">
+            Plugin
           </TableColumn>
           <TableColumn key="runner" align="center">
             Runner
@@ -254,7 +218,7 @@ export default function Payloads({
             Actions
           </TableColumn>
         </TableHeader>
-        <TableBody emptyContent="No payloads found" items={items}>
+        <TableBody emptyContent="No alerts found" items={items}>
           {(item: any) => (
             <TableRow key={item.id}>
               {(columnKey) => (
@@ -264,14 +228,10 @@ export default function Payloads({
           )}
         </TableBody>
       </Table>
-      <FunctionShowPayloadModal
-        disclosure={showPayloadModal}
-        payload={targetPayload}
-      />
-      <FunctionDeletePayloadModal
-        disclosure={deletePayloadModal}
-        flow={flow}
-        payload={targetPayload}
+      <FunctionShowAlertModal alert={targetAlert} disclosure={showAlertModal} />
+      <FunctionDeleteAlertModal
+        alert={targetAlert}
+        disclosure={deleteAlertModal}
       />
     </main>
   );

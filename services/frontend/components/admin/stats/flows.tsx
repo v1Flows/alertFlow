@@ -89,8 +89,8 @@ export default function FlowsStats({
         showTotal
         color="#006fed"
         interval={interval}
-        name="incoming payloads"
-        stats={stats.incoming_payload_stats}
+        name="incoming alerts"
+        stats={stats.incoming_alert_stats}
       />
     </div>
   );

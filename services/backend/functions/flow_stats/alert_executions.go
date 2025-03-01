@@ -1,19 +1,20 @@
 package flow_stats
 
 import (
-	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
-	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 	"fmt"
 	"sort"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
+
 	"github.com/gin-gonic/gin"
 	"github.com/uptrace/bun"
 )
 
-func PayloadExecutionsStats(interval string, flowID string, context *gin.Context, db *bun.DB) []models.StatsPayloadExecutions {
+func AlertExecutionsStats(interval string, flowID string, context *gin.Context, db *bun.DB) []models.StatsAlertExecutions {
 	// Parse the interval
 	intervalParts := strings.Split(interval, "-")
 	intervalValue, _ := strconv.Atoi(intervalParts[0])
@@ -52,16 +53,16 @@ func PayloadExecutionsStats(interval string, flowID string, context *gin.Context
 		return nil
 	}
 
-	// Query for payloads
-	var payloadStats []struct {
+	// Query for alerts
+	var alertStats []struct {
 		Date  string `bun:"date"`
 		Value int    `bun:"value"`
 	}
 	err = db.NewSelect().
-		TableExpr(fmt.Sprintf("(SELECT %s as date, COUNT(*) as value FROM payloads WHERE created_at >= '%s' AND flow_id = '%s' GROUP BY %s) AS subquery", groupBy, startDate, flowID, groupBy)).
-		Scan(context, &payloadStats)
+		TableExpr(fmt.Sprintf("(SELECT %s as date, COUNT(*) as value FROM alerts WHERE created_at >= '%s' AND flow_id = '%s' GROUP BY %s) AS subquery", groupBy, startDate, flowID, groupBy)).
+		Scan(context, &alertStats)
 	if err != nil {
-		httperror.InternalServerError(context, "Error collecting payload stats from db", err)
+		httperror.InternalServerError(context, "Error collecting alert stats from db", err)
 		return nil
 	}
 
@@ -71,20 +72,20 @@ func PayloadExecutionsStats(interval string, flowID string, context *gin.Context
 		executionStatsMap[stat.Date] = stat.Value
 	}
 
-	payloadStatsMap := make(map[string]int)
-	for _, stat := range payloadStats {
-		payloadStatsMap[stat.Date] = stat.Value
+	alertStatsMap := make(map[string]int)
+	for _, stat := range alertStats {
+		alertStatsMap[stat.Date] = stat.Value
 	}
 
 	// Generate the combined stats for the interval
-	var resultStats []models.StatsPayloadExecutions
+	var resultStats []models.StatsAlertExecutions
 	if intervalUnit == "months" {
 		currentDate := time.Now().UTC().AddDate(0, -intervalValue, 0)
 		for i := 0; i < intervalValue; i++ {
 			dateString := currentDate.Format("Jan 2006")
 			executionValue := executionStatsMap[dateString]
-			payloadValue := payloadStatsMap[dateString]
-			resultStats = append(resultStats, models.StatsPayloadExecutions{Key: dateString, Payloads: payloadValue, Executions: executionValue})
+			alertValue := alertStatsMap[dateString]
+			resultStats = append(resultStats, models.StatsAlertExecutions{Key: dateString, Alerts: alertValue, Executions: executionValue})
 			currentDate = currentDate.AddDate(0, 1, 0) // Move to the next month
 		}
 	} else if intervalUnit == "hours" {
@@ -93,8 +94,8 @@ func PayloadExecutionsStats(interval string, flowID string, context *gin.Context
 		for i := 0; i < intervalInt; i++ {
 			dateString := currentDate.Format("2006-01-02 15:00")
 			executionValue := executionStatsMap[dateString]
-			payloadValue := payloadStatsMap[dateString]
-			resultStats = append(resultStats, models.StatsPayloadExecutions{Key: dateString, Executions: executionValue, Payloads: payloadValue})
+			alertValue := alertStatsMap[dateString]
+			resultStats = append(resultStats, models.StatsAlertExecutions{Key: dateString, Executions: executionValue, Alerts: alertValue})
 			currentDate = currentDate.Add(time.Hour) // Move to the next hour
 		}
 	} else {
@@ -103,8 +104,8 @@ func PayloadExecutionsStats(interval string, flowID string, context *gin.Context
 		for i := 0; i < intervalInt; i++ {
 			dateString := currentDate.Format("2006-01-02")
 			executionValue := executionStatsMap[dateString]
-			payloadValue := payloadStatsMap[dateString]
-			resultStats = append(resultStats, models.StatsPayloadExecutions{Key: dateString, Executions: executionValue, Payloads: payloadValue})
+			alertValue := alertStatsMap[dateString]
+			resultStats = append(resultStats, models.StatsAlertExecutions{Key: dateString, Executions: executionValue, Alerts: alertValue})
 			currentDate = currentDate.AddDate(0, 0, 1) // Move to the next day
 		}
 	}
@@ -117,8 +118,8 @@ func PayloadExecutionsStats(interval string, flowID string, context *gin.Context
 		currentDateString = time.Now().UTC().Format("2006-01-02 15:00")
 	}
 	executionValue := executionStatsMap[currentDateString]
-	payloadValue := payloadStatsMap[currentDateString]
-	resultStats = append(resultStats, models.StatsPayloadExecutions{Key: currentDateString, Executions: executionValue, Payloads: payloadValue})
+	alertValue := alertStatsMap[currentDateString]
+	resultStats = append(resultStats, models.StatsAlertExecutions{Key: currentDateString, Executions: executionValue, Alerts: alertValue})
 
 	// Sort the stats by date
 	sort.Slice(resultStats, func(i, j int) bool {
@@ -138,7 +139,7 @@ func PayloadExecutionsStats(interval string, flowID string, context *gin.Context
 	})
 
 	// Remove any entry with an empty key
-	var filteredStats []models.StatsPayloadExecutions
+	var filteredStats []models.StatsAlertExecutions
 	for _, stat := range resultStats {
 		if stat.Key != "" {
 			filteredStats = append(filteredStats, stat)
@@ -155,7 +156,7 @@ func PayloadExecutionsStats(interval string, flowID string, context *gin.Context
 		missingMonths := intervalValue - len(filteredStats)
 		for i := 0; i < missingMonths; i++ {
 			dateString := time.Now().UTC().AddDate(0, -intervalValue+i, 0).Format("Jan 2006")
-			filteredStats = append([]models.StatsPayloadExecutions{{Key: dateString, Executions: 0, Payloads: 0}}, filteredStats...)
+			filteredStats = append([]models.StatsAlertExecutions{{Key: dateString, Executions: 0, Alerts: 0}}, filteredStats...)
 		}
 	}
 

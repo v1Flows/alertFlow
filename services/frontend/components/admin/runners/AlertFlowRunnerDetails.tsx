@@ -61,7 +61,7 @@ export default function AdminAlertFlowRunnerDetails({
       settings.add_project_members,
       settings.add_flow_actions,
       settings.start_executions,
-      settings.inject_payloads,
+      settings.receive_alerts,
       allowAlertFlowRunnerAutoJoin,
       allowAlertFlowRunnerJoin,
       alertflowRunnerAutoJoinToken,

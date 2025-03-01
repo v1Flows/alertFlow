@@ -2,7 +2,7 @@ import { ExecutionsList } from "@/components/admin/executions/list";
 import ErrorCard from "@/components/error/ErrorCard";
 import AdminGetExecutions from "@/lib/fetch/admin/executions";
 import AdminGetFlows from "@/lib/fetch/admin/flows";
-import AdminGetPayloads from "@/lib/fetch/admin/payloads";
+import { AdminGetAlerts } from "@/lib/fetch/admin/alerts";
 import AdminGetProjects from "@/lib/fetch/admin/projects";
 import AdminGetRunners from "@/lib/fetch/admin/runners";
 
@@ -10,14 +10,14 @@ export default async function AdminExecutionsPage() {
   const flowsData = AdminGetFlows();
   const projectsData = AdminGetProjects();
   const runnersData = AdminGetRunners();
-  const payloadsData = AdminGetPayloads();
+  const alertsData = AdminGetAlerts();
   const executionsData = AdminGetExecutions();
 
-  const [flows, projects, runners, payloads, executions] = (await Promise.all([
+  const [flows, projects, runners, alerts, executions] = (await Promise.all([
     flowsData,
     projectsData,
     runnersData,
-    payloadsData,
+    alertsData,
     executionsData,
   ])) as any;
 
@@ -25,13 +25,13 @@ export default async function AdminExecutionsPage() {
     <>
       {executions.success &&
       flows.success &&
-      payloads.success &&
+      alerts.success &&
       projects.success &&
       runners.success ? (
         <ExecutionsList
           executions={executions.data.executions}
           flows={flows.data.flows}
-          payloads={payloads.data.payloads}
+          payloads={alerts.data.payloads}
           projects={projects.data.projects}
           runners={[
             ...runners.data.alertflow_runners,
@@ -43,14 +43,14 @@ export default async function AdminExecutionsPage() {
           error={
             executions.error ||
             flows.error ||
-            payloads.error ||
+            alerts.error ||
             projects.error ||
             runners.error
           }
           message={
             executions.message ||
             flows.message ||
-            payloads.message ||
+            alerts.message ||
             projects.message ||
             runners.message
           }

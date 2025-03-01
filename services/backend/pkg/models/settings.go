@@ -16,7 +16,7 @@ type Settings struct {
 	AddProjectMembers            bool   `bun:"add_project_members,type:bool,default:true" json:"add_project_members"`
 	AddFlowActions               bool   `bun:"add_flow_actions,type:bool,default:true" json:"add_flow_actions"`
 	StartExecutions              bool   `bun:"start_executions,type:bool,default:true" json:"start_executions"`
-	InjectPayloads               bool   `bun:"inject_payloads,type:bool,default:true" json:"inject_payloads"`
+	ReceiveAlerts                bool   `bun:"receive_alerts,type:bool,default:true" json:"receive_alerts"`
 	ID                           int    `bun:"id,type:integer,pk,default:1" json:"id"`
 	AllowAlertFlowRunnerAutoJoin bool   `bun:"allow_alertflow_runner_auto_join,type:bool,default:true" json:"allow_alertflow_runner_auto_join"`
 	AllowAlertFlowRunnerJoin     bool   `bun:"allow_alertflow_runner_join,type:bool,default:true" json:"allow_alertflow_runner_join"`

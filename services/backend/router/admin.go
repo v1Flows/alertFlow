@@ -80,9 +80,9 @@ func Admin(router *gin.RouterGroup, db *bun.DB) {
 			admins.ChangeFlowStatus(c, db)
 		})
 
-		// payloads
-		admin.GET("/payloads", func(c *gin.Context) {
-			admins.GetPayloads(c, db)
+		// alerts
+		admin.GET("/alerts", func(c *gin.Context) {
+			admins.GetAlerts(c, db)
 		})
 
 		// executions

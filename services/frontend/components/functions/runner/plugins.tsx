@@ -94,10 +94,10 @@ export default function RunnerDrawer({
               </div>
               <div className="flex items-center justify-between">
                 <div className="text-small text-default-500">
-                  Payload Endpoints
+                  Alert Endpoints
                 </div>
                 <div className="text-small font-medium">
-                  {runner.payload_endpoints.length}
+                  {runner.alert_endpoints.length}
                 </div>
               </div>
 

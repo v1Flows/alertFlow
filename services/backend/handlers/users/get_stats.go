@@ -1,13 +1,14 @@
 package users
 
 import (
-	"github.com/v1Flows/alertFlow/services/backend/functions/auth"
-	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
-	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 	"fmt"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/v1Flows/alertFlow/services/backend/functions/auth"
+	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
+	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/uptrace/bun"
@@ -101,55 +102,55 @@ func GetUserStats(context *gin.Context, db *bun.DB) {
 		executionTrendPercentage, _ = strconv.ParseFloat(fmt.Sprintf("%.2f", executionTrendPercentage), 64)
 	}
 
-	var payloadStats []Stats
+	var alertStats []Stats
 	err = db.NewSelect().
-		TableExpr("(SELECT DATE(created_at) as date, COUNT(*) as value FROM payloads WHERE flow_id IN (?) AND created_at >= NOW() - INTERVAL '7 days' GROUP BY DATE(created_at)) AS subquery", bun.In(flowsArray)).
-		Scan(context, &payloadStats)
+		TableExpr("(SELECT DATE(created_at) as date, COUNT(*) as value FROM alerts WHERE flow_id IN (?) AND created_at >= NOW() - INTERVAL '7 days' GROUP BY DATE(created_at)) AS subquery", bun.In(flowsArray)).
+		Scan(context, &alertStats)
 	if err != nil {
-		httperror.InternalServerError(context, "Error collecting payload stats from db", err)
+		httperror.InternalServerError(context, "Error collecting alerts stats from db", err)
 		return
 	}
 
-	// Create a map to store the payload stats by weekday of the week
-	payloadsMap := make(map[string]int)
-	for _, stat := range payloadStats {
+	// Create a map to store the alert stats by weekday of the week
+	alertsMap := make(map[string]int)
+	for _, stat := range alertStats {
 		date, _ := time.Parse("2006-01-02", stat.Date)
 		weekday := date.Weekday().String()[:2]
-		payloadsMap[weekday] += stat.Value
+		alertsMap[weekday] += stat.Value
 	}
 
-	// Generate the payload stats for each weekday of the week
-	payloadStats = make([]Stats, 0)
+	// Generate the alert stats for each weekday of the week
+	alertStats = make([]Stats, 0)
 	for i := 6; i >= 0; i-- { // Look from the current weekday in the past
 		weekday := time.Now().AddDate(0, 0, -i).Weekday().String()[:2]
 		isCurrent := i == 0
-		payloadStats = append(payloadStats, Stats{Weekday: weekday, Value: payloadsMap[weekday], IsCurrent: isCurrent})
+		alertStats = append(alertStats, Stats{Weekday: weekday, Value: alertsMap[weekday], IsCurrent: isCurrent})
 	}
 
-	// Determine the trend for payloads
-	payloadTrend := "neutral"
-	payloadTrendPercentage := 0.0
-	if len(payloadStats) > 1 {
-		previousValue := payloadStats[len(payloadStats)-2].Value
-		currentValue := payloadStats[len(payloadStats)-1].Value
+	// Determine the trend for alerts
+	alertTrend := "neutral"
+	alertTrendPercentage := 0.0
+	if len(alertStats) > 1 {
+		previousValue := alertStats[len(alertStats)-2].Value
+		currentValue := alertStats[len(alertStats)-1].Value
 		if previousValue != 0 {
 			if currentValue > previousValue {
-				payloadTrend = "positive"
-				payloadTrendPercentage = (float64(currentValue-previousValue) / float64(previousValue)) * 100
+				alertTrend = "positive"
+				alertTrendPercentage = (float64(currentValue-previousValue) / float64(previousValue)) * 100
 			} else if currentValue < previousValue {
-				payloadTrend = "negative"
-				payloadTrendPercentage = (float64(previousValue-currentValue) / float64(previousValue)) * 100
+				alertTrend = "negative"
+				alertTrendPercentage = (float64(previousValue-currentValue) / float64(previousValue)) * 100
 			}
 		} else if currentValue > 0 {
-			payloadTrend = "positive"
-			payloadTrendPercentage = float64(currentValue) * 100 // Reflect significant increase
+			alertTrend = "positive"
+			alertTrendPercentage = float64(currentValue) * 100 // Reflect significant increase
 		}
-		payloadTrendPercentage, _ = strconv.ParseFloat(fmt.Sprintf("%.2f", payloadTrendPercentage), 64)
+		alertTrendPercentage, _ = strconv.ParseFloat(fmt.Sprintf("%.2f", alertTrendPercentage), 64)
 	}
 
-	payloadCount := 0
-	for _, payload := range payloadStats {
-		payloadCount += payload.Value
+	alertCount := 0
+	for _, alert := range alertStats {
+		alertCount += alert.Value
 	}
 
 	executionCount := 0
@@ -162,12 +163,12 @@ func GetUserStats(context *gin.Context, db *bun.DB) {
 		"total_flows":                flowCount,
 		"total_runners":              runnerCount,
 		"total_executions":           executionCount,
-		"total_payloads":             payloadCount,
+		"total_alert":                alertCount,
 		"executions":                 executionStats,
-		"payloads":                   payloadStats,
+		"alerts":                     alertStats,
 		"execution_trend":            executionTrend,
 		"execution_trend_percentage": executionTrendPercentage,
-		"payload_trend":              payloadTrend,
-		"payload_trend_percentage":   payloadTrendPercentage,
+		"alert_trend":                alertTrend,
+		"alert_trend_percentage":     alertTrendPercentage,
 	}})
 }

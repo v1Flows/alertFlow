@@ -3,8 +3,8 @@
 import { cookies } from "next/headers";
 
 type Stats = {
-  payloads_executions_stats: [];
-  payloads_executions_trends: [];
+  alerts_executions_stats: [];
+  alerts_executions_trends: [];
 };
 
 type ErrorResponse = {

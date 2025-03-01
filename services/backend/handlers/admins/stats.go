@@ -1,9 +1,10 @@
 package admins
 
 import (
+	"net/http"
+
 	"github.com/v1Flows/alertFlow/services/backend/functions/admin_stats"
 	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/uptrace/bun"
@@ -25,8 +26,8 @@ func GetStats(context *gin.Context, db *bun.DB) {
 		return
 	}
 
-	incomingPayloadStats := admin_stats.IncomingPayloadsStats(interval, context, db)
-	if incomingPayloadStats == nil {
+	incomingAlertStats := admin_stats.IncomingAlertsStats(interval, context, db)
+	if incomingAlertStats == nil {
 		httperror.InternalServerError(context, "Error collecting stats", nil)
 		return
 	}
@@ -65,7 +66,7 @@ func GetStats(context *gin.Context, db *bun.DB) {
 	context.JSON(http.StatusOK, gin.H{
 		"started_execution_stats": startedExecutionStats,
 		"failed_execution_stats":  failedExecutionStats,
-		"incoming_payload_stats":  incomingPayloadStats,
+		"incoming_alert_stats":    incomingAlertStats,
 		"user_registration_stats": userRegistrationStats,
 		"project_creation_stats":  projectCreationStats,
 		"flow_creation_stats":     flowCreationStats,

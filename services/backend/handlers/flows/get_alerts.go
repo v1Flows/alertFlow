@@ -1,19 +1,20 @@
 package flows
 
 import (
+	"errors"
+	"net/http"
+
 	"github.com/v1Flows/alertFlow/services/backend/functions/encryption"
 	"github.com/v1Flows/alertFlow/services/backend/functions/gatekeeper"
 	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
 	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
-	"errors"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
 	"github.com/uptrace/bun"
 )
 
-func GetFlowPayloads(context *gin.Context, db *bun.DB) {
+func GetFlowAlerts(context *gin.Context, db *bun.DB) {
 	flowID := context.Param("flowID")
 
 	// get flow
@@ -35,16 +36,16 @@ func GetFlowPayloads(context *gin.Context, db *bun.DB) {
 		return
 	}
 
-	payloads := make([]models.Payloads, 0)
-	err = db.NewSelect().Model(&payloads).Where("flow_id = ?", flowID).Order("created_at DESC").Scan(context)
+	alerts := make([]models.Alerts, 0)
+	err = db.NewSelect().Model(&alerts).Where("flow_id = ?", flowID).Order("created_at DESC").Scan(context)
 	if err != nil {
-		httperror.InternalServerError(context, "Error collecting flow payloads from db", err)
+		httperror.InternalServerError(context, "Error collecting flow alerts from db", err)
 		return
 	}
 
-	for i := range payloads {
-		if payloads[i].Encrypted {
-			payloads[i].Payload, err = encryption.DecryptPayload(payloads[i].Payload)
+	for i := range alerts {
+		if alerts[i].Encrypted {
+			alerts[i].Payload, err = encryption.DecryptPayload(alerts[i].Payload)
 			if err != nil {
 				httperror.InternalServerError(context, "Error decrypting payload", err)
 				return
@@ -52,5 +53,5 @@ func GetFlowPayloads(context *gin.Context, db *bun.DB) {
 		}
 	}
 
-	context.JSON(http.StatusOK, gin.H{"payloads": payloads})
+	context.JSON(http.StatusOK, gin.H{"alerts": alerts})
 }

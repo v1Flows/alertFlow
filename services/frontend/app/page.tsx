@@ -2,7 +2,7 @@ import { DashboardHome } from "@/components/dashboard/home";
 import ErrorCard from "@/components/error/ErrorCard";
 import GetExecutions from "@/lib/fetch/executions/all";
 import GetFlows from "@/lib/fetch/flow/all";
-import GetPayloads from "@/lib/fetch/payload/payloads";
+import GetAlerts from "@/lib/fetch/alert/alerts";
 import GetRunners from "@/lib/fetch/runner/get";
 import GetUserDetails from "@/lib/fetch/user/getDetails";
 import GetUserNotifications from "@/lib/fetch/user/getNotifications";
@@ -14,17 +14,17 @@ export default async function DashboardHomePage() {
   const flowsData = GetFlows();
   const runnersData = GetRunners();
   const executionsData = GetExecutions();
-  const payloadsData = GetPayloads();
+  const alertsData = GetAlerts();
   const userData = GetUserDetails();
 
-  const [stats, notifications, flows, runners, executions, payloads, user] =
+  const [stats, notifications, flows, runners, executions, alerts, user] =
     (await Promise.all([
       statsData,
       notificationsData,
       flowsData,
       runnersData,
       executionsData,
-      payloadsData,
+      alertsData,
       userData,
     ])) as any;
 
@@ -33,15 +33,15 @@ export default async function DashboardHomePage() {
       {executions.success &&
       flows.success &&
       notifications.success &&
-      payloads.success &&
+      alerts.success &&
       runners.success &&
       stats.success &&
       user.success ? (
         <DashboardHome
+          alerts={alerts.data.alerts}
           executions={executions.data.executions}
           flows={flows.data.flows}
           notifications={notifications.data.notifications}
-          payloads={payloads.data.payloads}
           runners={runners.data.runners}
           stats={stats.data.stats}
           user={user.data.user}
@@ -52,7 +52,7 @@ export default async function DashboardHomePage() {
             executions.error ||
             flows.error ||
             notifications.error ||
-            payloads.error ||
+            alerts.error ||
             runners.error ||
             stats.error ||
             user.error
@@ -61,7 +61,7 @@ export default async function DashboardHomePage() {
             executions.message ||
             flows.message ||
             notifications.message ||
-            payloads.message ||
+            alerts.message ||
             runners.message ||
             stats.message ||
             user.message

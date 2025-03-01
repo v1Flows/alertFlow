@@ -165,7 +165,7 @@ export default function SidebarMenu({
               startContent={
                 <Icon
                   className="text-default-500"
-                  icon="solar:face-scan-square-linear"
+                  icon="hugeicons:profile-02"
                   width={24}
                 />
               }
@@ -180,7 +180,7 @@ export default function SidebarMenu({
               startContent={
                 <Icon
                   className="text-danger"
-                  icon="solar:logout-3-linear"
+                  icon="hugeicons:logout-02"
                   width={24}
                 />
               }
@@ -252,14 +252,14 @@ export default function SidebarMenu({
               >
                 <Icon
                   className="text-default-500"
-                  icon="solar:bell-bold-duotone"
+                  icon="hugeicons:notification-03"
                   width={22}
                 />
               </Badge>
             ) : (
               <Icon
                 className="text-default-500"
-                icon="solar:bell-off-bold-duotone"
+                icon="hugeicons:notification-snooze-03"
                 width={22}
               />
             )}
@@ -274,7 +274,7 @@ export default function SidebarMenu({
             <Icon
               className="text-default-500"
               height={24}
-              icon="solar:sidebar-minimalistic-outline"
+              icon="hugeicons:sidebar-left"
               width={24}
             />
           </Button>

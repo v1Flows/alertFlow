@@ -26,23 +26,23 @@ import NumberFlow from "@number-flow/react";
 import { useRouter } from "next/navigation";
 import React, { useMemo, useState } from "react";
 
-import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
 import DeleteExecutionModal from "@/components/functions/flows/deleteExecution";
+import FunctionShowAlertModal from "@/components/functions/flows/showAlert";
 
-export function ExecutionsList({ flows, payloads, executions, runners }: any) {
+export function ExecutionsList({ flows, alerts, executions, runners }: any) {
   const router = useRouter();
 
-  const showPayloadModal = useDisclosure();
+  const showAlertModal = useDisclosure();
   const deleteExecutionModal = useDisclosure();
 
-  const [targetPayload, setTargetPayload] = useState({} as any);
+  const [targetAlert, setTargetAlert] = useState({} as any);
   const [targetExecution, setTargetExecution] = useState({} as any);
 
   const [statusFilter, setStatusFilter] = useState(new Set([]) as any);
 
-  const handleShow = (payload: any) => {
-    setTargetPayload(payload);
-    showPayloadModal.onOpen();
+  const handleShow = (alert: any) => {
+    setTargetAlert(alert);
+    showAlertModal.onOpen();
   };
 
   // pagination
@@ -383,13 +383,11 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
                     }
                     onPress={() =>
                       handleShow(
-                        payloads.find(
-                          (p: any) => p.id === execution.payload_id,
-                        ),
+                        alerts.find((p: any) => p.id === execution.alert_id),
                       )
                     }
                   >
-                    Payload
+                    Alert
                   </DropdownItem>
                 </DropdownSection>
                 <DropdownSection title="Danger Zone">
@@ -829,10 +827,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
           )}
         </TableBody>
       </Table>
-      <FunctionShowPayloadModal
-        disclosure={showPayloadModal}
-        payload={targetPayload}
-      />
+      <FunctionShowAlertModal alert={targetAlert} disclosure={showAlertModal} />
       <DeleteExecutionModal
         disclosure={deleteExecutionModal}
         execution={targetExecution}

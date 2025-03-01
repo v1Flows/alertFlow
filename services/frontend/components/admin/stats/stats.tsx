@@ -23,7 +23,7 @@ export function PageStats({
     started_execution_stats: [],
     failed_execution_stats: [],
     user_registration_stats: [],
-    incoming_payload_stats: [],
+    incoming_alert_stats: [],
     project_creation_stats: [],
     flow_creation_stats: [],
     users_per_role_stats: [],

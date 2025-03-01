@@ -67,10 +67,10 @@ export default function FlowEncryption({ flow }: { flow: any }) {
         <Card fullWidth>
           <CardBody className="flex items-center justify-between text-center">
             <div className="flex flex-col">
-              <p className="text-md font-bold">Encrypted Payloads</p>
+              <p className="text-md font-bold">Encrypt Alert Payloads</p>
               <p className="text-sm text-default-500">
-                Incoming payloads will be encrypted stored on the db when they
-                reached the backend
+                The payload of incoming alerts will be encrypted stored on the
+                db when they reached the backend
               </p>
             </div>
             <Spacer y={2} />
@@ -87,7 +87,7 @@ export default function FlowEncryption({ flow }: { flow: any }) {
         <Card fullWidth>
           <CardBody className="flex items-center justify-between text-center">
             <div className="flex flex-col">
-              <p className="text-md font-bold">Encypted Executions</p>
+              <p className="text-md font-bold">Encrypt Executions</p>
               <p className="text-sm text-default-500">
                 All execution action messages will be stored encrypted on the db
               </p>

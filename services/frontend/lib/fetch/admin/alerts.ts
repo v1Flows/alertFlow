@@ -2,8 +2,8 @@
 
 import { cookies } from "next/headers";
 
-type Payloads = {
-  payloads: [];
+type Alerts = {
+  alerts: [];
 };
 
 type ErrorResponse = {
@@ -14,12 +14,12 @@ type ErrorResponse = {
 
 type SuccessResponse = {
   success: true;
-  data: Payloads;
+  data: Alerts;
 };
 
-export async function GetFlowPayloads(
-  flowID: any,
-): Promise<SuccessResponse | ErrorResponse> {
+export async function AdminGetAlerts(): Promise<
+  SuccessResponse | ErrorResponse
+> {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get("session");
@@ -33,7 +33,7 @@ export async function GetFlowPayloads(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/flows/${flowID}/payloads`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/alerts`,
       {
         method: "GET",
         headers: {
@@ -63,9 +63,9 @@ export async function GetFlowPayloads(
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error occurred",
-      message: "Failed to fetch payloads",
+      message: "Failed to fetch alerts",
     };
   }
 }
 
-export default GetFlowPayloads;
+export default AdminGetAlerts;

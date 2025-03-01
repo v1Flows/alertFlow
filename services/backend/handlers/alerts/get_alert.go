@@ -1,4 +1,4 @@
-package payloads
+package alerts
 
 import (
 	"errors"
@@ -15,18 +15,18 @@ import (
 )
 
 func GetSingle(context *gin.Context, db *bun.DB) {
-	payloadID := context.Param("payloadID")
+	alertID := context.Param("alertID")
 
-	var payload models.Payloads
-	err := db.NewSelect().Model(&payload).Where("id = ?", payloadID).Scan(context)
+	var alert models.Alerts
+	err := db.NewSelect().Model(&alert).Where("id = ?", alertID).Scan(context)
 	if err != nil {
-		httperror.InternalServerError(context, "Error collecting payload data from db", err)
+		httperror.InternalServerError(context, "Error collecting alert data from db", err)
 		return
 	}
 
 	// get project_id from flow_id
 	var flow models.Flows
-	err = db.NewSelect().Model(&flow).Where("id = ?", payload.FlowID).Scan(context)
+	err = db.NewSelect().Model(&flow).Where("id = ?", alert.FlowID).Scan(context)
 	if err != nil {
 		httperror.InternalServerError(context, "Error collecting flow data from db", err)
 		return
@@ -38,17 +38,17 @@ func GetSingle(context *gin.Context, db *bun.DB) {
 		return
 	}
 	if !access {
-		httperror.Unauthorized(context, "You are not allowed to view this payload", errors.New("unauthorized"))
+		httperror.Unauthorized(context, "You are not allowed to view this alert", errors.New("unauthorized"))
 		return
 	}
 
-	if payload.Encrypted {
-		payload.Payload, err = encryption.DecryptPayload(payload.Payload)
+	if alert.Encrypted {
+		alert.Payload, err = encryption.DecryptPayload(alert.Payload)
 		if err != nil {
-			httperror.InternalServerError(context, "Error decrypting payload", err)
+			httperror.InternalServerError(context, "Error decrypting alert", err)
 			return
 		}
 	}
 
-	context.JSON(http.StatusOK, gin.H{"payload": payload})
+	context.JSON(http.StatusOK, gin.H{"alert": alert})
 }

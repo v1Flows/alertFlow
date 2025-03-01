@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 type Stats = {
   started_execution_stats: [];
   failed_execution_stats: [];
-  incoming_payload_stats: [];
+  incoming_alert_stats: [];
   user_registration_stats: [];
   project_creation_stats: [];
   flow_creation_stats: [];
