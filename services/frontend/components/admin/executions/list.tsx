@@ -26,7 +26,7 @@ import NumberFlow from "@number-flow/react";
 import { useRouter } from "next/navigation";
 import React, { useMemo, useState } from "react";
 
-import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
+import FunctionShowPayloadModal from "@/components/functions/flows/showAlert";
 import DeleteExecutionModal from "@/components/functions/flows/deleteExecution";
 
 export function ExecutionsList({ flows, payloads, executions, runners }: any) {

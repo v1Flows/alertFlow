@@ -27,7 +27,7 @@ import { useRouter } from "next/navigation";
 import React, { useMemo, useState } from "react";
 import TimeAgo from "react-timeago";
 
-import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
+import FunctionShowPayloadModal from "@/components/functions/flows/showAlert";
 import DeleteExecutionModal from "@/components/functions/flows/deleteExecution";
 
 export default function Executions({

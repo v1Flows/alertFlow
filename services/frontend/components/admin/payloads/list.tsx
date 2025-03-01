@@ -20,7 +20,7 @@ import {
 import { useRouter } from "next/navigation";
 import React from "react";
 
-import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
+import FunctionShowPayloadModal from "@/components/functions/flows/showAlert";
 import FunctionDeletePayloadModal from "@/components/functions/flows/deletePayload";
 
 export function PayloadsList({ flows, payloads, executions, runners }: any) {

@@ -23,11 +23,11 @@ import { useRouter } from "next/navigation";
 import React, { useMemo, useState } from "react";
 import { toast } from "sonner";
 
-import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
 import Reloader from "@/components/reloader/Reloader";
 import InteractExecutionStep from "@/lib/fetch/executions/PUT/step_interact";
 import GetExecutionSteps from "@/lib/fetch/executions/steps";
-import GetPayload from "@/lib/fetch/alert/alert";
+import GetAlert from "@/lib/fetch/alert/alert";
+import FunctionShowAlertModal from "@/components/functions/flows/showAlert";
 
 import AdminExecutionActions from "./adminExecutionActions";
 import AdminStepActions from "./adminStepActions";
@@ -37,10 +37,10 @@ import ExecutionDetails from "./details";
 export function Execution({ flow, execution, runners, userDetails }: any) {
   const router = useRouter();
 
-  const [payload, setPayload] = useState({} as any);
+  const [alert, setAlert] = useState({} as any);
   const [steps, setSteps] = useState([] as any);
 
-  const showPayloadModal = useDisclosure();
+  const showAlertModal = useDisclosure();
 
   React.useEffect(() => {
     GetExecutionSteps(execution.id).then((steps) => {
@@ -52,12 +52,12 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
         }
       }
     });
-    GetPayload(execution.payload_id).then((payload) => {
-      if (payload.success) {
-        setPayload(payload.data.payload);
+    GetAlert(execution.alert_id).then((alert) => {
+      if (alert.success) {
+        setAlert(alert.data.alert);
       } else {
-        if ("error" in payload) {
-          toast.error(payload.error);
+        if ("error" in alert) {
+          toast.error(alert.error);
         }
       }
     });
@@ -673,10 +673,10 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
           <Button
             color="secondary"
             variant="flat"
-            onPress={() => showPayloadModal.onOpen()}
+            onPress={() => showAlertModal.onOpen()}
           >
             <Icon icon="solar:letter-opened-broken" width={20} />
-            Show Payload
+            Show Alert
           </Button>
           {userDetails.role === "admin" && (
             <AdminExecutionActions execution={execution} />
@@ -746,10 +746,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
         </TableBody>
       </Table>
       <Spacer y={4} />
-      <FunctionShowPayloadModal
-        disclosure={showPayloadModal}
-        payload={payload}
-      />
+      <FunctionShowAlertModal alert={alert} disclosure={showAlertModal} />
     </>
   );
 }

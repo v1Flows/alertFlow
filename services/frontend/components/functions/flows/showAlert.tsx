@@ -11,12 +11,12 @@ import {
 } from "@heroui/react";
 import React from "react";
 
-export default function FunctionShowPayloadModal({
+export default function FunctionShowAlertModal({
   disclosure,
-  payload,
+  alert,
 }: {
   disclosure: UseDisclosureReturn;
-  payload: any;
+  alert: any;
 }) {
   const { isOpen, onOpenChange } = disclosure;
 
@@ -32,14 +32,14 @@ export default function FunctionShowPayloadModal({
         <ModalContent className="w-full">
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Payload</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">Alert</ModalHeader>
               <ModalBody>
                 <div className="flex flex-col gap-1">
-                  <p className="text-sm text-default-500">Payload ID</p>
-                  <Snippet hideSymbol>{payload.id}</Snippet>
+                  <p className="text-sm text-default-500">Alert ID</p>
+                  <Snippet hideSymbol>{alert.id}</Snippet>
                 </div>
                 <Snippet hideSymbol>
-                  <pre>{JSON.stringify(payload.payload, null, 2)}</pre>
+                  <pre>{JSON.stringify(alert.payload, null, 2)}</pre>
                 </Snippet>
               </ModalBody>
               <ModalFooter>
