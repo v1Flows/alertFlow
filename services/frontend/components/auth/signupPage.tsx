@@ -1,8 +1,7 @@
 "use client";
 
 import { Icon } from "@iconify/react";
-import { Alert } from "@heroui/alert";
-import { Button, Image, Input, Link, Tooltip } from "@heroui/react";
+import { Button, Image, Input, Link, Tooltip, Alert } from "@heroui/react";
 import { useIsSSR } from "@react-aria/ssr";
 import { AnimatePresence, domAnimation, LazyMotion, m } from "framer-motion";
 import { useTheme } from "next-themes";

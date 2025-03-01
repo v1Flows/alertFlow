@@ -2,12 +2,13 @@ import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import { Icon } from "@iconify/react";
 import {
+  Chip,
+  Divider,
   Drawer,
   DrawerBody,
   DrawerContent,
   DrawerHeader,
-} from "@heroui/drawer";
-import { Chip, Divider } from "@heroui/react";
+} from "@heroui/react";
 import TimeAgo from "react-timeago";
 
 export default function RunnerDrawer({
