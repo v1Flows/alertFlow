@@ -25,7 +25,13 @@ export default function AlertsHeading({ alerts }: any) {
                 </div>
                 <div>
                   <p className="text-md font-bold text-danger">
-                    <NumberFlow locales="en-US" value={2} />
+                    <NumberFlow
+                      locales="en-US"
+                      value={
+                        alerts.filter((alert: any) => alert.status === "firing")
+                          .length
+                      }
+                    />
                   </p>
                   <p className="text-sm text-default-500">Firing</p>
                 </div>
@@ -42,7 +48,14 @@ export default function AlertsHeading({ alerts }: any) {
                 </div>
                 <div>
                   <p className="text-md font-bold text-success">
-                    <NumberFlow locales="en-US" value={1} />
+                    <NumberFlow
+                      locales="en-US"
+                      value={
+                        alerts.filter(
+                          (alert: any) => alert.status === "resolved",
+                        ).length
+                      }
+                    />
                   </p>
                   <p className="text-sm text-default-500">Resolved</p>
                 </div>

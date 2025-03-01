@@ -24,6 +24,8 @@ export default async function DashboardAlertsPage() {
           <p className="text-xl font-bold mb-2 text-default-500">List</p>
           <AlertsList
             alerts={alerts.data.alerts}
+            compactMode={false}
+            maxAlerts={25}
             runners={runners.data.runners}
           />
         </>

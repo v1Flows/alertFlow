@@ -229,11 +229,7 @@ export default function Alerts({
 
   return (
     <main>
-      <Table
-        isStriped
-        aria-label="Payloads Table"
-        bottomContent={bottomContent}
-      >
+      <Table isStriped aria-label="Alerts Table" bottomContent={bottomContent}>
         <TableHeader>
           <TableColumn key="endpoint" align="start">
             Endpoint
@@ -254,7 +250,7 @@ export default function Alerts({
             Actions
           </TableColumn>
         </TableHeader>
-        <TableBody emptyContent="No payloads found" items={items}>
+        <TableBody emptyContent="No alerts found" items={items}>
           {(item: any) => (
             <TableRow key={item.id}>
               {(columnKey) => (

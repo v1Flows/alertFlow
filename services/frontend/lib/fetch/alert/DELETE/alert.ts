@@ -34,7 +34,7 @@ export default async function DeleteAlert(
     }
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/flows/${flowID}/alerts/${alertID}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/alerts/${alertID}`,
       {
         method: "DELETE",
         headers: {

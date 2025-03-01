@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
-import DeletePayload from "@/lib/fetch/flow/DELETE/DeleteAlert";
+import DeleteAlert from "@/lib/fetch/alert/DELETE/alert";
 import ErrorCard from "@/components/error/ErrorCard";
 
 export default function FunctionDeletePayloadModal({
@@ -36,7 +36,7 @@ export default function FunctionDeletePayloadModal({
 
   async function deletePayload() {
     setIsDeleteLoading(true);
-    const res = (await DeletePayload(flow.id, payload.id)) as any;
+    const res = (await DeleteAlert(flow.id, payload.id)) as any;
 
     if (!res) {
       setError(true);

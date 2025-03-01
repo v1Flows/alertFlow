@@ -78,7 +78,7 @@ export default function Project({
       </div>
       <Spacer y={2} />
       <div
-        className="p-1 rounded-full mb-4"
+        className="p-0.5 rounded-full mb-4"
         style={{
           backgroundColor: project.color,
         }}

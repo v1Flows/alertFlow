@@ -1,16 +1,30 @@
 "use client";
 
-import { Card, CardBody, Chip, Divider, Spacer } from "@heroui/react";
+import { Card, CardBody, Divider, Spacer } from "@heroui/react";
 import { Icon } from "@iconify/react";
-import NumberFlow from "@number-flow/react";
-import { toLower } from "lodash";
 import ReactTimeago from "react-timeago";
 
-export default function AlertsList({ alerts, runners }: any) {
+export default function AlertsList({
+  compactMode,
+  alerts,
+  runners,
+}: {
+  compactMode: boolean;
+  maxAlerts: number;
+  alerts: any;
+  runners: any;
+}) {
+  const maxAlerts = 25;
+
   return (
     <main>
+      {alerts.length === 0 && (
+        <div className="flex items-center justify-center">
+          <p className="text-lg text-default-500">No alerts found</p>
+        </div>
+      )}
       <div className="grid lg:grid-cols-3 sm:grid-cols-1 grid-cols-2 gap-4">
-        {alerts.map((alert: any) => (
+        {alerts.slice(0, maxAlerts).map((alert: any) => (
           <Card key={alert.id} fullWidth isPressable>
             <CardBody>
               <div className="flex items-center justify-between gap-2">
@@ -22,7 +36,9 @@ export default function AlertsList({ alerts, runners }: any) {
                     <p className="text-md font-bold text-danger">
                       {alert.name || "N/A"}
                     </p>
-                    <p className="text-sm text-default-500">Firing</p>
+                    <p className="text-sm text-default-500 capitalize">
+                      {alert.status || "N/A"}
+                    </p>
                   </div>
                 </div>
                 <p className="text-sm text-default-500">
@@ -30,59 +46,19 @@ export default function AlertsList({ alerts, runners }: any) {
                 </p>
               </div>
 
-              <Divider className="mt-2" />
-              <Spacer y={2} />
+              {!compactMode && (
+                <>
+                  <Divider className="mt-2" />
+                  <Spacer y={2} />
 
-              <div className="flex flex-col gap-1">
-                <div className="flex flex-cols items-center gap-2">
-                  <p className="text-default-500">Affected:</p>
-                  {alert.affected.map((affected: any) => (
-                    <Chip key={affected} radius="sm" variant="bordered">
-                      {affected || "N/A"}
-                    </Chip>
-                  ))}
-                </div>
-                <div className="flex flex-cols items-center gap-2">
-                  <p className="text-default-500">Grouped Alerts:</p>
-                  <p
-                    className={`text-md font-bold ${
-                      alert.grouped_alerts.length > 0
-                        ? "text-danger"
-                        : "text-default"
-                    }`}
-                  >
-                    <NumberFlow
-                      locales="en-US"
-                      value={alert.grouped_alerts.length}
-                    />
-                  </p>
-                </div>
-                <div className="flex flex-cols items-center gap-2">
-                  <p className="text-default-500">Origin:</p>
-                  {alert.origin}
-                </div>
-                <Spacer y={1} />
-                {runners.map((runner: any) =>
-                  runner.alert_endpoints.map((endpoint: any) => {
-                    if (toLower(endpoint.name) === toLower(alert.plugin)) {
-                      return (
-                        <div key={endpoint} className="flex items-center gap-2">
-                          <Icon
-                            icon={
-                              endpoint.icon || "hugeicons:bubble-chat-question"
-                            }
-                            width={24}
-                          />
-                          <div>
-                            <p>{endpoint.name}</p>
-                            <p className="text-xs text-default-500">Endpoint</p>
-                          </div>
-                        </div>
-                      );
-                    }
-                  }),
-                )}
-              </div>
+                  <div className="flex flex-col gap-1">
+                    <div className="flex flex-cols items-center gap-2">
+                      <p className="text-default-500">Plugin:</p>
+                      {alert.plugin}
+                    </div>
+                  </div>
+                </>
+              )}
             </CardBody>
           </Card>
         ))}

@@ -413,7 +413,7 @@ export function DashboardHome({
           </p>
         </div>
       </div>
-      <AlertsList alerts={alerts} runners={runners} />
+      <AlertsList compactMode alerts={alerts} maxAlerts={6} runners={runners} />
       <Spacer y={4} />
       <Executions displayToFlow alerts={alerts} executions={executions} />
 

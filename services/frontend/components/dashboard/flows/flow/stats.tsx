@@ -18,7 +18,7 @@ import GetFlowStats from "@/lib/fetch/flow/stats";
 
 type ChartData = {
   key: string;
-  payloads: number;
+  alerts: number;
   executions: number;
 };
 
@@ -82,15 +82,14 @@ export default function FlowStats({ flowID }: { flowID: string }) {
 
   const data: Chart[] = [
     {
-      key: "payloads-executions",
-      title: "Payloads / Executions",
-      value: stats?.payloads_executions_trends?.total_payloads || 0,
+      key: "alerts-executions",
+      title: "Alerts / Executions",
+      value: stats?.alerts_executions_trends?.total_alerts || 0,
       type: "number",
-      change: stats?.payloads_executions_trends?.payload_trend.percentage || 0,
+      change: stats?.alerts_executions_trends?.alert_trend.percentage || 0,
       changeType:
-        stats?.payloads_executions_trends?.payload_trend?.direction ||
-        "positive",
-      chartData: stats.payloads_executions_stats || [],
+        stats?.alerts_executions_trends?.alert_trend?.direction || "positive",
+      chartData: stats.alerts_executions_stats || [],
     },
     // {
     //   key: "executions",
@@ -229,15 +228,15 @@ export default function FlowStats({ flowID }: { flowID: string }) {
                       {/* Executions */}
                       <div className="flex items-center gap-x-3">
                         <span className="text-3xl font-bold text-foreground">
-                          {stats?.payloads_executions_trends
-                            ?.total_executions || 0}
+                          {stats?.alerts_executions_trends?.total_executions ||
+                            0}
                         </span>
                         <Chip
                           classNames={{
                             content: "font-medium",
                           }}
                           color={
-                            stats?.payloads_executions_trends?.execution_trend
+                            stats?.alerts_executions_trends?.execution_trend
                               ?.direction === "positive"
                               ? "success"
                               : changeType === "negative"
@@ -247,15 +246,15 @@ export default function FlowStats({ flowID }: { flowID: string }) {
                           radius="sm"
                           size="sm"
                           startContent={
-                            stats?.payloads_executions_trends?.execution_trend
+                            stats?.alerts_executions_trends?.execution_trend
                               ?.direction === "positive" ? (
                               <Icon
                                 height={16}
                                 icon="solar:arrow-right-up-linear"
                                 width={16}
                               />
-                            ) : stats?.payloads_executions_trends
-                                ?.execution_trend?.direction === "negative" ? (
+                            ) : stats?.alerts_executions_trends?.execution_trend
+                                ?.direction === "negative" ? (
                               <Icon
                                 height={16}
                                 icon="solar:arrow-right-down-linear"
@@ -273,7 +272,7 @@ export default function FlowStats({ flowID }: { flowID: string }) {
                         >
                           <span>
                             {
-                              stats?.payloads_executions_trends?.execution_trend
+                              stats?.alerts_executions_trends?.execution_trend
                                 ?.percentage
                             }
                             %
@@ -370,7 +369,7 @@ export default function FlowStats({ flowID }: { flowID: string }) {
               }}
               animationDuration={1000}
               animationEasing="ease"
-              dataKey="payloads"
+              dataKey="alerts"
               fill="url(#colorGradient)"
               stroke={`hsl(var(--heroui-${color === "default" ? "foreground" : color}))`}
               strokeWidth={2}
