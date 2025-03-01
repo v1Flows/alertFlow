@@ -1,6 +1,6 @@
 module github.com/v1Flows/alertFlow/services/backend
 
-go 1.22.3
+go 1.23.5
 
 require (
 	github.com/uptrace/bun v1.2.9
@@ -66,6 +66,5 @@ require (
 	github.com/sirupsen/logrus v1.9.3
 	github.com/uptrace/bun/dialect/pgdialect v1.2.9
 	github.com/zeromicro/go-zero v1.8.0
-	golang.org/x/exp v0.0.0-20250106191152-7588d65b2ba8
 	golang.org/x/sys v0.30.0 // indirect
 )

@@ -28,7 +28,7 @@ func GetMultiple(context *gin.Context, db *bun.DB) {
 		return
 	}
 
-	var alerts []models.Alerts
+	alerts := make([]models.Alerts, 0)
 
 	// get all alerts for each flow
 	for i := range flows {

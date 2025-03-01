@@ -20,5 +20,9 @@ func Alerts(router *gin.RouterGroup, db *bun.DB) {
 		alert.DELETE("/:alertID", func(c *gin.Context) {
 			alerts.Delete(c, db)
 		})
+
+		alert.POST("/", func(c *gin.Context) {
+			alerts.CreateAlert(c, db)
+		})
 	}
 }

@@ -54,12 +54,6 @@ func Flows(router *gin.RouterGroup, db *bun.DB) {
 		flow.GET("/:flowID/alerts", func(c *gin.Context) {
 			flows.GetFlowAlerts(c, db)
 		})
-		flow.POST("/:flowID/alerts", func(c *gin.Context) {
-			flows.CreateAlert(c, db)
-		})
-		flow.DELETE("/:flowID/alerts/:alertID", func(c *gin.Context) {
-			flows.DeleteAlert(c, db)
-		})
 
 		// executions
 		flow.GET("/:flowID/executions", func(c *gin.Context) {

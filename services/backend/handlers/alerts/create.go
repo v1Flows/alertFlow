@@ -1,10 +1,8 @@
-package flows
+package alerts
 
 import (
 	"net/http"
 
-	"github.com/v1Flows/alertFlow/services/backend/config"
-	"github.com/v1Flows/alertFlow/services/backend/functions/encryption"
 	functions "github.com/v1Flows/alertFlow/services/backend/functions/flow"
 	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
 	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
@@ -36,16 +34,6 @@ func CreateAlert(context *gin.Context, db *bun.DB) {
 	}
 
 	alert.ID = uuid.New()
-
-	// encrypt alert if enabled
-	if flow.EncryptAlerts && config.Config.Encryption.Enabled {
-		alert.Payload, err = encryption.EncryptPayload(alert.Payload)
-		if err != nil {
-			httperror.InternalServerError(context, "Error encrypting alert", err)
-			return
-		}
-		alert.Encrypted = true
-	}
 
 	res, err := db.NewInsert().Model(&alert).ExcludeColumn("execution_id").Exec(context)
 	if err != nil {
