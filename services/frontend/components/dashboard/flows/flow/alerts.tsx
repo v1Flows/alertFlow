@@ -19,8 +19,8 @@ import React, { useMemo } from "react";
 import TimeAgo from "react-timeago";
 import { toast } from "sonner";
 
-import FunctionDeletePayloadModal from "@/components/functions/flows/deletePayload";
 import FunctionShowAlertModal from "@/components/functions/flows/showAlert";
+import FunctionDeleteAlertModal from "@/components/functions/flows/deleteAlert";
 
 export default function Alerts({
   flow,
@@ -33,7 +33,7 @@ export default function Alerts({
 
   const showAlertModal = useDisclosure();
   const deleteAlertModal = useDisclosure();
-  const [targetPayload, setTargetPayload] = React.useState({} as any);
+  const [targetAlert, setTargetAlert] = React.useState({} as any);
 
   // pagination
   const [page, setPage] = React.useState(1);
@@ -47,12 +47,12 @@ export default function Alerts({
   }, [page, alerts]);
 
   const handleShow = (alert: any) => {
-    setTargetPayload(alert);
+    setTargetAlert(alert);
     showAlertModal.onOpen();
   };
 
   const handleDelete = (alert: any) => {
-    setTargetPayload(alert);
+    setTargetAlert(alert);
     deleteAlertModal.onOpen();
   };
 
@@ -228,14 +228,10 @@ export default function Alerts({
           )}
         </TableBody>
       </Table>
-      <FunctionShowAlertModal
-        alert={targetPayload}
-        disclosure={showAlertModal}
-      />
-      <FunctionDeletePayloadModal
+      <FunctionShowAlertModal alert={targetAlert} disclosure={showAlertModal} />
+      <FunctionDeleteAlertModal
+        alert={targetAlert}
         disclosure={deleteAlertModal}
-        flow={flow}
-        payload={targetPayload}
       />
     </main>
   );

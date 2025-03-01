@@ -18,7 +18,6 @@ type SuccessResponse = {
 };
 
 export default async function DeleteAlert(
-  flowID: any,
   alertID: any,
 ): Promise<SuccessResponse | ErrorResponse> {
   try {

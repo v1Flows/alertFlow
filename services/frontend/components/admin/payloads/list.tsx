@@ -21,7 +21,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 
 import FunctionShowPayloadModal from "@/components/functions/flows/showAlert";
-import FunctionDeletePayloadModal from "@/components/functions/flows/deletePayload";
+import FunctionDeletePayloadModal from "@/components/functions/flows/deleteAlert";
 
 export function PayloadsList({ flows, payloads, executions, runners }: any) {
   const router = useRouter();

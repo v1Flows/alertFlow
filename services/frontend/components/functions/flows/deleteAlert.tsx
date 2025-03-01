@@ -16,14 +16,12 @@ import { toast } from "sonner";
 import DeleteAlert from "@/lib/fetch/alert/DELETE/alert";
 import ErrorCard from "@/components/error/ErrorCard";
 
-export default function FunctionDeletePayloadModal({
+export default function FunctionDeleteAlertModal({
   disclosure,
-  flow,
-  payload,
+  alert,
 }: {
   disclosure: UseDisclosureReturn;
-  flow: any;
-  payload: any;
+  alert: any;
 }) {
   const router = useRouter();
 
@@ -34,14 +32,14 @@ export default function FunctionDeletePayloadModal({
   const [errorText, setErrorText] = React.useState("");
   const [errorMessage, setErrorMessage] = React.useState("");
 
-  async function deletePayload() {
+  async function deleteAlert() {
     setIsDeleteLoading(true);
-    const res = (await DeleteAlert(flow.id, payload.id)) as any;
+    const res = (await DeleteAlert(alert.id)) as any;
 
     if (!res) {
       setError(true);
-      setErrorText("Failed to delete payload");
-      setErrorMessage("Failed to delete payload");
+      setErrorText("Failed to delete alert");
+      setErrorMessage("Failed to delete alert");
       setIsDeleteLoading(false);
 
       return;
@@ -51,14 +49,14 @@ export default function FunctionDeletePayloadModal({
       setError(false);
       setErrorText("");
       setErrorMessage("");
-      toast.success("Payload deleted successfully");
+      toast.success("Alert deleted successfully");
       router.refresh();
       onOpenChange();
     } else {
       setError(true);
       setErrorText(res.message);
       setErrorMessage(res.error);
-      toast.error("Failed to delete payload");
+      toast.error("Failed to delete alert");
     }
 
     setIsDeleteLoading(false);
@@ -91,7 +89,7 @@ export default function FunctionDeletePayloadModal({
                 <Snippet hideCopyButton hideSymbol>
                   <span>
                     ID:
-                    {payload.id}
+                    {alert.id}
                   </span>
                 </Snippet>
               </ModalBody>
@@ -103,7 +101,7 @@ export default function FunctionDeletePayloadModal({
                   color="danger"
                   isLoading={isDeleteLoading}
                   variant="solid"
-                  onPress={deletePayload}
+                  onPress={deleteAlert}
                 >
                   Delete
                 </Button>
