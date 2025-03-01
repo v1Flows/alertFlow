@@ -38,8 +38,8 @@ export function Settings({ settings }: any) {
   const [startExecutions, setStartExecutions] = React.useState(
     settings.start_executions,
   );
-  const [injectPayloads, setInjectPayloads] = React.useState(
-    settings.inject_payloads,
+  const [receiveAlerts, setReceiveAlerts] = React.useState(
+    settings.receive_alerts,
   );
 
   const [isLoading, setIsLoading] = React.useState(false);
@@ -56,7 +56,7 @@ export function Settings({ settings }: any) {
       addProjectMembers,
       addFlowActions,
       startExecutions,
-      injectPayloads,
+      receiveAlerts,
       settings.allow_alertflow_runner_auto_join,
       settings.allow_alertflow_runner_join,
       settings.alertflow_runner_auto_join_token,
@@ -431,22 +431,22 @@ export function Settings({ settings }: any) {
         </Card>
 
         <Card
-          className={`${injectPayloads ? "border-success-200" : "border-danger-200"} border-2`}
+          className={`${receiveAlerts ? "border-success-200" : "border-danger-200"} border-2`}
         >
           <CardBody>
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <div
-                  className={`flex ${injectPayloads ? "bg-primary/10 text-primary" : "bg-danger/10 text-danger"} size-10 items-center justify-center rounded-small`}
+                  className={`flex ${receiveAlerts ? "bg-primary/10 text-primary" : "bg-danger/10 text-danger"} size-10 items-center justify-center rounded-small`}
                 >
                   <Icon icon="solar:letter-opened-broken" width={20} />
                 </div>
                 <div>
                   <div className="flex items-center gap-1">
                     <p className="text-md font-bold">
-                      {injectPayloads ? "Enabled" : "Disabled"}
+                      {receiveAlerts ? "Enabled" : "Disabled"}
                     </p>
-                    <Tooltip content="Disabling this option will prevent incoming payloads from being registered at AlertFlow.">
+                    <Tooltip content="Disabling this option will prevent incoming alerts from being registered at AlertFlow.">
                       <Icon
                         className="text-default-500"
                         icon="solar:info-circle-bold"
@@ -454,14 +454,14 @@ export function Settings({ settings }: any) {
                       />
                     </Tooltip>
                   </div>
-                  <p className="text-sm text-default-500">Inject Payloads</p>
+                  <p className="text-sm text-default-500">Receive Alerts</p>
                 </div>
               </div>
               <Switch
                 color="success"
-                isSelected={injectPayloads}
+                isSelected={receiveAlerts}
                 size="sm"
-                onValueChange={setInjectPayloads}
+                onValueChange={setReceiveAlerts}
               />
             </div>
           </CardBody>

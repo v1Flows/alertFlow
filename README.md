@@ -17,7 +17,7 @@ AlertFlow is a monitoring automation platform designed to streamline workflows, 
 
 - **Project Management**: Projects combine a number of Flows and add the option to invite members and control their access.
 - **Flows**: Create flows to design workflows for your incoming alarms.
-- **Payloads**: Receive incoming alarms from your monitoring infrastructure via payloads and automate them via Flows.
+- **Alerts**: Receive incoming alarms from your monitoring infrastructure via alerts and automate them via Flows.
 - **Runners**: Runners execute your workflows and can also be self-hosted.
 - **Shared Runners**: Create runners which can be used for all projects.
 - **Scalable to your Needs**: Runners can be scaled with the Auto Join option

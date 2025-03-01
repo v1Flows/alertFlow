@@ -177,7 +177,7 @@ export function Flow({
                         locales="en-US" // Intl.NumberFormat locales
                         value={
                           alerts.filter(
-                            (payload: any) => payload.flow_id === flow.id,
+                            (alert: any) => alert.flow_id === flow.id,
                           ).length
                         }
                       />

@@ -77,7 +77,7 @@ export default function FunctionDeleteAlertModal({
                 <div className="flex flex-col gap-2">
                   <p className="text-lg font-bold">Are you sure?</p>
                   <p className="text-sm text-default-500">
-                    You are about to delete the following payload which{" "}
+                    You are about to delete the following alert which{" "}
                     <span className="font-bold">cannot be undone</span>
                   </p>
                 </div>

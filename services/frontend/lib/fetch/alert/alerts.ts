@@ -2,8 +2,8 @@
 
 import { cookies } from "next/headers";
 
-type Payloads = {
-  payloads: [];
+type Alerts = {
+  alerts: [];
 };
 
 type ErrorResponse = {
@@ -14,7 +14,7 @@ type ErrorResponse = {
 
 type SuccessResponse = {
   success: true;
-  data: Payloads;
+  data: Alerts;
 };
 
 export async function GetAlerts(): Promise<SuccessResponse | ErrorResponse> {

@@ -27,8 +27,8 @@ import { useRouter } from "next/navigation";
 import React, { useMemo, useState } from "react";
 import TimeAgo from "react-timeago";
 
-import FunctionShowPayloadModal from "@/components/functions/flows/showAlert";
 import DeleteExecutionModal from "@/components/functions/flows/deleteExecution";
+import FunctionShowAlertModal from "@/components/functions/flows/showAlert";
 
 export default function Executions({
   executions,
@@ -38,10 +38,10 @@ export default function Executions({
 }: any) {
   const router = useRouter();
 
-  const showPayloadModal = useDisclosure();
+  const showAlertModal = useDisclosure();
   const deleteExecutionModal = useDisclosure();
 
-  const [targetPayload, setTargetPayload] = useState({} as any);
+  const [targetAlert, setTargetAlert] = useState({} as any);
   const [targetExecution, setTargetExecution] = useState({} as any);
 
   const [statusFilter, setStatusFilter] = useState(new Set([]) as any);
@@ -343,13 +343,13 @@ export default function Executions({
             isDisabled={!alerts.find((p: any) => p.id === execution.alert_id)}
             variant="light"
             onPress={() => {
-              setTargetPayload(
+              setTargetAlert(
                 alerts.find((p: any) => p.id === execution.alert_id),
               );
-              showPayloadModal.onOpen();
+              showAlertModal.onOpen();
             }}
           >
-            Show Payload
+            Show Alert
           </Button>
         );
       case "data":
@@ -960,9 +960,9 @@ export default function Executions({
           )}
         </TableBody>
       </Table>
-      <FunctionShowPayloadModal
-        disclosure={showPayloadModal}
-        payload={targetPayload}
+      <FunctionShowAlertModal
+        alert={targetAlert}
+        disclosure={showAlertModal}
       />
       <DeleteExecutionModal
         disclosure={deleteExecutionModal}
