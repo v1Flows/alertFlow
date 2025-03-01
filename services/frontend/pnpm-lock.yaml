@@ -153,8 +153,8 @@ importers:
         specifier: ^11.1.0
         version: 11.1.0(eslint@9.17.0(jiti@1.21.6))
       eslint-plugin-playwright:
-        specifier: ^2.1.0
-        version: 2.1.0(eslint@9.17.0(jiti@1.21.6))
+        specifier: ^2.2.0
+        version: 2.2.0(eslint@9.17.0(jiti@1.21.6))
       eslint-plugin-prettier:
         specifier: ^5.2.3
         version: 5.2.3(@types/eslint@9.6.1)(eslint-config-prettier@10.0.1(eslint@9.17.0(jiti@1.21.6)))(eslint@9.17.0(jiti@1.21.6))(prettier@3.4.2)
@@ -4436,8 +4436,8 @@ packages:
     peerDependencies:
       eslint: '>=8.0.0'
 
-  eslint-plugin-playwright@2.1.0:
-    resolution: {integrity: sha512-wMbHOehofSB1cBdzz2CLaCYaKNLeTQ0YnOW+7AHa281TJqlpEJUBgTHbRUYOUxiXphfWwOyTPvgr6vvEmArbSA==}
+  eslint-plugin-playwright@2.2.0:
+    resolution: {integrity: sha512-qSQpAw7RcSzE3zPp8FMGkthaCWovHZ/BsXtpmnGax9vQLIovlh1bsZHEa2+j2lv9DWhnyeLM/qZmp7ffQZfQvg==}
     engines: {node: '>=16.6.0'}
     peerDependencies:
       eslint: '>=8.40.0'
@@ -13235,7 +13235,7 @@ snapshots:
       eslint: 9.17.0(jiti@1.21.6)
       eslint-plugin-es-x: 7.8.0(eslint@9.17.0(jiti@1.21.6))
       get-tsconfig: 4.8.1
-      globals: 15.14.0
+      globals: 15.13.0
       ignore: 5.3.2
       minimatch: 9.0.5
       semver: 7.7.1
@@ -13262,7 +13262,7 @@ snapshots:
       - supports-color
       - typescript
 
-  eslint-plugin-playwright@2.1.0(eslint@9.17.0(jiti@1.21.6)):
+  eslint-plugin-playwright@2.2.0(eslint@9.17.0(jiti@1.21.6)):
     dependencies:
       eslint: 9.17.0(jiti@1.21.6)
       globals: 13.24.0
@@ -13479,7 +13479,7 @@ snapshots:
       core-js-compat: 3.39.0
       eslint: 9.17.0(jiti@1.21.6)
       esquery: 1.6.0
-      globals: 15.14.0
+      globals: 15.13.0
       indent-string: 4.0.0
       is-builtin-module: 3.2.1
       jsesc: 3.0.2
