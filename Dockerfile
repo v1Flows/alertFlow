@@ -38,7 +38,7 @@ RUN addgroup --system --gid 1001 nodejs \
 COPY --from=backend-builder /app/backend/alertflow-backend /app/
 
 # Copy the frontend build
-COPY --from=frontend-builder /app/frontend/public /app/frontend/public
+COPY --from=frontend-builder /app/frontend/public /app/public
 
 # Set the correct permission for prerender cache
 RUN mkdir .next \
