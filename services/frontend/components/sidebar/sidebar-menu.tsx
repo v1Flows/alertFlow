@@ -64,7 +64,6 @@ export default function SidebarMenu({
   const router = useRouter();
 
   const { theme } = useTheme();
-  const isSSR = useIsSSR();
   const pathname = usePathname();
   const currentPath = pathname.split("/")?.[1];
 
@@ -112,7 +111,7 @@ export default function SidebarMenu({
               height={32}
               radius="none"
               shadow="none"
-              src={`/images/af_logo_${theme === "light" || isSSR ? "black" : "white"}.png`}
+              src={`/images/af_logo_${theme === "light" ? "black" : "white"}.png`}
               width={32}
             />
           </div>
