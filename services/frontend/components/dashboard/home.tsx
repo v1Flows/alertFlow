@@ -87,11 +87,18 @@ export function DashboardHome({
                     <NumberFlow
                       locales="en-US" // Intl.NumberFormat locales
                       value={
-                        alerts.filter((a: any) => a.status === "firing").length
+                        alerts.filter(
+                          (a: any) =>
+                            a.status === "firing" &&
+                            new Date(a.created_at).getTime() >
+                              Date.now() - 24 * 60 * 60 * 1000,
+                        ).length
                       }
                     />
                   </p>
-                  <p className="text-sm text-default-500">Firing Alerts</p>
+                  <p className="text-sm text-default-500">
+                    Firing Alerts (last 24 hours)
+                  </p>
                 </div>
               </div>
             </CardBody>
@@ -413,7 +420,13 @@ export function DashboardHome({
           </p>
         </div>
       </div>
-      <AlertsList compactMode alerts={alerts} maxAlerts={6} runners={runners} />
+      <AlertsList
+        compactMode
+        alerts={alerts}
+        flows={flows}
+        maxAlerts={6}
+        runners={runners}
+      />
       <Spacer y={4} />
       <Executions displayToFlow alerts={alerts} executions={executions} />
 

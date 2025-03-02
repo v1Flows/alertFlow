@@ -9,7 +9,7 @@ import ErrorCard from "@/components/error/ErrorCard";
 export default function FlowEncryption({ flow }: { flow: any }) {
   const router = useRouter();
 
-  const [encryptPayloads, setEncryptPayloads] = useState(flow.encrypt_payloads);
+  const [encryptAlerts, setEncryptAlerts] = useState(flow.encrypt_alerts);
   const [encryptExecutions, setEncryptExecutions] = useState(
     flow.encrypt_executions,
   );
@@ -18,19 +18,19 @@ export default function FlowEncryption({ flow }: { flow: any }) {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    setEncryptPayloads(flow.encrypt_payloads);
+    setEncryptAlerts(flow.encrypt_alerts);
     setEncryptExecutions(flow.encrypt_executions);
   }, [flow]);
 
   useEffect(() => {
     if (
-      encryptPayloads === flow.encrypt_payloads &&
+      encryptAlerts === flow.encrypt_alerts &&
       encryptExecutions === flow.encrypt_executions
     ) {
       return;
     }
     updateFlow();
-  }, [encryptPayloads, encryptExecutions]);
+  }, [encryptAlerts, encryptExecutions]);
 
   async function updateFlow() {
     const response = (await UpdateFlow(
@@ -39,7 +39,7 @@ export default function FlowEncryption({ flow }: { flow: any }) {
       flow.description,
       flow.project_id,
       flow.runner_id,
-      encryptPayloads,
+      encryptAlerts,
       encryptExecutions,
     )) as any;
 
@@ -75,10 +75,10 @@ export default function FlowEncryption({ flow }: { flow: any }) {
             </div>
             <Spacer y={2} />
             <Switch
-              isSelected={encryptPayloads}
+              isSelected={encryptAlerts}
               size="sm"
               onValueChange={(value) => {
-                setEncryptPayloads(value);
+                setEncryptAlerts(value);
               }}
             />
           </CardBody>
