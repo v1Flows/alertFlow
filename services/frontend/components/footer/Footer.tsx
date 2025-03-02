@@ -21,7 +21,6 @@ const navLinks = [
 
 export default function Footer() {
   const { theme } = useTheme();
-  const isSSR = useIsSSR();
 
   return (
     <footer className="sticky top-[100vh] flex w-full flex-col">
@@ -32,7 +31,7 @@ export default function Footer() {
             height={32}
             radius="none"
             shadow="none"
-            src={`/images/af_logo_${theme === "light" || isSSR ? "black" : "white"}.png`}
+            src={`/images/af_logo_${theme === "light" ? "black" : "white"}.png`}
             width={32}
           />
           <span className="text-medium font-medium">AlertFlow</span>
