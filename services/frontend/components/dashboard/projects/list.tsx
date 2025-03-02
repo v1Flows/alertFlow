@@ -182,7 +182,7 @@ export function ProjectsList({
                           }
                           startContent={
                             <Icon
-                              icon="solar:pen-new-square-outline"
+                              icon="hugeicons:pencil-edit-02"
                               width={18}
                             />
                           }
@@ -205,7 +205,7 @@ export function ProjectsList({
                           }
                           startContent={
                             <Icon
-                              icon="solar:trash-bin-trash-outline"
+                              icon="hugeicons:delete-02"
                               width={18}
                             />
                           }

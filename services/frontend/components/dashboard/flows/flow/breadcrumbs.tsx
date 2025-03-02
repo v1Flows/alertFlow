@@ -8,7 +8,7 @@ export default function FlowBreadcrumbs({ id }: any) {
   return (
     <Breadcrumbs>
       <BreadcrumbItem href="/flows">
-        <Icon icon="solar:book-2-outline" width={20} /> Flows
+        <Icon icon="hugeicons:workflow-square-10" width={20} /> Flows
       </BreadcrumbItem>
       <BreadcrumbItem href={`/flows/${id}`}>
         <Snippet hideSymbol className="bg-transparent" size="sm" variant="flat">

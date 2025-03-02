@@ -238,7 +238,7 @@ export function UsersList({ users }: any) {
                     className="text-warning"
                     color="warning"
                     startContent={
-                      <Icon icon="solar:pen-new-square-broken" width={20} />
+                      <Icon icon="hugeicons:pencil-edit-02" width={20} />
                     }
                     onPress={() => handleEditUser(user)}
                   >
@@ -283,7 +283,7 @@ export function UsersList({ users }: any) {
                     className="text-danger"
                     color="danger"
                     startContent={
-                      <Icon icon="solar:trash-bin-trash-outline" width={20} />
+                      <Icon icon="hugeicons:delete-02" width={20} />
                     }
                     onPress={() => handleDeleteUser(user)}
                   >

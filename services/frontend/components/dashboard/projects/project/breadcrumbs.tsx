@@ -8,7 +8,7 @@ export default function ProjectBreadcrumbs({ id }: any) {
   return (
     <Breadcrumbs>
       <BreadcrumbItem href="/projects">
-        <Icon icon="solar:inbox-archive-outline" width={20} /> Projects
+        <Icon icon="hugeicons:ai-folder-01" width={20} /> Projects
       </BreadcrumbItem>
       <BreadcrumbItem href={`/projects/${id}`}>
         <Snippet hideSymbol className="bg-transparent" size="sm" variant="flat">

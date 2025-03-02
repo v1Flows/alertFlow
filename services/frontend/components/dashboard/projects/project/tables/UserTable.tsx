@@ -119,7 +119,7 @@ export default function ProjectMembers({
               >
                 <Icon
                   className="text-default-400"
-                  icon="solar:pen-new-square-outline"
+                  icon="hugeicons:pencil-edit-02"
                   width={20}
                 />
               </Button>
@@ -136,7 +136,7 @@ export default function ProjectMembers({
                   deleteProjectMemberModal.onOpen();
                 }}
               >
-                <Icon icon="solar:trash-bin-trash-outline" width={20} />
+                <Icon icon="hugeicons:delete-02" width={20} />
               </Button>
             </Tooltip>
           </ButtonGroup>

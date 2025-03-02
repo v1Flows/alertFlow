@@ -294,7 +294,7 @@ export default function EditFlowActionsDetails({
                                     }}
                                   >
                                     <Icon
-                                      icon="solar:trash-bin-trash-outline"
+                                      icon="hugeicons:delete-02"
                                       width={20}
                                     />
                                   </Button>

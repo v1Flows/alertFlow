@@ -138,7 +138,7 @@ export default function Runners({ runners, project, user, members }: any) {
                           }
                           startContent={
                             <Icon
-                              icon="solar:trash-bin-trash-outline"
+                              icon="hugeicons:delete-02"
                               width={18}
                             />
                           }
@@ -283,7 +283,7 @@ export default function Runners({ runners, project, user, members }: any) {
                                 }
                                 startContent={
                                   <Icon
-                                    icon="solar:trash-bin-trash-outline"
+                                    icon="hugeicons:delete-02"
                                     width={18}
                                   />
                                 }

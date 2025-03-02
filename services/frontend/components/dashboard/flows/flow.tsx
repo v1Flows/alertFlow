@@ -74,9 +74,7 @@ export function Flow({
           <Button
             color="warning"
             isDisabled={flow.disabled || !checkUserCanEdit()}
-            startContent={
-              <Icon icon="solar:pen-new-square-outline" width={20} />
-            }
+            startContent={<Icon icon="hugeicons:pencil-edit-02" width={20} />}
             variant="flat"
             onPress={() => {
               editFlowModal.onOpen();

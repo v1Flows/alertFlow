@@ -90,7 +90,7 @@ export default function Executions({
       return "Canceled";
     } else if (execution.status === "noPatternMatch") {
       return "No Pattern Match";
-    } else if (execution.status === "interactionRequired") {
+    } else if (execution.status === "interactionWaiting") {
       return "Interaction Required";
     } else if (execution.status === "error") {
       return "Error";
@@ -112,8 +112,8 @@ export default function Executions({
       return "canceled";
     } else if (execution.status === "noPatternMatch") {
       return "no_pattern_match";
-    } else if (execution.status === "interactionRequired") {
-      return "interaction_required";
+    } else if (execution.status === "interactionWaiting") {
+      return "interaction_waiting";
     } else if (execution.status === "error") {
       return "error";
     } else if (execution.status === "success") {
@@ -136,7 +136,7 @@ export default function Executions({
             valueLabel={
               <Icon
                 className="text-default-500"
-                icon="solar:sleeping-square-linear"
+                icon="hugeicons:time-quarter-pass"
                 width={20}
               />
             }
@@ -161,8 +161,8 @@ export default function Executions({
             valueLabel={
               <Icon
                 className="text-warning"
-                icon="solar:pause-broken"
-                width={16}
+                icon="hugeicons:pause"
+                width={20}
               />
             }
           />
@@ -180,7 +180,7 @@ export default function Executions({
             valueLabel={
               <Icon
                 className="text-danger"
-                icon="solar:forbidden-linear"
+                icon="hugeicons:cancel-01"
                 width={20}
               />
             }
@@ -198,14 +198,14 @@ export default function Executions({
             valueLabel={
               <Icon
                 className="text-secondary"
-                icon="solar:bill-cross-broken"
+                icon="hugeicons:note-remove"
                 width={20}
               />
             }
           />
         </Tooltip>
       );
-    } else if (execution.status === "interactionRequired") {
+    } else if (execution.status === "interactionWaiting") {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
@@ -217,8 +217,8 @@ export default function Executions({
             valueLabel={
               <Icon
                 className="text-primary"
-                icon="solar:hand-shake-linear"
-                width={22}
+                icon="hugeicons:waving-hand-01"
+                width={20}
               />
             }
           />
@@ -236,7 +236,7 @@ export default function Executions({
             valueLabel={
               <Icon
                 className="text-danger"
-                icon="solar:danger-triangle-broken"
+                icon="hugeicons:alert-02"
                 width={20}
               />
             }
@@ -255,8 +255,8 @@ export default function Executions({
             valueLabel={
               <Icon
                 className="text-success"
-                icon="solar:check-read-broken"
-                width={22}
+                icon="hugeicons:tick-double-01"
+                width={20}
               />
             }
           />
@@ -420,7 +420,7 @@ export default function Executions({
             >
               <Icon
                 height="20"
-                icon="solar:trash-bin-trash-outline"
+                icon="hugeicons:delete-02"
                 width="20"
               />
             </Button>
@@ -463,8 +463,8 @@ export default function Executions({
                   <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-default-500"
-                      icon="solar:sleeping-square-linear"
-                      width={18}
+                      icon="hugeicons:time-quarter-pass"
+                      width={20}
                     />
                     Pending
                   </div>
@@ -473,8 +473,8 @@ export default function Executions({
                   <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-primary"
-                      icon="solar:play-bold-duotone"
-                      width={18}
+                      icon="hugeicons:play"
+                      width={20}
                     />
                     Running
                   </div>
@@ -483,8 +483,8 @@ export default function Executions({
                   <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-warning"
-                      icon="solar:pause-outline"
-                      width={18}
+                      icon="hugeicons:pause"
+                      width={20}
                     />
                     Paused
                   </div>
@@ -493,8 +493,8 @@ export default function Executions({
                   <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-danger"
-                      icon="solar:forbidden-linear"
-                      width={18}
+                      icon="hugeicons:cancel-01"
+                      width={20}
                     />
                     Canceled
                   </div>
@@ -503,18 +503,18 @@ export default function Executions({
                   <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-secondary"
-                      icon="solar:bill-cross-outline"
-                      width={18}
+                      icon="hugeicons:note-remove"
+                      width={20}
                     />
                     No Pattern Match
                   </div>
                 </DropdownItem>
-                <DropdownItem key="interaction_required" className="capitalize">
+                <DropdownItem key="interaction_waiting" className="capitalize">
                   <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-primary"
-                      icon="solar:hand-shake-linear"
-                      width={18}
+                      icon="hugeicons:waving-hand-01"
+                      width={20}
                     />
                     Interaction Required
                   </div>
@@ -523,8 +523,8 @@ export default function Executions({
                   <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-danger"
-                      icon="solar:danger-triangle-outline"
-                      width={18}
+                      icon="hugeicons:alert-02"
+                      width={20}
                     />
                     Error
                   </div>
@@ -533,8 +533,8 @@ export default function Executions({
                   <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-success"
-                      icon="solar:check-read-outline"
-                      width={18}
+                      icon="hugeicons:tick-double-01"
+                      width={20}
                     />
                     Success
                   </div>
@@ -597,7 +597,7 @@ export default function Executions({
             <CardBody>
               <div className="flex items-center gap-2">
                 <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-default-500">
-                  <Icon icon="solar:sleeping-square-linear" width={20} />
+                  <Icon icon="hugeicons:time-quarter-pass" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">
@@ -640,7 +640,7 @@ export default function Executions({
             <CardBody>
               <div className="flex items-center gap-2">
                 <div className="flex size-10 items-center justify-center rounded-small bg-success/10 text-success">
-                  <Icon icon="solar:check-read-outline" width={20} />
+                  <Icon icon="hugeicons:tick-double-01" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">
@@ -683,7 +683,7 @@ export default function Executions({
             <CardBody>
               <div className="flex items-center gap-2">
                 <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
-                  <Icon icon="solar:play-bold-duotone" width={20} />
+                  <Icon icon="hugeicons:play" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">
@@ -726,7 +726,7 @@ export default function Executions({
             <CardBody>
               <div className="flex items-center gap-2">
                 <div className="flex size-10 items-center justify-center rounded-small bg-warning/10 text-warning">
-                  <Icon icon="solar:pause-outline" width={20} />
+                  <Icon icon="hugeicons:pause" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">
@@ -751,17 +751,17 @@ export default function Executions({
             isHoverable
             isPressable
             className={
-              statusFilter.has("interaction_required")
+              statusFilter.has("interaction_waiting")
                 ? "w-[240px] grow bg-primary/30"
                 : "w-[240px] grow"
             }
             onPress={() => {
-              if (statusFilter.has("interaction_required")) {
-                statusFilter.delete("interaction_required");
+              if (statusFilter.has("interaction_waiting")) {
+                statusFilter.delete("interaction_waiting");
                 setStatusFilter(new Set(statusFilter));
                 setPage(1);
               } else {
-                statusFilter.add("interaction_required");
+                statusFilter.add("interaction_waiting");
                 setStatusFilter(new Set(statusFilter));
                 setPage(1);
               }
@@ -770,7 +770,7 @@ export default function Executions({
             <CardBody>
               <div className="flex items-center gap-2">
                 <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
-                  <Icon icon="solar:hand-shake-linear" width={20} />
+                  <Icon icon="hugeicons:waving-hand-01" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">
@@ -817,7 +817,7 @@ export default function Executions({
             <CardBody>
               <div className="flex items-center gap-2">
                 <div className="flex size-10 items-center justify-center rounded-small bg-secondary/10 text-secondary">
-                  <Icon icon="solar:bill-cross-outline" width={20} />
+                  <Icon icon="hugeicons:note-remove" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">
@@ -861,7 +861,7 @@ export default function Executions({
             <CardBody>
               <div className="flex items-center gap-2">
                 <div className="flex size-10 items-center justify-center rounded-small bg-danger/10 text-danger">
-                  <Icon icon="solar:forbidden-linear" width={20} />
+                  <Icon icon="hugeicons:cancel-01" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">
@@ -904,7 +904,7 @@ export default function Executions({
             <CardBody>
               <div className="flex items-center gap-2">
                 <div className="flex size-10 items-center justify-center rounded-small bg-danger/10 text-danger">
-                  <Icon icon="solar:danger-triangle-outline" width={20} />
+                  <Icon icon="hugeicons:alert-02" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">
@@ -960,10 +960,7 @@ export default function Executions({
           )}
         </TableBody>
       </Table>
-      <FunctionShowAlertModal
-        alert={targetAlert}
-        disclosure={showAlertModal}
-      />
+      <FunctionShowAlertModal alert={targetAlert} disclosure={showAlertModal} />
       <DeleteExecutionModal
         disclosure={deleteExecutionModal}
         execution={targetExecution}

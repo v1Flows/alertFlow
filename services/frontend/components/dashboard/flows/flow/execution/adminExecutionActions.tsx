@@ -51,15 +51,15 @@ export default function AdminExecutionActions({
             ? execution.finished_at
             : new Date().toISOString();
         break;
-      case "no_pattern_match":
+      case "noPatternMatch":
         newExecution.status = "noPatternMatch";
         newExecution.finished_at =
           execution.finished_at !== "0001-01-01T00:00:00Z"
             ? execution.finished_at
             : "0001-01-01T00:00:00Z";
         break;
-      case "interaction_required":
-        newExecution.status = "interactionRequired";
+      case "interactionWaiting":
+        newExecution.status = "interactionWaiting";
         newExecution.finished_at =
           execution.finished_at !== "0001-01-01T00:00:00Z"
             ? execution.finished_at
@@ -72,15 +72,17 @@ export default function AdminExecutionActions({
             ? execution.finished_at
             : new Date().toISOString();
         break;
-      case "finished":
-        newExecution.status = "finished";
+      case "success":
+        newExecution.status = "success";
         newExecution.finished_at =
           execution.finished_at !== "0001-01-01T00:00:00Z"
             ? execution.finished_at
             : new Date().toISOString();
         break;
       default:
-        break;
+        toast.error("Invalid Status");
+
+        return;
     }
 
     const response = await UpdateExecution(newExecution);
@@ -111,8 +113,8 @@ export default function AdminExecutionActions({
             <div className="flex-cols flex gap-2">
               <Icon
                 className="text-default-500"
-                icon="solar:sleeping-square-linear"
-                width={18}
+                icon="hugeicons:time-quarter-pass"
+                width={20}
               />
               Pending
             </div>
@@ -123,11 +125,7 @@ export default function AdminExecutionActions({
             onPress={() => changeExecutionStatus("running")}
           >
             <div className="flex-cols flex gap-2">
-              <Icon
-                className="text-primary"
-                icon="solar:play-bold-duotone"
-                width={18}
-              />
+              <Icon className="text-primary" icon="hugeicons:play" width={20} />
               Running
             </div>
           </DropdownItem>
@@ -139,8 +137,8 @@ export default function AdminExecutionActions({
             <div className="flex-cols flex gap-2">
               <Icon
                 className="text-warning"
-                icon="solar:pause-broken"
-                width={18}
+                icon="hugeicons:pause"
+                width={20}
               />
               Paused
             </div>
@@ -153,36 +151,36 @@ export default function AdminExecutionActions({
             <div className="flex-cols flex gap-2">
               <Icon
                 className="text-danger"
-                icon="solar:forbidden-linear"
-                width={18}
+                icon="hugeicons:cancel-01"
+                width={20}
               />
               Canceled
             </div>
           </DropdownItem>
           <DropdownItem
-            key="no_pattern_match"
+            key="noPatternMatch"
             className="capitalize"
-            onPress={() => changeExecutionStatus("no_pattern_match")}
+            onPress={() => changeExecutionStatus("noPatternMatch")}
           >
             <div className="flex-cols flex gap-2">
               <Icon
                 className="text-secondary"
-                icon="solar:bill-cross-broken"
-                width={18}
+                icon="hugeicons:note-remove"
+                width={20}
               />
               No Pattern Match
             </div>
           </DropdownItem>
           <DropdownItem
-            key="interaction_required"
+            key="interactionWaiting"
             className="capitalize"
-            onPress={() => changeExecutionStatus("interaction_required")}
+            onPress={() => changeExecutionStatus("interactionWaiting")}
           >
             <div className="flex-cols flex gap-2">
               <Icon
                 className="text-primary"
-                icon="solar:hand-shake-linear"
-                width={18}
+                icon="hugeicons:waving-hand-01"
+                width={20}
               />
               Interaction Required
             </div>
@@ -195,24 +193,24 @@ export default function AdminExecutionActions({
             <div className="flex-cols flex gap-2">
               <Icon
                 className="text-danger"
-                icon="solar:danger-triangle-broken"
-                width={18}
+                icon="hugeicons:alert-02"
+                width={20}
               />
               Error
             </div>
           </DropdownItem>
           <DropdownItem
-            key="finished"
+            key="success"
             className="capitalize"
-            onPress={() => changeExecutionStatus("finished")}
+            onPress={() => changeExecutionStatus("success")}
           >
             <div className="flex-cols flex gap-2">
               <Icon
                 className="text-success"
-                icon="solar:check-read-broken"
-                width={18}
+                icon="hugeicons:tick-double-01"
+                width={20}
               />
-              Finished
+              Success
             </div>
           </DropdownItem>
         </DropdownSection>

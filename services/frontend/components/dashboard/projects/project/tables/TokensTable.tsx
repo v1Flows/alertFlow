@@ -135,7 +135,7 @@ export default function ProjectTokens({
             <Tooltip color="danger" content="Delete Token">
               <span className="cursor-pointer text-lg text-danger active:opacity-50">
                 <Icon
-                  icon="solar:trash-bin-trash-outline"
+                  icon="hugeicons:delete-02"
                   width={20}
                   onClick={() => {
                     if (
