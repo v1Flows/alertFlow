@@ -76,7 +76,7 @@ export function DashboardHome({
       <Spacer y={4} />
       <div className="grid grid-cols-1 items-stretch gap-4 md:grid-cols-2 lg:grid-cols-4">
         <div className="col-span-1">
-          <Card fullWidth>
+          <Card fullWidth isPressable onPress={() => router.push("/alerts")}>
             <CardBody>
               <div className="flex items-center gap-2">
                 <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
@@ -412,14 +412,9 @@ export function DashboardHome({
       {/* Stats */}
       <Stats stats={stats} />
 
-      <div className="my-4 flex items-end justify-between">
-        <div>
-          <p className="mb-0 text-2xl font-bold">
-            Recent <span className="text-[#e6522c]">Alerts</span> &{" "}
-            <span className="text-primary">Executions</span>
-          </p>
-        </div>
-      </div>
+      <p className="mb-2 mt-4 text-2xl font-bold">
+        Recent <span className="text-[#e6522c]">Alerts</span>
+      </p>
       <AlertsList
         compactMode
         alerts={alerts}
@@ -428,6 +423,9 @@ export function DashboardHome({
         runners={runners}
       />
       <Spacer y={4} />
+      <p className="mb-2 text-2xl font-bold">
+        & <span className="text-primary">Executions</span>
+      </p>
       <Executions displayToFlow alerts={alerts} executions={executions} />
 
       <WelcomeModal disclosure={welcomeModal} />
