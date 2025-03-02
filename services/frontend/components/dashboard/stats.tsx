@@ -37,7 +37,7 @@ export default function Stats({ stats }: { stats: any }) {
   const data = [
     {
       title: "Total Alerts this week",
-      value: stats.total_alerts,
+      value: stats.total_alert,
       change: `${stats.alert_trend_percentage}% today`,
       changeType: stats.alert_trend,
       trendChipPosition: "bottom",
