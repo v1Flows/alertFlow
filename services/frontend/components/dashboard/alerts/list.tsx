@@ -20,6 +20,7 @@ export default function AlertsList({
   alerts,
   runners,
   flows,
+  maxAlerts,
 }: {
   compactMode: boolean;
   maxAlerts: number;
@@ -27,7 +28,6 @@ export default function AlertsList({
   runners: any;
   flows: any;
 }) {
-  const maxAlerts = 25;
   const alertDrawer = useDisclosure();
   const router = useRouter();
 

@@ -172,7 +172,7 @@ export default function Alerts({
               variant="flat"
               onPress={() => handleDelete(alert)}
             >
-              <Icon icon="solar:trash-bin-trash-outline" width={20} />
+              <Icon icon="hugeicons:delete-02" width={20} />
             </Button>
           </div>
         );

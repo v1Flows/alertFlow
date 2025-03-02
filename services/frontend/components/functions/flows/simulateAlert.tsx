@@ -153,7 +153,7 @@ export default function SimulateAlertModal({
                   variant="flat"
                   onPress={sendPayload}
                 >
-                  <Icon icon="solar:play-bold-duotone" width={20} />
+                  <Icon icon="hugeicons:play" width={20} />
                   Send
                 </Button>
               </ModalFooter>

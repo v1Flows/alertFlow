@@ -69,7 +69,7 @@ export default function Project({
         <Button
           color="warning"
           isDisabled={checkEditDisabled()}
-          startContent={<Icon icon="hugeicons:pencil-edit-01" width={20} />}
+          startContent={<Icon icon="hugeicons:pencil-edit-02" width={20} />}
           variant="flat"
           onPress={() => editProjectModal.onOpen()}
         >
