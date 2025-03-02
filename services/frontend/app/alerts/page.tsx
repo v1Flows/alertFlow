@@ -5,14 +5,17 @@ import AlertsList from "@/components/dashboard/alerts/list";
 import ErrorCard from "@/components/error/ErrorCard";
 import GetAlerts from "@/lib/fetch/alert/alerts";
 import GetRunners from "@/lib/fetch/runner/get";
+import GetFlows from "@/lib/fetch/flow/all";
 
 export default async function DashboardAlertsPage() {
   const alertsData = GetAlerts();
   const runnersData = GetRunners();
+  const flowsData = GetFlows();
 
-  const [alerts, runners] = (await Promise.all([
+  const [alerts, runners, flows] = (await Promise.all([
     alertsData,
     runnersData,
+    flowsData,
   ])) as any;
 
   return (
@@ -25,6 +28,7 @@ export default async function DashboardAlertsPage() {
           <AlertsList
             alerts={alerts.data.alerts}
             compactMode={false}
+            flows={flows.data.flows}
             maxAlerts={25}
             runners={runners.data.runners}
           />

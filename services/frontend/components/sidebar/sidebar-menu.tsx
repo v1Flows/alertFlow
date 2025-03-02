@@ -197,7 +197,7 @@ export default function SidebarMenu({
           <Search flows={flows} isCollapsed={isCollapsed} projects={projects} />
         </div>
 
-        <ScrollShadow className="-mr-6 h-full max-h-full py-2 pr-2">
+        <ScrollShadow className="-mr-6 h-full max-h-full py-2 pr-6">
           <Sidebar
             ref={null}
             defaultSelectedKey="home"

@@ -4,8 +4,6 @@ import { Tab, Tabs } from "@heroui/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 
-import { Flash } from "@/components/icons";
-
 import Actions from "./actions";
 import Executions from "./executions";
 import Alerts from "./alerts";

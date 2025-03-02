@@ -34,6 +34,7 @@ export default async function AdminAlertsPage() {
           <AlertsList
             alerts={alerts.data.alerts}
             compactMode={false}
+            flows={flows.data.flows}
             maxAlerts={25}
             runners={runners.data.runners}
           />
