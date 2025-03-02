@@ -155,7 +155,6 @@ const CATEGORY_ICON_MAP = {
   [CategoryEnum.USER]: "solar:smile-square-linear",
   [CategoryEnum.PROJECTS]: "solar:inbox-archive-outline",
   [CategoryEnum.FLOWS]: "solar:book-2-outline",
-  [CategoryEnum.HELP]: "solar:info-square-linear",
 };
 const CATEGORIES = [
   {
@@ -177,11 +176,6 @@ const CATEGORIES = [
     key: CategoryEnum.FLOWS,
     icon: CATEGORY_ICON_MAP[CategoryEnum.FLOWS],
     label: "Flows",
-  },
-  {
-    key: CategoryEnum.HELP,
-    icon: CATEGORY_ICON_MAP[CategoryEnum.HELP],
-    label: "Help",
   },
 ] as const;
 
@@ -268,7 +262,6 @@ function groupedSearchData(data: SearchResultItem[]) {
     [CategoryEnum.USER]: [] as SearchResultItem[],
     [CategoryEnum.PROJECTS]: [] as SearchResultItem[],
     [CategoryEnum.FLOWS]: [] as SearchResultItem[],
-    [CategoryEnum.HELP]: [] as SearchResultItem[],
   };
 
   data.forEach((item) => {

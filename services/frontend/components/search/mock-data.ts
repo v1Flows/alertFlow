@@ -115,30 +115,6 @@ const searchData = {
   ],
   projects: [],
   flows: [],
-  help: [
-    {
-      slug: "help-api",
-      component: {
-        name: "API",
-        slug: "help-api",
-        icon: "solar:notebook-outline",
-        attributes: {
-          group: "informations",
-          groupOrder: 2,
-          iframe: {
-            initialHeight: 220,
-            initialMobileHeight: 220,
-          },
-        },
-      },
-      url: "/docs",
-      group: {
-        key: "informations",
-        name: "Informations",
-      },
-      content: "API",
-    },
-  ],
 };
 
 export { searchData };

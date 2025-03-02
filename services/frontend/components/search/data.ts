@@ -8,7 +8,6 @@ export enum CategoryEnum {
   USER = "user",
   PROJECTS = "projects",
   FLOWS = "flows",
-  HELP = "help",
 }
 
 export type Attributes = {
