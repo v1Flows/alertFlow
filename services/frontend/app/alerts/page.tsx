@@ -29,7 +29,7 @@ export default async function DashboardAlertsPage() {
             alerts={alerts.data.alerts}
             compactMode={false}
             flows={flows.data.flows}
-            maxAlerts={25}
+            maxAlerts={18}
             runners={runners.data.runners}
           />
         </>

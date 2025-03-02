@@ -5,11 +5,12 @@ import {
   Card,
   CardBody,
   Divider,
+  Pagination,
   Spacer,
   useDisclosure,
 } from "@heroui/react";
 import { Icon } from "@iconify/react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import ReactTimeago from "react-timeago";
 import { useRouter } from "next/navigation";
 
@@ -33,15 +34,25 @@ export default function AlertsList({
 
   const [targetAlert, setTargetAlert] = useState<any>(null);
 
+  // pagination
+  const [page, setPage] = useState(1);
+  const pages = Math.ceil(alerts.length / maxAlerts);
+  const items = useMemo(() => {
+    const start = (page - 1) * maxAlerts;
+    const end = start + maxAlerts;
+
+    return alerts.slice(start, end);
+  }, [page, alerts]);
+
   return (
     <main>
-      {alerts.length === 0 && (
+      {items.length === 0 && (
         <div className="flex items-center justify-center">
           <p className="text-lg text-default-500">No alerts found</p>
         </div>
       )}
       <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
-        {alerts.slice(0, maxAlerts).map((alert: any) => (
+        {items.map((alert: any) => (
           <Card
             key={alert.id}
             fullWidth
@@ -93,7 +104,7 @@ export default function AlertsList({
                         icon="hugeicons:rocket-02"
                         width={18}
                       />
-                      Execution
+                      To Execution
                     </Button>
                   </div>
                 )}
@@ -125,6 +136,19 @@ export default function AlertsList({
           </Card>
         ))}
       </div>
+      {!compactMode && (
+        <div className="flex w-full justify-center">
+          <Pagination
+            isCompact
+            showControls
+            showShadow
+            color="primary"
+            page={page}
+            total={pages}
+            onChange={(page) => setPage(page)}
+          />
+        </div>
+      )}
       <AlertDrawer
         alert={targetAlert}
         disclosure={alertDrawer}
