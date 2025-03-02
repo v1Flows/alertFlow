@@ -20,6 +20,7 @@ import WelcomeModal from "../functions/users/welcome";
 
 import Executions from "./flows/flow/executions";
 import Stats from "./stats";
+import AlertsList from "./alerts/list";
 
 export function DashboardHome({
   stats,
@@ -27,7 +28,7 @@ export function DashboardHome({
   flows,
   runners,
   executions,
-  payloads,
+  alerts,
   user,
 }: any) {
   const router = useRouter();
@@ -75,22 +76,29 @@ export function DashboardHome({
       <Spacer y={4} />
       <div className="grid grid-cols-1 items-stretch gap-4 md:grid-cols-2 lg:grid-cols-4">
         <div className="col-span-1">
-          <Card fullWidth>
+          <Card fullWidth isPressable onPress={() => router.push("/alerts")}>
             <CardBody>
               <div className="flex items-center gap-2">
                 <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
-                  <Icon icon="solar:bell-outline" width={20} />
+                  <Icon icon="hugeicons:alert-02" width={24} />
                 </div>
                 <div>
-                  <p className="text-md font-bold">
+                  <p className="text-md font-bold text-danger">
                     <NumberFlow
                       locales="en-US" // Intl.NumberFormat locales
                       value={
-                        notifications.filter((n: any) => !n.is_read).length
+                        alerts.filter(
+                          (a: any) =>
+                            a.status === "firing" &&
+                            new Date(a.created_at).getTime() >
+                              Date.now() - 24 * 60 * 60 * 1000,
+                        ).length
                       }
                     />
                   </p>
-                  <p className="text-sm text-default-500">Notifications</p>
+                  <p className="text-sm text-default-500">
+                    Firing Alerts (last 24 hours)
+                  </p>
                 </div>
               </div>
             </CardBody>
@@ -104,7 +112,7 @@ export function DashboardHome({
                 <CardBody>
                   <div className="flex items-center gap-2">
                     <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
-                      <Icon icon="solar:book-2-outline" width={20} />
+                      <Icon icon="hugeicons:workflow-square-10" width={24} />
                     </div>
                     <div>
                       {flows.filter((f: any) => f.maintenance).length > 0 ? (
@@ -136,7 +144,7 @@ export function DashboardHome({
                         <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
                           <Icon
                             className="text-warning"
-                            icon="solar:danger-triangle-outline"
+                            icon="hugeicons:alert-02"
                             width={20}
                           />
                         </div>
@@ -162,7 +170,7 @@ export function DashboardHome({
                 <CardBody>
                   <div className="flex items-center gap-2">
                     <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
-                      <Icon icon="solar:reorder-linear" width={20} />
+                      <Icon icon="hugeicons:rocket-02" width={24} />
                     </div>
                     <div>
                       {executions.filter(
@@ -244,8 +252,8 @@ export function DashboardHome({
                         <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
                           <Icon
                             className="text-primary"
-                            icon="solar:hand-shake-linear"
-                            width={20}
+                            icon="hugeicons:waving-hand-01"
+                            width={24}
                           />
                         </div>
                         <div>
@@ -291,8 +299,8 @@ export function DashboardHome({
                         <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
                           <Icon
                             className="text-danger"
-                            icon="solar:danger-triangle-outline"
-                            width={20}
+                            icon="hugeicons:alert-02"
+                            width={24}
                           />
                         </div>
                         <div>
@@ -325,7 +333,7 @@ export function DashboardHome({
                 <CardBody>
                   <div className="flex items-center gap-2">
                     <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
-                      <Icon icon="solar:rocket-2-outline" width={20} />
+                      <Icon icon="hugeicons:ai-brain-04" width={24} />
                     </div>
                     <div>
                       {runners.filter(
@@ -368,8 +376,8 @@ export function DashboardHome({
                         <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-foreground">
                           <Icon
                             className={`text-${heartbeatColor(runner)}`}
-                            icon="solar:danger-triangle-outline"
-                            width={20}
+                            icon="hugeicons:alert-02"
+                            width={24}
                           />
                         </div>
                         <div>
@@ -404,15 +412,21 @@ export function DashboardHome({
       {/* Stats */}
       <Stats stats={stats} />
 
-      {/* Latest executions */}
-      <div className="my-4 flex items-end justify-between">
-        <div>
-          <p className="mb-0 text-2xl font-bold">
-            Latest <span className="text-primary">Executions</span>
-          </p>
-        </div>
-      </div>
-      <Executions displayToFlow executions={executions} payloads={payloads} />
+      <p className="mb-2 mt-4 text-2xl font-bold">
+        Recent <span className="text-[#e6522c]">Alerts</span>
+      </p>
+      <AlertsList
+        compactMode
+        alerts={alerts}
+        flows={flows}
+        maxAlerts={6}
+        runners={runners}
+      />
+      <Spacer y={4} />
+      <p className="mb-2 text-2xl font-bold">
+        & <span className="text-primary">Executions</span>
+      </p>
+      <Executions displayToFlow alerts={alerts} executions={executions} />
 
       <WelcomeModal disclosure={welcomeModal} />
     </main>

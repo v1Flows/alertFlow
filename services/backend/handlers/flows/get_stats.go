@@ -1,9 +1,10 @@
 package flows
 
 import (
+	"net/http"
+
 	"github.com/v1Flows/alertFlow/services/backend/functions/flow_stats"
 	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/uptrace/bun"
@@ -13,13 +14,13 @@ func GetStats(context *gin.Context, db *bun.DB) {
 	flowID := context.Param("flowID")
 	interval := context.DefaultQuery("interval", "24-hours")
 
-	payloadExecutionsStats := flow_stats.PayloadExecutionsStats(interval, flowID, context, db)
-	if payloadExecutionsStats == nil {
+	alertExecutionsStats := flow_stats.AlertExecutionsStats(interval, flowID, context, db)
+	if alertExecutionsStats == nil {
 		httperror.InternalServerError(context, "Error collecting stats", nil)
 		return
 	}
 
-	payloadExectuionsTrends, err := flow_stats.PayloadExecutionsTrends(interval, flowID, context, db)
+	alertExectuionsTrends, err := flow_stats.AlertExecutionsTrends(interval, flowID, context, db)
 	if err != nil {
 		httperror.InternalServerError(context, "Error collecting trends", nil)
 		return
@@ -27,7 +28,7 @@ func GetStats(context *gin.Context, db *bun.DB) {
 
 	// Return the stats
 	context.JSON(http.StatusOK, gin.H{
-		"payloads_executions_stats":  payloadExecutionsStats,
-		"payloads_executions_trends": payloadExectuionsTrends,
+		"alerts_executions_stats":  alertExecutionsStats,
+		"alerts_executions_trends": alertExectuionsTrends,
 	})
 }

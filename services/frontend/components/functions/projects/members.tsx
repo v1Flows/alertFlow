@@ -196,7 +196,7 @@ export default function AddProjectMemberModal({
                           <DropdownItem
                             key="Editor"
                             startContent={
-                              <Icon icon="solar:pen-new-square-linear" />
+                              <Icon icon="hugeicons:pencil-edit-02" />
                             }
                           >
                             Can Edit

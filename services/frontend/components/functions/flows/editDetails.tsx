@@ -125,7 +125,8 @@ export default function EditFlowActionsDetails({
                   <p className="text-lg font-bold">Edit Actions Details</p>
                   <p className="text-sm text-default-500">
                     Actions Details determine how the action will be executed
-                    and for which patterns it should check the payload for.
+                    and for which patterns it should check the alert payload
+                    for.
                   </p>
                 </div>
               </ModalHeader>
@@ -293,7 +294,7 @@ export default function EditFlowActionsDetails({
                                     }}
                                   >
                                     <Icon
-                                      icon="solar:trash-bin-trash-outline"
+                                      icon="hugeicons:delete-02"
                                       width={20}
                                     />
                                   </Button>

@@ -23,24 +23,23 @@ import { useRouter } from "next/navigation";
 import React, { useMemo, useState } from "react";
 import { toast } from "sonner";
 
-import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
 import Reloader from "@/components/reloader/Reloader";
 import InteractExecutionStep from "@/lib/fetch/executions/PUT/step_interact";
 import GetExecutionSteps from "@/lib/fetch/executions/steps";
-import GetPayload from "@/lib/fetch/payload/payload";
+import GetAlert from "@/lib/fetch/alert/alert";
+import FunctionShowAlertModal from "@/components/functions/flows/showAlert";
 
 import AdminExecutionActions from "./adminExecutionActions";
 import AdminStepActions from "./adminStepActions";
-import ExecutionBreadcrumbs from "./breadcrumbs";
 import ExecutionDetails from "./details";
 
 export function Execution({ flow, execution, runners, userDetails }: any) {
   const router = useRouter();
 
-  const [payload, setPayload] = useState({} as any);
+  const [alert, setAlert] = useState({} as any);
   const [steps, setSteps] = useState([] as any);
 
-  const showPayloadModal = useDisclosure();
+  const showAlertModal = useDisclosure();
 
   React.useEffect(() => {
     GetExecutionSteps(execution.id).then((steps) => {
@@ -52,12 +51,12 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
         }
       }
     });
-    GetPayload(execution.payload_id).then((payload) => {
-      if (payload.success) {
-        setPayload(payload.data.payload);
+    GetAlert(execution.alert_id).then((alert) => {
+      if (alert.success) {
+        setAlert(alert.data.alert);
       } else {
-        if ("error" in payload) {
-          toast.error(payload.error);
+        if ("error" in alert) {
+          toast.error(alert.error);
         }
       }
     });
@@ -124,7 +123,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
             valueLabel={
               <Icon
                 className="text-default-500"
-                icon="solar:sleeping-square-linear"
+                icon="hugeicons:time-quarter-pass"
                 width={20}
               />
             }
@@ -149,7 +148,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
             valueLabel={
               <Icon
                 className="text-warning"
-                icon="solar:pause-broken"
+                icon="hugeicons:pause"
                 width={16}
               />
             }
@@ -168,7 +167,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
             valueLabel={
               <Icon
                 className="text-danger"
-                icon="solar:forbidden-linear"
+                icon="hugeicons:cancel-01"
                 width={20}
               />
             }
@@ -186,7 +185,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
             valueLabel={
               <Icon
                 className="text-secondary"
-                icon="solar:bill-cross-broken"
+                icon="hugeicons:note-remove"
                 width={20}
               />
             }
@@ -224,7 +223,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
             valueLabel={
               <Icon
                 className="text-primary"
-                icon="solar:hand-shake-linear"
+                icon="hugeicons:waving-hand-01"
                 width={22}
               />
             }
@@ -243,7 +242,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
             valueLabel={
               <Icon
                 className="text-danger"
-                icon="solar:danger-triangle-broken"
+                icon="hugeicons:alert-02"
                 width={20}
               />
             }
@@ -262,7 +261,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
             valueLabel={
               <Icon
                 className="text-success"
-                icon="solar:check-read-broken"
+                icon="hugeicons:tick-double-01"
                 width={22}
               />
             }
@@ -504,7 +503,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
                         fullWidth
                         color="danger"
                         startContent={
-                          <Icon icon="solar:forbidden-outline" width={18} />
+                          <Icon icon="hugeicons:cancel-01" width={18} />
                         }
                         variant="flat"
                         onPress={() => {
@@ -667,16 +666,23 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
 
   return (
     <>
-      <div className="grid items-center justify-between lg:grid-cols-2">
-        <ExecutionBreadcrumbs executionID={execution.id} flowID={flow.id} />
+      <div className="flex flex-cols items-center justify-between">
+        <Button
+          color="default"
+          variant="bordered"
+          onPress={() => router.push(`/flows/${flow.id}`)}
+        >
+          <Icon icon="hugeicons:link-backward" width={20} />
+          Back
+        </Button>
         <div className="flex-cols mt-2 flex items-center justify-center gap-4 lg:mt-0 lg:justify-end">
           <Button
             color="secondary"
             variant="flat"
-            onPress={() => showPayloadModal.onOpen()}
+            onPress={() => showAlertModal.onOpen()}
           >
-            <Icon icon="solar:letter-opened-broken" width={20} />
-            Show Payload
+            <Icon icon="hugeicons:alert-02" width={20} />
+            Show Alert
           </Button>
           {userDetails.role === "admin" && (
             <AdminExecutionActions execution={execution} />
@@ -685,7 +691,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
           {execution.status === "running" ||
           execution.status === "pending" ||
           execution.status === "paused" ||
-          execution.status === "interactionRequired" ? (
+          execution.status === "interactionWaiting" ? (
             <div>
               <Reloader />
             </div>
@@ -746,10 +752,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
         </TableBody>
       </Table>
       <Spacer y={4} />
-      <FunctionShowPayloadModal
-        disclosure={showPayloadModal}
-        payload={payload}
-      />
+      <FunctionShowAlertModal alert={alert} disclosure={showAlertModal} />
     </>
   );
 }

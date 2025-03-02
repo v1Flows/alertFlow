@@ -15,7 +15,7 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
       return "Canceled";
     } else if (execution.status === "noPatternMatch") {
       return "No Pattern Match";
-    } else if (execution.status === "interactionRequired") {
+    } else if (execution.status === "interactionWaiting") {
       return "Interaction Required";
     } else if (execution.status === "error") {
       return "Error";
@@ -36,8 +36,8 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
     } else if (execution.status === "canceled") {
       return "danger";
     } else if (execution.status === "noPatternMatch") {
-      return "default";
-    } else if (execution.status === "interactionRequired") {
+      return "secondary";
+    } else if (execution.status === "interactionWaiting") {
       return "primary";
     } else if (execution.status === "error") {
       return "danger";
@@ -61,7 +61,7 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
             valueLabel={
               <Icon
                 className="text-default-500"
-                icon="solar:sleeping-square-linear"
+                icon="hugeicons:time-quarter-pass"
                 width={20}
               />
             }
@@ -71,7 +71,7 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
     } else if (execution.status === "running") {
       return (
         <Tooltip content={`${status(execution)}`}>
-          <CircularProgress aria-label="Step" color="primary" size="md" />
+          <CircularProgress aria-label="Step" color="primary" size="lg" />
         </Tooltip>
       );
     } else if (execution.status === "paused") {
@@ -81,12 +81,12 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
             showValueLabel
             aria-label="Step"
             color="warning"
-            size="md"
+            size="lg"
             value={100}
             valueLabel={
               <Icon
                 className="text-warning"
-                icon="solar:pause-broken"
+                icon="hugeicons:pause"
                 width={16}
               />
             }
@@ -100,12 +100,12 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
             showValueLabel
             aria-label="Step"
             color="danger"
-            size="md"
+            size="lg"
             value={100}
             valueLabel={
               <Icon
                 className="text-danger"
-                icon="solar:forbidden-linear"
+                icon="hugeicons:cancel-01"
                 width={20}
               />
             }
@@ -118,31 +118,31 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
           <CircularProgress
             showValueLabel
             color="secondary"
-            size="md"
+            size="lg"
             value={100}
             valueLabel={
               <Icon
                 className="text-secondary"
-                icon="solar:bill-cross-broken"
+                icon="hugeicons:note-remove"
                 width={20}
               />
             }
           />
         </Tooltip>
       );
-    } else if (execution.status === "interactionRequired") {
+    } else if (execution.status === "interactionWaiting") {
       return (
         <Tooltip content={`${status(execution)}`}>
           <CircularProgress
             showValueLabel
             aria-label="Step"
             color="primary"
-            size="md"
+            size="lg"
             value={100}
             valueLabel={
               <Icon
                 className="text-primary"
-                icon="solar:hand-shake-linear"
+                icon="hugeicons:waving-hand-01"
                 width={22}
               />
             }
@@ -156,12 +156,12 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
             showValueLabel
             aria-label="Step"
             color="danger"
-            size="md"
+            size="lg"
             value={100}
             valueLabel={
               <Icon
                 className="text-danger"
-                icon="solar:danger-triangle-broken"
+                icon="hugeicons:alert-02"
                 width={20}
               />
             }
@@ -175,12 +175,12 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
             showValueLabel
             aria-label="Step"
             color="success"
-            size="md"
+            size="lg"
             value={100}
             valueLabel={
               <Icon
                 className="text-success"
-                icon="solar:check-read-broken"
+                icon="hugeicons:tick-double-01"
                 width={22}
               />
             }
@@ -194,7 +194,7 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
             showValueLabel
             aria-label="Step"
             color="success"
-            size="md"
+            size="lg"
             value={100}
             valueLabel={
               <Icon
@@ -244,11 +244,13 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
       <div className="grid grid-cols-2 items-start items-stretch gap-4 lg:grid-cols-3 xl:grid-cols-6">
         <Card>
           <CardBody>
-            <div className="flex items-center justify-start gap-4">
-              <div>{statusIcon(execution)}</div>
+            <div className="flex items-center justify-start gap-2">
+              <div className="flex size-12 items-center justify-center">
+                {statusIcon(execution)}
+              </div>
               <div>
                 <p
-                  className={`text-md text- font-bold text-${statusColor(execution)}`}
+                  className={`text-sm text- font-bold text-${statusColor(execution)}`}
                 >
                   {status(execution)}
                 </p>
@@ -261,12 +263,12 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
           <CardBody>
             <div className="flex items-center justify-start gap-4">
               <div className="flex size-12 items-center justify-center rounded-large bg-default bg-opacity-40">
-                <Icon icon="solar:rocket-2-broken" width={28} />
+                <Icon icon="hugeicons:ai-brain-04" width={28} />
               </div>
               <div>
-                <p className="text-md font-bold">
+                <p className="text-sm font-bold">
                   {runners.find((r: any) => r.id === execution.runner_id)?.name
-                    .length > 20 ? (
+                    .length > 10 ? (
                     <Tooltip
                       content={
                         runners.find((r: any) => r.id === execution.runner_id)
@@ -275,7 +277,7 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
                     >
                       {runners
                         .find((r: any) => r.id === execution.runner_id)
-                        ?.name.slice(0, 20) + "..."}
+                        ?.name.slice(0, 10) + "..."}
                     </Tooltip>
                   ) : (
                     runners.find((r: any) => r.id === execution.runner_id)
@@ -291,13 +293,10 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
           <CardBody>
             <div className="flex items-center justify-start gap-4">
               <div className="flex size-12 items-center justify-center rounded-large bg-default bg-opacity-40">
-                <Icon
-                  icon="solar:posts-carousel-vertical-line-duotone"
-                  width={28}
-                />
+                <Icon icon="hugeicons:workflow-square-02" width={28} />
               </div>
               <div>
-                <p className="text-md font-bold">
+                <p className="text-sm font-bold">
                   <NumberFlow
                     locales="en-US" // Intl.NumberFormat locales
                     value={steps.length}
@@ -312,10 +311,10 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
           <CardBody>
             <div className="flex items-center justify-start gap-4">
               <div className="flex size-12 items-center justify-center rounded-large bg-default bg-opacity-40">
-                <Icon icon="solar:delivery-line-duotone" width={28} />
+                <Icon icon="hugeicons:time-schedule" width={28} />
               </div>
               <div>
-                <p className="text-md font-bold">
+                <p className="text-sm font-bold">
                   {execution.executed_at === "0001-01-01T00:00:00Z" ? (
                     "N/A"
                   ) : (
@@ -331,10 +330,10 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
           <CardBody>
             <div className="flex items-center justify-start gap-4">
               <div className="flex size-12 items-center justify-center rounded-large bg-default bg-opacity-40">
-                <Icon icon="solar:delivery-outline" width={28} />
+                <Icon icon="hugeicons:time-02" width={28} />
               </div>
               <div>
-                <p className="text-md font-bold">
+                <p className="text-sm font-bold">
                   {execution.finished_at != "0001-01-01T00:00:00Z" ? (
                     <ReactTimeago date={execution.finished_at} />
                   ) : (
@@ -350,10 +349,10 @@ export default function ExecutionDetails({ runners, execution, steps }: any) {
           <CardBody>
             <div className="flex items-center justify-start gap-4">
               <div className="flex size-12 items-center justify-center rounded-large bg-default bg-opacity-40">
-                <Icon icon="solar:clock-circle-broken" width={28} />
+                <Icon icon="hugeicons:timer-02" width={28} />
               </div>
               <div>
-                <p className="text-md font-bold">{getDuration()}</p>
+                <p className="text-sm font-bold">{getDuration()}</p>
                 <p className="text-sm text-default-500">Duration</p>
               </div>
             </div>

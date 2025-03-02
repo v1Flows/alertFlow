@@ -23,7 +23,7 @@ export default async function UpdateFlow(
   description: string,
   projectID: string,
   runnerID: string,
-  encryptPayloads: boolean,
+  encryptAlerts: boolean,
   encryptExecutions: boolean,
 ): Promise<SuccessResponse | ErrorResponse> {
   try {
@@ -43,7 +43,7 @@ export default async function UpdateFlow(
           description,
           project_id: projectID,
           runner_id: runnerID,
-          encrypt_payloads: encryptPayloads,
+          encrypt_alerts: encryptAlerts,
           encrypt_executions: encryptExecutions,
         }),
       },

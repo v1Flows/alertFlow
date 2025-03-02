@@ -64,7 +64,6 @@ export default function SidebarMenu({
   const router = useRouter();
 
   const { theme } = useTheme();
-  const isSSR = useIsSSR();
   const pathname = usePathname();
   const currentPath = pathname.split("/")?.[1];
 
@@ -112,7 +111,7 @@ export default function SidebarMenu({
               height={32}
               radius="none"
               shadow="none"
-              src={`/images/af_logo_${theme === "light" || isSSR ? "black" : "white"}.png`}
+              src={`/images/af_logo_${theme === "light" ? "black" : "white"}.png`}
               width={32}
             />
           </div>
@@ -165,7 +164,7 @@ export default function SidebarMenu({
               startContent={
                 <Icon
                   className="text-default-500"
-                  icon="solar:face-scan-square-linear"
+                  icon="hugeicons:profile-02"
                   width={24}
                 />
               }
@@ -180,7 +179,7 @@ export default function SidebarMenu({
               startContent={
                 <Icon
                   className="text-danger"
-                  icon="solar:logout-3-linear"
+                  icon="hugeicons:logout-02"
                   width={24}
                 />
               }
@@ -191,16 +190,13 @@ export default function SidebarMenu({
           </DropdownMenu>
         </Dropdown>
 
-        <ScrollShadow className="-mr-6 h-full max-h-full py-6 pr-6">
-          <div className="flex items-center justify-center">
-            <Search
-              flows={flows}
-              isCollapsed={isCollapsed}
-              projects={projects}
-            />
-          </div>
-          <Spacer y={2} />
+        <Spacer y={4} />
 
+        <div className="flex items-center justify-center">
+          <Search flows={flows} isCollapsed={isCollapsed} projects={projects} />
+        </div>
+
+        <ScrollShadow className="-mr-6 h-full max-h-full py-2 pr-6">
           <Sidebar
             ref={null}
             defaultSelectedKey="home"
@@ -252,14 +248,14 @@ export default function SidebarMenu({
               >
                 <Icon
                   className="text-default-500"
-                  icon="solar:bell-bold-duotone"
+                  icon="hugeicons:notification-03"
                   width={22}
                 />
               </Badge>
             ) : (
               <Icon
                 className="text-default-500"
-                icon="solar:bell-off-bold-duotone"
+                icon="hugeicons:notification-snooze-03"
                 width={22}
               />
             )}
@@ -274,7 +270,7 @@ export default function SidebarMenu({
             <Icon
               className="text-default-500"
               height={24}
-              icon="solar:sidebar-minimalistic-outline"
+              icon="hugeicons:sidebar-left"
               width={24}
             />
           </Button>

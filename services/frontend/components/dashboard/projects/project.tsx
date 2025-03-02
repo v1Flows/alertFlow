@@ -3,18 +3,16 @@
 import { Icon } from "@iconify/react";
 import {
   Alert,
-  Avatar,
   Button,
   Card,
   CardBody,
-  Divider,
+  Spacer,
   useDisclosure,
 } from "@heroui/react";
 import NumberFlow from "@number-flow/react";
 import React from "react";
 
 import Reloader from "@/components/reloader/Reloader";
-import { subtitle } from "@/components/primitives";
 import EditProjectModal from "@/components/functions/projects/edit";
 
 import ProjectBreadcrumbs from "./project/breadcrumbs";
@@ -55,43 +53,36 @@ export default function Project({
           <Reloader />
         </div>
       </div>
-      <div className="my-2 flex items-center justify-between">
+      <Spacer y={4} />
+      <div className="flex flex-cols items-center justify-between">
         <div className="flex items-center gap-2">
-          <Avatar
-            classNames={{
-              base: `text-white`,
-            }}
-            icon={
-              <Icon
-                icon={
-                  project.icon ? project.icon : "solar:question-square-outline"
-                }
-                width={24}
-              />
-            }
-            radius="md"
-            style={{
-              backgroundColor: project.color,
-            }}
+          <Icon
+            className="h-full"
+            icon={project.icon ? project.icon : "solar:question-square-outline"}
+            width={32}
           />
           <div className="flex flex-col items-start">
-            <h1 className={subtitle({ className: "mb-0 font-bold" })}>
-              {project.name}
-            </h1>
+            <p className="text-xl font-bold">{project.name}</p>
             <p className="text-sm text-default-500">{project.description}</p>
           </div>
         </div>
         <Button
           color="warning"
           isDisabled={checkEditDisabled()}
-          startContent={<Icon icon="solar:pen-new-square-outline" width={20} />}
+          startContent={<Icon icon="hugeicons:pencil-edit-02" width={20} />}
           variant="flat"
           onPress={() => editProjectModal.onOpen()}
         >
           Edit
         </Button>
       </div>
-      <Divider className="mb-4" />
+      <Spacer y={2} />
+      <div
+        className="p-0.5 rounded-full mb-4"
+        style={{
+          backgroundColor: project.color,
+        }}
+      />
       {project.disabled && (
         <div className="mb-4">
           <Alert
@@ -109,7 +100,7 @@ export default function Project({
               <CardBody>
                 <div className="flex items-center gap-2">
                   <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
-                    <Icon icon="solar:smile-square-outline" width={20} />
+                    <Icon icon="hugeicons:location-user-02" width={24} />
                   </div>
                   <div>
                     <p className="text-md font-bold">
@@ -129,7 +120,7 @@ export default function Project({
               <CardBody>
                 <div className="flex items-center gap-2">
                   <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
-                    <Icon icon="solar:book-2-outline" width={20} />
+                    <Icon icon="hugeicons:workflow-square-10" width={24} />
                   </div>
                   <div>
                     <p className="text-md font-bold">{flows.length}</p>
@@ -144,7 +135,7 @@ export default function Project({
               <CardBody>
                 <div className="flex items-center gap-2">
                   <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
-                    <Icon icon="solar:rocket-2-outline" width={20} />
+                    <Icon icon="hugeicons:ai-brain-04" width={24} />
                   </div>
                   <div>
                     <p className="text-md font-bold">
@@ -175,7 +166,7 @@ export default function Project({
               <CardBody>
                 <div className="flex items-center gap-2">
                   <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
-                    <Icon icon="solar:key-square-2-outline" width={20} />
+                    <Icon icon="hugeicons:key-02" width={24} />
                   </div>
                   <div>
                     <p className="text-md font-bold">

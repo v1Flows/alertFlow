@@ -1,6 +1,8 @@
 # AlertFlow
 
-AlertFlow is a monitoring automation platform designed to streamline workflows, manage team members, and monitor project progress. This repository contains both the frontend and backend code for the AlertFlow application.
+AlertFlow is a monitoring automation platform designed to streamline workflows with incoming alarms from your existing monitoring infrastructure. This repository contains both the frontend and backend code for the AlertFlow application.
+
+![Dashboard Image](https://github.com/v1Flows/alertFlow/blob/develop/services/frontend/public/images/full_dashboard.png?raw=true)
 
 ## Table of Contents
 
@@ -16,9 +18,9 @@ AlertFlow is a monitoring automation platform designed to streamline workflows, 
 ## Features
 
 - **Project Management**: Projects combine a number of Flows and add the option to invite members and control their access.
-- **Flows**: Create flows to design workflows for your incoming alarms.
-- **Payloads**: Receive incoming alarms from your monitoring infrastructure via payloads and automate them via Flows.
-- **Runners**: Runners execute your workflows and can also be self-hosted.
+- **Flows**: Create flows to design workflows / automations for your incoming alarms.
+- **Alerts**: Receive incoming alarms from your monitoring infrastructure via alerts and automate them with Flows.
+- **Runners**: Runners execute your workflows and be the entry point for your incoming alarms. They can also be self-hosted and expanded with plugins.
 - **Shared Runners**: Create runners which can be used for all projects.
 - **Scalable to your Needs**: Runners can be scaled with the Auto Join option
 - **Team Collaboration**: Invite team members, assign roles, and manage permissions.

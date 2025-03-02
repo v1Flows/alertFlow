@@ -48,7 +48,7 @@ func UpdateFlow(context *gin.Context, db *bun.DB) {
 	}
 
 	flow.UpdatedAt = time.Now()
-	_, err = db.NewUpdate().Model(&flow).Column("name", "description", "project_id", "runner_id", "encrypt_payloads", "encrypt_executions", "updated_at").Where("id = ?", flowID).Exec(context)
+	_, err = db.NewUpdate().Model(&flow).Column("name", "description", "project_id", "runner_id", "encrypt_alerts", "encrypt_executions", "updated_at").Where("id = ?", flowID).Exec(context)
 	if err != nil {
 		httperror.InternalServerError(context, "Error updating flow on db", err)
 		return

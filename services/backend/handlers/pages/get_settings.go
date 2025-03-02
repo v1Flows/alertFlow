@@ -1,9 +1,10 @@
 package pages
 
 import (
+	"net/http"
+
 	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
 	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/uptrace/bun"
@@ -21,7 +22,7 @@ func GetSettings(context *gin.Context, db *bun.DB) {
 		"add_project_members",
 		"add_flow_actions",
 		"start_executions",
-		"inject_payloads",
+		"receive_alerts",
 	).Where("id = 1").Scan(context)
 	if err != nil {
 		httperror.InternalServerError(context, "Error collecting settings data on db", err)

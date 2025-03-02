@@ -145,7 +145,7 @@ export default function Actions({
                         editActionModal.onOpen();
                       }}
                     >
-                      <Icon icon="solar:pen-new-square-outline" width={20} />
+                      <Icon icon="hugeicons:pencil-edit-02" width={20} />
                     </Button>
                     <Button
                       isIconOnly
@@ -157,7 +157,7 @@ export default function Actions({
                         deleteActionModal.onOpen();
                       }}
                     >
-                      <Icon icon="solar:trash-bin-trash-outline" width={20} />
+                      <Icon icon="hugeicons:delete-02" width={20} />
                     </Button>
                   </div>
                 </div>
@@ -304,7 +304,7 @@ export default function Actions({
                 variant="light"
                 onPress={editFlowActionsDetails.onOpen}
               >
-                <Icon icon="solar:pen-new-square-outline" width={18} />
+                <Icon icon="hugeicons:pencil-edit-02" width={20} />
               </Button>
             </div>
             <Divider className="my-4" />

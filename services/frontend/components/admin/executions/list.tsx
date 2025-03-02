@@ -26,23 +26,23 @@ import NumberFlow from "@number-flow/react";
 import { useRouter } from "next/navigation";
 import React, { useMemo, useState } from "react";
 
-import FunctionShowPayloadModal from "@/components/functions/flows/showPayload";
 import DeleteExecutionModal from "@/components/functions/flows/deleteExecution";
+import FunctionShowAlertModal from "@/components/functions/flows/showAlert";
 
-export function ExecutionsList({ flows, payloads, executions, runners }: any) {
+export function ExecutionsList({ flows, alerts, executions, runners }: any) {
   const router = useRouter();
 
-  const showPayloadModal = useDisclosure();
+  const showAlertModal = useDisclosure();
   const deleteExecutionModal = useDisclosure();
 
-  const [targetPayload, setTargetPayload] = useState({} as any);
+  const [targetAlert, setTargetAlert] = useState({} as any);
   const [targetExecution, setTargetExecution] = useState({} as any);
 
   const [statusFilter, setStatusFilter] = useState(new Set([]) as any);
 
-  const handleShow = (payload: any) => {
-    setTargetPayload(payload);
-    showPayloadModal.onOpen();
+  const handleShow = (alert: any) => {
+    setTargetAlert(alert);
+    showAlertModal.onOpen();
   };
 
   // pagination
@@ -135,7 +135,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
             valueLabel={
               <Icon
                 className="text-default-500"
-                icon="solar:sleeping-square-linear"
+                icon="hugeicons:time-quarter-pass"
                 width={20}
               />
             }
@@ -160,7 +160,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
             valueLabel={
               <Icon
                 className="text-warning"
-                icon="solar:pause-broken"
+                icon="hugeicons:pause"
                 width={16}
               />
             }
@@ -179,7 +179,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
             valueLabel={
               <Icon
                 className="text-danger"
-                icon="solar:forbidden-linear"
+                icon="hugeicons:cancel-01"
                 width={20}
               />
             }
@@ -197,7 +197,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
             valueLabel={
               <Icon
                 className="text-secondary"
-                icon="solar:bill-cross-broken"
+                icon="hugeicons:note-remove"
                 width={20}
               />
             }
@@ -216,7 +216,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
             valueLabel={
               <Icon
                 className="text-primary"
-                icon="solar:hand-shake-linear"
+                icon="hugeicons:waving-hand-01"
                 width={22}
               />
             }
@@ -235,7 +235,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
             valueLabel={
               <Icon
                 className="text-danger"
-                icon="solar:danger-triangle-broken"
+                icon="hugeicons:alert-02"
                 width={20}
               />
             }
@@ -254,7 +254,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
             valueLabel={
               <Icon
                 className="text-success"
-                icon="solar:check-read-broken"
+                icon="hugeicons:tick-double-01"
                 width={22}
               />
             }
@@ -383,13 +383,11 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
                     }
                     onPress={() =>
                       handleShow(
-                        payloads.find(
-                          (p: any) => p.id === execution.payload_id,
-                        ),
+                        alerts.find((p: any) => p.id === execution.alert_id),
                       )
                     }
                   >
-                    Payload
+                    Alert
                   </DropdownItem>
                 </DropdownSection>
                 <DropdownSection title="Danger Zone">
@@ -398,7 +396,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
                     className="text-danger"
                     color="danger"
                     startContent={
-                      <Icon icon="solar:trash-bin-trash-outline" width={20} />
+                      <Icon icon="hugeicons:delete-02" width={20} />
                     }
                     onPress={() => {
                       setTargetExecution(execution);
@@ -449,7 +447,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
                   <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-default-500"
-                      icon="solar:sleeping-square-linear"
+                      icon="hugeicons:time-quarter-pass"
                       width={18}
                     />
                     Pending
@@ -459,7 +457,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
                   <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-primary"
-                      icon="solar:play-bold-duotone"
+                      icon="hugeicons:play"
                       width={18}
                     />
                     Running
@@ -469,7 +467,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
                   <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-warning"
-                      icon="solar:pause-broken"
+                      icon="hugeicons:pause"
                       width={18}
                     />
                     Paused
@@ -479,7 +477,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
                   <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-danger"
-                      icon="solar:forbidden-linear"
+                      icon="hugeicons:cancel-01"
                       width={18}
                     />
                     Canceled
@@ -489,7 +487,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
                   <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-secondary"
-                      icon="solar:bill-cross-broken"
+                      icon="hugeicons:note-remove"
                       width={18}
                     />
                     No Pattern Match
@@ -499,7 +497,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
                   <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-primary"
-                      icon="solar:hand-shake-linear"
+                      icon="hugeicons:waving-hand-01"
                       width={18}
                     />
                     Interaction Required
@@ -509,7 +507,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
                   <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-danger"
-                      icon="solar:danger-triangle-broken"
+                      icon="hugeicons:alert-02"
                       width={18}
                     />
                     Error
@@ -519,7 +517,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
                   <div className="flex-cols flex gap-2">
                     <Icon
                       className="text-success"
-                      icon="solar:check-read-broken"
+                      icon="hugeicons:tick-double-01"
                       width={18}
                     />
                     Finished
@@ -567,7 +565,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
             <CardBody>
               <div className="flex items-center gap-2">
                 <div className="flex size-10 items-center justify-center rounded-small bg-default/30 text-default-500">
-                  <Icon icon="solar:sleeping-square-linear" width={20} />
+                  <Icon icon="hugeicons:time-quarter-pass" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">
@@ -600,7 +598,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
             <CardBody>
               <div className="flex items-center gap-2">
                 <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
-                  <Icon icon="solar:play-bold-duotone" width={20} />
+                  <Icon icon="hugeicons:play" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">
@@ -630,7 +628,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
             <CardBody>
               <div className="flex items-center gap-2">
                 <div className="flex size-10 items-center justify-center rounded-small bg-warning/10 text-warning">
-                  <Icon icon="solar:pause-broken" width={20} />
+                  <Icon icon="hugeicons:pause" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">
@@ -662,7 +660,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
             <CardBody>
               <div className="flex items-center gap-2">
                 <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
-                  <Icon icon="solar:hand-shake-linear" width={20} />
+                  <Icon icon="hugeicons:waving-hand-01" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">
@@ -697,7 +695,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
             <CardBody>
               <div className="flex items-center gap-2">
                 <div className="flex size-10 items-center justify-center rounded-small bg-secondary/10 text-secondary">
-                  <Icon icon="solar:bill-cross-broken" width={20} />
+                  <Icon icon="hugeicons:note-remove" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">
@@ -728,7 +726,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
             <CardBody>
               <div className="flex items-center gap-2">
                 <div className="flex size-10 items-center justify-center rounded-small bg-danger/10 text-danger">
-                  <Icon icon="solar:danger-triangle-broken" width={20} />
+                  <Icon icon="hugeicons:alert-02" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">
@@ -755,7 +753,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
             <CardBody>
               <div className="flex items-center gap-2">
                 <div className="flex size-10 items-center justify-center rounded-small bg-success/10 text-success">
-                  <Icon icon="solar:check-read-broken" width={20} />
+                  <Icon icon="hugeicons:tick-double-01" width={20} />
                 </div>
                 <div>
                   <p className="text-md font-bold">
@@ -829,10 +827,7 @@ export function ExecutionsList({ flows, payloads, executions, runners }: any) {
           )}
         </TableBody>
       </Table>
-      <FunctionShowPayloadModal
-        disclosure={showPayloadModal}
-        payload={targetPayload}
-      />
+      <FunctionShowAlertModal alert={targetAlert} disclosure={showAlertModal} />
       <DeleteExecutionModal
         disclosure={deleteExecutionModal}
         execution={targetExecution}

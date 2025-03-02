@@ -2,12 +2,9 @@
 import { Card, CardBody, Divider, Skeleton, Spacer } from "@heroui/react";
 import React from "react";
 
-import ExecutionBreadcrumbs from "@/components/dashboard/flows/flow/execution/breadcrumbs";
-
 export default function loader() {
   return (
     <>
-      <ExecutionBreadcrumbs executionID="..." flowID="..." />
       <div className="my-2 flex items-center gap-2">
         <div className="flex w-full flex-col gap-2">
           <Skeleton className="w-1/12 rounded-lg">

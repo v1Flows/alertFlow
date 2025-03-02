@@ -59,7 +59,7 @@ export default function AdminStepActions({
             ? step.finished_at
             : new Date().toISOString();
         break;
-      case "no_pattern_match":
+      case "noPatternMatch":
         newStep.status = "noPatternMatch";
         newStep.messages = [
           "Action Status changed by Admin to No Pattern Match",
@@ -69,9 +69,11 @@ export default function AdminStepActions({
             ? step.finished_at
             : "0001-01-01T00:00:00Z";
         break;
-      case "no_result":
-        newStep.status = "noResult";
-        newStep.messages = ["Action Status changed by Admin to No Result"];
+      case "interactionWaiting":
+        newStep.status = "interactionWaiting";
+        newStep.messages = [
+          "Action Status changed by Admin to Interaction Required",
+        ];
         newStep.finished_at =
           step.finished_at !== "0001-01-01T00:00:00Z"
             ? step.finished_at
@@ -85,16 +87,18 @@ export default function AdminStepActions({
             ? step.finished_at
             : new Date().toISOString();
         break;
-      case "finished":
-        newStep.status = "finished";
-        newStep.messages = ["Action Status changed by Admin to Finished"];
+      case "success":
+        newStep.status = "success";
+        newStep.messages = ["Action Status changed by Admin to Success"];
         newStep.finished_at =
           step.finished_at !== "0001-01-01T00:00:00Z"
             ? step.finished_at
             : new Date().toISOString();
         break;
       default:
-        break;
+        toast.error("Invalid Status");
+
+        return;
     }
 
     const response = await UpdateExecutionStep(execution, newStep);
@@ -124,8 +128,8 @@ export default function AdminStepActions({
             <div className="flex-cols flex gap-2">
               <Icon
                 className="text-default-500"
-                icon="solar:sleeping-square-linear"
-                width={18}
+                icon="hugeicons:time-quarter-pass"
+                width={20}
               />
               Pending
             </div>
@@ -136,11 +140,7 @@ export default function AdminStepActions({
             onPress={() => changeStepStatus("running")}
           >
             <div className="flex-cols flex gap-2">
-              <Icon
-                className="text-primary"
-                icon="solar:play-bold-duotone"
-                width={18}
-              />
+              <Icon className="text-primary" icon="hugeicons:play" width={20} />
               Running
             </div>
           </DropdownItem>
@@ -152,8 +152,8 @@ export default function AdminStepActions({
             <div className="flex-cols flex gap-2">
               <Icon
                 className="text-warning"
-                icon="solar:pause-broken"
-                width={18}
+                icon="hugeicons:pause"
+                width={20}
               />
               Paused
             </div>
@@ -166,8 +166,8 @@ export default function AdminStepActions({
             <div className="flex-cols flex gap-2">
               <Icon
                 className="text-danger"
-                icon="solar:forbidden-linear"
-                width={18}
+                icon="hugeicons:cancel-01"
+                width={20}
               />
               Canceled
             </div>
@@ -175,29 +175,29 @@ export default function AdminStepActions({
           <DropdownItem
             key="no_pattern_match"
             className="capitalize"
-            onPress={() => changeStepStatus("no_pattern_match")}
+            onPress={() => changeStepStatus("noPatternMatch")}
           >
             <div className="flex-cols flex gap-2">
               <Icon
                 className="text-secondary"
-                icon="solar:bill-cross-broken"
-                width={18}
+                icon="hugeicons:note-remove"
+                width={20}
               />
               No Pattern Match
             </div>
           </DropdownItem>
           <DropdownItem
-            key="no_flow_actions_found"
+            key="interactionWaiting"
             className="capitalize"
-            onPress={() => changeStepStatus("no_result")}
+            onPress={() => changeStepStatus("interactionWaiting")}
           >
             <div className="flex-cols flex gap-2">
               <Icon
-                className="text-default-500"
-                icon="solar:ghost-broken"
-                width={18}
+                className="text-primary"
+                icon="hugeicons:waving-hand-01"
+                width={20}
               />
-              No Result
+              Interaction Required
             </div>
           </DropdownItem>
           <DropdownItem
@@ -208,24 +208,24 @@ export default function AdminStepActions({
             <div className="flex-cols flex gap-2">
               <Icon
                 className="text-danger"
-                icon="solar:danger-triangle-broken"
-                width={18}
+                icon="hugeicons:alert-02"
+                width={20}
               />
               Error
             </div>
           </DropdownItem>
           <DropdownItem
-            key="finished"
+            key="success"
             className="capitalize"
-            onPress={() => changeStepStatus("finished")}
+            onPress={() => changeStepStatus("success")}
           >
             <div className="flex-cols flex gap-2">
               <Icon
                 className="text-success"
-                icon="solar:check-read-broken"
-                width={18}
+                icon="hugeicons:tick-double-01"
+                width={20}
               />
-              Finished
+              Success
             </div>
           </DropdownItem>
         </DropdownSection>

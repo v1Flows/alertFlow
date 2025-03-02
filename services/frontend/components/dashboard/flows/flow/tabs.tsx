@@ -4,18 +4,16 @@ import { Tab, Tabs } from "@heroui/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 
-import { Flash } from "@/components/icons";
-
 import Actions from "./actions";
 import Executions from "./executions";
-import Payloads from "./payloads";
+import Alerts from "./alerts";
 import FlowStats from "./stats";
 import FlowEncryption from "./encryption";
 
 export default function FlowTabs({
   flow,
   executions,
-  payloads,
+  alerts,
   runners,
   user,
   canEdit,
@@ -52,7 +50,7 @@ export default function FlowTabs({
             key="actions"
             title={
               <div className="flex items-center space-x-2">
-                <Flash fill="currentColor" size={20} />
+                <Icon height={20} icon="hugeicons:blockchain-06" width="20" />
                 <span>Actions</span>
               </div>
             }
@@ -68,35 +66,31 @@ export default function FlowTabs({
             key="executions"
             title={
               <div className="flex items-center space-x-2">
-                <Icon height={20} icon="solar:reorder-linear" width="20" />
+                <Icon height={20} icon="hugeicons:rocket-02" width="20" />
                 <span>Executions</span>
               </div>
             }
           >
             <Executions
+              alerts={alerts}
               canEdit={canEdit}
               executions={executions}
-              payloads={payloads}
             />
           </Tab>
           <Tab
-            key="payloads"
+            key="alerts"
             title={
               <div className="flex items-center space-x-2">
-                <Icon
-                  height="20"
-                  icon="solar:letter-opened-outline"
-                  width="20"
-                />
-                <span>Payloads</span>
+                <Icon height="20" icon="hugeicons:alert-02" width="20" />
+                <span>Alerts</span>
               </div>
             }
           >
-            <Payloads
+            <Alerts
+              alerts={alerts}
               canEdit={canEdit}
               executions={executions}
               flow={flow}
-              payloads={payloads}
               runners={runners}
             />
           </Tab>
@@ -104,7 +98,7 @@ export default function FlowTabs({
             key="encryption"
             title={
               <div className="flex items-center space-x-2">
-                <Icon icon="solar:lock-linear" width={20} />
+                <Icon icon="hugeicons:encrypt" width={20} />
                 <span>Encryption</span>
               </div>
             }
@@ -115,7 +109,11 @@ export default function FlowTabs({
             key="stats"
             title={
               <div className="flex items-center space-x-2">
-                <Icon height="20" icon="solar:chart-2-outline" width="20" />
+                <Icon
+                  height="20"
+                  icon="hugeicons:chart-line-data-01"
+                  width="20"
+                />
                 <span>Stats</span>
               </div>
             }

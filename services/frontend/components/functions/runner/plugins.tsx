@@ -2,12 +2,13 @@ import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import { Icon } from "@iconify/react";
 import {
+  Chip,
+  Divider,
   Drawer,
   DrawerBody,
   DrawerContent,
   DrawerHeader,
-} from "@heroui/drawer";
-import { Chip, Divider } from "@heroui/react";
+} from "@heroui/react";
 import TimeAgo from "react-timeago";
 
 export default function RunnerDrawer({
@@ -94,10 +95,10 @@ export default function RunnerDrawer({
               </div>
               <div className="flex items-center justify-between">
                 <div className="text-small text-default-500">
-                  Payload Endpoints
+                  Alert Endpoints
                 </div>
                 <div className="text-small font-medium">
-                  {runner.payload_endpoints.length}
+                  {runner.alert_endpoints.length}
                 </div>
               </div>
 
