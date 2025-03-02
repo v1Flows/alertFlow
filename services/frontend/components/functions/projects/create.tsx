@@ -43,7 +43,7 @@ export default function CreateProjectModal({
     useDisclosure();
 
   const [color, setColor] = useColor("#5213d7");
-  const [projectIcon, setProjectIcon] = React.useState("solar:home-2-linear");
+  const [projectIcon, setProjectIcon] = React.useState("hugeicons:home-12");
   const [name, setName] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [alertflowRunners, setAlertflowRunners] = React.useState(true);
@@ -54,12 +54,12 @@ export default function CreateProjectModal({
   const [isLoading, setIsLoading] = React.useState(false);
 
   useEffect(() => {
-    loadAllSolarIcons();
+    loadAllIcons();
   }, []);
 
-  async function loadAllSolarIcons() {
-    await loadIcons(["solar:home-2-linear", "solar:atom-broken"]);
-    setIcons(() => listIcons("", "solar"));
+  async function loadAllIcons() {
+    await loadIcons(["hugeicons:home-12", "hugeicons:alien-02"]);
+    setIcons(() => listIcons("", "hugeicons"));
   }
 
   const handleIconChange = (e: any) => {
