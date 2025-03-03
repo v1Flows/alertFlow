@@ -137,7 +137,7 @@ export default function AlertsList({
         ))}
       </div>
       {!compactMode && (
-        <div className="flex w-full justify-center">
+        <div className="flex w-full mt-4 justify-center">
           <Pagination
             isCompact
             showControls

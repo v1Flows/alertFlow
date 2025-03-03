@@ -69,13 +69,27 @@ export default function Alerts({
     const cellValue = alert[columnKey];
 
     switch (columnKey) {
+      case "status":
+        return (
+          <p
+            className={`capitalize font-bold text-${alert.status === "firing" ? "danger" : "success"}`}
+          >
+            {alert.status}
+          </p>
+        );
       case "plugin":
-        return <p className="capitalize">{alert.plugin || "No endpoint"}</p>;
+        return (
+          <p className="capitalize">{alert.plugin || "No plugin found"}</p>
+        );
       case "runner":
         return (
-          <p>
-            {runners.find((runner: any) => runner.id === alert.runner_id)?.name}
-          </p>
+          <>
+            <p>
+              {runners.find((runner: any) => runner.id === alert.runner_id)
+                ?.name || "N/A"}
+            </p>
+            <p className="text-sm text-default-500">{alert.runner_id}</p>
+          </>
         );
       case "encrypted":
         return (
@@ -199,11 +213,14 @@ export default function Alerts({
     <main>
       <Table isStriped aria-label="Alerts Table" bottomContent={bottomContent}>
         <TableHeader>
-          <TableColumn key="plugin" align="start">
-            Plugin
-          </TableColumn>
-          <TableColumn key="runner" align="center">
+          <TableColumn key="runner" align="start">
             Runner
+          </TableColumn>
+          <TableColumn key="status" align="center">
+            Status
+          </TableColumn>
+          <TableColumn key="plugin" align="center">
+            Plugin
           </TableColumn>
           <TableColumn key="encrypted" align="center">
             Encrypted
