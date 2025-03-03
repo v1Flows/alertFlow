@@ -23,7 +23,7 @@
     "@heroui/system": "2.4.11",
     "@heroui/theme": "2.4.11",
     "@heroui/use-disclosure": "2.2.7",
-    "@iconify/react": "^5.0.2",
+    "@iconify/react": "^5.2.0",
     "@number-flow/react": "^0.5.5",
     "@radix-ui/react-popover": "^1.1.6",
     "@react-aria/ssr": "3.9.7",
