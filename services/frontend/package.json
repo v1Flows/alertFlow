@@ -15,7 +15,7 @@
     "@dnd-kit/modifiers": "^9.0.0",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
-    "@eslint/compat": "^1.2.6",
+    "@eslint/compat": "^1.2.7",
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.17.0",
     "@heroui/framer-utils": "2.1.11",
