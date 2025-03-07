@@ -29,7 +29,7 @@ type Flows struct {
 	EncryptExecutions     bool      `bun:"encrypt_executions,type:bool,default:true" json:"encrypt_executions"`
 	GroupAlerts           bool      `bun:"group_alerts,type:bool,default:true" json:"group_alerts"`
 	GroupAlertsIdentifier string    `bun:"group_alerts_identifier,type:text,default:''" json:"group_alerts_identifier"`
-	AlertRetryThreshold   int       `bun:"alert_threshold,type:int,default:0" json:"alert_threshold"`
+	AlertThreshold        int       `bun:"alert_threshold,type:int,default:0" json:"alert_threshold"`
 }
 
 type Actions struct {

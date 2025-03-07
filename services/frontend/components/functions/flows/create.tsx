@@ -256,6 +256,7 @@ export default function FunctionCreateFlow({
                     <NumberInput
                       isRequired
                       description="If an alert is resolved and reoccurs, after which threshold should an new execution be accepted? (in minutes)"
+                      endContent="minutes"
                       label="Threshold"
                       value={threshold}
                       variant="bordered"
