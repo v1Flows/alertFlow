@@ -30,7 +30,7 @@ func GetGrouped(context *gin.Context, db *bun.DB) {
 
 	// check if grouped alerts are enabled
 	if flow.GroupAlerts {
-		err = db.NewSelect().Model(&alerts).Where("flow_id = ? AND group_key = ?", incomingRequest.FlowID, incomingRequest.GroupAlertsIdentifier).Scan(context)
+		err = db.NewSelect().Model(&alerts).Where("flow_id = ? AND group_key = ?", incomingRequest.FlowID, incomingRequest.GroupAlertsIdentifier).Order("created_at DESC").Scan(context)
 		if err != nil {
 			httperror.InternalServerError(context, "Error collecting alerts from db", err)
 			return
