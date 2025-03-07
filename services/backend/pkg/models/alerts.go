@@ -44,3 +44,8 @@ type SubAlerts struct {
 	StartedAt  time.Time       `json:"started_at"`
 	ResolvedAt time.Time       `json:"resolved_at"`
 }
+
+type IncomingGroupedAlertsRequest struct {
+	FlowID                string `json:"flow_id"`
+	GroupAlertsIdentifier string `json:"group_alerts_identifier"`
+}

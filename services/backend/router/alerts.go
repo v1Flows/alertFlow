@@ -14,9 +14,13 @@ func Alerts(router *gin.RouterGroup, db *bun.DB) {
 		alert.GET("/", func(c *gin.Context) {
 			alerts.GetMultiple(c, db)
 		})
+		alert.GET("/grouped", func(c *gin.Context) {
+			alerts.GetGrouped(c, db)
+		})
 		alert.GET("/:alertID", func(c *gin.Context) {
 			alerts.GetSingle(c, db)
 		})
+
 		alert.DELETE("/:alertID", func(c *gin.Context) {
 			alerts.Delete(c, db)
 		})
