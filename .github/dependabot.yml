@@ -12,7 +12,6 @@ updates:
     labels:
       - "dependencies"
       - "frontend"
-    open-pull-requests-limit: 5
     target-branch: "develop"
 
   - package-ecosystem: "gomod" # See documentation for possible values
@@ -22,7 +21,6 @@ updates:
     labels:
       - "dependencies"
       - "backend"
-    open-pull-requests-limit: 5
     target-branch: "develop"
     groups:
       backend:
