@@ -8,7 +8,7 @@ import Actions from "./actions";
 import Executions from "./executions";
 import Alerts from "./alerts";
 import FlowStats from "./stats";
-import FlowEncryption from "./encryption";
+import FlowSettings from "./settings";
 
 export default function FlowTabs({
   flow,
@@ -95,15 +95,15 @@ export default function FlowTabs({
             />
           </Tab>
           <Tab
-            key="encryption"
+            key="settings"
             title={
               <div className="flex items-center space-x-2">
-                <Icon icon="hugeicons:encrypt" width={20} />
-                <span>Encryption</span>
+                <Icon icon="hugeicons:settings-02" width={20} />
+                <span>Settings</span>
               </div>
             }
           >
-            <FlowEncryption flow={flow} />
+            <FlowSettings flow={flow} />
           </Tab>
           <Tab
             key="stats"
