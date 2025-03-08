@@ -181,10 +181,7 @@ export function ProjectsList({
                             project.disabled
                           }
                           startContent={
-                            <Icon
-                              icon="hugeicons:pencil-edit-02"
-                              width={18}
-                            />
+                            <Icon icon="hugeicons:pencil-edit-02" width={18} />
                           }
                           onPress={() => {
                             setTargetProject(project);
@@ -204,10 +201,7 @@ export function ProjectsList({
                             project.disabled
                           }
                           startContent={
-                            <Icon
-                              icon="hugeicons:delete-02"
-                              width={18}
-                            />
+                            <Icon icon="hugeicons:delete-02" width={18} />
                           }
                           onPress={() => {
                             setTargetProject(project);

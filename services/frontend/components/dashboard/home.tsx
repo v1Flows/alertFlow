@@ -419,7 +419,7 @@ export function DashboardHome({
         compactMode
         alerts={alerts}
         flows={flows}
-        maxAlerts={6}
+        maxAlerts={3}
         runners={runners}
       />
       <Spacer y={4} />

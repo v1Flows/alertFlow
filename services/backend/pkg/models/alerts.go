@@ -22,6 +22,11 @@ type Alerts struct {
 	Plugin      string          `bun:"plugin,type:text,default:''" json:"plugin"`
 	CreatedAt   time.Time       `bun:"created_at,type:timestamptz,default:now()" json:"created_at"`
 	Encrypted   bool            `bun:"encrypted,type:bool,default:false" json:"encrypted"`
+	UpdatedAt   time.Time       `bun:"updated_at,type:timestamptz" json:"updated_at"`
+	ResolvedAt  time.Time       `bun:"resolved_at,type:timestamptz" json:"resolved_at"`
+	GroupKey    string          `bun:"group_key,type:text,default:''" json:"group_key"`
+	SubAlerts   []SubAlerts     `bun:"sub_alerts,type:jsonb,default:jsonb('[]')" json:"sub_alerts"`
+	Note        string          `bun:"note,type:text,default:''" json:"note"`
 }
 
 type AlertEndpoints struct {
@@ -30,4 +35,18 @@ type AlertEndpoints struct {
 	Endpoint string `json:"endpoint"`
 	Icon     string `json:"icon"`
 	Color    string `json:"color"`
+}
+
+type SubAlerts struct {
+	ID         string          `json:"id"`
+	Name       string          `json:"name"`
+	Status     string          `json:"status"`
+	Labels     json.RawMessage `json:"labels"`
+	StartedAt  time.Time       `json:"started_at"`
+	ResolvedAt time.Time       `json:"resolved_at"`
+}
+
+type IncomingGroupedAlertsRequest struct {
+	FlowID                string `json:"flow_id"`
+	GroupAlertsIdentifier string `json:"group_alerts_identifier"`
 }

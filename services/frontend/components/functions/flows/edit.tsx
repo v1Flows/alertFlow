@@ -93,6 +93,10 @@ export default function EditFlowModal({
       runnerLimit ? runnerId : "any",
       flow.encrypt_alerts,
       flow.encrypt_executions,
+      flow.encrypt_action_params,
+      flow.group_alerts,
+      flow.group_alerts_identifier,
+      flow.alert_threshold,
     )) as any;
 
     if (!response) {

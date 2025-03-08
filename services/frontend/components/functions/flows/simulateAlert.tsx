@@ -32,7 +32,7 @@ export default function SimulateAlertModal({
   const [errorMessage, setErrorMessage] = React.useState("");
   const [target, setTarget] = React.useState(
     // eslint-disable-next-line no-undef
-    `${window.location.origin}/alerts/alertmanager`,
+    `${window.location.origin}/alert/alertmanager`,
   );
   const [payload, setPayload] = React.useState(`{
   "receiver": "${flow.id}",

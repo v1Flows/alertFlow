@@ -22,6 +22,12 @@ export default async function CreateFlow(
   description: string,
   projectId: string,
   runnerId: string,
+  groupAlerts: boolean,
+  groupAlertIdentifier: string,
+  encryptAlerts: boolean,
+  encryptExecutions: boolean,
+  encryptActionParams: boolean,
+  alertThreshold: number,
 ): Promise<SuccessResponse | ErrorResponse> {
   try {
     const cookieStore = await cookies();
@@ -48,6 +54,12 @@ export default async function CreateFlow(
           description,
           project_id: projectId,
           runner_id: runnerId,
+          group_alerts: groupAlerts,
+          group_alerts_identifier: groupAlertIdentifier,
+          encrypt_alerts: encryptAlerts,
+          encrypt_executions: encryptExecutions,
+          encrypt_action_params: encryptActionParams,
+          alert_threshold: alertThreshold,
         }),
       },
     );
