@@ -2,6 +2,7 @@ package functions
 
 import (
 	"context"
+	"time"
 
 	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 
@@ -9,8 +10,28 @@ import (
 	"github.com/uptrace/bun"
 )
 
-func StartExecution(flowID string, alertID uuid.UUID, flow models.Flows, db *bun.DB) error {
+func PreStartExecution(flowID string, alert models.Alerts, flow models.Flows, db *bun.DB) error {
 	context := context.Background()
+
+	// check when the last alert came in which got executed
+	var lastAlert models.Alerts
+	err := db.NewSelect().Model(&lastAlert).Where("flow_id = ? AND id != ? AND execution_id != ''", flowID, alert.ID).Order("created_at DESC").Limit(1).Scan(context)
+	if err != nil {
+		return err
+	}
+
+	// compare the difference between the last alert and the current alert to the flow alert threshold
+	if lastAlert.CreatedAt.Add(time.Duration(flow.AlertThreshold) * time.Minute).After(alert.CreatedAt) {
+		// set note on alert why it was not executed
+		alert.Note = "Alert was not executed because it came in too soon after the last alert"
+		_, err = db.NewUpdate().Model(&alert).Column("note").Where("id = ?", alert.ID).Exec(context)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	}
+
 	var execution models.Executions
 
 	if flow.RunnerID != "" {
@@ -19,17 +40,16 @@ func StartExecution(flowID string, alertID uuid.UUID, flow models.Flows, db *bun
 
 	execution.ID = uuid.New()
 	execution.FlowID = flowID
-	execution.AlertID = alertID.String()
+	execution.AlertID = alert.ID.String()
 	execution.Status = "pending"
-	_, err := db.NewInsert().Model(&execution).Column("id", "flow_id", "alert_id", "status", "executed_at").Exec(context)
+	_, err = db.NewInsert().Model(&execution).Column("id", "flow_id", "alert_id", "status", "executed_at").Exec(context)
 	if err != nil {
 		return err
 	}
 
 	// set execution id on alert
-	var alert models.Alerts
 	alert.ExecutionID = execution.ID.String()
-	_, err = db.NewUpdate().Model(&alert).Column("execution_id").Where("id = ?", alertID).Exec(context)
+	_, err = db.NewUpdate().Model(&alert).Column("execution_id").Where("id = ?", alert.ID).Exec(context)
 	if err != nil {
 		return err
 	}

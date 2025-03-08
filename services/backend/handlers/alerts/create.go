@@ -87,7 +87,7 @@ func CreateAlert(context *gin.Context, db *bun.DB) {
 		}
 	}
 
-	err = functions.StartExecution(alert.FlowID, alert.ID, flow, db)
+	err = functions.PreStartExecution(alert.FlowID, alert, flow, db)
 	if err != nil {
 		log.Error("Failed to start execution: " + err.Error())
 		httperror.InternalServerError(context, "Failed to start execution", err)

@@ -26,6 +26,7 @@ type Alerts struct {
 	ResolvedAt  time.Time       `bun:"resolved_at,type:timestamptz" json:"resolved_at"`
 	GroupKey    string          `bun:"group_key,type:text,default:''" json:"group_key"`
 	SubAlerts   []SubAlerts     `bun:"sub_alerts,type:jsonb,default:jsonb('[]')" json:"sub_alerts"`
+	Note        string          `bun:"note,type:text,default:''" json:"note"`
 }
 
 type AlertEndpoints struct {
