@@ -143,10 +143,16 @@ export default function AlertsList({
                             key={a.id}
                             className="group h-auto py-3"
                             startContent={
-                              <IconWrapper className="bg-danger/10 text-danger">
+                              <IconWrapper
+                                className={`bg-${a.status === "firing" ? "danger" : "success"}/10 text-${a.status === "firing" ? "danger" : "success"}`}
+                              >
                                 <Icon
                                   className="text-lg"
-                                  icon="hugeicons:fire"
+                                  icon={
+                                    a.status === "firing"
+                                      ? "hugeicons:fire"
+                                      : "hugeicons:checkmark-badge-01"
+                                  }
                                 />
                               </IconWrapper>
                             }

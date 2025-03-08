@@ -48,7 +48,37 @@ func UpdateFlow(context *gin.Context, db *bun.DB) {
 	}
 
 	flow.UpdatedAt = time.Now()
-	_, err = db.NewUpdate().Model(&flow).Column("name", "description", "project_id", "runner_id", "encrypt_alerts", "encrypt_executions", "updated_at", "group_alerts", "group_alerts_identifier", "alert_threshold").Where("id = ?", flowID).Exec(context)
+	columns := []string{}
+	if flow.Name != "" {
+		columns = append(columns, "name")
+	}
+	if flow.Description != "" {
+		columns = append(columns, "description")
+	}
+	if flow.ProjectID != "" {
+		columns = append(columns, "project_id")
+	}
+	if flow.RunnerID != "" {
+		columns = append(columns, "runner_id")
+	}
+	if flow.EncryptAlerts {
+		columns = append(columns, "encrypt_alerts")
+	}
+	if flow.EncryptExecutions {
+		columns = append(columns, "encrypt_executions")
+	}
+	if flow.GroupAlerts {
+		columns = append(columns, "group_alerts")
+	}
+	if flow.GroupAlertsIdentifier != "" {
+		columns = append(columns, "group_alerts_identifier")
+	}
+	if flow.AlertThreshold != 0 {
+		columns = append(columns, "alert_threshold")
+	}
+	columns = append(columns, "updated_at")
+
+	_, err = db.NewUpdate().Model(&flow).Column(columns...).Where("id = ?", flowID).Exec(context)
 	if err != nil {
 		httperror.InternalServerError(context, "Error updating flow on db", err)
 		return
