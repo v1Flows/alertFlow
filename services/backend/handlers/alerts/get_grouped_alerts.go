@@ -1,9 +1,11 @@
 package alerts
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/v1Flows/alertFlow/services/backend/functions/encryption"
+	"github.com/v1Flows/alertFlow/services/backend/functions/gatekeeper"
 	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
 	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 
@@ -26,11 +28,21 @@ func GetGrouped(context *gin.Context, db *bun.DB) {
 		return
 	}
 
+	access, err := gatekeeper.CheckUserProjectAccess(flow.ProjectID, context, db)
+	if err != nil {
+		httperror.InternalServerError(context, "Error checking your user permissions on project", err)
+		return
+	}
+	if !access {
+		httperror.Unauthorized(context, "You are not allowed to view this alert", errors.New("unauthorized"))
+		return
+	}
+
 	alerts := make([]models.Alerts, 0)
 
 	// check if grouped alerts are enabled
 	if flow.GroupAlerts {
-		err = db.NewSelect().Model(&alerts).Where("flow_id = ? AND group_key = ?", incomingRequest.FlowID, incomingRequest.GroupAlertsIdentifier).Order("created_at ASC").Scan(context)
+		err = db.NewSelect().Model(&alerts).Where("flow_id = ? AND group_key = ? AND status != 'resolved'", incomingRequest.FlowID, incomingRequest.GroupAlertsIdentifier).Order("created_at ASC").Scan(context)
 		if err != nil {
 			httperror.InternalServerError(context, "Error collecting alerts from db", err)
 			return

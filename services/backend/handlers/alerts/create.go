@@ -1,12 +1,14 @@
 package alerts
 
 import (
+	"errors"
 	"net/http"
 	"time"
 
 	"github.com/v1Flows/alertFlow/services/backend/config"
 	"github.com/v1Flows/alertFlow/services/backend/functions/encryption"
 	functions "github.com/v1Flows/alertFlow/services/backend/functions/flow"
+	"github.com/v1Flows/alertFlow/services/backend/functions/gatekeeper"
 	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
 	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
 
@@ -33,6 +35,16 @@ func CreateAlert(context *gin.Context, db *bun.DB) {
 	}
 	if flowCount == 0 {
 		httperror.StatusNotFound(context, "Error no flow found", err)
+		return
+	}
+
+	access, err := gatekeeper.CheckUserProjectAccess(flow.ProjectID, context, db)
+	if err != nil {
+		httperror.InternalServerError(context, "Error checking your user permissions on project", err)
+		return
+	}
+	if !access {
+		httperror.Unauthorized(context, "You are not allowed to view this alert", errors.New("unauthorized"))
 		return
 	}
 
