@@ -325,10 +325,7 @@ export default function FlowList({ flows, projects, settings, user }: any) {
                               flow.disabled || !checkUserCanEdit(flow)
                             }
                             startContent={
-                              <Icon
-                                icon="hugeicons:delete-02"
-                                width={20}
-                              />
+                              <Icon icon="hugeicons:delete-02" width={20} />
                             }
                             onPress={() => {
                               setTargetFlow(flow);

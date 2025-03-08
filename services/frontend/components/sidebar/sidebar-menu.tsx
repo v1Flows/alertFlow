@@ -17,7 +17,6 @@ import {
   Spacer,
   useDisclosure,
 } from "@heroui/react";
-import { useIsSSR } from "@react-aria/ssr";
 import { useTheme } from "next-themes";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";

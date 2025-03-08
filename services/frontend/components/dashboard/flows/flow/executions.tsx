@@ -418,11 +418,7 @@ export default function Executions({
                 deleteExecutionModal.onOpen();
               }}
             >
-              <Icon
-                height="20"
-                icon="hugeicons:delete-02"
-                width="20"
-              />
+              <Icon height="20" icon="hugeicons:delete-02" width="20" />
             </Button>
           </div>
         );

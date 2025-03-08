@@ -57,11 +57,11 @@ export default async function DashboardFlowPage({
       settings.success &&
       userDetails.success ? (
         <Flow
+          alerts={alerts.data.alerts}
           executions={executions.data.executions}
           flow={flow.data.flow}
           id={id}
           members={project.data.members}
-          alerts={alerts.data.alerts}
           project={project.data.project}
           projects={projects.data.projects}
           runners={runners.data.runners}

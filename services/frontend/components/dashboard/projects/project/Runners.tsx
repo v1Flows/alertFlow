@@ -137,10 +137,7 @@ export default function Runners({ runners, project, user, members }: any) {
                               .role === "Viewer"
                           }
                           startContent={
-                            <Icon
-                              icon="hugeicons:delete-02"
-                              width={18}
-                            />
+                            <Icon icon="hugeicons:delete-02" width={18} />
                           }
                           onPress={() => {
                             setTargetRunner(runner);
@@ -282,10 +279,7 @@ export default function Runners({ runners, project, user, members }: any) {
                                   )[0].role === "Viewer"
                                 }
                                 startContent={
-                                  <Icon
-                                    icon="hugeicons:delete-02"
-                                    width={18}
-                                  />
+                                  <Icon icon="hugeicons:delete-02" width={18} />
                                 }
                                 onPress={() => {
                                   setTargetRunner(runner);

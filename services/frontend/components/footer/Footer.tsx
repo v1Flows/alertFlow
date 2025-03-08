@@ -2,7 +2,6 @@
 
 import { Icon } from "@iconify/react";
 import { Image, Link, Spacer } from "@heroui/react";
-import { useIsSSR } from "@react-aria/ssr";
 import { useTheme } from "next-themes";
 import React from "react";
 
