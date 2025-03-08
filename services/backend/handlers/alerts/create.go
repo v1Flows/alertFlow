@@ -55,6 +55,17 @@ func CreateAlert(context *gin.Context, db *bun.DB) {
 		return
 	}
 
+	// if the alert has a parent_id we need to update the parent alert updated_at time
+	if alert.ParentID != "" {
+		parentAlert := models.Alerts{}
+		parentAlert.UpdatedAt = time.Now()
+		_, err := db.NewUpdate().Model(&parentAlert).Where("id = ?", alert.ParentID).Column("updated_at").Exec(context)
+		if err != nil {
+			httperror.InternalServerError(context, "Error updating parent alert on db", err)
+			return
+		}
+	}
+
 	err = functions.StartExecution(alert.FlowID, alert.ID, flow, db)
 	if err != nil {
 		log.Error("Failed to start execution: " + err.Error())
