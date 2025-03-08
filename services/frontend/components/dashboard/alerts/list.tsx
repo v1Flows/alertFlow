@@ -15,7 +15,6 @@ import {
 import { Icon } from "@iconify/react";
 import { useMemo, useState } from "react";
 import ReactTimeago from "react-timeago";
-import { useRouter } from "next/navigation";
 
 import AlertDrawer from "@/components/functions/alert/details";
 import { IconWrapper } from "@/lib/IconWrapper";
@@ -38,7 +37,6 @@ export default function AlertsList({
   showDelete?: boolean;
 }) {
   const alertDrawer = useDisclosure();
-  const router = useRouter();
 
   const [targetAlert, setTargetAlert] = useState<any>(null);
 
