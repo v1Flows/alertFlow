@@ -9,12 +9,16 @@ import {
   Snippet,
   Code,
   Divider,
+  Listbox,
+  ListboxItem,
 } from "@heroui/react";
 import { useDisclosure, UseDisclosureReturn } from "@heroui/use-disclosure";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ReactTimeago from "react-timeago";
+
+import { IconWrapper } from "@/lib/IconWrapper";
 
 import FunctionDeleteAlertModal from "../flows/deleteAlert";
 
@@ -178,6 +182,90 @@ export default function AlertDrawer({
                   <Snippet hideSymbol>
                     <pre>{JSON.stringify(alert.payload, null, 2)}</pre>
                   </Snippet>
+                )}
+
+                {alert.sub_alerts.length > 0 && (
+                  <>
+                    <Divider />
+                    <p className="font-bold">Sub Alerts</p>
+                    <Listbox
+                      aria-label="User Menu"
+                      className="p-0 gap-0 divide-y divide-default-300/50 dark:divide-default-100/80 bg-content1 overflow-visible shadow-small rounded-medium"
+                      itemClasses={{
+                        base: "px-3 first:rounded-t-medium last:rounded-b-medium rounded-none gap-3 h-12 data-[hover=true]:bg-default-100/80",
+                      }}
+                    >
+                      {alert.sub_alerts
+                        .sort(
+                          (a: any, b: any) =>
+                            new Date(b.created_at).getTime() -
+                            new Date(a.created_at).getTime(),
+                        )
+                        .map((sa: any) => {
+                          return (
+                            <ListboxItem
+                              key={sa.id}
+                              className="group h-auto py-3"
+                              startContent={
+                                <IconWrapper
+                                  className={`bg-${sa.status === "firing" ? "danger" : "success"}/10 text-${sa.status === "firing" ? "danger" : "success"}`}
+                                >
+                                  <Icon
+                                    className="text-lg"
+                                    icon={
+                                      sa.status === "firing"
+                                        ? "hugeicons:fire"
+                                        : "hugeicons:checkmark-badge-01"
+                                    }
+                                  />
+                                </IconWrapper>
+                              }
+                              textValue={sa.name}
+                            >
+                              <div className="flex flex-col gap-1">
+                                <span>{sa.name}</span>
+                                <div className="px-2 py-1 rounded-small bg-default-100 group-data-[hover=true]:bg-default-200">
+                                  <span
+                                    className={`text-tiny text-${sa.status === "firing" ? "danger" : "success"} capitalize`}
+                                  >
+                                    {sa.status || "N/A"}
+                                  </span>
+                                  <div className="flex gap-2 text-tiny">
+                                    <span className="text-default-500">
+                                      Started:{" "}
+                                      <ReactTimeago date={sa.started_at} />
+                                    </span>
+                                    {sa.resolved_at !==
+                                      "0001-01-01T00:00:00Z" && (
+                                      <span className="text-default-500">
+                                        Resolved:{" "}
+                                        <ReactTimeago date={sa.resolved_at} />
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="flex flex-wrap mt-1 gap-2">
+                                  {Object.entries(sa.labels).map(
+                                    ([key, value]: [string, any]) => {
+                                      return (
+                                        <Chip
+                                          key={key}
+                                          radius="sm"
+                                          size="sm"
+                                          variant="flat"
+                                        >
+                                          {key}: {value}
+                                        </Chip>
+                                      );
+                                    },
+                                  )}
+                                </div>
+                              </div>
+                            </ListboxItem>
+                          );
+                        })}
+                    </Listbox>
+                  </>
                 )}
               </DrawerBody>
               <DrawerFooter className="flex flex-wrap items-center justify-between">
