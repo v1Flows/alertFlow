@@ -71,10 +71,19 @@ func CreateAlert(context *gin.Context, db *bun.DB) {
 	if alert.ParentID != "" {
 		parentAlert := models.Alerts{}
 		parentAlert.UpdatedAt = time.Now()
-		_, err := db.NewUpdate().Model(&parentAlert).Where("id = ?", alert.ParentID).Column("updated_at").Exec(context)
-		if err != nil {
-			httperror.InternalServerError(context, "Error updating parent alert on db", err)
-			return
+		if alert.Status == "resolved" {
+			parentAlert.Status = "resolved"
+			_, err := db.NewUpdate().Model(&parentAlert).Where("id = ?", alert.ParentID).Column("updated_at", "status").Exec(context)
+			if err != nil {
+				httperror.InternalServerError(context, "Error updating parent alert on db", err)
+				return
+			}
+		} else {
+			_, err := db.NewUpdate().Model(&parentAlert).Where("id = ?", alert.ParentID).Column("updated_at").Exec(context)
+			if err != nil {
+				httperror.InternalServerError(context, "Error updating parent alert on db", err)
+				return
+			}
 		}
 	}
 
