@@ -311,7 +311,7 @@ export default function AddActionModal({
           {() => (
             <>
               <ModalHeader className="flex flex-wrap items-center">
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col">
                   <p className="text-lg font-bold">Add Action to Flow</p>
                   <p className="text-sm text-default-500">
                     Actions are the building blocks of your flows. Those are the
