@@ -138,6 +138,14 @@ export default function AlertDrawer({
                       "N/A"
                     )}
                   </span>
+
+                  {alert.note && (
+                    <>
+                      <Divider className="col-span-3" />
+                      <p className="font-bold col-span-1">Note</p>
+                      <span className="col-span-2 font-bold">{alert.note}</span>
+                    </>
+                  )}
                 </div>
 
                 {showPayload && (
@@ -160,17 +168,19 @@ export default function AlertDrawer({
                   <Icon icon="hugeicons:workflow-square-10" />
                   View Flow
                 </Button>
-                <Button
-                  color="primary"
-                  onPress={() => {
-                    router.push(
-                      `/flows/${alert.flow_id}/execution/${alert.execution_id}`,
-                    );
-                  }}
-                >
-                  <Icon icon="hugeicons:rocket-02" />
-                  View Execution
-                </Button>
+                {alert.execution_id && (
+                  <Button
+                    color="primary"
+                    onPress={() => {
+                      router.push(
+                        `/flows/${alert.flow_id}/execution/${alert.execution_id}`,
+                      );
+                    }}
+                  >
+                    <Icon icon="hugeicons:rocket-02" />
+                    View Execution
+                  </Button>
+                )}
               </DrawerFooter>
             </>
           )}

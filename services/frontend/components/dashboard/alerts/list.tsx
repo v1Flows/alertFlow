@@ -187,6 +187,11 @@ export default function AlertsList({
                                     ) && (
                                     <span className="text-success">Latest</span>
                                   )}
+                                  {a.execution_id !== "" && (
+                                    <span className="text-primary">
+                                      Executed
+                                    </span>
+                                  )}
                                 </div>
                               </div>
                             </div>
