@@ -26,12 +26,16 @@ export default function AlertsList({
   runners,
   flows,
   maxAlerts,
+  canEdit,
+  showDelete,
 }: {
   compactMode: boolean;
   maxAlerts: number;
   alerts: any;
   runners: any;
-  flows: any;
+  flows?: any;
+  canEdit?: boolean;
+  showDelete?: boolean;
 }) {
   const alertDrawer = useDisclosure();
   const router = useRouter();
@@ -205,6 +209,11 @@ export default function AlertsList({
             </CardBody>
             <CardFooter className="flex items-center justify-between gap-2">
               <div className="flex flex-wrap gap-2">
+                {alert.execution_id !== "" && (
+                  <Chip color="primary" radius="sm" size="sm" variant="solid">
+                    Executed
+                  </Chip>
+                )}
                 {alert.group_key !== "" && (
                   <Chip radius="sm" size="sm" variant="solid">
                     Group Ident: {alert.group_key}
@@ -247,9 +256,11 @@ export default function AlertsList({
       )}
       <AlertDrawer
         alert={targetAlert}
+        canEdit={canEdit}
         disclosure={alertDrawer}
         flows={flows}
         runners={runners}
+        showDelete={showDelete}
       />
     </main>
   );

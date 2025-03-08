@@ -4,9 +4,10 @@ import { Tab, Tabs } from "@heroui/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 
+import AlertsList from "../../alerts/list";
+
 import Actions from "./actions";
 import Executions from "./executions";
-import Alerts from "./alerts";
 import FlowStats from "./stats";
 import FlowSettings from "./settings";
 
@@ -86,12 +87,14 @@ export default function FlowTabs({
               </div>
             }
           >
-            <Alerts
+            <AlertsList
               alerts={alerts}
               canEdit={canEdit}
-              executions={executions}
-              flow={flow}
+              compactMode={false}
+              flows={[flow]}
+              maxAlerts={18}
               runners={runners}
+              showDelete={true}
             />
           </Tab>
           <Tab

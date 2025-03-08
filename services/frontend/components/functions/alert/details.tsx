@@ -10,27 +10,39 @@ import {
   Code,
   Divider,
 } from "@heroui/react";
-import { UseDisclosureReturn } from "@heroui/use-disclosure";
+import { useDisclosure, UseDisclosureReturn } from "@heroui/use-disclosure";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ReactTimeago from "react-timeago";
+
+import FunctionDeleteAlertModal from "../flows/deleteAlert";
 
 export default function AlertDrawer({
   alert,
   runners,
   flows,
   disclosure,
+  canEdit,
+  showDelete,
 }: {
   alert: any;
   runners: any;
   flows: any;
   disclosure: UseDisclosureReturn;
+  canEdit?: boolean;
+  showDelete?: boolean;
 }) {
   const { isOpen, onOpenChange } = disclosure;
   const router = useRouter();
 
   const [showPayload, setShowPayload] = useState(false);
+  const deleteAlertModal = useDisclosure();
+
+  const handleDelete = () => {
+    deleteAlertModal.onOpen();
+    onOpenChange();
+  };
 
   return (
     <>
@@ -60,11 +72,20 @@ export default function AlertDrawer({
                     {alert.encrypted ? "Encrypted" : "Unencrypted"}
                   </Chip>
                 </div>
-                <p className="text-sm text-default-500">{alert.id}</p>
               </DrawerHeader>
               <Divider />
               <DrawerBody>
                 <div className="grid grid-cols-3 items-center gap-3">
+                  <p className="font-bold text-default-500 col-span-1">ID</p>
+                  <Snippet
+                    hideSymbol
+                    className="col-span-2"
+                    size="sm"
+                    variant="flat"
+                  >
+                    {alert.id}
+                  </Snippet>
+
                   <p className="font-bold text-default-500 col-span-1">
                     Runner
                   </p>
@@ -82,9 +103,14 @@ export default function AlertDrawer({
                   <p className="font-bold text-default-500 col-span-1">
                     Execution ID
                   </p>
-                  <Code className="col-span-2">
+                  <Snippet
+                    hideSymbol
+                    className="col-span-2"
+                    size="sm"
+                    variant="flat"
+                  >
                     {alert.execution_id || "N/A"}
-                  </Code>
+                  </Snippet>
 
                   {alert.parent_id && (
                     <>
@@ -154,38 +180,55 @@ export default function AlertDrawer({
                   </Snippet>
                 )}
               </DrawerBody>
-              <DrawerFooter>
-                <Button color="default" variant="flat" onPress={onClose}>
-                  Close
-                </Button>
-                <Button
-                  color="primary"
-                  variant="flat"
-                  onPress={() => {
-                    router.push(`/flows/${alert.flow_id}`);
-                  }}
-                >
-                  <Icon icon="hugeicons:workflow-square-10" />
-                  View Flow
-                </Button>
-                {alert.execution_id && (
+              <DrawerFooter className="flex flex-wrap items-center justify-between">
+                <div className="flex flex-col gap-2">
                   <Button
                     color="primary"
+                    variant="flat"
                     onPress={() => {
-                      router.push(
-                        `/flows/${alert.flow_id}/execution/${alert.execution_id}`,
-                      );
+                      router.push(`/flows/${alert.flow_id}`);
                     }}
                   >
-                    <Icon icon="hugeicons:rocket-02" />
-                    View Execution
+                    <Icon icon="hugeicons:workflow-square-10" width={20} />
+                    View Flow
                   </Button>
-                )}
+                  {alert.execution_id && (
+                    <Button
+                      color="primary"
+                      onPress={() => {
+                        router.push(
+                          `/flows/${alert.flow_id}/execution/${alert.execution_id}`,
+                        );
+                      }}
+                    >
+                      <Icon icon="hugeicons:rocket-02" width={20} />
+                      View Execution
+                    </Button>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-2">
+                  {showDelete && (
+                    <Button
+                      color="danger"
+                      isDisabled={!canEdit}
+                      variant="flat"
+                      onPress={() => handleDelete()}
+                    >
+                      <Icon icon="hugeicons:delete-02" width={20} />
+                      Delete
+                    </Button>
+                  )}
+                  <Button color="default" variant="flat" onPress={onClose}>
+                    Close
+                  </Button>
+                </div>
               </DrawerFooter>
             </>
           )}
         </DrawerContent>
       </Drawer>
+      <FunctionDeleteAlertModal alert={alert} disclosure={deleteAlertModal} />
     </>
   );
 }
