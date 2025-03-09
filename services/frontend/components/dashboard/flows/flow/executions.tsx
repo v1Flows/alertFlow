@@ -5,26 +5,18 @@ import {
   Button,
   Card,
   CardBody,
+  CardFooter,
+  CardHeader,
+  Chip,
   CircularProgress,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
   Pagination,
-  Snippet,
   Spacer,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
   Tooltip,
   useDisclosure,
 } from "@heroui/react";
 import NumberFlow from "@number-flow/react";
 import { useRouter } from "next/navigation";
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import TimeAgo from "react-timeago";
 
 import DeleteExecutionModal from "@/components/functions/flows/deleteExecution";
@@ -48,7 +40,7 @@ export default function Executions({
 
   // pagination
   const [page, setPage] = useState(1);
-  const rowsPerPage = 10;
+  const rowsPerPage = 9;
   const items = React.useMemo(() => {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
@@ -326,246 +318,6 @@ export default function Executions({
     }
   }
 
-  const renderCell = React.useCallback((execution: any, columnKey: any) => {
-    const cellValue = execution[columnKey];
-
-    switch (columnKey) {
-      case "name":
-        return (
-          <div className="flex flex-col items-center gap-2">
-            {execution.icon}
-            <p className="text-md font-medium">{execution.name}</p>
-          </div>
-        );
-      case "trigger":
-        return (
-          <Button
-            isDisabled={!alerts.find((p: any) => p.id === execution.alert_id)}
-            variant="light"
-            onPress={() => {
-              setTargetAlert(
-                alerts.find((p: any) => p.id === execution.alert_id),
-              );
-              showAlertModal.onOpen();
-            }}
-          >
-            Show Alert
-          </Button>
-        );
-      case "data":
-        return (
-          <Snippet fullWidth hideSymbol>
-            <pre>{JSON.stringify(execution.data, null, 2)}</pre>
-          </Snippet>
-        );
-      case "duration":
-        return <p>{getDuration(execution)}</p>;
-      case "status":
-        return <div>{statusIcon(execution)}</div>;
-      case "created":
-        return (
-          <>
-            <Tooltip
-              content={
-                <div className="px-1 py-2">
-                  <div className="text-small font-bold">Created at</div>
-                  <div className="text-tiny">
-                    {new Date(execution.created_at).toLocaleString()}
-                  </div>
-                </div>
-              }
-            >
-              <p>
-                <TimeAgo date={execution.created_at} title="" />
-              </p>
-            </Tooltip>
-          </>
-        );
-      case "actions":
-        return (
-          <div className="flex items-center justify-end gap-2">
-            {displayToFlow && (
-              <Button
-                color="primary"
-                size="md"
-                variant="bordered"
-                onPress={() => router.push(`/flows/${execution.flow_id}/`)}
-              >
-                View Flow
-              </Button>
-            )}
-            <Button
-              color="primary"
-              size="md"
-              startContent={<Icon icon="solar:eye-outline" width={18} />}
-              variant="solid"
-              onPress={() =>
-                router.push(
-                  `/flows/${execution.flow_id}/execution/${execution.id}`,
-                )
-              }
-            >
-              View
-            </Button>
-            <Button
-              isIconOnly
-              color="danger"
-              isDisabled={!canEdit}
-              size="md"
-              variant="flat"
-              onPress={() => {
-                setTargetExecution(execution);
-                deleteExecutionModal.onOpen();
-              }}
-            >
-              <Icon height="20" icon="hugeicons:delete-02" width="20" />
-            </Button>
-          </div>
-        );
-      default:
-        return cellValue;
-    }
-  }, []);
-
-  const topContent = useMemo(() => {
-    return (
-      <div className="flex flex-col gap-4">
-        <div className="flex items-end justify-between gap-3">
-          <div className="flex gap-3">
-            <Dropdown>
-              <DropdownTrigger>
-                <Button
-                  color={statusFilter.size > 0 ? "primary" : "default"}
-                  endContent={
-                    <Icon icon="solar:alt-arrow-down-line-duotone" width={18} />
-                  }
-                  variant="flat"
-                >
-                  Status
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                aria-label="Table Columns"
-                closeOnSelect={false}
-                selectedKeys={statusFilter}
-                selectionMode="multiple"
-                variant="flat"
-                onSelectionChange={(keys) => {
-                  setStatusFilter(keys);
-                  setPage(1);
-                }}
-              >
-                <DropdownItem key="pending" className="capitalize">
-                  <div className="flex-cols flex gap-2">
-                    <Icon
-                      className="text-default-500"
-                      icon="hugeicons:time-quarter-pass"
-                      width={20}
-                    />
-                    Pending
-                  </div>
-                </DropdownItem>
-                <DropdownItem key="running" className="capitalize">
-                  <div className="flex-cols flex gap-2">
-                    <Icon
-                      className="text-primary"
-                      icon="hugeicons:play"
-                      width={20}
-                    />
-                    Running
-                  </div>
-                </DropdownItem>
-                <DropdownItem key="paused" className="capitalize">
-                  <div className="flex-cols flex gap-2">
-                    <Icon
-                      className="text-warning"
-                      icon="hugeicons:pause"
-                      width={20}
-                    />
-                    Paused
-                  </div>
-                </DropdownItem>
-                <DropdownItem key="canceled" className="capitalize">
-                  <div className="flex-cols flex gap-2">
-                    <Icon
-                      className="text-danger"
-                      icon="hugeicons:cancel-01"
-                      width={20}
-                    />
-                    Canceled
-                  </div>
-                </DropdownItem>
-                <DropdownItem key="no_pattern_match" className="capitalize">
-                  <div className="flex-cols flex gap-2">
-                    <Icon
-                      className="text-secondary"
-                      icon="hugeicons:note-remove"
-                      width={20}
-                    />
-                    No Pattern Match
-                  </div>
-                </DropdownItem>
-                <DropdownItem key="interaction_waiting" className="capitalize">
-                  <div className="flex-cols flex gap-2">
-                    <Icon
-                      className="text-primary"
-                      icon="hugeicons:waving-hand-01"
-                      width={20}
-                    />
-                    Interaction Required
-                  </div>
-                </DropdownItem>
-                <DropdownItem key="error" className="capitalize">
-                  <div className="flex-cols flex gap-2">
-                    <Icon
-                      className="text-danger"
-                      icon="hugeicons:alert-02"
-                      width={20}
-                    />
-                    Error
-                  </div>
-                </DropdownItem>
-                <DropdownItem key="success" className="capitalize">
-                  <div className="flex-cols flex gap-2">
-                    <Icon
-                      className="text-success"
-                      icon="hugeicons:tick-double-01"
-                      width={20}
-                    />
-                    Success
-                  </div>
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-            <Button
-              variant="flat"
-              onPress={() => {
-                setStatusFilter(new Set([]));
-                setPage(1);
-              }}
-            >
-              Reset Filter
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
-  }, [items, executions, statusFilter]);
-
-  const bottomContent = useMemo(() => {
-    return (
-      <div className="flex justify-center">
-        <Pagination
-          showControls
-          isDisabled={items.length === 0}
-          page={page}
-          total={pages()}
-          onChange={(page) => setPage(page)}
-        />
-      </div>
-    );
-  }, [items, statusFilter]);
-
   return (
     <>
       <div className="flex flex-wrap items-stretch gap-4">
@@ -838,7 +590,7 @@ export default function Executions({
             isHoverable
             isPressable
             className={
-              statusFilter.has("cancelled")
+              statusFilter.has("canceled")
                 ? "w-[240px] grow bg-danger/30"
                 : "w-[240px] grow"
             }
@@ -920,42 +672,109 @@ export default function Executions({
         )}
       </div>
       <Spacer y={2} />
-      <Table
-        isStriped
-        aria-label="Executions Table"
-        bottomContent={bottomContent}
-        topContent={topContent}
-      >
-        <TableHeader>
-          <TableColumn key="status" align="start">
-            Status
-          </TableColumn>
-          <TableColumn key="id" align="center">
-            ID
-          </TableColumn>
-          <TableColumn key="trigger" align="center">
-            Trigger
-          </TableColumn>
-          <TableColumn key="duration" align="center">
-            Duration
-          </TableColumn>
-          <TableColumn key="created" align="center">
-            Created
-          </TableColumn>
-          <TableColumn key="actions" align="end">
-            Actions
-          </TableColumn>
-        </TableHeader>
-        <TableBody emptyContent="No executions found" items={items}>
-          {(item: any) => (
-            <TableRow key={item.id}>
-              {(columnKey) => (
-                <TableCell>{renderCell(item, columnKey)}</TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+      <div className="grid grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4">
+        {items.map((execution: any) => (
+          <Card key={execution.id}>
+            <CardHeader>
+              <div className="flex flex-cols w-full items-center justify-between gap-2">
+                <div className="flex flex-cols items-center gap-2">
+                  {statusIcon(execution)}
+                  <div className="flex flex-col items-start">
+                    <p className="font-bold">{status(execution)}</p>
+                    <p className="text-sm text-default-500">
+                      {getDuration(execution)}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-cols items-center gap-2">
+                  {executions[0].id === execution.id && (
+                    <p className="text-sm text-success mr-2">Latest</p>
+                  )}
+                  <Tooltip content="Show Alert">
+                    <Button
+                      isIconOnly
+                      isDisabled={
+                        !alerts.find((p: any) => p.id === execution.alert_id)
+                      }
+                      size="sm"
+                      variant="flat"
+                      onPress={() => {
+                        setTargetAlert(
+                          alerts.find((p: any) => p.id === execution.alert_id),
+                        );
+                        showAlertModal.onOpen();
+                      }}
+                    >
+                      <Icon icon="hugeicons:alert-02" width={18} />
+                    </Button>
+                  </Tooltip>
+                  <Button
+                    isIconOnly
+                    color="danger"
+                    isDisabled={!canEdit}
+                    size="sm"
+                    variant="flat"
+                    onPress={() => {
+                      setTargetExecution(execution);
+                      deleteExecutionModal.onOpen();
+                    }}
+                  >
+                    <Icon icon="hugeicons:delete-02" width={18} />
+                  </Button>
+                </div>
+              </div>
+            </CardHeader>
+            <CardBody>
+              <div className="flex flex-cols items-center gap-2">
+                {displayToFlow && (
+                  <Button
+                    fullWidth
+                    color="primary"
+                    size="md"
+                    startContent={
+                      <Icon icon="hugeicons:workflow-square-10" width={18} />
+                    }
+                    variant="ghost"
+                    onPress={() => router.push(`/flows/${execution.flow_id}`)}
+                  >
+                    To Flow
+                  </Button>
+                )}
+                <Button
+                  fullWidth
+                  color="primary"
+                  size="md"
+                  startContent={<Icon icon="solar:eye-outline" width={18} />}
+                  variant="flat"
+                  onPress={() =>
+                    router.push(
+                      `/flows/${execution.flow_id}/execution/${execution.id}`,
+                    )
+                  }
+                >
+                  View
+                </Button>
+              </div>
+            </CardBody>
+            <CardFooter className="flex justify-between">
+              <p className="text-tiny text-default-500">{execution.id}</p>
+              <Chip radius="sm" size="sm" variant="faded">
+                <TimeAgo date={execution.created_at} />
+              </Chip>
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
+      <Spacer y={2} />
+      <div className="flex justify-center">
+        <Pagination
+          showControls
+          isDisabled={items.length === 0}
+          page={page}
+          total={pages()}
+          onChange={(page) => setPage(page)}
+        />
+      </div>
       <FunctionShowAlertModal alert={targetAlert} disclosure={showAlertModal} />
       <DeleteExecutionModal
         disclosure={deleteExecutionModal}
