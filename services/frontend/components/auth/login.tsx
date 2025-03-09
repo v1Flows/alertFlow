@@ -1,6 +1,7 @@
 "use client";
 import { Icon } from "@iconify/react";
 import {
+  addToast,
   Avatar,
   Button,
   Dropdown,
@@ -13,7 +14,6 @@ import {
 import { LogInIcon, UserPlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { toast } from "sonner";
 
 import { Logout } from "@/lib/logout";
 
@@ -76,7 +76,12 @@ export default function Login({ user, session, showSignUp, settings }: any) {
               startContent={<Icon icon="solar:copy-outline" width={18} />}
               onPress={() => {
                 navigator.clipboard.writeText(session);
-                toast.success("Copied to clipboard!");
+                addToast({
+                  title: "Token",
+                  description: "Copied to clipboard",
+                  color: "success",
+                  variant: "flat",
+                });
               }}
             >
               Copy Token

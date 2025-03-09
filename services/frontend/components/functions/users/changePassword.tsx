@@ -3,6 +3,7 @@
 import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
+  addToast,
   Button,
   Input,
   Modal,
@@ -12,7 +13,6 @@ import {
   ModalHeader,
 } from "@heroui/react";
 import React from "react";
-import { toast } from "sonner";
 
 import ErrorCard from "@/components/error/ErrorCard";
 import { deleteSession } from "@/lib/auth/deleteSession";
@@ -82,7 +82,12 @@ export default function ChangeUserPasswordModal({
       setError(true);
       setErrorText("Failed to update user password");
       setErrorMessage("Failed to update user password");
-      toast.error("Failed to update user password");
+      addToast({
+        title: "Password",
+        description: "Failed to update user password",
+        color: "danger",
+        variant: "flat",
+      });
 
       return;
     }
@@ -93,7 +98,12 @@ export default function ChangeUserPasswordModal({
       setErrorText("");
       setErrorMessage("");
       onOpenChange();
-      toast.success("User password updated successfully");
+      addToast({
+        title: "Password",
+        description: "User password updated successfully",
+        color: "success",
+        variant: "flat",
+      });
       deleteSession();
     } else if (response.error === "Current password is incorrect") {
       setIsLoading(false);
@@ -101,13 +111,23 @@ export default function ChangeUserPasswordModal({
       setErrorText(response.error);
       setErrorMessage(response.message);
       setIsCurrentPasswordValid(false);
-      toast.error("Current password is incorrect");
+      addToast({
+        title: "Password",
+        description: "Current password is incorrect",
+        color: "danger",
+        variant: "flat",
+      });
     } else {
       setIsLoading(false);
       setError(true);
       setErrorText(response.error);
       setErrorMessage(response.message);
-      toast.error(response.error);
+      addToast({
+        title: "Password",
+        description: response.error,
+        color: "danger",
+        variant: "flat",
+      });
     }
   }
 

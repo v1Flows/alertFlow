@@ -4,6 +4,7 @@ import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import { Icon } from "@iconify/react";
 import {
+  addToast,
   Button,
   Modal,
   ModalBody,
@@ -14,7 +15,6 @@ import {
 import { LibraryIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { toast } from "sonner";
 
 import Welcomed from "@/lib/fetch/user/PUT/welcomed";
 import ErrorCard from "@/components/error/ErrorCard";
@@ -38,7 +38,12 @@ export default function WelcomeModal({
       setError(true);
       setErrorText("Failed to set welcomed status");
       setErrorMessage("Failed to set welcomed status");
-      toast.error("Failed to set welcomed status");
+      addToast({
+        title: "Welcome",
+        description: "Failed to set welcomed status",
+        color: "danger",
+        variant: "flat",
+      });
 
       return;
     }
@@ -52,7 +57,12 @@ export default function WelcomeModal({
       setError(true);
       setErrorText(response.error);
       setErrorMessage(response.message);
-      toast.error("Failed to set welcomed status");
+      addToast({
+        title: "Welcome",
+        description: "Failed to set welcomed status",
+        color: "danger",
+        variant: "flat",
+      });
     }
   }
 

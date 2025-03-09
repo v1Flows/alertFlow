@@ -4,6 +4,7 @@ import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import { Icon } from "@iconify/react";
 import {
+  addToast,
   Button,
   Modal,
   ModalBody,
@@ -14,7 +15,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { toast } from "sonner";
 
 import AdminSendUserNotification from "@/lib/fetch/admin/POST/sendUserNotification";
 import ErrorCard from "@/components/error/ErrorCard";
@@ -47,7 +47,12 @@ export default function AdminSendUserNotificationModal({
       setErrorMessage("Failed to send notification");
       setErrorText("Failed to send notification");
       setIsLoading(false);
-      toast.error("Failed to send notification");
+      addToast({
+        title: "Notification",
+        description: "Failed to send notification",
+        color: "danger",
+        variant: "flat",
+      });
 
       return;
     }
@@ -59,12 +64,22 @@ export default function AdminSendUserNotificationModal({
       setError(false);
       setErrorMessage("");
       setErrorText("");
-      toast.success("Notification sent successfully");
+      addToast({
+        title: "Notification",
+        description: "Notification sent successfully",
+        color: "success",
+        variant: "flat",
+      });
     } else {
       setError(true);
       setErrorMessage(response.message);
       setErrorText(response.error);
-      toast.error("Failed to send notification");
+      addToast({
+        title: "Notification",
+        description: "Failed to send notification",
+        color: "danger",
+        variant: "flat",
+      });
     }
 
     setIsLoading(false);

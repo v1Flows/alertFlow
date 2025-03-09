@@ -1,6 +1,7 @@
 "use client";
 import { Icon } from "@iconify/react";
 import {
+  addToast,
   Button,
   Card,
   CardBody,
@@ -10,7 +11,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { toast } from "sonner";
 
 import UpdateSettings from "@/lib/fetch/admin/PUT/UpdateSettings";
 
@@ -64,12 +64,22 @@ export function Settings({ settings }: any) {
 
     if (response.success) {
       setIsLoading(false);
-      toast.success("Settings updated successfully");
+      addToast({
+        title: "Settings",
+        description: "Settings updated successfully",
+        color: "success",
+        variant: "flat",
+      });
       router.refresh();
     } else {
       setIsLoading(false);
       router.refresh();
-      toast.error("Failed to update settings");
+      addToast({
+        title: "Settings",
+        description: "Failed to update settings",
+        color: "danger",
+        variant: "flat",
+      });
     }
   }
 

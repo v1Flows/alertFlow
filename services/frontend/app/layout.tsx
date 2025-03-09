@@ -3,7 +3,6 @@ import type { Metadata, Viewport } from "next";
 import { cookies } from "next/headers";
 import clsx from "clsx";
 import React from "react";
-import { Toaster } from "sonner";
 
 import Footer from "@/components/footer/Footer";
 import SidebarMenu from "@/components/sidebar/sidebar-menu";
@@ -103,7 +102,6 @@ export default async function RootLayout({
         )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-          <Toaster richColors position="bottom-center" />
           <div className="relative flex h-screen flex-col">
             {sessionCookie ? (
               <SidebarMenu

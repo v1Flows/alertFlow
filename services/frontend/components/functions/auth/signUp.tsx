@@ -4,6 +4,7 @@ import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import { Icon } from "@iconify/react";
 import {
+  addToast,
   Button,
   Input,
   Link,
@@ -14,7 +15,6 @@ import {
 import { useDisclosure } from "@heroui/use-disclosure";
 import { AnimatePresence, domAnimation, LazyMotion, m } from "framer-motion";
 import React from "react";
-import { toast } from "sonner";
 
 import { IconWrapper } from "@/lib/IconWrapper";
 import SignUpAPI from "@/lib/auth/signup";
@@ -156,7 +156,12 @@ export default function SignUpModal({
       setIsLoading(false);
       setError(true);
       setErrorText(res.error);
-      toast.error(res.error);
+      addToast({
+        title: "Sign Up",
+        description: res.error,
+        color: "danger",
+        variant: "flat",
+      });
     }
   };
 

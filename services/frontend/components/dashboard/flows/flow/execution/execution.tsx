@@ -2,6 +2,7 @@
 
 import { Icon } from "@iconify/react";
 import {
+  addToast,
   Badge,
   Button,
   Chip,
@@ -21,7 +22,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React, { useMemo, useState } from "react";
-import { toast } from "sonner";
 
 import Reloader from "@/components/reloader/Reloader";
 import InteractExecutionStep from "@/lib/fetch/executions/PUT/step_interact";
@@ -47,7 +47,12 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
         setSteps(steps.data.steps);
       } else {
         if ("error" in steps) {
-          toast.error(steps.error);
+          addToast({
+            title: "Execution",
+            description: steps.error,
+            color: "danger",
+            variant: "flat",
+          });
         }
       }
     });
@@ -56,7 +61,12 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
         setAlert(alert.data.alert);
       } else {
         if ("error" in alert) {
-          toast.error(alert.error);
+          addToast({
+            title: "Alert",
+            description: alert.error,
+            color: "danger",
+            variant: "flat",
+          });
         }
       }
     });
@@ -368,9 +378,19 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
     )) as any;
 
     if (!res.success) {
-      toast.error(res.error);
+      addToast({
+        title: "Interaction",
+        description: res.error,
+        color: "danger",
+        variant: "flat",
+      });
     } else {
-      toast.success("Step interaction successful");
+      addToast({
+        title: "Interaction",
+        description: "Step interaction successful",
+        color: "success",
+        variant: "flat",
+      });
       router.refresh();
     }
   }
@@ -452,45 +472,27 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
                 <p>Step not started yet</p>
               ) : (
                 <div className="flex flex-col gap-2">
-                  <div className="flex flex-cols items-center gap-2">
-                    <Snippet fullWidth hideCopyButton hideSymbol radius="sm">
-                      {step.messages.map((data: any, index: any) => (
-                        <p
-                          key={index}
-                          className="flex-cols flex items-center gap-1"
-                        >
-                          <Icon
-                            icon="solar:double-alt-arrow-right-bold-duotone"
-                            width={16}
-                          />
-                          {data}
-                        </p>
-                      ))}
-                    </Snippet>
-                    {step.encrypted && (
-                      <Tooltip content="Encrypted">
-                        <Chip
-                          color="success"
-                          radius="sm"
-                          size="sm"
-                          variant="flat"
-                        >
-                          <Icon
-                            className="text-success"
-                            icon="solar:lock-linear"
-                            width={16}
-                          />
-                        </Chip>
-                      </Tooltip>
-                    )}
-                  </div>
+                  <Snippet fullWidth hideCopyButton hideSymbol radius="sm">
+                    {step.messages.map((data: any, index: any) => (
+                      <p
+                        key={index}
+                        className="flex-cols flex items-center gap-1"
+                      >
+                        <Icon icon="hugeicons:arrow-right-double" width={16} />
+                        {data}
+                      </p>
+                    ))}
+                  </Snippet>
                   {step.status === "interactionWaiting" && !step.interacted && (
                     <div className="flex-cols flex items-center gap-4">
                       <Button
                         fullWidth
                         color="success"
                         startContent={
-                          <Icon icon="solar:verified-check-linear" width={18} />
+                          <Icon
+                            icon="hugeicons:checkmark-badge-01"
+                            width={18}
+                          />
                         }
                         variant="flat"
                         onPress={() => {
@@ -589,7 +591,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-start justify-self-end">
+                      <div className="flex items-start justify-self-end gap-2">
                         <Chip
                           color={statusColor(step)}
                           radius="sm"
@@ -598,6 +600,22 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
                         >
                           {status(step)}
                         </Chip>
+                        {step.encrypted && (
+                          <Tooltip content="Encrypted">
+                            <Chip
+                              color="success"
+                              radius="sm"
+                              size="sm"
+                              variant="flat"
+                            >
+                              <Icon
+                                className="text-success"
+                                icon="hugeicons:square-lock-password"
+                                width={16}
+                              />
+                            </Chip>
+                          </Tooltip>
+                        )}
                       </div>
                     </div>
                     <Divider className="m-2" />
@@ -666,7 +684,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
 
   return (
     <>
-      <div className="flex flex-cols items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between">
         <Button
           color="default"
           variant="bordered"
@@ -675,7 +693,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
           <Icon icon="hugeicons:link-backward" width={20} />
           Back
         </Button>
-        <div className="flex-cols mt-2 flex items-center justify-center gap-4 lg:mt-0 lg:justify-end">
+        <div className="flex-wrap mt-2 flex items-center gap-4 lg:mt-0 lg:justify-end">
           <Button
             color="secondary"
             variant="flat"

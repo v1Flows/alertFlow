@@ -1,6 +1,7 @@
 "use client";
 import { Icon } from "@iconify/react";
 import {
+  addToast,
   Alert,
   Button,
   Card,
@@ -25,7 +26,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { toast } from "sonner";
 
 import ChangeFlowMaintenanceModal from "@/components/functions/flows/changeMaintenance";
 import ChangeFlowStatusModal from "@/components/functions/flows/changeStatus";
@@ -80,9 +80,19 @@ export default function FlowList({ flows, projects, settings, user }: any) {
   const copyFlowIDtoClipboard = (key: string) => {
     if (typeof navigator !== "undefined" && navigator.clipboard) {
       navigator.clipboard.writeText(key);
-      toast.success("Copied to clipboard!");
+      addToast({
+        title: "Flow",
+        description: "FlowID Copied to clipboard",
+        color: "success",
+        variant: "flat",
+      });
     } else {
-      toast.error("Failed to copy flow ID to clipboard");
+      addToast({
+        title: "Flow",
+        description: "Failed to copy FlowID to clipboard",
+        color: "danger",
+        variant: "flat",
+      });
     }
   };
 

@@ -1,6 +1,7 @@
 "use client";
 import { Icon } from "@iconify/react";
 import {
+  addToast,
   Button,
   Card,
   CardBody,
@@ -11,7 +12,6 @@ import {
 } from "@heroui/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect } from "react";
-import { toast } from "sonner";
 
 import ChangeUserDetails from "@/lib/fetch/user/PUT/changeDetails";
 import CheckUserTaken from "@/lib/auth/checkTaken";
@@ -47,7 +47,12 @@ export function UserProfile({ user, session }: any) {
     if (res.result === "success") {
       UpdateUser();
     } else {
-      toast.error(res.error);
+      addToast({
+        title: "User",
+        description: res.error,
+        color: "danger",
+        variant: "flat",
+      });
     }
   }
 
@@ -57,11 +62,21 @@ export function UserProfile({ user, session }: any) {
 
     if (res) {
       setIsLoading(false);
-      toast.success("User updated successfully");
+      addToast({
+        title: "User",
+        description: "User updated successfully",
+        color: "success",
+        variant: "flat",
+      });
       router.refresh();
     } else {
       setIsLoading(false);
-      toast.error("Failed to update user");
+      addToast({
+        title: "User",
+        description: "Failed to update user",
+        color: "danger",
+        variant: "flat",
+      });
     }
   }
 
@@ -131,7 +146,12 @@ export function UserProfile({ user, session }: any) {
                   variant="flat"
                   onPress={() => {
                     navigator.clipboard.writeText(user.id);
-                    toast.success("UserID copied to clipboard!");
+                    addToast({
+                      title: "UserID",
+                      description: "UserID copied to clipboard!",
+                      color: "success",
+                      variant: "flat",
+                    });
                   }}
                 >
                   Copy UserID
@@ -142,7 +162,12 @@ export function UserProfile({ user, session }: any) {
                   variant="flat"
                   onPress={() => {
                     navigator.clipboard.writeText(session);
-                    toast.success("Session Token copied to clipboard!");
+                    addToast({
+                      title: "Session Token",
+                      description: "Session Token copied to clipboard!",
+                      color: "success",
+                      variant: "flat",
+                    });
                   }}
                 >
                   Copy Token

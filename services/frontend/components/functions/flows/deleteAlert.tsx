@@ -1,6 +1,7 @@
 import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
+  addToast,
   Button,
   Modal,
   ModalBody,
@@ -11,7 +12,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { toast } from "sonner";
 
 import DeleteAlert from "@/lib/fetch/alert/DELETE/alert";
 import ErrorCard from "@/components/error/ErrorCard";
@@ -49,14 +49,24 @@ export default function FunctionDeleteAlertModal({
       setError(false);
       setErrorText("");
       setErrorMessage("");
-      toast.success("Alert deleted successfully");
+      addToast({
+        title: "Alert",
+        description: "Alert deleted successfully",
+        color: "success",
+        variant: "flat",
+      });
       router.refresh();
       onOpenChange();
     } else {
       setError(true);
       setErrorText(res.message);
       setErrorMessage(res.error);
-      toast.error("Failed to delete alert");
+      addToast({
+        title: "Alert",
+        description: "Failed to delete alert",
+        color: "danger",
+        variant: "flat",
+      });
     }
 
     setIsDeleteLoading(false);

@@ -10,6 +10,7 @@ import { Icon } from "@iconify/react";
 import {
   Accordion,
   AccordionItem,
+  addToast,
   Button,
   Card,
   CardBody,
@@ -27,7 +28,6 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import React, { useEffect } from "react";
-import { toast } from "sonner";
 
 import UpdateFlowActions from "@/lib/fetch/flow/PUT/UpdateActions";
 import EditFlowActionsDetails from "@/components/functions/flows/editDetails";
@@ -162,7 +162,7 @@ export default function Actions({
                   </div>
                 </div>
                 <Spacer y={2} />
-                <div className="flex-cols flex gap-2">
+                <div className="flex-wrap flex gap-2">
                   <Chip
                     className="lg:hidden"
                     color="default"
@@ -278,10 +278,20 @@ export default function Actions({
   function updateFlowActions(items: any) {
     UpdateFlowActions(flow.id, items)
       .then(() => {
-        toast.success("Flow actions order updated successfully.");
+        addToast({
+          title: "Flow",
+          description: "Flow actions order updated successfully.",
+          color: "success",
+          variant: "flat",
+        });
       })
       .catch(() => {
-        toast.error("Failed to update flow actions order.");
+        addToast({
+          title: "Flow",
+          description: "Failed to update flow actions order.",
+          color: "danger",
+          variant: "flat",
+        });
       });
   }
 

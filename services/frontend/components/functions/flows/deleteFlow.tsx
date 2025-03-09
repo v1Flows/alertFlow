@@ -1,6 +1,7 @@
 import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
+  addToast,
   Button,
   Modal,
   ModalBody,
@@ -11,7 +12,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { toast } from "sonner";
 
 import DeleteFlow from "@/lib/fetch/flow/DELETE/DeleteFlow";
 import ErrorCard from "@/components/error/ErrorCard";
@@ -50,13 +50,23 @@ export default function FunctionDeleteFlow({
       setErrorText("");
       setErrorMessage("");
       onOpenChange();
-      toast.success("Flow deleted successfully");
+      addToast({
+        title: "Flow",
+        description: "Flow deleted successfully",
+        color: "success",
+        variant: "flat",
+      });
       router.refresh();
     } else {
       setError(true);
       setErrorText(res.error);
       setErrorMessage(res.message);
-      toast.error("Failed to delete flow");
+      addToast({
+        title: "Flow",
+        description: "Failed to delete flow",
+        color: "danger",
+        variant: "flat",
+      });
     }
 
     setIsDeleteLoading(false);

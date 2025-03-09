@@ -1,4 +1,5 @@
 import {
+  addToast,
   Button,
   Card,
   CardBody,
@@ -10,7 +11,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 import { Icon } from "@iconify/react";
 
 import UpdateFlow from "@/lib/fetch/flow/PUT/UpdateFlow";
@@ -68,11 +68,21 @@ export default function FlowSettings({ flow }: { flow: any }) {
 
     if (response.success) {
       router.refresh();
-      toast.success("Flow updated successfully");
+      addToast({
+        title: "Flow",
+        description: "Flow updated successfully",
+        color: "success",
+        variant: "flat",
+      });
     } else {
       setError(true);
       setErrorMessage(response.message);
-      toast.error("Failed to update flow");
+      addToast({
+        title: "Flow",
+        description: "Failed to update flow",
+        color: "danger",
+        variant: "flat",
+      });
     }
   }
 
@@ -85,7 +95,7 @@ export default function FlowSettings({ flow }: { flow: any }) {
           <div className="grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 w-full gap-4">
             <Card>
               <CardBody>
-                <div className="flex flex-cols items-center justify-between gap-8">
+                <div className="flex flex-wrap items-center justify-between gap-8">
                   <div>
                     <p className="text-md font-bold">Threshold</p>
                     <p className="text-sm text-default-500 max-w-lg">
@@ -130,7 +140,7 @@ export default function FlowSettings({ flow }: { flow: any }) {
 
             <Card>
               <CardBody>
-                <div className="flex flex-cols items-center justify-between gap-8">
+                <div className="flex flex-wrap items-center justify-between gap-8">
                   <div>
                     <p className="text-md font-bold">Group Alert Identifier</p>
                     <p className="text-sm text-default-500 max-w-lg">
@@ -143,6 +153,7 @@ export default function FlowSettings({ flow }: { flow: any }) {
                     </p>
                   </div>
                   <Input
+                    className="max-w-md"
                     placeholder="Group Alert Identifier"
                     value={groupAlertsIdentifier}
                     onValueChange={setGroupAlertsIdentifier}
