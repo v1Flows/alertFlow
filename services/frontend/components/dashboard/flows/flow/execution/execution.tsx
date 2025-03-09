@@ -452,45 +452,27 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
                 <p>Step not started yet</p>
               ) : (
                 <div className="flex flex-col gap-2">
-                  <div className="flex flex-cols items-center gap-2">
-                    <Snippet fullWidth hideCopyButton hideSymbol radius="sm">
-                      {step.messages.map((data: any, index: any) => (
-                        <p
-                          key={index}
-                          className="flex-cols flex items-center gap-1"
-                        >
-                          <Icon
-                            icon="solar:double-alt-arrow-right-bold-duotone"
-                            width={16}
-                          />
-                          {data}
-                        </p>
-                      ))}
-                    </Snippet>
-                    {step.encrypted && (
-                      <Tooltip content="Encrypted">
-                        <Chip
-                          color="success"
-                          radius="sm"
-                          size="sm"
-                          variant="flat"
-                        >
-                          <Icon
-                            className="text-success"
-                            icon="solar:lock-linear"
-                            width={16}
-                          />
-                        </Chip>
-                      </Tooltip>
-                    )}
-                  </div>
+                  <Snippet fullWidth hideCopyButton hideSymbol radius="sm">
+                    {step.messages.map((data: any, index: any) => (
+                      <p
+                        key={index}
+                        className="flex-cols flex items-center gap-1"
+                      >
+                        <Icon icon="hugeicons:arrow-right-double" width={16} />
+                        {data}
+                      </p>
+                    ))}
+                  </Snippet>
                   {step.status === "interactionWaiting" && !step.interacted && (
                     <div className="flex-cols flex items-center gap-4">
                       <Button
                         fullWidth
                         color="success"
                         startContent={
-                          <Icon icon="solar:verified-check-linear" width={18} />
+                          <Icon
+                            icon="hugeicons:checkmark-badge-01"
+                            width={18}
+                          />
                         }
                         variant="flat"
                         onPress={() => {
@@ -589,7 +571,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-start justify-self-end">
+                      <div className="flex items-start justify-self-end gap-2">
                         <Chip
                           color={statusColor(step)}
                           radius="sm"
@@ -598,6 +580,22 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
                         >
                           {status(step)}
                         </Chip>
+                        {step.encrypted && (
+                          <Tooltip content="Encrypted">
+                            <Chip
+                              color="success"
+                              radius="sm"
+                              size="sm"
+                              variant="flat"
+                            >
+                              <Icon
+                                className="text-success"
+                                icon="hugeicons:square-lock-password"
+                                width={16}
+                              />
+                            </Chip>
+                          </Tooltip>
+                        )}
                       </div>
                     </div>
                     <Divider className="m-2" />
