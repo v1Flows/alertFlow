@@ -42,7 +42,9 @@ export default function AlertsList({
 
   // pagination
   const [page, setPage] = useState(1);
-  const pages = Math.ceil(alerts.length / maxAlerts);
+  const pages = Math.ceil(
+    alerts.filter((alert: any) => !alert.parent_id).length / maxAlerts,
+  );
   const items = useMemo(() => {
     const filteredAlerts = alerts.filter((alert: any) => !alert.parent_id);
     const start = (page - 1) * maxAlerts;

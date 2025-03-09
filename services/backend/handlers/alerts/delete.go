@@ -43,6 +43,13 @@ func Delete(context *gin.Context, db *bun.DB) {
 		return
 	}
 
+	// delete all alerts which got this alert id as parent_id
+	_, err = db.NewDelete().Model((*models.Alerts)(nil)).Where("parent_id = ?", alertID).Exec(context)
+	if err != nil {
+		httperror.InternalServerError(context, "Error deleting alert on db", err)
+		return
+	}
+
 	_, err = db.NewDelete().Model((*models.Alerts)(nil)).Where("id = ?", alertID).Exec(context)
 	if err != nil {
 		httperror.InternalServerError(context, "Error deleting alert on db", err)

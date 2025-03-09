@@ -2,6 +2,7 @@ package functions
 
 import (
 	"context"
+	"database/sql"
 	"time"
 
 	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
@@ -15,21 +16,23 @@ func PreStartExecution(flowID string, alert models.Alerts, flow models.Flows, db
 
 	// check when the last alert came in which got executed
 	var lastAlert models.Alerts
-	err := db.NewSelect().Model(&lastAlert).Where("flow_id = ? AND id != ? AND execution_id != ''", flowID, alert.ID).Order("created_at DESC").Limit(1).Scan(context)
-	if err != nil {
+	count, err := db.NewSelect().Model(&lastAlert).Where("flow_id = ? AND id != ? AND execution_id != ''", flowID, alert.ID).Order("created_at DESC").Limit(1).ScanAndCount(context)
+	if err != nil && err != sql.ErrNoRows {
 		return err
 	}
 
-	// compare the difference between the last alert and the current alert to the flow alert threshold
-	if lastAlert.CreatedAt.Add(time.Duration(flow.AlertThreshold) * time.Minute).After(alert.CreatedAt) {
-		// set note on alert why it was not executed
-		alert.Note = "Alert was not executed because it came in too soon after the last alert"
-		_, err = db.NewUpdate().Model(&alert).Column("note").Where("id = ?", alert.ID).Exec(context)
-		if err != nil {
-			return err
-		}
+	if count > 0 {
+		// compare the difference between the last alert and the current alert to the flow alert threshold
+		if lastAlert.CreatedAt.Add(time.Duration(flow.AlertThreshold) * time.Minute).After(alert.CreatedAt) {
+			// set note on alert why it was not executed
+			alert.Note = "Alert was not executed because it came in too soon after the last alert"
+			_, err = db.NewUpdate().Model(&alert).Column("note").Where("id = ?", alert.ID).Exec(context)
+			if err != nil {
+				return err
+			}
 
-		return nil
+			return nil
+		}
 	}
 
 	var execution models.Executions

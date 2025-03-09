@@ -33,10 +33,15 @@ export default async function AdminAlertsPage() {
           <p className="text-xl font-bold mb-2 text-default-500">List</p>
           <AlertsList
             alerts={alerts.data.alerts}
+            canEdit={true}
             compactMode={false}
             flows={flows.data.flows}
-            maxAlerts={25}
-            runners={runners.data.runners}
+            maxAlerts={18}
+            runners={[
+              ...runners.data.self_hosted_runners,
+              ...runners.data.alertflow_runners,
+            ]}
+            showDelete={true}
           />
         </>
       ) : (
