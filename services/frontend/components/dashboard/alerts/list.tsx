@@ -207,7 +207,7 @@ export default function AlertsList({
                 </>
               )}
             </CardBody>
-            <CardFooter className="flex items-center justify-between gap-2">
+            <CardFooter className="flex flex-wrap items-center justify-between gap-2">
               <div className="flex flex-wrap gap-2">
                 {alert.execution_id !== "" && (
                   <Chip color="primary" radius="sm" size="sm" variant="solid">
@@ -223,7 +223,7 @@ export default function AlertsList({
                   Plugin: {alert.plugin}
                 </Chip>
               </div>
-              <div className="flex flex-wrap justify-end gap-2">
+              <div className="flex flex-col lg:justify-end gap-2">
                 {alert.updated_at !== "0001-01-01T00:00:00Z" && (
                   <Chip radius="sm" size="sm" variant="flat">
                     <span className="text-default-600">

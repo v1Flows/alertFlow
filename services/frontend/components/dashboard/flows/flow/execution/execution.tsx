@@ -666,7 +666,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
 
   return (
     <>
-      <div className="flex flex-cols items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between">
         <Button
           color="default"
           variant="bordered"
@@ -675,7 +675,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
           <Icon icon="hugeicons:link-backward" width={20} />
           Back
         </Button>
-        <div className="flex-cols mt-2 flex items-center justify-center gap-4 lg:mt-0 lg:justify-end">
+        <div className="flex-wrap mt-2 flex items-center gap-4 lg:mt-0 lg:justify-end">
           <Button
             color="secondary"
             variant="flat"
