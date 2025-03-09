@@ -85,7 +85,7 @@ export default function FlowSettings({ flow }: { flow: any }) {
           <div className="grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 w-full gap-4">
             <Card>
               <CardBody>
-                <div className="flex flex-cols items-center justify-between gap-8">
+                <div className="flex flex-wrap items-center justify-between gap-8">
                   <div>
                     <p className="text-md font-bold">Threshold</p>
                     <p className="text-sm text-default-500 max-w-lg">
@@ -130,7 +130,7 @@ export default function FlowSettings({ flow }: { flow: any }) {
 
             <Card>
               <CardBody>
-                <div className="flex flex-cols items-center justify-between gap-8">
+                <div className="flex flex-wrap items-center justify-between gap-8">
                   <div>
                     <p className="text-md font-bold">Group Alert Identifier</p>
                     <p className="text-sm text-default-500 max-w-lg">
@@ -143,6 +143,7 @@ export default function FlowSettings({ flow }: { flow: any }) {
                     </p>
                   </div>
                   <Input
+                    className="max-w-md"
                     placeholder="Group Alert Identifier"
                     value={groupAlertsIdentifier}
                     onValueChange={setGroupAlertsIdentifier}

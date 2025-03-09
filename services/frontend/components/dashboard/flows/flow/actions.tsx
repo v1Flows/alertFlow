@@ -162,7 +162,7 @@ export default function Actions({
                   </div>
                 </div>
                 <Spacer y={2} />
-                <div className="flex-cols flex gap-2">
+                <div className="flex-wrap flex gap-2">
                   <Chip
                     className="lg:hidden"
                     color="default"
