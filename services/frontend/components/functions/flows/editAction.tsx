@@ -2,6 +2,7 @@ import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import { Icon } from "@iconify/react";
 import {
+  addToast,
   Button,
   ButtonGroup,
   Input,
@@ -17,7 +18,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { toast } from "sonner";
 
 import UpdateFlowActions from "@/lib/fetch/flow/PUT/UpdateActions";
 import { cn } from "@/components/functions/cn/cn";
@@ -96,14 +96,24 @@ export default function EditActionModal({
       setError(false);
       setErrorText("");
       setErrorMessage("");
-      toast.success("Action updated successfully.");
+      addToast({
+        title: "Flow",
+        description: "Action updated successfully",
+        color: "success",
+        variant: "flat",
+      });
       onOpenChange();
       router.refresh();
     } else {
       setError(true);
       setErrorText(res.error);
       setErrorMessage(res.message);
-      toast.error("An error occurred while updating the action.");
+      addToast({
+        title: "Flow",
+        description: "An error occurred while updating the action.",
+        color: "danger",
+        variant: "flat",
+      });
     }
 
     setLoading(false);

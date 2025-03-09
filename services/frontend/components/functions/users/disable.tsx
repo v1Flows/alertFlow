@@ -3,6 +3,7 @@
 import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
+  addToast,
   Button,
   Modal,
   ModalBody,
@@ -13,7 +14,6 @@ import {
   Spacer,
 } from "@heroui/react";
 import React from "react";
-import { toast } from "sonner";
 
 import ErrorCard from "@/components/error/ErrorCard";
 import { deleteSession } from "@/lib/auth/deleteSession";
@@ -42,7 +42,12 @@ export default function DisableUserModal({
       setError(true);
       setErrorText("Failed to disable user");
       setErrorMessage("Failed to disable user");
-      toast.error("Failed to disable user");
+      addToast({
+        title: "User",
+        description: "Failed to disable user",
+        color: "danger",
+        variant: "flat",
+      });
 
       return;
     }
@@ -53,14 +58,24 @@ export default function DisableUserModal({
       setErrorText("");
       setErrorMessage("");
       onOpenChange();
-      toast.success("User disabled successfully");
+      addToast({
+        title: "User",
+        description: "User disabled successfully",
+        color: "success",
+        variant: "flat",
+      });
       deleteSession();
     } else {
       setIsLoading(false);
       setError(true);
       setErrorText(response.error);
       setErrorMessage(response.message);
-      toast.error("Failed to disable user");
+      addToast({
+        title: "User",
+        description: "Failed to disable user",
+        color: "danger",
+        variant: "flat",
+      });
     }
   }
 

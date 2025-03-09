@@ -1,4 +1,5 @@
 import {
+  addToast,
   Button,
   Card,
   CardBody,
@@ -10,7 +11,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 import { Icon } from "@iconify/react";
 
 import UpdateFlow from "@/lib/fetch/flow/PUT/UpdateFlow";
@@ -68,11 +68,21 @@ export default function FlowSettings({ flow }: { flow: any }) {
 
     if (response.success) {
       router.refresh();
-      toast.success("Flow updated successfully");
+      addToast({
+        title: "Flow",
+        description: "Flow updated successfully",
+        color: "success",
+        variant: "flat",
+      });
     } else {
       setError(true);
       setErrorMessage(response.message);
-      toast.error("Failed to update flow");
+      addToast({
+        title: "Flow",
+        description: "Failed to update flow",
+        color: "danger",
+        variant: "flat",
+      });
     }
   }
 

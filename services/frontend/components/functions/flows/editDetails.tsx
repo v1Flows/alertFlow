@@ -2,6 +2,7 @@ import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import { Icon } from "@iconify/react";
 import {
+  addToast,
   Alert,
   Button,
   ButtonGroup,
@@ -19,7 +20,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { toast } from "sonner";
 
 import UpdateFlowActionsDetails from "@/lib/fetch/flow/PUT/UpdateActionsDetails";
 import { PlusIcon } from "@/components/icons";
@@ -97,12 +97,22 @@ export default function EditFlowActionsDetails({
       setErrorText("");
       setErrorMessage("");
       router.refresh();
-      toast.success("Flow Actions Details updated successfully!");
+      addToast({
+        title: "Flow",
+        description: "Flow Actions Details updated successfully",
+        color: "success",
+        variant: "flat",
+      });
     } else {
       setError(true);
       setErrorText(res.error);
       setErrorMessage(res.message);
-      toast.error("Failed to update Flow Actions Details!");
+      addToast({
+        title: "Flow",
+        description: "Failed to update Flow Actions Details",
+        color: "danger",
+        variant: "flat",
+      });
     }
 
     setLoading(false);

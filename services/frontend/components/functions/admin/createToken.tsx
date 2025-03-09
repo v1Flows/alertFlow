@@ -3,6 +3,7 @@
 import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
+  addToast,
   Button,
   Input,
   Modal,
@@ -13,7 +14,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { toast } from "sonner";
 
 import ErrorCard from "@/components/error/ErrorCard";
 import CreateServiceToken from "@/lib/fetch/admin/POST/CreateServiceToken";
@@ -46,7 +46,12 @@ export default function CreateServiceTokenModal({
       setError(true);
       setErrorText("Failed to create service token");
       setErrorMessage("Failed to create service token");
-      toast.error("Failed to create service token");
+      addToast({
+        title: "Token",
+        description: "Failed to create service token",
+        color: "danger",
+        variant: "flat",
+      });
 
       return;
     }
@@ -55,12 +60,23 @@ export default function CreateServiceTokenModal({
       router.refresh();
       onOpenChange();
       setIsLoading(false);
+      addToast({
+        title: "Token",
+        description: "Service token created successfully",
+        color: "success",
+        variant: "flat",
+      });
     } else {
       setIsLoading(false);
       setError(true);
       setErrorText(res.error);
       setErrorMessage(res.message);
-      toast.error("Failed to create service token");
+      addToast({
+        title: "Token",
+        description: "Failed to create service token",
+        color: "danger",
+        variant: "flat",
+      });
     }
   }
 

@@ -1,6 +1,7 @@
 "use client";
 import { Icon } from "@iconify/react";
 import {
+  addToast,
   Button,
   Chip,
   Divider,
@@ -28,7 +29,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { toast } from "sonner";
 
 import AdminDeleteUserModal from "@/components/functions/admin/delete";
 import AdminSendUserNotificationModal from "@/components/functions/admin/sendNotification";
@@ -95,10 +95,20 @@ export function UsersList({ users }: any) {
       if (res.success) {
         setUserID("");
         router.refresh();
-        toast.success("User status updated successfully");
+        addToast({
+          title: "User",
+          description: "User status updated successfully",
+          color: "success",
+          variant: "flat",
+        });
       } else {
         router.refresh();
-        toast.error("Failed to update user status");
+        addToast({
+          title: "User",
+          description: "Failed to update user status",
+          color: "danger",
+          variant: "flat",
+        });
       }
     } else {
       setIsDisableLoading(true);
@@ -111,11 +121,21 @@ export function UsersList({ users }: any) {
         setDisableUser(false);
         onOpenChange();
         router.refresh();
-        toast.success("User status updated successfully");
+        addToast({
+          title: "User",
+          description: "User status updated successfully",
+          color: "success",
+          variant: "flat",
+        });
       } else {
         setIsDisableLoading(false);
         router.refresh();
-        toast.error("Failed to update user status");
+        addToast({
+          title: "User",
+          description: "Failed to update user status",
+          color: "danger",
+          variant: "flat",
+        });
       }
     }
   }

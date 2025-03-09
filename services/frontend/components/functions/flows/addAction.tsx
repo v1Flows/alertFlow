@@ -2,6 +2,7 @@ import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import { Icon } from "@iconify/react";
 import {
+  addToast,
   Button,
   Card,
   CardBody,
@@ -19,7 +20,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
 
 import AddFlowActions from "@/lib/fetch/flow/POST/AddFlowActions";
@@ -279,12 +279,22 @@ export default function AddActionModal({
       setCurrentStep(0);
       onOpenChange();
       router.refresh();
-      toast.success("Action added successfully");
+      addToast({
+        title: "Flow",
+        description: "Action added successfully",
+        color: "success",
+        variant: "flat",
+      });
     } else {
       setError(true);
       setErrorText(res.error);
       setErrorMessage(res.message);
-      toast.error("Failed to add action");
+      addToast({
+        title: "Flow",
+        description: "Failed to add action",
+        color: "danger",
+        variant: "flat",
+      });
     }
 
     setLoading(false);

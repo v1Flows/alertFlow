@@ -1,5 +1,6 @@
 import { Icon } from "@iconify/react";
 import {
+  addToast,
   Button,
   Dropdown,
   DropdownItem,
@@ -8,7 +9,6 @@ import {
   DropdownTrigger,
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 
 import UpdateExecution from "@/lib/fetch/executions/PUT/update";
 
@@ -80,7 +80,12 @@ export default function AdminExecutionActions({
             : new Date().toISOString();
         break;
       default:
-        toast.error("Invalid Status");
+        addToast({
+          title: "Execution",
+          description: "Invalid Status",
+          color: "danger",
+          variant: "flat",
+        });
 
         return;
     }
@@ -88,10 +93,20 @@ export default function AdminExecutionActions({
     const response = await UpdateExecution(newExecution);
 
     if (response.success) {
-      toast.success("Execution Status Changed");
+      addToast({
+        title: "Execution",
+        description: "Execution Status Changed",
+        color: "success",
+        variant: "flat",
+      });
       router.refresh();
     } else {
-      toast.error("Failed to change Execution Status");
+      addToast({
+        title: "Execution",
+        description: "Failed to change Execution Status",
+        color: "danger",
+        variant: "flat",
+      });
     }
   }
 

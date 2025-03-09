@@ -3,6 +3,7 @@
 import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
+  addToast,
   Button,
   Input,
   Modal,
@@ -13,7 +14,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { toast } from "sonner";
 
 import EditRunner from "@/lib/fetch/runner/PUT/Edit";
 import ErrorCard from "@/components/error/ErrorCard";
@@ -48,7 +48,12 @@ export default function EditRunnerModal({
       setError(true);
       setErrorText("Failed to update runner");
       setErrorMessage("An error occurred while updating the runner");
-      toast.error("Failed to update runner");
+      addToast({
+        title: "Runner",
+        description: "Failed to update runner",
+        color: "danger",
+        variant: "flat",
+      });
 
       return;
     }
@@ -59,13 +64,23 @@ export default function EditRunnerModal({
       setErrorText("");
       setErrorMessage("");
       onOpenChange();
-      toast.success("Runner updated successfully");
+      addToast({
+        title: "Runner",
+        description: "Runner updated successfully",
+        color: "success",
+        variant: "flat",
+      });
       router.refresh();
     } else {
       setError(true);
       setErrorText(response.error);
       setErrorMessage(response.message);
-      toast.error("Failed to update runner");
+      addToast({
+        title: "Runner",
+        description: "Failed to update runner",
+        color: "danger",
+        variant: "flat",
+      });
     }
 
     setIsLoading(false);

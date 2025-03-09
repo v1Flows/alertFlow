@@ -3,6 +3,7 @@
 import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
+  addToast,
   Button,
   Chip,
   Modal,
@@ -14,7 +15,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { toast } from "sonner";
 
 import RemoveProjectMember from "@/lib/fetch/project/DELETE/removeProjectMember";
 import ErrorCard from "@/components/error/ErrorCard";
@@ -52,7 +52,12 @@ export default function DeleteProjectMemberModal({
       setError(true);
       setErrorText("An error occurred");
       setErrorMessage("An error occurred while removing the member");
-      toast.error("An error occurred while removing the member");
+      addToast({
+        title: "Project",
+        description: "An error occurred while removing the member",
+        color: "danger",
+        variant: "flat",
+      });
 
       return;
     }
@@ -63,14 +68,24 @@ export default function DeleteProjectMemberModal({
       setError(false);
       setErrorText("");
       setErrorMessage("");
-      toast.success("Member removed successfully");
+      addToast({
+        title: "Project",
+        description: "Member removed successfully",
+        color: "success",
+        variant: "flat",
+      });
       router.refresh();
     } else {
       setError(true);
       setErrorText(res.error);
       setErrorMessage(res.message);
       setIsDeleteLoading(false);
-      toast.error(res.error);
+      addToast({
+        title: "Project",
+        description: res.error,
+        color: "danger",
+        variant: "flat",
+      });
     }
 
     setIsDeleteLoading(false);

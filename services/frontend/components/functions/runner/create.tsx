@@ -3,6 +3,7 @@
 import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
+  addToast,
   Button,
   Divider,
   Input,
@@ -17,7 +18,6 @@ import {
 import { LibraryIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { toast } from "sonner";
 
 import AddRunner from "@/lib/fetch/runner/POST/AddRunner";
 import { CheckIcon } from "@/components/icons";
@@ -62,7 +62,12 @@ export default function CreateRunnerModal({
       setError(true);
       setErrorText("Failed to create runner");
       setErrorMessage("An error occurred while creating the runner");
-      toast.error("Failed to create runner");
+      addToast({
+        title: "Runner",
+        description: "Failed to create runner",
+        color: "danger",
+        variant: "flat",
+      });
 
       return;
     }
@@ -79,12 +84,22 @@ export default function CreateRunnerModal({
       setInRunnerId(response.data.runner.id);
       onOpenChangeInstructions();
       router.refresh();
-      toast.success("Runner created successfully");
+      addToast({
+        title: "Runner",
+        description: "Runner created successfully",
+        color: "success",
+        variant: "flat",
+      });
     } else {
       setError(true);
       setErrorText(response.error.error);
       setErrorMessage(response.error.message);
-      toast.error(`Failed to create runner: ${response.error.error}`);
+      addToast({
+        title: "Runner",
+        description: `Failed to create runner: ${response.error.error}`,
+        color: "danger",
+        variant: "flat",
+      });
     }
 
     setIsLoading(false);

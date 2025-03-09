@@ -1,5 +1,6 @@
 import { Icon } from "@iconify/react";
 import {
+  addToast,
   Button,
   Card,
   CardBody,
@@ -18,7 +19,6 @@ import {
 } from "@heroui/react";
 import React from "react";
 import TimeAgo from "react-timeago";
-import { toast } from "sonner";
 
 import { VerticalDotsIcon } from "@/components/icons";
 import RunnerDrawer from "@/components/functions/runner/plugins";
@@ -36,9 +36,19 @@ export default function Runners({ runners, project, user, members }: any) {
   const copyRunnerIDtoClipboard = (id: string) => {
     if (typeof navigator !== "undefined" && navigator.clipboard) {
       navigator.clipboard.writeText(id);
-      toast.success("Runner ID copied to clipboard!");
+      addToast({
+        title: "RunnerID",
+        description: "RunnerID copied to clipboard",
+        color: "success",
+        variant: "flat",
+      });
     } else {
-      toast.error("Failed to copy runner ID to clipboard");
+      addToast({
+        title: "RunnerID",
+        description: "Failed to copy RunnerID to clipboard",
+        color: "danger",
+        variant: "flat",
+      });
     }
   };
 

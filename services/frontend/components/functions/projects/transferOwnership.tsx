@@ -4,6 +4,7 @@ import type { Selection } from "@heroui/react";
 import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
+  addToast,
   Avatar,
   AvatarGroup,
   Button,
@@ -22,7 +23,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { toast } from "sonner";
 
 import ProjectTransferOwnershipAPI from "@/lib/fetch/project/PUT/transferOwnership";
 import ErrorCard from "@/components/error/ErrorCard";
@@ -72,7 +72,12 @@ export default function ProjectTransferOwnership({
       setError(true);
       setErrorText("An error occurred while transferring the ownership");
       setErrorMessage("An error occurred while transferring the ownership");
-      toast.error("An error occurred while transferring the ownership");
+      addToast({
+        title: "Project",
+        description: "An error occurred while transferring the ownership",
+        color: "danger",
+        variant: "flat",
+      });
 
       return;
     }
@@ -85,13 +90,23 @@ export default function ProjectTransferOwnership({
       setErrorText("");
       setErrorMessage("");
       router.refresh();
-      toast.success("Owner transferred successfully");
+      addToast({
+        title: "Project",
+        description: "Owner transferred successfully",
+        color: "success",
+        variant: "flat",
+      });
     } else {
       setIsLoading(false);
       setError(true);
       setErrorText(res.error);
       setErrorMessage(res.message);
-      toast.error("An error occurred while transferring the ownership");
+      addToast({
+        title: "Project",
+        description: "An error occurred while transferring the ownership",
+        color: "danger",
+        variant: "flat",
+      });
     }
   }
 

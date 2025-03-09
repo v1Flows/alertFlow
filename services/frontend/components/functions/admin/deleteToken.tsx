@@ -3,6 +3,7 @@
 import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
+  addToast,
   Button,
   Modal,
   ModalBody,
@@ -13,7 +14,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { toast } from "sonner";
 
 import ErrorCard from "@/components/error/ErrorCard";
 import AdminDeleteToken from "@/lib/fetch/admin/DELETE/DeleteToken";
@@ -43,7 +43,12 @@ export default function AdminDeleteTokenModal({
       setError(true);
       setErrorText("Failed to delete token");
       setErrorMessage("Failed to delete token");
-      toast.error("Failed to delete token");
+      addToast({
+        title: "Token",
+        description: "Failed to delete token",
+        color: "danger",
+        variant: "flat",
+      });
 
       return;
     }
@@ -55,13 +60,23 @@ export default function AdminDeleteTokenModal({
       setErrorMessage("");
       router.refresh();
       onOpenChange();
-      toast.success("Token deleted successfully");
+      addToast({
+        title: "Token",
+        description: "Token deleted successfully",
+        color: "success",
+        variant: "flat",
+      });
     } else {
       setError(true);
       setErrorText(response.error);
       setErrorMessage(response.message);
       setIsLoading(false);
-      toast.error("Failed to delete token");
+      addToast({
+        title: "Token",
+        description: "Failed to delete token",
+        color: "danger",
+        variant: "flat",
+      });
     }
   }
 

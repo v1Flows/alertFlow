@@ -4,6 +4,7 @@ import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import { Icon, listIcons, loadIcons } from "@iconify/react";
 import {
+  addToast,
   Avatar,
   Button,
   cn,
@@ -21,7 +22,6 @@ import {
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { ColorPicker, useColor } from "react-color-palette";
-import { toast } from "sonner";
 
 import UpdateProject from "@/lib/fetch/project/PUT/UpdateProject";
 import ErrorCard from "@/components/error/ErrorCard";
@@ -85,7 +85,12 @@ export default function EditProjectModal({
       setError(true);
       setErrorText(response.error);
       setErrorMessage(response.message);
-      toast.error("Failed to update project");
+      addToast({
+        title: "Project",
+        description: "An error occurred while updating the project",
+        color: "danger",
+        variant: "flat",
+      });
 
       return;
     }
@@ -97,13 +102,23 @@ export default function EditProjectModal({
       setError(false);
       setErrorText("");
       setErrorMessage("");
-      toast.success("Project updated successfully");
+      addToast({
+        title: "Project",
+        description: "Project updated successfully",
+        color: "success",
+        variant: "flat",
+      });
     } else {
       setIsLoading(false);
       setError(true);
       setErrorText(response.error);
       setErrorMessage(response.message);
-      toast.error("Failed to update project");
+      addToast({
+        title: "Project",
+        description: "Failed to update project",
+        color: "danger",
+        variant: "flat",
+      });
     }
   }
 

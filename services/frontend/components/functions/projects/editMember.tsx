@@ -3,6 +3,7 @@
 import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
+  addToast,
   Button,
   Modal,
   ModalBody,
@@ -14,7 +15,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { toast } from "sonner";
 
 import EditProjectMember from "@/lib/fetch/project/PUT/editProjectMember";
 import ErrorCard from "@/components/error/ErrorCard";
@@ -60,7 +60,12 @@ export default function EditProjectMemberModal({
       setErrorText("Failed to edit member");
       setErrorMessage("Failed to edit member");
       onOpenChange();
-      toast.success("Member edited successfully");
+      addToast({
+        title: "Project",
+        description: "Failed to edit member",
+        color: "danger",
+        variant: "flat",
+      });
 
       return;
     }
@@ -70,13 +75,23 @@ export default function EditProjectMemberModal({
       setErrorText("");
       setErrorMessage("");
       onOpenChange();
-      toast.success("Member edited successfully");
+      addToast({
+        title: "Project",
+        description: "Member edited successfully",
+        color: "success",
+        variant: "flat",
+      });
       router.refresh();
     } else {
       setError(true);
       setErrorText(response.error);
       setErrorMessage(response.message);
-      toast.error("Failed to edit member");
+      addToast({
+        title: "Project",
+        description: "Failed to edit member",
+        color: "danger",
+        variant: "flat",
+      });
     }
 
     setIsLoginLoading(false);

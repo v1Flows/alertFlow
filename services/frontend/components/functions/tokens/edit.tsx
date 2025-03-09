@@ -3,6 +3,7 @@
 import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
+  addToast,
   Button,
   Input,
   Modal,
@@ -13,7 +14,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
-import { toast } from "sonner";
 
 import UpdateToken from "@/lib/fetch/tokens/update";
 import ErrorCard from "@/components/error/ErrorCard";
@@ -50,7 +50,12 @@ export default function EditTokenModal({
       setError(true);
       setErrorText("Failed to update token");
       setErrorMessage("Failed to update token");
-      toast.error("Failed to update token");
+      addToast({
+        title: "Token",
+        description: "Failed to update token",
+        color: "danger",
+        variant: "flat",
+      });
 
       return;
     }
@@ -67,7 +72,12 @@ export default function EditTokenModal({
       setError(true);
       setErrorText(response.error);
       setErrorMessage(response.message);
-      toast.error("Failed to update token");
+      addToast({
+        title: "Token",
+        description: "Failed to update token",
+        color: "danger",
+        variant: "flat",
+      });
     }
   }
 

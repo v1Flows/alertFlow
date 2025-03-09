@@ -1,7 +1,7 @@
 "use client";
 
 import { Icon } from "@iconify/react";
-import { Card, Chip, cn, Spacer, Tab, Tabs } from "@heroui/react";
+import { addToast, Card, Chip, cn, Spacer, Tab, Tabs } from "@heroui/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import {
@@ -12,7 +12,6 @@ import {
   Tooltip,
   XAxis,
 } from "recharts";
-import { toast } from "sonner";
 
 import GetFlowStats from "@/lib/fetch/flow/stats";
 
@@ -71,7 +70,12 @@ export default function FlowStats({ flowID }: { flowID: string }) {
       setStats(stats.data);
     } else {
       if ("message" in stats) {
-        toast.error(stats.message);
+        addToast({
+          title: "Stats",
+          description: stats.message,
+          color: "danger",
+          variant: "flat",
+        });
       }
     }
   }
