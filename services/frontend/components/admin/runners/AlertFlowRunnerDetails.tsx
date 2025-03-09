@@ -1,4 +1,5 @@
 import {
+  addToast,
   Button,
   Card,
   CardBody,
@@ -8,7 +9,6 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
 
@@ -68,17 +68,32 @@ export default function AdminAlertFlowRunnerDetails({
     )) as any;
 
     if (response.success) {
-      toast.success("Settings updated successfully");
+      addToast({
+        title: "Settings",
+        description: "Settings updated successfully",
+        color: "success",
+        variant: "flat",
+      });
       router.refresh();
     } else {
       router.refresh();
-      toast.error("Failed to update settings");
+      addToast({
+        title: "Settings",
+        description: "Failed to update settings",
+        color: "danger",
+        variant: "flat",
+      });
     }
   }
 
   function copyJoinToken() {
     navigator.clipboard.writeText(alertflowRunnerAutoJoinToken);
-    toast.success("Join token copied to clipboard");
+    addToast({
+      title: "Runner",
+      description: "Join token copied to clipboard",
+      color: "success",
+      variant: "flat",
+    });
   }
 
   return (

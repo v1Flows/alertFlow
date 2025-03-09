@@ -3,6 +3,7 @@
 import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
+  addToast,
   Button,
   Chip,
   Divider,
@@ -15,7 +16,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
-import { toast } from "sonner";
 
 import GetRunnerFlowLinks from "@/lib/fetch/runner/GetRunnerFlowLinks";
 import DeleteProjectRunner from "@/lib/fetch/project/DELETE/DeleteRunner";
@@ -49,7 +49,12 @@ export default function DeleteRunnerModal({
       setErrorText("Failed to fetch runner flow links");
       setErrorMessage("An error occurred while fetching the runner flow links");
       router.refresh();
-      toast.error("Failed to fetch runner flow links");
+      addToast({
+        title: "Runner",
+        description: "Failed to fetch runner flow links",
+        color: "danger",
+        variant: "flat",
+      });
     }
 
     if (flows.success) {
@@ -74,7 +79,12 @@ export default function DeleteRunnerModal({
       setError(true);
       setErrorText("Failed to delete runner");
       setErrorMessage("An error occurred while deleting the runner");
-      toast.error("Failed to delete runner");
+      addToast({
+        title: "Runner",
+        description: "Failed to delete runner",
+        color: "danger",
+        variant: "flat",
+      });
 
       return;
     }
@@ -84,13 +94,23 @@ export default function DeleteRunnerModal({
       setError(false);
       setErrorText("");
       setErrorMessage("");
-      toast.success("Runner deleted successfully");
+      addToast({
+        title: "Runner",
+        description: "Runner deleted successfully",
+        color: "success",
+        variant: "flat",
+      });
       router.refresh();
     } else {
       setError(true);
       setErrorText(response.error);
       setErrorMessage(response.message);
-      toast.error("Failed to create runner");
+      addToast({
+        title: "Runner",
+        description: "Failed to create runner",
+        color: "danger",
+        variant: "flat",
+      });
     }
 
     setIsLoading(false);

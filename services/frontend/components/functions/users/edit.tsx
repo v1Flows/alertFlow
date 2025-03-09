@@ -3,6 +3,7 @@
 import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
+  addToast,
   Button,
   Input,
   Modal,
@@ -15,7 +16,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
-import { toast } from "sonner";
 
 import UpdateUser from "@/lib/fetch/admin/PUT/UpdateUser";
 import ErrorCard from "@/components/error/ErrorCard";
@@ -65,7 +65,12 @@ export default function EditUserModal({
       setErrorText("Failed to update user");
       setErrorMessage("Failed to update user");
       setIsLoading(false);
-      toast.error("Failed to update user");
+      addToast({
+        title: "User",
+        description: "Failed to update user",
+        color: "danger",
+        variant: "flat",
+      });
 
       return;
     }
@@ -77,13 +82,23 @@ export default function EditUserModal({
       setErrorMessage("");
       router.refresh();
       onOpenChange();
-      toast.success("User updated successfully");
+      addToast({
+        title: "User",
+        description: "User updated successfully",
+        color: "success",
+        variant: "flat",
+      });
     } else {
       setError(true);
       setErrorText(response.error);
       setErrorMessage(response.message);
       setIsLoading(false);
-      toast.error("Failed to update user");
+      addToast({
+        title: "User",
+        description: "Failed to update user",
+        color: "danger",
+        variant: "flat",
+      });
     }
   }
 

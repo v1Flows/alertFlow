@@ -3,6 +3,7 @@
 import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
+  addToast,
   Button,
   Modal,
   ModalBody,
@@ -12,7 +13,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { toast } from "sonner";
 
 import LeaveProject from "@/lib/fetch/project/DELETE/leave";
 import ErrorCard from "@/components/error/ErrorCard";
@@ -42,7 +42,12 @@ export default function LeaveProjectModal({
       setError(true);
       setErrorText("An error occurred");
       setErrorMessage("An error occurred while leaving the project");
-      toast.error("An error occurred while leaving the project");
+      addToast({
+        title: "Project",
+        description: "An error occurred while leaving the project",
+        color: "danger",
+        variant: "flat",
+      });
 
       return;
     }
@@ -53,14 +58,24 @@ export default function LeaveProjectModal({
       setError(false);
       setErrorText("");
       setErrorMessage("");
-      toast.success("You have left the project successfully");
+      addToast({
+        title: "Project",
+        description: "You have left the project successfully",
+        color: "success",
+        variant: "flat",
+      });
       router.push("/projects");
     } else {
       setIsLeaveLoading(false);
       setError(true);
       setErrorText(res.error);
       setErrorMessage(res.message);
-      toast.error(res.error);
+      addToast({
+        title: "Project",
+        description: res.error,
+        color: "danger",
+        variant: "flat",
+      });
     }
 
     setIsLeaveLoading(false);

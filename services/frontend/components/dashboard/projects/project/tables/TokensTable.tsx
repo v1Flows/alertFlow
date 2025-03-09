@@ -1,5 +1,6 @@
 import { Icon } from "@iconify/react";
 import {
+  addToast,
   Button,
   Chip,
   Pagination,
@@ -13,7 +14,6 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import React from "react";
-import { toast } from "sonner";
 
 import { PlusIcon } from "@/components/icons";
 import CreateProjectTokenModal from "@/components/functions/projects/createToken";
@@ -50,7 +50,12 @@ export default function ProjectTokens({
 
   const copyTokentoClipboard = (key: string) => {
     navigator.clipboard.writeText(key);
-    toast.success("Copied to clipboard!");
+    addToast({
+      title: "Token",
+      description: "Token copied to clipboard",
+      color: "success",
+      variant: "flat",
+    });
   };
 
   function checkAddTokenDisabled() {

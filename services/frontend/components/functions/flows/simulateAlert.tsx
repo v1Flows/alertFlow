@@ -2,6 +2,7 @@ import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import { Icon } from "@iconify/react";
 import {
+  addToast,
   Button,
   Input,
   Modal,
@@ -12,7 +13,6 @@ import {
   Textarea,
 } from "@heroui/react";
 import React from "react";
-import { toast } from "sonner";
 
 import SimulateAlert from "@/lib/fetch/alert/POST/send";
 import ErrorCard from "@/components/error/ErrorCard";
@@ -81,7 +81,12 @@ export default function SimulateAlertModal({
       setErrorText("Failed to send alert!");
       setErrorMessage("Please try again later.");
       setIsLoading(false);
-      toast.error("Failed to send alert!");
+      addToast({
+        title: "Alert Simulation",
+        description: "Failed to send alert!",
+        color: "danger",
+        variant: "flat",
+      });
 
       return;
     }
@@ -90,13 +95,23 @@ export default function SimulateAlertModal({
       setError(true);
       setErrorText(send.error);
       setErrorMessage(send.message);
-      toast.error("Failed to send alert!");
+      addToast({
+        title: "Alert Simulation",
+        description: "Failed to send alert!",
+        color: "danger",
+        variant: "flat",
+      });
     } else {
       onOpenChange();
       setError(false);
       setErrorText("");
       setErrorMessage("");
-      toast.success("Alert sent successfully!");
+      addToast({
+        title: "Alert Simulation",
+        description: "Alert sent successfully!",
+        color: "success",
+        variant: "flat",
+      });
     }
 
     setIsLoading(false);

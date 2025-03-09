@@ -3,6 +3,7 @@
 import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
+  addToast,
   Button,
   cn,
   Divider,
@@ -18,7 +19,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
-import { toast } from "sonner";
 
 import GetProjectRunners from "@/lib/fetch/project/runners";
 import UpdateFlow from "@/lib/fetch/flow/PUT/UpdateFlow";
@@ -112,13 +112,23 @@ export default function EditFlowModal({
       router.refresh();
       onOpenChange();
       setIsLoading(false);
-      toast.success("Flow updated successfully");
+      addToast({
+        title: "Flow",
+        description: "Flow updated successfully",
+        color: "success",
+        variant: "flat",
+      });
     } else {
       setError(true);
       setErrorText(response.error);
       setErrorMessage(response.message);
       setIsLoading(false);
-      toast.error("Failed to update flow");
+      addToast({
+        title: "Flow",
+        description: "Failed to update flow",
+        color: "danger",
+        variant: "flat",
+      });
     }
   }
 

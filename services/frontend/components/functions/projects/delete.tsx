@@ -3,6 +3,7 @@
 import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
+  addToast,
   Button,
   Modal,
   ModalBody,
@@ -13,7 +14,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { toast } from "sonner";
 
 import DeleteProject from "@/lib/fetch/project/DELETE/DeleteProject";
 import ErrorCard from "@/components/error/ErrorCard";
@@ -42,7 +42,12 @@ export default function DeleteProjectModal({
       setError(true);
       setErrorText("Failed to delete project");
       setErrorMessage("Failed to delete project");
-      toast.error("Failed to delete project");
+      addToast({
+        title: "Project",
+        description: "Failed to delete project",
+        color: "danger",
+        variant: "flat",
+      });
 
       return;
     }
@@ -54,13 +59,23 @@ export default function DeleteProjectModal({
       setError(false);
       setErrorText("");
       setErrorMessage("");
-      toast.success("Project deleted successfully");
+      addToast({
+        title: "Project",
+        description: "Project deleted successfully",
+        color: "success",
+        variant: "flat",
+      });
     } else {
       setIsLoading(false);
       setError(true);
       setErrorText(res.error);
       setErrorMessage(res.message);
-      toast.error("Failed to delete project");
+      addToast({
+        title: "Project",
+        description: "Failed to delete project",
+        color: "danger",
+        variant: "flat",
+      });
     }
   }
 

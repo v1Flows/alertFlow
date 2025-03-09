@@ -1,6 +1,7 @@
 "use client";
 import { Icon } from "@iconify/react";
 import {
+  addToast,
   Alert,
   Avatar,
   AvatarGroup,
@@ -22,7 +23,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { toast } from "sonner";
 
 import CreateProjectModal from "@/components/functions/projects/create";
 import DeleteProjectModal from "@/components/functions/projects/delete";
@@ -48,9 +48,19 @@ export function ProjectsList({
   const copyProjectIDtoClipboard = (key: string) => {
     if (typeof navigator !== "undefined" && navigator.clipboard) {
       navigator.clipboard.writeText(key);
-      toast.success("Copied to clipboard!");
+      addToast({
+        title: "Project",
+        description: "ProjectID copied to clipboard!",
+        color: "success",
+        variant: "flat",
+      });
     } else {
-      toast.error("Failed to copy project ID to clipboard");
+      addToast({
+        title: "Project",
+        description: "Failed to copy ProjectID to clipboard",
+        color: "danger",
+        variant: "flat",
+      });
     }
   };
 

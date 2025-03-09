@@ -2,6 +2,7 @@
 
 import { Icon } from "@iconify/react";
 import {
+  addToast,
   Badge,
   Button,
   Chip,
@@ -21,7 +22,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React, { useMemo, useState } from "react";
-import { toast } from "sonner";
 
 import Reloader from "@/components/reloader/Reloader";
 import InteractExecutionStep from "@/lib/fetch/executions/PUT/step_interact";
@@ -47,7 +47,12 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
         setSteps(steps.data.steps);
       } else {
         if ("error" in steps) {
-          toast.error(steps.error);
+          addToast({
+            title: "Execution",
+            description: steps.error,
+            color: "danger",
+            variant: "flat",
+          });
         }
       }
     });
@@ -56,7 +61,12 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
         setAlert(alert.data.alert);
       } else {
         if ("error" in alert) {
-          toast.error(alert.error);
+          addToast({
+            title: "Alert",
+            description: alert.error,
+            color: "danger",
+            variant: "flat",
+          });
         }
       }
     });
@@ -368,9 +378,19 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
     )) as any;
 
     if (!res.success) {
-      toast.error(res.error);
+      addToast({
+        title: "Interaction",
+        description: res.error,
+        color: "danger",
+        variant: "flat",
+      });
     } else {
-      toast.success("Step interaction successful");
+      addToast({
+        title: "Interaction",
+        description: "Step interaction successful",
+        color: "success",
+        variant: "flat",
+      });
       router.refresh();
     }
   }

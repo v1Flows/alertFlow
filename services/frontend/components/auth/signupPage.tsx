@@ -1,13 +1,20 @@
 "use client";
 
 import { Icon } from "@iconify/react";
-import { Button, Image, Input, Link, Tooltip, Alert } from "@heroui/react";
+import {
+  Button,
+  Image,
+  Input,
+  Link,
+  Tooltip,
+  Alert,
+  addToast,
+} from "@heroui/react";
 import { useIsSSR } from "@react-aria/ssr";
 import { AnimatePresence, domAnimation, LazyMotion, m } from "framer-motion";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { toast } from "sonner";
 
 import { setSession } from "@/lib/setSession";
 import SignUpAPI from "@/lib/auth/signup";
@@ -145,15 +152,30 @@ export default function SignUpPage() {
 
         setIsLoading(false);
         router.push("/");
-        toast.success("Successfully signed up and logged in!");
+        addToast({
+          title: "Sign Up",
+          description: "Successfully signed up and logged in!",
+          color: "success",
+          variant: "flat",
+        });
       } else {
-        toast.error(loginRes.error);
+        addToast({
+          title: "Sign Up",
+          description: loginRes.error,
+          color: "danger",
+          variant: "flat",
+        });
       }
     } else {
       setIsLoading(false);
       setError(true);
       setErrorText(res.error);
-      toast.error(res.error);
+      addToast({
+        title: "Sign Up",
+        description: res.error,
+        color: "danger",
+        variant: "flat",
+      });
     }
   };
 

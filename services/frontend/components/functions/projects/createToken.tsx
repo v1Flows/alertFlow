@@ -3,6 +3,7 @@
 import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
+  addToast,
   Button,
   Input,
   Modal,
@@ -13,7 +14,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { toast } from "sonner";
 
 import ErrorCard from "@/components/error/ErrorCard";
 import CreateProjectToken from "@/lib/fetch/project/POST/CreateProjectToken";
@@ -49,7 +49,12 @@ export default function CreateProjectTokenModal({
       setError(true);
       setErrorText("Failed to create token");
       setErrorMessage("Failed to create token");
-      toast.error("Failed to create token");
+      addToast({
+        title: "Project",
+        description: "Failed to create token",
+        color: "danger",
+        variant: "flat",
+      });
 
       return;
     }
@@ -63,7 +68,12 @@ export default function CreateProjectTokenModal({
       setError(true);
       setErrorText(res.error);
       setErrorMessage(res.message);
-      toast.error("Failed to create token");
+      addToast({
+        title: "Project",
+        description: "Failed to create token",
+        color: "danger",
+        variant: "flat",
+      });
     }
   }
 

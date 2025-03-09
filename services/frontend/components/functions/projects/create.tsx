@@ -4,6 +4,7 @@ import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import { Icon, listIcons, loadIcons } from "@iconify/react";
 import {
+  addToast,
   Avatar,
   Button,
   ButtonGroup,
@@ -23,7 +24,6 @@ import { LibraryIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { ColorPicker, useColor } from "react-color-palette";
-import { toast } from "sonner";
 
 import CreateProject from "@/lib/fetch/project/POST/CreateProject";
 import ErrorCard from "@/components/error/ErrorCard";
@@ -82,7 +82,12 @@ export default function CreateProjectModal({
       setError(true);
       setErrorText("Failed to create project");
       setErrorMessage("Failed to create project");
-      toast.error("Failed to create project");
+      addToast({
+        title: "Project",
+        description: "Failed to create project",
+        color: "danger",
+        variant: "flat",
+      });
 
       return;
     }
@@ -103,7 +108,12 @@ export default function CreateProjectModal({
       setError(true);
       setErrorText(res.error);
       setErrorMessage(res.message);
-      toast.error("Failed to create project");
+      addToast({
+        title: "Project",
+        description: "Failed to create project",
+        color: "danger",
+        variant: "flat",
+      });
     }
   }
 

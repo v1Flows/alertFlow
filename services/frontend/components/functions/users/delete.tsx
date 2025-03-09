@@ -3,6 +3,7 @@
 import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
+  addToast,
   Button,
   Modal,
   ModalBody,
@@ -14,7 +15,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { toast } from "sonner";
 
 import DeleteUser from "@/lib/fetch/user/DELETE/delete";
 import ErrorCard from "@/components/error/ErrorCard";
@@ -43,7 +43,12 @@ export default function DeleteUserModal({
       setError(true);
       setErrorText("Failed to delete user");
       setErrorMessage("Failed to delete user");
-      toast.error("Failed to delete user");
+      addToast({
+        title: "User",
+        description: "Failed to delete user",
+        color: "danger",
+        variant: "flat",
+      });
 
       return;
     }
@@ -55,13 +60,23 @@ export default function DeleteUserModal({
       setErrorMessage("");
       router.refresh();
       onOpenChange();
-      toast.success("User deleted successfully");
+      addToast({
+        title: "User",
+        description: "User deleted successfully",
+        color: "success",
+        variant: "flat",
+      });
     } else {
       setError(true);
       setErrorText(response.error);
       setErrorMessage(response.message);
       setIsLoading(false);
-      toast.error("Failed to delete user");
+      addToast({
+        title: "User",
+        description: "Failed to delete user",
+        color: "danger",
+        variant: "flat",
+      });
     }
   }
 

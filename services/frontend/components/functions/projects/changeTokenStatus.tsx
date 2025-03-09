@@ -1,6 +1,7 @@
 import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
+  addToast,
   Button,
   Input,
   Modal,
@@ -12,7 +13,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { toast } from "sonner";
 
 import ErrorCard from "@/components/error/ErrorCard";
 import ChangeProjectTokenStatus from "@/lib/fetch/project/PUT/ChangeProjectTokenStatus";
@@ -53,7 +53,12 @@ export default function ChangeProjectTokenStatusModal({
       setError(true);
       setErrorText("Failed to update token status");
       setErrorMessage("Failed to update token status");
-      toast.error("Failed to update token status");
+      addToast({
+        title: "Project",
+        description: "Failed to update token status",
+        color: "danger",
+        variant: "flat",
+      });
 
       return;
     }
@@ -65,14 +70,24 @@ export default function ChangeProjectTokenStatusModal({
       setErrorMessage("");
       onOpenChange();
       router.refresh();
-      toast.success("Token status updated successfully");
+      addToast({
+        title: "Project",
+        description: "Token status updated successfully",
+        color: "success",
+        variant: "flat",
+      });
     } else {
       setLoading(false);
       setError(true);
       setErrorText(res.error);
       setErrorMessage(res.message);
       router.refresh();
-      toast.error("Failed to update token status");
+      addToast({
+        title: "Project",
+        description: "Failed to update token status",
+        color: "danger",
+        variant: "flat",
+      });
     }
   }
 

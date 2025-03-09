@@ -1,6 +1,7 @@
 import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
+  addToast,
   Button,
   Modal,
   ModalBody,
@@ -11,7 +12,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { toast } from "sonner";
 
 import DeleteExecution from "@/lib/fetch/executions/DELETE/delete";
 import ErrorCard from "@/components/error/ErrorCard";
@@ -50,14 +50,24 @@ export default function DeleteExecutionModal({
       setError(false);
       setErrorText("");
       setErrorMessage("");
-      toast.success("Execution deleted successfully");
+      addToast({
+        title: "Flow",
+        description: "Execution deleted successfully",
+        color: "success",
+        variant: "flat",
+      });
       router.refresh();
     } else {
       setError(true);
       setErrorText(res.error);
       setErrorMessage(res.message);
       setIsDeleteLoading(false);
-      toast.error("Failed to delete execution");
+      addToast({
+        title: "Flow",
+        description: "Failed to delete execution",
+        color: "danger",
+        variant: "flat",
+      });
     }
 
     setIsDeleteLoading(false);

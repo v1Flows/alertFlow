@@ -3,6 +3,7 @@
 import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
+  addToast,
   Button,
   Divider,
   Input,
@@ -21,7 +22,6 @@ import {
 import { LibraryIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { toast } from "sonner";
 
 import GetProjectRunners from "@/lib/fetch/project/runners";
 import CreateFlow from "@/lib/fetch/flow/POST/CreateFlow";
@@ -136,7 +136,12 @@ export default function FunctionCreateFlow({
       setError(true);
       setErrorText(response.error);
       setErrorMessage(response.message);
-      toast.error("Failed to create flow");
+      addToast({
+        title: "Flow",
+        description: "Failed to create flow",
+        color: "danger",
+        variant: "flat",
+      });
     }
 
     setIsLoading(false);

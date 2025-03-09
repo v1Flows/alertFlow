@@ -1,6 +1,7 @@
 import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
+  addToast,
   Button,
   Modal,
   ModalBody,
@@ -11,7 +12,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { toast } from "sonner";
 
 import DeleteAction from "@/lib/fetch/flow/DELETE/DeleteAction";
 import ErrorCard from "@/components/error/ErrorCard";
@@ -52,14 +52,24 @@ export default function DeleteActionModal({
       setError(false);
       setErrorText("");
       setErrorMessage("");
-      toast.success("Action deleted successfully");
+      addToast({
+        title: "Flow",
+        description: "Action deleted successfully",
+        color: "success",
+        variant: "flat",
+      });
       router.refresh();
     } else {
       setIsDeleteLoading(false);
       setError(true);
       setErrorText(res.error);
       setErrorMessage(res.message);
-      toast.error("Failed to delete action");
+      addToast({
+        title: "Flow",
+        description: "Failed to delete action",
+        color: "danger",
+        variant: "flat",
+      });
     }
 
     setIsDeleteLoading(false);

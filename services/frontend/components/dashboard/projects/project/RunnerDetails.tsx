@@ -1,4 +1,5 @@
 import {
+  addToast,
   Button,
   Card,
   CardBody,
@@ -8,7 +9,6 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
 
@@ -57,22 +57,42 @@ export default function ProjectRunnerDetails({ project }: { project: any }) {
     )) as any;
 
     if (!response) {
-      toast.error("Failed to update project");
+      addToast({
+        title: "Project",
+        description: "Failed to update project",
+        color: "danger",
+        variant: "flat",
+      });
 
       return;
     }
 
     if (response.success) {
       router.refresh();
-      toast.success("Project updated successfully");
+      addToast({
+        title: "Project",
+        description: "Project updated successfully",
+        color: "success",
+        variant: "flat",
+      });
     } else {
-      toast.error("Failed to update project");
+      addToast({
+        title: "Project",
+        description: "Failed to update project",
+        color: "danger",
+        variant: "flat",
+      });
     }
   }
 
   function copyJoinToken() {
     navigator.clipboard.writeText(project.runner_auto_join_token);
-    toast.success("Join token copied to clipboard");
+    addToast({
+      title: "Runner",
+      description: "Join token copied to clipboard",
+      color: "success",
+      variant: "flat",
+    });
   }
 
   return (

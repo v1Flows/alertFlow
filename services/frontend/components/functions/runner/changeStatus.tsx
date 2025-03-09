@@ -1,6 +1,7 @@
 import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import {
+  addToast,
   Button,
   Input,
   Modal,
@@ -12,7 +13,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { toast } from "sonner";
 
 import ChangeRunnerStatus from "@/lib/fetch/admin/PUT/ChangeRunnerStatus";
 import ErrorCard from "@/components/error/ErrorCard";
@@ -50,7 +50,12 @@ export default function ChangeRunnerStatusModal({
       setError(true);
       setErrorText("Failed to update runner status");
       setErrorMessage("An error occurred while updating the runner status");
-      toast.error("Failed to update runner status");
+      addToast({
+        title: "Runner",
+        description: "Failed to update runner status",
+        color: "danger",
+        variant: "flat",
+      });
 
       return;
     }
@@ -62,14 +67,24 @@ export default function ChangeRunnerStatusModal({
       setErrorMessage("");
       onOpenChange();
       router.refresh();
-      toast.success("Runner status updated successfully");
+      addToast({
+        title: "Runner",
+        description: "Runner status updated successfully",
+        color: "success",
+        variant: "flat",
+      });
     } else {
       setLoading(false);
       setError(true);
       setErrorText(res.error);
       setErrorMessage(res.message);
       router.refresh();
-      toast.error("Failed to update runner status");
+      addToast({
+        title: "Runner",
+        description: "Failed to update runner status",
+        color: "danger",
+        variant: "flat",
+      });
     }
   }
 

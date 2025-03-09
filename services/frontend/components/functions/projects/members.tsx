@@ -5,6 +5,7 @@ import type { UseDisclosureReturn } from "@heroui/use-disclosure";
 
 import { Icon } from "@iconify/react";
 import {
+  addToast,
   Avatar,
   AvatarGroup,
   Button,
@@ -25,7 +26,6 @@ import {
 } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { toast } from "sonner";
 
 import AddProjectMember from "@/lib/fetch/project/POST/AddProjectMember";
 import ErrorCard from "@/components/error/ErrorCard";
@@ -105,7 +105,12 @@ export default function AddProjectMemberModal({
       setErrorText("");
       setErrorMessage("");
       onOpenChange();
-      toast.success("Member invited successfully");
+      addToast({
+        title: "Project",
+        description: "Member invited successfully",
+        color: "success",
+        variant: "flat",
+      });
 
       return;
     }
@@ -118,13 +123,23 @@ export default function AddProjectMemberModal({
       setErrorMessage("");
       onOpenChange();
       router.refresh();
-      toast.success("Member invited successfully");
+      addToast({
+        title: "Project",
+        description: "Member invited successfully",
+        color: "success",
+        variant: "flat",
+      });
     } else {
       setIsLoading(false);
       setError(true);
       setErrorText(res.error);
       setErrorMessage(res.message);
-      toast.error(res.error);
+      addToast({
+        title: "Project",
+        description: res.error,
+        color: "danger",
+        variant: "flat",
+      });
     }
   }
 

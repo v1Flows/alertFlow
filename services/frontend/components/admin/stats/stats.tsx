@@ -1,7 +1,6 @@
 "use client";
-import { Divider, Input, Spacer } from "@heroui/react";
+import { addToast, Divider, Input, Spacer } from "@heroui/react";
 import React from "react";
-import { toast } from "sonner";
 
 import AdminGetStats from "@/lib/fetch/admin/stats";
 
@@ -34,7 +33,12 @@ export function PageStats({
 
     if (!stats.success) {
       if ("error" in stats) {
-        toast.error(stats.error);
+        addToast({
+          title: "Stats",
+          description: stats.error,
+          color: "danger",
+          variant: "flat",
+        });
       }
     } else {
       setStats(stats.data);
