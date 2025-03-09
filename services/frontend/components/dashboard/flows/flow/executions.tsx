@@ -672,7 +672,7 @@ export default function Executions({
         )}
       </div>
       <Spacer y={2} />
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4">
         {items.map((execution: any) => (
           <Card key={execution.id}>
             <CardHeader>
