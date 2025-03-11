@@ -9,6 +9,7 @@ import {
   CircularProgress,
   Divider,
   Progress,
+  ScrollShadow,
   Snippet,
   Spacer,
   Table,
@@ -473,16 +474,22 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
               ) : (
                 <div className="flex flex-col gap-2">
                   <Snippet fullWidth hideCopyButton hideSymbol radius="sm">
-                    {step.messages.map((data: any, index: any) => (
-                      <p
-                        key={index}
-                        className="flex-cols flex items-center gap-1"
-                      >
-                        <Icon icon="hugeicons:arrow-right-double" width={16} />
-                        {data}
-                      </p>
-                    ))}
+                    <ScrollShadow className="max-h-[400px] max-w-[800px]">
+                      {step.messages.map((data: any, index: any) => (
+                        <p
+                          key={index}
+                          className="flex-cols flex items-center gap-1"
+                        >
+                          <Icon
+                            icon="hugeicons:arrow-right-double"
+                            width={16}
+                          />
+                          {data}
+                        </p>
+                      ))}
+                    </ScrollShadow>
                   </Snippet>
+
                   {step.status === "interactionWaiting" && !step.interacted && (
                     <div className="flex-cols flex items-center gap-4">
                       <Button
