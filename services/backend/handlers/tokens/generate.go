@@ -1,11 +1,13 @@
 package tokens
 
 import (
+	"errors"
+	"net/http"
+	"time"
+
 	"github.com/v1Flows/alertFlow/services/backend/functions/auth"
 	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
 	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
-	"errors"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -18,7 +20,7 @@ type TokenRequest struct {
 	RememberMe bool   `json:"remember_me"`
 }
 
-func GenerateToken(db *bun.DB, context *gin.Context) {
+func GenerateTokenUser(db *bun.DB, context *gin.Context) {
 	var request TokenRequest
 	if err := context.ShouldBindJSON(&request); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -50,6 +52,35 @@ func GenerateToken(db *bun.DB, context *gin.Context) {
 	tokenString, ExpiresAt, err := auth.GenerateJWT(user.ID, request.RememberMe)
 	if err != nil {
 		httperror.InternalServerError(context, "Error generating user token", err)
+		return
+	}
+
+	// check if user has a token
+	var tokens []models.Tokens
+	err = db.NewSelect().Model(&tokens).Where("user_id = ?", user.ID).Scan(context)
+	if err == nil {
+		// delete token
+		for _, token := range tokens {
+			_, err = db.NewDelete().Model(&token).Where("user_id = ?", user.ID).Exec(context)
+			if err != nil {
+				httperror.InternalServerError(context, "Error deleting token from db", err)
+				return
+			}
+		}
+	}
+
+	// write token in tokens table
+	token := models.Tokens{
+		UserID:      user.ID.String(),
+		Key:         tokenString,
+		Description: "User token",
+		Type:        "user",
+		ExpiresAt:   time.Unix(ExpiresAt, 0),
+		CreatedAt:   time.Now(),
+	}
+	_, err = db.NewInsert().Model(&token).Exec(context)
+	if err != nil {
+		httperror.InternalServerError(context, "Error writing token to db", err)
 		return
 	}
 

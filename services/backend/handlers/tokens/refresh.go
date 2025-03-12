@@ -1,10 +1,11 @@
 package tokens
 
 import (
+	"net/http"
+
 	"github.com/v1Flows/alertFlow/services/backend/functions/auth"
 	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
 	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/uptrace/bun"
@@ -32,6 +33,14 @@ func RefreshToken(context *gin.Context, db *bun.DB) {
 	err = db.NewSelect().Model(&user).Column("id", "username", "email", "disabled", "role").Where("id = ?", userID).Scan(context)
 	if err != nil {
 		httperror.InternalServerError(context, "Error collecting user informations from db", err)
+		return
+	}
+
+	// update the expired time in tokens table
+	_, err = db.NewUpdate().Model(&models.Tokens{}).Set("expires_at = ?, key = ?", expiresAt, newToken).
+		Where("token = ?", token).Exec(context)
+	if err != nil {
+		httperror.InternalServerError(context, "Error updating token expiration time", err)
 		return
 	}
 
