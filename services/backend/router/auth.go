@@ -12,7 +12,7 @@ func Auth(router *gin.RouterGroup, db *bun.DB) {
 	auth := router.Group("/auth")
 	{
 		auth.POST("/login", func(c *gin.Context) {
-			tokens.GenerateToken(db, c)
+			tokens.GenerateTokenUser(db, c)
 		})
 		auth.POST("/register", func(c *gin.Context) {
 			auths.RegisterUser(c, db)

@@ -1,11 +1,12 @@
 package middlewares
 
 import (
+	"errors"
+
 	"github.com/v1Flows/alertFlow/services/backend/functions/auth"
 	"github.com/v1Flows/alertFlow/services/backend/functions/gatekeeper"
 	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
 	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
-	"errors"
 
 	"github.com/gin-gonic/gin"
 	"github.com/uptrace/bun"
@@ -21,6 +22,17 @@ func Admin(db *bun.DB) gin.HandlerFunc {
 		err := auth.ValidateToken(tokenString)
 		if err != nil {
 			httperror.Unauthorized(context, "Token is not valid", err)
+			return
+		}
+
+		valid, err := auth.ValidateTokenDBEntry(tokenString, db, context)
+		if err != nil {
+			httperror.InternalServerError(context, "Error receiving token from db", err)
+			return
+		}
+
+		if !valid {
+			httperror.Unauthorized(context, "The provided token is not valid", errors.New("the provided token is not valid"))
 			return
 		}
 

@@ -9,6 +9,7 @@ import {
   Listbox,
   ListboxItem,
   Pagination,
+  ScrollShadow,
   Spacer,
   useDisclosure,
 } from "@heroui/react";
@@ -132,78 +133,83 @@ export default function AlertsList({
                 <>
                   <p className="text-sm font-bold">Grouped Alerts</p>
                   <Spacer y={2} />
-                  <Listbox
-                    aria-label="User Menu"
-                    className="p-0 gap-0 divide-y divide-default-300/50 dark:divide-default-100/80 bg-content1 overflow-visible shadow-small rounded-medium"
-                    itemClasses={{
-                      base: "px-3 first:rounded-t-medium last:rounded-b-medium rounded-none gap-3 h-12 data-[hover=true]:bg-default-100/80",
-                    }}
-                    onAction={(key) => alert(key)}
-                  >
-                    {alerts.map((a: any) => {
-                      if (a.parent_id === alert.id) {
-                        return (
-                          <ListboxItem
-                            key={a.id}
-                            className="group h-auto py-3"
-                            startContent={
-                              <IconWrapper
-                                className={`bg-${a.status === "firing" ? "danger" : "success"}/10 text-${a.status === "firing" ? "danger" : "success"}`}
-                              >
-                                <Icon
-                                  className="text-lg"
-                                  icon={
-                                    a.status === "firing"
-                                      ? "hugeicons:fire"
-                                      : "hugeicons:checkmark-badge-01"
-                                  }
-                                />
-                              </IconWrapper>
-                            }
-                            textValue={a.name}
-                            onPress={() => {
-                              setTargetAlert(a);
-                              alertDrawer.onOpenChange();
-                            }}
-                          >
-                            <div className="flex flex-col gap-1">
-                              <span>{a.name}</span>
-                              <div className="px-2 py-1 rounded-small bg-default-100 group-data-[hover=true]:bg-default-200">
-                                <span
-                                  className={`text-tiny text-${a.status === "firing" ? "danger" : "success"} capitalize`}
+                  <ScrollShadow className="h-[300px]" size={100}>
+                    <Listbox
+                      aria-label="User Menu"
+                      className="p-0 gap-0 divide-y divide-default-300/50 dark:divide-default-100/80 bg-content1 overflow-visible shadow-small rounded-medium"
+                      itemClasses={{
+                        base: "px-3 first:rounded-t-medium last:rounded-b-medium rounded-none gap-3 h-12 data-[hover=true]:bg-default-100/80",
+                      }}
+                    >
+                      {alerts.map((a: any) => {
+                        if (a.parent_id === alert.id) {
+                          return (
+                            <ListboxItem
+                              key={a.id}
+                              className="group h-auto py-3"
+                              startContent={
+                                <IconWrapper
+                                  className={`bg-${a.status === "firing" ? "danger" : "success"}/10 text-${a.status === "firing" ? "danger" : "success"}`}
                                 >
-                                  {a.status || "N/A"}
-                                </span>
-                                <div className="flex gap-2 text-tiny">
-                                  <span className="text-default-500">
-                                    <ReactTimeago date={a.created_at} />
+                                  <Icon
+                                    className="text-lg"
+                                    icon={
+                                      a.status === "firing"
+                                        ? "hugeicons:fire"
+                                        : "hugeicons:checkmark-badge-01"
+                                    }
+                                  />
+                                </IconWrapper>
+                              }
+                              textValue={a.name}
+                              onPress={() => {
+                                setTargetAlert(a);
+                                alertDrawer.onOpenChange();
+                              }}
+                            >
+                              <div className="flex flex-col gap-1">
+                                <span>{a.name}</span>
+                                <div className="px-2 py-1 rounded-small bg-default-100 group-data-[hover=true]:bg-default-200">
+                                  <span
+                                    className={`text-tiny text-${a.status === "firing" ? "danger" : "success"} capitalize`}
+                                  >
+                                    {a.status || "N/A"}
                                   </span>
-                                  {new Date(a.created_at).getTime() ===
-                                    Math.max(
-                                      ...alerts
-                                        .filter(
-                                          (alert: any) =>
-                                            alert.parent_id === a.parent_id,
-                                        )
-                                        .map((alert: any) =>
-                                          new Date(alert.created_at).getTime(),
-                                        ),
-                                    ) && (
-                                    <span className="text-success">Latest</span>
-                                  )}
-                                  {a.execution_id !== "" && (
-                                    <span className="text-primary">
-                                      Executed
+                                  <div className="flex gap-2 text-tiny">
+                                    <span className="text-default-500">
+                                      <ReactTimeago date={a.created_at} />
                                     </span>
-                                  )}
+                                    {new Date(a.created_at).getTime() ===
+                                      Math.max(
+                                        ...alerts
+                                          .filter(
+                                            (alert: any) =>
+                                              alert.parent_id === a.parent_id,
+                                          )
+                                          .map((alert: any) =>
+                                            new Date(
+                                              alert.created_at,
+                                            ).getTime(),
+                                          ),
+                                      ) && (
+                                      <span className="text-success">
+                                        Latest
+                                      </span>
+                                    )}
+                                    {a.execution_id !== "" && (
+                                      <span className="text-primary">
+                                        Executed
+                                      </span>
+                                    )}
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </ListboxItem>
-                        );
-                      }
-                    })}
-                  </Listbox>
+                            </ListboxItem>
+                          );
+                        }
+                      })}
+                    </Listbox>
+                  </ScrollShadow>
                 </>
               )}
             </CardBody>
