@@ -55,20 +55,6 @@ func GenerateTokenUser(db *bun.DB, context *gin.Context) {
 		return
 	}
 
-	// check if user has a token
-	var tokens []models.Tokens
-	err = db.NewSelect().Model(&tokens).Where("user_id = ?", user.ID).Scan(context)
-	if err == nil {
-		// delete token
-		for _, token := range tokens {
-			_, err = db.NewDelete().Model(&token).Where("user_id = ?", user.ID).Exec(context)
-			if err != nil {
-				httperror.InternalServerError(context, "Error deleting token from db", err)
-				return
-			}
-		}
-	}
-
 	// write token in tokens table
 	token := models.Tokens{
 		UserID:      user.ID.String(),
