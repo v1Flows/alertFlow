@@ -672,9 +672,18 @@ export default function Executions({
         )}
       </div>
       <Spacer y={2} />
-      <div className="grid grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4">
+      <div className="flex flex-col gap-4">
         {items.map((execution: any) => (
-          <Card key={execution.id}>
+          <Card
+            key={execution.id}
+            isPressable
+            className="shadow hover:shadow-primary hover:transition"
+            onPress={() =>
+              router.push(
+                `/flows/${execution.flow_id}/execution/${execution.id}`,
+              )
+            }
+          >
             <CardHeader>
               <div className="flex flex-cols w-full items-center justify-between gap-2">
                 <div className="flex flex-cols items-center gap-2">
@@ -689,6 +698,22 @@ export default function Executions({
                 <div className="flex flex-cols items-center gap-2">
                   {executions[0].id === execution.id && (
                     <p className="text-sm text-success mr-2">Latest</p>
+                  )}
+                  {displayToFlow && (
+                    <Tooltip content="Show Flow">
+                      <Button
+                        fullWidth
+                        isIconOnly
+                        color="primary"
+                        size="sm"
+                        variant="flat"
+                        onPress={() =>
+                          router.push(`/flows/${execution.flow_id}`)
+                        }
+                      >
+                        <Icon icon="hugeicons:workflow-square-10" width={18} />
+                      </Button>
+                    </Tooltip>
                   )}
                   <Tooltip content="Show Alert">
                     <Button
@@ -724,38 +749,6 @@ export default function Executions({
                 </div>
               </div>
             </CardHeader>
-            <CardBody>
-              <div className="flex flex-cols items-center gap-2">
-                {displayToFlow && (
-                  <Button
-                    fullWidth
-                    color="primary"
-                    size="md"
-                    startContent={
-                      <Icon icon="hugeicons:workflow-square-10" width={18} />
-                    }
-                    variant="ghost"
-                    onPress={() => router.push(`/flows/${execution.flow_id}`)}
-                  >
-                    To Flow
-                  </Button>
-                )}
-                <Button
-                  fullWidth
-                  color="primary"
-                  size="md"
-                  startContent={<Icon icon="solar:eye-outline" width={18} />}
-                  variant="flat"
-                  onPress={() =>
-                    router.push(
-                      `/flows/${execution.flow_id}/execution/${execution.id}`,
-                    )
-                  }
-                >
-                  View
-                </Button>
-              </div>
-            </CardBody>
             <CardFooter className="flex justify-between">
               <p className="text-tiny text-default-500">{execution.id}</p>
               <Chip radius="sm" size="sm" variant="faded">
@@ -765,7 +758,7 @@ export default function Executions({
           </Card>
         ))}
       </div>
-      <Spacer y={2} />
+      <Spacer y={4} />
       <div className="flex justify-center">
         <Pagination
           showControls
