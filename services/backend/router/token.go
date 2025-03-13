@@ -13,9 +13,6 @@ func Token(router *gin.RouterGroup, db *bun.DB) {
 		token.GET("/validate", func(c *gin.Context) {
 			tokens.ValidateToken(c)
 		})
-		token.POST("/", func(c *gin.Context) {
-			tokens.GenerateToken(db, c)
-		})
 		token.POST("/refresh", func(c *gin.Context) {
 			tokens.RefreshToken(c, db)
 		})
