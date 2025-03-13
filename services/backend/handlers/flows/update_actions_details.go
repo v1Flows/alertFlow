@@ -1,14 +1,15 @@
 package flows
 
 import (
+	"errors"
+	"net/http"
+
 	"github.com/v1Flows/alertFlow/services/backend/config"
 	"github.com/v1Flows/alertFlow/services/backend/functions/encryption"
 	"github.com/v1Flows/alertFlow/services/backend/functions/gatekeeper"
 	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
 	functions_project "github.com/v1Flows/alertFlow/services/backend/functions/project"
 	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
-	"errors"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
@@ -62,7 +63,7 @@ func UpdateFlowActionsDetails(context *gin.Context, db *bun.DB) {
 			return
 		}
 	} else if flowDB.EncryptActionParams && !flow.EncryptActionParams && config.Config.Encryption.Enabled {
-		flow.Actions, err = encryption.DecryptParams(flowDB.Actions)
+		flow.Actions, err = encryption.DecryptParams(flowDB.Actions, true)
 		if err != nil {
 			httperror.InternalServerError(context, "Error decrypting action params", err)
 			return
