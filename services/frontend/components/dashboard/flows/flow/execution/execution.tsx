@@ -474,7 +474,7 @@ export function Execution({ flow, execution, runners, userDetails }: any) {
               ) : (
                 <div className="flex flex-col gap-2">
                   <Snippet fullWidth hideCopyButton hideSymbol radius="sm">
-                    <ScrollShadow className="max-h-[400px] max-w-[800px]">
+                    <ScrollShadow className="max-h-[400px] max-w-screen">
                       {step.messages.map((data: any, index: any) => (
                         <p
                           key={index}
