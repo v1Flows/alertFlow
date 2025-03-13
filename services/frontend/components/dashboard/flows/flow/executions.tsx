@@ -9,6 +9,7 @@ import {
   CardHeader,
   Chip,
   CircularProgress,
+  Divider,
   Pagination,
   Spacer,
   Tooltip,
@@ -112,6 +113,28 @@ export default function Executions({
       return "success";
     } else {
       return "unknown";
+    }
+  }
+
+  function statusColor(execution: any) {
+    if (execution.status === "pending") {
+      return "default";
+    } else if (execution.status === "running") {
+      return "primary";
+    } else if (execution.status === "paused") {
+      return "warning";
+    } else if (execution.status === "canceled") {
+      return "danger";
+    } else if (execution.status === "noPatternMatch") {
+      return "secondary";
+    } else if (execution.status === "interactionWaiting") {
+      return "primary";
+    } else if (execution.status === "error") {
+      return "danger";
+    } else if (execution.status === "success") {
+      return "success";
+    } else {
+      return "default";
     }
   }
 
@@ -672,10 +695,13 @@ export default function Executions({
         )}
       </div>
       <Spacer y={2} />
+      <Divider />
+      <Spacer y={2} />
       <div className="flex flex-col gap-4">
         {items.map((execution: any) => (
           <Card
             key={execution.id}
+            isHoverable
             isPressable
             className="shadow hover:shadow-primary hover:transition"
             onPress={() =>
@@ -689,7 +715,9 @@ export default function Executions({
                 <div className="flex flex-cols items-center gap-2">
                   {statusIcon(execution)}
                   <div className="flex flex-col items-start">
-                    <p className="font-bold">{status(execution)}</p>
+                    <p className={`font-bold text-${statusColor(execution)}`}>
+                      {status(execution)}
+                    </p>
                     <p className="text-sm text-default-500">
                       {getDuration(execution)}
                     </p>
