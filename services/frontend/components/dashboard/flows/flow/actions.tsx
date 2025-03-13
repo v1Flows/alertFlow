@@ -227,12 +227,23 @@ export default function Actions({
                         <TableHeader>
                           <TableColumn align="center">Key</TableColumn>
                           <TableColumn align="center">Value</TableColumn>
+                          <TableColumn align="center">Note</TableColumn>
                         </TableHeader>
                         <TableBody emptyContent="No patterns defined.">
                           {action.params.map((param: any, index: number) => (
                             <TableRow key={index}>
                               <TableCell>{param.key}</TableCell>
                               <TableCell>{param.value}</TableCell>
+                              <TableCell>
+                                {param.type === "password" &&
+                                param.value != "" ? (
+                                  <span className="text-success">
+                                    Encrypted
+                                  </span>
+                                ) : (
+                                  ""
+                                )}
+                              </TableCell>
                             </TableRow>
                           ))}
                         </TableBody>

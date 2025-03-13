@@ -1,13 +1,15 @@
 package flows
 
 import (
+	"errors"
+	"net/http"
+
 	"github.com/v1Flows/alertFlow/services/backend/config"
+	"github.com/v1Flows/alertFlow/services/backend/functions/auth"
 	"github.com/v1Flows/alertFlow/services/backend/functions/encryption"
 	"github.com/v1Flows/alertFlow/services/backend/functions/gatekeeper"
 	"github.com/v1Flows/alertFlow/services/backend/functions/httperror"
 	"github.com/v1Flows/alertFlow/services/backend/pkg/models"
-	"errors"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
@@ -36,8 +38,22 @@ func GetFlow(context *gin.Context, db *bun.DB) {
 	}
 
 	// decrypt action params
+	tokenString := context.GetHeader("Authorization")
+	tokenType, err := auth.GetTypeFromToken(tokenString)
+	if err != nil {
+		httperror.InternalServerError(context, "Error receiving token type", err)
+		return
+	}
+
+	var decryptPasswords bool
+	if tokenType == "user" || tokenType == "service" {
+		decryptPasswords = false
+	} else {
+		decryptPasswords = true
+	}
+
 	if config.Config.Encryption.Enabled && flow.EncryptActionParams && len(flow.Actions) > 0 {
-		flow.Actions, err = encryption.DecryptParams(flow.Actions)
+		flow.Actions, err = encryption.DecryptParams(flow.Actions, decryptPasswords)
 		if err != nil {
 			httperror.InternalServerError(context, "Error decrypting action params", err)
 			return

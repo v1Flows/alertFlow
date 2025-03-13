@@ -15,6 +15,8 @@ import {
   ModalHeader,
   Pagination,
   Radio,
+  Select,
+  SelectItem,
   Spacer,
   Textarea,
 } from "@heroui/react";
@@ -344,253 +346,274 @@ export default function AddActionModal({
                   />
                 </div>
                 <div className="flex-cols flex w-full gap-4">
-                  <div className="col-span-1 w-full">
-                    {currentStep === 0 && (
-                      <div>
-                        {countTotalAvailableActions() === 0 ? (
-                          <div>
-                            <Card className="border border-danger">
-                              <CardBody>
-                                <p className="font-bold text-danger">
-                                  😕 Seems like there are no Actions available.
-                                </p>
-                                <p className="text-default-500">
-                                  Please check if you have a dedicated runner
-                                  assign to your flow and if that runner exposes
-                                  any actions
-                                </p>
-                              </CardBody>
-                            </Card>
-                          </div>
-                        ) : (
-                          <>
-                            <p className="text-lg font-bold text-default-500">
-                              Available Actions
-                            </p>
-                            <Spacer y={2} />
-                            <p className="text-sm text-default-500">
-                              Categories
-                            </p>
-                            <Spacer y={1} />
-                            <div className="flex gap-2">
-                              {availableCategories.map((category: any) => (
-                                <Chip
-                                  key={category}
-                                  color={
-                                    selectedCategory === category
-                                      ? "primary"
-                                      : "default"
-                                  }
-                                  radius="sm"
-                                  size="lg"
-                                  variant={
-                                    selectedCategory === category
-                                      ? "solid"
-                                      : "flat"
-                                  }
-                                  onClick={() => {
-                                    setSelectedCategory(category);
-                                    setActionPage(1);
-                                  }}
-                                >
-                                  {category}
-                                </Chip>
-                              ))}
-                            </div>
-                            <Spacer y={4} />
-                            <div className="grid grid-cols-2 items-stretch gap-4">
-                              {actionItems.map((act: any) => (
-                                <Card
-                                  key={act.type}
-                                  isHoverable
-                                  isPressable
-                                  className={`border-2 border-default-200 ${act.plugin === action.plugin && act.version === action.version ? "border-primary" : ""}`}
-                                  radius="sm"
-                                  onPress={() => handleActionSelect(act)}
-                                >
-                                  <CardBody>
-                                    <div className="flex items-center gap-2">
-                                      <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
-                                        <Icon icon={act.icon} width={26} />
-                                      </div>
-                                      <div className="flex flex-col">
-                                        <div className="flex flex-cols gap-2 items-center">
-                                          <p className="text-lg font-bold">
-                                            {act.name}
-                                          </p>
-                                          <Chip
-                                            color="primary"
-                                            radius="sm"
-                                            size="sm"
-                                            variant="flat"
-                                          >
-                                            Ver. {act.version}
-                                          </Chip>
-                                        </div>
-                                        <p className="text-sm text-default-500">
-                                          {act.description}
-                                        </p>
-                                      </div>
-                                    </div>
-                                  </CardBody>
-                                </Card>
-                              ))}
-                            </div>
-                            <Spacer y={4} />
-                            <div className="flex items-center justify-center">
-                              <Pagination
-                                showControls
-                                initialPage={1}
-                                page={actionPage}
-                                total={actionPages()}
-                                onChange={(actionPage) =>
-                                  setActionPage(actionPage)
-                                }
-                              />
-                            </div>
-                          </>
-                        )}
-                      </div>
-                    )}
-                    {currentStep === 1 && (
-                      <div>
-                        <Card
-                          className="border-2 border-default-200 border-primary"
-                          radius="sm"
-                        >
-                          <CardBody>
-                            <div className="flex items-center gap-2">
-                              <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
-                                <Icon icon={action.icon} width={26} />
-                              </div>
-                              <div className="flex flex-col">
-                                <div className="flex flex-cols gap-2 items-center">
-                                  <p className="text-lg font-bold">
-                                    {action.name}
-                                  </p>
-                                  <Chip
-                                    color="primary"
-                                    radius="sm"
-                                    size="sm"
-                                    variant="flat"
-                                  >
-                                    Ver. {action.version}
-                                  </Chip>
-                                </div>
-                                <p className="text-sm text-default-500">
-                                  {action.description}
-                                </p>
-                              </div>
-                            </div>
-                          </CardBody>
-                        </Card>
-                        <Spacer y={2} />
-                        <p className="text-lg font-bold text-default-500">
-                          Details
-                        </p>
-                        <Spacer y={2} />
-                        <div className="grid grid-cols-2 gap-2">
-                          <Input
-                            description="Custom name for this action (optional)"
-                            label="Custom Name"
-                            type="text"
-                            value={action.custom_name}
-                            onValueChange={(e) =>
-                              setAction({ ...action, custom_name: e })
-                            }
-                          />
-                          <Input
-                            description="Custom description for this action (optional)"
-                            label="Custom Description"
-                            type="text"
-                            value={action.custom_description}
-                            onValueChange={(e) =>
-                              setAction({ ...action, custom_description: e })
-                            }
-                          />
+                  {currentStep === 0 && (
+                    <div>
+                      {countTotalAvailableActions() === 0 ? (
+                        <div>
+                          <Card className="border border-danger">
+                            <CardBody>
+                              <p className="font-bold text-danger">
+                                😕 Seems like there are no Actions available.
+                              </p>
+                              <p className="text-default-500">
+                                Please check if you have a dedicated runner
+                                assign to your flow and if that runner exposes
+                                any actions
+                              </p>
+                            </CardBody>
+                          </Card>
                         </div>
-                        <p className="text-lg font-bold text-default-500">
-                          Parameters
-                        </p>
-                        <Spacer y={2} />
-                        {(action.params && action.params.length > 0) ||
-                        action?.params ? (
-                          <div className="grid grid-cols-2 gap-2">
-                            {action.params.map((param: any) => {
-                              return param.type === "text" ||
-                                param.type === "number" ||
-                                param.type === "boolean" ? (
-                                <Input
-                                  key={param.key}
-                                  description={param?.description}
-                                  isRequired={param.required}
-                                  label={param.key}
-                                  type={param.type}
-                                  value={param.value}
-                                  onValueChange={(e) => {
-                                    setAction({
-                                      ...action,
-                                      params: action.params.map((x: any) => {
-                                        if (x.key === param.key) {
-                                          return { ...x, value: e };
-                                        }
-
-                                        return x;
-                                      }),
-                                    });
-                                  }}
-                                />
-                              ) : param.type === "textarea" ? (
-                                <Textarea
-                                  key={param.key}
-                                  description={param?.description}
-                                  isRequired={param.required}
-                                  label={param.key}
-                                  type={param.type}
-                                  value={param.value}
-                                  onValueChange={(e) => {
-                                    setAction({
-                                      ...action,
-                                      params: action.params.map((x: any) => {
-                                        if (x.key === param.key) {
-                                          return { ...x, value: e };
-                                        }
-
-                                        return x;
-                                      }),
-                                    });
-                                  }}
-                                />
-                              ) : param.type === "password" ? (
-                                <Input
-                                  key={param.key}
-                                  description={param?.description}
-                                  isRequired={param.required}
-                                  label={param.key}
-                                  type={param.type}
-                                  value={param.value}
-                                  onValueChange={(e) => {
-                                    setAction({
-                                      ...action,
-                                      params: action.params.map((x: any) => {
-                                        if (x.key === param.key) {
-                                          return { ...x, value: e };
-                                        }
-
-                                        return x;
-                                      }),
-                                    });
-                                  }}
-                                />
-                              ) : null;
-                            })}
+                      ) : (
+                        <>
+                          <p className="text-lg font-bold text-default-500">
+                            Available Actions
+                          </p>
+                          <Spacer y={2} />
+                          <p className="text-sm text-default-500">Categories</p>
+                          <Spacer y={1} />
+                          <div className="flex gap-2">
+                            {availableCategories.map((category: any) => (
+                              <Chip
+                                key={category}
+                                color={
+                                  selectedCategory === category
+                                    ? "primary"
+                                    : "default"
+                                }
+                                radius="sm"
+                                size="lg"
+                                variant={
+                                  selectedCategory === category
+                                    ? "solid"
+                                    : "flat"
+                                }
+                                onClick={() => {
+                                  setSelectedCategory(category);
+                                  setActionPage(1);
+                                }}
+                              >
+                                {category}
+                              </Chip>
+                            ))}
                           </div>
-                        ) : (
-                          <p>No parameters for this action found.</p>
-                        )}
+                          <Spacer y={4} />
+                          <div className="grid grid-cols-2 items-stretch gap-4">
+                            {actionItems.map((act: any) => (
+                              <Card
+                                key={act.type}
+                                isHoverable
+                                isPressable
+                                className={`border-2 border-default-200 ${act.plugin === action.plugin && act.version === action.version ? "border-primary" : ""}`}
+                                radius="sm"
+                                onPress={() => handleActionSelect(act)}
+                              >
+                                <CardBody>
+                                  <div className="flex items-center gap-2">
+                                    <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
+                                      <Icon icon={act.icon} width={26} />
+                                    </div>
+                                    <div className="flex flex-col">
+                                      <div className="flex flex-cols gap-2 items-center">
+                                        <p className="text-lg font-bold">
+                                          {act.name}
+                                        </p>
+                                        <Chip
+                                          color="primary"
+                                          radius="sm"
+                                          size="sm"
+                                          variant="flat"
+                                        >
+                                          Ver. {act.version}
+                                        </Chip>
+                                      </div>
+                                      <p className="text-sm text-default-500">
+                                        {act.description}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </CardBody>
+                              </Card>
+                            ))}
+                          </div>
+                          <Spacer y={4} />
+                          <div className="flex items-center justify-center">
+                            <Pagination
+                              showControls
+                              initialPage={1}
+                              page={actionPage}
+                              total={actionPages()}
+                              onChange={(actionPage) =>
+                                setActionPage(actionPage)
+                              }
+                            />
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
+                  {currentStep === 1 && (
+                    <div>
+                      <Card
+                        className="border-2 border-default-200 border-primary"
+                        radius="sm"
+                      >
+                        <CardBody>
+                          <div className="flex items-center gap-2">
+                            <div className="flex size-10 items-center justify-center rounded-small bg-primary/10 text-primary">
+                              <Icon icon={action.icon} width={26} />
+                            </div>
+                            <div className="flex flex-col">
+                              <div className="flex flex-cols gap-2 items-center">
+                                <p className="text-lg font-bold">
+                                  {action.name}
+                                </p>
+                                <Chip
+                                  color="primary"
+                                  radius="sm"
+                                  size="sm"
+                                  variant="flat"
+                                >
+                                  Ver. {action.version}
+                                </Chip>
+                              </div>
+                              <p className="text-sm text-default-500">
+                                {action.description}
+                              </p>
+                            </div>
+                          </div>
+                        </CardBody>
+                      </Card>
+                      <Spacer y={2} />
+                      <p className="text-lg font-bold text-default-500">
+                        Details
+                      </p>
+                      <Spacer y={2} />
+                      <div className="grid grid-cols-2 gap-2">
+                        <Input
+                          description="Custom name for this action (optional)"
+                          label="Custom Name"
+                          type="text"
+                          value={action.custom_name}
+                          onValueChange={(e) =>
+                            setAction({ ...action, custom_name: e })
+                          }
+                        />
+                        <Input
+                          description="Custom description for this action (optional)"
+                          label="Custom Description"
+                          type="text"
+                          value={action.custom_description}
+                          onValueChange={(e) =>
+                            setAction({ ...action, custom_description: e })
+                          }
+                        />
                       </div>
-                    )}
-                  </div>
+                      <p className="text-lg font-bold text-default-500">
+                        Parameters
+                      </p>
+                      <Spacer y={2} />
+                      {(action.params && action.params.length > 0) ||
+                      action?.params ? (
+                        <div className="grid grid-cols-2 gap-2">
+                          {action.params.map((param: any) => {
+                            return param.type === "text" ||
+                              param.type === "number" ? (
+                              <Input
+                                key={param.key}
+                                description={param?.description}
+                                isRequired={param.required}
+                                label={param.key}
+                                type={param.type}
+                                value={param.value}
+                                onValueChange={(e) => {
+                                  setAction({
+                                    ...action,
+                                    params: action.params.map((x: any) => {
+                                      if (x.key === param.key) {
+                                        return { ...x, value: e };
+                                      }
+
+                                      return x;
+                                    }),
+                                  });
+                                }}
+                              />
+                            ) : param.type === "boolean" ? (
+                              <Select
+                                key={param.key}
+                                description={param?.description}
+                                isRequired={param.required}
+                                label={param.key}
+                                selectedKeys={[param.value]}
+                                onSelectionChange={(e) => {
+                                  const value = Array.from(e).join("");
+
+                                  setAction({
+                                    ...action,
+                                    params: action.params.map((x: any) => {
+                                      if (x.key === param.key) {
+                                        return { ...x, value };
+                                      }
+
+                                      return x;
+                                    }),
+                                  });
+                                }}
+                              >
+                                <SelectItem key="true">true</SelectItem>
+                                <SelectItem key="false">false</SelectItem>
+                              </Select>
+                            ) : param.type === "textarea" ? (
+                              <Textarea
+                                key={param.key}
+                                className="col-span-2"
+                                description={param?.description}
+                                isRequired={param.required}
+                                label={param.key}
+                                type={param.type}
+                                value={param.value}
+                                onValueChange={(e) => {
+                                  setAction({
+                                    ...action,
+                                    params: action.params.map((x: any) => {
+                                      if (x.key === param.key) {
+                                        return { ...x, value: e };
+                                      }
+
+                                      return x;
+                                    }),
+                                  });
+                                }}
+                              />
+                            ) : param.type === "password" ? (
+                              <Input
+                                key={param.key}
+                                description={param?.description}
+                                isRequired={param.required}
+                                label={param.key}
+                                type={param.type}
+                                value={param.value}
+                                onValueChange={(e) => {
+                                  setAction({
+                                    ...action,
+                                    params: action.params.map((x: any) => {
+                                      if (x.key === param.key) {
+                                        return { ...x, value: e };
+                                      }
+
+                                      return x;
+                                    }),
+                                  });
+                                }}
+                              />
+                            ) : null;
+                          })}
+                        </div>
+                      ) : (
+                        <p>No parameters for this action found.</p>
+                      )}
+                    </div>
+                  )}
                 </div>
               </ModalBody>
               <ModalFooter>
